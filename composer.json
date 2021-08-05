@@ -1,0 +1,36 @@
+{
+  "name": "wikibasesolutions/cypher-dsl",
+  "description": "Cypher DSL library",
+  "type": "library",
+  "homepage": "https://wikibase-solutions.com",
+  "keywords": [
+    "neo4j",
+    "cypher",
+    "dsl",
+    "graph"
+  ],
+  "license": "GPL-v2.0-or-later",
+  "authors": [
+    {
+      "name": "Marijn van Wezel",
+      "role": "Original author"
+    }
+  ],
+  "require": {
+    "php": "^7.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~6.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "WikibaseSolutions\\CypherDSL\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "WikibaseSolutions\\CypherDSL\\Tests\\": "tests/"
+    }
+  },
+  "minimum-stability": "dev"
+}
