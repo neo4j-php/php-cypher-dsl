@@ -22,27 +22,32 @@
 namespace WikibaseSolutions\CypherDSL;
 
 use WikibaseSolutions\CypherDSL\Clauses\Match;
+use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 
 class Query
 {
 	/**
-	 * @var Match[]
+	 * @var Match
 	 */
-	private $matchClauses;
+	private Match $matchClause;
 
 	/**
-	 * @param string $variable
-	 * @param string $label
-	 * @param array $properties
+	 * Query constructor.
+	 */
+	public function __construct()
+	{
+		$this->matchClause = new Match();
+	}
+
+	/**
+	 * Add a pattern to the match clause.
+	 *
+	 * @param Pattern $pattern
 	 * @return Query
 	 */
-	public function match(string $variable = '', string $label = '', array $properties = []): self
+	public function match(Pattern $pattern): self
 	{
-		if ($variable === '' && $label === '') {
-			throw new \InvalidArgumentException("Variable and label cannot both be empty");
-		}
-
-		$this->matchClauses[] = new Match($variable, $label, $properties);
+		$this->matchClause->addPattern($pattern);
 
 		return $this;
 	}

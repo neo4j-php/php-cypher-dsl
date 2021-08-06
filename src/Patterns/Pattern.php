@@ -19,46 +19,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Clauses;
-
-use WikibaseSolutions\CypherDSL\Patterns\Pattern;
+namespace WikibaseSolutions\CypherDSL\Patterns;
 
 /**
- * This class represents a MATCH clause.
+ * A pattern describes the shape of the data you are looking for.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/
- * @package WikibaseSolutions\CypherDSL\Clauses
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/
+ * @package WikibaseSolutions\CypherDSL
  */
-class Match extends Clause
+interface Pattern
 {
 	/**
-	 * @var Pattern[] List of patterns
-	 */
-	private array $patterns;
-
-	/**
-	 * Add a pattern to the match clause.
+	 * Converts the pattern into a string.
 	 *
-	 * @param Pattern $pattern
+	 * @return string
 	 */
-	public function addPattern(Pattern $pattern)
-	{
-		$this->patterns[] = $pattern;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getClause(): string
-	{
-		return "MATCH";
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getSubject(): string
-	{
-		return implode(",", array_map(fn (Pattern $pattern): string => $pattern->toString(), $this->patterns));
-	}
+	public function toString(): string;
 }

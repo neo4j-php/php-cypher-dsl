@@ -17,10 +17,11 @@
     }
   ],
   "require": {
-    "php": "^7.0"
+    "php": "^7.4",
+    "ext-mbstring": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "~6.0"
+    "phpunit/phpunit": "~9.0"
   },
   "autoload": {
     "psr-4": {
@@ -31,6 +32,9 @@
     "psr-4": {
       "WikibaseSolutions\\CypherDSL\\Tests\\": "tests/"
     }
+  },
+  "scripts": {
+    "test": "phpunit tests/"
   },
   "minimum-stability": "dev"
 }
