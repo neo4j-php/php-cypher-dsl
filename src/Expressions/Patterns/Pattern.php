@@ -19,8 +19,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL;
+namespace WikibaseSolutions\CypherDSL\Expressions\Patterns;
 
-class Query
+use WikibaseSolutions\CypherDSL\Expressions\Expression;
+
+/**
+ * Marker interface that represents a pattern. A pattern describes the shape of the data you are looking for.
+ *
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/
+ * @package WikibaseSolutions\CypherDSL\Expressions\Patterns
+ */
+interface Pattern extends Expression
 {
+	/**
+	 * Converts the pattern into a query.
+	 *
+	 * @return string
+	 */
+	public function toQuery(): string;
 }

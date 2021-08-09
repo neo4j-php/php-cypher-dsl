@@ -1,7 +1,32 @@
 <?php
 
+/*
+ * Cypher DSL
+ * Copyright (C) 2021  Wikibase Solutions
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+/**
+ * This class represents all the clauses in the Cypher query language.
+ *
+ * @see https://neo4j.com/docs/cypher-manual/current/clauses/
+ * @package WikibaseSolutions\CypherDSL\Clauses
+ */
 abstract class Clause
 {
 	/**
@@ -9,7 +34,21 @@ abstract class Clause
 	 */
 	public function toString(): string
 	{
+		if ($this->getSubject() === "") {
+			// If we have an empty subject, either return the empty clause, or nothing at all
+			return $this->canBeEmpty() ? $this->getClause() : "";
+		}
+
 		return sprintf("%s %s", $this->getClause(), $this->getSubject());
+	}
+
+	/**
+	 * Returns whether this clause is still valid if it has an empty subject.
+	 *
+	 * @return bool
+	 */
+	public function canBeEmpty(): bool {
+		return false;
 	}
 
 	/**
@@ -17,7 +56,7 @@ abstract class Clause
 	 *
 	 * @return string
 	 */
-	abstract public function getClause(): string;
+	abstract protected function getClause(): string;
 
 	/**
 	 * Returns the subject of this object. The subject is anything after
@@ -26,5 +65,5 @@ abstract class Clause
 	 *
 	 * @return string
 	 */
-	abstract public function getSubject(): string;
+	abstract protected function getSubject(): string;
 }

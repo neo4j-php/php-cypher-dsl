@@ -19,19 +19,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Patterns;
+namespace WikibaseSolutions\CypherDSL\Expressions\Patterns;
 
-use WikibaseSolutions\CypherDSL\Encoder;
+use WikibaseSolutions\CypherDSL\Escape;
+use WikibaseSolutions\CypherDSL\PropertyMap;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 
 /**
  * This class represents a node.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
- * @package WikibaseSolutions\CypherDSL
+ * @package WikibaseSolutions\CypherDSL\Expressions\Patterns
  */
 class Node implements Pattern
 {
-	use Encoder;
+	use Escape;
 
 	/**
 	 * @var string
@@ -39,14 +41,14 @@ class Node implements Pattern
 	private string $label = "";
 
 	/**
-	 * @var string
+	 * @var \WikibaseSolutions\CypherDSL\Expressions\Variable
 	 */
-	private string $variable = "";
+	private Variable $variable;
 
 	/**
-	 * @var array
+	 * @var PropertyMap
 	 */
-	private array $properties = [];
+	private PropertyMap $properties;
 
 	/**
 	 * Node constructor.
@@ -58,12 +60,31 @@ class Node implements Pattern
 	}
 
 	/**
-	 * @param string $variable
+	 * @param \WikibaseSolutions\CypherDSL\Expressions\Variable|string $variable
 	 * @return Node
 	 */
-	public function named(string $variable): self
+	public function named($variable): self
 	{
+		if (!($variable instanceof Variable)) {
+			$variable = new Variable($variable);
+		}
+
 		$this->variable = $variable;
+
+		return $this;
+	}
+
+	/**
+	 * @param PropertyMap|array $properties
+	 * @return Node
+	 */
+	public function withProperties($properties): self
+	{
+		if (!($properties instanceof PropertyMap)) {
+			$properties = new PropertyMap($properties);
+		}
+
+		$this->properties = $properties;
 
 		return $this;
 	}
@@ -80,37 +101,29 @@ class Node implements Pattern
 	}
 
 	/**
-	 * @param array $properties
-	 * @return Node
-	 */
-	public function withProperties(array $properties): self
-	{
-		$this->properties = $properties;
-
-		return $this;
-	}
-
-	/**
 	 * Returns the string representation of this relationship that can be used directly
 	 * in a query.
 	 *
 	 * @return string
 	 */
-	public function toString(): string
+	public function toQuery(): string
 	{
 		$nodeInner = "";
 
-		if ($this->variable !== "") {
-			$nodeInner .= $this->escapeName($this->variable);
+		if (isset($this->variable)) {
+			$nodeInner .= $this->variable->toQuery();
 		}
 
 		if ($this->label !== "") {
-			$nodeInner .= ":{$this->escapeName($this->label)}";
+			$nodeInner .= ":{$this->escape($this->label)}";
 		}
 
-		if (count($this->properties) !== 0) {
-			if ($nodeInner !== "") $nodeInner .= " ";
-			$nodeInner .= $this->encodePropertyList($this->properties);
+		if (isset($this->properties)) {
+			if ($nodeInner !== "") {
+				$nodeInner .= " ";
+			}
+
+			$nodeInner .= $this->properties->toQuery();
 		}
 
 		return "($nodeInner)";

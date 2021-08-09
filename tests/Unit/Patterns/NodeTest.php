@@ -22,10 +22,10 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Patterns\Node;
+use WikibaseSolutions\CypherDSL\Expressions\Patterns\Node;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Node
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Patterns\Node
  * @package WikibaseSolutions\CypherDSL\Tests\Unit\Patterns
  */
 class NodeTest extends TestCase
@@ -34,7 +34,7 @@ class NodeTest extends TestCase
 	{
 		$node = new Node();
 
-		$this->assertSame( "()", $node->toString() );
+		$this->assertSame( "()", $node->toQuery() );
 	}
 
 	/**
@@ -47,7 +47,7 @@ class NodeTest extends TestCase
 		$node = new Node();
 		$node->withLabel($label);
 
-		$this->assertSame($expected, $node->toString());
+		$this->assertSame($expected, $node->toQuery());
 	}
 
 	/**
@@ -60,7 +60,7 @@ class NodeTest extends TestCase
 		$node = new Node();
 		$node->named($name);
 
-		$this->assertSame($expected, $node->toString());
+		$this->assertSame($expected, $node->toQuery());
 	}
 
 	/**
@@ -73,7 +73,7 @@ class NodeTest extends TestCase
 		$node = new Node();
 		$node->withProperties($properties);
 
-		$this->assertSame($expected, $node->toString());
+		$this->assertSame($expected, $node->toQuery());
 	}
 
 	/**
@@ -87,7 +87,7 @@ class NodeTest extends TestCase
 		$node = new Node();
 		$node->withLabel($label)->named($name);
 
-		$this->assertSame($expected, $node->toString());
+		$this->assertSame($expected, $node->toQuery());
 	}
 
 	/**
@@ -101,7 +101,7 @@ class NodeTest extends TestCase
 		$node = new Node();
 		$node->named($name)->withProperties($properties);
 
-		$this->assertSame($expected, $node->toString());
+		$this->assertSame($expected, $node->toQuery());
 	}
 
 	/**
@@ -115,7 +115,7 @@ class NodeTest extends TestCase
 		$node = new Node();
 		$node->withLabel($label)->withProperties($properties);
 
-		$this->assertSame($expected, $node->toString());
+		$this->assertSame($expected, $node->toQuery());
 	}
 
 	/**
@@ -130,17 +130,17 @@ class NodeTest extends TestCase
 		$node = new Node();
 		$node->named($name)->withLabel($label)->withProperties($properties);
 
-		$this->assertSame($expected, $node->toString());
+		$this->assertSame($expected, $node->toQuery());
 	}
 
 	/**
 	 * @dataProvider provideBacktickThrowsExceptionData
-	 * @param Node $invalidNode
+	 * @param \WikibaseSolutions\CypherDSL\Expressions\Patterns\Node $invalidNode
 	 */
 	public function testBacktickThrowsException(Node $invalidNode)
 	{
 		$this->expectException(\InvalidArgumentException::class);
-		$invalidNode->toString();
+		$invalidNode->toQuery();
 	}
 
 	public function testSetterSameAsConstructor()
@@ -149,7 +149,7 @@ class NodeTest extends TestCase
 		$viaConstructor = new Node($label);
 		$viaSetter = (new Node())->withLabel($label);
 
-		$this->assertSame($viaConstructor->toString(), $viaSetter->toString(), "Setting label via setter has different effect than using constructor");
+		$this->assertSame($viaConstructor->toQuery(), $viaSetter->toQuery(), "Setting label via setter has different effect than using constructor");
 	}
 
 	public function provideOnlyLabelData(): array
@@ -175,7 +175,7 @@ class NodeTest extends TestCase
 		return [
 			[new Node('__`__')],
 			[(new Node())->named('__`__')],
-			[(new Node())->withProperties(['__`__' => ""])]
+			[(new Node())->withProperties(['__`__' => "foobar"])]
 		];
 	}
 

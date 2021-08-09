@@ -19,20 +19,46 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Patterns;
+namespace WikibaseSolutions\CypherDSL\Expressions;
+
+use WikibaseSolutions\CypherDSL\Escape;
 
 /**
- * A pattern describes the shape of the data you are looking for.
+ * Represents a property. A property in Cypher would be something like "n.prop".
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/
  * @package WikibaseSolutions\CypherDSL
  */
-interface Pattern
+class Property implements Expression
 {
+	use Escape;
+
 	/**
-	 * Converts the pattern into a string.
-	 *
-	 * @return string
+	 * @var Variable The variable to which this property belongs
 	 */
-	public function toString(): string;
+	private Variable $variable;
+
+	/**
+	 * @var string The name of the variable
+	 */
+	private string $property;
+
+	/**
+	 * Property constructor.
+	 *
+	 * @param Variable $variable
+	 * @param string $property
+	 */
+	public function __construct(Variable $variable, string $property)
+	{
+		$this->variable = $variable;
+		$this->property = $property;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function toQuery(): string
+	{
+		return sprintf("%s.%s", $this->variable->toQuery(), $this->escape($this->property));
+	}
 }

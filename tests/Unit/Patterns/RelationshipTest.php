@@ -23,11 +23,11 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Patterns\Pattern;
-use WikibaseSolutions\CypherDSL\Patterns\Relationship;
+use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
+use WikibaseSolutions\CypherDSL\Expressions\Patterns\Relationship;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Patterns\Relationship
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Patterns\Relationship
  * @package WikibaseSolutions\CypherDSL\Tests\Unit\Patterns
  */
 class RelationshipTest extends TestCase
@@ -35,10 +35,10 @@ class RelationshipTest extends TestCase
 	/**
 	 * @var MockObject|Pattern
 	 */
-	private Pattern $a;
+	private \WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern $a;
 
 	/**
-	 * @var MockObject|Pattern
+	 * @var MockObject|\WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern
 	 */
 	private Pattern $b;
 
@@ -51,19 +51,19 @@ class RelationshipTest extends TestCase
 	public function testDirRight()
 	{
 		$r = new Relationship($this->a, $this->b, Relationship::DIR_RIGHT);
-		$this->assertSame("(a)-[]->(b)", $r->toString());
+		$this->assertSame("(a)-[]->(b)", $r->toQuery());
 	}
 
 	public function testDirLeft()
 	{
 		$r = new Relationship($this->a, $this->b, Relationship::DIR_LEFT);
-		$this->assertSame("(a)<-[]-(b)", $r->toString());
+		$this->assertSame("(a)<-[]-(b)", $r->toQuery());
 	}
 
 	public function testDirUni()
 	{
 		$r = new Relationship($this->a, $this->b, Relationship::DIR_UNI);
-		$this->assertSame("(a)-[]-(b)", $r->toString());
+		$this->assertSame("(a)-[]-(b)", $r->toQuery());
 	}
 
 	/**
@@ -77,7 +77,7 @@ class RelationshipTest extends TestCase
 		$r = new Relationship($this->a, $this->b, $direction);
 		$r->named($name);
 
-		$this->assertSame($expected, $r->toString());
+		$this->assertSame($expected, $r->toQuery());
 	}
 
 	/**
@@ -91,7 +91,7 @@ class RelationshipTest extends TestCase
 		$r = new Relationship($this->a, $this->b, $direction);
 		$r->withType($type);
 
-		$this->assertSame($expected, $r->toString());
+		$this->assertSame($expected, $r->toQuery());
 	}
 
 	/**
@@ -105,7 +105,7 @@ class RelationshipTest extends TestCase
 		$r = new Relationship($this->a, $this->b, $direction);
 		$r->withProperties($properties);
 
-		$this->assertSame($expected, $r->toString());
+		$this->assertSame($expected, $r->toQuery());
 	}
 
 	/**
@@ -120,7 +120,7 @@ class RelationshipTest extends TestCase
 		$r = new Relationship($this->a, $this->b, $direction);
 		$r->named($name)->withType($type);
 
-		$this->assertSame($expected, $r->toString());
+		$this->assertSame($expected, $r->toQuery());
 	}
 
 	/**
@@ -135,7 +135,7 @@ class RelationshipTest extends TestCase
 		$r = new Relationship($this->a, $this->b, $direction);
 		$r->named($name)->withProperties($properties);
 
-		$this->assertSame($expected, $r->toString());
+		$this->assertSame($expected, $r->toQuery());
 	}
 
 	/**
@@ -150,7 +150,7 @@ class RelationshipTest extends TestCase
 		$r = new Relationship($this->a, $this->b, $direction);
 		$r->withType($type)->withProperties($properties);
 
-		$this->assertSame($expected, $r->toString());
+		$this->assertSame($expected, $r->toQuery());
 	}
 
 	/**
@@ -166,18 +166,18 @@ class RelationshipTest extends TestCase
 		$r = new Relationship($this->a, $this->b, $direction);
 		$r->named($name)->withType($type)->withProperties($properties);
 
-		$this->assertSame($expected, $r->toString());
+		$this->assertSame($expected, $r->toQuery());
 	}
 
 	/**
-	 * @dataProvider provideWithMultiplePropertiesData
+	 * @dataProvider provideWithMultipleTypesData
 	 * @param string $name
 	 * @param array $types
 	 * @param array $properties
 	 * @param array $direction
 	 * @param string $expected
 	 */
-	public function testWithMultipleProperties(string $name, array $types, array $properties, array $direction, string $expected)
+	public function testWithMultipleTypes(string $name, array $types, array $properties, array $direction, string $expected)
 	{
 		$r = new Relationship($this->a, $this->b, $direction);
 		$r->named($name)->withProperties($properties);
@@ -186,7 +186,7 @@ class RelationshipTest extends TestCase
 			$r->withType($type);
 		}
 
-		$this->assertSame($expected, $r->toString());
+		$this->assertSame($expected, $r->toQuery());
 	}
 
 	public function provideWithNameData(): array
@@ -208,6 +208,17 @@ class RelationshipTest extends TestCase
 		];
 	}
 
+	public function provideWithPropertiesData()
+	{
+		return [
+			[[], Relationship::DIR_LEFT, "(a)<-[{}]-(b)"],
+			[['a'], Relationship::DIR_LEFT, "(a)<-[{`0`: 'a'}]-(b)"],
+			[['a' => 'b'], Relationship::DIR_LEFT, "(a)<-[{a: 'b'}]-(b)"],
+			[['a' => 'b', 'c'], Relationship::DIR_LEFT, "(a)<-[{a: 'b', `0`: 'c'}]-(b)"],
+			[[':' => 12], Relationship::DIR_LEFT, "(a)<-[{`:`: 12}]-(b)"]
+		];
+	}
+
 	public function provideWithNameAndTypeData(): array
 	{
 		return [
@@ -216,7 +227,52 @@ class RelationshipTest extends TestCase
 			['', 'a', Relationship::DIR_LEFT, '(a)<-[:a]-(b)'],
 			['a', 'b', Relationship::DIR_LEFT, '(a)<-[a:b]-(b)'],
 			[':', 'b', Relationship::DIR_LEFT, '(a)<-[`:`:b]-(b)'],
-			// TODO: Some more tests
+			[':', ':', Relationship::DIR_LEFT, '(a)<-[`:`:`:`]-(b)']
+		];
+	}
+
+	public function provideWithNameAndPropertiesData()
+	{
+		return [
+			['a', [], Relationship::DIR_LEFT, "(a)<-[a {}]-(b)"],
+			['b', ['a'], Relationship::DIR_LEFT, "(a)<-[b {`0`: 'a'}]-(b)"],
+			['', ['a' => 'b'], Relationship::DIR_LEFT, "(a)<-[{a: 'b'}]-(b)"],
+			[':', ['a' => 'b', 'c'], Relationship::DIR_LEFT, "(a)<-[`:` {a: 'b', `0`: 'c'}]-(b)"]
+		];
+	}
+
+	public function provideWithTypeAndPropertiesData()
+	{
+		return [
+			['a', [], Relationship::DIR_LEFT, "(a)<-[:a {}]-(b)"],
+			['b', ['a'], Relationship::DIR_LEFT, "(a)<-[:b {`0`: 'a'}]-(b)"],
+			['', ['a' => 'b'], Relationship::DIR_LEFT, "(a)<-[{a: 'b'}]-(b)"],
+			[':', ['a' => 'b', 'c'], Relationship::DIR_LEFT, "(a)<-[:`:` {a: 'b', `0`: 'c'}]-(b)"]
+		];
+	}
+
+	public function provideWithNameAndTypeAndPropertiesData()
+	{
+		return [
+			['a', 'a', [], Relationship::DIR_LEFT, "(a)<-[a:a {}]-(b)"],
+			['b', 'a', ['a'], Relationship::DIR_LEFT, "(a)<-[b:a {`0`: 'a'}]-(b)"],
+			['', 'a', ['a' => 'b'], Relationship::DIR_LEFT, "(a)<-[:a {a: 'b'}]-(b)"],
+			[':', 'a', ['a' => 'b', 'c'], Relationship::DIR_LEFT, "(a)<-[`:`:a {a: 'b', `0`: 'c'}]-(b)"],
+			['a', 'b', ['a'], Relationship::DIR_LEFT, "(a)<-[a:b {`0`: 'a'}]-(b)"],
+			['a', '', ['a' => 'b'], Relationship::DIR_LEFT, "(a)<-[a {a: 'b'}]-(b)"],
+			['a', ':', ['a' => 'b', 'c'], Relationship::DIR_LEFT, "(a)<-[a:`:` {a: 'b', `0`: 'c'}]-(b)"]
+		];
+	}
+
+	public function provideWithMultipleTypesData()
+	{
+		return [
+			['a', [], [], Relationship::DIR_LEFT, "(a)<-[a {}]-(b)"],
+			['b', ['a'], ['a'], Relationship::DIR_LEFT, "(a)<-[b:a {`0`: 'a'}]-(b)"],
+			['', ['a', 'b'], ['a' => 'b'], Relationship::DIR_LEFT, "(a)<-[:a|b {a: 'b'}]-(b)"],
+			[':', ['a', ':'], ['a' => 'b', 'c'], Relationship::DIR_LEFT, "(a)<-[`:`:a|`:` {a: 'b', `0`: 'c'}]-(b)"],
+			['a', ['a', 'b', 'c'], ['a'], Relationship::DIR_LEFT, "(a)<-[a:a|b|c {`0`: 'a'}]-(b)"],
+			['a', ['a', 'b'], [], Relationship::DIR_LEFT, "(a)<-[a:a|b {}]-(b)"]
 		];
 	}
 
@@ -224,21 +280,13 @@ class RelationshipTest extends TestCase
 	 * Creates a mock of the Pattern class that returns the given string when toString() is called.
 	 *
 	 * @param string $toString
-	 * @return Pattern|MockObject
+	 * @return \WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern|MockObject
 	 */
 	private function getPatternMock(string $toString): Pattern
 	{
 		$mock = $this->getMockBuilder(Pattern::class)->getMock();
-		$mock->method('toString')->willReturn($toString);
+		$mock->method('toQuery')->willReturn($toString);
 
 		return $mock;
-	}
-
-	public function provideWithPropertiesData()
-	{
-		return [
-			[[], Relationship::DIR_LEFT, "(a)<-[]-(b)"],
-			[['a'], Relationship::DIR_LEFT, "(a)<-[{`0`: 'a'}]-(b)"]
-		];
 	}
 }

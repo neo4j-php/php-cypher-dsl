@@ -19,8 +19,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL;
+namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
-class Query
+use WikibaseSolutions\CypherDSL\Expressions\Expression;
+
+/**
+ * Marker interface that represents a literal.
+ *
+ * @package WikibaseSolutions\CypherDSL\Expressions\Patterns
+ */
+interface Literal extends Expression
 {
+	/**
+	 * Converts the literal into a query.
+	 *
+	 * @return string
+	 */
+	public function toQuery(): string;
 }

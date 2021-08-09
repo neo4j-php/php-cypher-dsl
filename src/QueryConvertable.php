@@ -21,6 +21,18 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-class Query
+/**
+ * This interface represents any class that can be converted into a (partial) Cypher query.
+ *
+ * @see https://neo4j.com/docs/cypher-manual/current/
+ * @package WikibaseSolutions\CypherDSL
+ */
+interface QueryConvertable
 {
+	/**
+	 * Converts the object into a query.
+	 *
+	 * @return string
+	 */
+	public function toQuery(): string;
 }

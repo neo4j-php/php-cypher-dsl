@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Patterns\Pattern;
+use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 
 /**
  * This class represents a MATCH clause.
@@ -29,27 +29,30 @@ use WikibaseSolutions\CypherDSL\Patterns\Pattern;
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/
  * @package WikibaseSolutions\CypherDSL\Clauses
  */
-class Match extends Clause
+class MatchClause extends Clause
 {
 	/**
 	 * @var Pattern[] List of patterns
 	 */
-	private array $patterns;
+	private array $patterns = [];
 
 	/**
 	 * Add a pattern to the match clause.
 	 *
 	 * @param Pattern $pattern
+	 * @return MatchClause
 	 */
-	public function addPattern(Pattern $pattern)
+	public function addPattern(Pattern $pattern): self
 	{
 		$this->patterns[] = $pattern;
+
+		return $this;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getClause(): string
+	protected function getClause(): string
 	{
 		return "MATCH";
 	}
@@ -57,8 +60,11 @@ class Match extends Clause
 	/**
 	 * @inheritDoc
 	 */
-	public function getSubject(): string
+	protected function getSubject(): string
 	{
-		return implode(",", array_map(fn (Pattern $pattern): string => $pattern->toString(), $this->patterns));
+		return implode(
+			", ",
+			array_map(fn (Pattern $pattern): string => $pattern->toQuery(), $this->patterns)
+		);
 	}
 }

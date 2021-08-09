@@ -29,52 +29,8 @@ use InvalidArgumentException;
  *
  * @package WikibaseSolutions\CypherDSL
  */
-trait Encoder
+trait Escape
 {
-	/**
-	 * Encodes the given key-value list of properties into a string that can be used directly in
-	 * a Cypher query.
-	 *
-	 * @param array $properties
-	 * @return string
-	 */
-	private function encodePropertyList(array $properties): string
-	{
-		$pairs = [];
-
-		foreach ($properties as $key => $value) {
-			$pairs[] = sprintf("%s: %s", $this->escapeName(strval($key)), $this->encodeValue($value));
-		}
-
-		return sprintf("{%s}", implode(", ", $pairs));
-	}
-
-	/**
-	 * Escapes the given value and returns the encoded variant (i.e. with quotes inserted) that
-	 * can directly be inserted into a Cypher query.
-	 *
-	 * @param $value
-	 * @return string
-	 */
-	private function encodeValue($value): string
-	{
-		if (is_string($value)) {
-			// Escape any quotes in the given value and then encapsulate the value with quotes
-			return sprintf("'%s'", str_replace("'", "\\'", $value));
-		}
-
-		if (is_array($value)) {
-			// Encode every value in the array, then put comma's in-between the values and place brackets
-			// around the result
-			return sprintf(
-				"[%s]",
-				implode(", ", array_map(fn ($value): string => $this->encodeValue($value), $value))
-			);
-		}
-
-		return strval($value);
-	}
-
 	/**
 	 * Escapes the given 'name'. A name is an unquoted literal in a Cypher query, such as variables,
 	 * types or property names.
@@ -82,7 +38,7 @@ trait Encoder
 	 * @param string $name
 	 * @return string
 	 */
-	private function escapeName(string $name): string
+	private function escape(string $name): string
 	{
 		if ($name === "") {
 			return "";

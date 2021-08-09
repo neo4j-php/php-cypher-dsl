@@ -19,21 +19,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Patterns;
+namespace WikibaseSolutions\CypherDSL\Expressions\Patterns;
 
 use InvalidArgumentException;
-use WikibaseSolutions\CypherDSL\Encoder;
+use WikibaseSolutions\CypherDSL\Escape;
+use WikibaseSolutions\CypherDSL\PropertyMap;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 
 /**
  * This class represents an arbitrary relationship between two nodes, a node and a
  * relationship or between two relationships.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
- * @package WikibaseSolutions\CypherDSL
+ * @package WikibaseSolutions\CypherDSL\Expressions\Patterns
  */
 class Relationship implements Pattern
 {
-	use Encoder;
+	use Escape;
 
 	const DIR_RIGHT = ["-", "->"];
 	const DIR_LEFT = ["<-", "-"];
@@ -55,19 +57,19 @@ class Relationship implements Pattern
 	private array $direction;
 
 	/**
-	 * @var string
-	 */
-	private string $variable = "";
-
-	/**
 	 * @var array
 	 */
 	private array $types = [];
 
 	/**
-	 * @var array
+	 * @var Variable
 	 */
-	private array $properties = [];
+	private Variable $variable;
+
+	/**
+	 * @var PropertyMap
+	 */
+	private PropertyMap $properties;
 
 	/**
 	 * Relationship constructor.
@@ -93,12 +95,31 @@ class Relationship implements Pattern
 	}
 
 	/**
-	 * @param string $variable
+	 * @param \WikibaseSolutions\CypherDSL\Expressions\Variable|string $variable
 	 * @return Relationship
 	 */
-	public function named(string $variable): self
+	public function named($variable): self
 	{
+		if (!($variable instanceof Variable)) {
+			$variable = new Variable($variable);
+		}
+
 		$this->variable = $variable;
+
+		return $this;
+	}
+
+	/**
+	 * @param PropertyMap|array $properties
+	 * @return Relationship
+	 */
+	public function withProperties($properties): self
+	{
+		if (!($properties instanceof PropertyMap)) {
+			$properties = new PropertyMap($properties);
+		}
+
+		$this->properties = $properties;
 
 		return $this;
 	}
@@ -115,26 +136,15 @@ class Relationship implements Pattern
 	}
 
 	/**
-	 * @param array $properties
-	 * @return Relationship
-	 */
-	public function withProperties(array $properties): self
-	{
-		$this->properties = $properties;
-
-		return $this;
-	}
-
-	/**
 	 * Returns the string representation of this relationship that can be used directly
 	 * in a query.
 	 *
 	 * @return string
 	 */
-	public function toString(): string
+	public function toQuery(): string
 	{
-		$a = $this->a->toString();
-		$b = $this->b->toString();
+		$a = $this->a->toQuery();
+		$b = $this->b->toQuery();
 
 		return $a . $this->direction[0] . $this->conditionToString() . $this->direction[1] . $b;
 	}
@@ -144,29 +154,30 @@ class Relationship implements Pattern
 	 */
 	private function conditionToString(): string
 	{
-		$escapedVariable = $this->escapeName($this->variable);
+		$conditionInner = "";
+
+		// The condition always starts with the variable
+		if (isset($this->variable)) {
+			$conditionInner .= $this->variable->toQuery();
+		}
 
 		$types = array_filter($this->types);
-		$properties = array_filter($this->properties);
 
 		if (count($types) !== 0) {
-			$escapedTypes = array_map(fn (string $type): string => $this->escapeName($type), $types);
-			$typeCondition = sprintf(":%s", implode("|", $escapedTypes));
-		} else {
-			$typeCondition = "";
+			// If we have at least one condition type, escape them and insert them into the query
+			$escapedTypes = array_map(fn (string $type): string => $this->escape($type), $types);
+			$conditionInner .= sprintf(":%s", implode("|", $escapedTypes));
 		}
 
-		if (count($properties) !== 0) {
-			$propertyList = $this->encodePropertyList($properties);
-
-			if ($typeCondition !== "" || $escapedVariable !== "") {
+		if (isset($this->properties)) {
+			if ($conditionInner !== "") {
 				// Add some padding between the property list and the preceding structure
-				$propertyList = " " . $propertyList;
+				$conditionInner .= " ";
 			}
-		} else {
-			$propertyList = "";
+
+			$conditionInner .= $this->properties->toQuery();
 		}
 
-		return sprintf("[%s%s%s]", $escapedVariable, $typeCondition, $propertyList);
+		return sprintf("[%s]", $conditionInner);
 	}
 }
