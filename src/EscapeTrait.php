@@ -29,7 +29,7 @@ use InvalidArgumentException;
  *
  * @package WikibaseSolutions\CypherDSL
  */
-trait Escape
+trait EscapeTrait
 {
 	/**
 	 * Escapes the given 'name'. A name is an unquoted literal in a Cypher query, such as variables,
