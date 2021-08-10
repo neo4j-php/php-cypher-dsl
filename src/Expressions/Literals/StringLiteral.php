@@ -65,11 +65,8 @@ class StringLiteral implements Expression
 	 */
 	public function toQuery(): string
 	{
-		// Encode backslashes
-		$value = str_replace("\\", "\\\\", $this->value);
-
 		// Encode tabs, newlines, carriage returns and form feeds
-		$value = str_replace(["\t", "\n", "\r", "\f"], ["\\t", "\\n", "\\r", "\\f"], $value);
+		$value = str_replace(["\t", "\n", "\r", "\f"], ["\\t", "\\n", "\\r", "\\f"], $this->value);
 
 		if ($this->useDoubleQuotes) {
 			return sprintf('"%s"', str_replace('"', '\"', $value));
