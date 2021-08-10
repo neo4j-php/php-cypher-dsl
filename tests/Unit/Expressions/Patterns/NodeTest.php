@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Patterns;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
@@ -29,7 +29,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Patterns\Node;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Patterns\Node
- * @package WikibaseSolutions\CypherDSL\Tests\Unit\Patterns
+ * @package WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Patterns
  */
 class NodeTest extends TestCase
 {

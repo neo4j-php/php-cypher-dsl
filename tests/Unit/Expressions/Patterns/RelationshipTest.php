@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Patterns;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -30,7 +30,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Patterns\Relationship;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Patterns\Relationship
- * @package WikibaseSolutions\CypherDSL\Tests\Unit\Patterns
+ * @package WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Patterns
  */
 class RelationshipTest extends TestCase
 {
