@@ -21,17 +21,19 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\QueryConvertable;
+
 /**
  * This class represents all the clauses in the Cypher query language.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/
  */
-abstract class Clause
+abstract class Clause implements QueryConvertable
 {
 	/**
 	 * @return string
 	 */
-	public function toString(): string
+	public function toQuery(): string
 	{
 		if ($this->getSubject() === "") {
 			// If we have an empty subject, either return the empty clause, or nothing at all
