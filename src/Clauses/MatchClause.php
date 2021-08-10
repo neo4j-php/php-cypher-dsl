@@ -62,9 +62,8 @@ class MatchClause extends Clause
 	 */
 	protected function getSubject(): string
 	{
-		return implode(
-			", ",
-			array_map(fn (Pattern $pattern): string => $pattern->toQuery(), $this->patterns)
-		);
+		$patterns = array_map(fn (Pattern $pattern): string => $pattern->toQuery(), $this->patterns);
+
+		return implode(", ", $patterns);
 	}
 }

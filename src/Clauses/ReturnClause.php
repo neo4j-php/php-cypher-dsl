@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
 
 /**
@@ -31,6 +32,8 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  */
 class ReturnClause extends Clause
 {
+	use EscapeTrait;
+
 	/**
 	 * @var bool Whether to be a RETURN DISTINCT query
 	 */
@@ -56,14 +59,21 @@ class ReturnClause extends Clause
 	}
 
 	/**
-	 * Adds the given expression to this RETURN clause.
+	 * Add a new column to this RETURN clause.
 	 *
-	 * @param Expression $expression
+	 * @param Expression $expression The expression to return
+	 * @param string $alias The alias of this column
+	 *
+	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
 	 * @return ReturnClause
 	 */
-	public function addExpression(Expression $expression): self
+	public function addColumn(Expression $expression, string $alias = ""): self
 	{
-		$this->expressions[] = $expression;
+		if ($alias !== "") {
+			$this->expressions[$alias] = $expression;
+		} else {
+			$this->expressions[] = $expression;
+		}
 
 		return $this;
 	}
@@ -83,9 +93,15 @@ class ReturnClause extends Clause
 	 */
 	protected function getSubject(): string
 	{
-		return implode(
-			", ",
-			array_map(fn (Expression $expression): string => $expression->toQuery(), $this->expressions)
-		);
+		$expressions = [];
+
+		foreach ($this->expressions as $alias => $expression) {
+			$expressionQuery = $expression->toQuery();
+			$expressions[] = is_int($alias) ?
+				$expressionQuery :
+				sprintf("%s AS %s", $expressionQuery,  $this->escape($alias));
+		}
+
+		return implode(", ", $expressions);
 	}
 }
