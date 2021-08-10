@@ -278,15 +278,15 @@ class RelationshipTest extends TestCase
 	}
 
 	/**
-	 * Creates a mock of the Pattern class that returns the given string when toString() is called.
+	 * Creates a mock of the Pattern class that returns the given string when toQuery() is called.
 	 *
-	 * @param string $toString
+	 * @param string $pattern
 	 * @return Pattern|MockObject
 	 */
-	private function getPatternMock(string $toString): Pattern
+	private function getPatternMock(string $pattern): Pattern
 	{
 		$mock = $this->getMockBuilder(Pattern::class)->getMock();
-		$mock->method('toQuery')->willReturn($toString);
+		$mock->method('toQuery')->willReturn($pattern);
 
 		return $mock;
 	}
