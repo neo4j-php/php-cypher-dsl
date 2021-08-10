@@ -26,7 +26,7 @@ class DecimalTest extends TestCase
 	{
 		$decimal = new Decimal($number);
 
-		$this->assertSame($expected, $number);
+		$this->assertSame($expected, $decimal->toQuery());
 	}
 
 	public function provideToQueryData(): array

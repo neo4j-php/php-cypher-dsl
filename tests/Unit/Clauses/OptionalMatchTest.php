@@ -35,7 +35,7 @@ class OptionalMatchTest extends TestCase
 	{
 		$match = new OptionalMatchClause();
 
-		$this->assertSame("", $match->toString());
+		$this->assertSame("", $match->toQuery());
 	}
 
 	public function testSinglePattern()
@@ -43,7 +43,7 @@ class OptionalMatchTest extends TestCase
 		$match = new OptionalMatchClause();
 		$match->addPattern($this->getPatternMock("(a)"));
 
-		$this->assertSame("OPTIONAL MATCH (a)", $match->toString());
+		$this->assertSame("OPTIONAL MATCH (a)", $match->toQuery());
 	}
 
 	public function testMultiplePatterns()
@@ -52,14 +52,14 @@ class OptionalMatchTest extends TestCase
 		$match->addPattern($this->getPatternMock("(a)"));
 		$match->addPattern($this->getPatternMock("(b)"));
 
-		$this->assertSame("OPTIONAL MATCH (a), (b)", $match->toString());
+		$this->assertSame("OPTIONAL MATCH (a), (b)", $match->toQuery());
 	}
 
 	/**
 	 * Creates a mock of the Pattern class that returns the given string when toString() is called.
 	 *
 	 * @param string $toString
-	 * @return \WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern|MockObject
+	 * @return Pattern|MockObject
 	 */
 	private function getPatternMock(string $toString): Pattern
 	{

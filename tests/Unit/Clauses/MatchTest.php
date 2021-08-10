@@ -35,7 +35,7 @@ class MatchTest extends TestCase
 	{
 		$match = new MatchClause();
 
-		$this->assertSame("", $match->toString());
+		$this->assertSame("", $match->toQuery());
 	}
 
 	public function testSinglePattern()
@@ -43,7 +43,7 @@ class MatchTest extends TestCase
 		$match = new MatchClause();
 		$match->addPattern($this->getPatternMock("(a)"));
 
-		$this->assertSame("MATCH (a)", $match->toString());
+		$this->assertSame("MATCH (a)", $match->toQuery());
 	}
 
 	public function testMultiplePatterns()
@@ -52,7 +52,7 @@ class MatchTest extends TestCase
 		$match->addPattern($this->getPatternMock("(a)"));
 		$match->addPattern($this->getPatternMock("(b)"));
 
-		$this->assertSame("MATCH (a), (b)", $match->toString());
+		$this->assertSame("MATCH (a), (b)", $match->toQuery());
 	}
 
 	/**
