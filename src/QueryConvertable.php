@@ -29,7 +29,7 @@ namespace WikibaseSolutions\CypherDSL;
 interface QueryConvertable
 {
 	/**
-	 * Converts the object into a query.
+	 * Converts the object into a (partial) query.
 	 *
 	 * @return string
 	 */
