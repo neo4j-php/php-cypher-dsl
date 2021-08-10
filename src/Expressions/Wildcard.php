@@ -21,49 +21,19 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
-use WikibaseSolutions\CypherDSL\EscapeTrait;
-
 /**
- * Represents a variable.
+ * Represents a wildcard variable.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/variables/
+ * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-all-elements
  * @package WikibaseSolutions\CypherDSL\Expressions
  */
-class Variable implements Expression
+class Wildcard implements Expression
 {
-	use EscapeTrait;
-
-	/**
-	 * @var string The variable
-	 */
-	private string $variable;
-
-	/**
-	 * Variable constructor.
-	 *
-	 * @param string $variable The variable
-	 */
-	public function __construct(string $variable)
-	{
-		$this->variable = $variable;
-	}
-
-	/**
-	 * Returns the property of the given name for this variable.
-	 *
-	 * @param string $property
-	 * @return Property
-	 */
-	public function property(string $property): Property
-	{
-		return new Property($this, $property);
-	}
-
 	/**
 	 * @inheritDoc
 	 */
 	public function toQuery(): string
 	{
-		return $this->escape($this->variable);
+		return "*";
 	}
 }

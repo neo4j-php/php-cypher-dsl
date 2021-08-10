@@ -24,39 +24,37 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
 use WikibaseSolutions\CypherDSL\EscapeTrait;
 
 /**
- * Represents a variable.
+ * This class represents a list of expressions. For example, this class can represent the following
+ * construct:
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/variables/
- * @package WikibaseSolutions\CypherDSL\Expressions
+ * ['a', 2, n.property]
+ *
+ * @see PropertyMap for a construct that takes keys into account
+ * @package WikibaseSolutions\CypherDSL
  */
-class Variable implements Expression
+class ExpressionList implements Expression
 {
 	use EscapeTrait;
 
 	/**
-	 * @var string The variable
+	 * @var array The list of expressions
 	 */
-	private string $variable;
+	private array $expressions;
 
 	/**
-	 * Variable constructor.
+	 * ExpressionList constructor.
 	 *
-	 * @param string $variable The variable
+	 * @param Expression[] $expressions The list of expressions
 	 */
-	public function __construct(string $variable)
+	public function __construct(array $expressions)
 	{
-		$this->variable = $variable;
-	}
+		foreach ($expressions as $expression) {
+			if (!($expression instanceof Expression)) {
+				throw new \InvalidArgumentException("\$expressions must be an array of only Expression objects");
+			}
+		}
 
-	/**
-	 * Returns the property of the given name for this variable.
-	 *
-	 * @param string $property
-	 * @return Property
-	 */
-	public function property(string $property): Property
-	{
-		return new Property($this, $property);
+		$this->expressions = $expressions;
 	}
 
 	/**
@@ -64,6 +62,8 @@ class Variable implements Expression
 	 */
 	public function toQuery(): string
 	{
-		return $this->escape($this->variable);
+		$expressions = array_map(fn (Expression $expression): string => $expression->toQuery(), $this->expressions);
+
+		return sprintf("[%s]", implode(", ", $expressions));
 	}
 }

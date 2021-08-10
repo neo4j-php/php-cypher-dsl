@@ -22,6 +22,9 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Node;
 
 /**
@@ -175,7 +178,7 @@ class NodeTest extends TestCase
 		return [
 			[new Node('__`__')],
 			[(new Node())->named('__`__')],
-			[(new Node())->withProperties(['__`__' => "foobar"])]
+			[(new Node())->withProperties(['__`__' => new StringLiteral('a')])]
 		];
 	}
 
@@ -191,36 +194,36 @@ class NodeTest extends TestCase
 	public function provideWithNameAndPropertiesData()
 	{
 		return [
-			['a', ['a' => 'b', 'b' => 'c'], "(a {a: 'b', b: 'c'})"],
-			['b', ['a' => 0, 'b' => 1], "(b {a: 0, b: 1})"],
-			['c', [':' => [1,'a']], "(c {`:`: [1, 'a']})"]
+			['a', ['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "(a {a: 'b', b: 'c'})"],
+			['b', ['a' => new Decimal(0), 'b' => new Decimal(1)], "(b {a: 0, b: 1})"],
+			['c', [':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "(c {`:`: [1, 'a']})"]
 		];
 	}
 
 	public function provideWithLabelAndPropertiesData()
 	{
 		return [
-			['a', ['a' => 'b', 'b' => 'c'], "(:a {a: 'b', b: 'c'})"],
-			['b', ['a' => 0, 'b' => 1], "(:b {a: 0, b: 1})"],
-			['c', [':' => [1,'a']], "(:c {`:`: [1, 'a']})"]
+			['a', ['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "(:a {a: 'b', b: 'c'})"],
+			['b', ['a' => new Decimal(0), 'b' => new Decimal(1)], "(:b {a: 0, b: 1})"],
+			['c', [':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "(:c {`:`: [1, 'a']})"]
 		];
 	}
 
 	public function provideOnlyPropertiesData()
 	{
 		return [
-			[['a' => 'b', 'b' => 'c'], "({a: 'b', b: 'c'})"],
-			[['a' => 0, 'b' => 1], "({a: 0, b: 1})"],
-			[[':' => [1,'a']], "({`:`: [1, 'a']})"]
+			[['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "({a: 'b', b: 'c'})"],
+			[['a' => new Decimal(0), 'b' => new Decimal(1)], "({a: 0, b: 1})"],
+			[[':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "({`:`: [1, 'a']})"]
 		];
 	}
 
 	public function provideWithNameAndLabelAndPropertiesData()
 	{
 		return [
-			['a', 'd', ['a' => 'b', 'b' => 'c'], "(a:d {a: 'b', b: 'c'})"],
-			['b', 'e', ['a' => 0, 'b' => 1], "(b:e {a: 0, b: 1})"],
-			['c', 'f', [':' => [1,'a']], "(c:f {`:`: [1, 'a']})"]
+			['a', 'd', ['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "(a:d {a: 'b', b: 'c'})"],
+			['b', 'e', ['a' => new Decimal(0), 'b' => new Decimal(1)], "(b:e {a: 0, b: 1})"],
+			['c', 'f', [':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "(c:f {`:`: [1, 'a']})"]
 		];
 	}
 }

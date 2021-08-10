@@ -22,8 +22,8 @@
 namespace WikibaseSolutions\CypherDSL\Expressions\Patterns;
 
 use InvalidArgumentException;
-use WikibaseSolutions\CypherDSL\Escape;
-use WikibaseSolutions\CypherDSL\PropertyMap;
+use WikibaseSolutions\CypherDSL\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 
 /**
@@ -35,7 +35,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Variable;
  */
 class Relationship implements Pattern
 {
-	use Escape;
+	use EscapeTrait;
 
 	const DIR_RIGHT = ["-", "->"];
 	const DIR_LEFT = ["<-", "-"];
@@ -67,7 +67,7 @@ class Relationship implements Pattern
 	private Variable $variable;
 
 	/**
-	 * @var PropertyMap
+	 * @var \WikibaseSolutions\CypherDSL\Expressions\PropertyMap
 	 */
 	private PropertyMap $properties;
 

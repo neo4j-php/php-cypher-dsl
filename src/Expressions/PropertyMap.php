@@ -19,9 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL;
+namespace WikibaseSolutions\CypherDSL\Expressions;
 
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\EscapeTrait;
 
 /**
  * This class represents a map of properties. For example, this class can represent the following
@@ -30,11 +30,11 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  * {name: 'Andy', sport: 'Brazilian Ju-Jitsu'}
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-properties
- * @package WikibaseSolutions\CypherDSL
+ * @package WikibaseSolutions\CypherDSL\Expressions
  */
-class PropertyMap implements QueryConvertable
+class PropertyMap implements Expression
 {
-	use Escape;
+	use EscapeTrait;
 
 	/**
 	 * @var array The map of properties
@@ -42,19 +42,23 @@ class PropertyMap implements QueryConvertable
 	private array $properties;
 
 	/**
-	 * Map constructor.
+	 * PropertyMap constructor.
 	 *
 	 * @param Expression[] $properties The map of properties as a number of key-expression pairs
 	 */
 	public function __construct(array $properties)
 	{
-		$this->properties = array_filter($properties);
+		foreach ($properties as $property) {
+			if (!($property instanceof Expression)) {
+				throw new \InvalidArgumentException("\$properties must be an array of only Expression objects");
+			}
+		}
+
+		$this->properties = $properties;
 	}
 
 	/**
-	 * Converts the map to a string that may be used directly in a Cypher query.
-	 *
-	 * @return string
+	 * @inheritDoc
 	 */
 	public function toQuery(): string
 	{

@@ -24,9 +24,10 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
 
 /**
- * Marker interface that represents a literal.
+ * Represents any literal in Cypher, such as decimals, strings and booleans.
  *
- * @package WikibaseSolutions\CypherDSL\Expressions\Patterns
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/expressions/
+ * @package WikibaseSolutions\CypherDSL\Expressions\Literals
  */
 interface Literal extends Expression
 {

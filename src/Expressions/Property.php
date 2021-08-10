@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
-use WikibaseSolutions\CypherDSL\Escape;
+use WikibaseSolutions\CypherDSL\EscapeTrait;
 
 /**
  * Represents a property. A property in Cypher would be something like "n.prop".
@@ -30,7 +30,7 @@ use WikibaseSolutions\CypherDSL\Escape;
  */
 class Property implements Expression
 {
-	use Escape;
+	use EscapeTrait;
 
 	/**
 	 * @var Variable The variable to which this property belongs

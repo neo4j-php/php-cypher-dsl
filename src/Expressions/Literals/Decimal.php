@@ -19,44 +19,28 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
-
-use WikibaseSolutions\CypherDSL\EscapeTrait;
+namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
 /**
- * Represents a variable.
+ * Represents a decimal (integer or float) literal.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/variables/
- * @package WikibaseSolutions\CypherDSL\Expressions
+ * @package WikibaseSolutions\CypherDSL\Expressions\Literals
  */
-class Variable implements Expression
+class Decimal implements Literal
 {
-	use EscapeTrait;
-
 	/**
-	 * @var string The variable
+	 * @var string The value
 	 */
-	private string $variable;
+	private string $value;
 
 	/**
-	 * Variable constructor.
+	 * Decimal constructor.
 	 *
-	 * @param string $variable The variable
+	 * @param int|float $value
 	 */
-	public function __construct(string $variable)
+	public function __construct($value)
 	{
-		$this->variable = $variable;
-	}
-
-	/**
-	 * Returns the property of the given name for this variable.
-	 *
-	 * @param string $property
-	 * @return Property
-	 */
-	public function property(string $property): Property
-	{
-		return new Property($this, $property);
+		$this->value = $value;
 	}
 
 	/**
@@ -64,6 +48,6 @@ class Variable implements Expression
 	 */
 	public function toQuery(): string
 	{
-		return $this->escape($this->variable);
+		return strval($this->value);
 	}
 }

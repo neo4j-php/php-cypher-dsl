@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Patterns;
 
-use WikibaseSolutions\CypherDSL\Escape;
-use WikibaseSolutions\CypherDSL\PropertyMap;
+use WikibaseSolutions\CypherDSL\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 
 /**
@@ -33,7 +33,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Variable;
  */
 class Node implements Pattern
 {
-	use Escape;
+	use EscapeTrait;
 
 	/**
 	 * @var string
@@ -41,7 +41,7 @@ class Node implements Pattern
 	private string $label = "";
 
 	/**
-	 * @var \WikibaseSolutions\CypherDSL\Expressions\Variable
+	 * @var Variable
 	 */
 	private Variable $variable;
 
@@ -60,7 +60,7 @@ class Node implements Pattern
 	}
 
 	/**
-	 * @param \WikibaseSolutions\CypherDSL\Expressions\Variable|string $variable
+	 * @param Variable|string $variable
 	 * @return Node
 	 */
 	public function named($variable): self
