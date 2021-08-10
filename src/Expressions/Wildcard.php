@@ -25,7 +25,6 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
  * Represents a wildcard variable.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-all-elements
- * @package WikibaseSolutions\CypherDSL\Expressions
  */
 class Wildcard implements Expression
 {

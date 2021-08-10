@@ -30,7 +30,6 @@ use WikibaseSolutions\CypherDSL\Expressions\Patterns\Relationship;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Patterns\Relationship
- * @package WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Patterns
  */
 class RelationshipTest extends TestCase
 {

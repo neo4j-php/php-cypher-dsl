@@ -28,7 +28,6 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  * in PHP cannot be named "String".
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/expressions/#cypher-expressions-string-literals
- * @package WikibaseSolutions\CypherDSL\Expressions\Literals
  */
 class StringLiteral implements Expression
 {

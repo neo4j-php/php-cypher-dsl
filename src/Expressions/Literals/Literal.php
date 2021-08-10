@@ -27,7 +27,6 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  * Represents any literal in Cypher, such as decimals, strings and booleans.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/expressions/
- * @package WikibaseSolutions\CypherDSL\Expressions\Literals
  */
 interface Literal extends Expression
 {

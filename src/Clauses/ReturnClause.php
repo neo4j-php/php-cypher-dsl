@@ -28,7 +28,6 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  * This class represents a RETURN clause.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/
- * @package WikibaseSolutions\CypherDSL\Clauses
  */
 class ReturnClause extends Clause
 {

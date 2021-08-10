@@ -29,7 +29,6 @@ use WikibaseSolutions\CypherDSL\Expressions\Variable;
  * This class represents a node.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
- * @package WikibaseSolutions\CypherDSL\Expressions\Patterns
  */
 class Node implements Pattern
 {

@@ -27,7 +27,6 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  * Marker interface that represents a pattern. A pattern describes the shape of the data you are looking for.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/
- * @package WikibaseSolutions\CypherDSL\Expressions\Patterns
  */
 interface Pattern extends Expression
 {

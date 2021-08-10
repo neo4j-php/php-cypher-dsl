@@ -23,8 +23,6 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
 /**
  * Represents a decimal (integer or float) literal.
- *
- * @package WikibaseSolutions\CypherDSL\Expressions\Literals
  */
 class Decimal implements Literal
 {

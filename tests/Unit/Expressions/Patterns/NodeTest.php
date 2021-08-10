@@ -29,7 +29,6 @@ use WikibaseSolutions\CypherDSL\Expressions\Patterns\Node;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Patterns\Node
- * @package WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Patterns
  */
 class NodeTest extends TestCase
 {

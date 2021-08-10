@@ -30,7 +30,6 @@ use WikibaseSolutions\CypherDSL\EscapeTrait;
  * ['a', 2, n.property]
  *
  * @see PropertyMap for a construct that takes keys into account
- * @package WikibaseSolutions\CypherDSL
  */
 class ExpressionList implements Expression
 {

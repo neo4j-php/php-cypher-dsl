@@ -25,8 +25,6 @@ use WikibaseSolutions\CypherDSL\EscapeTrait;
 
 /**
  * Represents a property. A property in Cypher would be something like "n.prop".
- *
- * @package WikibaseSolutions\CypherDSL
  */
 class Property implements Expression
 {

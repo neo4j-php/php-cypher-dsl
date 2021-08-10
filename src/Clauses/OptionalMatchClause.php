@@ -27,7 +27,6 @@ use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
  * This class represents an OPTIONAL MATCH clause.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/optional-match/
- * @package WikibaseSolutions\CypherDSL\Clauses
  */
 class OptionalMatchClause extends Clause
 {

@@ -23,8 +23,6 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
 /**
  * Represents a boolean (true or false) literal.
- *
- * @package WikibaseSolutions\CypherDSL\Expressions\Literals
  */
 class Boolean implements Literal
 {

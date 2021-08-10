@@ -9,7 +9,6 @@ use WikibaseSolutions\CypherDSL\QueryConvertable;
  * This class represents any function call.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/
- * @package WikibaseSolutions\CypherDSL\Expressions\Functions
  */
 abstract class FunctionCall implements Expression
 {

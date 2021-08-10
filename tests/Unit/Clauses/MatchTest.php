@@ -28,7 +28,6 @@ use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\MatchClause
- * @package WikibaseSolutions\CypherDSL\Tests\Unit\Clauses
  */
 class MatchTest extends TestCase
 {

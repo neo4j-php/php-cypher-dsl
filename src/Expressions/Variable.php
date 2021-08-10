@@ -27,7 +27,6 @@ use WikibaseSolutions\CypherDSL\EscapeTrait;
  * Represents a variable.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/variables/
- * @package WikibaseSolutions\CypherDSL\Expressions
  */
 class Variable implements Expression
 {

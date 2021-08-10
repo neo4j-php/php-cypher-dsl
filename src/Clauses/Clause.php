@@ -25,7 +25,6 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
  * This class represents all the clauses in the Cypher query language.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/
- * @package WikibaseSolutions\CypherDSL\Clauses
  */
 abstract class Clause
 {

@@ -30,7 +30,6 @@ use WikibaseSolutions\CypherDSL\EscapeTrait;
  * {name: 'Andy', sport: 'Brazilian Ju-Jitsu'}
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-properties
- * @package WikibaseSolutions\CypherDSL\Expressions
  */
 class PropertyMap implements Expression
 {

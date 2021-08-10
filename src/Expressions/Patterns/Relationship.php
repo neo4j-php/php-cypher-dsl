@@ -31,7 +31,6 @@ use WikibaseSolutions\CypherDSL\Expressions\Variable;
  * relationship or between two relationships.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
- * @package WikibaseSolutions\CypherDSL\Expressions\Patterns
  */
 class Relationship implements Pattern
 {

@@ -48,7 +48,6 @@ use WikibaseSolutions\CypherDSL\QueryConvertable;
  * - A CASE expression.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/expressions/
- * @package WikibaseSolutions\CypherDSL
  */
 interface Expression extends QueryConvertable
 {

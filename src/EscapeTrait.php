@@ -26,8 +26,6 @@ use InvalidArgumentException;
 /**
  * Trait for encoding certain structures that are used in multiple clauses in a
  * Cypher query.
- *
- * @package WikibaseSolutions\CypherDSL
  */
 trait EscapeTrait
 {
