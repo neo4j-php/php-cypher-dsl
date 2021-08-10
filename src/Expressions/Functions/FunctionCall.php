@@ -23,18 +23,18 @@ abstract class FunctionCall implements Expression
 			$this->getParameters()
 		);
 
-		return sprintf($signature, $parameters);
+		return sprintf($signature, ...$parameters);
 	}
 
 	/**
 	 * Returns the signature of this function as a format string. For example for the "all()" function,
 	 * the signature would be this:
 	 *
-	 * "all(%s IN $s WHERE %s)"
+	 * "all(%s IN %s WHERE %s)"
 	 *
 	 * @return string
 	 */
-	abstract public function getSignature(): string;
+	abstract protected function getSignature(): string;
 
 	/**
 	 * The parameters for this function as QueryConvertable objects. These parameters are inserted, in order, into
@@ -42,5 +42,5 @@ abstract class FunctionCall implements Expression
 	 *
 	 * @return QueryConvertable[]
 	 */
-	abstract public function getParameters(): array;
+	abstract protected function getParameters(): array;
 }
