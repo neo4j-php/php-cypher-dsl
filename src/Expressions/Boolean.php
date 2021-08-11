@@ -19,21 +19,33 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
-
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
+namespace WikibaseSolutions\CypherDSL\Expressions;
 
 /**
- * Represents any literal in Cypher, such as decimals, strings and booleans.
- *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/expressions/
+ * Represents a boolean (true or false) literal.
  */
-interface Literal extends Expression
+class Boolean implements Expression
 {
 	/**
-	 * Converts the literal into a query.
-	 *
-	 * @return string
+	 * @var bool The value
 	 */
-	public function toQuery(): string;
+	private bool $value;
+
+	/**
+	 * Boolean constructor.
+	 *
+	 * @param bool $value
+	 */
+	public function __construct(bool $value)
+	{
+		$this->value = $value;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function toQuery(): string
+	{
+		return $this->value ? "true" : "false";
+	}
 }

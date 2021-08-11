@@ -1,12 +1,12 @@
 <?php
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Literals;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\Expressions\Decimal;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Decimal
  */
 class DecimalTest extends TestCase
 {

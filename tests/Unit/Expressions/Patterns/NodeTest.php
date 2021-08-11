@@ -23,8 +23,8 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Patterns;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
+use WikibaseSolutions\CypherDSL\Expressions\Decimal;
+use WikibaseSolutions\CypherDSL\Expressions\StringLiteral;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Node;
 
 /**

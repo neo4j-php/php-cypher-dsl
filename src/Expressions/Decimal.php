@@ -19,24 +19,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
+namespace WikibaseSolutions\CypherDSL\Expressions;
 
 /**
- * Represents a boolean (true or false) literal.
+ * Represents a decimal (integer or float) literal.
  */
-class Boolean implements Literal
+class Decimal implements Expression
 {
 	/**
-	 * @var bool The value
+	 * @var string The value
 	 */
-	private bool $value;
+	private string $value;
 
 	/**
-	 * Boolean constructor.
+	 * Decimal constructor.
 	 *
-	 * @param bool $value
+	 * @param int|float $value
 	 */
-	public function __construct(bool $value)
+	public function __construct($value)
 	{
 		$this->value = $value;
 	}
@@ -46,6 +46,6 @@ class Boolean implements Literal
 	 */
 	public function toQuery(): string
 	{
-		return $this->value ? "true" : "false";
+		return strval($this->value);
 	}
 }

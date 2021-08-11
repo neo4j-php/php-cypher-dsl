@@ -1,12 +1,12 @@
 <?php
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Literals;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
+use WikibaseSolutions\CypherDSL\Expressions\StringLiteral;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\StringLiteral
  */
 class StringLiteralTest extends TestCase
 {
@@ -33,7 +33,7 @@ class StringLiteralTest extends TestCase
 	 */
 	public function testSingleQuotes(string $string, string $expected)
 	{
-		$string = new StringLiteral($string);
+		$string = new \WikibaseSolutions\CypherDSL\Expressions\StringLiteral($string);
 		$string->useDoubleQuotes(false);
 
 		$this->assertSame($expected, $string->toQuery());

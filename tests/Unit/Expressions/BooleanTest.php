@@ -1,12 +1,12 @@
 <?php
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Literals;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
+use WikibaseSolutions\CypherDSL\Expressions\Boolean;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Boolean
  */
 class BooleanTest extends TestCase
 {
