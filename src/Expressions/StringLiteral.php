@@ -21,8 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
-
 /**
  * Represents a string literal. The name of this class diverges from the naming scheme, because a class
  * in PHP cannot be named "String".
