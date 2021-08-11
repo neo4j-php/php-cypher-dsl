@@ -23,4 +23,8 @@ namespace WikibaseSolutions\CypherDSL;
 
 class Query
 {
+	// TODO: Write this class;
+	// This class will contain helper functions as well as provide a structure for
+	// constructing multi-clause queries. It will be similar in usage to the "Cypher"
+	// class in the Java DSL (https://neo4j-contrib.github.io/cypher-dsl/current/).
 }
