@@ -3,7 +3,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
 
-use WikibaseSolutions\CypherDSL\QueryConvertable;
+use WikibaseSolutions\CypherDSL\Expressions\Expression;
 
 /**
  * Represents the "all()" function.
@@ -13,30 +13,30 @@ use WikibaseSolutions\CypherDSL\QueryConvertable;
 class All extends FunctionCall
 {
 	/**
-	 * @var QueryConvertable A variable that can be used from within the predicate
+	 * @var Expression A variable that can be used from within the predicate
 	 */
-	private QueryConvertable $variable;
+	private Expression $variable;
 
 	/**
-	 * @var QueryConvertable An expression that returns a list
+	 * @var Expression An expression that returns a list
 	 */
-	private QueryConvertable $list;
+	private Expression $list;
 
 	/**
-	 * @var QueryConvertable A predicate that is tested against all items in the list
+	 * @var Expression A predicate that is tested against all items in the list
 	 */
-	private QueryConvertable $predicate;
+	private Expression $predicate;
 
 	/**
 	 * All constructor. The signature of the "all()" function is:
 	 *
 	 * all(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
 	 *
-	 * @param QueryConvertable $variable A variable that can be used from within the predicate
-	 * @param QueryConvertable $list An expression that returns a list
-	 * @param QueryConvertable $predicate A predicate that is tested against all items in the list
+	 * @param Expression $variable A variable that can be used from within the predicate
+	 * @param Expression $list An expression that returns a list
+	 * @param Expression $predicate A predicate that is tested against all items in the list
 	 */
-	public function __construct(QueryConvertable $variable, QueryConvertable $list, QueryConvertable $predicate)
+	public function __construct(Expression $variable, Expression $list, Expression $predicate)
 	{
 		$this->variable = $variable;
 		$this->list = $list;

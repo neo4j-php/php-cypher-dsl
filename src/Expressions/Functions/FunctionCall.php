@@ -40,7 +40,7 @@ abstract class FunctionCall implements Expression
 	 * The parameters for this function as QueryConvertable objects. These parameters are inserted, in order, into
 	 * the signature string retrieved from ::getSignature().
 	 *
-	 * @return QueryConvertable[]
+	 * @return Expression[]
 	 */
 	abstract protected function getParameters(): array;
 }
