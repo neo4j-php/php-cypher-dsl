@@ -2,14 +2,15 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Expressions\Expression;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 
 class SetClause extends Clause
 {
-    private array $patterns = [];
+    private array $expressions = [];
 
-    public function addPattern(Pattern $pattern): void {
-        $this->patterns[] = $pattern;
+    public function addExpression(Expression $expression): void {
+        $this->expressions[] = $expression;
     }
     /**
      * @inheritDoc
@@ -24,8 +25,8 @@ class SetClause extends Clause
      */
     protected function getSubject(): string
     {
-        $patterns = array_map(fn (Pattern $pattern): string => $pattern->toQuery(), $this->patterns);
+        $expression = array_map(fn (Expression $expression): string => $expression->toQuery(), $this->expressions);
 
-        return implode(", ", $patterns);
+        return implode(", ", $expression);
     }
 }

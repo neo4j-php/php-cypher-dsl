@@ -2,16 +2,22 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Expressions\Expression;
+
 class WhereClause extends Clause
 {
+    private Expression $expression;
+
+    public function setExpression(Expression $expression): void {
+        $this->expression = $expression;
+    }
 
     /**
      * @inheritDoc
      */
     protected function getClause(): string
     {
-        // TODO: Implement getClause() method.
-        return "";
+        return "WHERE";
     }
 
     /**
@@ -19,7 +25,6 @@ class WhereClause extends Clause
      */
     protected function getSubject(): string
     {
-        // TODO: Implement getSubject() method.
-        return "";
+        return $this->expression->toQuery();
     }
 }
