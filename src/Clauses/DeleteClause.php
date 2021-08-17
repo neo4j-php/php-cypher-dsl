@@ -2,16 +2,47 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Expressions\Expression;
+
 class DeleteClause extends Clause
 {
+    /**
+     * Used for checking if DETACH clause is needed
+     * @var bool $isDetach
+     */
+    private bool $isDetach = false;
+
+    /**
+     * The node that needs to be deleted
+     * @var Expression $node
+     */
+    private Expression $node;
+
+    /**
+     * sets the DETACH check
+     * @param bool $isDetach
+     */
+    public function setDetach(bool $isDetach): void {
+        $this->isDetach = $isDetach;
+    }
+
+    /**
+     * Set the node that needs to be deleted
+     * @param Expression $node
+     */
+    public function setNode(Expression $node): void {
+        $this->node = $node;
+    }
 
     /**
      * @inheritDoc
      */
     protected function getClause(): string
     {
-        // TODO: Implement getClause() method.
-        return "";
+        if ( $this->isDetach ) {
+            return "DETACH DELETE";
+        }
+        return "DELETE";
     }
 
     /**
@@ -19,7 +50,6 @@ class DeleteClause extends Clause
      */
     protected function getSubject(): string
     {
-        // TODO: Implement getSubject() method.
-        return "";
+        return $this->node->toQuery();
     }
 }

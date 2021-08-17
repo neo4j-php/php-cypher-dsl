@@ -2,16 +2,30 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Expressions\Expression;
+
 class LimitClause extends Clause
 {
+    /**
+     * The expression of the limit statement
+     * @var Expression $expression
+     */
+    private Expression $expression;
+
+    /**
+     * Sets the expression
+     * @param Expression $expression
+     */
+    public function setExpression(Expression $expression): void {
+        $this->expression = $expression;
+    }
 
     /**
      * @inheritDoc
      */
     protected function getClause(): string
     {
-        // TODO: Implement getClause() method.
-        return "";
+        return "LIMIT";
     }
 
     /**
@@ -19,7 +33,6 @@ class LimitClause extends Clause
      */
     protected function getSubject(): string
     {
-        // TODO: Implement getSubject() method.
-        return "";
+        return $this->expression->toQuery();
     }
 }
