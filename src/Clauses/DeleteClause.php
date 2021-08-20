@@ -2,7 +2,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 
 class DeleteClause extends Clause
 {
@@ -14,9 +14,9 @@ class DeleteClause extends Clause
 
     /**
      * The node that needs to be deleted
-     * @var Expression $node
+     * @var Pattern $node
      */
-    private Expression $node;
+    private Pattern $node;
 
     /**
      * sets the DETACH check
@@ -28,9 +28,9 @@ class DeleteClause extends Clause
 
     /**
      * Set the node that needs to be deleted
-     * @param Expression $node
+     * @param Pattern $node
      */
-    public function setNode(Expression $node): void {
+    public function setNode(Pattern $node): void {
         $this->node = $node;
     }
 
@@ -50,6 +50,9 @@ class DeleteClause extends Clause
      */
     protected function getSubject(): string
     {
-        return $this->node->toQuery();
+        if ( isset($this->node) ) {
+            return $this->node->toQuery();
+        }
+        return "";
     }
 }

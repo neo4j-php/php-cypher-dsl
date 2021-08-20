@@ -7,10 +7,13 @@ use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 
 class SetClause extends Clause
 {
-    private array $expressions = [];
+    /**
+     * @var Pattern[] $patterns
+     */
+    private array $patterns = [];
 
-    public function addExpression(Expression $expression): void {
-        $this->expressions[] = $expression;
+    public function addPattern(Pattern $pattern): void {
+        $this->patterns[] = $pattern;
     }
     /**
      * @inheritDoc
@@ -25,8 +28,8 @@ class SetClause extends Clause
      */
     protected function getSubject(): string
     {
-        $expression = array_map(fn (Expression $expression): string => $expression->toQuery(), $this->expressions);
+        $patterns = array_map(fn (Pattern $pattern): string => $pattern->toQuery(), $this->patterns);
 
-        return implode(", ", $expression);
+        return implode(", ", $patterns);
     }
 }

@@ -1,9 +1,8 @@
 <?php
 
-namespace Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
 
 use WikibaseSolutions\CypherDSL\Expressions\Functions\IsEmpty;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions\FunctionTestHelper;
 
 class IsEmptyTest extends \PHPUnit\Framework\TestCase
 {

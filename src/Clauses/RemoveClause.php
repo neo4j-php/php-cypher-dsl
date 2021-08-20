@@ -3,14 +3,15 @@
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 
 class RemoveClause extends Clause
 {
 
-    private Expression $expression;
+    private Pattern $pattern;
 
-    public function setExpression(Expression $expression): void {
-        $this->expression = $expression;
+    public function setPattern(Pattern $pattern): void {
+        $this->pattern = $pattern;
     }
 
     /**
@@ -26,6 +27,8 @@ class RemoveClause extends Clause
      */
     protected function getSubject(): string
     {
-        return $this->expression->toQuery();
+        if ( isset($this->pattern) ) return $this->pattern->toQuery();
+
+        return "";
     }
 }

@@ -41,7 +41,7 @@ class OrderByClauseTest extends TestCase
 	public function testSingleProperty()
 	{
 		$orderBy = new OrderByClause();
-		$orderBy->addProperty($this->getPropertyMock("a.a"));
+		$orderBy->addProperty(ClauseTestHelper::getPropertyMock("a.a", $this));
 
 		$this->assertSame("ORDER BY a.a", $orderBy->toQuery());
 	}
@@ -49,8 +49,8 @@ class OrderByClauseTest extends TestCase
 	public function testMultipleProperties()
 	{
 		$orderBy = new OrderByClause();
-		$orderBy->addProperty($this->getPropertyMock("a.a"));
-		$orderBy->addProperty($this->getPropertyMock("a.b"));
+		$orderBy->addProperty(ClauseTestHelper::getPropertyMock("a.a", $this));
+		$orderBy->addProperty(ClauseTestHelper::getPropertyMock("a.b", $this));
 
 		$this->assertSame("ORDER BY a.a, a.b", $orderBy->toQuery());
 	}
@@ -58,7 +58,7 @@ class OrderByClauseTest extends TestCase
 	public function testSinglePropertyDesc()
 	{
 		$orderBy = new OrderByClause();
-		$orderBy->addProperty($this->getPropertyMock("a.a"));
+		$orderBy->addProperty(ClauseTestHelper::getPropertyMock("a.a", $this));
 		$orderBy->setDescending();
 
 		$this->assertSame("ORDER BY a.a DESCENDING", $orderBy->toQuery());
@@ -67,24 +67,10 @@ class OrderByClauseTest extends TestCase
 	public function testMultiplePropertiesDesc()
 	{
 		$orderBy = new OrderByClause();
-		$orderBy->addProperty($this->getPropertyMock("a.a"));
-		$orderBy->addProperty($this->getPropertyMock("a.b"));
+		$orderBy->addProperty(ClauseTestHelper::getPropertyMock("a.a", $this));
+		$orderBy->addProperty(ClauseTestHelper::getPropertyMock("a.b", $this));
 		$orderBy->setDescending();
 
 		$this->assertSame("ORDER BY a.a, a.b DESCENDING", $orderBy->toQuery());
-	}
-
-	/**
-	 * Returns a mock of the Property class that returns the given string when toQuery() is called.
-	 *
-	 * @param string $variable
-	 * @return Property|MockObject
-	 */
-	private function getPropertyMock(string $variable): Property
-	{
-		$mock = $this->getMockBuilder(Property::class)->disableOriginalConstructor()->getMock();
-		$mock->method('toQuery')->willReturn($variable);
-
-		return $mock;
 	}
 }

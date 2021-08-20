@@ -41,7 +41,7 @@ class OptionalMatchTest extends TestCase
 	public function testSinglePattern()
 	{
 		$match = new OptionalMatchClause();
-		$match->addPattern($this->getPatternMock("(a)"));
+		$match->addPattern(ClauseTestHelper::getPatternMock("(a)", $this));
 
 		$this->assertSame("OPTIONAL MATCH (a)", $match->toQuery());
 	}
@@ -49,23 +49,9 @@ class OptionalMatchTest extends TestCase
 	public function testMultiplePatterns()
 	{
 		$match = new OptionalMatchClause();
-		$match->addPattern($this->getPatternMock("(a)"));
-		$match->addPattern($this->getPatternMock("(b)"));
+		$match->addPattern(ClauseTestHelper::getPatternMock("(a)", $this));
+		$match->addPattern(ClauseTestHelper::getPatternMock("(b)", $this));
 
 		$this->assertSame("OPTIONAL MATCH (a), (b)", $match->toQuery());
-	}
-
-	/**
-	 * Creates a mock of the Pattern class that returns the given string when toString() is called.
-	 *
-	 * @param string $toString
-	 * @return Pattern|MockObject
-	 */
-	private function getPatternMock(string $toString): Pattern
-	{
-		$mock = $this->getMockBuilder(Pattern::class)->getMock();
-		$mock->method('toQuery')->willReturn($toString);
-
-		return $mock;
 	}
 }

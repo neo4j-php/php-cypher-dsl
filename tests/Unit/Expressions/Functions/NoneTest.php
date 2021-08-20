@@ -1,9 +1,8 @@
 <?php
 
-namespace Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
 
 use WikibaseSolutions\CypherDSL\Expressions\Functions\None;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions\FunctionTestHelper;
 
 class NoneTest extends \PHPUnit\Framework\TestCase
 {

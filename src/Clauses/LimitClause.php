@@ -2,22 +2,22 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 
 class LimitClause extends Clause
 {
     /**
      * The expression of the limit statement
-     * @var Expression $expression
+     * @var Pattern $pattern
      */
-    private Expression $expression;
+    private Pattern $pattern;
 
     /**
      * Sets the expression
-     * @param Expression $expression
+     * @param Pattern $pattern
      */
-    public function setExpression(Expression $expression): void {
-        $this->expression = $expression;
+    public function setExpression(Pattern $pattern): void {
+        $this->pattern = $pattern;
     }
 
     /**
@@ -33,6 +33,8 @@ class LimitClause extends Clause
      */
     protected function getSubject(): string
     {
-        return $this->expression->toQuery();
+        if ( isset($this->pattern) ) return $this->pattern->toQuery();
+
+        return "";
     }
 }

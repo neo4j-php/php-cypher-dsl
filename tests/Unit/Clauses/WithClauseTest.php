@@ -41,7 +41,7 @@ class WithClauseTest extends TestCase
 	public function testSingleEntry()
 	{
 		$return = new WithClause();
-		$return->addEntry($this->getExpressionMock("a"));
+		$return->addEntry(ClauseTestHelper::getExpressionMock("a", $this));
 
 		$this->assertSame("WITH a", $return->toQuery());
 	}
@@ -49,9 +49,9 @@ class WithClauseTest extends TestCase
 	public function testMultipleEntries()
 	{
 		$return = new WithClause();
-		$return->addEntry($this->getExpressionMock("a"));
-		$return->addEntry($this->getExpressionMock("b"));
-		$return->addEntry($this->getExpressionMock("c"));
+		$return->addEntry(ClauseTestHelper::getExpressionMock("a", $this));
+		$return->addEntry(ClauseTestHelper::getExpressionMock("b", $this));
+		$return->addEntry(ClauseTestHelper::getExpressionMock("c", $this));
 
 		$this->assertSame("WITH a, b, c", $return->toQuery());
 	}
@@ -59,7 +59,7 @@ class WithClauseTest extends TestCase
 	public function testSingleAlias()
 	{
 		$return = new WithClause();
-		$return->addEntry($this->getExpressionMock("a"), "b");
+		$return->addEntry(ClauseTestHelper::getExpressionMock("a", $this), "b");
 
 		$this->assertSame("WITH a AS b", $return->toQuery());
 	}
@@ -67,8 +67,8 @@ class WithClauseTest extends TestCase
 	public function testMultipleAliases()
 	{
 		$return = new WithClause();
-		$return->addEntry($this->getExpressionMock("a"), "b");
-		$return->addEntry($this->getExpressionMock("b"), "c");
+		$return->addEntry(ClauseTestHelper::getExpressionMock("a", $this), "b");
+		$return->addEntry(ClauseTestHelper::getExpressionMock("b", $this), "c");
 
 		$this->assertSame("WITH a AS b, b AS c", $return->toQuery());
 	}
@@ -76,9 +76,9 @@ class WithClauseTest extends TestCase
 	public function testMixedAliases()
 	{
 		$return = new WithClause();
-		$return->addEntry($this->getExpressionMock("a"), "b");
-		$return->addEntry($this->getExpressionMock("c"));
-		$return->addEntry($this->getExpressionMock("b"), "c");
+		$return->addEntry(ClauseTestHelper::getExpressionMock("a", $this), "b");
+		$return->addEntry(ClauseTestHelper::getExpressionMock("c", $this));
+		$return->addEntry(ClauseTestHelper::getExpressionMock("b", $this), "c");
 
 		$this->assertSame("WITH a AS b, c, b AS c", $return->toQuery());
 	}
@@ -86,22 +86,8 @@ class WithClauseTest extends TestCase
 	public function testAliasIsEscaped()
 	{
 		$return = new WithClause();
-		$return->addEntry($this->getExpressionMock("a"), ":");
+		$return->addEntry(ClauseTestHelper::getExpressionMock("a", $this), ":");
 
 		$this->assertSame("WITH a AS `:`", $return->toQuery());
-	}
-
-	/**
-	 * Returns a mock of the Expression class that returns the given string when toQuery() is called.
-	 *
-	 * @param string $variable
-	 * @return Expression|MockObject
-	 */
-	private function getExpressionMock(string $variable): Expression
-	{
-		$mock = $this->getMockBuilder(Expression::class)->getMock();
-		$mock->method('toQuery')->willReturn($variable);
-
-		return $mock;
 	}
 }
