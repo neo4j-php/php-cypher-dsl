@@ -22,7 +22,7 @@ class Exists extends FunctionCall
      */
     protected function getSignature(): string
     {
-        return "exists(%e)";
+        return "exists(%s)";
     }
 
     /**

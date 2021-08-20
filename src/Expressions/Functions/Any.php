@@ -28,7 +28,7 @@ class Any extends FunctionCall
      */
     protected function getSignature(): string
     {
-        return "any(%v IN %l WHERE %p)";
+        return "any(%s IN %s WHERE %s)";
     }
 
     /**

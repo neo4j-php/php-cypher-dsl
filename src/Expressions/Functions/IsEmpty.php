@@ -22,7 +22,7 @@ class IsEmpty extends FunctionCall
      */
     protected function getSignature(): string
     {
-        return "isEmpty(%l)";
+        return "isEmpty(%s)";
     }
 
     /**

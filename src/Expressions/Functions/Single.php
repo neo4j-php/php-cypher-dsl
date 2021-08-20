@@ -4,7 +4,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
 
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
 
-class None extends FunctionCall
+class Single extends FunctionCall
 {
     private Expression $variable;
     private Expression $list;
@@ -28,7 +28,7 @@ class None extends FunctionCall
      */
     protected function getSignature(): string
     {
-        return "none(%s IN %s WHERE %s)";
+        return "single(%s IN %s WHERE %s)";
     }
 
     /**
