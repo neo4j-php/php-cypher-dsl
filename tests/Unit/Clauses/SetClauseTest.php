@@ -14,20 +14,20 @@ class SetClauseTest extends \PHPUnit\Framework\TestCase
 
     public function testSinglePattern() {
         $set = new SetClause();
-        $pattern = ClauseTestHelper::getPatternMock("(a)", $this);
+        $expression = ClauseTestHelper::getExpressionMock("(a)", $this);
 
-        $set->addPattern($pattern);
+        $set->addExpression($expression);
 
         $this->assertSame("SET (a)", $set->toQuery());
     }
 
     public function testMultiplePattern() {
         $set = new SetClause();
-        $patternA = ClauseTestHelper::getPatternMock("(a)", $this);
-        $patternB = ClauseTestHelper::getPatternMock("(b)", $this);
+        $expressionA = ClauseTestHelper::getExpressionMock("(a)", $this);
+        $expressionB = ClauseTestHelper::getExpressionMock("(b)", $this);
 
-        $set->addPattern($patternA);
-        $set->addPattern($patternB);
+        $set->addExpression($expressionA);
+        $set->addExpression($expressionB);
 
         $this->assertSame("SET (a), (b)", $set->toQuery());
     }

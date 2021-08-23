@@ -2,16 +2,27 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
+
 class MergeClause extends Clause
 {
+    /**
+     * @var Pattern $pattern
+     */
+    private Pattern $pattern;
 
+    /**
+     * @param Pattern $pattern
+     */
+    public function setPattern(Pattern $pattern): void {
+        $this->pattern = $pattern;
+    }
     /**
      * @inheritDoc
      */
     protected function getClause(): string
     {
-        // TODO: Implement getClause() method.
-        return "";
+        return "MERGE";
     }
 
     /**
@@ -19,7 +30,8 @@ class MergeClause extends Clause
      */
     protected function getSubject(): string
     {
-        // TODO: Implement getSubject() method.
+        if ( isset($this->pattern) ) return $this->pattern->toQuery();
+
         return "";
     }
 }

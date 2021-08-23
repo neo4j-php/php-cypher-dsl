@@ -14,9 +14,9 @@ class LimitClauseTest extends \PHPUnit\Framework\TestCase
 
     public function testPattern() {
         $limit = new LimitClause();
-        $pattern = ClauseTestHelper::getPatternMock("(a)", $this);
+        $expression = ClauseTestHelper::getExpressionMock("(a)", $this);
 
-        $limit->setExpression($pattern);
+        $limit->setExpression($expression);
 
         $this->assertSame("LIMIT (a)", $limit->toQuery());
     }

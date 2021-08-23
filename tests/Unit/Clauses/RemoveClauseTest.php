@@ -14,9 +14,9 @@ class RemoveClauseTest extends \PHPUnit\Framework\TestCase
 
     public function testPattern() {
         $remove = new RemoveClause();
-        $pattern = ClauseTestHelper::getPatternMock("(a)", $this);
+        $expression = ClauseTestHelper::getExpressionMock("(a)", $this);
 
-        $remove->setPattern($pattern);
+        $remove->setExpression($expression);
 
         $this->assertSame("REMOVE (a)", $remove->toQuery());
     }
