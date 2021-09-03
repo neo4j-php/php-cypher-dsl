@@ -50,9 +50,6 @@ class DeleteClause extends Clause
      */
     protected function getSubject(): string
     {
-        if ( isset($this->node) ) {
-            return $this->node->toQuery();
-        }
-        return "";
+        return $this->node->toQuery();
     }
 }
