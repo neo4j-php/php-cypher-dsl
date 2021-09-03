@@ -17,8 +17,9 @@
     }
   ],
   "require": {
-    "php": "^7.4",
-    "ext-mbstring": "*"
+    "php": ">=7.4",
+    "ext-mbstring": "*",
+    "ext-ctype": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "~9.0"
