@@ -24,7 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 
 /**
- * This class represents a MATCH clause.
+ * This class represents a CREATE clause.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/create/
  */
