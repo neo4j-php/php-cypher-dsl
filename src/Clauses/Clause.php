@@ -31,7 +31,7 @@ use WikibaseSolutions\CypherDSL\QueryConvertable;
 abstract class Clause implements QueryConvertable
 {
 	/**
-	 * @return string
+	 * @inheritDoc
 	 */
 	public function toQuery(): string
 	{
