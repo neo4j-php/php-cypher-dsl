@@ -6,13 +6,18 @@ use WikibaseSolutions\CypherDSL\Expressions\Functions\Any;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-
+/**
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Functions\Any
+ */
 class AnyTest extends TestCase
 {
-    public function testToQuery() {
-        $variable = FunctionTestHelper::getExpressionMock("variable", $this);
-        $list = FunctionTestHelper::getExpressionMock("list", $this);
-        $predicate = FunctionTestHelper::getExpressionMock("predicate", $this);
+	use FunctionTestHelper;
+
+    public function testToQuery()
+	{
+        $variable = $this->getExpressionMock("variable", $this);
+        $list = $this->getExpressionMock("list", $this);
+        $predicate = $this->getExpressionMock("predicate", $this);
 
         $any = new Any($variable, $list, $predicate);
 

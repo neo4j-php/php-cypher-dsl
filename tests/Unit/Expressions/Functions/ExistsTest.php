@@ -2,12 +2,19 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
 
+use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Functions\Exists;
 
-class ExistsTest extends \PHPUnit\Framework\TestCase
+/**
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Functions\Exists
+ */
+class ExistsTest extends TestCase
 {
-    public function testToQuery() {
-        $expression = FunctionTestHelper::getExpressionMock("expression", $this);
+	use FunctionTestHelper;
+
+    public function testToQuery()
+	{
+        $expression = $this->getExpressionMock("expression", $this);
 
         $exists = new Exists($expression);
 

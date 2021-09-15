@@ -6,9 +6,15 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class FunctionTestHelper
+trait FunctionTestHelper
 {
-    public static function getExpressionMock(string $variable, TestCase $testCase): Expression {
+	/**
+	 * @param string $variable
+	 * @param TestCase $testCase
+	 * @return Expression|MockObject
+	 */
+    public function getExpressionMock(string $variable, TestCase $testCase): Expression
+	{
         $mock = $testCase->getMockBuilder(Expression::class)->getMock();
         $mock->method('toQuery')->willReturn($variable);
 

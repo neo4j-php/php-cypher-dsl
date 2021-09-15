@@ -2,12 +2,19 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
 
+use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Functions\IsEmpty;
 
-class IsEmptyTest extends \PHPUnit\Framework\TestCase
+/**
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Functions\IsEmpty
+ */
+class IsEmptyTest extends TestCase
 {
-    public function testToQuery() {
-        $list = FunctionTestHelper::getExpressionMock("list", $this);
+	use FunctionTestHelper;
+
+    public function testToQuery()
+	{
+        $list = $this->getExpressionMock("list", $this);
 
         $isEmpty = new IsEmpty($list);
 

@@ -2,14 +2,21 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
 
+use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Functions\Single;
 
-class SingleTest extends \PHPUnit\Framework\TestCase
+/**
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Functions\Single
+ */
+class SingleTest extends TestCase
 {
-    public function testToQuery() {
-        $variable = FunctionTestHelper::getExpressionMock("variable", $this);
-        $list = FunctionTestHelper::getExpressionMock("list", $this);
-        $predicate = FunctionTestHelper::getExpressionMock("predicate", $this);
+	use FunctionTestHelper;
+
+    public function testToQuery()
+	{
+        $variable = $this->getExpressionMock("variable", $this);
+        $list = $this->getExpressionMock("list", $this);
+        $predicate = $this->getExpressionMock("predicate", $this);
 
         $single = new Single($variable, $list, $predicate);
 

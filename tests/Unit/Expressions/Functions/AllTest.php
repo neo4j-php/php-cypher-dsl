@@ -12,11 +12,13 @@ use WikibaseSolutions\CypherDSL\Expressions\Functions\All;
  */
 class AllTest extends TestCase
 {
+	use FunctionTestHelper;
+
 	public function testToQuery()
 	{
-		$variable = FunctionTestHelper::getExpressionMock("variable", $this);
-		$list = FunctionTestHelper::getExpressionMock("list", $this);
-		$predicate = FunctionTestHelper::getExpressionMock("predicate", $this);
+		$variable = $this->getExpressionMock("variable", $this);
+		$list = $this->getExpressionMock("list", $this);
+		$predicate = $this->getExpressionMock("predicate", $this);
 
 		$all = new All($variable, $list, $predicate);
 
