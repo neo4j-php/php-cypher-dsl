@@ -2,10 +2,16 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
+use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 
-class SetClauseTest extends \PHPUnit\Framework\TestCase
+/**
+ * @covers \WikibaseSolutions\CypherDSL\Clauses\SetClause
+ */
+class SetClauseTest extends TestCase
 {
+	use ClauseTestHelper;
+
     public function testEmptyClause() {
         $set = new SetClause();
 
@@ -14,7 +20,7 @@ class SetClauseTest extends \PHPUnit\Framework\TestCase
 
     public function testSinglePattern() {
         $set = new SetClause();
-        $expression = ClauseTestHelper::getExpressionMock("(a)", $this);
+        $expression = $this->getExpressionMock("(a)", $this);
 
         $set->addExpression($expression);
 
@@ -23,8 +29,8 @@ class SetClauseTest extends \PHPUnit\Framework\TestCase
 
     public function testMultiplePattern() {
         $set = new SetClause();
-        $expressionA = ClauseTestHelper::getExpressionMock("(a)", $this);
-        $expressionB = ClauseTestHelper::getExpressionMock("(b)", $this);
+        $expressionA = $this->getExpressionMock("(a)", $this);
+        $expressionB = $this->getExpressionMock("(b)", $this);
 
         $set->addExpression($expressionA);
         $set->addExpression($expressionB);

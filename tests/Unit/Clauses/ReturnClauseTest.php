@@ -31,6 +31,8 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  */
 class ReturnClauseTest extends TestCase
 {
+	use ClauseTestHelper;
+
 	public function testEmptyClause()
 	{
 		$return = new ReturnClause();
@@ -41,7 +43,7 @@ class ReturnClauseTest extends TestCase
 	public function testSingleColumn()
 	{
 		$return = new ReturnClause();
-		$return->addColumn(ClauseTestHelper::getExpressionMock("a", $this));
+		$return->addColumn($this->getExpressionMock("a", $this));
 
 		$this->assertSame("RETURN a", $return->toQuery());
 	}
@@ -49,9 +51,9 @@ class ReturnClauseTest extends TestCase
 	public function testMultipleColumns()
 	{
 		$return = new ReturnClause();
-		$return->addColumn(ClauseTestHelper::getExpressionMock("a", $this));
-		$return->addColumn(ClauseTestHelper::getExpressionMock("b", $this));
-		$return->addColumn(ClauseTestHelper::getExpressionMock("c", $this));
+		$return->addColumn($this->getExpressionMock("a", $this));
+		$return->addColumn($this->getExpressionMock("b", $this));
+		$return->addColumn($this->getExpressionMock("c", $this));
 
 		$this->assertSame("RETURN a, b, c", $return->toQuery());
 	}
@@ -59,7 +61,7 @@ class ReturnClauseTest extends TestCase
 	public function testSingleAlias()
 	{
 		$return = new ReturnClause();
-		$return->addColumn(ClauseTestHelper::getExpressionMock("a", $this), "b");
+		$return->addColumn($this->getExpressionMock("a", $this), "b");
 
 		$this->assertSame("RETURN a AS b", $return->toQuery());
 	}
@@ -67,8 +69,8 @@ class ReturnClauseTest extends TestCase
 	public function testMultipleAliases()
 	{
 		$return = new ReturnClause();
-		$return->addColumn(ClauseTestHelper::getExpressionMock("a", $this), "b");
-		$return->addColumn(ClauseTestHelper::getExpressionMock("b", $this), "c");
+		$return->addColumn($this->getExpressionMock("a", $this), "b");
+		$return->addColumn($this->getExpressionMock("b", $this), "c");
 
 		$this->assertSame("RETURN a AS b, b AS c", $return->toQuery());
 	}
@@ -76,9 +78,9 @@ class ReturnClauseTest extends TestCase
 	public function testMixedAliases()
 	{
 		$return = new ReturnClause();
-		$return->addColumn(ClauseTestHelper::getExpressionMock("a", $this), "b");
-		$return->addColumn(ClauseTestHelper::getExpressionMock("c", $this));
-		$return->addColumn(ClauseTestHelper::getExpressionMock("b", $this), "c");
+		$return->addColumn($this->getExpressionMock("a", $this), "b");
+		$return->addColumn($this->getExpressionMock("c", $this));
+		$return->addColumn($this->getExpressionMock("b", $this), "c");
 
 		$this->assertSame("RETURN a AS b, c, b AS c", $return->toQuery());
 	}
@@ -86,7 +88,7 @@ class ReturnClauseTest extends TestCase
 	public function testAliasIsEscaped()
 	{
 		$return = new ReturnClause();
-		$return->addColumn(ClauseTestHelper::getExpressionMock("a", $this), ":");
+		$return->addColumn($this->getExpressionMock("a", $this), ":");
 
 		$this->assertSame("RETURN a AS `:`", $return->toQuery());
 	}
@@ -94,7 +96,7 @@ class ReturnClauseTest extends TestCase
 	public function testReturnDistinct()
 	{
 		$return = new ReturnClause();
-		$return->addColumn(ClauseTestHelper::getExpressionMock("a", $this));
+		$return->addColumn($this->getExpressionMock("a", $this));
 		$return->setDistinct();
 
 		$this->assertSame("RETURN DISTINCT a", $return->toQuery());

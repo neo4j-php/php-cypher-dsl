@@ -2,10 +2,16 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
+use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\LimitClause;
 
-class LimitClauseTest extends \PHPUnit\Framework\TestCase
+/**
+ * @covers \WikibaseSolutions\CypherDSL\Clauses\LimitClause
+ */
+class LimitClauseTest extends TestCase
 {
+	use ClauseTestHelper;
+
     public function testEmptyClause() {
         $limit = new LimitClause();
 
@@ -14,7 +20,7 @@ class LimitClauseTest extends \PHPUnit\Framework\TestCase
 
     public function testPattern() {
         $limit = new LimitClause();
-        $expression = ClauseTestHelper::getExpressionMock("(a)", $this);
+        $expression = $this->getExpressionMock("(a)", $this);
 
         $limit->setExpression($expression);
 

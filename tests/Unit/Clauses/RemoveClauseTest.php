@@ -2,10 +2,16 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
+use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\RemoveClause;
 
-class RemoveClauseTest extends \PHPUnit\Framework\TestCase
+/**
+ * @covers \WikibaseSolutions\CypherDSL\Clauses\RemoveClause
+ */
+class RemoveClauseTest extends TestCase
 {
+	use ClauseTestHelper;
+
     public function testEmptyClause() {
         $remove = new RemoveClause();
 
@@ -14,7 +20,7 @@ class RemoveClauseTest extends \PHPUnit\Framework\TestCase
 
     public function testPattern() {
         $remove = new RemoveClause();
-        $expression = ClauseTestHelper::getExpressionMock("(a)", $this);
+        $expression = $this->getExpressionMock("(a)", $this);
 
         $remove->setExpression($expression);
 

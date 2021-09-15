@@ -2,10 +2,16 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
+use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\MergeClause;
 
-class MergeClauseTest extends \PHPUnit\Framework\TestCase
+/**
+ * @covers \WikibaseSolutions\CypherDSL\Clauses\MergeClause
+ */
+class MergeClauseTest extends TestCase
 {
+	use ClauseTestHelper;
+
     public function testEmptyClause() {
         $merge = new MergeClause();
 
@@ -14,7 +20,7 @@ class MergeClauseTest extends \PHPUnit\Framework\TestCase
 
     public function testPattern() {
         $merge = new MergeClause();
-        $pattern = ClauseTestHelper::getPatternMock("(a)", $this);
+        $pattern = $this->getPatternMock("(a)", $this);
 
         $merge->setPattern($pattern);
 

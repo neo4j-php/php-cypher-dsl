@@ -2,10 +2,13 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
+use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\CreateClause;
 
-class CreateClauseTest extends \PHPUnit\Framework\TestCase
+class CreateClauseTest extends TestCase
 {
+	use ClauseTestHelper;
+
     public function testEmptyClause() {
         $createClause = new CreateClause();
 
@@ -14,7 +17,7 @@ class CreateClauseTest extends \PHPUnit\Framework\TestCase
 
     public function testSinglePattern() {
         $createClause = new CreateClause();
-        $pattern = ClauseTestHelper::getPatternMock("(a)", $this);
+        $pattern = $this->getPatternMock("(a)", $this);
 
         $createClause->addPattern($pattern);
 
@@ -24,8 +27,8 @@ class CreateClauseTest extends \PHPUnit\Framework\TestCase
     public function testMultiplePatterns() {
         $createClause = new CreateClause();
 
-        $patternA = ClauseTestHelper::getPatternMock("(a)", $this);
-        $patternB = ClauseTestHelper::getPatternMock("(b)", $this);
+        $patternA = $this->getPatternMock("(a)", $this);
+        $patternB = $this->getPatternMock("(b)", $this);
 
         $createClause->addPattern($patternA);
         $createClause->addPattern($patternB);

@@ -21,16 +21,16 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\MatchClause;
-use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\MatchClause
  */
 class MatchTest extends TestCase
 {
+	use ClauseTestHelper;
+
 	public function testEmptyClause()
 	{
 		$match = new MatchClause();
@@ -41,7 +41,7 @@ class MatchTest extends TestCase
 	public function testSinglePattern()
 	{
 		$match = new MatchClause();
-		$match->addPattern(ClauseTestHelper::getPatternMock("(a)", $this));
+		$match->addPattern($this->getPatternMock("(a)", $this));
 
 		$this->assertSame("MATCH (a)", $match->toQuery());
 	}
@@ -49,8 +49,8 @@ class MatchTest extends TestCase
 	public function testMultiplePatterns()
 	{
 		$match = new MatchClause();
-		$match->addPattern(ClauseTestHelper::getPatternMock("(a)", $this));
-		$match->addPattern(ClauseTestHelper::getPatternMock("(b)", $this));
+		$match->addPattern($this->getPatternMock("(a)", $this));
+		$match->addPattern($this->getPatternMock("(b)", $this));
 
 		$this->assertSame("MATCH (a), (b)", $match->toQuery());
 	}

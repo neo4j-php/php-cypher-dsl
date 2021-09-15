@@ -2,10 +2,16 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
+use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\DeleteClause;
 
-class DeleteClauseTest extends \PHPUnit\Framework\TestCase
+/**
+ * @covers \WikibaseSolutions\CypherDSL\Clauses\DeleteClause
+ */
+class DeleteClauseTest extends TestCase
 {
+	use ClauseTestHelper;
+
     public function testEmptyClause() {
         $delete = new DeleteClause();
 
@@ -14,7 +20,7 @@ class DeleteClauseTest extends \PHPUnit\Framework\TestCase
 
     public function testPattern() {
         $delete = new DeleteClause();
-        $pattern = ClauseTestHelper::getPatternMock("(a)", $this);
+        $pattern = $this->getPatternMock("(a)", $this);
 
         $delete->setNode($pattern);
 
@@ -23,7 +29,7 @@ class DeleteClauseTest extends \PHPUnit\Framework\TestCase
 
     public function testDetachDelete() {
         $delete = new DeleteClause();
-        $pattern = ClauseTestHelper::getPatternMock("(a)", $this);
+        $pattern = $this->getPatternMock("(a)", $this);
 
         $delete->setNode($pattern);
         $delete->setDetach(true);

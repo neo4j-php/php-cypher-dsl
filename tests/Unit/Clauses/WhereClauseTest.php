@@ -2,10 +2,13 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
+use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 
-class WhereClauseTest extends \PHPUnit\Framework\TestCase
+class WhereClauseTest extends TestCase
 {
+	use ClauseTestHelper;
+
     public function testEmptyClause() {
         $where = new WhereClause();
 
@@ -14,7 +17,7 @@ class WhereClauseTest extends \PHPUnit\Framework\TestCase
 
     public function testPattern() {
         $where = new WhereClause();
-        $pattern = ClauseTestHelper::getPatternMock("(a)", $this);
+        $pattern = $this->getPatternMock("(a)", $this);
 
         $where->setPattern($pattern);
 

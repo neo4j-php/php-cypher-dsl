@@ -31,6 +31,8 @@ use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
  */
 class OptionalMatchTest extends TestCase
 {
+	use ClauseTestHelper;
+
 	public function testEmptyClause()
 	{
 		$match = new OptionalMatchClause();
@@ -41,7 +43,7 @@ class OptionalMatchTest extends TestCase
 	public function testSinglePattern()
 	{
 		$match = new OptionalMatchClause();
-		$match->addPattern(ClauseTestHelper::getPatternMock("(a)", $this));
+		$match->addPattern($this->getPatternMock("(a)", $this));
 
 		$this->assertSame("OPTIONAL MATCH (a)", $match->toQuery());
 	}
@@ -49,8 +51,8 @@ class OptionalMatchTest extends TestCase
 	public function testMultiplePatterns()
 	{
 		$match = new OptionalMatchClause();
-		$match->addPattern(ClauseTestHelper::getPatternMock("(a)", $this));
-		$match->addPattern(ClauseTestHelper::getPatternMock("(b)", $this));
+		$match->addPattern($this->getPatternMock("(a)", $this));
+		$match->addPattern($this->getPatternMock("(b)", $this));
 
 		$this->assertSame("OPTIONAL MATCH (a), (b)", $match->toQuery());
 	}
