@@ -13,7 +13,11 @@
   "authors": [
     {
       "name": "Marijn van Wezel",
-      "role": "Original author"
+      "role": "Developer"
+    },
+    {
+      "name": "Lars Akkermans",
+      "role": "Developer"
     }
   ],
   "require": {
