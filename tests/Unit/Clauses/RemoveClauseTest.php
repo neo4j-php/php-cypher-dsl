@@ -4,13 +4,14 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\RemoveClause;
+use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\RemoveClause
  */
 class RemoveClauseTest extends TestCase
 {
-	use ClauseTestHelper;
+	use TestHelper;
 
     public function testEmptyClause() {
         $remove = new RemoveClause();

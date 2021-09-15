@@ -25,13 +25,14 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\OrderByClause;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\OrderByClause
  */
 class OrderByClauseTest extends TestCase
 {
-	use ClauseTestHelper;
+	use TestHelper;
 
 	public function testEmptyClause()
 	{

@@ -23,13 +23,14 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
+use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\WithClause
  */
 class WithClauseTest extends TestCase
 {
-	use ClauseTestHelper;
+	use TestHelper;
 
 	public function testEmptyClause()
 	{

@@ -66,7 +66,7 @@ class Relationship implements Pattern
 	private Variable $variable;
 
 	/**
-	 * @var \WikibaseSolutions\CypherDSL\Expressions\PropertyMap
+	 * @var PropertyMap
 	 */
 	private PropertyMap $properties;
 

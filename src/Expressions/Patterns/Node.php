@@ -35,9 +35,9 @@ class Node implements Pattern
 	use EscapeTrait;
 
 	/**
-	 * @var string
+	 * @var string[]
 	 */
-	private string $label = "";
+	private array $labels = [];
 
 	/**
 	 * @var Variable
@@ -51,11 +51,14 @@ class Node implements Pattern
 
 	/**
 	 * Node constructor.
+	 *
 	 * @param string|null $label
 	 */
-	public function __construct(string $label = "")
+	public function __construct(string $label = null)
 	{
-		$this->label = $label;
+		if ($label !== null) {
+			$this->labels[] = $label;
+		}
 	}
 
 	/**
@@ -94,7 +97,7 @@ class Node implements Pattern
 	 */
 	public function withLabel(string $label): self
 	{
-		$this->label = $label;
+		$this->labels[] = $label;
 
 		return $this;
 	}
@@ -113,8 +116,10 @@ class Node implements Pattern
 			$nodeInner .= $this->variable->toQuery();
 		}
 
-		if ($this->label !== "") {
-			$nodeInner .= ":{$this->escape($this->label)}";
+		if ($this->labels !== []) {
+			foreach ($this->labels as $label) {
+				$nodeInner .= ":{$this->escape($label)}";
+			}
 		}
 
 		if (isset($this->properties)) {

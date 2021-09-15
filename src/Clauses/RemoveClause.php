@@ -32,8 +32,10 @@ class RemoveClause extends Clause
      */
     protected function getSubject(): string
     {
-        if ( isset($this->expression) ) return $this->expression->toQuery();
+        if (!isset($this->expression)) {
+        	return "";
+		}
 
-        return "";
+		return $this->expression->toQuery();
     }
 }

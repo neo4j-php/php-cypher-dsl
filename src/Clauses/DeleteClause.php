@@ -42,6 +42,7 @@ class DeleteClause extends Clause
         if ( $this->isDetach ) {
             return "DETACH DELETE";
         }
+
         return "DELETE";
     }
 
@@ -50,6 +51,10 @@ class DeleteClause extends Clause
      */
     protected function getSubject(): string
     {
-        return $this->node->toQuery();
+    	if ( !isset( $this->node ) ) {
+			return "";
+		}
+
+     	return $this->node->toQuery();
     }
 }

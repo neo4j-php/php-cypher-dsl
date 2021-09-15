@@ -25,13 +25,14 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\OptionalMatchClause;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
+use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\OptionalMatchClause
  */
 class OptionalMatchTest extends TestCase
 {
-	use ClauseTestHelper;
+	use TestHelper;
 
 	public function testEmptyClause()
 	{

@@ -23,13 +23,14 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\MatchClause;
+use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\MatchClause
  */
 class MatchTest extends TestCase
 {
-	use ClauseTestHelper;
+	use TestHelper;
 
 	public function testEmptyClause()
 	{

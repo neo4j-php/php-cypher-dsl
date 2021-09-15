@@ -4,13 +4,14 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
+use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\SetClause
  */
 class SetClauseTest extends TestCase
 {
-	use ClauseTestHelper;
+	use TestHelper;
 
     public function testEmptyClause() {
         $set = new SetClause();

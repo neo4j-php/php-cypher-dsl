@@ -4,13 +4,14 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\DeleteClause;
+use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\DeleteClause
  */
 class DeleteClauseTest extends TestCase
 {
-	use ClauseTestHelper;
+	use TestHelper;
 
     public function testEmptyClause() {
         $delete = new DeleteClause();

@@ -137,12 +137,28 @@ class NodeTest extends TestCase
 
 	/**
 	 * @dataProvider provideBacktickThrowsExceptionData
-	 * @param \WikibaseSolutions\CypherDSL\Expressions\Patterns\Node $invalidNode
+	 * @param Node $invalidNode
 	 */
 	public function testBacktickThrowsException(Node $invalidNode)
 	{
 		$this->expectException(\InvalidArgumentException::class);
 		$invalidNode->toQuery();
+	}
+
+	/**
+	 * @dataProvider provideMultipleLabelsData
+	 * @param array $labels
+	 * @param string $expected
+	 */
+	public function testMultipleLabels(array $labels, string $expected)
+	{
+		$node = new Node();
+
+		foreach ($labels as $label) {
+			$node->withLabel($label);
+		}
+
+		$this->assertSame($expected, $node->toQuery());
 	}
 
 	public function testSetterSameAsConstructor()
@@ -223,6 +239,18 @@ class NodeTest extends TestCase
 			['a', 'd', ['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "(a:d {a: 'b', b: 'c'})"],
 			['b', 'e', ['a' => new Decimal(0), 'b' => new Decimal(1)], "(b:e {a: 0, b: 1})"],
 			['c', 'f', [':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "(c:f {`:`: [1, 'a']})"]
+		];
+	}
+
+	public function provideMultipleLabelsData()
+	{
+		return [
+			[['a'], '(:a)'],
+			[['A'], '(:A)'],
+			[[':'], '(:`:`)'],
+			[['a', 'b'], '(:a:b)'],
+			[['A', 'B'], '(:A:B)'],
+			[[':', 'a'], '(:`:`:a)'],
 		];
 	}
 }

@@ -1,23 +1,24 @@
 <?php
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 
-trait ClauseTestHelper
+trait TestHelper
 {
 	/**
-	 * @param string $toString
+	 * @param string $variable
 	 * @param TestCase $testCase
 	 * @return Pattern|MockObject
 	 */
-    public function getPatternMock(string $toString, TestCase $testCase): Pattern {
+    public function getPatternMock(string $variable, TestCase $testCase): Pattern {
         $mock = $testCase->getMockBuilder(Pattern::class)->getMock();
-        $mock->method('toQuery')->willReturn($toString);
+        $mock->method('toQuery')->willReturn($variable);
 
         return $mock;
     }
@@ -45,4 +46,16 @@ trait ClauseTestHelper
 
         return $mock;
     }
+
+	/**
+	 * @param string $variable
+	 * @param TestCase $testCase
+	 * @return Clause|MockObject
+	 */
+    public function getClauseMock(string $variable, TestCase $testCase): Clause {
+    	$mock = $testCase->getMockBuilder(Clause::class)->getMock();
+    	$mock->method('toQuery')->willReturn($variable);
+
+    	return $mock;
+	}
 }

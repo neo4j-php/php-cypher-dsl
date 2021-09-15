@@ -39,6 +39,7 @@ class OrderByClause extends Clause
 	 * @var Property[] The expressions to include in the clause
 	 */
 	private array $properties = [];
+
 	/**
 	 * @var bool
 	 */

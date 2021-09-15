@@ -25,13 +25,14 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\ReturnClause;
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\ReturnClause
  */
 class ReturnClauseTest extends TestCase
 {
-	use ClauseTestHelper;
+	use TestHelper;
 
 	public function testEmptyClause()
 	{
