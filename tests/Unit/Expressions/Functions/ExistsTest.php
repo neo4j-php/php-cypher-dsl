@@ -11,10 +11,10 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class ExistsTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
     public function testToQuery()
-	{
+    {
         $expression = $this->getExpressionMock("expression", $this);
 
         $exists = new Exists($expression);

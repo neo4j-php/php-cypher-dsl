@@ -30,49 +30,49 @@ use WikibaseSolutions\CypherDSL\Expressions\Variable;
  */
 class VariableTest extends TestCase
 {
-	/**
-	 * @dataProvider provideToQueryData
-	 * @param string $variable
-	 * @param string $expected
-	 */
-	public function testToQuery(string $variable, string $expected)
-	{
-		$variable = new Variable($variable);
+    /**
+     * @dataProvider provideToQueryData
+     * @param        string $variable
+     * @param        string $expected
+     */
+    public function testToQuery(string $variable, string $expected)
+    {
+        $variable = new Variable($variable);
 
-		$this->assertSame($expected, $variable->toQuery());
-	}
+        $this->assertSame($expected, $variable->toQuery());
+    }
 
-	/**
-	 * @dataProvider providePropertyData
-	 * @param string $variable
-	 * @param string $property
-	 * @param Property $expected
-	 */
-	public function testProperty(string $variable, string $property, Property $expected)
-	{
-		$variable = new Variable($variable);
-		$property = $variable->property($property);
+    /**
+     * @dataProvider providePropertyData
+     * @param        string   $variable
+     * @param        string   $property
+     * @param        Property $expected
+     */
+    public function testProperty(string $variable, string $property, Property $expected)
+    {
+        $variable = new Variable($variable);
+        $property = $variable->property($property);
 
-		$this->assertEquals($expected, $property);
-	}
+        $this->assertEquals($expected, $property);
+    }
 
-	public function provideToQueryData(): array
-	{
-		return [
-			["a", "a"],
-			["b", "b"],
-			[":", "`:`"],
-			["0", "`0`"]
-		];
-	}
+    public function provideToQueryData(): array
+    {
+        return [
+        ["a", "a"],
+        ["b", "b"],
+        [":", "`:`"],
+        ["0", "`0`"]
+        ];
+    }
 
-	public function providePropertyData(): array
-	{
-		return [
-			["a", "a", new Property(new Variable("a"), "a")],
-			["a", "b", new Property(new Variable("a"), "b")],
-			["0", "0", new Property(new Variable("0"), "0")],
-			[":", ":", new Property(new Variable(":"), ":")]
-		];
-	}
+    public function providePropertyData(): array
+    {
+        return [
+        ["a", "a", new Property(new Variable("a"), "a")],
+        ["a", "b", new Property(new Variable("a"), "b")],
+        ["0", "0", new Property(new Variable("0"), "0")],
+        [":", ":", new Property(new Variable(":"), ":")]
+        ];
+    }
 }

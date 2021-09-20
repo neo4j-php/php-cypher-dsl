@@ -11,10 +11,10 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class SingleTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
     public function testToQuery()
-	{
+    {
         $variable = $this->getExpressionMock("variable", $this);
         $list = $this->getExpressionMock("list", $this);
         $predicate = $this->getExpressionMock("predicate", $this);

@@ -32,137 +32,137 @@ use WikibaseSolutions\CypherDSL\Expressions\Variable;
  */
 class Node implements Pattern
 {
-	use EscapeTrait;
+    use EscapeTrait;
 
-	/**
-	 * @var string[]
-	 */
-	private array $labels = [];
+    /**
+     * @var string[]
+     */
+    private array $labels = [];
 
-	/**
-	 * @var Variable
-	 */
-	private Variable $variable;
+    /**
+     * @var Variable
+     */
+    private Variable $variable;
 
-	/**
-	 * @var PropertyMap
-	 */
-	private PropertyMap $properties;
+    /**
+     * @var PropertyMap
+     */
+    private PropertyMap $properties;
 
-	/**
-	 * Node constructor.
-	 *
-	 * @param string|null $label
-	 */
-	public function __construct(string $label = null)
-	{
-		if ($label !== null) {
-			$this->labels[] = $label;
-		}
-	}
+    /**
+     * Node constructor.
+     *
+     * @param string|null $label
+     */
+    public function __construct(string $label = null)
+    {
+        if ($label !== null) {
+            $this->labels[] = $label;
+        }
+    }
 
-	/**
-	 * @param Variable|string $variable
-	 * @return Node
-	 */
-	public function named($variable): self
-	{
-		if (!($variable instanceof Variable)) {
-			$variable = new Variable($variable);
-		}
+    /**
+     * @param  Variable|string $variable
+     * @return Node
+     */
+    public function named($variable): self
+    {
+        if (!($variable instanceof Variable)) {
+            $variable = new Variable($variable);
+        }
 
-		$this->variable = $variable;
+        $this->variable = $variable;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * @param PropertyMap|array $properties
-	 * @return Node
-	 */
-	public function withProperties($properties): self
-	{
-		if (!($properties instanceof PropertyMap)) {
-			$properties = new PropertyMap($properties);
-		}
+    /**
+     * @param  PropertyMap|array $properties
+     * @return Node
+     */
+    public function withProperties($properties): self
+    {
+        if (!($properties instanceof PropertyMap)) {
+            $properties = new PropertyMap($properties);
+        }
 
-		$this->properties = $properties;
+        $this->properties = $properties;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * @param string $label
-	 * @return Node
-	 */
-	public function withLabel(string $label): self
-	{
-		$this->labels[] = $label;
+    /**
+     * @param  string $label
+     * @return Node
+     */
+    public function withLabel(string $label): self
+    {
+        $this->labels[] = $label;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Returns the string representation of this relationship that can be used directly
-	 * in a query.
-	 *
-	 * @return string
-	 */
-	public function toQuery(): string
-	{
-		$nodeInner = "";
+    /**
+     * Returns the string representation of this relationship that can be used directly
+     * in a query.
+     *
+     * @return string
+     */
+    public function toQuery(): string
+    {
+        $nodeInner = "";
 
-		if (isset($this->variable)) {
-			$nodeInner .= $this->variable->toQuery();
-		}
+        if (isset($this->variable)) {
+            $nodeInner .= $this->variable->toQuery();
+        }
 
-		if ($this->labels !== []) {
-			foreach ($this->labels as $label) {
-				$nodeInner .= ":{$this->escape($label)}";
-			}
-		}
+        if ($this->labels !== []) {
+            foreach ($this->labels as $label) {
+                $nodeInner .= ":{$this->escape($label)}";
+            }
+        }
 
-		if (isset($this->properties)) {
-			if ($nodeInner !== "") {
-				$nodeInner .= " ";
-			}
+        if (isset($this->properties)) {
+            if ($nodeInner !== "") {
+                $nodeInner .= " ";
+            }
 
-			$nodeInner .= $this->properties->toQuery();
-		}
+            $nodeInner .= $this->properties->toQuery();
+        }
 
-		return "($nodeInner)";
-	}
+        return "($nodeInner)";
+    }
 
-	/**
-	 * Creates a new relationship from this node to the given pattern.
-	 *
-	 * @param Pattern $pattern
-	 * @return Relationship
-	 */
-	public function relationshipTo(Pattern $pattern): Relationship
-	{
-		return new Relationship($this, $pattern, Relationship::DIR_RIGHT);
-	}
+    /**
+     * Creates a new relationship from this node to the given pattern.
+     *
+     * @param  Pattern $pattern
+     * @return Relationship
+     */
+    public function relationshipTo(Pattern $pattern): Relationship
+    {
+        return new Relationship($this, $pattern, Relationship::DIR_RIGHT);
+    }
 
-	/**
-	 * Creates a new relationship from the given pattern to this node.
-	 *
-	 * @param Pattern $pattern
-	 * @return Relationship
-	 */
-	public function relationshipFrom(Pattern $pattern): Relationship
-	{
-		return new Relationship($this, $pattern, Relationship::DIR_LEFT);
-	}
+    /**
+     * Creates a new relationship from the given pattern to this node.
+     *
+     * @param  Pattern $pattern
+     * @return Relationship
+     */
+    public function relationshipFrom(Pattern $pattern): Relationship
+    {
+        return new Relationship($this, $pattern, Relationship::DIR_LEFT);
+    }
 
-	/**
-	 * Creates a new unidirectional relationship between this node and the given pattern.
-	 *
-	 * @param Pattern $pattern
-	 * @return Relationship
-	 */
-	public function relationshipUni(Pattern $pattern): Relationship
-	{
-		return new Relationship($this, $pattern, Relationship::DIR_UNI);
-	}
+    /**
+     * Creates a new unidirectional relationship between this node and the given pattern.
+     *
+     * @param  Pattern $pattern
+     * @return Relationship
+     */
+    public function relationshipUni(Pattern $pattern): Relationship
+    {
+        return new Relationship($this, $pattern, Relationship::DIR_UNI);
+    }
 }

@@ -31,28 +31,28 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  */
 class ContainsTest extends TestCase
 {
-	public function testToQuery()
-	{
-		$contains = new Contains($this->getExpressionMock("a"), $this->getExpressionMock("b"));
+    public function testToQuery()
+    {
+        $contains = new Contains($this->getExpressionMock("a"), $this->getExpressionMock("b"));
 
-		$this->assertSame("(a CONTAINS b)", $contains->toQuery());
+        $this->assertSame("(a CONTAINS b)", $contains->toQuery());
 
-		$contains = new Contains($contains, $contains);
+        $contains = new Contains($contains, $contains);
 
-		$this->assertSame("((a CONTAINS b) CONTAINS (a CONTAINS b))", $contains->toQuery());
-	}
+        $this->assertSame("((a CONTAINS b) CONTAINS (a CONTAINS b))", $contains->toQuery());
+    }
 
-	/**
-	 * Returns a mock of the Expression class that returns the given string when toQuery() is called.
-	 *
-	 * @param string $variable
-	 * @return Expression|MockObject
-	 */
-	private function getExpressionMock(string $variable): Expression
-	{
-		$mock = $this->getMockBuilder(Expression::class)->getMock();
-		$mock->method('toQuery')->willReturn($variable);
+    /**
+     * Returns a mock of the Expression class that returns the given string when toQuery() is called.
+     *
+     * @param  string $variable
+     * @return Expression|MockObject
+     */
+    private function getExpressionMock(string $variable): Expression
+    {
+        $mock = $this->getMockBuilder(Expression::class)->getMock();
+        $mock->method('toQuery')->willReturn($variable);
 
-		return $mock;
-	}
+        return $mock;
+    }
 }

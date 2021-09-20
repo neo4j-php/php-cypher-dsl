@@ -31,87 +31,87 @@ use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
  */
 class PropertyMapTest extends TestCase
 {
-	public function testEmpty()
-	{
-		$propertyMap = new PropertyMap([]);
+    public function testEmpty()
+    {
+        $propertyMap = new PropertyMap([]);
 
-		$this->assertSame("{}", $propertyMap->toQuery());
-	}
+        $this->assertSame("{}", $propertyMap->toQuery());
+    }
 
-	/**
-	 * @dataProvider provideNumericalKeysData
-	 * @param array $properties
-	 * @param string $expected
-	 */
-	public function testNumericalKeys(array $properties, string $expected)
-	{
-		$propertyMap = new PropertyMap($properties);
+    /**
+     * @dataProvider provideNumericalKeysData
+     * @param        array  $properties
+     * @param        string $expected
+     */
+    public function testNumericalKeys(array $properties, string $expected)
+    {
+        $propertyMap = new PropertyMap($properties);
 
-		$this->assertSame($expected, $propertyMap->toQuery());
-	}
+        $this->assertSame($expected, $propertyMap->toQuery());
+    }
 
-	/**
-	 * @dataProvider provideStringKeysData
-	 * @param array $properties
-	 * @param string $expected
-	 */
-	public function testStringKeys(array $properties, string $expected)
-	{
-		$propertyMap = new PropertyMap($properties);
+    /**
+     * @dataProvider provideStringKeysData
+     * @param        array  $properties
+     * @param        string $expected
+     */
+    public function testStringKeys(array $properties, string $expected)
+    {
+        $propertyMap = new PropertyMap($properties);
 
-		$this->assertSame($expected, $propertyMap->toQuery());
-	}
+        $this->assertSame($expected, $propertyMap->toQuery());
+    }
 
-	/**
-	 * @dataProvider provideNestedPropertyMapsData
-	 * @param array $properties
-	 * @param string $expected
-	 */
-	public function testNestedPropertyMaps(array $properties, string $expected)
-	{
-		$propertyMap = new PropertyMap($properties);
+    /**
+     * @dataProvider provideNestedPropertyMapsData
+     * @param        array  $properties
+     * @param        string $expected
+     */
+    public function testNestedPropertyMaps(array $properties, string $expected)
+    {
+        $propertyMap = new PropertyMap($properties);
 
-		$this->assertSame($expected, $propertyMap->toQuery());
-	}
+        $this->assertSame($expected, $propertyMap->toQuery());
+    }
 
-	public function provideNumericalKeysData(): array
-	{
-		return [
-			[[$this->getExpressionMock("'a'")], "{`0`: 'a'}"],
-			[[$this->getExpressionMock("'a'"), $this->getExpressionMock("'b'")], "{`0`: 'a', `1`: 'b'}"]
-		];
-	}
+    public function provideNumericalKeysData(): array
+    {
+        return [
+        [[$this->getExpressionMock("'a'")], "{`0`: 'a'}"],
+        [[$this->getExpressionMock("'a'"), $this->getExpressionMock("'b'")], "{`0`: 'a', `1`: 'b'}"]
+        ];
+    }
 
-	public function provideStringKeysData(): array
-	{
-		return [
-			[['a' => $this->getExpressionMock("'a'")], "{a: 'a'}"],
-			[['a' => $this->getExpressionMock("'a'"), 'b' => $this->getExpressionMock("'b'")], "{a: 'a', b: 'b'}"],
-			[['a' => $this->getExpressionMock("'b'")], "{a: 'b'}"],
-			[[':' => $this->getExpressionMock("'a'")], "{`:`: 'a'}"]
-		];
-	}
+    public function provideStringKeysData(): array
+    {
+        return [
+        [['a' => $this->getExpressionMock("'a'")], "{a: 'a'}"],
+        [['a' => $this->getExpressionMock("'a'"), 'b' => $this->getExpressionMock("'b'")], "{a: 'a', b: 'b'}"],
+        [['a' => $this->getExpressionMock("'b'")], "{a: 'b'}"],
+        [[':' => $this->getExpressionMock("'a'")], "{`:`: 'a'}"]
+        ];
+    }
 
-	public function provideNestedPropertyMapsData()
-	{
-		return [
-			[['a' => new PropertyMap([])], "{a: {}}"],
-			[['a' => new PropertyMap(['a' => new PropertyMap(['a' => $this->getExpressionMock("'b'")])])], "{a: {a: {a: 'b'}}}"],
-			[['a' => new PropertyMap(['b' => $this->getExpressionMock("'c'")]), 'b' => $this->getExpressionMock("'d'")], "{a: {b: 'c'}, b: 'd'}"]
-		];
-	}
+    public function provideNestedPropertyMapsData()
+    {
+        return [
+        [['a' => new PropertyMap([])], "{a: {}}"],
+        [['a' => new PropertyMap(['a' => new PropertyMap(['a' => $this->getExpressionMock("'b'")])])], "{a: {a: {a: 'b'}}}"],
+        [['a' => new PropertyMap(['b' => $this->getExpressionMock("'c'")]), 'b' => $this->getExpressionMock("'d'")], "{a: {b: 'c'}, b: 'd'}"]
+        ];
+    }
 
-	/**
-	 * Returns a mock of the Expression class that returns the given string when toQuery() is called.
-	 *
-	 * @param string $variable
-	 * @return Expression|MockObject
-	 */
-	private function getExpressionMock(string $variable): Expression
-	{
-		$mock = $this->getMockBuilder(Expression::class)->getMock();
-		$mock->method('toQuery')->willReturn($variable);
+    /**
+     * Returns a mock of the Expression class that returns the given string when toQuery() is called.
+     *
+     * @param  string $variable
+     * @return Expression|MockObject
+     */
+    private function getExpressionMock(string $variable): Expression
+    {
+        $mock = $this->getMockBuilder(Expression::class)->getMock();
+        $mock->method('toQuery')->willReturn($variable);
 
-		return $mock;
-	}
+        return $mock;
+    }
 }

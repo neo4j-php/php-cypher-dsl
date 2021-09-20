@@ -8,7 +8,8 @@ class WhereClause extends Clause
 {
     private Pattern $pattern;
 
-    public function setPattern(Pattern $pattern): void {
+    public function setPattern(Pattern $pattern): void
+    {
         $this->pattern = $pattern;
     }
 
@@ -25,7 +26,8 @@ class WhereClause extends Clause
      */
     protected function getSubject(): string
     {
-        if ( isset($this->pattern) ) return $this->pattern->toQuery();
+        if (isset($this->pattern) ) { return $this->pattern->toQuery();
+        }
 
         return "";
     }

@@ -11,15 +11,17 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class DeleteClauseTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-    public function testEmptyClause() {
+    public function testEmptyClause()
+    {
         $delete = new DeleteClause();
 
         $this->assertSame("", $delete->toQuery());
     }
 
-    public function testPattern() {
+    public function testPattern()
+    {
         $delete = new DeleteClause();
         $pattern = $this->getPatternMock("(a)", $this);
 
@@ -28,7 +30,8 @@ class DeleteClauseTest extends TestCase
         $this->assertSame("DELETE (a)", $delete->toQuery());
     }
 
-    public function testDetachDelete() {
+    public function testDetachDelete()
+    {
         $delete = new DeleteClause();
         $pattern = $this->getPatternMock("(a)", $this);
 

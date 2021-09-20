@@ -31,28 +31,28 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  */
 class AdditionTest extends TestCase
 {
-	public function testToQuery()
-	{
-		$addition = new Addition($this->getExpressionMock("a"), $this->getExpressionMock("b"));
+    public function testToQuery()
+    {
+        $addition = new Addition($this->getExpressionMock("a"), $this->getExpressionMock("b"));
 
-		$this->assertSame("(a + b)", $addition->toQuery());
+        $this->assertSame("(a + b)", $addition->toQuery());
 
-		$addition = new Addition($addition, $addition);
+        $addition = new Addition($addition, $addition);
 
-		$this->assertSame("((a + b) + (a + b))", $addition->toQuery());
-	}
+        $this->assertSame("((a + b) + (a + b))", $addition->toQuery());
+    }
 
-	/**
-	 * Returns a mock of the Expression class that returns the given string when toQuery() is called.
-	 *
-	 * @param string $variable
-	 * @return Expression|MockObject
-	 */
-	private function getExpressionMock(string $variable): Expression
-	{
-		$mock = $this->getMockBuilder(Expression::class)->getMock();
-		$mock->method('toQuery')->willReturn($variable);
+    /**
+     * Returns a mock of the Expression class that returns the given string when toQuery() is called.
+     *
+     * @param  string $variable
+     * @return Expression|MockObject
+     */
+    private function getExpressionMock(string $variable): Expression
+    {
+        $mock = $this->getMockBuilder(Expression::class)->getMock();
+        $mock->method('toQuery')->willReturn($variable);
 
-		return $mock;
-	}
+        return $mock;
+    }
 }

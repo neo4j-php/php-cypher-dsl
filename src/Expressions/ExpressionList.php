@@ -33,36 +33,36 @@ use WikibaseSolutions\CypherDSL\EscapeTrait;
  */
 class ExpressionList implements Expression
 {
-	use EscapeTrait;
+    use EscapeTrait;
 
-	/**
-	 * @var array The list of expressions
-	 */
-	private array $expressions;
+    /**
+     * @var array The list of expressions
+     */
+    private array $expressions;
 
-	/**
-	 * ExpressionList constructor.
-	 *
-	 * @param Expression[] $expressions The list of expressions
-	 */
-	public function __construct(array $expressions)
-	{
-		foreach ($expressions as $expression) {
-			if (!($expression instanceof Expression)) {
-				throw new \InvalidArgumentException("\$expressions must be an array of only Expression objects");
-			}
-		}
+    /**
+     * ExpressionList constructor.
+     *
+     * @param Expression[] $expressions The list of expressions
+     */
+    public function __construct(array $expressions)
+    {
+        foreach ($expressions as $expression) {
+            if (!($expression instanceof Expression)) {
+                throw new \InvalidArgumentException("\$expressions must be an array of only Expression objects");
+            }
+        }
 
-		$this->expressions = $expressions;
-	}
+        $this->expressions = $expressions;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function toQuery(): string
-	{
-		$expressions = array_map(fn (Expression $expression): string => $expression->toQuery(), $this->expressions);
+    /**
+     * @inheritDoc
+     */
+    public function toQuery(): string
+    {
+        $expressions = array_map(fn (Expression $expression): string => $expression->toQuery(), $this->expressions);
 
-		return sprintf("[%s]", implode(", ", $expressions));
-	}
+        return sprintf("[%s]", implode(", ", $expressions));
+    }
 }

@@ -11,16 +11,16 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class AllTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$variable = $this->getExpressionMock("variable", $this);
-		$list = $this->getExpressionMock("list", $this);
-		$predicate = $this->getExpressionMock("predicate", $this);
+    public function testToQuery()
+    {
+        $variable = $this->getExpressionMock("variable", $this);
+        $list = $this->getExpressionMock("list", $this);
+        $predicate = $this->getExpressionMock("predicate", $this);
 
-		$all = new All($variable, $list, $predicate);
+        $all = new All($variable, $list, $predicate);
 
-		$this->assertSame("all(variable IN list WHERE predicate)", $all->toQuery());
-	}
+        $this->assertSame("all(variable IN list WHERE predicate)", $all->toQuery());
+    }
 }

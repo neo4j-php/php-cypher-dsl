@@ -10,17 +10,17 @@ use WikibaseSolutions\CypherDSL\Expressions\Boolean;
  */
 class BooleanTest extends TestCase
 {
-	public function testTrue()
-	{
-		$boolean = new Boolean(true);
+    public function testTrue()
+    {
+        $boolean = new Boolean(true);
 
-		$this->assertSame("true", $boolean->toQuery());
-	}
+        $this->assertSame("true", $boolean->toQuery());
+    }
 
-	public function testFalse()
-	{
-		$boolean = new Boolean(false);
+    public function testFalse()
+    {
+        $boolean = new Boolean(false);
 
-		$this->assertSame("false", $boolean->toQuery());
-	}
+        $this->assertSame("false", $boolean->toQuery());
+    }
 }

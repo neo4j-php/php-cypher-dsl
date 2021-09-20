@@ -38,7 +38,7 @@ class CreateClause extends Clause
     /**
      * Add a pattern to create.
      *
-     * @param Pattern $pattern
+     * @param  Pattern $pattern
      * @return CreateClause
      */
     public function addPattern(Pattern $pattern): self

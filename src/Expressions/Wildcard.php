@@ -28,11 +28,11 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
  */
 class Wildcard implements Expression
 {
-	/**
-	 * @inheritDoc
-	 */
-	public function toQuery(): string
-	{
-		return "*";
-	}
+    /**
+     * @inheritDoc
+     */
+    public function toQuery(): string
+    {
+        return "*";
+    }
 }

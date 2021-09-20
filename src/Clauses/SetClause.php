@@ -12,7 +12,8 @@ class SetClause extends Clause
      */
     private array $expressions = [];
 
-    public function addExpression(Expression $expression): void {
+    public function addExpression(Expression $expression): void
+    {
         $this->expressions[] = $expression;
     }
     /**

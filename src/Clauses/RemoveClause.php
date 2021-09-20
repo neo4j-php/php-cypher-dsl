@@ -15,7 +15,8 @@ class RemoveClause extends Clause
     /**
      * @param Expression $expression
      */
-    public function setExpression(Expression $expression): void {
+    public function setExpression(Expression $expression): void
+    {
         $this->expression = $expression;
     }
 
@@ -33,9 +34,9 @@ class RemoveClause extends Clause
     protected function getSubject(): string
     {
         if (!isset($this->expression)) {
-        	return "";
-		}
+            return "";
+        }
 
-		return $this->expression->toQuery();
+        return $this->expression->toQuery();
     }
 }

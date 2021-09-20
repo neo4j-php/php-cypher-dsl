@@ -8,15 +8,18 @@ class LimitClause extends Clause
 {
     /**
      * The expression of the limit statement
+     *
      * @var Expression $expression
      */
     private Expression $expression;
 
     /**
      * Sets the expression
+     *
      * @param Expression $expression
      */
-    public function setExpression(Expression $expression): void {
+    public function setExpression(Expression $expression): void
+    {
         $this->expression = $expression;
     }
 
@@ -33,7 +36,8 @@ class LimitClause extends Clause
      */
     protected function getSubject(): string
     {
-        if ( isset($this->expression) ) return $this->expression->toQuery();
+        if (isset($this->expression) ) { return $this->expression->toQuery();
+        }
 
         return "";
     }

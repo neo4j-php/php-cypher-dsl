@@ -28,11 +28,11 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
  */
 class Addition extends BinaryOperator
 {
-	/**
-	 * @inheritDoc
-	 */
-	protected function getOperator(): string
-	{
-		return "+";
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getOperator(): string
+    {
+        return "+";
+    }
 }

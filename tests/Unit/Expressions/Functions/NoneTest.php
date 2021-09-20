@@ -11,9 +11,10 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class NoneTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-    public function testToQuery() {
+    public function testToQuery()
+    {
         $variable = $this->getExpressionMock("variable", $this);
         $list = $this->getExpressionMock("list", $this);
         $predicate = $this->getExpressionMock("predicate", $this);

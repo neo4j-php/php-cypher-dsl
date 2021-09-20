@@ -32,48 +32,48 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class OrderByClauseTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testEmptyClause()
-	{
-		$orderBy = new OrderByClause();
+    public function testEmptyClause()
+    {
+        $orderBy = new OrderByClause();
 
-		$this->assertSame("", $orderBy->toQuery());
-	}
+        $this->assertSame("", $orderBy->toQuery());
+    }
 
-	public function testSingleProperty()
-	{
-		$orderBy = new OrderByClause();
-		$orderBy->addProperty($this->getPropertyMock("a.a", $this));
+    public function testSingleProperty()
+    {
+        $orderBy = new OrderByClause();
+        $orderBy->addProperty($this->getPropertyMock("a.a", $this));
 
-		$this->assertSame("ORDER BY a.a", $orderBy->toQuery());
-	}
+        $this->assertSame("ORDER BY a.a", $orderBy->toQuery());
+    }
 
-	public function testMultipleProperties()
-	{
-		$orderBy = new OrderByClause();
-		$orderBy->addProperty($this->getPropertyMock("a.a", $this));
-		$orderBy->addProperty($this->getPropertyMock("a.b", $this));
+    public function testMultipleProperties()
+    {
+        $orderBy = new OrderByClause();
+        $orderBy->addProperty($this->getPropertyMock("a.a", $this));
+        $orderBy->addProperty($this->getPropertyMock("a.b", $this));
 
-		$this->assertSame("ORDER BY a.a, a.b", $orderBy->toQuery());
-	}
+        $this->assertSame("ORDER BY a.a, a.b", $orderBy->toQuery());
+    }
 
-	public function testSinglePropertyDesc()
-	{
-		$orderBy = new OrderByClause();
-		$orderBy->addProperty($this->getPropertyMock("a.a", $this));
-		$orderBy->setDescending();
+    public function testSinglePropertyDesc()
+    {
+        $orderBy = new OrderByClause();
+        $orderBy->addProperty($this->getPropertyMock("a.a", $this));
+        $orderBy->setDescending();
 
-		$this->assertSame("ORDER BY a.a DESCENDING", $orderBy->toQuery());
-	}
+        $this->assertSame("ORDER BY a.a DESCENDING", $orderBy->toQuery());
+    }
 
-	public function testMultiplePropertiesDesc()
-	{
-		$orderBy = new OrderByClause();
-		$orderBy->addProperty($this->getPropertyMock("a.a", $this));
-		$orderBy->addProperty($this->getPropertyMock("a.b", $this));
-		$orderBy->setDescending();
+    public function testMultiplePropertiesDesc()
+    {
+        $orderBy = new OrderByClause();
+        $orderBy->addProperty($this->getPropertyMock("a.a", $this));
+        $orderBy->addProperty($this->getPropertyMock("a.b", $this));
+        $orderBy->setDescending();
 
-		$this->assertSame("ORDER BY a.a, a.b DESCENDING", $orderBy->toQuery());
-	}
+        $this->assertSame("ORDER BY a.a, a.b DESCENDING", $orderBy->toQuery());
+    }
 }

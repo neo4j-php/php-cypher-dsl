@@ -51,10 +51,10 @@ use WikibaseSolutions\CypherDSL\QueryConvertable;
  */
 interface Expression extends QueryConvertable
 {
-	/**
-	 * Converts the expression into a query.
-	 *
-	 * @return string
-	 */
-	public function toQuery(): string;
+    /**
+     * Converts the expression into a query.
+     *
+     * @return string
+     */
+    public function toQuery(): string;
 }

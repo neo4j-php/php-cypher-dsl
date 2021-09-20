@@ -30,10 +30,10 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  */
 interface Pattern extends Expression
 {
-	/**
-	 * Converts the pattern into a query.
-	 *
-	 * @return string
-	 */
-	public function toQuery(): string;
+    /**
+     * Converts the pattern into a query.
+     *
+     * @return string
+     */
+    public function toQuery(): string;
 }

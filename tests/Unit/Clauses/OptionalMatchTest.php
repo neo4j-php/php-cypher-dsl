@@ -32,29 +32,29 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class OptionalMatchTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testEmptyClause()
-	{
-		$match = new OptionalMatchClause();
+    public function testEmptyClause()
+    {
+        $match = new OptionalMatchClause();
 
-		$this->assertSame("", $match->toQuery());
-	}
+        $this->assertSame("", $match->toQuery());
+    }
 
-	public function testSinglePattern()
-	{
-		$match = new OptionalMatchClause();
-		$match->addPattern($this->getPatternMock("(a)", $this));
+    public function testSinglePattern()
+    {
+        $match = new OptionalMatchClause();
+        $match->addPattern($this->getPatternMock("(a)", $this));
 
-		$this->assertSame("OPTIONAL MATCH (a)", $match->toQuery());
-	}
+        $this->assertSame("OPTIONAL MATCH (a)", $match->toQuery());
+    }
 
-	public function testMultiplePatterns()
-	{
-		$match = new OptionalMatchClause();
-		$match->addPattern($this->getPatternMock("(a)", $this));
-		$match->addPattern($this->getPatternMock("(b)", $this));
+    public function testMultiplePatterns()
+    {
+        $match = new OptionalMatchClause();
+        $match->addPattern($this->getPatternMock("(a)", $this));
+        $match->addPattern($this->getPatternMock("(b)", $this));
 
-		$this->assertSame("OPTIONAL MATCH (a), (b)", $match->toQuery());
-	}
+        $this->assertSame("OPTIONAL MATCH (a), (b)", $match->toQuery());
+    }
 }

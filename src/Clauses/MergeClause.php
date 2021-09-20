@@ -14,7 +14,8 @@ class MergeClause extends Clause
     /**
      * @param Pattern $pattern
      */
-    public function setPattern(Pattern $pattern): void {
+    public function setPattern(Pattern $pattern): void
+    {
         $this->pattern = $pattern;
     }
     /**
@@ -30,7 +31,8 @@ class MergeClause extends Clause
      */
     protected function getSubject(): string
     {
-        if ( isset($this->pattern) ) return $this->pattern->toQuery();
+        if (isset($this->pattern) ) { return $this->pattern->toQuery();
+        }
 
         return "";
     }

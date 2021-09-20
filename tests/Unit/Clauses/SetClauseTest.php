@@ -11,15 +11,17 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class SetClauseTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-    public function testEmptyClause() {
+    public function testEmptyClause()
+    {
         $set = new SetClause();
 
         $this->assertSame("", $set->toQuery());
     }
 
-    public function testSinglePattern() {
+    public function testSinglePattern()
+    {
         $set = new SetClause();
         $expression = $this->getExpressionMock("(a)", $this);
 
@@ -28,7 +30,8 @@ class SetClauseTest extends TestCase
         $this->assertSame("SET (a)", $set->toQuery());
     }
 
-    public function testMultiplePattern() {
+    public function testMultiplePattern()
+    {
         $set = new SetClause();
         $expressionA = $this->getExpressionMock("(a)", $this);
         $expressionB = $this->getExpressionMock("(b)", $this);

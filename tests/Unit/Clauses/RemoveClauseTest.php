@@ -11,15 +11,17 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class RemoveClauseTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-    public function testEmptyClause() {
+    public function testEmptyClause()
+    {
         $remove = new RemoveClause();
 
         $this->assertSame("", $remove->toQuery());
     }
 
-    public function testPattern() {
+    public function testPattern()
+    {
         $remove = new RemoveClause();
         $expression = $this->getExpressionMock("(a)", $this);
 

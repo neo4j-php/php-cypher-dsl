@@ -31,66 +31,66 @@ use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
  */
 class ExpressionListTest extends TestCase
 {
-	public function testEmpty()
-	{
-		$expressionList = new ExpressionList([]);
+    public function testEmpty()
+    {
+        $expressionList = new ExpressionList([]);
 
-		$this->assertSame("[]", $expressionList->toQuery());
-	}
+        $this->assertSame("[]", $expressionList->toQuery());
+    }
 
-	/**
-	 * @dataProvider provideOneDimensionalData
-	 * @param array $expressions
-	 * @param string $expected
-	 */
-	public function testOneDimensional(array $expressions, string $expected)
-	{
-		$expressionList = new ExpressionList($expressions);
+    /**
+     * @dataProvider provideOneDimensionalData
+     * @param        array  $expressions
+     * @param        string $expected
+     */
+    public function testOneDimensional(array $expressions, string $expected)
+    {
+        $expressionList = new ExpressionList($expressions);
 
-		$this->assertSame($expected, $expressionList->toQuery());
-	}
+        $this->assertSame($expected, $expressionList->toQuery());
+    }
 
-	/**
-	 * @dataProvider provideMultidimensionalData
-	 * @param array $expressions
-	 * @param string $expected
-	 */
-	public function testMultidimensional(array $expressions, string $expected)
-	{
-		$expressionList = new ExpressionList($expressions);
+    /**
+     * @dataProvider provideMultidimensionalData
+     * @param        array  $expressions
+     * @param        string $expected
+     */
+    public function testMultidimensional(array $expressions, string $expected)
+    {
+        $expressionList = new ExpressionList($expressions);
 
-		$this->assertSame($expected, $expressionList->toQuery());
-	}
+        $this->assertSame($expected, $expressionList->toQuery());
+    }
 
-	public function provideOneDimensionalData(): array
-	{
-		return [
-			[[$this->getExpressionMock("12")], "[12]"],
-			[[$this->getExpressionMock("'12'")], "['12']"],
-			[[$this->getExpressionMock("'12'"), $this->getExpressionMock("'13'")], "['12', '13']"]
-		];
-	}
+    public function provideOneDimensionalData(): array
+    {
+        return [
+        [[$this->getExpressionMock("12")], "[12]"],
+        [[$this->getExpressionMock("'12'")], "['12']"],
+        [[$this->getExpressionMock("'12'"), $this->getExpressionMock("'13'")], "['12', '13']"]
+        ];
+    }
 
-	public function provideMultidimensionalData(): array
-	{
-		return [
-			[[new ExpressionList([$this->getExpressionMock("12")])], "[[12]]"],
-			[[new ExpressionList([$this->getExpressionMock("'12'")])], "[['12']]"],
-			[[new ExpressionList([$this->getExpressionMock("'12'"), $this->getExpressionMock("'14'")]), $this->getExpressionMock("'13'")], "[['12', '14'], '13']"]
-		];
-	}
+    public function provideMultidimensionalData(): array
+    {
+        return [
+        [[new ExpressionList([$this->getExpressionMock("12")])], "[[12]]"],
+        [[new ExpressionList([$this->getExpressionMock("'12'")])], "[['12']]"],
+        [[new ExpressionList([$this->getExpressionMock("'12'"), $this->getExpressionMock("'14'")]), $this->getExpressionMock("'13'")], "[['12', '14'], '13']"]
+        ];
+    }
 
-	/**
-	 * Returns a mock of the Expression class that returns the given string when toQuery() is called.
-	 *
-	 * @param string $variable
-	 * @return Expression|MockObject
-	 */
-	private function getExpressionMock(string $variable): Expression
-	{
-		$mock = $this->getMockBuilder(Expression::class)->getMock();
-		$mock->method('toQuery')->willReturn($variable);
+    /**
+     * Returns a mock of the Expression class that returns the given string when toQuery() is called.
+     *
+     * @param  string $variable
+     * @return Expression|MockObject
+     */
+    private function getExpressionMock(string $variable): Expression
+    {
+        $mock = $this->getMockBuilder(Expression::class)->getMock();
+        $mock->method('toQuery')->willReturn($variable);
 
-		return $mock;
-	}
+        return $mock;
+    }
 }

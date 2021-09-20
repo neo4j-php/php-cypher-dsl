@@ -8,29 +8,35 @@ class DeleteClause extends Clause
 {
     /**
      * Used for checking if DETACH clause is needed
+     *
      * @var bool $isDetach
      */
     private bool $isDetach = false;
 
     /**
      * The node that needs to be deleted
+     *
      * @var Pattern $node
      */
     private Pattern $node;
 
     /**
      * sets the DETACH check
+     *
      * @param bool $isDetach
      */
-    public function setDetach(bool $isDetach): void {
+    public function setDetach(bool $isDetach): void
+    {
         $this->isDetach = $isDetach;
     }
 
     /**
      * Set the node that needs to be deleted
+     *
      * @param Pattern $node
      */
-    public function setNode(Pattern $node): void {
+    public function setNode(Pattern $node): void
+    {
         $this->node = $node;
     }
 
@@ -39,7 +45,7 @@ class DeleteClause extends Clause
      */
     protected function getClause(): string
     {
-        if ( $this->isDetach ) {
+        if ($this->isDetach ) {
             return "DETACH DELETE";
         }
 
@@ -51,10 +57,10 @@ class DeleteClause extends Clause
      */
     protected function getSubject(): string
     {
-    	if ( !isset( $this->node ) ) {
-			return "";
-		}
+        if (!isset($this->node) ) {
+            return "";
+        }
 
-     	return $this->node->toQuery();
+        return $this->node->toQuery();
     }
 }

@@ -34,149 +34,149 @@ use WikibaseSolutions\CypherDSL\Expressions\Variable;
  */
 class Relationship implements Pattern
 {
-	use EscapeTrait;
+    use EscapeTrait;
 
-	const DIR_RIGHT = ["-", "->"];
-	const DIR_LEFT = ["<-", "-"];
-	const DIR_UNI = ["-", "-"];
+    const DIR_RIGHT = ["-", "->"];
+    const DIR_LEFT = ["<-", "-"];
+    const DIR_UNI = ["-", "-"];
 
-	/**
-	 * @var Pattern The pattern left of the relationship
-	 */
-	private Pattern $a;
+    /**
+     * @var Pattern The pattern left of the relationship
+     */
+    private Pattern $a;
 
-	/**
-	 * @var Pattern The pattern right of the relationship
-	 */
-	private Pattern $b;
+    /**
+     * @var Pattern The pattern right of the relationship
+     */
+    private Pattern $b;
 
-	/**
-	 * @var array The direction of the relationship
-	 */
-	private array $direction;
+    /**
+     * @var array The direction of the relationship
+     */
+    private array $direction;
 
-	/**
-	 * @var array
-	 */
-	private array $types = [];
+    /**
+     * @var array
+     */
+    private array $types = [];
 
-	/**
-	 * @var Variable
-	 */
-	private Variable $variable;
+    /**
+     * @var Variable
+     */
+    private Variable $variable;
 
-	/**
-	 * @var PropertyMap
-	 */
-	private PropertyMap $properties;
+    /**
+     * @var PropertyMap
+     */
+    private PropertyMap $properties;
 
-	/**
-	 * Relationship constructor.
-	 *
-	 * @param Pattern $a The node left of the relationship
-	 * @param Pattern $b The node right of the relationship
-	 * @param array $direction The direction of the relationship, should be either:
-	 *
-	 * - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
-	 * - Relationship::DIR_LEFT (for a relation of (a)<--(b))
-	 * - Relationship::DIR_UNI (for a relation of (a)--(b))
-	 */
-	public function __construct(Pattern $a, Pattern $b, array $direction)
-	{
-		$this->a = $a;
-		$this->b = $b;
+    /**
+     * Relationship constructor.
+     *
+     * @param Pattern $a         The node left of the relationship
+     * @param Pattern $b         The node right of the relationship
+     * @param array   $direction The direction of the relationship, should be either:
+     *                           - Relationship::DIR_RIGHT (for a relation of
+     *                           (a)-->(b)) - Relationship::DIR_LEFT (for a relation
+     *                           of (a)<--(b)) - Relationship::DIR_UNI (for a
+     *                           relation of (a)--(b))                    
+     */
+    public function __construct(Pattern $a, Pattern $b, array $direction)
+    {
+        $this->a = $a;
+        $this->b = $b;
 
-		if ($direction !== self::DIR_RIGHT && $direction !== self::DIR_LEFT && $direction !== self::DIR_UNI) {
-			throw new InvalidArgumentException("The direction must be either 'DIR_LEFT', 'DIR_RIGHT' or 'RELATED_TO'");
-		}
+        if ($direction !== self::DIR_RIGHT && $direction !== self::DIR_LEFT && $direction !== self::DIR_UNI) {
+            throw new InvalidArgumentException("The direction must be either 'DIR_LEFT', 'DIR_RIGHT' or 'RELATED_TO'");
+        }
 
-		$this->direction = $direction;
-	}
+        $this->direction = $direction;
+    }
 
-	/**
-	 * @param \WikibaseSolutions\CypherDSL\Expressions\Variable|string $variable
-	 * @return Relationship
-	 */
-	public function named($variable): self
-	{
-		if (!($variable instanceof Variable)) {
-			$variable = new Variable($variable);
-		}
+    /**
+     * @param  \WikibaseSolutions\CypherDSL\Expressions\Variable|string $variable
+     * @return Relationship
+     */
+    public function named($variable): self
+    {
+        if (!($variable instanceof Variable)) {
+            $variable = new Variable($variable);
+        }
 
-		$this->variable = $variable;
+        $this->variable = $variable;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * @param PropertyMap|array $properties
-	 * @return Relationship
-	 */
-	public function withProperties($properties): self
-	{
-		if (!($properties instanceof PropertyMap)) {
-			$properties = new PropertyMap($properties);
-		}
+    /**
+     * @param  PropertyMap|array $properties
+     * @return Relationship
+     */
+    public function withProperties($properties): self
+    {
+        if (!($properties instanceof PropertyMap)) {
+            $properties = new PropertyMap($properties);
+        }
 
-		$this->properties = $properties;
+        $this->properties = $properties;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * @param string $type
-	 * @return Relationship
-	 */
-	public function withType(string $type): self
-	{
-		$this->types[] = $type;
+    /**
+     * @param  string $type
+     * @return Relationship
+     */
+    public function withType(string $type): self
+    {
+        $this->types[] = $type;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Returns the string representation of this relationship that can be used directly
-	 * in a query.
-	 *
-	 * @return string
-	 */
-	public function toQuery(): string
-	{
-		$a = $this->a->toQuery();
-		$b = $this->b->toQuery();
+    /**
+     * Returns the string representation of this relationship that can be used directly
+     * in a query.
+     *
+     * @return string
+     */
+    public function toQuery(): string
+    {
+        $a = $this->a->toQuery();
+        $b = $this->b->toQuery();
 
-		return $a . $this->direction[0] . $this->conditionToString() . $this->direction[1] . $b;
-	}
+        return $a . $this->direction[0] . $this->conditionToString() . $this->direction[1] . $b;
+    }
 
-	/**
-	 * @return string
-	 */
-	private function conditionToString(): string
-	{
-		$conditionInner = "";
+    /**
+     * @return string
+     */
+    private function conditionToString(): string
+    {
+        $conditionInner = "";
 
-		// The condition always starts with the variable
-		if (isset($this->variable)) {
-			$conditionInner .= $this->variable->toQuery();
-		}
+        // The condition always starts with the variable
+        if (isset($this->variable)) {
+            $conditionInner .= $this->variable->toQuery();
+        }
 
-		$types = array_filter($this->types);
+        $types = array_filter($this->types);
 
-		if (count($types) !== 0) {
-			// If we have at least one condition type, escape them and insert them into the query
-			$escapedTypes = array_map(fn (string $type): string => $this->escape($type), $types);
-			$conditionInner .= sprintf(":%s", implode("|", $escapedTypes));
-		}
+        if (count($types) !== 0) {
+            // If we have at least one condition type, escape them and insert them into the query
+            $escapedTypes = array_map(fn (string $type): string => $this->escape($type), $types);
+            $conditionInner .= sprintf(":%s", implode("|", $escapedTypes));
+        }
 
-		if (isset($this->properties)) {
-			if ($conditionInner !== "") {
-				// Add some padding between the property list and the preceding structure
-				$conditionInner .= " ";
-			}
+        if (isset($this->properties)) {
+            if ($conditionInner !== "") {
+                // Add some padding between the property list and the preceding structure
+                $conditionInner .= " ";
+            }
 
-			$conditionInner .= $this->properties->toQuery();
-		}
+            $conditionInner .= $this->properties->toQuery();
+        }
 
-		return sprintf("[%s]", $conditionInner);
-	}
+        return sprintf("[%s]", $conditionInner);
+    }
 }

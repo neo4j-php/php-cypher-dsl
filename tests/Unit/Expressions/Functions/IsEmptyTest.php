@@ -11,10 +11,10 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class IsEmptyTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
     public function testToQuery()
-	{
+    {
         $list = $this->getExpressionMock("list", $this);
 
         $isEmpty = new IsEmpty($list);

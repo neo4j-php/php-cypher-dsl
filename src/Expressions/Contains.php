@@ -28,11 +28,11 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
  */
 class Contains extends BinaryOperator
 {
-	/**
-	 * @inheritDoc
-	 */
-	protected function getOperator(): string
-	{
-		return "CONTAINS";
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getOperator(): string
+    {
+        return "CONTAINS";
+    }
 }

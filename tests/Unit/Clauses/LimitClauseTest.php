@@ -11,15 +11,17 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class LimitClauseTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-    public function testEmptyClause() {
+    public function testEmptyClause()
+    {
         $limit = new LimitClause();
 
         $this->assertSame("", $limit->toQuery());
     }
 
-    public function testPattern() {
+    public function testPattern()
+    {
         $limit = new LimitClause();
         $expression = $this->getExpressionMock("(a)", $this);
 

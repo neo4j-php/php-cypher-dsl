@@ -31,28 +31,28 @@ use WikibaseSolutions\CypherDSL\Expressions\Multiplication;
  */
 class MultiplicationTest extends TestCase
 {
-	public function testToQuery()
-	{
-		$multiplication = new Multiplication($this->getExpressionMock("a"), $this->getExpressionMock("b"));
+    public function testToQuery()
+    {
+        $multiplication = new Multiplication($this->getExpressionMock("a"), $this->getExpressionMock("b"));
 
-		$this->assertSame("(a * b)", $multiplication->toQuery());
+        $this->assertSame("(a * b)", $multiplication->toQuery());
 
-		$multiplication = new Multiplication($multiplication, $multiplication);
+        $multiplication = new Multiplication($multiplication, $multiplication);
 
-		$this->assertSame("((a * b) * (a * b))", $multiplication->toQuery());
-	}
+        $this->assertSame("((a * b) * (a * b))", $multiplication->toQuery());
+    }
 
-	/**
-	 * Returns a mock of the Expression class that returns the given string when toQuery() is called.
-	 *
-	 * @param string $variable
-	 * @return Expression|MockObject
-	 */
-	private function getExpressionMock(string $variable): Expression
-	{
-		$mock = $this->getMockBuilder(Expression::class)->getMock();
-		$mock->method('toQuery')->willReturn($variable);
+    /**
+     * Returns a mock of the Expression class that returns the given string when toQuery() is called.
+     *
+     * @param  string $variable
+     * @return Expression|MockObject
+     */
+    private function getExpressionMock(string $variable): Expression
+    {
+        $mock = $this->getMockBuilder(Expression::class)->getMock();
+        $mock->method('toQuery')->willReturn($variable);
 
-		return $mock;
-	}
+        return $mock;
+    }
 }
