@@ -51,6 +51,125 @@ use WikibaseSolutions\CypherDSL\QueryConvertable;
  */
 abstract class Expression implements QueryConvertable
 {
+	/**
+	 * Add this expression to the given expression.
+	 *
+	 * @param Expression $right
+	 * @return Expression
+	 */
+	public function plus(Expression $right): Expression
+	{
+		return new Addition($this, $right);
+	}
+
+	/**
+	 * Create a conjunction between this expression and the given expression.
+	 *
+	 * @param Expression $right
+	 * @return Expression
+	 */
+	public function and(Expression $right): Expression
+	{
+		return new AndOperator($this, $right);
+	}
+
+	/**
+	 * Check whether this expression the given expression.
+	 *
+	 * @param Expression $right
+	 * @return Expression
+	 */
+	public function contains(Expression $right): Expression
+	{
+		return new Contains($this, $right);
+	}
+
+	/**
+	 * Divide this expression by the given expression.
+	 *
+	 * @param Expression $right
+	 * @return Expression
+	 */
+	public function divideBy(Expression $right): Expression
+	{
+		return new Division($this, $right);
+	}
+
+	public function endsWith(Expression $right): Expression
+	{
+		// TODO
+	}
+
+	public function equals(Expression $right): Expression
+	{
+		// TODO
+	}
+
+	public function exponentiate(Expression $right): Expression
+	{
+		// TODO
+	}
+
+	public function gt(Expression $right): Expression
+	{
+		// TODO
+	}
+
+	public function gte(Expression $right): Expression
+	{
+		// TODO
+	}
+
+	public function notEquals(Expression $right): Expression
+	{
+		// TODO
+	}
+
+	public function lt(Expression $right): Expression
+	{
+		// TODO
+	}
+
+	public function lte(Expression $right): Expression
+	{
+		// TODO
+	}
+
+	public function mod(Expression $right): Expression
+	{
+		// TODO
+	}
+
+	public function times(Expression $expression): Expression
+	{
+		// TODO
+	}
+
+	public function or(Expression $expression): Expression
+	{
+		// TODO
+	}
+
+	public function propertyReplacement(Expression $expression): Expression
+	{
+		// TODO
+	}
+
+	public function startsWith(Expression $expression): Expression
+	{
+		// TODO
+	}
+
+	public function minus(Expression $expression): Expression
+	{
+		// TODO
+	}
+
+	public function xor(Expression $expression): Expression
+	{
+		// TODO
+	}
+
     /**
      * Converts the expression into a query.
      *
