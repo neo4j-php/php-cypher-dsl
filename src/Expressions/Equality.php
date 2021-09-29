@@ -22,9 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
 /**
- * Represents the application of the equality (=) operator.
+ * Represents the application of the equality (=) operator. This operator is also used for assigning
+ * values to properties.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
+ * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/#set-remove-properties-using-empty-map
  */
 class Equality extends BinaryOperator
 {
