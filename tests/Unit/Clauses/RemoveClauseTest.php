@@ -30,16 +30,16 @@ class RemoveClauseTest extends TestCase
         $this->assertSame("REMOVE (a)", $remove->toQuery());
     }
 
-	public function testMultipleExpressions()
-	{
-		$remove = new RemoveClause();
+    public function testMultipleExpressions()
+    {
+        $remove = new RemoveClause();
 
-		$a = $this->getExpressionMock("(a)", $this);
-		$b = $this->getExpressionMock("(b)", $this);
+        $a = $this->getExpressionMock("(a)", $this);
+        $b = $this->getExpressionMock("(b)", $this);
 
-		$remove->addExpression($a);
-		$remove->addExpression($b);
+        $remove->addExpression($a);
+        $remove->addExpression($b);
 
-		$this->assertSame("REMOVE (a), (b)", $remove->toQuery());
-	}
+        $this->assertSame("REMOVE (a), (b)", $remove->toQuery());
+    }
 }

@@ -23,7 +23,7 @@ class WhereClauseTest extends TestCase
     public function testExpression()
     {
         $where = new WhereClause();
-		$expression = $this->getExpressionMock("(a)", $this);
+        $expression = $this->getExpressionMock("(a)", $this);
 
         $where->setExpression($expression);
 

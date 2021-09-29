@@ -52,17 +52,17 @@ class QueryTest extends TestCase
         }
     }
 
-	/**
-	 * @dataProvider provideLiteralData
-	 * @param $literal
-	 * @param Literal $expected
-	 */
+    /**
+     * @dataProvider provideLiteralData
+     * @param        $literal
+     * @param        Literal $expected
+     */
     public function testLiteral($literal, Literal $expected)
-	{
-		$actual = Query::literal($literal);
+    {
+        $actual = Query::literal($literal);
 
-		$this->assertEquals($expected, $actual);
-	}
+        $this->assertEquals($expected, $actual);
+    }
 
     public function testMatch()
     {
@@ -111,9 +111,9 @@ class QueryTest extends TestCase
 
         $this->assertSame("DELETE (m:Movie)", $statement);
 
-		$statement = (new Query())->delete([$m, $m])->build();
+        $statement = (new Query())->delete([$m, $m])->build();
 
-		$this->assertSame("DELETE (m:Movie), (m:Movie)", $statement);
+        $this->assertSame("DELETE (m:Movie), (m:Movie)", $statement);
     }
 
     public function testDetachDelete()
@@ -124,9 +124,9 @@ class QueryTest extends TestCase
 
         $this->assertSame("DETACH DELETE (m:Movie)", $statement);
 
-		$statement = (new Query())->detachDelete([$m, $m])->build();
+        $statement = (new Query())->detachDelete([$m, $m])->build();
 
-		$this->assertSame("DETACH DELETE (m:Movie), (m:Movie)", $statement);
+        $this->assertSame("DETACH DELETE (m:Movie), (m:Movie)", $statement);
     }
 
     public function testLimit()
@@ -203,10 +203,11 @@ class QueryTest extends TestCase
         $this->assertSame("SET a.age, a.age", $statement);
     }
 
-	public function testWhere() {
-		$expression = $this->getExpressionMock("(a)", $this);
+    public function testWhere()
+    {
+        $expression = $this->getExpressionMock("(a)", $this);
 
-		$statement = (new Query())->where($expression)->build();
+        $statement = (new Query())->where($expression)->build();
 
         $this->assertSame("WHERE (a)", $statement);
     }
@@ -241,44 +242,44 @@ class QueryTest extends TestCase
 
         $query = new Query();
         $statement = $query->match([$patternMock, $patternMock])
-			->returning($patternMock, "#")
-			->create([$patternMock, $patternMock])
-			->create($patternMock)
-			->delete([$patternMock, $patternMock])
-			->detachDelete([$patternMock, $patternMock])
-			->limit($patternMock)
-			->merge($patternMock)
-			->optionalMatch([$patternMock, $patternMock])
-			->orderBy([$propertyMock, $propertyMock], true)
-			->remove($patternMock)
-			->set([$patternMock, $patternMock])
-			->where($patternMock)
-			->with($patternMock, "#")
-			->build();
+            ->returning($patternMock, "#")
+            ->create([$patternMock, $patternMock])
+            ->create($patternMock)
+            ->delete([$patternMock, $patternMock])
+            ->detachDelete([$patternMock, $patternMock])
+            ->limit($patternMock)
+            ->merge($patternMock)
+            ->optionalMatch([$patternMock, $patternMock])
+            ->orderBy([$propertyMock, $propertyMock], true)
+            ->remove($patternMock)
+            ->set([$patternMock, $patternMock])
+            ->where($patternMock)
+            ->with($patternMock, "#")
+            ->build();
 
         $this->assertSame("MATCH (a), (a) RETURN (a) AS `#` CREATE (a), (a) CREATE (a) DELETE (a), (a) DETACH DELETE (a), (a) LIMIT (a) MERGE (a) OPTIONAL MATCH (a), (a) ORDER BY a.b, a.b DESCENDING REMOVE (a) SET (a), (a) WHERE (a) WITH (a) AS `#`", $statement);
     }
 
     public function testBuildEmpty()
-	{
-		$query = new Query();
+    {
+        $query = new Query();
 
-		$this->assertSame("", $query->build());
-	}
+        $this->assertSame("", $query->build());
+    }
 
-	public function provideLiteralData(): array
-	{
-		return [
-			['foobar', new StringLiteral('foobar')],
-			['0', new StringLiteral('0')],
-			['100', new StringLiteral('100')],
-			[0, new Decimal(0)],
-			[100, new Decimal(100)],
-			[10.0, new Decimal(10.0)],
-			[69420, new Decimal(69420)],
-			[10.0000000000000000000000000000001, new Decimal(10.0000000000000000000000000000001)],
-			[false, new Boolean(false)],
-			[true, new Boolean(true)]
-		];
-	}
+    public function provideLiteralData(): array
+    {
+        return [
+        ['foobar', new StringLiteral('foobar')],
+        ['0', new StringLiteral('0')],
+        ['100', new StringLiteral('100')],
+        [0, new Decimal(0)],
+        [100, new Decimal(100)],
+        [10.0, new Decimal(10.0)],
+        [69420, new Decimal(69420)],
+        [10.0000000000000000000000000000001, new Decimal(10.0000000000000000000000000000001)],
+        [false, new Boolean(false)],
+        [true, new Boolean(true)]
+        ];
+    }
 }

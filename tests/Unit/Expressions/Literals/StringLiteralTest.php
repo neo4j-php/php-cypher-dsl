@@ -45,15 +45,15 @@ class StringLiteralTest extends TestCase
         $this->assertSame('""', $string->toQuery());
     }
 
-	/**
-	 * @dataProvider provideSingleQuotesData
-	 * @param string $string
-	 * @param string $expected
-	 */
-	public function testSingleQuotes(string $string, string $expected)
-	{
-		$string = new StringLiteral($string);
-		$string->useDoubleQuotes(false);
+    /**
+     * @dataProvider provideSingleQuotesData
+     * @param        string $string
+     * @param        string $expected
+     */
+    public function testSingleQuotes(string $string, string $expected)
+    {
+        $string = new StringLiteral($string);
+        $string->useDoubleQuotes(false);
 
         $this->assertSame($expected, $string->toQuery());
     }

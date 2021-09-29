@@ -30,40 +30,43 @@ class MergeClauseTest extends TestCase
         $this->assertSame("MERGE (a)", $merge->toQuery());
     }
 
-    public function testSetOnCreate() {
-    	$merge = new MergeClause();
+    public function testSetOnCreate()
+    {
+        $merge = new MergeClause();
 
-    	$pattern = $this->getPatternMock("(a)", $this);
-    	$clause = $this->getClauseMock("SET a = 10", $this);
+        $pattern = $this->getPatternMock("(a)", $this);
+        $clause = $this->getClauseMock("SET a = 10", $this);
 
-    	$merge->setPattern($pattern);
-    	$merge->setOnCreate($clause);
+        $merge->setPattern($pattern);
+        $merge->setOnCreate($clause);
 
-		$this->assertSame("MERGE (a) ON CREATE SET a = 10", $merge->toQuery());
-	}
+        $this->assertSame("MERGE (a) ON CREATE SET a = 10", $merge->toQuery());
+    }
 
-	public function testSetOnMatch() {
-		$merge = new MergeClause();
+    public function testSetOnMatch()
+    {
+        $merge = new MergeClause();
 
-		$pattern = $this->getPatternMock("(a)", $this);
-		$clause = $this->getClauseMock("SET a = 10", $this);
+        $pattern = $this->getPatternMock("(a)", $this);
+        $clause = $this->getClauseMock("SET a = 10", $this);
 
-		$merge->setPattern($pattern);
-		$merge->setOnMatch($clause);
+        $merge->setPattern($pattern);
+        $merge->setOnMatch($clause);
 
-		$this->assertSame("MERGE (a) ON MATCH SET a = 10", $merge->toQuery());
-	}
+        $this->assertSame("MERGE (a) ON MATCH SET a = 10", $merge->toQuery());
+    }
 
-	public function testSetOnBoth() {
-		$merge = new MergeClause();
+    public function testSetOnBoth()
+    {
+        $merge = new MergeClause();
 
-		$pattern = $this->getPatternMock("(a)", $this);
-		$clause = $this->getClauseMock("SET a = 10", $this);
+        $pattern = $this->getPatternMock("(a)", $this);
+        $clause = $this->getClauseMock("SET a = 10", $this);
 
-		$merge->setPattern($pattern);
-		$merge->setOnCreate($clause);
-		$merge->setOnMatch($clause);
+        $merge->setPattern($pattern);
+        $merge->setOnCreate($clause);
+        $merge->setOnMatch($clause);
 
-		$this->assertSame("MERGE (a) ON CREATE SET a = 10 ON MATCH SET a = 10", $merge->toQuery());
-	}
+        $this->assertSame("MERGE (a) ON CREATE SET a = 10 ON MATCH SET a = 10", $merge->toQuery());
+    }
 }
