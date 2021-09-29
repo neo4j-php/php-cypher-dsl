@@ -1,9 +1,9 @@
 <?php
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Literals;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Boolean;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Boolean

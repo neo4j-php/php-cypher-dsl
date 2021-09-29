@@ -19,20 +19,32 @@ class DeleteClauseTest extends TestCase
         $this->assertSame("", $delete->toQuery());
     }
 
-    public function testPattern() {
+    public function testSingleNode() {
         $delete = new DeleteClause();
-        $pattern = $this->getPatternMock("(a)", $this);
+        $node = $this->getExpressionMock("(a)", $this);
 
-        $delete->setNode($pattern);
+        $delete->addNode($node);
 
         $this->assertSame("DELETE (a)", $delete->toQuery());
     }
+
+    public function testMultipleNodes() {
+		$delete = new DeleteClause();
+
+		$a = $this->getExpressionMock("(a)", $this);
+		$b = $this->getExpressionMock("(b)", $this);
+
+		$delete->addNode($a);
+		$delete->addNode($b);
+
+		$this->assertSame("DELETE (a), (b)", $delete->toQuery());
+	}
 
     public function testDetachDelete() {
         $delete = new DeleteClause();
         $pattern = $this->getPatternMock("(a)", $this);
 
-        $delete->setNode($pattern);
+        $delete->addNode($pattern);
         $delete->setDetach(true);
 
         $this->assertSame("DETACH DELETE (a)", $delete->toQuery());

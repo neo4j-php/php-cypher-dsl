@@ -23,7 +23,7 @@ class RemoveClauseTest extends TestCase
         $remove = new RemoveClause();
         $expression = $this->getExpressionMock("(a)", $this);
 
-        $remove->setExpression($expression);
+        $remove->addExpression($expression);
 
         $this->assertSame("REMOVE (a)", $remove->toQuery());
     }

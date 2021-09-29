@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
 /**
  * Represents a string literal. The name of this class diverges from the naming scheme, because a class
@@ -27,7 +27,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/expressions/#cypher-expressions-string-literals
  */
-class StringLiteral implements Expression
+class StringLiteral implements Literal
 {
 	/**
 	 * @var string

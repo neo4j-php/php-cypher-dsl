@@ -22,7 +22,6 @@
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 
 /**

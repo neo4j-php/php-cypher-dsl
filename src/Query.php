@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
+use InvalidArgumentException;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\Clauses\CreateClause;
 use WikibaseSolutions\CypherDSL\Clauses\DeleteClause;
@@ -35,6 +36,10 @@ use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Relationship;
@@ -79,6 +84,30 @@ class Query
         return new Relationship($a, $b, $direction);
     }
 
+	/**
+	 * Creates a new literal from the given value. This function automatically constructs the appropriate
+	 * class based on the type of the value given.
+	 *
+	 * @param integer|float|double|bool|string $literal The literal to construct
+	 * @return Literal
+	 */
+    public static function literal($literal): Literal {
+		$literalType = gettype($literal);
+
+		switch ($literalType) {
+			case "string":
+				return new StringLiteral($literal);
+			case "boolean":
+				return new Boolean($literal);
+			case "double":
+			case "float":
+			case "integer":
+				return new Decimal($literal);
+			default:
+				throw new InvalidArgumentException("The literal type " . $literalType . " is not supported by Cypher");
+		}
+	}
+
     /**
      * Creates the MATCH clause.
 	 *
@@ -107,7 +136,7 @@ class Query
 	/**
 	 * Creates the RETURN clause.
 	 *
-	 * @param Pattern $pattern The pattern to return
+	 * @param Expression $expression The expression to return
 	 * @param string|null $alias The alias of this column
 	 *
 	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/
@@ -115,9 +144,9 @@ class Query
 	 *
 	 * @return $this
 	 */
-    public function returning(Pattern $pattern, string $alias = ""): self {
+    public function returning(Expression $expression, string $alias = ""): self {
         $returnClause = new ReturnClause();
-        $returnClause->addColumn($pattern, $alias);
+        $returnClause->addColumn($expression, $alias);
 
         $this->clauses[] = $returnClause;
 
@@ -152,15 +181,22 @@ class Query
     /**
      * Creates the DELETE clause.
 	 *
-     * @param Pattern $pattern The pattern to delete
+     * @param Expression|Expression[] $expressions The nodes to delete
 	 *
 	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
 	 *
      * @return $this
      */
-    public function delete(Pattern $pattern): self {
+    public function delete($expressions): self {
         $deleteClause = new DeleteClause();
-		$deleteClause->setNode($pattern);
+
+        if ($expressions instanceof Expression) {
+        	$expressions = [$expressions];
+		}
+
+		foreach ($expressions as $expression) {
+			$deleteClause->addNode($expression);
+		}
 
         $this->clauses[] = $deleteClause;
 
@@ -170,16 +206,23 @@ class Query
     /**
      * Creates the DETACH DELETE clause.
 	 *
-     * @param Pattern $pattern The pattern to delete
+     * @param Expression|Expression[] $expressions The nodes to delete
 	 *
 	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
 	 *
      * @return $this
      */
-    public function detachDelete(Pattern $pattern): self {
+    public function detachDelete($expressions): self {
         $deleteClause = new DeleteClause();
         $deleteClause->setDetach(true);
-        $deleteClause->setNode($pattern);
+
+		if ($expressions instanceof Expression) {
+			$expressions = [$expressions];
+		}
+
+		foreach ($expressions as $expression) {
+			$deleteClause->addNode($expression);
+		}
 
         $this->clauses[] = $deleteClause;
 
@@ -285,7 +328,7 @@ class Query
      */
     public function remove(Expression $expression): self {
         $removeClause = new RemoveClause();
-        $removeClause->setExpression($expression);
+        $removeClause->addExpression($expression);
 
         $this->clauses[] = $removeClause;
 
@@ -320,15 +363,15 @@ class Query
     /**
      * Creates the WHERE clause.
 	 *
-     * @param Pattern $pattern The pattern to match
+     * @param Expression $expression The expression to match
 	 *
 	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/
 	 *
      * @return $this
      */
-    public function where(Pattern $pattern): self {
+    public function where(Expression $expression): self {
         $whereClause = new WhereClause();
-        $whereClause->setPattern($pattern);
+        $whereClause->setExpression($expression);
 
        	$this->clauses[] = $whereClause;
 

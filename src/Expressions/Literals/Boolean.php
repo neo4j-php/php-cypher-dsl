@@ -19,12 +19,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
 /**
  * Represents a boolean (true or false) literal.
  */
-class Boolean implements Expression
+class Boolean implements Literal
 {
 	/**
 	 * @var bool The value

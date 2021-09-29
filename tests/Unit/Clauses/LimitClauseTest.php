@@ -21,10 +21,10 @@ class LimitClauseTest extends TestCase
 
     public function testPattern() {
         $limit = new LimitClause();
-        $expression = $this->getExpressionMock("(a)", $this);
+        $expression = $this->getExpressionMock("10", $this);
 
         $limit->setExpression($expression);
 
-        $this->assertSame("LIMIT (a)", $limit->toQuery());
+        $this->assertSame("LIMIT 10", $limit->toQuery());
     }
 }

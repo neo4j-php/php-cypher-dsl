@@ -19,10 +19,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Literals;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\StringLiteral;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\StringLiteral
@@ -52,7 +52,7 @@ class StringLiteralTest extends TestCase
 	 */
 	public function testSingleQuotes(string $string, string $expected)
 	{
-		$string = new \WikibaseSolutions\CypherDSL\Expressions\StringLiteral($string);
+		$string = new StringLiteral($string);
 		$string->useDoubleQuotes(false);
 
 		$this->assertSame($expected, $string->toQuery());

@@ -165,9 +165,9 @@ class QueryTest extends TestCase
 	}
 
 	public function testWhere() {
-		$pattern = $this->getPatternMock("(a)", $this);
+		$expression = $this->getExpressionMock("(a)", $this);
 
-		$statement = (new Query())->where($pattern)->build();
+		$statement = (new Query())->where($expression)->build();
 
 		$this->assertSame("WHERE (a)", $statement);
 	}

@@ -19,12 +19,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
 /**
  * Represents a decimal (integer or float) literal.
  */
-class Decimal implements Expression
+class Decimal implements Literal
 {
 	/**
 	 * @var string The value
@@ -34,7 +34,7 @@ class Decimal implements Expression
 	/**
 	 * Decimal constructor.
 	 *
-	 * @param int|float $value
+	 * @param int|double|float $value
 	 */
 	public function __construct($value)
 	{

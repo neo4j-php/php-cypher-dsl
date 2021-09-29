@@ -61,8 +61,9 @@ class OptionalMatchClause extends Clause
 	 */
 	protected function getSubject(): string
 	{
-		$patterns = array_map(fn (Pattern $pattern): string => $pattern->toQuery(), $this->patterns);
-
-		return implode(", ", $patterns);
+		return implode(
+			", ",
+			array_map(fn (Pattern $pattern): string => $pattern->toQuery(), $this->patterns)
+		);
 	}
 }

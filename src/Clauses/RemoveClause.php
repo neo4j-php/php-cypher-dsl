@@ -1,22 +1,50 @@
 <?php
 
+/*
+ * Cypher DSL
+ * Copyright (C) 2021  Wikibase Solutions
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
-use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 
+/**
+ * This class represents a REMOVE clause.
+ *
+ * @see https://neo4j.com/docs/cypher-manual/current/clauses/remove/
+ */
 class RemoveClause extends Clause
 {
-    /**
-     * @var Expression $expression
-     */
-    private Expression $expression;
+	/**
+	 * @var Expression[] The expressions in this REMOVE clause.
+	 */
+	private array $expressions = [];
 
-    /**
-     * @param Expression $expression
-     */
-    public function setExpression(Expression $expression): void {
-        $this->expression = $expression;
+	/**
+	 * Add an expression to the REMOVE clause. This expression usually returns a property (a.b) or a label (a:b).
+	 *
+	 * @param Expression $expression The expression to add
+	 * @return RemoveClause
+	 */
+    public function addExpression(Expression $expression): self {
+        $this->expressions[] = $expression;
+
+        return $this;
     }
 
     /**
@@ -32,10 +60,9 @@ class RemoveClause extends Clause
      */
     protected function getSubject(): string
     {
-        if (!isset($this->expression)) {
-        	return "";
-		}
-
-		return $this->expression->toQuery();
+		return implode(
+			", ",
+			array_map(fn(Expression $expression) => $expression->toQuery(), $this->expressions)
+		);
     }
 }

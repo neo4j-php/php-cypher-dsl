@@ -21,42 +21,18 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
-use WikibaseSolutions\CypherDSL\EscapeTrait;
-
 /**
- * Represents a property. A property in Cypher would be something like "n.prop" or "n.a.b".
+ * Represents the application of the property mutation (+=) operator.
+ *
+ * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/#set-setting-properties-using-map
  */
-class Property implements Expression
+class PropertyMutation extends BinaryOperator
 {
-	use EscapeTrait;
-
-	/**
-	 * @var Expression The expression to which this property belongs
-	 */
-	private Expression $expression;
-
-	/**
-	 * @var string The name of the property
-	 */
-	private string $property;
-
-	/**
-	 * Property constructor.
-	 *
-	 * @param Expression $expression
-	 * @param string $property
-	 */
-	public function __construct(Expression $expression, string $property)
-	{
-		$this->expression = $expression;
-		$this->property = $property;
-	}
-
 	/**
 	 * @inheritDoc
 	 */
-	public function toQuery(): string
+	protected function getOperator(): string
 	{
-		return sprintf("%s.%s", $this->expression->toQuery(), $this->escape($this->property));
+		return "+=";
 	}
 }

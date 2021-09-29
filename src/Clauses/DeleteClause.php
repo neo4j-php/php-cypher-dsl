@@ -1,37 +1,72 @@
 <?php
 
+/*
+ * Cypher DSL
+ * Copyright (C) 2021  Wikibase Solutions
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
+use WikibaseSolutions\CypherDSL\Expressions\Expression;
 
+/**
+ * This class represents a DELETE clause.
+ *
+ * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
+ */
 class DeleteClause extends Clause
 {
     /**
-     * Used for checking if DETACH clause is needed
-     * @var bool $isDetach
+     * Whether the DETACH modifier is needed.
+	 *
+     * @var bool $detach
      */
-    private bool $isDetach = false;
+    private bool $detach = false;
 
     /**
-     * The node that needs to be deleted
-     * @var Pattern $node
+     * The nodes that needs to be deleted.
+	 *
+     * @var Expression[] $nodes
      */
-    private Pattern $node;
+    private array $nodes = [];
 
-    /**
-     * sets the DETACH check
-     * @param bool $isDetach
-     */
-    public function setDetach(bool $isDetach): void {
-        $this->isDetach = $isDetach;
+	/**
+	 * Sets the clause to DETACH DELETE. Without DETACH DELETE, all relationships need to be explicitly
+	 * deleted.
+	 *
+	 * @param bool $detach Whether or not to use DETACH DELETE.
+	 * @return DeleteClause
+	 */
+    public function setDetach(bool $detach = true): self {
+        $this->detach = $detach;
+
+        return $this;
     }
 
-    /**
-     * Set the node that needs to be deleted
-     * @param Pattern $node
-     */
-    public function setNode(Pattern $node): void {
-        $this->node = $node;
+	/**
+	 * Add the node to be deleted. The expresion must return a node when evaluated.
+	 *
+	 * @param Expression $node Expression that returns the node the be deleted
+	 * @return DeleteClause
+	 */
+    public function addNode(Expression $node): self {
+        $this->nodes[] = $node;
+
+        return $this;
     }
 
     /**
@@ -39,7 +74,7 @@ class DeleteClause extends Clause
      */
     protected function getClause(): string
     {
-        if ( $this->isDetach ) {
+        if ( $this->detach ) {
             return "DETACH DELETE";
         }
 
@@ -51,10 +86,9 @@ class DeleteClause extends Clause
      */
     protected function getSubject(): string
     {
-    	if ( !isset( $this->node ) ) {
-			return "";
-		}
-
-     	return $this->node->toQuery();
+     	return implode(
+     		", ",
+			array_map(fn(Expression $node) => $node->toQuery(), $this->nodes)
+		);
     }
 }

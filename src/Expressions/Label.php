@@ -24,32 +24,32 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
 use WikibaseSolutions\CypherDSL\EscapeTrait;
 
 /**
- * Represents a property. A property in Cypher would be something like "n.prop" or "n.a.b".
+ * Represents a label. A label in Cypher would be something like "n:German" or "n:German:Swedish".
  */
-class Property implements Expression
+class Label implements Expression
 {
 	use EscapeTrait;
 
 	/**
-	 * @var Expression The expression to which this property belongs
+	 * @var Expression The expression to which this label belongs
 	 */
 	private Expression $expression;
 
 	/**
-	 * @var string The name of the property
+	 * @var string The name of the label
 	 */
-	private string $property;
+	private string $label;
 
 	/**
-	 * Property constructor.
+	 * Label constructor.
 	 *
 	 * @param Expression $expression
-	 * @param string $property
+	 * @param string $label
 	 */
-	public function __construct(Expression $expression, string $property)
+	public function __construct(Expression $expression, string $label)
 	{
 		$this->expression = $expression;
-		$this->property = $property;
+		$this->label = $label;
 	}
 
 	/**
@@ -57,6 +57,6 @@ class Property implements Expression
 	 */
 	public function toQuery(): string
 	{
-		return sprintf("%s.%s", $this->expression->toQuery(), $this->escape($this->property));
+		return sprintf("%s:%s", $this->expression->toQuery(), $this->escape($this->label));
 	}
 }

@@ -82,7 +82,7 @@ class Node implements Pattern
 	 */
 	public function withProperties($properties): self
 	{
-		if (!($properties instanceof PropertyMap)) {
+		if (is_array($properties)) {
 			$properties = new PropertyMap($properties);
 		}
 

@@ -23,7 +23,7 @@ class WhereClauseTest extends TestCase
         $where = new WhereClause();
         $pattern = $this->getPatternMock("(a)", $this);
 
-        $where->setPattern($pattern);
+        $where->setExpression($pattern);
 
         $this->assertSame("WHERE (a)", $where->toQuery());
     }
