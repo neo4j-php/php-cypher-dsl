@@ -30,20 +30,20 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  */
 class IsEmpty extends FunctionCall
 {
-	/**
-	 * @var Expression An expression that returns a list
-	 */
+    /**
+     * @var Expression An expression that returns a list
+     */
     private Expression $list;
 
-	/**
-	 * IsEmpty constructor. The signature of the "isEmpty()" function is:
-	 *
-	 * isEmpty(input :: LIST? OF ANY?) :: (BOOLEAN?) - to check whether a list is empty
-	 * isEmpty(input :: MAP?) :: (BOOLEAN?) - to check whether a map is empty
-	 * isEmpty(input :: STRING?) :: (BOOLEAN?) - to check whether a string is empty
-	 *
-	 * @param Expression $list An expression that returns a list
-	 */
+    /**
+     * IsEmpty constructor. The signature of the "isEmpty()" function is:
+     *
+     * isEmpty(input :: LIST? OF ANY?) :: (BOOLEAN?) - to check whether a list is empty
+     * isEmpty(input :: MAP?) :: (BOOLEAN?) - to check whether a map is empty
+     * isEmpty(input :: STRING?) :: (BOOLEAN?) - to check whether a string is empty
+     *
+     * @param Expression $list An expression that returns a list
+     */
     public function __construct(Expression $list)
     {
         $this->list = $list;

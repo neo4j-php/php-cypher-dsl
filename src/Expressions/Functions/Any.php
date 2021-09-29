@@ -30,36 +30,36 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  */
 class Any extends FunctionCall
 {
-	/**
-	 * @var Expression A variable that can be used from within the predicate
-	 */
-	private Expression $variable;
+    /**
+     * @var Expression A variable that can be used from within the predicate
+     */
+    private Expression $variable;
 
-	/**
-	 * @var Expression An expression that returns a list
-	 */
-	private Expression $list;
+    /**
+     * @var Expression An expression that returns a list
+     */
+    private Expression $list;
 
-	/**
-	 * @var Expression A predicate that is tested against all items in the list
-	 */
-	private Expression $predicate;
+    /**
+     * @var Expression A predicate that is tested against all items in the list
+     */
+    private Expression $predicate;
 
-	/**
-	 * Any constructor. The signature of the "any()" function is:
-	 *
-	 * any(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
-	 *
-	 * @param Expression $variable  A variable that can be used from within the predicate
-	 * @param Expression $list      An expression that returns a list
-	 * @param Expression $predicate A predicate that is tested against all items in the list
-	 */
-	public function __construct(Expression $variable, Expression $list, Expression $predicate)
-	{
-		$this->variable = $variable;
-		$this->list = $list;
-		$this->predicate = $predicate;
-	}
+    /**
+     * Any constructor. The signature of the "any()" function is:
+     *
+     * any(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
+     *
+     * @param Expression $variable  A variable that can be used from within the predicate
+     * @param Expression $list      An expression that returns a list
+     * @param Expression $predicate A predicate that is tested against all items in the list
+     */
+    public function __construct(Expression $variable, Expression $list, Expression $predicate)
+    {
+        $this->variable = $variable;
+        $this->list = $list;
+        $this->predicate = $predicate;
+    }
 
 
     /**

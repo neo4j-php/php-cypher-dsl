@@ -30,30 +30,30 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  */
 class Single extends FunctionCall
 {
-	/**
-	 * @var Expression A variable that can be used from within the predicate
-	 */
-	private Expression $variable;
+    /**
+     * @var Expression A variable that can be used from within the predicate
+     */
+    private Expression $variable;
 
-	/**
-	 * @var Expression An expression that returns a list
-	 */
-	private Expression $list;
+    /**
+     * @var Expression An expression that returns a list
+     */
+    private Expression $list;
 
-	/**
-	 * @var Expression A predicate that is tested against all items in the list
-	 */
-	private Expression $predicate;
+    /**
+     * @var Expression A predicate that is tested against all items in the list
+     */
+    private Expression $predicate;
 
-	/**
-	 * Single constructor. The signature of the "single()" function is:
-	 *
-	 * single(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
-	 *
-	 * @param Expression $variable  A variable that can be used from within the predicate
-	 * @param Expression $list      An expression that returns a list
-	 * @param Expression $predicate A predicate that is tested against all items in the list
-	 */
+    /**
+     * Single constructor. The signature of the "single()" function is:
+     *
+     * single(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
+     *
+     * @param Expression $variable  A variable that can be used from within the predicate
+     * @param Expression $list      An expression that returns a list
+     * @param Expression $predicate A predicate that is tested against all items in the list
+     */
     public function __construct(Expression $variable, Expression $list, Expression $predicate)
     {
         $this->variable = $variable;

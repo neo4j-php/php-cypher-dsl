@@ -30,18 +30,18 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  */
 class Exists extends FunctionCall
 {
-	/**
-	 * @var Expression A pattern or property
-	 */
+    /**
+     * @var Expression A pattern or property
+     */
     private Expression $expression;
 
-	/**
-	 * Exists constructor. The signature of the "exists()" function is:
-	 *
-	 * exists(input :: ANY?) :: (BOOLEAN?)
-	 *
-	 * @param Expression $expression A pattern or property
-	 */
+    /**
+     * Exists constructor. The signature of the "exists()" function is:
+     *
+     * exists(input :: ANY?) :: (BOOLEAN?)
+     *
+     * @param Expression $expression A pattern or property
+     */
     public function __construct(Expression $expression)
     {
         $this->expression = $expression;
