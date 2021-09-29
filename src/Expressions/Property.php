@@ -28,35 +28,35 @@ use WikibaseSolutions\CypherDSL\EscapeTrait;
  */
 class Property implements Expression
 {
-	use EscapeTrait;
+    use EscapeTrait;
 
-	/**
-	 * @var Expression The expression to which this property belongs
-	 */
-	private Expression $expression;
+    /**
+     * @var Expression The expression to which this property belongs
+     */
+    private Expression $expression;
 
-	/**
-	 * @var string The name of the property
-	 */
-	private string $property;
+    /**
+     * @var string The name of the property
+     */
+    private string $property;
 
-	/**
-	 * Property constructor.
-	 *
-	 * @param Expression $expression
-	 * @param string $property
-	 */
-	public function __construct(Expression $expression, string $property)
-	{
-		$this->expression = $expression;
-		$this->property = $property;
-	}
+    /**
+     * Property constructor.
+     *
+     * @param Expression $expression
+     * @param string     $property
+     */
+    public function __construct(Expression $expression, string $property)
+    {
+        $this->expression = $expression;
+        $this->property = $property;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function toQuery(): string
-	{
-		return sprintf("%s.%s", $this->expression->toQuery(), $this->escape($this->property));
-	}
+    /**
+     * @inheritDoc
+     */
+    public function toQuery(): string
+    {
+        return sprintf("%s.%s", $this->expression->toQuery(), $this->escape($this->property));
+    }
 }

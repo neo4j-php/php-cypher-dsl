@@ -30,18 +30,19 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  */
 class WhereClause extends Clause
 {
-	/**
-	 * @var Expression The expression to match
-	 */
-	private Expression $expression;
+    /**
+     * @var Expression The expression to match
+     */
+    private Expression $expression;
 
-	/**
-	 * Sets the expression to match in this WHERE clause.
-	 *
-	 * @param Expression $expression The expression to match
-	 * @return WhereClause
-	 */
-	public function setExpression(Expression $expression): self {
+    /**
+     * Sets the expression to match in this WHERE clause.
+     *
+     * @param  Expression $expression The expression to match
+     * @return WhereClause
+     */
+    public function setExpression(Expression $expression): self
+    {
         $this->expression = $expression;
 
         return $this;
@@ -61,9 +62,9 @@ class WhereClause extends Clause
     protected function getSubject(): string
     {
         if (!isset($this->expression)) {
-        	return "";
-		}
+            return "";
+        }
 
-		return $this->expression->toQuery();
+        return $this->expression->toQuery();
     }
 }

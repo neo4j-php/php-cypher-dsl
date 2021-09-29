@@ -32,18 +32,19 @@ class LimitClause extends Clause
 {
     /**
      * The expression of the LIMIT statement.
-	 *
+     *
      * @var Expression $expression
      */
     private Expression $expression;
 
-	/**
-	 * Sets the expression that returns the limit.
-	 *
-	 * @param Expression $expression The expression that returns a scalar that is the limit
-	 * @return LimitClause
-	 */
-    public function setExpression(Expression $expression): self {
+    /**
+     * Sets the expression that returns the limit.
+     *
+     * @param  Expression $expression The expression that returns a scalar that is the limit
+     * @return LimitClause
+     */
+    public function setExpression(Expression $expression): self
+    {
         $this->expression = $expression;
 
         return $this;
@@ -62,9 +63,9 @@ class LimitClause extends Clause
      */
     protected function getSubject(): string
     {
-        if ( isset($this->expression) ) {
-        	return $this->expression->toQuery();
-		}
+        if (isset($this->expression) ) {
+            return $this->expression->toQuery();
+        }
 
         return "";
     }

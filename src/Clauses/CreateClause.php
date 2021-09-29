@@ -38,7 +38,7 @@ class CreateClause extends Clause
     /**
      * Add a pattern to create.
      *
-     * @param Pattern $pattern The pattern to create
+     * @param  Pattern $pattern The pattern to create
      * @return CreateClause
      */
     public function addPattern(Pattern $pattern): self
@@ -62,8 +62,8 @@ class CreateClause extends Clause
     protected function getSubject(): string
     {
         return implode(
-        	", ",
-			array_map(fn (Pattern $pattern): string => $pattern->toQuery(), $this->patterns)
-		);
+            ", ",
+            array_map(fn (Pattern $pattern): string => $pattern->toQuery(), $this->patterns)
+        );
     }
 }

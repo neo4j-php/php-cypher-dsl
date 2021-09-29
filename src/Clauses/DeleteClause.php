@@ -32,38 +32,40 @@ class DeleteClause extends Clause
 {
     /**
      * Whether the DETACH modifier is needed.
-	 *
+     *
      * @var bool $detach
      */
     private bool $detach = false;
 
     /**
      * The nodes that needs to be deleted.
-	 *
+     *
      * @var Expression[] $nodes
      */
     private array $nodes = [];
 
-	/**
-	 * Sets the clause to DETACH DELETE. Without DETACH DELETE, all relationships need to be explicitly
-	 * deleted.
-	 *
-	 * @param bool $detach Whether or not to use DETACH DELETE.
-	 * @return DeleteClause
-	 */
-    public function setDetach(bool $detach = true): self {
+    /**
+     * Sets the clause to DETACH DELETE. Without DETACH DELETE, all relationships need to be explicitly
+     * deleted.
+     *
+     * @param  bool $detach Whether or not to use DETACH DELETE.
+     * @return DeleteClause
+     */
+    public function setDetach(bool $detach = true): self
+    {
         $this->detach = $detach;
 
         return $this;
     }
 
-	/**
-	 * Add the node to be deleted. The expresion must return a node when evaluated.
-	 *
-	 * @param Expression $node Expression that returns the node the be deleted
-	 * @return DeleteClause
-	 */
-    public function addNode(Expression $node): self {
+    /**
+     * Add the node to be deleted. The expresion must return a node when evaluated.
+     *
+     * @param  Expression $node Expression that returns the node the be deleted
+     * @return DeleteClause
+     */
+    public function addNode(Expression $node): self
+    {
         $this->nodes[] = $node;
 
         return $this;
@@ -74,7 +76,7 @@ class DeleteClause extends Clause
      */
     protected function getClause(): string
     {
-        if ( $this->detach ) {
+        if ($this->detach ) {
             return "DETACH DELETE";
         }
 
@@ -86,9 +88,9 @@ class DeleteClause extends Clause
      */
     protected function getSubject(): string
     {
-     	return implode(
-     		", ",
-			array_map(fn(Expression $node) => $node->toQuery(), $this->nodes)
-		);
+        return implode(
+            ", ",
+            array_map(fn(Expression $node) => $node->toQuery(), $this->nodes)
+        );
     }
 }

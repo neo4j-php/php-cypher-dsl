@@ -30,18 +30,19 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  */
 class RemoveClause extends Clause
 {
-	/**
-	 * @var Expression[] The expressions in this REMOVE clause.
-	 */
-	private array $expressions = [];
+    /**
+     * @var Expression[] The expressions in this REMOVE clause.
+     */
+    private array $expressions = [];
 
-	/**
-	 * Add an expression to the REMOVE clause. This expression usually returns a property (a.b) or a label (a:b).
-	 *
-	 * @param Expression $expression The expression to add
-	 * @return RemoveClause
-	 */
-    public function addExpression(Expression $expression): self {
+    /**
+     * Add an expression to the REMOVE clause. This expression usually returns a property (a.b) or a label (a:b).
+     *
+     * @param  Expression $expression The expression to add
+     * @return RemoveClause
+     */
+    public function addExpression(Expression $expression): self
+    {
         $this->expressions[] = $expression;
 
         return $this;
@@ -60,9 +61,9 @@ class RemoveClause extends Clause
      */
     protected function getSubject(): string
     {
-		return implode(
-			", ",
-			array_map(fn(Expression $expression) => $expression->toQuery(), $this->expressions)
-		);
+        return implode(
+            ", ",
+            array_map(fn(Expression $expression) => $expression->toQuery(), $this->expressions)
+        );
     }
 }

@@ -29,11 +29,11 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
  */
 class PropertyReplacement extends BinaryOperator
 {
-	/**
-	 * @inheritDoc
-	 */
-	protected function getOperator(): string
-	{
-		return "=";
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getOperator(): string
+    {
+        return "=";
+    }
 }

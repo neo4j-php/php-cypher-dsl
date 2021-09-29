@@ -28,35 +28,35 @@ use WikibaseSolutions\CypherDSL\EscapeTrait;
  */
 class Label implements Expression
 {
-	use EscapeTrait;
+    use EscapeTrait;
 
-	/**
-	 * @var Expression The expression to which this label belongs
-	 */
-	private Expression $expression;
+    /**
+     * @var Expression The expression to which this label belongs
+     */
+    private Expression $expression;
 
-	/**
-	 * @var string The name of the label
-	 */
-	private string $label;
+    /**
+     * @var string The name of the label
+     */
+    private string $label;
 
-	/**
-	 * Label constructor.
-	 *
-	 * @param Expression $expression
-	 * @param string $label
-	 */
-	public function __construct(Expression $expression, string $label)
-	{
-		$this->expression = $expression;
-		$this->label = $label;
-	}
+    /**
+     * Label constructor.
+     *
+     * @param Expression $expression
+     * @param string     $label
+     */
+    public function __construct(Expression $expression, string $label)
+    {
+        $this->expression = $expression;
+        $this->label = $label;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function toQuery(): string
-	{
-		return sprintf("%s:%s", $this->expression->toQuery(), $this->escape($this->label));
-	}
+    /**
+     * @inheritDoc
+     */
+    public function toQuery(): string
+    {
+        return sprintf("%s:%s", $this->expression->toQuery(), $this->escape($this->label));
+    }
 }

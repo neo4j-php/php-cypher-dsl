@@ -30,10 +30,10 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  */
 interface Literal extends Expression
 {
-	/**
-	 * Converts the literal into a query.
-	 *
-	 * @return string
-	 */
-	public function toQuery(): string;
+    /**
+     * Converts the literal into a query.
+     *
+     * @return string
+     */
+    public function toQuery(): string;
 }

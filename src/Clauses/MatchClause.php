@@ -56,14 +56,14 @@ class MatchClause extends Clause
         return "MATCH";
     }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getSubject(): string
-	{
-		return implode(
-			", ",
-			array_map(fn (Pattern $pattern): string => $pattern->toQuery(), $this->patterns)
-		);
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getSubject(): string
+    {
+        return implode(
+            ", ",
+            array_map(fn (Pattern $pattern): string => $pattern->toQuery(), $this->patterns)
+        );
+    }
 }

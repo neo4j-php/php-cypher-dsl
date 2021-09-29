@@ -35,13 +35,14 @@ class SetClause extends Clause
      */
     private array $expressions = [];
 
-	/**
-	 * Add an expression to set. This expression is usually an "assignment" expression.
-	 *
-	 * @param Expression $expression The expression to set
-	 * @return SetClause
-	 */
-    public function addExpression(Expression $expression): self {
+    /**
+     * Add an expression to set. This expression is usually an "assignment" expression.
+     *
+     * @param  Expression $expression The expression to set
+     * @return SetClause
+     */
+    public function addExpression(Expression $expression): self
+    {
         $this->expressions[] = $expression;
 
         return $this;
@@ -60,8 +61,8 @@ class SetClause extends Clause
     protected function getSubject(): string
     {
         return implode(
-        	", ",
-			array_map(fn (Expression $expression): string => $expression->toQuery(), $this->expressions)
-		);
+            ", ",
+            array_map(fn (Expression $expression): string => $expression->toQuery(), $this->expressions)
+        );
     }
 }

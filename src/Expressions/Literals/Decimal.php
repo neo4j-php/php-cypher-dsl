@@ -31,15 +31,15 @@ class Decimal implements Literal
      */
     private string $value;
 
-	/**
-	 * Decimal constructor.
-	 *
-	 * @param int|double|float $value
-	 */
-	public function __construct($value)
-	{
-		$this->value = $value;
-	}
+    /**
+     * Decimal constructor.
+     *
+     * @param int|double|float $value
+     */
+    public function __construct($value)
+    {
+        $this->value = $value;
+    }
 
     /**
      * @inheritDoc
