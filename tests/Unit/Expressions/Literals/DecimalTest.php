@@ -3,7 +3,7 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Decimal;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Decimal
