@@ -28,12 +28,12 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/
  */
-interface Literal extends Expression
+abstract class Literal extends Expression
 {
     /**
      * Converts the literal into a query.
      *
      * @return string
      */
-    public function toQuery(): string;
+    abstract public function toQuery(): string;
 }

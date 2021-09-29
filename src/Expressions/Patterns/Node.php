@@ -30,7 +30,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Variable;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
  */
-class Node implements Pattern
+class Node extends Pattern
 {
     use EscapeTrait;
 

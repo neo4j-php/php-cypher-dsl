@@ -32,7 +32,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Variable;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
  */
-class Relationship implements Pattern
+class Relationship extends Pattern
 {
     use EscapeTrait;
 

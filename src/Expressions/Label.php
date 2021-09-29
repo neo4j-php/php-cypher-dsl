@@ -26,7 +26,7 @@ use WikibaseSolutions\CypherDSL\EscapeTrait;
 /**
  * Represents a label. A label in Cypher would be something like "n:German" or "n:German:Swedish".
  */
-class Label implements Expression
+class Label extends Expression
 {
     use EscapeTrait;
 

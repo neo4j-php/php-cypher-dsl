@@ -24,7 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 /**
  * Represents a boolean (true or false) literal.
  */
-class Boolean implements Literal
+class Boolean extends Literal
 {
     /**
      * @var bool The value

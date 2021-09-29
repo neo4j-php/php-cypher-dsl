@@ -26,7 +26,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#syntax-using-the-unary-minus-operator
  */
-class Minus implements Expression
+class Minus extends Expression
 {
     /**
      * @var Expression The expression to negate

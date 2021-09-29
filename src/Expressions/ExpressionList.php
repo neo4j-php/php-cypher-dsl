@@ -31,7 +31,7 @@ use WikibaseSolutions\CypherDSL\EscapeTrait;
  *
  * @see PropertyMap for a construct that takes keys into account
  */
-class ExpressionList implements Expression
+class ExpressionList extends Expression
 {
     use EscapeTrait;
 

@@ -28,12 +28,12 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/
  */
-interface Pattern extends Expression
+abstract class Pattern extends Expression
 {
     /**
      * Converts the pattern into a query.
      *
      * @return string
      */
-    public function toQuery(): string;
+    abstract public function toQuery(): string;
 }

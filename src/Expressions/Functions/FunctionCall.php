@@ -29,7 +29,7 @@ use WikibaseSolutions\CypherDSL\QueryConvertable;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/
  */
-abstract class FunctionCall implements Expression
+abstract class FunctionCall extends Expression
 {
     /**
      * @inheritDoc

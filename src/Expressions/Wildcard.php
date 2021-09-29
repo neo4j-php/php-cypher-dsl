@@ -26,7 +26,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-all-elements
  */
-class Wildcard implements Expression
+class Wildcard extends Expression
 {
     /**
      * @inheritDoc

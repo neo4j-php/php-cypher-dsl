@@ -24,7 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
 /**
  * This class represents the application of a binary operator, such as "+", "/" and "*".
  */
-abstract class BinaryOperator implements Expression
+abstract class BinaryOperator extends Expression
 {
     /**
      * @var Expression The left-hand of the expression

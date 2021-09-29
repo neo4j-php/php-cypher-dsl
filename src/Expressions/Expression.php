@@ -49,12 +49,12 @@ use WikibaseSolutions\CypherDSL\QueryConvertable;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/expressions/
  */
-interface Expression extends QueryConvertable
+abstract class Expression implements QueryConvertable
 {
     /**
      * Converts the expression into a query.
      *
      * @return string
      */
-    public function toQuery(): string;
+    abstract public function toQuery(): string;
 }

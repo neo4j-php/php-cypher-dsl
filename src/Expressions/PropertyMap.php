@@ -31,7 +31,7 @@ use WikibaseSolutions\CypherDSL\EscapeTrait;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-properties
  */
-class PropertyMap implements Expression
+class PropertyMap extends Expression
 {
     use EscapeTrait;
 

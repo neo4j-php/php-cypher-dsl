@@ -24,7 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 /**
  * Represents a decimal (integer or float) literal.
  */
-class Decimal implements Literal
+class Decimal extends Literal
 {
     /**
      * @var string The value

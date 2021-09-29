@@ -27,7 +27,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/expressions/#cypher-expressions-string-literals
  */
-class StringLiteral implements Literal
+class StringLiteral extends Literal
 {
     /**
      * @var string

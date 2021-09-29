@@ -28,7 +28,7 @@ use WikibaseSolutions\CypherDSL\EscapeTrait;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/variables/
  */
-class Variable implements Expression
+class Variable extends Expression
 {
     use EscapeTrait;
 
