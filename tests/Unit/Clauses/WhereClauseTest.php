@@ -20,12 +20,12 @@ class WhereClauseTest extends TestCase
         $this->assertSame("", $where->toQuery());
     }
 
-    public function testPattern()
+    public function testExpression()
     {
         $where = new WhereClause();
-        $pattern = $this->getPatternMock("(a)", $this);
+		$expression = $this->getExpressionMock("(a)", $this);
 
-        $where->setExpression($pattern);
+        $where->setExpression($expression);
 
         $this->assertSame("WHERE (a)", $where->toQuery());
     }

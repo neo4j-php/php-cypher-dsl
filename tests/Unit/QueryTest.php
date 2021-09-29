@@ -4,6 +4,10 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Query;
@@ -48,6 +52,18 @@ class QueryTest extends TestCase
         }
     }
 
+	/**
+	 * @dataProvider provideLiteralData
+	 * @param $literal
+	 * @param Literal $expected
+	 */
+    public function testLiteral($literal, Literal $expected)
+	{
+		$actual = Query::literal($literal);
+
+		$this->assertEquals($expected, $actual);
+	}
+
     public function testMatch()
     {
         $m = $this->getPatternMock("(m:Movie)", $this);
@@ -55,6 +71,10 @@ class QueryTest extends TestCase
         $statement = (new Query())->match($m)->build();
 
         $this->assertSame("MATCH (m:Movie)", $statement);
+
+        $statement = (new Query())->match([$m, $m])->build();
+
+        $this->assertSame("MATCH (m:Movie), (m:Movie)", $statement);
     }
 
     public function testReturning()
@@ -90,6 +110,10 @@ class QueryTest extends TestCase
         $statement = (new Query())->delete($m)->build();
 
         $this->assertSame("DELETE (m:Movie)", $statement);
+
+		$statement = (new Query())->delete([$m, $m])->build();
+
+		$this->assertSame("DELETE (m:Movie), (m:Movie)", $statement);
     }
 
     public function testDetachDelete()
@@ -99,6 +123,10 @@ class QueryTest extends TestCase
         $statement = (new Query())->detachDelete($m)->build();
 
         $this->assertSame("DETACH DELETE (m:Movie)", $statement);
+
+		$statement = (new Query())->detachDelete([$m, $m])->build();
+
+		$this->assertSame("DETACH DELETE (m:Movie), (m:Movie)", $statement);
     }
 
     public function testLimit()
@@ -201,11 +229,56 @@ class QueryTest extends TestCase
         $withClause = $this->getClauseMock("WITH foobar", $this);
         $whereClause = $this->getClauseMock("WHERE foobar", $this);
 
-        $query = (new Query());
+        $query = new Query();
         $query->clauses = [$withClause, $whereClause];
 
         $statement = $query->build();
 
         $this->assertSame("WITH foobar WHERE foobar", $statement);
+
+        $patternMock = $this->getPatternMock("(a)", $this);
+        $propertyMock = $this->getPropertyMock("a.b", $this);
+
+        $query = new Query();
+        $statement = $query->match([$patternMock, $patternMock])
+			->returning($patternMock, "#")
+			->create([$patternMock, $patternMock])
+			->create($patternMock)
+			->delete([$patternMock, $patternMock])
+			->detachDelete([$patternMock, $patternMock])
+			->limit($patternMock)
+			->merge($patternMock)
+			->optionalMatch([$patternMock, $patternMock])
+			->orderBy([$propertyMock, $propertyMock], true)
+			->remove($patternMock)
+			->set([$patternMock, $patternMock])
+			->where($patternMock)
+			->with($patternMock, "#")
+			->build();
+
+        $this->assertSame("MATCH (a), (a) RETURN (a) AS `#` CREATE (a), (a) CREATE (a) DELETE (a), (a) DETACH DELETE (a), (a) LIMIT (a) MERGE (a) OPTIONAL MATCH (a), (a) ORDER BY a.b, a.b DESCENDING REMOVE (a) SET (a), (a) WHERE (a) WITH (a) AS `#`", $statement);
     }
+
+    public function testBuildEmpty()
+	{
+		$query = new Query();
+
+		$this->assertSame("", $query->build());
+	}
+
+	public function provideLiteralData(): array
+	{
+		return [
+			['foobar', new StringLiteral('foobar')],
+			['0', new StringLiteral('0')],
+			['100', new StringLiteral('100')],
+			[0, new Decimal(0)],
+			[100, new Decimal(100)],
+			[10.0, new Decimal(10.0)],
+			[69420, new Decimal(69420)],
+			[10.0000000000000000000000000000001, new Decimal(10.0000000000000000000000000000001)],
+			[false, new Boolean(false)],
+			[true, new Boolean(true)]
+		];
+	}
 }
