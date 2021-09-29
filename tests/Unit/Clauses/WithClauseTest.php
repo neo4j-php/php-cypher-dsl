@@ -30,65 +30,65 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class WithClauseTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testEmptyClause()
-	{
-		$return = new WithClause();
+    public function testEmptyClause()
+    {
+        $return = new WithClause();
 
-		$this->assertSame("", $return->toQuery());
-	}
+        $this->assertSame("", $return->toQuery());
+    }
 
-	public function testSingleEntry()
-	{
-		$return = new WithClause();
-		$return->addEntry($this->getExpressionMock("a", $this));
+    public function testSingleEntry()
+    {
+        $return = new WithClause();
+        $return->addEntry($this->getExpressionMock("a", $this));
 
-		$this->assertSame("WITH a", $return->toQuery());
-	}
+        $this->assertSame("WITH a", $return->toQuery());
+    }
 
-	public function testMultipleEntries()
-	{
-		$return = new WithClause();
-		$return->addEntry($this->getExpressionMock("a", $this));
-		$return->addEntry($this->getExpressionMock("b", $this));
-		$return->addEntry($this->getExpressionMock("c", $this));
+    public function testMultipleEntries()
+    {
+        $return = new WithClause();
+        $return->addEntry($this->getExpressionMock("a", $this));
+        $return->addEntry($this->getExpressionMock("b", $this));
+        $return->addEntry($this->getExpressionMock("c", $this));
 
-		$this->assertSame("WITH a, b, c", $return->toQuery());
-	}
+        $this->assertSame("WITH a, b, c", $return->toQuery());
+    }
 
-	public function testSingleAlias()
-	{
-		$return = new WithClause();
-		$return->addEntry($this->getExpressionMock("a", $this), "b");
+    public function testSingleAlias()
+    {
+        $return = new WithClause();
+        $return->addEntry($this->getExpressionMock("a", $this), "b");
 
-		$this->assertSame("WITH a AS b", $return->toQuery());
-	}
+        $this->assertSame("WITH a AS b", $return->toQuery());
+    }
 
-	public function testMultipleAliases()
-	{
-		$return = new WithClause();
-		$return->addEntry($this->getExpressionMock("a", $this), "b");
-		$return->addEntry($this->getExpressionMock("b", $this), "c");
+    public function testMultipleAliases()
+    {
+        $return = new WithClause();
+        $return->addEntry($this->getExpressionMock("a", $this), "b");
+        $return->addEntry($this->getExpressionMock("b", $this), "c");
 
-		$this->assertSame("WITH a AS b, b AS c", $return->toQuery());
-	}
+        $this->assertSame("WITH a AS b, b AS c", $return->toQuery());
+    }
 
-	public function testMixedAliases()
-	{
-		$return = new WithClause();
-		$return->addEntry($this->getExpressionMock("a", $this), "b");
-		$return->addEntry($this->getExpressionMock("c", $this));
-		$return->addEntry($this->getExpressionMock("b", $this), "c");
+    public function testMixedAliases()
+    {
+        $return = new WithClause();
+        $return->addEntry($this->getExpressionMock("a", $this), "b");
+        $return->addEntry($this->getExpressionMock("c", $this));
+        $return->addEntry($this->getExpressionMock("b", $this), "c");
 
-		$this->assertSame("WITH a AS b, c, b AS c", $return->toQuery());
-	}
+        $this->assertSame("WITH a AS b, c, b AS c", $return->toQuery());
+    }
 
-	public function testAliasIsEscaped()
-	{
-		$return = new WithClause();
-		$return->addEntry($this->getExpressionMock("a", $this), ":");
+    public function testAliasIsEscaped()
+    {
+        $return = new WithClause();
+        $return->addEntry($this->getExpressionMock("a", $this), ":");
 
-		$this->assertSame("WITH a AS `:`", $return->toQuery());
-	}
+        $this->assertSame("WITH a AS `:`", $return->toQuery());
+    }
 }

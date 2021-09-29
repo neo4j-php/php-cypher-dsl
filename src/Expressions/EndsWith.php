@@ -28,11 +28,11 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
  */
 class EndsWith extends BinaryOperator
 {
-	/**
-	 * @inheritDoc
-	 */
-	protected function getOperator(): string
-	{
-		return "ENDS WITH";
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getOperator(): string
+    {
+        return "ENDS WITH";
+    }
 }

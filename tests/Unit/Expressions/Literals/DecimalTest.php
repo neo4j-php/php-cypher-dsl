@@ -10,33 +10,33 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
  */
 class DecimalTest extends TestCase
 {
-	public function testZero()
-	{
-		$decimal = new Decimal(0);
+    public function testZero()
+    {
+        $decimal = new Decimal(0);
 
-		$this->assertSame("0", $decimal->toQuery());
-	}
+        $this->assertSame("0", $decimal->toQuery());
+    }
 
-	/**
-	 * @dataProvider provideToQueryData
-	 * @param $number
-	 * @param string $expected
-	 */
-	public function testToQuery($number, string $expected)
-	{
-		$decimal = new Decimal($number);
+    /**
+     * @dataProvider provideToQueryData
+     * @param        $number
+     * @param        string $expected
+     */
+    public function testToQuery($number, string $expected)
+    {
+        $decimal = new Decimal($number);
 
-		$this->assertSame($expected, $decimal->toQuery());
-	}
+        $this->assertSame($expected, $decimal->toQuery());
+    }
 
-	public function provideToQueryData(): array
-	{
-		return [
-			[1, "1"],
-			[2, "2"],
-			[3.14, "3.14"],
-			[-12, "-12"],
-			[69, "69"]
-		];
-	}
+    public function provideToQueryData(): array
+    {
+        return [
+        [1, "1"],
+        [2, "2"],
+        [3.14, "3.14"],
+        [-12, "-12"],
+        [69, "69"]
+        ];
+    }
 }

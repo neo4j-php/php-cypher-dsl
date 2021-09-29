@@ -11,15 +11,17 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class MergeClauseTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-    public function testEmptyClause() {
+    public function testEmptyClause()
+    {
         $merge = new MergeClause();
 
         $this->assertSame("", $merge->toQuery());
     }
 
-    public function testPattern() {
+    public function testPattern()
+    {
         $merge = new MergeClause();
         $pattern = $this->getPatternMock("(a)", $this);
 

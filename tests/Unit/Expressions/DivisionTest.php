@@ -31,28 +31,28 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  */
 class DivisionTest extends TestCase
 {
-	public function testToQuery()
-	{
-		$division = new Division($this->getExpressionMock("a"), $this->getExpressionMock("b"));
+    public function testToQuery()
+    {
+        $division = new Division($this->getExpressionMock("a"), $this->getExpressionMock("b"));
 
-		$this->assertSame("(a / b)", $division->toQuery());
+        $this->assertSame("(a / b)", $division->toQuery());
 
-		$division = new Division($division, $division);
+        $division = new Division($division, $division);
 
-		$this->assertSame("((a / b) / (a / b))", $division->toQuery());
-	}
+        $this->assertSame("((a / b) / (a / b))", $division->toQuery());
+    }
 
-	/**
-	 * Returns a mock of the Expression class that returns the given string when toQuery() is called.
-	 *
-	 * @param string $variable
-	 * @return Expression|MockObject
-	 */
-	private function getExpressionMock(string $variable): Expression
-	{
-		$mock = $this->getMockBuilder(Expression::class)->getMock();
-		$mock->method('toQuery')->willReturn($variable);
+    /**
+     * Returns a mock of the Expression class that returns the given string when toQuery() is called.
+     *
+     * @param  string $variable
+     * @return Expression|MockObject
+     */
+    private function getExpressionMock(string $variable): Expression
+    {
+        $mock = $this->getMockBuilder(Expression::class)->getMock();
+        $mock->method('toQuery')->willReturn($variable);
 
-		return $mock;
-	}
+        return $mock;
+    }
 }

@@ -31,76 +31,76 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  */
 class ReturnClause extends Clause
 {
-	use EscapeTrait;
+    use EscapeTrait;
 
-	/**
-	 * @var bool Whether to be a RETURN DISTINCT query
-	 */
-	private bool $distinct = false;
+    /**
+     * @var bool Whether to be a RETURN DISTINCT query
+     */
+    private bool $distinct = false;
 
-	/**
-	 * @var array The expressions to return
-	 */
-	private array $expressions = [];
+    /**
+     * @var array The expressions to return
+     */
+    private array $expressions = [];
 
-	/**
-	 * Sets this query to only retrieve unique rows.
-	 *
-	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-unique-results
-	 * @param bool $distinct
-	 * @return ReturnClause
-	 */
-	public function setDistinct(bool $distinct = true): self
-	{
-		$this->distinct = $distinct;
+    /**
+     * Sets this query to only retrieve unique rows.
+     *
+     * @see    https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-unique-results
+     * @param  bool $distinct
+     * @return ReturnClause
+     */
+    public function setDistinct(bool $distinct = true): self
+    {
+        $this->distinct = $distinct;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Add a new column to this RETURN clause.
-	 *
-	 * @param Expression $expression The expression to return
-	 * @param string $alias The alias of this column
-	 *
-	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
-	 * @return ReturnClause
-	 */
-	public function addColumn(Expression $expression, string $alias = ""): self
-	{
-		if ($alias !== "") {
-			$this->expressions[$alias] = $expression;
-		} else {
-			$this->expressions[] = $expression;
-		}
+    /**
+     * Add a new column to this RETURN clause.
+     *
+     * @param Expression $expression The expression to return
+     * @param string     $alias      The alias of this column
+     *
+     * @see    https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
+     * @return ReturnClause
+     */
+    public function addColumn(Expression $expression, string $alias = ""): self
+    {
+        if ($alias !== "") {
+            $this->expressions[$alias] = $expression;
+        } else {
+            $this->expressions[] = $expression;
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getClause(): string
-	{
-		return $this->distinct ?
-			"RETURN DISTINCT" :
-			"RETURN";
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getClause(): string
+    {
+        return $this->distinct ?
+        "RETURN DISTINCT" :
+        "RETURN";
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getSubject(): string
-	{
-		$expressions = [];
+    /**
+     * @inheritDoc
+     */
+    protected function getSubject(): string
+    {
+        $expressions = [];
 
-		foreach ($this->expressions as $alias => $expression) {
-			$expressionQuery = $expression->toQuery();
-			$expressions[] = is_int($alias) ?
-				$expressionQuery :
-				sprintf("%s AS %s", $expressionQuery,  $this->escape($alias));
-		}
+        foreach ($this->expressions as $alias => $expression) {
+            $expressionQuery = $expression->toQuery();
+            $expressions[] = is_int($alias) ?
+            $expressionQuery :
+            sprintf("%s AS %s", $expressionQuery,  $this->escape($alias));
+        }
 
-		return implode(", ", $expressions);
-	}
+        return implode(", ", $expressions);
+    }
 }

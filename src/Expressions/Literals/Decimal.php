@@ -26,10 +26,10 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
  */
 class Decimal implements Literal
 {
-	/**
-	 * @var string The value
-	 */
-	private string $value;
+    /**
+     * @var string The value
+     */
+    private string $value;
 
 	/**
 	 * Decimal constructor.
@@ -41,11 +41,11 @@ class Decimal implements Literal
 		$this->value = $value;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function toQuery(): string
-	{
-		return strval($this->value);
-	}
+    /**
+     * @inheritDoc
+     */
+    public function toQuery(): string
+    {
+        return strval($this->value);
+    }
 }

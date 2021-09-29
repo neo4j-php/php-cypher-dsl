@@ -11,15 +11,17 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class WhereClauseTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-    public function testEmptyClause() {
+    public function testEmptyClause()
+    {
         $where = new WhereClause();
 
         $this->assertSame("", $where->toQuery());
     }
 
-    public function testPattern() {
+    public function testPattern()
+    {
         $where = new WhereClause();
         $pattern = $this->getPatternMock("(a)", $this);
 

@@ -32,74 +32,74 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class ReturnClauseTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testEmptyClause()
-	{
-		$return = new ReturnClause();
+    public function testEmptyClause()
+    {
+        $return = new ReturnClause();
 
-		$this->assertSame("", $return->toQuery());
-	}
+        $this->assertSame("", $return->toQuery());
+    }
 
-	public function testSingleColumn()
-	{
-		$return = new ReturnClause();
-		$return->addColumn($this->getExpressionMock("a", $this));
+    public function testSingleColumn()
+    {
+        $return = new ReturnClause();
+        $return->addColumn($this->getExpressionMock("a", $this));
 
-		$this->assertSame("RETURN a", $return->toQuery());
-	}
+        $this->assertSame("RETURN a", $return->toQuery());
+    }
 
-	public function testMultipleColumns()
-	{
-		$return = new ReturnClause();
-		$return->addColumn($this->getExpressionMock("a", $this));
-		$return->addColumn($this->getExpressionMock("b", $this));
-		$return->addColumn($this->getExpressionMock("c", $this));
+    public function testMultipleColumns()
+    {
+        $return = new ReturnClause();
+        $return->addColumn($this->getExpressionMock("a", $this));
+        $return->addColumn($this->getExpressionMock("b", $this));
+        $return->addColumn($this->getExpressionMock("c", $this));
 
-		$this->assertSame("RETURN a, b, c", $return->toQuery());
-	}
+        $this->assertSame("RETURN a, b, c", $return->toQuery());
+    }
 
-	public function testSingleAlias()
-	{
-		$return = new ReturnClause();
-		$return->addColumn($this->getExpressionMock("a", $this), "b");
+    public function testSingleAlias()
+    {
+        $return = new ReturnClause();
+        $return->addColumn($this->getExpressionMock("a", $this), "b");
 
-		$this->assertSame("RETURN a AS b", $return->toQuery());
-	}
+        $this->assertSame("RETURN a AS b", $return->toQuery());
+    }
 
-	public function testMultipleAliases()
-	{
-		$return = new ReturnClause();
-		$return->addColumn($this->getExpressionMock("a", $this), "b");
-		$return->addColumn($this->getExpressionMock("b", $this), "c");
+    public function testMultipleAliases()
+    {
+        $return = new ReturnClause();
+        $return->addColumn($this->getExpressionMock("a", $this), "b");
+        $return->addColumn($this->getExpressionMock("b", $this), "c");
 
-		$this->assertSame("RETURN a AS b, b AS c", $return->toQuery());
-	}
+        $this->assertSame("RETURN a AS b, b AS c", $return->toQuery());
+    }
 
-	public function testMixedAliases()
-	{
-		$return = new ReturnClause();
-		$return->addColumn($this->getExpressionMock("a", $this), "b");
-		$return->addColumn($this->getExpressionMock("c", $this));
-		$return->addColumn($this->getExpressionMock("b", $this), "c");
+    public function testMixedAliases()
+    {
+        $return = new ReturnClause();
+        $return->addColumn($this->getExpressionMock("a", $this), "b");
+        $return->addColumn($this->getExpressionMock("c", $this));
+        $return->addColumn($this->getExpressionMock("b", $this), "c");
 
-		$this->assertSame("RETURN a AS b, c, b AS c", $return->toQuery());
-	}
+        $this->assertSame("RETURN a AS b, c, b AS c", $return->toQuery());
+    }
 
-	public function testAliasIsEscaped()
-	{
-		$return = new ReturnClause();
-		$return->addColumn($this->getExpressionMock("a", $this), ":");
+    public function testAliasIsEscaped()
+    {
+        $return = new ReturnClause();
+        $return->addColumn($this->getExpressionMock("a", $this), ":");
 
-		$this->assertSame("RETURN a AS `:`", $return->toQuery());
-	}
+        $this->assertSame("RETURN a AS `:`", $return->toQuery());
+    }
 
-	public function testReturnDistinct()
-	{
-		$return = new ReturnClause();
-		$return->addColumn($this->getExpressionMock("a", $this));
-		$return->setDistinct();
+    public function testReturnDistinct()
+    {
+        $return = new ReturnClause();
+        $return->addColumn($this->getExpressionMock("a", $this));
+        $return->setDistinct();
 
-		$this->assertSame("RETURN DISTINCT a", $return->toQuery());
-	}
+        $this->assertSame("RETURN DISTINCT a", $return->toQuery());
+    }
 }

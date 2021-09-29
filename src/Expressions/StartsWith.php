@@ -28,11 +28,11 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
  */
 class StartsWith extends BinaryOperator
 {
-	/**
-	 * @inheritDoc
-	 */
-	protected function getOperator(): string
-	{
-		return "STARTS WITH";
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getOperator(): string
+    {
+        return "STARTS WITH";
+    }
 }

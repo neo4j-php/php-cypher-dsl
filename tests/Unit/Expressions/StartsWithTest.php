@@ -31,28 +31,28 @@ use WikibaseSolutions\CypherDSL\Expressions\StartsWith;
  */
 class StartsWithTest extends TestCase
 {
-	public function testToQuery()
-	{
-		$startsWith = new StartsWith($this->getExpressionMock("a"), $this->getExpressionMock("b"));
+    public function testToQuery()
+    {
+        $startsWith = new StartsWith($this->getExpressionMock("a"), $this->getExpressionMock("b"));
 
-		$this->assertSame("(a STARTS WITH b)", $startsWith->toQuery());
+        $this->assertSame("(a STARTS WITH b)", $startsWith->toQuery());
 
-		$startsWith = new StartsWith($startsWith, $startsWith);
+        $startsWith = new StartsWith($startsWith, $startsWith);
 
-		$this->assertSame("((a STARTS WITH b) STARTS WITH (a STARTS WITH b))", $startsWith->toQuery());
-	}
+        $this->assertSame("((a STARTS WITH b) STARTS WITH (a STARTS WITH b))", $startsWith->toQuery());
+    }
 
-	/**
-	 * Returns a mock of the Expression class that returns the given string when toQuery() is called.
-	 *
-	 * @param string $variable
-	 * @return Expression|MockObject
-	 */
-	private function getExpressionMock(string $variable): Expression
-	{
-		$mock = $this->getMockBuilder(Expression::class)->getMock();
-		$mock->method('toQuery')->willReturn($variable);
+    /**
+     * Returns a mock of the Expression class that returns the given string when toQuery() is called.
+     *
+     * @param  string $variable
+     * @return Expression|MockObject
+     */
+    private function getExpressionMock(string $variable): Expression
+    {
+        $mock = $this->getMockBuilder(Expression::class)->getMock();
+        $mock->method('toQuery')->willReturn($variable);
 
-		return $mock;
-	}
+        return $mock;
+    }
 }

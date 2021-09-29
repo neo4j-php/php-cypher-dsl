@@ -33,40 +33,40 @@ use WikibaseSolutions\CypherDSL\EscapeTrait;
  */
 class PropertyMap implements Expression
 {
-	use EscapeTrait;
+    use EscapeTrait;
 
-	/**
-	 * @var array The map of properties
-	 */
-	private array $properties;
+    /**
+     * @var array The map of properties
+     */
+    private array $properties;
 
-	/**
-	 * PropertyMap constructor.
-	 *
-	 * @param Expression[] $properties The map of properties as a number of key-expression pairs
-	 */
-	public function __construct(array $properties)
-	{
-		foreach ($properties as $property) {
-			if (!($property instanceof Expression)) {
-				throw new \InvalidArgumentException("\$properties must be an array of only Expression objects");
-			}
-		}
+    /**
+     * PropertyMap constructor.
+     *
+     * @param Expression[] $properties The map of properties as a number of key-expression pairs
+     */
+    public function __construct(array $properties)
+    {
+        foreach ($properties as $property) {
+            if (!($property instanceof Expression)) {
+                throw new \InvalidArgumentException("\$properties must be an array of only Expression objects");
+            }
+        }
 
-		$this->properties = $properties;
-	}
+        $this->properties = $properties;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function toQuery(): string
-	{
-		$pairs = [];
+    /**
+     * @inheritDoc
+     */
+    public function toQuery(): string
+    {
+        $pairs = [];
 
-		foreach ($this->properties as $key => $value) {
-			$pairs[] = sprintf("%s: %s", $this->escape(strval($key)), $value->toQuery());
-		}
+        foreach ($this->properties as $key => $value) {
+            $pairs[] = sprintf("%s: %s", $this->escape(strval($key)), $value->toQuery());
+        }
 
-		return sprintf("{%s}", implode(", ", $pairs));
-	}
+        return sprintf("{%s}", implode(", ", $pairs));
+    }
 }

@@ -30,31 +30,31 @@ use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
  */
 class MatchClause extends Clause
 {
-	/**
-	 * @var Pattern[] List of patterns
-	 */
-	private array $patterns = [];
+    /**
+     * @var Pattern[] List of patterns
+     */
+    private array $patterns = [];
 
-	/**
-	 * Add a pattern to the match clause.
-	 *
-	 * @param Pattern $pattern
-	 * @return MatchClause
-	 */
-	public function addPattern(Pattern $pattern): self
-	{
-		$this->patterns[] = $pattern;
+    /**
+     * Add a pattern to the match clause.
+     *
+     * @param  Pattern $pattern
+     * @return MatchClause
+     */
+    public function addPattern(Pattern $pattern): self
+    {
+        $this->patterns[] = $pattern;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getClause(): string
-	{
-		return "MATCH";
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getClause(): string
+    {
+        return "MATCH";
+    }
 
 	/**
 	 * @inheritDoc

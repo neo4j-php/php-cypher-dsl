@@ -31,28 +31,28 @@ use WikibaseSolutions\CypherDSL\Expressions\LessThanOrEqual;
  */
 class LessThanOrEqualTest extends TestCase
 {
-	public function testToQuery()
-	{
-		$lessThanOrEqual = new LessThanOrEqual($this->getExpressionMock("a"), $this->getExpressionMock("b"));
+    public function testToQuery()
+    {
+        $lessThanOrEqual = new LessThanOrEqual($this->getExpressionMock("a"), $this->getExpressionMock("b"));
 
-		$this->assertSame("(a <= b)", $lessThanOrEqual->toQuery());
+        $this->assertSame("(a <= b)", $lessThanOrEqual->toQuery());
 
-		$lessThanOrEqual = new LessThanOrEqual($lessThanOrEqual, $lessThanOrEqual);
+        $lessThanOrEqual = new LessThanOrEqual($lessThanOrEqual, $lessThanOrEqual);
 
-		$this->assertSame("((a <= b) <= (a <= b))", $lessThanOrEqual->toQuery());
-	}
+        $this->assertSame("((a <= b) <= (a <= b))", $lessThanOrEqual->toQuery());
+    }
 
-	/**
-	 * Returns a mock of the Expression class that returns the given string when toQuery() is called.
-	 *
-	 * @param string $variable
-	 * @return Expression|MockObject
-	 */
-	private function getExpressionMock(string $variable): Expression
-	{
-		$mock = $this->getMockBuilder(Expression::class)->getMock();
-		$mock->method('toQuery')->willReturn($variable);
+    /**
+     * Returns a mock of the Expression class that returns the given string when toQuery() is called.
+     *
+     * @param  string $variable
+     * @return Expression|MockObject
+     */
+    private function getExpressionMock(string $variable): Expression
+    {
+        $mock = $this->getMockBuilder(Expression::class)->getMock();
+        $mock->method('toQuery')->willReturn($variable);
 
-		return $mock;
-	}
+        return $mock;
+    }
 }

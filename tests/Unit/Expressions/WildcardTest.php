@@ -29,8 +29,8 @@ use WikibaseSolutions\CypherDSL\Expressions\Wildcard;
  */
 class WildcardTest extends TestCase
 {
-	public function testToQuery()
-	{
-		$this->assertSame("*", (new Wildcard())->toQuery());
-	}
+    public function testToQuery()
+    {
+        $this->assertSame("*", (new Wildcard())->toQuery());
+    }
 }

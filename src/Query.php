@@ -54,33 +54,35 @@ class Query
 
     /**
      * Creates a node.
-	 *
+     *
      * @param string|null $label
-	 *
-	 * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
-	 *
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
+     *
      * @return Node
      */
-    public static function node(string $label = null): Node {
+    public static function node(string $label = null): Node
+    {
         return new Node($label);
     }
 
-	/**
-	 * Creates a relationship.
-	 *
-	 * @param Pattern $a The node left of the relationship
-	 * @param Pattern $b The node right of the relationship
-	 * @param array $direction The direction of the relationship, should be either:
-	 *
-	 * - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
-	 * - Relationship::DIR_LEFT (for a relation of (a)<--(b))
-	 * - Relationship::DIR_UNI (for a relation of (a)--(b))
-	 *
-	 * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
-	 *
-	 * @return Relationship
-	 */
-    public static function relationship(Pattern $a, Pattern $b, array $direction): Relationship {
+    /**
+     * Creates a relationship.
+     *
+     * @param Pattern $a         The node left of the relationship
+     * @param Pattern $b         The node right of the relationship
+     * @param array   $direction The direction of the relationship, should be either:
+     *                           - Relationship::DIR_RIGHT (for a relation of
+     *                           (a)-->(b)) - Relationship::DIR_LEFT (for a relation
+     *                           of (a)<--(b)) - Relationship::DIR_UNI (for a
+     *                           relation of (a)--(b))                    
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
+     *
+     * @return Relationship
+     */
+    public static function relationship(Pattern $a, Pattern $b, array $direction): Relationship
+    {
         return new Relationship($a, $b, $direction);
     }
 
@@ -110,23 +112,24 @@ class Query
 
     /**
      * Creates the MATCH clause.
-	 *
+     *
      * @param Pattern|Pattern[] $patterns A single pattern or a list of patterns
-	 *
-	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/
-	 *
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/
+     *
      * @return $this
      */
-    public function match($patterns): self {
-    	$matchClause = new MatchClause();
+    public function match($patterns): self
+    {
+        $matchClause = new MatchClause();
 
         if ($patterns instanceof Pattern) {
-        	$patterns = [$patterns];
-		}
+            $patterns = [$patterns];
+        }
 
         foreach ($patterns as $pattern) {
-			$matchClause->addPattern($pattern);
-		}
+            $matchClause->addPattern($pattern);
+        }
 
         $this->clauses[] = $matchClause;
 
@@ -155,23 +158,24 @@ class Query
 
     /**
      * Creates the CREATE clause.
-	 *
+     *
      * @param Pattern|Pattern[] $patterns A single pattern or a list of patterns
-	 *
-	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/create/
-	 *
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/create/
+     *
      * @return $this
      */
-    public function create($patterns): self {
+    public function create($patterns): self
+    {
         $createClause = new CreateClause();
 
         if ($patterns instanceof Pattern) {
             $patterns = [$patterns];
         }
 
-		foreach ($patterns as $pattern) {
-			$createClause->addPattern($pattern);
-		}
+        foreach ($patterns as $pattern) {
+            $createClause->addPattern($pattern);
+        }
 
         $this->clauses[] = $createClause;
 
@@ -231,14 +235,15 @@ class Query
 
     /**
      * Creates the LIMIT clause.
-	 *
+     *
      * @param Expression $expression An expression that returns an integer
-	 *
-	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/limit/
-	 *
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/limit/
+     *
      * @return $this
      */
-    public function limit(Expression $expression): self {
+    public function limit(Expression $expression): self
+    {
         $limitClause = new LimitClause();
         $limitClause->setExpression($expression);
 
@@ -249,14 +254,15 @@ class Query
 
     /**
      * Creates the MERGE clause.
-	 *
+     *
      * @param Pattern $pattern The pattern to merge
-	 *
-	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/
-	 *
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/
+     *
      * @return $this
      */
-    public function merge(Pattern $pattern): self {
+    public function merge(Pattern $pattern): self
+    {
         $mergeClause = new MergeClause();
         $mergeClause->setPattern($pattern);
 
@@ -267,50 +273,52 @@ class Query
 
     /**
      * Creates the OPTIONAL MATCH clause.
-	 *
+     *
      * @param Pattern|Pattern[] $patterns A single pattern or a list of patterns
-	 *
-	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/optional-match/
-	 *
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/optional-match/
+     *
      * @return $this
      */
-    public function optionalMatch($patterns): self {
+    public function optionalMatch($patterns): self
+    {
         $optionalMatchClause = new OptionalMatchClause();
 
-        if ( $patterns instanceof Pattern) {
+        if ($patterns instanceof Pattern) {
             $patterns = [$patterns];
         }
 
-		foreach ($patterns as  $pattern) {
-			$optionalMatchClause->addPattern($pattern);
-		}
+        foreach ($patterns as  $pattern) {
+            $optionalMatchClause->addPattern($pattern);
+        }
 
         $this->clauses[] = $optionalMatchClause;
 
         return $this;
     }
 
-	/**
-	 * Creates the ORDER BY clause.
-	 *
-	 * @param Property|Property[] $properties A single property or a list of properties
-	 * @param bool $descending Whether or not to order in a descending order
-	 *
-	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/order-by/
-	 *
-	 * @return $this
-	 */
-    public function orderBy($properties, bool $descending = false): self {
+    /**
+     * Creates the ORDER BY clause.
+     *
+     * @param Property|Property[] $properties A single property or a list of properties
+     * @param bool                $descending Whether or not to order in a descending order
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/order-by/
+     *
+     * @return $this
+     */
+    public function orderBy($properties, bool $descending = false): self
+    {
         $orderByClause = new OrderByClause();
         $orderByClause->setDescending($descending);
 
-        if ( $properties instanceof Property ) {
-        	$properties = [$properties];
-		}
+        if ($properties instanceof Property ) {
+            $properties = [$properties];
+        }
 
         foreach ( $properties as $property ) {
-        	$orderByClause->addProperty($property);
-		}
+            $orderByClause->addProperty($property);
+        }
 
         $this->clauses[] = $orderByClause;
 
@@ -319,14 +327,15 @@ class Query
 
     /**
      * Creates the REMOVE clause.
-	 *
+     *
      * @param Expression $expression The expression to remove (should either be a Node or a Property)
-	 *
-	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/remove/
-	 *
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/remove/
+     *
      * @return $this
      */
-    public function remove(Expression $expression): self {
+    public function remove(Expression $expression): self
+    {
         $removeClause = new RemoveClause();
         $removeClause->addExpression($expression);
 
@@ -337,25 +346,26 @@ class Query
 
     /**
      * Create the SET clause.
-	 *
+     *
      * @param Expression|Expression[] $expressions A single expression or a list of expressions
-	 *
-	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/
-	 *
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/
+     *
      * @return $this
      */
-    public function set($expressions): self {
+    public function set($expressions): self
+    {
         $setClause = new SetClause();
 
-        if ( $expressions instanceof Expression ) {
+        if ($expressions instanceof Expression ) {
             $expressions = [$expressions];
         }
 
-		foreach ($expressions as $expression) {
-			$setClause->addExpression($expression);
-		}
+        foreach ($expressions as $expression) {
+            $setClause->addExpression($expression);
+        }
 
-       	$this->clauses[] = $setClause;
+           $this->clauses[] = $setClause;
 
         return $this;
     }
@@ -373,39 +383,43 @@ class Query
         $whereClause = new WhereClause();
         $whereClause->setExpression($expression);
 
-       	$this->clauses[] = $whereClause;
+           $this->clauses[] = $whereClause;
 
         return $this;
     }
 
-	/**
-	 * Creates the WITH clause.
-	 *
-	 * @param Expression $expression The entry to add
-	 * @param string $alias An optional entry alias
-	 *
-	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/with/
-	 *
-	 * @return Query
-	 */
-    public function with(Expression $expression, string $alias = ""): self {
-		$withClause = new WithClause();
-		$withClause->addEntry($expression, $alias);
+    /**
+     * Creates the WITH clause.
+     *
+     * @param Expression $expression The entry to add
+     * @param string     $alias      An optional entry alias
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/with/
+     *
+     * @return Query
+     */
+    public function with(Expression $expression, string $alias = ""): self
+    {
+        $withClause = new WithClause();
+        $withClause->addEntry($expression, $alias);
 
-       	$this->clauses[] = $withClause;
+           $this->clauses[] = $withClause;
 
         return $this;
     }
 
-	/**
-	 * Builds the query.
-	 *
-	 * @return string The fully constructed query
-	 */
-    public function build(): string {
-    	return implode(" ", array_map(
-			fn(Clause $clause): string => $clause->toQuery(),
-			$this->clauses
-		));
+    /**
+     * Builds the query.
+     *
+     * @return string The fully constructed query
+     */
+    public function build(): string
+    {
+        return implode(
+            " ", array_map(
+                fn(Clause $clause): string => $clause->toQuery(),
+                $this->clauses
+            )
+        );
     }
 }

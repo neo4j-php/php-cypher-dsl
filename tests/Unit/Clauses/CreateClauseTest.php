@@ -11,15 +11,17 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class CreateClauseTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-    public function testEmptyClause() {
+    public function testEmptyClause()
+    {
         $createClause = new CreateClause();
 
         $this->assertSame("", $createClause->toQuery());
     }
 
-    public function testSinglePattern() {
+    public function testSinglePattern()
+    {
         $createClause = new CreateClause();
         $pattern = $this->getPatternMock("(a)", $this);
 
@@ -28,7 +30,8 @@ class CreateClauseTest extends TestCase
         $this->assertSame("CREATE (a)", $createClause->toQuery());
     }
 
-    public function testMultiplePatterns() {
+    public function testMultiplePatterns()
+    {
         $createClause = new CreateClause();
 
         $patternA = $this->getPatternMock("(a)", $this);

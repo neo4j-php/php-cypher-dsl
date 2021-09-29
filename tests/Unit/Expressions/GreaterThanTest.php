@@ -31,28 +31,28 @@ use WikibaseSolutions\CypherDSL\Expressions\GreaterThan;
  */
 class GreaterThanTest extends TestCase
 {
-	public function testToQuery()
-	{
-		$greaterThan = new GreaterThan($this->getExpressionMock("a"), $this->getExpressionMock("b"));
+    public function testToQuery()
+    {
+        $greaterThan = new GreaterThan($this->getExpressionMock("a"), $this->getExpressionMock("b"));
 
-		$this->assertSame("(a > b)", $greaterThan->toQuery());
+        $this->assertSame("(a > b)", $greaterThan->toQuery());
 
-		$greaterThan = new GreaterThan($greaterThan, $greaterThan);
+        $greaterThan = new GreaterThan($greaterThan, $greaterThan);
 
-		$this->assertSame("((a > b) > (a > b))", $greaterThan->toQuery());
-	}
+        $this->assertSame("((a > b) > (a > b))", $greaterThan->toQuery());
+    }
 
-	/**
-	 * Returns a mock of the Expression class that returns the given string when toQuery() is called.
-	 *
-	 * @param string $variable
-	 * @return Expression|MockObject
-	 */
-	private function getExpressionMock(string $variable): Expression
-	{
-		$mock = $this->getMockBuilder(Expression::class)->getMock();
-		$mock->method('toQuery')->willReturn($variable);
+    /**
+     * Returns a mock of the Expression class that returns the given string when toQuery() is called.
+     *
+     * @param  string $variable
+     * @return Expression|MockObject
+     */
+    private function getExpressionMock(string $variable): Expression
+    {
+        $mock = $this->getMockBuilder(Expression::class)->getMock();
+        $mock->method('toQuery')->willReturn($variable);
 
-		return $mock;
-	}
+        return $mock;
+    }
 }

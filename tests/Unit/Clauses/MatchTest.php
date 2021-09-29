@@ -30,29 +30,29 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class MatchTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testEmptyClause()
-	{
-		$match = new MatchClause();
+    public function testEmptyClause()
+    {
+        $match = new MatchClause();
 
-		$this->assertSame("", $match->toQuery());
-	}
+        $this->assertSame("", $match->toQuery());
+    }
 
-	public function testSinglePattern()
-	{
-		$match = new MatchClause();
-		$match->addPattern($this->getPatternMock("(a)", $this));
+    public function testSinglePattern()
+    {
+        $match = new MatchClause();
+        $match->addPattern($this->getPatternMock("(a)", $this));
 
-		$this->assertSame("MATCH (a)", $match->toQuery());
-	}
+        $this->assertSame("MATCH (a)", $match->toQuery());
+    }
 
-	public function testMultiplePatterns()
-	{
-		$match = new MatchClause();
-		$match->addPattern($this->getPatternMock("(a)", $this));
-		$match->addPattern($this->getPatternMock("(b)", $this));
+    public function testMultiplePatterns()
+    {
+        $match = new MatchClause();
+        $match->addPattern($this->getPatternMock("(a)", $this));
+        $match->addPattern($this->getPatternMock("(b)", $this));
 
-		$this->assertSame("MATCH (a), (b)", $match->toQuery());
-	}
+        $this->assertSame("MATCH (a), (b)", $match->toQuery());
+    }
 }

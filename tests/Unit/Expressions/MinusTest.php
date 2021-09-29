@@ -31,28 +31,28 @@ use WikibaseSolutions\CypherDSL\Expressions\Minus;
  */
 class MinusTest extends TestCase
 {
-	public function testToQuery()
-	{
-		$minus = new Minus($this->getExpressionMock("a"));
+    public function testToQuery()
+    {
+        $minus = new Minus($this->getExpressionMock("a"));
 
-		$this->assertSame("-a", $minus->toQuery());
+        $this->assertSame("-a", $minus->toQuery());
 
-		$minus = new Minus($minus);
+        $minus = new Minus($minus);
 
-		$this->assertSame("--a", $minus->toQuery());
-	}
+        $this->assertSame("--a", $minus->toQuery());
+    }
 
-	/**
-	 * Returns a mock of the Expression class that returns the given string when toQuery() is called.
-	 *
-	 * @param string $variable
-	 * @return Expression|MockObject
-	 */
-	private function getExpressionMock(string $variable): Expression
-	{
-		$mock = $this->getMockBuilder(Expression::class)->getMock();
-		$mock->method('toQuery')->willReturn($variable);
+    /**
+     * Returns a mock of the Expression class that returns the given string when toQuery() is called.
+     *
+     * @param  string $variable
+     * @return Expression|MockObject
+     */
+    private function getExpressionMock(string $variable): Expression
+    {
+        $mock = $this->getMockBuilder(Expression::class)->getMock();
+        $mock->method('toQuery')->willReturn($variable);
 
-		return $mock;
-	}
+        return $mock;
+    }
 }
