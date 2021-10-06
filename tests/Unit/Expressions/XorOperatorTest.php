@@ -24,24 +24,27 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
-use WikibaseSolutions\CypherDSL\Expressions\LessThan;
+use WikibaseSolutions\CypherDSL\Expressions\Multiplication;
+use WikibaseSolutions\CypherDSL\Expressions\OrOperator;
+use WikibaseSolutions\CypherDSL\Expressions\PropertyMutation;
+use WikibaseSolutions\CypherDSL\Expressions\XorOperator;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\LessThan
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\XorOperator
  */
-class LessThanTest extends TestCase
+class XorOperatorTest extends TestCase
 {
 	use TestHelper;
 
-    public function testToQuery()
-    {
-        $lessThan = new LessThan($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
+	public function testToQuery()
+	{
+		$xor = new XorOperator($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
 
-        $this->assertSame("(a < b)", $lessThan->toQuery());
+		$this->assertSame("(a XOR b)", $xor->toQuery());
 
-        $lessThan = new LessThan($lessThan, $lessThan);
+		$xor = new XorOperator($xor, $xor);
 
-        $this->assertSame("((a < b) < (a < b))", $lessThan->toQuery());
-    }
+		$this->assertSame("((a XOR b) XOR (a XOR b))", $xor->toQuery());
+	}
 }

@@ -25,34 +25,23 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
 use WikibaseSolutions\CypherDSL\Expressions\LessThanOrEqual;
+use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\LessThanOrEqual
  */
 class LessThanOrEqualTest extends TestCase
 {
+	use TestHelper;
+
     public function testToQuery()
     {
-        $lessThanOrEqual = new LessThanOrEqual($this->getExpressionMock("a"), $this->getExpressionMock("b"));
+        $lessThanOrEqual = new LessThanOrEqual($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
 
         $this->assertSame("(a <= b)", $lessThanOrEqual->toQuery());
 
         $lessThanOrEqual = new LessThanOrEqual($lessThanOrEqual, $lessThanOrEqual);
 
         $this->assertSame("((a <= b) <= (a <= b))", $lessThanOrEqual->toQuery());
-    }
-
-    /**
-     * Returns a mock of the Expression class that returns the given string when toQuery() is called.
-     *
-     * @param  string $variable
-     * @return Expression|MockObject
-     */
-    private function getExpressionMock(string $variable): Expression
-    {
-        $mock = $this->getMockBuilder(Expression::class)->getMock();
-        $mock->method('toQuery')->willReturn($variable);
-
-        return $mock;
     }
 }

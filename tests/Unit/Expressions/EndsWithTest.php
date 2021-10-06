@@ -25,34 +25,23 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\EndsWith;
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\EndsWith
  */
 class EndsWithTest extends TestCase
 {
+	use TestHelper;
+
     public function testToQuery()
     {
-        $endsWith = new EndsWith($this->getExpressionMock("a"), $this->getExpressionMock("b"));
+        $endsWith = new EndsWith($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
 
         $this->assertSame("(a ENDS WITH b)", $endsWith->toQuery());
 
         $endsWith = new EndsWith($endsWith, $endsWith);
 
         $this->assertSame("((a ENDS WITH b) ENDS WITH (a ENDS WITH b))", $endsWith->toQuery());
-    }
-
-    /**
-     * Returns a mock of the Expression class that returns the given string when toQuery() is called.
-     *
-     * @param  string $variable
-     * @return Expression|MockObject
-     */
-    private function getExpressionMock(string $variable): Expression
-    {
-        $mock = $this->getMockBuilder(Expression::class)->getMock();
-        $mock->method('toQuery')->willReturn($variable);
-
-        return $mock;
     }
 }

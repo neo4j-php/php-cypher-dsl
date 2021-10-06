@@ -25,12 +25,15 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
 use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
+use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\PropertyMap
  */
 class PropertyMapTest extends TestCase
 {
+	use TestHelper;
+
     public function testEmpty()
     {
         $propertyMap = new PropertyMap([]);
@@ -77,18 +80,18 @@ class PropertyMapTest extends TestCase
     public function provideNumericalKeysData(): array
     {
         return [
-        [[$this->getExpressionMock("'a'")], "{`0`: 'a'}"],
-        [[$this->getExpressionMock("'a'"), $this->getExpressionMock("'b'")], "{`0`: 'a', `1`: 'b'}"]
+        [[$this->getExpressionMock("'a'", $this)], "{`0`: 'a'}"],
+        [[$this->getExpressionMock("'a'", $this), $this->getExpressionMock("'b'", $this)], "{`0`: 'a', `1`: 'b'}"]
         ];
     }
 
     public function provideStringKeysData(): array
     {
         return [
-        [['a' => $this->getExpressionMock("'a'")], "{a: 'a'}"],
-        [['a' => $this->getExpressionMock("'a'"), 'b' => $this->getExpressionMock("'b'")], "{a: 'a', b: 'b'}"],
-        [['a' => $this->getExpressionMock("'b'")], "{a: 'b'}"],
-        [[':' => $this->getExpressionMock("'a'")], "{`:`: 'a'}"]
+        [['a' => $this->getExpressionMock("'a'", $this)], "{a: 'a'}"],
+        [['a' => $this->getExpressionMock("'a'", $this), 'b' => $this->getExpressionMock("'b'", $this)], "{a: 'a', b: 'b'}"],
+        [['a' => $this->getExpressionMock("'b'", $this)], "{a: 'b'}"],
+        [[':' => $this->getExpressionMock("'a'", $this)], "{`:`: 'a'}"]
         ];
     }
 
@@ -96,22 +99,8 @@ class PropertyMapTest extends TestCase
     {
         return [
         [['a' => new PropertyMap([])], "{a: {}}"],
-        [['a' => new PropertyMap(['a' => new PropertyMap(['a' => $this->getExpressionMock("'b'")])])], "{a: {a: {a: 'b'}}}"],
-        [['a' => new PropertyMap(['b' => $this->getExpressionMock("'c'")]), 'b' => $this->getExpressionMock("'d'")], "{a: {b: 'c'}, b: 'd'}"]
+        [['a' => new PropertyMap(['a' => new PropertyMap(['a' => $this->getExpressionMock("'b'", $this)])])], "{a: {a: {a: 'b'}}}"],
+        [['a' => new PropertyMap(['b' => $this->getExpressionMock("'c'", $this)]), 'b' => $this->getExpressionMock("'d'", $this)], "{a: {b: 'c'}, b: 'd'}"]
         ];
-    }
-
-    /**
-     * Returns a mock of the Expression class that returns the given string when toQuery() is called.
-     *
-     * @param  string $variable
-     * @return Expression|MockObject
-     */
-    private function getExpressionMock(string $variable): Expression
-    {
-        $mock = $this->getMockBuilder(Expression::class)->getMock();
-        $mock->method('toQuery')->willReturn($variable);
-
-        return $mock;
     }
 }

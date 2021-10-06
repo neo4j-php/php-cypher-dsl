@@ -24,24 +24,26 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
-use WikibaseSolutions\CypherDSL\Expressions\LessThan;
+use WikibaseSolutions\CypherDSL\Expressions\Multiplication;
+use WikibaseSolutions\CypherDSL\Expressions\OrOperator;
+use WikibaseSolutions\CypherDSL\Expressions\PropertyMutation;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\LessThan
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\PropertyMutation
  */
-class LessThanTest extends TestCase
+class PropertyMutationTest extends TestCase
 {
 	use TestHelper;
 
-    public function testToQuery()
-    {
-        $lessThan = new LessThan($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
+	public function testToQuery()
+	{
+		$mutation = new PropertyMutation($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
 
-        $this->assertSame("(a < b)", $lessThan->toQuery());
+		$this->assertSame("(a += b)", $mutation->toQuery());
 
-        $lessThan = new LessThan($lessThan, $lessThan);
+		$mutation = new PropertyMutation($mutation, $mutation);
 
-        $this->assertSame("((a < b) < (a < b))", $lessThan->toQuery());
-    }
+		$this->assertSame("((a += b) += (a += b))", $mutation->toQuery());
+	}
 }

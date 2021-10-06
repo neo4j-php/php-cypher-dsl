@@ -25,12 +25,15 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Property
  */
 class PropertyTest extends TestCase
 {
+	use TestHelper;
+
     /**
      * @dataProvider provideToQueryData
      * @param        Variable $variable
@@ -47,25 +50,11 @@ class PropertyTest extends TestCase
     public function provideToQueryData(): array
     {
         return [
-        [$this->getVariableMock("a"), "a", "a.a"],
-        [$this->getVariableMock("a"), "b", "a.b"],
-        [$this->getVariableMock("b"), "a", "b.a"],
-        [$this->getVariableMock("a"), ":", "a.`:`"],
-        [$this->getVariableMock("b"), ":", "b.`:`"]
+        [$this->getVariableMock("a", $this), "a", "a.a"],
+        [$this->getVariableMock("a", $this), "b", "a.b"],
+        [$this->getVariableMock("b", $this), "a", "b.a"],
+        [$this->getVariableMock("a", $this), ":", "a.`:`"],
+        [$this->getVariableMock("b", $this), ":", "b.`:`"]
         ];
-    }
-
-    /**
-     * Returns a mock of the Variable class that returns the given string when toQuery() is called.
-     *
-     * @param  string $variable
-     * @return Variable|MockObject
-     */
-    private function getVariableMock(string $variable): Variable
-    {
-        $mock = $this->getMockBuilder(Variable::class)->disableOriginalConstructor()->getMock();
-        $mock->method('toQuery')->willReturn($variable);
-
-        return $mock;
     }
 }

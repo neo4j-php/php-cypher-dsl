@@ -27,6 +27,7 @@ use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 
 trait TestHelper
 {
@@ -81,4 +82,17 @@ trait TestHelper
 
         return $mock;
     }
+
+	/**
+	 * @param string $variable
+	 * @param TestCase $testCase
+	 * @return Variable|MockObject
+	 */
+    public function getVariableMock(string $variable, TestCase $testCase): Variable
+	{
+		$mock = $testCase->getMockBuilder(Variable::class)->disableOriginalConstructor()->getMock();
+		$mock->method('toQuery')->willReturn($variable);
+
+		return $mock;
+	}
 }

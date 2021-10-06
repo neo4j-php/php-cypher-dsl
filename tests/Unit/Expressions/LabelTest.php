@@ -24,24 +24,34 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
-use WikibaseSolutions\CypherDSL\Expressions\LessThan;
+use WikibaseSolutions\CypherDSL\Expressions\Inequality;
+use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\LessThan
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Label
  */
-class LessThanTest extends TestCase
+class LabelTest extends TestCase
 {
 	use TestHelper;
 
-    public function testToQuery()
-    {
-        $lessThan = new LessThan($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
+	public function testToQuery()
+	{
+		$expression = $this->getExpressionMock("foo", $this);
+		$label = "Bar";
 
-        $this->assertSame("(a < b)", $lessThan->toQuery());
+		$label = new Label($expression, $label);
 
-        $lessThan = new LessThan($lessThan, $lessThan);
+		$this->assertSame("foo:Bar", $label->toQuery());
+	}
 
-        $this->assertSame("((a < b) < (a < b))", $lessThan->toQuery());
-    }
+	public function testLabelIsEscaped()
+	{
+		$expression = $this->getExpressionMock("foo", $this);
+		$label = "{}";
+
+		$label = new Label($expression, $label);
+
+		$this->assertSame("foo:`{}`", $label->toQuery());
+	}
 }

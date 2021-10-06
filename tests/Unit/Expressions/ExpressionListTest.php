@@ -25,12 +25,15 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
 use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
+use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\ExpressionList
  */
 class ExpressionListTest extends TestCase
 {
+	use TestHelper;
+
     public function testEmpty()
     {
         $expressionList = new ExpressionList([]);
@@ -65,32 +68,18 @@ class ExpressionListTest extends TestCase
     public function provideOneDimensionalData(): array
     {
         return [
-        [[$this->getExpressionMock("12")], "[12]"],
-        [[$this->getExpressionMock("'12'")], "['12']"],
-        [[$this->getExpressionMock("'12'"), $this->getExpressionMock("'13'")], "['12', '13']"]
+        [[$this->getExpressionMock("12", $this)], "[12]"],
+        [[$this->getExpressionMock("'12'", $this)], "['12']"],
+        [[$this->getExpressionMock("'12'", $this), $this->getExpressionMock("'13'", $this)], "['12', '13']"]
         ];
     }
 
     public function provideMultidimensionalData(): array
     {
         return [
-        [[new ExpressionList([$this->getExpressionMock("12")])], "[[12]]"],
-        [[new ExpressionList([$this->getExpressionMock("'12'")])], "[['12']]"],
-        [[new ExpressionList([$this->getExpressionMock("'12'"), $this->getExpressionMock("'14'")]), $this->getExpressionMock("'13'")], "[['12', '14'], '13']"]
+        [[new ExpressionList([$this->getExpressionMock("12", $this)])], "[[12]]"],
+        [[new ExpressionList([$this->getExpressionMock("'12'", $this)])], "[['12']]"],
+        [[new ExpressionList([$this->getExpressionMock("'12'", $this), $this->getExpressionMock("'14'", $this)]), $this->getExpressionMock("'13'", $this)], "[['12', '14'], '13']"]
         ];
-    }
-
-    /**
-     * Returns a mock of the Expression class that returns the given string when toQuery() is called.
-     *
-     * @param  string $variable
-     * @return Expression|MockObject
-     */
-    private function getExpressionMock(string $variable): Expression
-    {
-        $mock = $this->getMockBuilder(Expression::class)->getMock();
-        $mock->method('toQuery')->willReturn($variable);
-
-        return $mock;
     }
 }

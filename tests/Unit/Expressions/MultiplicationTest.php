@@ -25,34 +25,23 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
 use WikibaseSolutions\CypherDSL\Expressions\Multiplication;
+use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Multiplication
  */
 class MultiplicationTest extends TestCase
 {
+	use TestHelper;
+
     public function testToQuery()
     {
-        $multiplication = new Multiplication($this->getExpressionMock("a"), $this->getExpressionMock("b"));
+        $multiplication = new Multiplication($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
 
         $this->assertSame("(a * b)", $multiplication->toQuery());
 
         $multiplication = new Multiplication($multiplication, $multiplication);
 
         $this->assertSame("((a * b) * (a * b))", $multiplication->toQuery());
-    }
-
-    /**
-     * Returns a mock of the Expression class that returns the given string when toQuery() is called.
-     *
-     * @param  string $variable
-     * @return Expression|MockObject
-     */
-    private function getExpressionMock(string $variable): Expression
-    {
-        $mock = $this->getMockBuilder(Expression::class)->getMock();
-        $mock->method('toQuery')->willReturn($variable);
-
-        return $mock;
     }
 }

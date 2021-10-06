@@ -25,34 +25,23 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
 use WikibaseSolutions\CypherDSL\Expressions\Minus;
+use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Minus
  */
 class MinusTest extends TestCase
 {
+	use TestHelper;
+
     public function testToQuery()
     {
-        $minus = new Minus($this->getExpressionMock("a"));
+        $minus = new Minus($this->getExpressionMock("a", $this));
 
         $this->assertSame("-a", $minus->toQuery());
 
         $minus = new Minus($minus);
 
         $this->assertSame("--a", $minus->toQuery());
-    }
-
-    /**
-     * Returns a mock of the Expression class that returns the given string when toQuery() is called.
-     *
-     * @param  string $variable
-     * @return Expression|MockObject
-     */
-    private function getExpressionMock(string $variable): Expression
-    {
-        $mock = $this->getMockBuilder(Expression::class)->getMock();
-        $mock->method('toQuery')->willReturn($variable);
-
-        return $mock;
     }
 }

@@ -25,34 +25,23 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
 use WikibaseSolutions\CypherDSL\Expressions\StartsWith;
+use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\StartsWith
  */
 class StartsWithTest extends TestCase
 {
+	use TestHelper;
+
     public function testToQuery()
     {
-        $startsWith = new StartsWith($this->getExpressionMock("a"), $this->getExpressionMock("b"));
+        $startsWith = new StartsWith($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
 
         $this->assertSame("(a STARTS WITH b)", $startsWith->toQuery());
 
         $startsWith = new StartsWith($startsWith, $startsWith);
 
         $this->assertSame("((a STARTS WITH b) STARTS WITH (a STARTS WITH b))", $startsWith->toQuery());
-    }
-
-    /**
-     * Returns a mock of the Expression class that returns the given string when toQuery() is called.
-     *
-     * @param  string $variable
-     * @return Expression|MockObject
-     */
-    private function getExpressionMock(string $variable): Expression
-    {
-        $mock = $this->getMockBuilder(Expression::class)->getMock();
-        $mock->method('toQuery')->willReturn($variable);
-
-        return $mock;
     }
 }

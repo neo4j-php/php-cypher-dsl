@@ -24,24 +24,25 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
-use WikibaseSolutions\CypherDSL\Expressions\LessThan;
+use WikibaseSolutions\CypherDSL\Expressions\Multiplication;
+use WikibaseSolutions\CypherDSL\Expressions\OrOperator;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\LessThan
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\OrOperator
  */
-class LessThanTest extends TestCase
+class OrOperatorTest extends TestCase
 {
 	use TestHelper;
 
-    public function testToQuery()
-    {
-        $lessThan = new LessThan($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
+	public function testToQuery()
+	{
+		$or = new OrOperator($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
 
-        $this->assertSame("(a < b)", $lessThan->toQuery());
+		$this->assertSame("(a OR b)", $or->toQuery());
 
-        $lessThan = new LessThan($lessThan, $lessThan);
+		$or = new OrOperator($or, $or);
 
-        $this->assertSame("((a < b) < (a < b))", $lessThan->toQuery());
-    }
+		$this->assertSame("((a OR b) OR (a OR b))", $or->toQuery());
+	}
 }

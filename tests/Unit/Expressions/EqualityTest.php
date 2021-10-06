@@ -25,34 +25,23 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Equality;
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Equality
  */
 class EqualityTest extends TestCase
 {
+	use TestHelper;
+
     public function testToQuery()
     {
-        $equality = new Equality($this->getExpressionMock("a"), $this->getExpressionMock("b"));
+        $equality = new Equality($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
 
         $this->assertSame("(a = b)", $equality->toQuery());
 
         $equality = new Equality($equality, $equality);
 
         $this->assertSame("((a = b) = (a = b))", $equality->toQuery());
-    }
-
-    /**
-     * Returns a mock of the Expression class that returns the given string when toQuery() is called.
-     *
-     * @param  string $variable
-     * @return Expression|MockObject
-     */
-    private function getExpressionMock(string $variable): Expression
-    {
-        $mock = $this->getMockBuilder(Expression::class)->getMock();
-        $mock->method('toQuery')->willReturn($variable);
-
-        return $mock;
     }
 }

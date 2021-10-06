@@ -22,12 +22,15 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
+use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Relationship;
+use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
 use WikibaseSolutions\CypherDSL\Query;
 
 /**
@@ -81,6 +84,20 @@ class QueryTest extends TestCase
 
         $this->assertEquals($expected, $actual);
     }
+
+    public function testList()
+	{
+		$list = Query::list([]);
+
+		$this->assertInstanceOf(ExpressionList::class, $list);
+	}
+
+	public function testMap()
+	{
+		$map = Query::map([]);
+
+		$this->assertInstanceOf(PropertyMap::class, $map);
+	}
 
     public function testMatch()
     {
