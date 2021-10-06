@@ -46,6 +46,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 
 class Query
 {
@@ -85,6 +86,17 @@ class Query
     public static function relationship(Pattern $a, Pattern $b, array $direction): Relationship
     {
         return new Relationship($a, $b, $direction);
+    }
+
+    /**
+     * Creates a variable.
+     *
+     * @param  string $variable
+     * @return Variable
+     */
+    public static function variable(string $variable): Variable
+    {
+        return new Variable($variable);
     }
 
     /**
