@@ -32,7 +32,7 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class ExponentiationTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
     public function testToQuery()
     {

@@ -33,16 +33,16 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class OrOperatorTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$or = new OrOperator($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
+    public function testToQuery()
+    {
+        $or = new OrOperator($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
 
-		$this->assertSame("(a OR b)", $or->toQuery());
+        $this->assertSame("(a OR b)", $or->toQuery());
 
-		$or = new OrOperator($or, $or);
+        $or = new OrOperator($or, $or);
 
-		$this->assertSame("((a OR b) OR (a OR b))", $or->toQuery());
-	}
+        $this->assertSame("((a OR b) OR (a OR b))", $or->toQuery());
+    }
 }

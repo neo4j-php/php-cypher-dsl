@@ -31,61 +31,61 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class CallProcedureTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testEmptyClause()
-	{
-		$callProcedureClause = new CallProcedureClause();
+    public function testEmptyClause()
+    {
+        $callProcedureClause = new CallProcedureClause();
 
-		$this->assertSame("", $callProcedureClause->toQuery());
-	}
+        $this->assertSame("", $callProcedureClause->toQuery());
+    }
 
-	public function testZeroArguments()
-	{
-		$callProcedureClause = new CallProcedureClause();
-		$callProcedureClause->setProcedure("apoc.json");
+    public function testZeroArguments()
+    {
+        $callProcedureClause = new CallProcedureClause();
+        $callProcedureClause->setProcedure("apoc.json");
 
-		$this->assertSame("CALL apoc.json()", $callProcedureClause->toQuery());
-	}
+        $this->assertSame("CALL apoc.json()", $callProcedureClause->toQuery());
+    }
 
-	public function testOneArgument()
-	{
-		$callProcedureClause = new CallProcedureClause();
-		$callProcedureClause->setProcedure("apoc.json");
+    public function testOneArgument()
+    {
+        $callProcedureClause = new CallProcedureClause();
+        $callProcedureClause->setProcedure("apoc.json");
 
-		$callProcedureClause->addArgument($this->getExpressionMock("'text'", $this));
+        $callProcedureClause->addArgument($this->getExpressionMock("'text'", $this));
 
-		$this->assertSame("CALL apoc.json('text')", $callProcedureClause->toQuery());
-	}
+        $this->assertSame("CALL apoc.json('text')", $callProcedureClause->toQuery());
+    }
 
-	public function testMultipleArgument()
-	{
-		$callProcedureClause = new CallProcedureClause();
-		$callProcedureClause->setProcedure("apoc.json");
+    public function testMultipleArgument()
+    {
+        $callProcedureClause = new CallProcedureClause();
+        $callProcedureClause->setProcedure("apoc.json");
 
-		$expression = $this->getExpressionMock("'text'", $this);
+        $expression = $this->getExpressionMock("'text'", $this);
 
-		$callProcedureClause->addArgument($expression);
-		$callProcedureClause->addArgument($expression);
-		$callProcedureClause->addArgument($expression);
+        $callProcedureClause->addArgument($expression);
+        $callProcedureClause->addArgument($expression);
+        $callProcedureClause->addArgument($expression);
 
-		$this->assertSame("CALL apoc.json('text', 'text', 'text')", $callProcedureClause->toQuery());
-	}
+        $this->assertSame("CALL apoc.json('text', 'text', 'text')", $callProcedureClause->toQuery());
+    }
 
-	public function testWithArguments()
-	{
-		$callProcedureClause = new CallProcedureClause();
-		$callProcedureClause->setProcedure("apoc.json");
+    public function testWithArguments()
+    {
+        $callProcedureClause = new CallProcedureClause();
+        $callProcedureClause->setProcedure("apoc.json");
 
-		$expression = $this->getExpressionMock("'text'", $this);
+        $expression = $this->getExpressionMock("'text'", $this);
 
-		$callProcedureClause->addArgument($expression);
-		$callProcedureClause->addArgument($expression);
-		$callProcedureClause->addArgument($expression);
+        $callProcedureClause->addArgument($expression);
+        $callProcedureClause->addArgument($expression);
+        $callProcedureClause->addArgument($expression);
 
-		// This should overwrite the previous calls to addArgument
-		$callProcedureClause->withArguments([$expression]);
+        // This should overwrite the previous calls to addArgument
+        $callProcedureClause->withArguments([$expression]);
 
-		$this->assertSame("CALL apoc.json('text')", $callProcedureClause->toQuery());
-	}
+        $this->assertSame("CALL apoc.json('text')", $callProcedureClause->toQuery());
+    }
 }

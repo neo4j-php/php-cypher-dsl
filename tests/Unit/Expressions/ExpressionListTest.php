@@ -32,7 +32,7 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class ExpressionListTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
     public function testEmpty()
     {

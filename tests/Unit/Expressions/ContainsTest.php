@@ -32,7 +32,7 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class ContainsTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
     public function testToQuery()
     {

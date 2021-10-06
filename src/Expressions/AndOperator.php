@@ -28,9 +28,9 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
  */
 class AndOperator extends BinaryOperator
 {
-	/**
-	 * @inheritDoc
-	 */
+    /**
+     * @inheritDoc
+     */
     protected function getOperator(): string
     {
         return "AND";

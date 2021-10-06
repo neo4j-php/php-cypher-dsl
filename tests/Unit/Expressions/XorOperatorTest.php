@@ -35,16 +35,16 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class XorOperatorTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$xor = new XorOperator($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
+    public function testToQuery()
+    {
+        $xor = new XorOperator($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
 
-		$this->assertSame("(a XOR b)", $xor->toQuery());
+        $this->assertSame("(a XOR b)", $xor->toQuery());
 
-		$xor = new XorOperator($xor, $xor);
+        $xor = new XorOperator($xor, $xor);
 
-		$this->assertSame("((a XOR b) XOR (a XOR b))", $xor->toQuery());
-	}
+        $this->assertSame("((a XOR b) XOR (a XOR b))", $xor->toQuery());
+    }
 }

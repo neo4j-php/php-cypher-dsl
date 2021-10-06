@@ -32,7 +32,7 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class PropertyTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
     /**
      * @dataProvider provideToQueryData

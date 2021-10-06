@@ -28,9 +28,9 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
  */
 class XorOperator extends BinaryOperator
 {
-	/**
-	 * @inheritDoc
-	 */
+    /**
+     * @inheritDoc
+     */
     protected function getOperator(): string
     {
         return "XOR";

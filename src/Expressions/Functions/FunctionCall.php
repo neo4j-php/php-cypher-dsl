@@ -31,93 +31,93 @@ use WikibaseSolutions\CypherDSL\QueryConvertable;
  */
 abstract class FunctionCall extends Expression
 {
-	/**
-	 * Calls the "all()" function. The signature of the "all()" function is:
-	 *
-	 * all(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
-	 *
-	 * @param Expression $variable  A variable that can be used from within the predicate
-	 * @param Expression $list      An expression that returns a list
-	 * @param Expression $predicate A predicate that is tested against all items in the list
-	 * @return FunctionCall
-	 */
-	public static function all(Expression $variable, Expression $list, Expression $predicate): FunctionCall
-	{
-		return new All($variable, $list, $predicate);
-	}
+    /**
+     * Calls the "all()" function. The signature of the "all()" function is:
+     *
+     * all(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
+     *
+     * @param  Expression $variable  A variable that can be used from within the predicate
+     * @param  Expression $list      An expression that returns a list
+     * @param  Expression $predicate A predicate that is tested against all items in the list
+     * @return FunctionCall
+     */
+    public static function all(Expression $variable, Expression $list, Expression $predicate): FunctionCall
+    {
+        return new All($variable, $list, $predicate);
+    }
 
-	/**
-	 * Calls the "any()" function. The signature of the "any()" function is:
-	 *
-	 * any(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
-	 *
-	 * @param Expression $variable  A variable that can be used from within the predicate
-	 * @param Expression $list      An expression that returns a list
-	 * @param Expression $predicate A predicate that is tested against all items in the list
-	 * @return FunctionCall
-	 */
-	public function any(Expression $variable, Expression $list, Expression $predicate): FunctionCall
-	{
-		return new Any($variable, $list, $predicate);
-	}
+    /**
+     * Calls the "any()" function. The signature of the "any()" function is:
+     *
+     * any(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
+     *
+     * @param  Expression $variable  A variable that can be used from within the predicate
+     * @param  Expression $list      An expression that returns a list
+     * @param  Expression $predicate A predicate that is tested against all items in the list
+     * @return FunctionCall
+     */
+    public function any(Expression $variable, Expression $list, Expression $predicate): FunctionCall
+    {
+        return new Any($variable, $list, $predicate);
+    }
 
-	/**
-	 * Calls the "exists()" function. The signature of the "exists()" function is:
-	 *
-	 * exists(input :: ANY?) :: (BOOLEAN?)
-	 *
-	 * @param Expression $expression A pattern or property
-	 * @return FunctionCall
-	 */
-	public function exists(Expression $expression): FunctionCall
-	{
-		return new Exists($expression);
-	}
+    /**
+     * Calls the "exists()" function. The signature of the "exists()" function is:
+     *
+     * exists(input :: ANY?) :: (BOOLEAN?)
+     *
+     * @param  Expression $expression A pattern or property
+     * @return FunctionCall
+     */
+    public function exists(Expression $expression): FunctionCall
+    {
+        return new Exists($expression);
+    }
 
-	/**
-	 * Calls the "isEmpty()" function. The signature of the "isEmpty()" function is:
-	 *
-	 * isEmpty(input :: LIST? OF ANY?) :: (BOOLEAN?) - to check whether a list is empty
-	 * isEmpty(input :: MAP?) :: (BOOLEAN?) - to check whether a map is empty
-	 * isEmpty(input :: STRING?) :: (BOOLEAN?) - to check whether a string is empty
-	 *
-	 * @param Expression $list An expression that returns a list
-	 * @return FunctionCall
-	 */
-	public function isEmpty(Expression $list): FunctionCall
-	{
-		return new IsEmpty($list);
-	}
+    /**
+     * Calls the "isEmpty()" function. The signature of the "isEmpty()" function is:
+     *
+     * isEmpty(input :: LIST? OF ANY?) :: (BOOLEAN?) - to check whether a list is empty
+     * isEmpty(input :: MAP?) :: (BOOLEAN?) - to check whether a map is empty
+     * isEmpty(input :: STRING?) :: (BOOLEAN?) - to check whether a string is empty
+     *
+     * @param  Expression $list An expression that returns a list
+     * @return FunctionCall
+     */
+    public function isEmpty(Expression $list): FunctionCall
+    {
+        return new IsEmpty($list);
+    }
 
-	/**
-	 * Calls the "none()" function. The signature of the "none()" function is:
-	 *
-	 * none(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
-	 *
-	 * @param Expression $variable  A variable that can be used from within the predicate
-	 * @param Expression $list      An expression that returns a list
-	 * @param Expression $predicate A predicate that is tested against all items in the list
-	 * @return FunctionCall
-	 */
-	public function none(Expression $variable, Expression $list, Expression $predicate): FunctionCall
-	{
-		return new None($variable, $list, $predicate);
-	}
+    /**
+     * Calls the "none()" function. The signature of the "none()" function is:
+     *
+     * none(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
+     *
+     * @param  Expression $variable  A variable that can be used from within the predicate
+     * @param  Expression $list      An expression that returns a list
+     * @param  Expression $predicate A predicate that is tested against all items in the list
+     * @return FunctionCall
+     */
+    public function none(Expression $variable, Expression $list, Expression $predicate): FunctionCall
+    {
+        return new None($variable, $list, $predicate);
+    }
 
-	/**
-	 * Calls the "single()" function. The signature of the "single()" function is:
-	 *
-	 * single(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
-	 *
-	 * @param Expression $variable  A variable that can be used from within the predicate
-	 * @param Expression $list      An expression that returns a list
-	 * @param Expression $predicate A predicate that is tested against all items in the list
-	 * @return FunctionCall
-	 */
-	public function single(Expression $variable, Expression $list, Expression $predicate): FunctionCall
-	{
-		return new Single($variable, $list, $predicate);
-	}
+    /**
+     * Calls the "single()" function. The signature of the "single()" function is:
+     *
+     * single(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
+     *
+     * @param  Expression $variable  A variable that can be used from within the predicate
+     * @param  Expression $list      An expression that returns a list
+     * @param  Expression $predicate A predicate that is tested against all items in the list
+     * @return FunctionCall
+     */
+    public function single(Expression $variable, Expression $list, Expression $predicate): FunctionCall
+    {
+        return new Single($variable, $list, $predicate);
+    }
 
     /**
      * @inheritDoc

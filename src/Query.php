@@ -74,9 +74,9 @@ class Query
      * @param Pattern $a         The node left of the relationship
      * @param Pattern $b         The node right of the relationship
      * @param array   $direction The direction of the relationship, should be either:
-     * - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
-	 * - Relationship::DIR_LEFT (for a relation of (a)<--(b))
-	 * - Relationship::DIR_UNI (for a relation of (a)--(b))
+     *                           - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
+     *                           - Relationship::DIR_LEFT (for a relation of (a)<--(b))
+     *                           - Relationship::DIR_UNI (for a relation of (a)--(b))
      *
      * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
      *
@@ -112,27 +112,27 @@ class Query
         }
     }
 
-	/**
-	 * Creates a list of expressions.
-	 *
-	 * @param Expression[] $expressions
-	 * @return ExpressionList
-	 */
+    /**
+     * Creates a list of expressions.
+     *
+     * @param  Expression[] $expressions
+     * @return ExpressionList
+     */
     public static function list(array $expressions): ExpressionList
-	{
-    	return new ExpressionList($expressions);
-	}
+    {
+        return new ExpressionList($expressions);
+    }
 
-	/**
-	 * Creates a property map.
-	 *
-	 * @param Expression[] $properties The map of properties as a number of key-expression pairs
-	 * @return PropertyMap
-	 */
-	public static function map(array $properties): PropertyMap
-	{
-		return new PropertyMap($properties);
-	}
+    /**
+     * Creates a property map.
+     *
+     * @param  Expression[] $properties The map of properties as a number of key-expression pairs
+     * @return PropertyMap
+     */
+    public static function map(array $properties): PropertyMap
+    {
+        return new PropertyMap($properties);
+    }
 
     /**
      * Creates the MATCH clause.

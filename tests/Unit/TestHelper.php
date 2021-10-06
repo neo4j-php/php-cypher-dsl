@@ -83,16 +83,16 @@ trait TestHelper
         return $mock;
     }
 
-	/**
-	 * @param string $variable
-	 * @param TestCase $testCase
-	 * @return Variable|MockObject
-	 */
+    /**
+     * @param  string   $variable
+     * @param  TestCase $testCase
+     * @return Variable|MockObject
+     */
     public function getVariableMock(string $variable, TestCase $testCase): Variable
-	{
-		$mock = $testCase->getMockBuilder(Variable::class)->disableOriginalConstructor()->getMock();
-		$mock->method('toQuery')->willReturn($variable);
+    {
+        $mock = $testCase->getMockBuilder(Variable::class)->disableOriginalConstructor()->getMock();
+        $mock->method('toQuery')->willReturn($variable);
 
-		return $mock;
-	}
+        return $mock;
+    }
 }

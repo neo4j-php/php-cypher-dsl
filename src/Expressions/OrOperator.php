@@ -28,9 +28,9 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
  */
 class OrOperator extends BinaryOperator
 {
-	/**
-	 * @inheritDoc
-	 */
+    /**
+     * @inheritDoc
+     */
     protected function getOperator(): string
     {
         return "OR";

@@ -31,79 +31,79 @@ use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
  */
 class CallProcedureClause extends Clause
 {
-	/**
-	 * @var string The procedure to call
-	 */
-	private string $procedure;
+    /**
+     * @var string The procedure to call
+     */
+    private string $procedure;
 
-	/**
-	 * @var Expression[] The arguments passed to the procedure
-	 */
-	private array $arguments = [];
+    /**
+     * @var Expression[] The arguments passed to the procedure
+     */
+    private array $arguments = [];
 
-	/**
-	 * Sets the procedure to call. This can be for instance "apoc.load.json". This
-	 * procedure name is passed unescaped to the query.
-	 *
-	 * @param string $procedure
-	 * @return CallProcedureClause
-	 */
-	public function setProcedure(string $procedure): self
-	{
-		$this->procedure = $procedure;
+    /**
+     * Sets the procedure to call. This can be for instance "apoc.load.json". This
+     * procedure name is passed unescaped to the query.
+     *
+     * @param  string $procedure
+     * @return CallProcedureClause
+     */
+    public function setProcedure(string $procedure): self
+    {
+        $this->procedure = $procedure;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Sets the arguments to pass to this procedure call. This overwrites any previously passed
-	 * arguments.
-	 *
-	 * @param Expression[] $arguments
-	 * @return CallProcedureClause
-	 */
-	public function withArguments(array $arguments): self
-	{
-		$this->arguments = $arguments;
+    /**
+     * Sets the arguments to pass to this procedure call. This overwrites any previously passed
+     * arguments.
+     *
+     * @param  Expression[] $arguments
+     * @return CallProcedureClause
+     */
+    public function withArguments(array $arguments): self
+    {
+        $this->arguments = $arguments;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Add an argument to pass to this procedure call.
-	 *
-	 * @param Expression $argument
-	 * @return CallProcedureClause
-	 */
-	public function addArgument(Expression $argument): self
-	{
-		$this->arguments[] = $argument;
+    /**
+     * Add an argument to pass to this procedure call.
+     *
+     * @param  Expression $argument
+     * @return CallProcedureClause
+     */
+    public function addArgument(Expression $argument): self
+    {
+        $this->arguments[] = $argument;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getClause(): string
-	{
-		return "CALL";
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getClause(): string
+    {
+        return "CALL";
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getSubject(): string
-	{
-		if (!isset($this->procedure)) {
-			return "";
-		}
+    /**
+     * @inheritDoc
+     */
+    protected function getSubject(): string
+    {
+        if (!isset($this->procedure)) {
+            return "";
+        }
 
-		$arguments = implode(
-			", ",
-			array_map(fn (Expression $pattern): string => $pattern->toQuery(), $this->arguments)
-		);
+        $arguments = implode(
+            ", ",
+            array_map(fn (Expression $pattern): string => $pattern->toQuery(), $this->arguments)
+        );
 
-		return sprintf("%s(%s)", $this->procedure, $arguments);
-	}
+        return sprintf("%s(%s)", $this->procedure, $arguments);
+    }
 }

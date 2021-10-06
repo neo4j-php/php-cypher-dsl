@@ -33,25 +33,25 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class LabelTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$expression = $this->getExpressionMock("foo", $this);
-		$label = "Bar";
+    public function testToQuery()
+    {
+        $expression = $this->getExpressionMock("foo", $this);
+        $label = "Bar";
 
-		$label = new Label($expression, $label);
+        $label = new Label($expression, $label);
 
-		$this->assertSame("foo:Bar", $label->toQuery());
-	}
+        $this->assertSame("foo:Bar", $label->toQuery());
+    }
 
-	public function testLabelIsEscaped()
-	{
-		$expression = $this->getExpressionMock("foo", $this);
-		$label = "{}";
+    public function testLabelIsEscaped()
+    {
+        $expression = $this->getExpressionMock("foo", $this);
+        $label = "{}";
 
-		$label = new Label($expression, $label);
+        $label = new Label($expression, $label);
 
-		$this->assertSame("foo:`{}`", $label->toQuery());
-	}
+        $this->assertSame("foo:`{}`", $label->toQuery());
+    }
 }

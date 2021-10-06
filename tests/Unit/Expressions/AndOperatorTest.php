@@ -33,16 +33,16 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class AndOperatorTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$and = new AndOperator($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
+    public function testToQuery()
+    {
+        $and = new AndOperator($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
 
-		$this->assertSame("(a AND b)", $and->toQuery());
+        $this->assertSame("(a AND b)", $and->toQuery());
 
-		$and = new AndOperator($and, $and);
+        $and = new AndOperator($and, $and);
 
-		$this->assertSame("((a AND b) AND (a AND b))", $and->toQuery());
-	}
+        $this->assertSame("((a AND b) AND (a AND b))", $and->toQuery());
+    }
 }

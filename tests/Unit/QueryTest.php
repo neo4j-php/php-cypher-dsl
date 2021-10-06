@@ -86,18 +86,18 @@ class QueryTest extends TestCase
     }
 
     public function testList()
-	{
-		$list = Query::list([]);
+    {
+        $list = Query::list([]);
 
-		$this->assertInstanceOf(ExpressionList::class, $list);
-	}
+        $this->assertInstanceOf(ExpressionList::class, $list);
+    }
 
-	public function testMap()
-	{
-		$map = Query::map([]);
+    public function testMap()
+    {
+        $map = Query::map([]);
 
-		$this->assertInstanceOf(PropertyMap::class, $map);
-	}
+        $this->assertInstanceOf(PropertyMap::class, $map);
+    }
 
     public function testMatch()
     {

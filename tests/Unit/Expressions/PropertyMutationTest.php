@@ -34,16 +34,16 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class PropertyMutationTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$mutation = new PropertyMutation($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
+    public function testToQuery()
+    {
+        $mutation = new PropertyMutation($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
 
-		$this->assertSame("(a += b)", $mutation->toQuery());
+        $this->assertSame("(a += b)", $mutation->toQuery());
 
-		$mutation = new PropertyMutation($mutation, $mutation);
+        $mutation = new PropertyMutation($mutation, $mutation);
 
-		$this->assertSame("((a += b) += (a += b))", $mutation->toQuery());
-	}
+        $this->assertSame("((a += b) += (a += b))", $mutation->toQuery());
+    }
 }
