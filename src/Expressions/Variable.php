@@ -48,17 +48,6 @@ class Variable extends Expression
     }
 
     /**
-     * Returns the property of the given name for this variable.
-     *
-     * @param  string $property
-     * @return Property
-     */
-    public function property(string $property): Property
-    {
-        return new Property($this, $property);
-    }
-
-    /**
      * @inheritDoc
      */
     public function toQuery(): string
