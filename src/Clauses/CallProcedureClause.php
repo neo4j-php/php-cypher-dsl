@@ -22,7 +22,6 @@
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
-use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 
 /**
  * This class represents a CALL (CALL procedure) clause.

@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
 
-use WikibaseSolutions\CypherDSL\Expressions\Functions\Any;
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Expressions\Functions\Any;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**

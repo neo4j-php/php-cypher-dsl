@@ -21,10 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
-use WikibaseSolutions\CypherDSL\Expressions\Inequality;
 use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
