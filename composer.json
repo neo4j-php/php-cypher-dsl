@@ -1,5 +1,5 @@
 {
-  "name": "wikibase/php-cypher-dsl",
+  "name": "wikibase-solutions/php-cypher-dsl",
   "description": "A PHP DSL for the Cypher Query Language",
   "type": "library",
   "homepage": "https://wikibase-solutions.com",
