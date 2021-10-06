@@ -31,6 +31,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Query;
 
 /**
@@ -71,6 +72,11 @@ class QueryTest extends TestCase
 
             $this->assertEquals($expected, $actual);
         }
+    }
+
+    public function testVariable()
+    {
+        $this->assertInstanceOf(Variable::class, Query::variable("foo"));
     }
 
     /**
