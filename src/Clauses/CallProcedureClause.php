@@ -21,29 +21,63 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Expressions\Expression;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 
 /**
- * This class represents a CALL clause.
+ * This class represents a CALL (CALL procedure) clause.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/clauses/create/
+ * @see https://neo4j.com/docs/cypher-manual/current/clauses/call/
  */
-class CreateClause extends Clause
+class CallProcedureClause extends Clause
 {
 	/**
-	 * @var Pattern[] The patterns to create
+	 * @var string The procedure to call
 	 */
-	private array $patterns = [];
+	private string $procedure;
 
 	/**
-	 * Add a pattern to create.
-	 *
-	 * @param  Pattern $pattern The pattern to create
-	 * @return CreateClause
+	 * @var Expression[] The arguments passed to the procedure
 	 */
-	public function addPattern(Pattern $pattern): self
+	private array $arguments = [];
+
+	/**
+	 * Sets the procedure to call. This can be for instance "apoc.load.json". This
+	 * procedure name is passed unescaped to the query.
+	 *
+	 * @param string $procedure
+	 * @return CallProcedureClause
+	 */
+	public function setProcedure(string $procedure): self
 	{
-		$this->patterns[] = $pattern;
+		$this->procedure = $procedure;
+
+		return $this;
+	}
+
+	/**
+	 * Sets the arguments to pass to this procedure call. This overwrites any previously passed
+	 * arguments.
+	 *
+	 * @param Expression[] $arguments
+	 * @return CallProcedureClause
+	 */
+	public function withArguments(array $arguments): self
+	{
+		$this->arguments = $arguments;
+
+		return $this;
+	}
+
+	/**
+	 * Add an argument to pass to this procedure call.
+	 *
+	 * @param Expression $argument
+	 * @return CallProcedureClause
+	 */
+	public function addArgument(Expression $argument): self
+	{
+		$this->arguments[] = $argument;
 
 		return $this;
 	}
@@ -53,7 +87,7 @@ class CreateClause extends Clause
 	 */
 	protected function getClause(): string
 	{
-		return "CREATE";
+		return "CALL";
 	}
 
 	/**
@@ -61,9 +95,15 @@ class CreateClause extends Clause
 	 */
 	protected function getSubject(): string
 	{
-		return implode(
+		if (!isset($this->procedure)) {
+			return "";
+		}
+
+		$arguments = implode(
 			", ",
-			array_map(fn (Pattern $pattern): string => $pattern->toQuery(), $this->patterns)
+			array_map(fn (Expression $pattern): string => $pattern->toQuery(), $this->arguments)
 		);
+
+		return sprintf("%s(%s)", $this->procedure, $arguments);
 	}
 }
