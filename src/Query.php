@@ -36,6 +36,7 @@ use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
@@ -44,6 +45,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
 
 class Query
 {
@@ -72,10 +74,9 @@ class Query
      * @param Pattern $a         The node left of the relationship
      * @param Pattern $b         The node right of the relationship
      * @param array   $direction The direction of the relationship, should be either:
-     *                           - Relationship::DIR_RIGHT (for a relation of
-     *                           (a)-->(b)) - Relationship::DIR_LEFT (for a relation
-     *                           of (a)<--(b)) - Relationship::DIR_UNI (for a
-     *                           relation of (a)--(b))                    
+     * - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
+	 * - Relationship::DIR_LEFT (for a relation of (a)<--(b))
+	 * - Relationship::DIR_UNI (for a relation of (a)--(b))
      *
      * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
      *
@@ -110,6 +111,28 @@ class Query
             throw new InvalidArgumentException("The literal type " . $literalType . " is not supported by Cypher");
         }
     }
+
+	/**
+	 * Creates a list of expressions.
+	 *
+	 * @param Expression[] $expressions
+	 * @return ExpressionList
+	 */
+    public static function list(array $expressions): ExpressionList
+	{
+    	return new ExpressionList($expressions);
+	}
+
+	/**
+	 * Creates a property map.
+	 *
+	 * @param Expression[] $properties The map of properties as a number of key-expression pairs
+	 * @return PropertyMap
+	 */
+	public static function map(array $properties): PropertyMap
+	{
+		return new PropertyMap($properties);
+	}
 
     /**
      * Creates the MATCH clause.

@@ -55,9 +55,9 @@ abstract class Expression implements QueryConvertable
 	 * Add this expression to the given expression.
 	 *
 	 * @param Expression $right
-	 * @return Expression
+	 * @return Addition
 	 */
-	public function plus(Expression $right): Expression
+	public function plus(Expression $right): Addition
 	{
 		return new Addition($this, $right);
 	}
@@ -66,9 +66,9 @@ abstract class Expression implements QueryConvertable
 	 * Create a conjunction between this expression and the given expression.
 	 *
 	 * @param Expression $right
-	 * @return Expression
+	 * @return AndOperator
 	 */
-	public function and(Expression $right): Expression
+	public function and(Expression $right): AndOperator
 	{
 		return new AndOperator($this, $right);
 	}
@@ -77,9 +77,9 @@ abstract class Expression implements QueryConvertable
 	 * Check whether this expression the given expression.
 	 *
 	 * @param Expression $right
-	 * @return Expression
+	 * @return Contains
 	 */
-	public function contains(Expression $right): Expression
+	public function contains(Expression $right): Contains
 	{
 		return new Contains($this, $right);
 	}
@@ -88,86 +88,210 @@ abstract class Expression implements QueryConvertable
 	 * Divide this expression by the given expression.
 	 *
 	 * @param Expression $right
-	 * @return Expression
+	 * @return Division
 	 */
-	public function divideBy(Expression $right): Expression
+	public function divide(Expression $right): Division
 	{
 		return new Division($this, $right);
 	}
 
-	public function endsWith(Expression $right): Expression
+	/**
+	 * Perform a suffix string search with the given expression.
+	 *
+	 * @param Expression $right
+	 * @return EndsWith
+	 */
+	public function endsWith(Expression $right): EndsWith
 	{
-		// TODO
+		return new EndsWith($this, $right);
 	}
 
-	public function equals(Expression $right): Expression
+	/**
+	 * Perform an equality check or an assignment with the given expression.
+	 *
+	 * @param Expression $right
+	 * @return Equality
+	 */
+	public function equals(Expression $right): Equality
 	{
-		// TODO
+		return new Equality($this, $right);
 	}
 
-	public function exponentiate(Expression $right): Expression
+	/**
+	 * Perform an exponentiation with the given expression.
+	 *
+	 * @param Expression $right
+	 * @return Exponentiation
+	 */
+	public function exponentiate(Expression $right): Exponentiation
 	{
-		// TODO
+		return new Exponentiation($this, $right);
 	}
 
-	public function gt(Expression $right): Expression
+	/**
+	 * Perform a greater than comparison against the given expression.
+	 *
+	 * @param Expression $right
+	 * @return GreaterThan
+	 */
+	public function gt(Expression $right): GreaterThan
 	{
-		// TODO
+		return new GreaterThan($this, $right);
 	}
 
-	public function gte(Expression $right): Expression
+	/**
+	 * Perform a greater than or equal comparison against the given expression.
+	 *
+	 * @param Expression $right
+	 * @return GreaterThanOrEqual
+	 */
+	public function gte(Expression $right): GreaterThanOrEqual
 	{
-		// TODO
+		return new GreaterThanOrEqual($this, $right);
 	}
 
-	public function notEquals(Expression $right): Expression
+	/**
+	 * Perform a inequality comparison against the given expression.
+	 *
+	 * @param Expression $right
+	 * @return Inequality
+	 */
+	public function notEquals(Expression $right): Inequality
 	{
-		// TODO
+		return new Inequality($this, $right);
 	}
 
-	public function lt(Expression $right): Expression
+	/**
+	 * Perform a less than comparison against the given expression.
+	 *
+	 * @param Expression $right
+	 * @return LessThan
+	 */
+	public function lt(Expression $right): LessThan
 	{
-		// TODO
+		return new LessThan($this, $right);
 	}
 
-	public function lte(Expression $right): Expression
+	/**
+	 * Perform a less than or equal comparison against the given expression.
+	 *
+	 * @param Expression $right
+	 * @return LessThanOrEqual
+	 */
+	public function lte(Expression $right): LessThanOrEqual
 	{
-		// TODO
+		return new LessThanOrEqual($this, $right);
 	}
 
-	public function mod(Expression $right): Expression
+	/**
+	 * Perform the modulo operation with the given expression.
+	 *
+	 * @param Expression $right
+	 * @return Modulo
+	 */
+	public function mod(Expression $right): Modulo
 	{
-		// TODO
+		return new Modulo($this, $right);
 	}
 
-	public function times(Expression $expression): Expression
+	/**
+	 * Perform a multiplication with the given expression.
+	 *
+	 * @param Expression $right
+	 * @return Multiplication
+	 */
+	public function times(Expression $right): Multiplication
 	{
-		// TODO
+		return new Multiplication($this, $right);
 	}
 
-	public function or(Expression $expression): Expression
+	/**
+	 * Create a disjunction between this expression and the given expression.
+	 *
+	 * @param Expression $right
+	 * @return OrOperator
+	 */
+	public function or(Expression $right): OrOperator
 	{
-		// TODO
+		return new OrOperator($this, $right);
 	}
 
-	public function propertyReplacement(Expression $expression): Expression
+	/**
+	 * Perform a plus-equals (+=) assignment with the given expression.
+	 *
+	 * @param Expression $right
+	 * @return PropertyMutation
+	 */
+	public function plusEquals(Expression $right): PropertyMutation
 	{
-		// TODO
+		return new PropertyMutation($this, $right);
 	}
 
-	public function startsWith(Expression $expression): Expression
+	/**
+	 * Perform a prefix string search with the given expression.
+	 *
+	 * @param Expression $right
+	 * @return StartsWith
+	 */
+	public function startsWith(Expression $right): StartsWith
 	{
-		// TODO
+		return new StartsWith($this, $right);
 	}
 
-	public function minus(Expression $expression): Expression
+	/**
+	 * Subtract the given expression from this expression.
+	 *
+	 * @param Expression $right
+	 * @return Subtraction
+	 */
+	public function minus(Expression $right): Subtraction
 	{
-		// TODO
+		return new Subtraction($this, $right);
 	}
 
-	public function xor(Expression $expression): Expression
+	/**
+	 * Perform an XOR with the given expression.
+	 *
+	 * @param Expression $right
+	 * @return XorOperator
+	 */
+	public function xor(Expression $right): XorOperator
 	{
-		// TODO
+		return new XorOperator($this, $right);
+	}
+
+	/**
+	 * Add a label to this expression. For instance, if this expression is the variable "foo",
+	 * a function call like $expression->labeled("bar") would yield "foo:bar".
+	 *
+	 * @param string $label
+	 * @return Label
+	 */
+	public function labeled(string $label): Label
+	{
+		return new Label($this, $label);
+	}
+
+	/**
+	 * Returns the property of the given name for this expression. For instance, if this expression is the
+	 * variable "foo", a function call like $expression->property("bar") would yield "foo.bar".
+	 *
+	 * @param string $property
+	 * @return Property
+	 */
+	public function property(string $property): Property
+	{
+		return new Property($this, $property);
+	}
+
+	/**
+	 * Negate this expression.
+	 *
+	 * @return Minus
+	 */
+	public function negate(): Minus
+	{
+		return new Minus($this);
 	}
 
     /**
