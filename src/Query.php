@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL;
 
 use InvalidArgumentException;
+use WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\Clauses\CreateClause;
 use WikibaseSolutions\CypherDSL\Clauses\DeleteClause;
@@ -37,6 +38,7 @@ use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
 use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
+use WikibaseSolutions\CypherDSL\Expressions\Functions\FunctionCall;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
@@ -54,6 +56,16 @@ class Query
      * @var Clause[] $clauses
      */
     public array $clauses = [];
+
+    /**
+     * Construct a new Query instance.
+     *
+     * @return Query
+     */
+    public static function new(): self
+    {
+        return new Query();
+    }
 
     /**
      * Creates a node.
@@ -175,18 +187,26 @@ class Query
     /**
      * Creates the RETURN clause.
      *
-     * @param Expression  $expression The expression to return
-     * @param string|null $alias      The alias of this column
+     * @param Expression[]|Expression $expressions The expressions to return; if the array-key is
+     *                                             non-numerical, it is used as the alias
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
      *
      * @return $this
      */
-    public function returning(Expression $expression, string $alias = ""): self
+    public function returning($expressions): self
     {
         $returnClause = new ReturnClause();
-        $returnClause->addColumn($expression, $alias);
+
+        if ($expressions instanceof Expression) {
+            $expressions = [$expressions];
+        }
+
+        foreach ($expressions as $maybeAlias => $expression) {
+            $alias = is_integer($maybeAlias) ? "" : $maybeAlias;
+            $returnClause->addColumn($expression, $alias);
+        }
 
         $this->clauses[] = $returnClause;
 
@@ -367,16 +387,23 @@ class Query
     /**
      * Creates the REMOVE clause.
      *
-     * @param Expression $expression The expression to remove (should either be a Node or a Property)
+     * @param Expression[]|Expression $expressions The expressions to remove (should either be a Node or a Property)
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/remove/
      *
      * @return $this
      */
-    public function remove(Expression $expression): self
+    public function remove($expressions): self
     {
         $removeClause = new RemoveClause();
-        $removeClause->addExpression($expression);
+
+        if ($expressions instanceof Expression) {
+            $expressions = [$expressions];
+        }
+
+        foreach ($expressions as $expression) {
+            $removeClause->addExpression($expression);
+        }
 
         $this->clauses[] = $removeClause;
 
@@ -404,7 +431,7 @@ class Query
             $setClause->addExpression($expression);
         }
 
-           $this->clauses[] = $setClause;
+        $this->clauses[] = $setClause;
 
         return $this;
     }
@@ -423,7 +450,7 @@ class Query
         $whereClause = new WhereClause();
         $whereClause->setExpression($expression);
 
-           $this->clauses[] = $whereClause;
+        $this->clauses[] = $whereClause;
 
         return $this;
     }
@@ -431,19 +458,63 @@ class Query
     /**
      * Creates the WITH clause.
      *
-     * @param Expression $expression The entry to add
-     * @param string     $alias      An optional entry alias
+     * @param Expression[]|Expression $expressions The entries to add; if the array-key is
+     *                                             non-numerical, it is used as the alias
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/with/
      *
      * @return Query
      */
-    public function with(Expression $expression, string $alias = ""): self
+    public function with($expressions): self
     {
         $withClause = new WithClause();
-        $withClause->addEntry($expression, $alias);
 
-           $this->clauses[] = $withClause;
+        if ($expressions instanceof Expression) {
+            $expressions = [$expressions];
+        }
+
+        foreach ($expressions as $maybeAlias => $expression) {
+            $alias = is_integer($maybeAlias) ? "" : $maybeAlias;
+            $withClause->addEntry($expression, $alias);
+        }
+
+        $this->clauses[] = $withClause;
+
+        return $this;
+    }
+
+    /**
+     * Creates the CALL procedure clause.
+     *
+     * @param string $procedure The procedure to call
+     * @param array  $arguments The arguments passed to the procedure
+     * @param array  $yields    The results field that will be returned
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/call/
+     *
+     * @return Query
+     */
+    public function callProcedure(string $procedure, array $arguments = [], array $yields = []): self
+    {
+        $callProcedureClause = new CallProcedureClause();
+        $callProcedureClause->setProcedure($procedure);
+        $callProcedureClause->withArguments($arguments);
+        $callProcedureClause->yields($yields);
+
+        $this->clauses[] = $callProcedureClause;
+
+        return $this;
+    }
+
+    /**
+     * Add a clause to the query.
+     *
+     * @param  Clause $clause
+     * @return Query
+     */
+    public function addClause(Clause $clause): self
+    {
+        $this->clauses[] = $clause;
 
         return $this;
     }

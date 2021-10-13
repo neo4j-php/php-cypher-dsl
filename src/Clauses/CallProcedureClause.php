@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 
 /**
  * This class represents a CALL (CALL procedure) clause.
@@ -41,8 +42,16 @@ class CallProcedureClause extends Clause
     private array $arguments = [];
 
     /**
+     * @var Variable[] The results field that will be returned
+     */
+    private array $yieldParameters = [];
+
+    /**
      * Sets the procedure to call. This can be for instance "apoc.load.json". This
      * procedure name is passed unescaped to the query.
+     *
+     * @note The given procedure name is not escaped before being inserted into the
+     * query.
      *
      * @param  string $procedure
      * @return CallProcedureClause
@@ -82,6 +91,20 @@ class CallProcedureClause extends Clause
     }
 
     /**
+     * Used to explicitly select which available result fields are returned as newly-bound
+     * variables.
+     *
+     * @param  Variable[] $variables
+     * @return CallProcedureClause
+     */
+    public function yields(array $variables): self
+    {
+        $this->yieldParameters = $variables;
+
+        return $this;
+    }
+
+    /**
      * @inheritDoc
      */
     protected function getClause(): string
@@ -103,6 +126,15 @@ class CallProcedureClause extends Clause
             array_map(fn (Expression $pattern): string => $pattern->toQuery(), $this->arguments)
         );
 
-        return sprintf("%s(%s)", $this->procedure, $arguments);
+        if (count($this->yieldParameters) > 0) {
+            $yieldParameters = implode(
+                ", ",
+                array_map(fn (Variable $variable): string => $variable->toQuery(), $this->yieldParameters)
+            );
+
+            return sprintf("%s(%s) YIELD %s", $this->procedure, $arguments, $yieldParameters);
+        } else {
+            return sprintf("%s(%s)", $this->procedure, $arguments);
+        }
     }
 }

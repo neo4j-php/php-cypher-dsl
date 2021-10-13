@@ -88,4 +88,19 @@ class CallProcedureTest extends TestCase
 
         $this->assertSame("CALL apoc.json('text')", $callProcedureClause->toQuery());
     }
+
+    public function testWithYield()
+    {
+        $callProcedureClause = new CallProcedureClause();
+        $callProcedureClause->setProcedure("apoc.json");
+
+        $a = $this->getVariableMock("a", $this);
+        $b = $this->getVariableMock("b", $this);
+        $c = $this->getVariableMock("c", $this);
+
+        // This should overwrite the previous calls to addArgument
+        $callProcedureClause->yields([$a, $b, $c]);
+
+        $this->assertSame("CALL apoc.json() YIELD a, b, c", $callProcedureClause->toQuery());
+    }
 }

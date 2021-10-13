@@ -132,37 +132,4 @@ class Node extends Pattern
 
         return "($nodeInner)";
     }
-
-    /**
-     * Creates a new relationship from this node to the given pattern.
-     *
-     * @param  Pattern $pattern
-     * @return Relationship
-     */
-    public function relationshipTo(Pattern $pattern): Relationship
-    {
-        return new Relationship($this, $pattern, Relationship::DIR_RIGHT);
-    }
-
-    /**
-     * Creates a new relationship from the given pattern to this node.
-     *
-     * @param  Pattern $pattern
-     * @return Relationship
-     */
-    public function relationshipFrom(Pattern $pattern): Relationship
-    {
-        return new Relationship($this, $pattern, Relationship::DIR_LEFT);
-    }
-
-    /**
-     * Creates a new unidirectional relationship between this node and the given pattern.
-     *
-     * @param  Pattern $pattern
-     * @return Relationship
-     */
-    public function relationshipUni(Pattern $pattern): Relationship
-    {
-        return new Relationship($this, $pattern, Relationship::DIR_UNI);
-    }
 }

@@ -56,7 +56,7 @@ abstract class FunctionCall extends Expression
      * @param  Expression $predicate A predicate that is tested against all items in the list
      * @return FunctionCall
      */
-    public function any(Expression $variable, Expression $list, Expression $predicate): FunctionCall
+    public static function any(Expression $variable, Expression $list, Expression $predicate): FunctionCall
     {
         return new Any($variable, $list, $predicate);
     }
@@ -69,7 +69,7 @@ abstract class FunctionCall extends Expression
      * @param  Expression $expression A pattern or property
      * @return FunctionCall
      */
-    public function exists(Expression $expression): FunctionCall
+    public static function exists(Expression $expression): FunctionCall
     {
         return new Exists($expression);
     }
@@ -84,7 +84,7 @@ abstract class FunctionCall extends Expression
      * @param  Expression $list An expression that returns a list
      * @return FunctionCall
      */
-    public function isEmpty(Expression $list): FunctionCall
+    public static function isEmpty(Expression $list): FunctionCall
     {
         return new IsEmpty($list);
     }
@@ -99,7 +99,7 @@ abstract class FunctionCall extends Expression
      * @param  Expression $predicate A predicate that is tested against all items in the list
      * @return FunctionCall
      */
-    public function none(Expression $variable, Expression $list, Expression $predicate): FunctionCall
+    public static function none(Expression $variable, Expression $list, Expression $predicate): FunctionCall
     {
         return new None($variable, $list, $predicate);
     }
@@ -114,7 +114,7 @@ abstract class FunctionCall extends Expression
      * @param  Expression $predicate A predicate that is tested against all items in the list
      * @return FunctionCall
      */
-    public function single(Expression $variable, Expression $list, Expression $predicate): FunctionCall
+    public static function single(Expression $variable, Expression $list, Expression $predicate): FunctionCall
     {
         return new Single($variable, $list, $predicate);
     }

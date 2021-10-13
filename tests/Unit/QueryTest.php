@@ -126,7 +126,7 @@ class QueryTest extends TestCase
 
         $this->assertSame("RETURN (m:Movie)", $statement);
 
-        $statement = (new Query())->returning($m, "n")->build();
+        $statement = (new Query())->returning(["n" => $m])->build();
 
         $this->assertSame("RETURN (m:Movie) AS n", $statement);
     }
@@ -261,9 +261,39 @@ class QueryTest extends TestCase
 
         $this->assertSame("WITH a < b", $statement);
 
-        $statement = (new Query())->with($expression, "foobar")->build();
+        $statement = (new Query())->with(["foobar" => $expression])->build();
 
         $this->assertSame("WITH a < b AS foobar", $statement);
+    }
+
+    public function testCallProcedure()
+    {
+        $procedure = "apoc.json";
+
+        $statement = (new Query())->callProcedure($procedure)->build();
+
+        $this->assertSame("CALL apoc.json()", $statement);
+
+        $expression = $this->getExpressionMock("a < b", $this);
+
+        $statement = (new Query())->callProcedure($procedure, [$expression])->build();
+
+        $this->assertSame("CALL apoc.json(a < b)", $statement);
+
+        $variable = $this->getVariableMock("a", $this);
+
+        $statement = (new Query())->callProcedure($procedure, [$expression], [$variable])->build();
+
+        $this->assertSame("CALL apoc.json(a < b) YIELD a", $statement);
+    }
+
+    public function testAddClause()
+    {
+        $clauseMockText = "FOOBAR foobar";
+        $clauseMock = $this->getClauseMock($clauseMockText, $this);
+        $statement = (new Query())->addClause($clauseMock)->build();
+
+        $this->assertSame($clauseMockText, $statement);
     }
 
     public function testBuild()
@@ -283,7 +313,7 @@ class QueryTest extends TestCase
 
         $query = new Query();
         $statement = $query->match([$patternMock, $patternMock])
-            ->returning($patternMock, "#")
+            ->returning(["#" => $patternMock])
             ->create([$patternMock, $patternMock])
             ->create($patternMock)
             ->delete([$patternMock, $patternMock])
@@ -295,7 +325,7 @@ class QueryTest extends TestCase
             ->remove($patternMock)
             ->set([$patternMock, $patternMock])
             ->where($patternMock)
-            ->with($patternMock, "#")
+            ->with(["#" => $patternMock])
             ->build();
 
         $this->assertSame("MATCH (a), (a) RETURN (a) AS `#` CREATE (a), (a) CREATE (a) DELETE (a), (a) DETACH DELETE (a), (a) LIMIT (a) MERGE (a) OPTIONAL MATCH (a), (a) ORDER BY a.b, a.b DESCENDING REMOVE (a) SET (a), (a) WHERE (a) WITH (a) AS `#`", $statement);
