@@ -314,16 +314,26 @@ class Query
     /**
      * Creates the MERGE clause.
      *
-     * @param Pattern $pattern The pattern to merge
+     * @param Pattern     $pattern      The pattern to merge
+     * @param Clause|null $createClause The clause to execute when the pattern is created
+     * @param Clause|null $matchClause  The clause to execute when the pattern is matched
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/
      *
      * @return $this
      */
-    public function merge(Pattern $pattern): self
+    public function merge(Pattern $pattern, Clause $createClause = null, Clause $matchClause = null): self
     {
         $mergeClause = new MergeClause();
         $mergeClause->setPattern($pattern);
+
+        if (isset($createClause)) {
+            $mergeClause->setOnCreate($createClause);
+        }
+
+        if (isset($matchClause)) {
+            $mergeClause->setOnMatch($matchClause);
+        }
 
         $this->clauses[] = $mergeClause;
 

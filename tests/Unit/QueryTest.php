@@ -186,6 +186,13 @@ class QueryTest extends TestCase
         $statement = (new Query())->merge($pattern)->build();
 
         $this->assertSame("MERGE (m)", $statement);
+
+        $onCreate = $this->getClauseMock("DELETE (m:Movie)", $this);
+        $onMatch = $this->getClauseMock("CREATE (m:Movie)", $this);
+
+        $statement = (new Query())->merge($pattern, $onCreate, $onMatch)->build();
+
+        $this->assertSame("MERGE (m) ON CREATE DELETE (m:Movie) ON MATCH CREATE (m:Movie)", $statement);
     }
 
     public function testOptionalMatch()

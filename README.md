@@ -10,7 +10,7 @@ The `php-cypher-dsl` library provides a way to programmatically construct advanc
 
 ### Requirements
 
-`php-cypher-dsl` 1.0.0 requires PHP 7.4 or greater; using the latest version of PHP is highly recommended.
+`php-cypher-dsl` requires PHP 7.4 or greater; using the latest version of PHP is highly recommended.
 
 ### Installation through Composer
 
