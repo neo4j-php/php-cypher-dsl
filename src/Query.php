@@ -43,6 +43,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
+use WikibaseSolutions\CypherDSL\Expressions\Parameter;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Relationship;
@@ -159,6 +160,18 @@ class Query
     }
 
     /**
+     * Creates a parameter.
+     *
+     * @param  string $parameter The name of the parameter; may only consist of alphanumeric characters and
+     *                           underscores
+     * @return Parameter
+     */
+    public static function parameter(string $parameter): Parameter
+    {
+        return new Parameter($parameter);
+    }
+
+    /**
      * Creates the MATCH clause.
      *
      * @param Pattern|Pattern[] $patterns A single pattern or a list of patterns
@@ -189,6 +202,7 @@ class Query
      *
      * @param Expression[]|Expression $expressions The expressions to return; if the array-key is
      *                                             non-numerical, it is used as the alias
+     * @param bool                    $distinct
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias

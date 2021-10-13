@@ -28,6 +28,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
+use WikibaseSolutions\CypherDSL\Expressions\Parameter;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
@@ -78,6 +79,11 @@ class QueryTest extends TestCase
     {
         $this->assertInstanceOf(Variable::class, Query::variable("foo"));
     }
+
+    public function testParameter()
+	{
+		$this->assertInstanceOf(Parameter::class, Query::parameter("foo"));
+	}
 
     /**
      * @dataProvider provideLiteralData
