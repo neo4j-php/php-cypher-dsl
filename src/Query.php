@@ -195,7 +195,7 @@ class Query
      *
      * @return $this
      */
-    public function returning($expressions): self
+    public function returning($expressions, bool $distinct = false): self
     {
         $returnClause = new ReturnClause();
 
@@ -207,6 +207,8 @@ class Query
             $alias = is_integer($maybeAlias) ? "" : $maybeAlias;
             $returnClause->addColumn($expression, $alias);
         }
+
+        $returnClause->setDistinct($distinct);
 
         $this->clauses[] = $returnClause;
 
