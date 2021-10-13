@@ -1,25 +1,39 @@
 {
   "name": "wikibase-solutions/php-cypher-dsl",
   "description": "A PHP DSL for the Cypher Query Language",
+  "version": "1.0.0",
   "type": "library",
-  "homepage": "https://wikibase-solutions.com",
   "keywords": [
     "neo4j",
     "cypher",
     "dsl",
-    "graph"
+    "graph",
+    "querybuilder",
+    "query",
+    "builder"
   ],
+  "homepage": "https://wikibase-solutions.com",
   "license": "GPL-2.0-or-later",
   "authors": [
     {
       "name": "Marijn van Wezel",
+      "email": "marijn@wikibase.nl",
+      "homepage": "https://wikibase-solutions.com/author/marijn",
       "role": "Developer"
     },
     {
       "name": "Lars Akkermans",
+      "email": "lars@wikibase.nl",
+      "homepage": "https://wikibase-solutions.com/author/lars",
       "role": "Developer"
     }
   ],
+  "support": {
+    "email": "info@wikibase-solutions.com",
+    "issues": "https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/issues",
+    "wiki": "https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/home",
+    "source": "https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl"
+  },
   "require": {
     "php": ">=7.4",
     "ext-ctype": "*"
@@ -40,5 +54,6 @@
   "scripts": {
     "test": "phpunit tests/"
   },
-  "minimum-stability": "dev"
+  "minimum-stability": "stable",
+  "prefer-stable": true
 }
