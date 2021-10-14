@@ -21,12 +21,14 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
+use WikibaseSolutions\CypherDSL\Expressions\Types\NumeralType;
+
 /**
  * Represents the application of the division (/) operator.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-mathematical
  */
-class Division extends BinaryOperator
+class Division extends BinaryOperator implements NumeralType
 {
     /**
      * @inheritDoc

@@ -19,31 +19,35 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Types;
 
-use WikibaseSolutions\CypherDSL\Expressions\Types\BooleanType;
-use WikibaseSolutions\CypherDSL\Expressions\Types\NumeralType;
+use WikibaseSolutions\CypherDSL\Expressions\Equality;
+use WikibaseSolutions\CypherDSL\Expressions\Inequality;
 
 /**
- * Represents the application of the greater than (>) operator.
- *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
+ * This trait should be used by any function that returns a list.
  */
-class GreaterThan extends BinaryOperator implements BooleanType
+trait ListTypeTrait
 {
     /**
-     * @inheritDoc
+     * Perform an equality check or an assignment with the given expression.
+     *
+     * @param  AnyType $right
+     * @return Equality
      */
-    public function __construct(NumeralType $left, NumeralType $right)
+    public function equals(AnyType $right): Equality
     {
-        parent::__construct($left, $right);
+        return new Equality($this, $right);
     }
 
     /**
-     * @inheritDoc
+     * Perform an inequality comparison against the given expression.
+     *
+     * @param  AnyType $right
+     * @return Inequality
      */
-    protected function getOperator(): string
+    public function notEquals(AnyType $right): Inequality
     {
-        return ">";
+        return new Inequality($this, $right);
     }
 }

@@ -21,10 +21,12 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
+use WikibaseSolutions\CypherDSL\Expressions\Types\BooleanType;
+
 /**
  * Represents a boolean (true or false) literal.
  */
-class Boolean extends Literal
+class Boolean extends Literal implements BooleanType
 {
     /**
      * @var bool The value

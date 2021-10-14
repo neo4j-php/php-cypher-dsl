@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
 use WikibaseSolutions\CypherDSL\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Expressions\Types\MapType;
 
 /**
  * This class represents a map of properties. For example, this class can represent the following
@@ -31,7 +32,7 @@ use WikibaseSolutions\CypherDSL\EscapeTrait;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-properties
  */
-class PropertyMap extends Expression
+class PropertyMap extends Expression implements MapType
 {
     use EscapeTrait;
 

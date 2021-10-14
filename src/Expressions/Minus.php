@@ -21,24 +21,26 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
+use WikibaseSolutions\CypherDSL\Expressions\Types\NumeralType;
+
 /**
  * This class represents an application of the unary minus operator.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#syntax-using-the-unary-minus-operator
  */
-class Minus extends Expression
+class Minus extends Expression implements NumeralType
 {
     /**
-     * @var Expression The expression to negate
+     * @var NumeralType The expression to negate
      */
-    private Expression $expression;
+    private NumeralType $expression;
 
     /**
      * Minus constructor.
      *
-     * @param Expression $expression The expression to negate
+     * @param NumeralType $expression The expression to negate
      */
-    public function __construct(Expression $expression)
+    public function __construct(NumeralType $expression)
     {
         $this->expression = $expression;
     }

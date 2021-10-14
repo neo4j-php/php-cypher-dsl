@@ -21,13 +21,15 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
+use WikibaseSolutions\CypherDSL\Expressions\Types\StringType;
+
 /**
  * Represents a string literal. The name of this class diverges from the naming scheme, because a class
  * in PHP cannot be named "String".
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/expressions/#cypher-expressions-string-literals
  */
-class StringLiteral extends Literal
+class StringLiteral extends Literal implements StringType
 {
     /**
      * @var string

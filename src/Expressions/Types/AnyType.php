@@ -19,31 +19,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Types;
 
-use WikibaseSolutions\CypherDSL\Expressions\Types\BooleanType;
-use WikibaseSolutions\CypherDSL\Expressions\Types\NumeralType;
+use WikibaseSolutions\CypherDSL\QueryConvertable;
 
 /**
- * Represents the application of the greater than (>) operator.
+ * Represents any type in Cypher.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
+ * @note This interface should not be implemented by any class, except for interfaces
+ * in this namespace.
  */
-class GreaterThan extends BinaryOperator implements BooleanType
+interface AnyType extends QueryConvertable
 {
-    /**
-     * @inheritDoc
-     */
-    public function __construct(NumeralType $left, NumeralType $right)
-    {
-        parent::__construct($left, $right);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function getOperator(): string
-    {
-        return ">";
-    }
 }

@@ -21,13 +21,23 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
+use WikibaseSolutions\CypherDSL\Expressions\Types\BooleanType;
+
 /**
  * Represents the application of the exclusive or (XOR) operator.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-boolean
  */
-class XorOperator extends BinaryOperator
+class XorOperator extends BinaryOperator implements BooleanType
 {
+    /**
+     * @inheritDoc
+     */
+    public function __construct(BooleanType $left, BooleanType $right)
+    {
+        parent::__construct($left, $right);
+    }
+
     /**
      * @inheritDoc
      */

@@ -21,10 +21,12 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
+use WikibaseSolutions\CypherDSL\Expressions\Types\NumeralType;
+
 /**
  * Represents a decimal (integer or float) literal.
  */
-class Decimal extends Literal
+class Decimal extends Literal implements NumeralType
 {
     /**
      * @var string The value

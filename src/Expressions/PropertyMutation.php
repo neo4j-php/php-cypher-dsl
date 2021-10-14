@@ -21,6 +21,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
+use WikibaseSolutions\CypherDSL\Expressions\Types\MapType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\NodeType;
+
 /**
  * Represents the application of the property mutation (+=) operator.
  *
@@ -28,6 +31,14 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
  */
 class PropertyMutation extends BinaryOperator
 {
+    /**
+     * @inheritDoc
+     */
+    public function __construct(NodeType $left, MapType $right)
+    {
+        parent::__construct($left, $right);
+    }
+
     /**
      * @inheritDoc
      */

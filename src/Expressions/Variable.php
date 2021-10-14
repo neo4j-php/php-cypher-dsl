@@ -22,13 +22,21 @@
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
 use WikibaseSolutions\CypherDSL\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Expressions\Types\BooleanType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\ListType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\MapType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\NodeType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\NumeralType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\PatternType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\RelationshipType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\StringType;
 
 /**
  * Represents a variable.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/variables/
  */
-class Variable extends Expression
+class Variable extends Expression implements BooleanType, ListType, MapType, NodeType, NumeralType, RelationshipType, StringType
 {
     use EscapeTrait;
 

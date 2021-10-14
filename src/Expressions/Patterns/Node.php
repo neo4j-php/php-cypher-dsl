@@ -23,6 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Patterns;
 
 use WikibaseSolutions\CypherDSL\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
+use WikibaseSolutions\CypherDSL\Expressions\Types\NodeType;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 
 /**
@@ -30,7 +31,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Variable;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
  */
-class Node extends Pattern
+class Node extends Pattern implements NodeType
 {
     use EscapeTrait;
 

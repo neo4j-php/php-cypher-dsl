@@ -22,18 +22,24 @@
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
 use WikibaseSolutions\CypherDSL\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Expressions\Types\BooleanType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\ListType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\MapType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\NodeType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\NumeralType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\StringType;
 
 /**
- * Represents a property. A property in Cypher would be something like "n.prop" or "n.a.b".
+ * Represents a property. A property in Cypher would be something like "n.prop" or "n.a".
  */
-class Property extends Expression
+class Property extends Expression implements BooleanType, NumeralType, StringType, MapType, ListType
 {
     use EscapeTrait;
 
     /**
-     * @var Expression The expression to which this property belongs
+     * @var NodeType The expression to which this property belongs
      */
-    private Expression $expression;
+    private NodeType $expression;
 
     /**
      * @var string The name of the property
@@ -43,10 +49,10 @@ class Property extends Expression
     /**
      * Property constructor.
      *
-     * @param Expression $expression
+     * @param NodeType $expression
      * @param string     $property
      */
-    public function __construct(Expression $expression, string $property)
+    public function __construct(NodeType $expression, string $property)
     {
         $this->expression = $expression;
         $this->property = $property;

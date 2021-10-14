@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Expressions\Patterns;
 
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Expressions\Types\PatternType;
 
 /**
  * Marker interface that represents a pattern. A pattern describes the shape of the data you are looking for.
@@ -33,10 +34,10 @@ abstract class Pattern extends Expression
     /**
      * Creates a new relationship from this node to the given pattern.
      *
-     * @param  Pattern $pattern
+     * @param  PatternType $pattern
      * @return Relationship
      */
-    public function relationshipTo(Pattern $pattern): Relationship
+    public function relationshipTo(PatternType $pattern): Relationship
     {
         return new Relationship($this, $pattern, Relationship::DIR_RIGHT);
     }
@@ -44,10 +45,10 @@ abstract class Pattern extends Expression
     /**
      * Creates a new relationship from the given pattern to this node.
      *
-     * @param  Pattern $pattern
+     * @param  PatternType $pattern
      * @return Relationship
      */
-    public function relationshipFrom(Pattern $pattern): Relationship
+    public function relationshipFrom(PatternType $pattern): Relationship
     {
         return new Relationship($this, $pattern, Relationship::DIR_LEFT);
     }
@@ -55,10 +56,10 @@ abstract class Pattern extends Expression
     /**
      * Creates a new unidirectional relationship between this node and the given pattern.
      *
-     * @param  Pattern $pattern
+     * @param  PatternType $pattern
      * @return Relationship
      */
-    public function relationshipUni(Pattern $pattern): Relationship
+    public function relationshipUni(PatternType $pattern): Relationship
     {
         return new Relationship($this, $pattern, Relationship::DIR_UNI);
     }

@@ -22,11 +22,12 @@
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
 use WikibaseSolutions\CypherDSL\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Expressions\Types\NodeType;
 
 /**
  * Represents a label. A label in Cypher would be something like "n:German" or "n:German:Swedish".
  */
-class Label extends Expression
+class Label extends Expression implements NodeType
 {
     use EscapeTrait;
 

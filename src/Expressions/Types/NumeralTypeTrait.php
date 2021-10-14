@@ -19,31 +19,36 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Types;
 
-use WikibaseSolutions\CypherDSL\Expressions\Types\BooleanType;
-use WikibaseSolutions\CypherDSL\Expressions\Types\NumeralType;
+use WikibaseSolutions\CypherDSL\Expressions\Addition;
+use WikibaseSolutions\CypherDSL\Expressions\Division;
+use WikibaseSolutions\CypherDSL\Expressions\Expression;
 
 /**
- * Represents the application of the greater than (>) operator.
- *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
+ * This trait should be used by any function that returns a numeral.
  */
-class GreaterThan extends BinaryOperator implements BooleanType
+trait NumeralTypeTrait
 {
     /**
-     * @inheritDoc
+     * Add this expression to the given expression.
+     *
+     * @param  NumeralType $right
+     * @return Addition
      */
-    public function __construct(NumeralType $left, NumeralType $right)
+    public function plus(NumeralType $right): Addition
     {
-        parent::__construct($left, $right);
+        return new Addition($this, $right);
     }
 
     /**
-     * @inheritDoc
+     * Divide this expression by the given expression.
+     *
+     * @param  NumeralType $right
+     * @return Division
      */
-    protected function getOperator(): string
+    public function divide(NumeralType $right): Division
     {
-        return ">";
+        return new Division($this, $right);
     }
 }

@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
 
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Expressions\Types\ListOrMapOrStringType;
 
 /**
  * This class represents the "isEmpty()" function.
@@ -31,9 +31,9 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
 class IsEmpty extends FunctionCall
 {
     /**
-     * @var Expression An expression that returns a list
+     * @var ListOrMapOrStringType An expression that returns a list
      */
-    private Expression $list;
+    private ListOrMapOrStringType $list;
 
     /**
      * IsEmpty constructor. The signature of the "isEmpty()" function is:
@@ -42,9 +42,9 @@ class IsEmpty extends FunctionCall
      * isEmpty(input :: MAP?) :: (BOOLEAN?) - to check whether a map is empty
      * isEmpty(input :: STRING?) :: (BOOLEAN?) - to check whether a string is empty
      *
-     * @param Expression $list An expression that returns a list
+     * @param ListOrMapOrStringType $list An expression that returns a list
      */
-    public function __construct(Expression $list)
+    public function __construct(ListOrMapOrStringType $list)
     {
         $this->list = $list;
     }

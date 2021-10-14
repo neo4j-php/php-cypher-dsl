@@ -21,12 +21,14 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
+use WikibaseSolutions\CypherDSL\Expressions\Types\BooleanType;
+
 /**
  * Represents the application of the inequality (<>) operator.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
  */
-class Inequality extends BinaryOperator
+class Inequality extends BinaryOperator implements BooleanType
 {
     /**
      * @inheritDoc

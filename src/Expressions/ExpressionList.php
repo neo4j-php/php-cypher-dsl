@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
 use WikibaseSolutions\CypherDSL\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Expressions\Types\ListType;
 
 /**
  * This class represents a list of expressions. For example, this class can represent the following
@@ -31,7 +32,7 @@ use WikibaseSolutions\CypherDSL\EscapeTrait;
  *
  * @see PropertyMap for a construct that takes keys into account
  */
-class ExpressionList extends Expression
+class ExpressionList extends Expression implements ListType
 {
     use EscapeTrait;
 

@@ -22,13 +22,18 @@
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
 use WikibaseSolutions\CypherDSL\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Expressions\Types\BooleanType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\ListType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\MapType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\NumeralType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\StringType;
 
 /**
  * Represents a parameter.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/parameters/
  */
-class Parameter extends Expression
+class Parameter extends Expression implements BooleanType, ListType, MapType, NumeralType, StringType
 {
     use EscapeTrait;
 

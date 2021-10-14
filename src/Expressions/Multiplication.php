@@ -21,13 +21,23 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
+use WikibaseSolutions\CypherDSL\Expressions\Types\NumeralType;
+
 /**
  * Represents the application of the multiplication (*) operator.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-mathematical
  */
-class Multiplication extends BinaryOperator
+class Multiplication extends BinaryOperator implements NumeralType
 {
+    /**
+     * @inheritDoc
+     */
+    public function __construct(NumeralType $left, NumeralType $right)
+    {
+        parent::__construct($left, $right);
+    }
+
     /**
      * @inheritDoc
      */

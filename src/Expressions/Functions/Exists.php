@@ -21,28 +21,29 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
 
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Expressions\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\BooleanType;
 
 /**
  * This class represents the "exists()" function.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-exists
  */
-class Exists extends FunctionCall
+class Exists extends FunctionCall implements BooleanType
 {
     /**
-     * @var Expression A pattern or property
+     * @var AnyType A pattern or property
      */
-    private Expression $expression;
+    private AnyType $expression;
 
     /**
      * Exists constructor. The signature of the "exists()" function is:
      *
      * exists(input :: ANY?) :: (BOOLEAN?)
      *
-     * @param Expression $expression A pattern or property
+     * @param AnyType $expression A pattern or property
      */
-    public function __construct(Expression $expression)
+    public function __construct(AnyType $expression)
     {
         $this->expression = $expression;
     }

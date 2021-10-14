@@ -21,40 +21,46 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
 
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Expressions\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\BooleanType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Expressions\Types\ListType;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 
 /**
  * Represents the "any()" function.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-any
  */
-class Any extends FunctionCall
+class Any extends FunctionCall implements BooleanType
 {
-    /**
-     * @var Expression A variable that can be used from within the predicate
-     */
-    private Expression $variable;
+    use BooleanTypeTrait;
 
     /**
-     * @var Expression An expression that returns a list
+     * @var Variable A variable that can be used from within the predicate
      */
-    private Expression $list;
+    private Variable $variable;
 
     /**
-     * @var Expression A predicate that is tested against all items in the list
+     * @var ListType A list
      */
-    private Expression $predicate;
+    private ListType $list;
+
+    /**
+     * @var AnyType A predicate that is tested against all items in the list
+     */
+    private AnyType $predicate;
 
     /**
      * Any constructor. The signature of the "any()" function is:
      *
      * any(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
      *
-     * @param Expression $variable  A variable that can be used from within the predicate
-     * @param Expression $list      An expression that returns a list
-     * @param Expression $predicate A predicate that is tested against all items in the list
+     * @param Variable    $variable  A variable that can be used from within the predicate
+     * @param ListType    $list      A list
+     * @param AnyType     $predicate A predicate that is tested against all items in the list
      */
-    public function __construct(Expression $variable, Expression $list, Expression $predicate)
+    public function __construct(Variable $variable, ListType $list, AnyType $predicate)
     {
         $this->variable = $variable;
         $this->list = $list;

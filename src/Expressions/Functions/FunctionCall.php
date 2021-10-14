@@ -22,6 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
 
 use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Expressions\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\BooleanType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\ListOrMapOrStringType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\ListType;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\QueryConvertable;
 
 /**
@@ -36,12 +41,12 @@ abstract class FunctionCall extends Expression
      *
      * all(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
      *
-     * @param  Expression $variable  A variable that can be used from within the predicate
-     * @param  Expression $list      An expression that returns a list
-     * @param  Expression $predicate A predicate that is tested against all items in the list
+     * @param Variable    $variable  A variable that can be used from within the predicate
+     * @param ListType    $list      A list
+     * @param AnyType     $predicate A predicate that is tested against all items in the list
      * @return FunctionCall
      */
-    public static function all(Expression $variable, Expression $list, Expression $predicate): FunctionCall
+    public static function all(Variable $variable, ListType $list, AnyType $predicate): FunctionCall
     {
         return new All($variable, $list, $predicate);
     }
@@ -51,12 +56,13 @@ abstract class FunctionCall extends Expression
      *
      * any(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
      *
-     * @param  Expression $variable  A variable that can be used from within the predicate
-     * @param  Expression $list      An expression that returns a list
-     * @param  Expression $predicate A predicate that is tested against all items in the list
+     * @param Variable    $variable  A variable that can be used from within the predicate
+     * @param ListType    $list      A list
+     * @param AnyType     $predicate A predicate that is tested against all items in the list
+     *
      * @return FunctionCall
      */
-    public static function any(Expression $variable, Expression $list, Expression $predicate): FunctionCall
+    public static function any(Variable $variable, ListType $list, AnyType $predicate): FunctionCall
     {
         return new Any($variable, $list, $predicate);
     }
@@ -66,10 +72,10 @@ abstract class FunctionCall extends Expression
      *
      * exists(input :: ANY?) :: (BOOLEAN?)
      *
-     * @param  Expression $expression A pattern or property
+     * @param  AnyType $expression A pattern or property
      * @return FunctionCall
      */
-    public static function exists(Expression $expression): FunctionCall
+    public static function exists(AnyType $expression): FunctionCall
     {
         return new Exists($expression);
     }
@@ -81,10 +87,10 @@ abstract class FunctionCall extends Expression
      * isEmpty(input :: MAP?) :: (BOOLEAN?) - to check whether a map is empty
      * isEmpty(input :: STRING?) :: (BOOLEAN?) - to check whether a string is empty
      *
-     * @param  Expression $list An expression that returns a list
+     * @param  ListOrMapOrStringType $list An expression that returns a list
      * @return FunctionCall
      */
-    public static function isEmpty(Expression $list): FunctionCall
+    public static function isEmpty(ListOrMapOrStringType $list): FunctionCall
     {
         return new IsEmpty($list);
     }
@@ -94,12 +100,13 @@ abstract class FunctionCall extends Expression
      *
      * none(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
      *
-     * @param  Expression $variable  A variable that can be used from within the predicate
-     * @param  Expression $list      An expression that returns a list
-     * @param  Expression $predicate A predicate that is tested against all items in the list
+     * @param Variable    $variable  A variable that can be used from within the predicate
+     * @param ListType    $list      A list
+     * @param AnyType     $predicate A predicate that is tested against all items in the list
+     *
      * @return FunctionCall
      */
-    public static function none(Expression $variable, Expression $list, Expression $predicate): FunctionCall
+    public static function none(Variable $variable, ListType $list, AnyType $predicate): FunctionCall
     {
         return new None($variable, $list, $predicate);
     }
@@ -109,12 +116,13 @@ abstract class FunctionCall extends Expression
      *
      * single(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
      *
-     * @param  Expression $variable  A variable that can be used from within the predicate
-     * @param  Expression $list      An expression that returns a list
-     * @param  Expression $predicate A predicate that is tested against all items in the list
+     * @param Variable    $variable  A variable that can be used from within the predicate
+     * @param ListType    $list      A list
+     * @param AnyType     $predicate A predicate that is tested against all items in the list
+     *
      * @return FunctionCall
      */
-    public static function single(Expression $variable, Expression $list, Expression $predicate): FunctionCall
+    public static function single(Variable $variable, ListType $list, AnyType $predicate): FunctionCall
     {
         return new Single($variable, $list, $predicate);
     }

@@ -21,28 +21,30 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
+use WikibaseSolutions\CypherDSL\Expressions\Types\AnyType;
+
 /**
  * This class represents the application of a binary operator, such as "+", "/" and "*".
  */
 abstract class BinaryOperator extends Expression
 {
     /**
-     * @var Expression The left-hand of the expression
+     * @var AnyType The left-hand of the expression
      */
-    private Expression $left;
+    private AnyType $left;
 
     /**
-     * @var Expression The right-hand of the expression
+     * @var AnyType The right-hand of the expression
      */
-    private Expression $right;
+    private AnyType $right;
 
     /**
-     * Plus constructor.
+     * BinaryOperator constructor.
      *
-     * @param Expression $left  The left-hand of the expression
-     * @param Expression $right The right-hand of the expression
+     * @param AnyType $left  The left-hand of the expression
+     * @param AnyType $right The right-hand of the expression
      */
-    public function __construct(Expression $left, Expression $right)
+    public function __construct(AnyType $left, AnyType $right)
     {
         $this->left = $left;
         $this->right = $right;

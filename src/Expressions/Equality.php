@@ -21,6 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
+use WikibaseSolutions\CypherDSL\Expressions\Types\BooleanType;
+
 /**
  * Represents the application of the equality (=) operator. This operator is also used for assigning
  * values to properties.
@@ -28,7 +30,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/#set-remove-properties-using-empty-map
  */
-class Equality extends BinaryOperator
+class Equality extends BinaryOperator implements BooleanType
 {
     /**
      * @inheritDoc

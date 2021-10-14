@@ -24,6 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Patterns;
 use InvalidArgumentException;
 use WikibaseSolutions\CypherDSL\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
+use WikibaseSolutions\CypherDSL\Expressions\Types\PatternType;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 
 /**
@@ -41,14 +42,14 @@ class Relationship extends Pattern
     const DIR_UNI = ["-", "-"];
 
     /**
-     * @var Pattern The pattern left of the relationship
+     * @var PatternType The pattern left of the relationship
      */
-    private Pattern $a;
+    private PatternType $a;
 
     /**
-     * @var Pattern The pattern right of the relationship
+     * @var PatternType The pattern right of the relationship
      */
-    private Pattern $b;
+    private PatternType $b;
 
     /**
      * @var array The direction of the relationship
@@ -73,15 +74,15 @@ class Relationship extends Pattern
     /**
      * Relationship constructor.
      *
-     * @param Pattern $a         The node left of the relationship
-     * @param Pattern $b         The node right of the relationship
+     * @param PatternType $a     The node left of the relationship
+     * @param PatternType $b     The node right of the relationship
      * @param array   $direction The direction of the relationship, should be either:
      *                           - Relationship::DIR_RIGHT (for a relation of
      *                           (a)-->(b)) - Relationship::DIR_LEFT (for a relation
      *                           of (a)<--(b)) - Relationship::DIR_UNI (for a
      *                           relation of (a)--(b))                    
      */
-    public function __construct(Pattern $a, Pattern $b, array $direction)
+    public function __construct(PatternType $a, PatternType $b, array $direction)
     {
         $this->a = $a;
         $this->b = $b;

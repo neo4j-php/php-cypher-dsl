@@ -21,13 +21,23 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
+use WikibaseSolutions\CypherDSL\Expressions\Types\NumeralType;
+
 /**
  * Represents the application of the exponentiation (+) operator.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#syntax-using-the-exponentiation-operator
  */
-class Exponentiation extends BinaryOperator
+class Exponentiation extends BinaryOperator implements NumeralType
 {
+    /**
+     * @inheritDoc
+     */
+    public function __construct(NumeralType $left, NumeralType $right)
+    {
+        parent::__construct($left, $right);
+    }
+
     /**
      * @inheritDoc
      */

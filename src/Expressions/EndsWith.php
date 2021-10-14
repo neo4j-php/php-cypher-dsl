@@ -21,13 +21,27 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
+use WikibaseSolutions\CypherDSL\Expressions\Types\BooleanType;
+use WikibaseSolutions\CypherDSL\Expressions\Types\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Expressions\Types\StringType;
+
 /**
  * Represents the application of the case-sensitive suffix search (ENDS WITH) operator.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operator-comparison-string-specific
  */
-class EndsWith extends BinaryOperator
+class EndsWith extends BinaryOperator implements BooleanType
 {
+    use BooleanTypeTrait;
+
+    /**
+     * @inheritDoc
+     */
+    public function __construct(StringType $left, StringType $right)
+    {
+        parent::__construct($left, $right);
+    }
+
     /**
      * @inheritDoc
      */

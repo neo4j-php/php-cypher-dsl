@@ -21,13 +21,23 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
+use WikibaseSolutions\CypherDSL\Expressions\Types\BooleanType;
+
 /**
  * Represents the application of the disjunction (OR) operator.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-boolean
  */
-class OrOperator extends BinaryOperator
+class OrOperator extends BinaryOperator implements BooleanType
 {
+    /**
+     * @inheritDoc
+     */
+    public function __construct(BooleanType $left, BooleanType $right)
+    {
+        parent::__construct($left, $right);
+    }
+
     /**
      * @inheritDoc
      */

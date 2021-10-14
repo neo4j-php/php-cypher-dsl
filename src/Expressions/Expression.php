@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
+use WikibaseSolutions\CypherDSL\Expressions\Types\AnyType;
 use WikibaseSolutions\CypherDSL\QueryConvertable;
 
 /**
@@ -51,27 +52,7 @@ use WikibaseSolutions\CypherDSL\QueryConvertable;
  */
 abstract class Expression implements QueryConvertable
 {
-    /**
-     * Add this expression to the given expression.
-     *
-     * @param  Expression $right
-     * @return Addition
-     */
-    public function plus(Expression $right): Addition
-    {
-        return new Addition($this, $right);
-    }
 
-    /**
-     * Create a conjunction between this expression and the given expression.
-     *
-     * @param  Expression $right
-     * @return AndOperator
-     */
-    public function and(Expression $right): AndOperator
-    {
-        return new AndOperator($this, $right);
-    }
 
     /**
      * Check whether this expression the given expression.
@@ -84,16 +65,7 @@ abstract class Expression implements QueryConvertable
         return new Contains($this, $right);
     }
 
-    /**
-     * Divide this expression by the given expression.
-     *
-     * @param  Expression $right
-     * @return Division
-     */
-    public function divide(Expression $right): Division
-    {
-        return new Division($this, $right);
-    }
+
 
     /**
      * Perform a suffix string search with the given expression.
@@ -104,17 +76,6 @@ abstract class Expression implements QueryConvertable
     public function endsWith(Expression $right): EndsWith
     {
         return new EndsWith($this, $right);
-    }
-
-    /**
-     * Perform an equality check or an assignment with the given expression.
-     *
-     * @param  Expression $right
-     * @return Equality
-     */
-    public function equals(Expression $right): Equality
-    {
-        return new Equality($this, $right);
     }
 
     /**
@@ -148,17 +109,6 @@ abstract class Expression implements QueryConvertable
     public function gte(Expression $right): GreaterThanOrEqual
     {
         return new GreaterThanOrEqual($this, $right);
-    }
-
-    /**
-     * Perform a inequality comparison against the given expression.
-     *
-     * @param  Expression $right
-     * @return Inequality
-     */
-    public function notEquals(Expression $right): Inequality
-    {
-        return new Inequality($this, $right);
     }
 
     /**
@@ -206,28 +156,6 @@ abstract class Expression implements QueryConvertable
     }
 
     /**
-     * Create a disjunction between this expression and the given expression.
-     *
-     * @param  Expression $right
-     * @return OrOperator
-     */
-    public function or(Expression $right): OrOperator
-    {
-        return new OrOperator($this, $right);
-    }
-
-    /**
-     * Perform a plus-equals (+=) assignment with the given expression.
-     *
-     * @param  Expression $right
-     * @return PropertyMutation
-     */
-    public function plusEquals(Expression $right): PropertyMutation
-    {
-        return new PropertyMutation($this, $right);
-    }
-
-    /**
      * Perform a prefix string search with the given expression.
      *
      * @param  Expression $right
@@ -247,17 +175,6 @@ abstract class Expression implements QueryConvertable
     public function minus(Expression $right): Subtraction
     {
         return new Subtraction($this, $right);
-    }
-
-    /**
-     * Perform an XOR with the given expression.
-     *
-     * @param  Expression $right
-     * @return XorOperator
-     */
-    public function xor(Expression $right): XorOperator
-    {
-        return new XorOperator($this, $right);
     }
 
     /**
