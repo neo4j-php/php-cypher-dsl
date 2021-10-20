@@ -31,6 +31,7 @@ use WikibaseSolutions\CypherDSL\Clauses\MatchClause;
 use WikibaseSolutions\CypherDSL\Clauses\MergeClause;
 use WikibaseSolutions\CypherDSL\Clauses\OptionalMatchClause;
 use WikibaseSolutions\CypherDSL\Clauses\OrderByClause;
+use WikibaseSolutions\CypherDSL\Clauses\RawClause;
 use WikibaseSolutions\CypherDSL\Clauses\RemoveClause;
 use WikibaseSolutions\CypherDSL\Clauses\ReturnClause;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
@@ -49,6 +50,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Expressions\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
+use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 
 class Query
@@ -170,6 +172,31 @@ class Query
     {
         return new Parameter($parameter);
     }
+
+	/**
+	 * Creates a raw expression.
+	 *
+	 * @param string $expression The raw expression
+	 * @return Expression
+	 */
+    public static function rawExpression(string $expression): Expression
+	{
+		return new RawExpression($expression);
+	}
+
+	/**
+	 * Adds a raw clause to this query.
+	 *
+	 * @param string $clause The name of the clause; for instance "MATCH"
+	 * @param string $subject The subject/body of the clause
+	 * @return Query
+	 */
+	public function raw(string $clause, string $subject): self
+	{
+		$this->clauses[] = new RawClause($clause, $subject);
+
+		return $this;
+	}
 
     /**
      * Creates the MATCH clause.

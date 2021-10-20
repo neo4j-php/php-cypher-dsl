@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Expressions\Expression;
 use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
 use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
@@ -110,6 +111,20 @@ class QueryTest extends TestCase
 
         $this->assertInstanceOf(PropertyMap::class, $map);
     }
+
+    public function testRawExpression()
+	{
+		$expression = Query::rawExpression("foobar(3 > 4)");
+
+		$this->assertInstanceOf(Expression::class, $expression);
+	}
+
+	public function testRaw()
+	{
+		$statement = (new Query())->raw("UNIMPLEMENTED", "clause body")->build();
+
+		$this->assertSame("UNIMPLEMENTED clause body", $statement);
+	}
 
     public function testMatch()
     {
