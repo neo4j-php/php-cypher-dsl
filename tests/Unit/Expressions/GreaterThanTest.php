@@ -22,11 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\GreaterThan;
+use WikibaseSolutions\CypherDSL\GreaterThan;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\GreaterThan
+ * @covers \WikibaseSolutions\CypherDSL\GreaterThan
  */
 class GreaterThanTest extends TestCase
 {

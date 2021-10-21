@@ -22,11 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\OrOperator;
+use WikibaseSolutions\CypherDSL\OrOperator;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\OrOperator
+ * @covers \WikibaseSolutions\CypherDSL\OrOperator
  */
 class OrOperatorTest extends TestCase
 {

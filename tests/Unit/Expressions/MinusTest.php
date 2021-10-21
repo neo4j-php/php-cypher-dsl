@@ -22,11 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Minus;
+use WikibaseSolutions\CypherDSL\Minus;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Minus
+ * @covers \WikibaseSolutions\CypherDSL\Minus
  */
 class MinusTest extends TestCase
 {

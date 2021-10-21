@@ -22,11 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Contains;
+use WikibaseSolutions\CypherDSL\Contains;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Contains
+ * @covers \WikibaseSolutions\CypherDSL\Contains
  */
 class ContainsTest extends TestCase
 {

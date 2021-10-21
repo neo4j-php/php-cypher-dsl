@@ -22,11 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Equality;
+use WikibaseSolutions\CypherDSL\Equality;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Equality
+ * @covers \WikibaseSolutions\CypherDSL\Equality
  */
 class EqualityTest extends TestCase
 {

@@ -22,11 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Multiplication;
+use WikibaseSolutions\CypherDSL\Multiplication;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Multiplication
+ * @covers \WikibaseSolutions\CypherDSL\Multiplication
  */
 class MultiplicationTest extends TestCase
 {

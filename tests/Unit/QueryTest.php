@@ -22,17 +22,17 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
-use WikibaseSolutions\CypherDSL\Expressions\Label;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
-use WikibaseSolutions\CypherDSL\Expressions\Parameter;
-use WikibaseSolutions\CypherDSL\Expressions\Patterns\Node;
-use WikibaseSolutions\CypherDSL\Expressions\Patterns\Relationship;
-use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
-use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\ExpressionList;
+use WikibaseSolutions\CypherDSL\Label;
+use WikibaseSolutions\CypherDSL\Literals\Boolean;
+use WikibaseSolutions\CypherDSL\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\Literals\Literal;
+use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
+use WikibaseSolutions\CypherDSL\Parameter;
+use WikibaseSolutions\CypherDSL\Patterns\Node;
+use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\PropertyMap;
+use WikibaseSolutions\CypherDSL\Variable;
 use WikibaseSolutions\CypherDSL\Query;
 
 /**
@@ -65,10 +65,10 @@ class QueryTest extends TestCase
         $a = $this->getPatternMock("a", $this);
         $b = $this->getPatternMock("b", $this);
 
-        $directions = [Relationship::DIR_UNI, Relationship::DIR_LEFT, Relationship::DIR_RIGHT];
+        $directions = [Path::DIR_UNI, Path::DIR_LEFT, Path::DIR_RIGHT];
 
         foreach ($directions as $direction) {
-            $expected = new Relationship($a, $b, $direction);
+            $expected = new Path($a, $b, $direction);
             $actual = Query::relationship($a, $b, $direction);
 
             $this->assertEquals($expected, $actual);

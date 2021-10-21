@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * This class represents a WITH clause.
@@ -41,12 +41,12 @@ class WithClause extends Clause
     /**
      * Add a new entry to the WITH clause.
      *
-     * @param Expression $expression The entry to add
+     * @param AnyType $expression The entry to add
      * @param string     $alias      An optional entry alias
      *
      * @return WithClause
      */
-    public function addEntry(Expression $expression, string $alias = ""): self
+    public function addEntry(AnyType $expression, string $alias = ""): self
     {
         if ($alias !== "") {
             $this->expressions[$alias] = $expression;
@@ -76,7 +76,7 @@ class WithClause extends Clause
             $expressionQuery = $expression->toQuery();
             $expressions[] = is_int($alias) ?
             $expressionQuery :
-            sprintf("%s AS %s", $expressionQuery,  $this->escape($alias));
+            sprintf("%s AS %s", $expressionQuery, $this->escape($alias));
         }
 
         return implode(", ", $expressions);

@@ -22,11 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\PropertyMutation;
+use WikibaseSolutions\CypherDSL\PropertyMutation;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\PropertyMutation
+ * @covers \WikibaseSolutions\CypherDSL\PropertyMutation
  */
 class PropertyMutationTest extends TestCase
 {

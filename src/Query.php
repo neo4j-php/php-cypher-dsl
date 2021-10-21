@@ -36,20 +36,14 @@ use WikibaseSolutions\CypherDSL\Clauses\ReturnClause;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
-use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\FunctionCall;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
-use WikibaseSolutions\CypherDSL\Expressions\Parameter;
-use WikibaseSolutions\CypherDSL\Expressions\Patterns\Node;
-use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
-use WikibaseSolutions\CypherDSL\Expressions\Patterns\Relationship;
-use WikibaseSolutions\CypherDSL\Expressions\Property;
-use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
-use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Literals\Boolean;
+use WikibaseSolutions\CypherDSL\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
+use WikibaseSolutions\CypherDSL\Patterns\Node;
+use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 class Query
 {
@@ -85,20 +79,20 @@ class Query
     /**
      * Creates a relationship.
      *
-     * @param Pattern $a         The node left of the relationship
-     * @param Pattern $b         The node right of the relationship
+     * @param StructuralType $a         The node left of the relationship
+     * @param StructuralType $b         The node right of the relationship
      * @param array   $direction The direction of the relationship, should be either:
-     *                           - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
-     *                           - Relationship::DIR_LEFT (for a relation of (a)<--(b))
-     *                           - Relationship::DIR_UNI (for a relation of (a)--(b))
+     *                           - Path::DIR_RIGHT (for a relation of (a)-->(b))
+     *                           - Path::DIR_LEFT (for a relation of (a)<--(b))
+     *                           - Path::DIR_UNI (for a relation of (a)--(b))
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
+     * @return Path
+     *@see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
      *
-     * @return Relationship
      */
-    public static function relationship(Pattern $a, Pattern $b, array $direction): Relationship
+    public static function relationship(StructuralType $a, StructuralType $b, array $direction): Path
     {
-        return new Relationship($a, $b, $direction);
+        return new Path($a, $b, $direction);
     }
 
     /**
@@ -117,9 +111,9 @@ class Query
      * class based on the type of the value given.
      *
      * @param  integer|float|double|bool|string $literal The literal to construct
-     * @return Literal
+     * @return PropertyType
      */
-    public static function literal($literal): Literal
+    public static function literal($literal): PropertyType
     {
         $literalType = gettype($literal);
 
@@ -140,7 +134,7 @@ class Query
     /**
      * Creates a list of expressions.
      *
-     * @param  Expression[] $expressions
+     * @param  AnyType[] $expressions
      * @return ExpressionList
      */
     public static function list(array $expressions): ExpressionList
@@ -151,7 +145,7 @@ class Query
     /**
      * Creates a property map.
      *
-     * @param  Expression[] $properties The map of properties as a number of key-expression pairs
+     * @param  AnyType[] $properties The map of properties as a number of key-expression pairs
      * @return PropertyMap
      */
     public static function map(array $properties): PropertyMap
@@ -174,7 +168,7 @@ class Query
     /**
      * Creates the MATCH clause.
      *
-     * @param Pattern|Pattern[] $patterns A single pattern or a list of patterns
+     * @param StructuralType|StructuralType[] $patterns A single pattern or a list of patterns
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/
      *
@@ -184,7 +178,7 @@ class Query
     {
         $matchClause = new MatchClause();
 
-        if ($patterns instanceof Pattern) {
+        if ($patterns instanceof StructuralType) {
             $patterns = [$patterns];
         }
 
@@ -200,7 +194,7 @@ class Query
     /**
      * Creates the RETURN clause.
      *
-     * @param Expression[]|Expression $expressions The expressions to return; if the array-key is
+     * @param AnyType[]|AnyType $expressions The expressions to return; if the array-key is
      *                                             non-numerical, it is used as the alias
      * @param bool                    $distinct
      *
@@ -213,7 +207,7 @@ class Query
     {
         $returnClause = new ReturnClause();
 
-        if ($expressions instanceof Expression) {
+        if ($expressions instanceof AnyType) {
             $expressions = [$expressions];
         }
 
@@ -232,7 +226,7 @@ class Query
     /**
      * Creates the CREATE clause.
      *
-     * @param Pattern|Pattern[] $patterns A single pattern or a list of patterns
+     * @param StructuralType|StructuralType[] $patterns A single pattern or a list of patterns
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/create/
      *
@@ -242,7 +236,7 @@ class Query
     {
         $createClause = new CreateClause();
 
-        if ($patterns instanceof Pattern) {
+        if ($patterns instanceof StructuralType) {
             $patterns = [$patterns];
         }
 
@@ -258,7 +252,7 @@ class Query
     /**
      * Creates the DELETE clause.
      *
-     * @param Expression|Expression[] $expressions The nodes to delete
+     * @param AnyType|AnyType[] $expressions The nodes to delete
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
      *
@@ -268,7 +262,7 @@ class Query
     {
         $deleteClause = new DeleteClause();
 
-        if ($expressions instanceof Expression) {
+        if ($expressions instanceof AnyType) {
             $expressions = [$expressions];
         }
 
@@ -284,7 +278,7 @@ class Query
     /**
      * Creates the DETACH DELETE clause.
      *
-     * @param Expression|Expression[] $expressions The nodes to delete
+     * @param AnyType|AnyType[] $expressions The nodes to delete
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
      *
@@ -295,7 +289,7 @@ class Query
         $deleteClause = new DeleteClause();
         $deleteClause->setDetach(true);
 
-        if ($expressions instanceof Expression) {
+        if ($expressions instanceof AnyType) {
             $expressions = [$expressions];
         }
 
@@ -311,13 +305,13 @@ class Query
     /**
      * Creates the LIMIT clause.
      *
-     * @param Expression $expression An expression that returns an integer
+     * @param AnyType $expression An expression that returns an integer
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/limit/
      *
      * @return $this
      */
-    public function limit(Expression $expression): self
+    public function limit(AnyType $expression): self
     {
         $limitClause = new LimitClause();
         $limitClause->setExpression($expression);
@@ -330,7 +324,7 @@ class Query
     /**
      * Creates the MERGE clause.
      *
-     * @param Pattern     $pattern      The pattern to merge
+     * @param StructuralType     $pattern      The pattern to merge
      * @param Clause|null $createClause The clause to execute when the pattern is created
      * @param Clause|null $matchClause  The clause to execute when the pattern is matched
      *
@@ -338,7 +332,7 @@ class Query
      *
      * @return $this
      */
-    public function merge(Pattern $pattern, Clause $createClause = null, Clause $matchClause = null): self
+    public function merge(StructuralType $pattern, Clause $createClause = null, Clause $matchClause = null): self
     {
         $mergeClause = new MergeClause();
         $mergeClause->setPattern($pattern);
@@ -359,7 +353,7 @@ class Query
     /**
      * Creates the OPTIONAL MATCH clause.
      *
-     * @param Pattern|Pattern[] $patterns A single pattern or a list of patterns
+     * @param StructuralType|StructuralType[] $patterns A single pattern or a list of patterns
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/optional-match/
      *
@@ -369,7 +363,7 @@ class Query
     {
         $optionalMatchClause = new OptionalMatchClause();
 
-        if ($patterns instanceof Pattern) {
+        if ($patterns instanceof StructuralType) {
             $patterns = [$patterns];
         }
 
@@ -413,7 +407,7 @@ class Query
     /**
      * Creates the REMOVE clause.
      *
-     * @param Expression[]|Expression $expressions The expressions to remove (should either be a Node or a Property)
+     * @param AnyType[]|AnyType $expressions The expressions to remove (should either be a Node or a Property)
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/remove/
      *
@@ -423,7 +417,7 @@ class Query
     {
         $removeClause = new RemoveClause();
 
-        if ($expressions instanceof Expression) {
+        if ($expressions instanceof AnyType) {
             $expressions = [$expressions];
         }
 
@@ -439,7 +433,7 @@ class Query
     /**
      * Create the SET clause.
      *
-     * @param Expression|Expression[] $expressions A single expression or a list of expressions
+     * @param AnyType|AnyType[] $expressions A single expression or a list of expressions
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/
      *
@@ -449,7 +443,7 @@ class Query
     {
         $setClause = new SetClause();
 
-        if ($expressions instanceof Expression ) {
+        if ($expressions instanceof AnyType) {
             $expressions = [$expressions];
         }
 
@@ -465,13 +459,13 @@ class Query
     /**
      * Creates the WHERE clause.
      *
-     * @param Expression $expression The expression to match
+     * @param AnyType $expression The expression to match
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/
      *
      * @return $this
      */
-    public function where(Expression $expression): self
+    public function where(AnyType $expression): self
     {
         $whereClause = new WhereClause();
         $whereClause->setExpression($expression);
@@ -484,7 +478,7 @@ class Query
     /**
      * Creates the WITH clause.
      *
-     * @param Expression[]|Expression $expressions The entries to add; if the array-key is
+     * @param AnyType[]|AnyType $expressions The entries to add; if the array-key is
      *                                             non-numerical, it is used as the alias
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/with/
@@ -495,7 +489,7 @@ class Query
     {
         $withClause = new WithClause();
 
-        if ($expressions instanceof Expression) {
+        if ($expressions instanceof AnyType) {
             $expressions = [$expressions];
         }
 

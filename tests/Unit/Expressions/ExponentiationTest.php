@@ -22,11 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Exponentiation;
+use WikibaseSolutions\CypherDSL\Exponentiation;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Exponentiation
+ * @covers \WikibaseSolutions\CypherDSL\Exponentiation
  */
 class ExponentiationTest extends TestCase
 {

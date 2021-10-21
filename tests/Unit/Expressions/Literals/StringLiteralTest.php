@@ -22,10 +22,10 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Literals;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
+use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\StringLiteral
+ * @covers \WikibaseSolutions\CypherDSL\StringLiteral
  */
 class StringLiteralTest extends TestCase
 {

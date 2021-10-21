@@ -22,11 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\Any;
+use WikibaseSolutions\CypherDSL\Functions\Any;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Functions\Any
+ * @covers \WikibaseSolutions\CypherDSL\Functions\Any
  */
 class AnyTest extends TestCase
 {

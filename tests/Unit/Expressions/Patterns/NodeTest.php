@@ -22,13 +22,13 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Patterns;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
-use WikibaseSolutions\CypherDSL\Expressions\Patterns\Node;
+use WikibaseSolutions\CypherDSL\ExpressionList;
+use WikibaseSolutions\CypherDSL\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
+use WikibaseSolutions\CypherDSL\Patterns\Node;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Patterns\Node
+ * @covers \WikibaseSolutions\CypherDSL\Patterns\Node
  */
 class NodeTest extends TestCase
 {

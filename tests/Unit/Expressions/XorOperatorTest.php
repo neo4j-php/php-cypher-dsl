@@ -22,11 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\XorOperator;
+use WikibaseSolutions\CypherDSL\XorOperator;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\XorOperator
+ * @covers \WikibaseSolutions\CypherDSL\XorOperator
  */
 class XorOperatorTest extends TestCase
 {

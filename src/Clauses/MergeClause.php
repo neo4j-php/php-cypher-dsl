@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * This class represents a MERGE clause.
@@ -31,9 +31,9 @@ use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 class MergeClause extends Clause
 {
     /**
-     * @var Pattern $pattern The pattern to merge
+     * @var StructuralType $pattern The pattern to merge
      */
-    private Pattern $pattern;
+    private StructuralType $pattern;
 
     /**
      * @var Clause $createClause The clause to execute when the pattern is created
@@ -48,10 +48,10 @@ class MergeClause extends Clause
     /**
      * Sets the pattern to merge.
      *
-     * @param  Pattern $pattern The pattern to merge
+     * @param  StructuralType $pattern The pattern to merge
      * @return MergeClause
      */
-    public function setPattern(Pattern $pattern): self
+    public function setPattern(StructuralType $pattern): self
     {
         $this->pattern = $pattern;
 

@@ -24,7 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\ReturnClause;
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Expression;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**

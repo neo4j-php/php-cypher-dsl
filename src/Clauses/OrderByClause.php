@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Property;
 
 /**
  * This class represents an ORDER BY clause. This clause should always be preceded by a RETURN
@@ -45,7 +45,7 @@ class OrderByClause extends Clause
     private bool $descending = false;
 
     /**
-     * Add an additional property to sort on.
+     * Add a property to sort on.
      *
      * @param  Property $property The additional property to sort on
      * @return OrderByClause

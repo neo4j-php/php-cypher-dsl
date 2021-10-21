@@ -22,11 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Property;
-use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Property;
+use WikibaseSolutions\CypherDSL\Variable;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Variable
+ * @covers \WikibaseSolutions\CypherDSL\Variable
  */
 class VariableTest extends TestCase
 {

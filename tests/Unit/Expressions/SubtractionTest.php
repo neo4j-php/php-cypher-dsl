@@ -22,11 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Subtraction;
+use WikibaseSolutions\CypherDSL\Subtraction;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Subtraction
+ * @covers \WikibaseSolutions\CypherDSL\Subtraction
  */
 class SubtractionTest extends TestCase
 {

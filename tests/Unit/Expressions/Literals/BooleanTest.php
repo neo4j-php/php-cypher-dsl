@@ -22,10 +22,10 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Literals;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
+use WikibaseSolutions\CypherDSL\Literals\Boolean;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Boolean
+ * @covers \WikibaseSolutions\CypherDSL\Boolean
  */
 class BooleanTest extends TestCase
 {

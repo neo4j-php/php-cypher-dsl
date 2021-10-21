@@ -23,13 +23,13 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Patterns;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
-use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
-use WikibaseSolutions\CypherDSL\Expressions\Patterns\Relationship;
+use WikibaseSolutions\CypherDSL\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
+use WikibaseSolutions\CypherDSL\Patterns\Pattern;
+use WikibaseSolutions\CypherDSL\Patterns\Path;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Patterns\Relationship
+ * @covers \WikibaseSolutions\CypherDSL\Patterns\Path
  */
 class RelationshipTest extends TestCase
 {
@@ -51,19 +51,19 @@ class RelationshipTest extends TestCase
 
     public function testDirRight()
     {
-        $r = new Relationship($this->a, $this->b, Relationship::DIR_RIGHT);
+        $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
         $this->assertSame("(a)-[]->(b)", $r->toQuery());
     }
 
     public function testDirLeft()
     {
-        $r = new Relationship($this->a, $this->b, Relationship::DIR_LEFT);
+        $r = new Path($this->a, $this->b, Path::DIR_LEFT);
         $this->assertSame("(a)<-[]-(b)", $r->toQuery());
     }
 
     public function testDirUni()
     {
-        $r = new Relationship($this->a, $this->b, Relationship::DIR_UNI);
+        $r = new Path($this->a, $this->b, Path::DIR_UNI);
         $this->assertSame("(a)-[]-(b)", $r->toQuery());
     }
 
@@ -75,7 +75,7 @@ class RelationshipTest extends TestCase
      */
     public function testWithName(string $name, array $direction, string $expected)
     {
-        $r = new Relationship($this->a, $this->b, $direction);
+        $r = new Path($this->a, $this->b, $direction);
         $r->named($name);
 
         $this->assertSame($expected, $r->toQuery());
@@ -89,7 +89,7 @@ class RelationshipTest extends TestCase
      */
     public function testWithType(string $type, array $direction, string $expected)
     {
-        $r = new Relationship($this->a, $this->b, $direction);
+        $r = new Path($this->a, $this->b, $direction);
         $r->withType($type);
 
         $this->assertSame($expected, $r->toQuery());
@@ -103,7 +103,7 @@ class RelationshipTest extends TestCase
      */
     public function testWithProperties(array $properties, array $direction, string $expected)
     {
-        $r = new Relationship($this->a, $this->b, $direction);
+        $r = new Path($this->a, $this->b, $direction);
         $r->withProperties($properties);
 
         $this->assertSame($expected, $r->toQuery());
@@ -118,7 +118,7 @@ class RelationshipTest extends TestCase
      */
     public function testWithNameAndType(string $name, string $type, array $direction, string $expected)
     {
-        $r = new Relationship($this->a, $this->b, $direction);
+        $r = new Path($this->a, $this->b, $direction);
         $r->named($name)->withType($type);
 
         $this->assertSame($expected, $r->toQuery());
@@ -133,7 +133,7 @@ class RelationshipTest extends TestCase
      */
     public function testWithNameAndProperties(string $name, array $properties, array $direction, string $expected)
     {
-        $r = new Relationship($this->a, $this->b, $direction);
+        $r = new Path($this->a, $this->b, $direction);
         $r->named($name)->withProperties($properties);
 
         $this->assertSame($expected, $r->toQuery());
@@ -148,7 +148,7 @@ class RelationshipTest extends TestCase
      */
     public function testWithTypeAndProperties(string $type, array $properties, array $direction, string $expected)
     {
-        $r = new Relationship($this->a, $this->b, $direction);
+        $r = new Path($this->a, $this->b, $direction);
         $r->withType($type)->withProperties($properties);
 
         $this->assertSame($expected, $r->toQuery());
@@ -164,7 +164,7 @@ class RelationshipTest extends TestCase
      */
     public function testWithNameAndTypeAndProperties(string $name, string $type, array $properties, array $direction, string $expected)
     {
-        $r = new Relationship($this->a, $this->b, $direction);
+        $r = new Path($this->a, $this->b, $direction);
         $r->named($name)->withType($type)->withProperties($properties);
 
         $this->assertSame($expected, $r->toQuery());
@@ -180,7 +180,7 @@ class RelationshipTest extends TestCase
      */
     public function testWithMultipleTypes(string $name, array $types, array $properties, array $direction, string $expected)
     {
-        $r = new Relationship($this->a, $this->b, $direction);
+        $r = new Path($this->a, $this->b, $direction);
         $r->named($name)->withProperties($properties);
 
         foreach ($types as $type) {
@@ -193,87 +193,87 @@ class RelationshipTest extends TestCase
     public function provideWithNameData(): array
     {
         return [
-        ['', Relationship::DIR_UNI, '(a)-[]-(b)'],
-        ['a', Relationship::DIR_UNI, '(a)-[a]-(b)'],
-        ['a', Relationship::DIR_LEFT, '(a)<-[a]-(b)'],
-        [':', Relationship::DIR_RIGHT, '(a)-[`:`]->(b)']
+        ['', Path::DIR_UNI, '(a)-[]-(b)'],
+        ['a', Path::DIR_UNI, '(a)-[a]-(b)'],
+        ['a', Path::DIR_LEFT, '(a)<-[a]-(b)'],
+        [':', Path::DIR_RIGHT, '(a)-[`:`]->(b)']
         ];
     }
 
     public function provideWithTypeData(): array
     {
         return [
-        ['', Relationship::DIR_LEFT, '(a)<-[]-(b)'],
-        ['a', Relationship::DIR_LEFT, '(a)<-[:a]-(b)'],
-        [':', Relationship::DIR_LEFT, '(a)<-[:`:`]-(b)']
+        ['', Path::DIR_LEFT, '(a)<-[]-(b)'],
+        ['a', Path::DIR_LEFT, '(a)<-[:a]-(b)'],
+        [':', Path::DIR_LEFT, '(a)<-[:`:`]-(b)']
         ];
     }
 
     public function provideWithPropertiesData()
     {
         return [
-        [[], Relationship::DIR_LEFT, "(a)<-[{}]-(b)"],
-        [[new StringLiteral('a')], Relationship::DIR_LEFT, "(a)<-[{`0`: 'a'}]-(b)"],
-        [['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "(a)<-[{a: 'b'}]-(b)"],
-        [['a' => new StringLiteral('b'), new StringLiteral('c')], Relationship::DIR_LEFT, "(a)<-[{a: 'b', `0`: 'c'}]-(b)"],
-        [[':' => new Decimal(12)], Relationship::DIR_LEFT, "(a)<-[{`:`: 12}]-(b)"]
+        [[], Path::DIR_LEFT, "(a)<-[{}]-(b)"],
+        [[new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[{`0`: 'a'}]-(b)"],
+        [['a' => new StringLiteral('b')], Path::DIR_LEFT, "(a)<-[{a: 'b'}]-(b)"],
+        [['a' => new StringLiteral('b'), new StringLiteral('c')], Path::DIR_LEFT, "(a)<-[{a: 'b', `0`: 'c'}]-(b)"],
+        [[':' => new Decimal(12)], Path::DIR_LEFT, "(a)<-[{`:`: 12}]-(b)"]
         ];
     }
 
     public function provideWithNameAndTypeData(): array
     {
         return [
-        ['', '', Relationship::DIR_LEFT, '(a)<-[]-(b)'],
-        ['a', '', Relationship::DIR_LEFT, '(a)<-[a]-(b)'],
-        ['', 'a', Relationship::DIR_LEFT, '(a)<-[:a]-(b)'],
-        ['a', 'b', Relationship::DIR_LEFT, '(a)<-[a:b]-(b)'],
-        [':', 'b', Relationship::DIR_LEFT, '(a)<-[`:`:b]-(b)'],
-        [':', ':', Relationship::DIR_LEFT, '(a)<-[`:`:`:`]-(b)']
+        ['', '', Path::DIR_LEFT, '(a)<-[]-(b)'],
+        ['a', '', Path::DIR_LEFT, '(a)<-[a]-(b)'],
+        ['', 'a', Path::DIR_LEFT, '(a)<-[:a]-(b)'],
+        ['a', 'b', Path::DIR_LEFT, '(a)<-[a:b]-(b)'],
+        [':', 'b', Path::DIR_LEFT, '(a)<-[`:`:b]-(b)'],
+        [':', ':', Path::DIR_LEFT, '(a)<-[`:`:`:`]-(b)']
         ];
     }
 
     public function provideWithNameAndPropertiesData()
     {
         return [
-        ['a', [], Relationship::DIR_LEFT, "(a)<-[a {}]-(b)"],
-        ['b', [new StringLiteral('a')], Relationship::DIR_LEFT, "(a)<-[b {`0`: 'a'}]-(b)"],
-        ['', ['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "(a)<-[{a: 'b'}]-(b)"],
-        [':', ['a' => new StringLiteral('b'), new StringLiteral('c')], Relationship::DIR_LEFT, "(a)<-[`:` {a: 'b', `0`: 'c'}]-(b)"]
+        ['a', [], Path::DIR_LEFT, "(a)<-[a {}]-(b)"],
+        ['b', [new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[b {`0`: 'a'}]-(b)"],
+        ['', ['a' => new StringLiteral('b')], Path::DIR_LEFT, "(a)<-[{a: 'b'}]-(b)"],
+        [':', ['a' => new StringLiteral('b'), new StringLiteral('c')], Path::DIR_LEFT, "(a)<-[`:` {a: 'b', `0`: 'c'}]-(b)"]
         ];
     }
 
     public function provideWithTypeAndPropertiesData()
     {
         return [
-        ['a', [], Relationship::DIR_LEFT, "(a)<-[:a {}]-(b)"],
-        ['b', [new StringLiteral('a')], Relationship::DIR_LEFT, "(a)<-[:b {`0`: 'a'}]-(b)"],
-        ['', ['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "(a)<-[{a: 'b'}]-(b)"],
-        [':', ['a' => new StringLiteral('b'), new StringLiteral('c')], Relationship::DIR_LEFT, "(a)<-[:`:` {a: 'b', `0`: 'c'}]-(b)"]
+        ['a', [], Path::DIR_LEFT, "(a)<-[:a {}]-(b)"],
+        ['b', [new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[:b {`0`: 'a'}]-(b)"],
+        ['', ['a' => new StringLiteral('b')], Path::DIR_LEFT, "(a)<-[{a: 'b'}]-(b)"],
+        [':', ['a' => new StringLiteral('b'), new StringLiteral('c')], Path::DIR_LEFT, "(a)<-[:`:` {a: 'b', `0`: 'c'}]-(b)"]
         ];
     }
 
     public function provideWithNameAndTypeAndPropertiesData()
     {
         return [
-        ['a', 'a', [], Relationship::DIR_LEFT, "(a)<-[a:a {}]-(b)"],
-        ['b', 'a', [new StringLiteral('a')], Relationship::DIR_LEFT, "(a)<-[b:a {`0`: 'a'}]-(b)"],
-        ['', 'a', ['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "(a)<-[:a {a: 'b'}]-(b)"],
-        [':', 'a', ['a' => new StringLiteral('b'), new StringLiteral('c')], Relationship::DIR_LEFT, "(a)<-[`:`:a {a: 'b', `0`: 'c'}]-(b)"],
-        ['a', 'b', [new StringLiteral('a')], Relationship::DIR_LEFT, "(a)<-[a:b {`0`: 'a'}]-(b)"],
-        ['a', '', ['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "(a)<-[a {a: 'b'}]-(b)"],
-        ['a', ':', ['a' => new StringLiteral('b'), new StringLiteral('c')], Relationship::DIR_LEFT, "(a)<-[a:`:` {a: 'b', `0`: 'c'}]-(b)"]
+        ['a', 'a', [], Path::DIR_LEFT, "(a)<-[a:a {}]-(b)"],
+        ['b', 'a', [new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[b:a {`0`: 'a'}]-(b)"],
+        ['', 'a', ['a' => new StringLiteral('b')], Path::DIR_LEFT, "(a)<-[:a {a: 'b'}]-(b)"],
+        [':', 'a', ['a' => new StringLiteral('b'), new StringLiteral('c')], Path::DIR_LEFT, "(a)<-[`:`:a {a: 'b', `0`: 'c'}]-(b)"],
+        ['a', 'b', [new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[a:b {`0`: 'a'}]-(b)"],
+        ['a', '', ['a' => new StringLiteral('b')], Path::DIR_LEFT, "(a)<-[a {a: 'b'}]-(b)"],
+        ['a', ':', ['a' => new StringLiteral('b'), new StringLiteral('c')], Path::DIR_LEFT, "(a)<-[a:`:` {a: 'b', `0`: 'c'}]-(b)"]
         ];
     }
 
     public function provideWithMultipleTypesData()
     {
         return [
-        ['a', [], [], Relationship::DIR_LEFT, "(a)<-[a {}]-(b)"],
-        ['b', ['a'], [new StringLiteral('a')], Relationship::DIR_LEFT, "(a)<-[b:a {`0`: 'a'}]-(b)"],
-        ['', ['a', 'b'], ['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "(a)<-[:a|b {a: 'b'}]-(b)"],
-        [':', ['a', ':'], ['a' => new StringLiteral('b'), new StringLiteral('c')], Relationship::DIR_LEFT, "(a)<-[`:`:a|`:` {a: 'b', `0`: 'c'}]-(b)"],
-        ['a', ['a', 'b', 'c'], [new StringLiteral('a')], Relationship::DIR_LEFT, "(a)<-[a:a|b|c {`0`: 'a'}]-(b)"],
-        ['a', ['a', 'b'], [], Relationship::DIR_LEFT, "(a)<-[a:a|b {}]-(b)"]
+        ['a', [], [], Path::DIR_LEFT, "(a)<-[a {}]-(b)"],
+        ['b', ['a'], [new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[b:a {`0`: 'a'}]-(b)"],
+        ['', ['a', 'b'], ['a' => new StringLiteral('b')], Path::DIR_LEFT, "(a)<-[:a|b {a: 'b'}]-(b)"],
+        [':', ['a', ':'], ['a' => new StringLiteral('b'), new StringLiteral('c')], Path::DIR_LEFT, "(a)<-[`:`:a|`:` {a: 'b', `0`: 'c'}]-(b)"],
+        ['a', ['a', 'b', 'c'], [new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[a:a|b|c {`0`: 'a'}]-(b)"],
+        ['a', ['a', 'b'], [], Path::DIR_LEFT, "(a)<-[a:a|b {}]-(b)"]
         ];
     }
 

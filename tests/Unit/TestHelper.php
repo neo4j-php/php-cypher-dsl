@@ -24,10 +24,10 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
-use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
-use WikibaseSolutions\CypherDSL\Expressions\Property;
-use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Expression;
+use WikibaseSolutions\CypherDSL\Patterns\Pattern;
+use WikibaseSolutions\CypherDSL\Property;
+use WikibaseSolutions\CypherDSL\Variable;
 
 trait TestHelper
 {

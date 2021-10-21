@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * This class represents a MATCH clause.
@@ -31,17 +31,17 @@ use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 class MatchClause extends Clause
 {
     /**
-     * @var Pattern[] List of patterns
+     * @var StructuralType[] List of patterns
      */
     private array $patterns = [];
 
     /**
      * Add a pattern to the match clause.
      *
-     * @param  Pattern $pattern
+     * @param  StructuralType $pattern
      * @return MatchClause
      */
-    public function addPattern(Pattern $pattern): self
+    public function addPattern(StructuralType $pattern): self
     {
         $this->patterns[] = $pattern;
 
@@ -63,7 +63,7 @@ class MatchClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (Pattern $pattern): string => $pattern->toQuery(), $this->patterns)
+            array_map(fn (StructuralType $pattern): string => $pattern->toQuery(), $this->patterns)
         );
     }
 }

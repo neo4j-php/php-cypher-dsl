@@ -22,11 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
+use WikibaseSolutions\CypherDSL\ExpressionList;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\ExpressionList
+ * @covers \WikibaseSolutions\CypherDSL\ExpressionList
  */
 class ExpressionListTest extends TestCase
 {

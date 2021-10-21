@@ -22,10 +22,10 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Wildcard;
+use WikibaseSolutions\CypherDSL\Wildcard;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Wildcard
+ * @covers \WikibaseSolutions\CypherDSL\Wildcard
  */
 class WildcardTest extends TestCase
 {

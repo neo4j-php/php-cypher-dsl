@@ -21,7 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 
 /**
  * This class represents a DELETE clause.
@@ -40,7 +41,7 @@ class DeleteClause extends Clause
     /**
      * The nodes that needs to be deleted.
      *
-     * @var Expression[] $nodes
+     * @var AnyType[] $nodes
      */
     private array $nodes = [];
 
@@ -48,7 +49,7 @@ class DeleteClause extends Clause
      * Sets the clause to DETACH DELETE. Without DETACH DELETE, all relationships need to be explicitly
      * deleted.
      *
-     * @param  bool $detach Whether or not to use DETACH DELETE.
+     * @param  bool $detach Whether to use DETACH DELETE.
      * @return DeleteClause
      */
     public function setDetach(bool $detach = true): self
@@ -59,12 +60,12 @@ class DeleteClause extends Clause
     }
 
     /**
-     * Add the node to be deleted. The expresion must return a node when evaluated.
+     * Add the node to be deleted. The expression must return a node when evaluated.
      *
-     * @param  Expression $node Expression that returns the node the be deleted
+     * @param  NodeType $node Expression that returns the node to be deleted
      * @return DeleteClause
      */
-    public function addNode(Expression $node): self
+    public function addNode(NodeType $node): self
     {
         $this->nodes[] = $node;
 
@@ -90,7 +91,7 @@ class DeleteClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn(Expression $node) => $node->toQuery(), $this->nodes)
+            array_map(fn(NodeType $node) => $node->toQuery(), $this->nodes)
         );
     }
 }

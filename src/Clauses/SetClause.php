@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * This class represents a SET clause.
@@ -31,17 +31,17 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
 class SetClause extends Clause
 {
     /**
-     * @var Expression[] $expressions The expressions to set
+     * @var AnyType[] $expressions The expressions to set
      */
     private array $expressions = [];
 
     /**
      * Add an expression to set. This expression is usually an "assignment" expression.
      *
-     * @param  Expression $expression The expression to set
+     * @param  AnyType $expression The expression to set
      * @return SetClause
      */
-    public function addExpression(Expression $expression): self
+    public function addExpression(AnyType $expression): self
     {
         $this->expressions[] = $expression;
 
@@ -62,7 +62,7 @@ class SetClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (Expression $expression): string => $expression->toQuery(), $this->expressions)
+            array_map(fn (AnyType $expression): string => $expression->toQuery(), $this->expressions)
         );
     }
 }

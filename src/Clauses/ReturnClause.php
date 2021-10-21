@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * This class represents a RETURN clause.
@@ -60,13 +60,13 @@ class ReturnClause extends Clause
     /**
      * Add a new column to this RETURN clause.
      *
-     * @param Expression $expression The expression to return
+     * @param AnyType $expression The expression to return
      * @param string     $alias      The alias of this column
      *
      * @see    https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
      * @return ReturnClause
      */
-    public function addColumn(Expression $expression, string $alias = ""): self
+    public function addColumn(AnyType $expression, string $alias = ""): self
     {
         if ($alias !== "") {
             $this->expressions[$alias] = $expression;

@@ -22,11 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\StartsWith;
+use WikibaseSolutions\CypherDSL\StartsWith;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\StartsWith
+ * @covers \WikibaseSolutions\CypherDSL\StartsWith
  */
 class StartsWithTest extends TestCase
 {

@@ -21,7 +21,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Label;
+use WikibaseSolutions\CypherDSL\Property;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * This class represents a REMOVE clause.
@@ -31,18 +33,22 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
 class RemoveClause extends Clause
 {
     /**
-     * @var Expression[] The expressions in this REMOVE clause.
+     * @var AnyType[] The expressions in this REMOVE clause.
      */
     private array $expressions = [];
 
     /**
      * Add an expression to the REMOVE clause. This expression usually returns a property (a.b) or a label (a:b).
      *
-     * @param  Expression $expression The expression to add
+     * @param  Property|Label $expression The expression to add
      * @return RemoveClause
      */
-    public function addExpression(Expression $expression): self
+    public function addExpression(AnyType $expression): self
     {
+        if (!($expression instanceof Property) && !($expression instanceof Label)) {
+            throw new \InvalidArgumentException("\$expression must be either a Property or a Label");
+        }
+
         $this->expressions[] = $expression;
 
         return $this;
@@ -63,7 +69,7 @@ class RemoveClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn(Expression $expression) => $expression->toQuery(), $this->expressions)
+            array_map(fn(AnyType $expression) => $expression->toQuery(), $this->expressions)
         );
     }
 }

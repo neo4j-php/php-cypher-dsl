@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * This class represents a CREATE clause.
@@ -31,17 +31,17 @@ use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
 class CreateClause extends Clause
 {
     /**
-     * @var Pattern[] The patterns to create
+     * @var StructuralType[] The patterns to create
      */
     private array $patterns = [];
 
     /**
      * Add a pattern to create.
      *
-     * @param  Pattern $pattern The pattern to create
+     * @param  StructuralType $pattern The pattern to create
      * @return CreateClause
      */
-    public function addPattern(Pattern $pattern): self
+    public function addPattern(StructuralType $pattern): self
     {
         $this->patterns[] = $pattern;
 
@@ -63,7 +63,7 @@ class CreateClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (Pattern $pattern): string => $pattern->toQuery(), $this->patterns)
+            array_map(fn (StructuralType $pattern): string => $pattern->toQuery(), $this->patterns)
         );
     }
 }

@@ -22,11 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\Single;
+use WikibaseSolutions\CypherDSL\Functions\Single;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Functions\Single
+ * @covers \WikibaseSolutions\CypherDSL\Functions\Single
  */
 class SingleTest extends TestCase
 {

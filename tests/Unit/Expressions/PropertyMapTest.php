@@ -22,11 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
+use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\PropertyMap
+ * @covers \WikibaseSolutions\CypherDSL\PropertyMap
  */
 class PropertyMapTest extends TestCase
 {

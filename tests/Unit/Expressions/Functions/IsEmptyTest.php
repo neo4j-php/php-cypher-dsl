@@ -22,11 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\IsEmpty;
+use WikibaseSolutions\CypherDSL\Functions\IsEmpty;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Functions\IsEmpty
+ * @covers \WikibaseSolutions\CypherDSL\Functions\IsEmpty
  */
 class IsEmptyTest extends TestCase
 {

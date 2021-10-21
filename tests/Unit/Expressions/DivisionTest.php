@@ -22,11 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Division;
+use WikibaseSolutions\CypherDSL\Division;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Division
+ * @covers \WikibaseSolutions\CypherDSL\Division
  */
 class DivisionTest extends TestCase
 {

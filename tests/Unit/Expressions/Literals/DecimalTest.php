@@ -22,10 +22,10 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Literals;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\Literals\Decimal;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Decimal
+ * @covers \WikibaseSolutions\CypherDSL\Decimal
  */
 class DecimalTest extends TestCase
 {

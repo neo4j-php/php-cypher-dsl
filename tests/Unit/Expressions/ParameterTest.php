@@ -22,10 +22,10 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Parameter;
+use WikibaseSolutions\CypherDSL\Parameter;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Parameter
+ * @covers \WikibaseSolutions\CypherDSL\Parameter
  */
 class ParameterTest extends TestCase
 {

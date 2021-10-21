@@ -22,11 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\AndOperator;
+use WikibaseSolutions\CypherDSL\AndOperator;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\AndOperator
+ * @covers \WikibaseSolutions\CypherDSL\AndOperator
  */
 class AndOperatorTest extends TestCase
 {

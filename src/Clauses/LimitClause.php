@@ -21,7 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
  * This class represents a LIMIT clause.
@@ -33,17 +34,17 @@ class LimitClause extends Clause
     /**
      * The expression of the LIMIT statement.
      *
-     * @var Expression $expression
+     * @var NumeralType $expression
      */
-    private Expression $expression;
+    private NumeralType $expression;
 
     /**
      * Sets the expression that returns the limit.
      *
-     * @param  Expression $expression The expression that returns a scalar that is the limit
+     * @param  NumeralType $expression The expression that returns a scalar that is the limit
      * @return LimitClause
      */
-    public function setExpression(Expression $expression): self
+    public function setExpression(NumeralType $expression): self
     {
         $this->expression = $expression;
 

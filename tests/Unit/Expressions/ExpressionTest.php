@@ -23,32 +23,32 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Addition;
-use WikibaseSolutions\CypherDSL\Expressions\AndOperator;
-use WikibaseSolutions\CypherDSL\Expressions\Contains;
-use WikibaseSolutions\CypherDSL\Expressions\Division;
-use WikibaseSolutions\CypherDSL\Expressions\EndsWith;
-use WikibaseSolutions\CypherDSL\Expressions\Equality;
-use WikibaseSolutions\CypherDSL\Expressions\Exponentiation;
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
-use WikibaseSolutions\CypherDSL\Expressions\GreaterThan;
-use WikibaseSolutions\CypherDSL\Expressions\GreaterThanOrEqual;
-use WikibaseSolutions\CypherDSL\Expressions\Inequality;
-use WikibaseSolutions\CypherDSL\Expressions\LessThan;
-use WikibaseSolutions\CypherDSL\Expressions\LessThanOrEqual;
-use WikibaseSolutions\CypherDSL\Expressions\Minus;
-use WikibaseSolutions\CypherDSL\Expressions\Modulo;
-use WikibaseSolutions\CypherDSL\Expressions\Multiplication;
-use WikibaseSolutions\CypherDSL\Expressions\OrOperator;
-use WikibaseSolutions\CypherDSL\Expressions\Property;
-use WikibaseSolutions\CypherDSL\Expressions\PropertyMutation;
-use WikibaseSolutions\CypherDSL\Expressions\StartsWith;
-use WikibaseSolutions\CypherDSL\Expressions\Subtraction;
-use WikibaseSolutions\CypherDSL\Expressions\XorOperator;
+use WikibaseSolutions\CypherDSL\Addition;
+use WikibaseSolutions\CypherDSL\AndOperator;
+use WikibaseSolutions\CypherDSL\Contains;
+use WikibaseSolutions\CypherDSL\Division;
+use WikibaseSolutions\CypherDSL\EndsWith;
+use WikibaseSolutions\CypherDSL\Equality;
+use WikibaseSolutions\CypherDSL\Exponentiation;
+use WikibaseSolutions\CypherDSL\Expression;
+use WikibaseSolutions\CypherDSL\GreaterThan;
+use WikibaseSolutions\CypherDSL\GreaterThanOrEqual;
+use WikibaseSolutions\CypherDSL\Inequality;
+use WikibaseSolutions\CypherDSL\LessThan;
+use WikibaseSolutions\CypherDSL\LessThanOrEqual;
+use WikibaseSolutions\CypherDSL\Minus;
+use WikibaseSolutions\CypherDSL\Modulo;
+use WikibaseSolutions\CypherDSL\Multiplication;
+use WikibaseSolutions\CypherDSL\OrOperator;
+use WikibaseSolutions\CypherDSL\Property;
+use WikibaseSolutions\CypherDSL\PropertyMutation;
+use WikibaseSolutions\CypherDSL\StartsWith;
+use WikibaseSolutions\CypherDSL\Subtraction;
+use WikibaseSolutions\CypherDSL\XorOperator;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Expression
+ * @covers \WikibaseSolutions\CypherDSL\Expression
  */
 class ExpressionTest extends TestCase
 {

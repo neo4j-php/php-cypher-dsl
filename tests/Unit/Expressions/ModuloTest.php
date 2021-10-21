@@ -22,11 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Modulo;
+use WikibaseSolutions\CypherDSL\Modulo;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Modulo
+ * @covers \WikibaseSolutions\CypherDSL\Modulo
  */
 class ModuloTest extends TestCase
 {

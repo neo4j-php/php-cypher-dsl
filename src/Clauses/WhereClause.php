@@ -21,7 +21,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Label;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * This class represents a WHERE clause.
@@ -31,17 +33,17 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
 class WhereClause extends Clause
 {
     /**
-     * @var Expression The expression to match
+     * @var BooleanType|Label The expression to match
      */
-    private Expression $expression;
+    private AnyType $expression;
 
     /**
      * Sets the expression to match in this WHERE clause.
      *
-     * @param  Expression $expression The expression to match
+     * @param  BooleanType|Label $expression The expression to match
      * @return WhereClause
      */
-    public function setExpression(Expression $expression): self
+    public function setExpression(AnyType $expression): self
     {
         $this->expression = $expression;
 

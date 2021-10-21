@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
-use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Variable;
 
 /**
  * This class represents a CALL (CALL procedure) clause.
@@ -37,7 +37,7 @@ class CallProcedureClause extends Clause
     private string $procedure;
 
     /**
-     * @var Expression[] The arguments passed to the procedure
+     * @var AnyType[] The arguments passed to the procedure
      */
     private array $arguments = [];
 
@@ -67,7 +67,7 @@ class CallProcedureClause extends Clause
      * Sets the arguments to pass to this procedure call. This overwrites any previously passed
      * arguments.
      *
-     * @param  Expression[] $arguments
+     * @param  AnyType[] $arguments
      * @return CallProcedureClause
      */
     public function withArguments(array $arguments): self
@@ -80,10 +80,10 @@ class CallProcedureClause extends Clause
     /**
      * Add an argument to pass to this procedure call.
      *
-     * @param  Expression $argument
+     * @param  AnyType $argument
      * @return CallProcedureClause
      */
-    public function addArgument(Expression $argument): self
+    public function addArgument(AnyType $argument): self
     {
         $this->arguments[] = $argument;
 
@@ -123,7 +123,7 @@ class CallProcedureClause extends Clause
 
         $arguments = implode(
             ", ",
-            array_map(fn (Expression $pattern): string => $pattern->toQuery(), $this->arguments)
+            array_map(fn (AnyType $pattern): string => $pattern->toQuery(), $this->arguments)
         );
 
         if (count($this->yieldParameters) > 0) {
