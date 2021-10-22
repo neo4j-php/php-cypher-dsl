@@ -21,77 +21,12 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Clauses\Clause;
-use WikibaseSolutions\CypherDSL\Expression;
-use WikibaseSolutions\CypherDSL\Patterns\Pattern;
-use WikibaseSolutions\CypherDSL\Property;
-use WikibaseSolutions\CypherDSL\Variable;
-
 trait TestHelper
 {
-    /**
-     * @param  string   $variable
-     * @param  TestCase $testCase
-     * @return Pattern|MockObject
-     */
-    public function getPatternMock(string $variable, TestCase $testCase): Pattern
+    public function getQueryConvertableMock(string $class, string $value)
     {
-        $mock = $testCase->getMockBuilder(Pattern::class)->getMock();
-        $mock->method('toQuery')->willReturn($variable);
-
-        return $mock;
-    }
-
-    /**
-     * @param  string   $variable
-     * @param  TestCase $testCase
-     * @return Property|MockObject
-     */
-    public function getPropertyMock(string $variable, TestCase $testCase): Property
-    {
-        $mock = $testCase->getMockBuilder(Property::class)->disableOriginalConstructor()->getMock();
-        $mock->method('toQuery')->willReturn($variable);
-
-        return $mock;
-    }
-
-    /**
-     * @param  string   $variable
-     * @param  TestCase $testCase
-     * @return Expression|MockObject
-     */
-    public function getExpressionMock(string $variable, TestCase $testCase): Expression
-    {
-        $mock = $testCase->getMockBuilder(Expression::class)->getMock();
-        $mock->method('toQuery')->willReturn($variable);
-
-        return $mock;
-    }
-
-    /**
-     * @param  string   $variable
-     * @param  TestCase $testCase
-     * @return Clause|MockObject
-     */
-    public function getClauseMock(string $variable, TestCase $testCase): Clause
-    {
-        $mock = $testCase->getMockBuilder(Clause::class)->getMock();
-        $mock->method('toQuery')->willReturn($variable);
-
-        return $mock;
-    }
-
-    /**
-     * @param  string   $variable
-     * @param  TestCase $testCase
-     * @return Variable|MockObject
-     */
-    public function getVariableMock(string $variable, TestCase $testCase): Variable
-    {
-        $mock = $testCase->getMockBuilder(Variable::class)->disableOriginalConstructor()->getMock();
-        $mock->method('toQuery')->willReturn($variable);
+        $mock = $this->getMockBuilder($class)->disableOriginalConstructor()->getMock();
+        $mock->method('toQuery')->willReturn($value);
 
         return $mock;
     }

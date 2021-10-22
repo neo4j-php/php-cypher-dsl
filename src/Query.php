@@ -42,7 +42,9 @@ use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 class Query
@@ -110,7 +112,7 @@ class Query
      * Creates a new literal from the given value. This function automatically constructs the appropriate
      * class based on the type of the value given.
      *
-     * @param  integer|float|double|bool|string $literal The literal to construct
+     * @param  integer|float|bool|string $literal The literal to construct
      * @return PropertyType
      */
     public static function literal($literal): PropertyType
@@ -183,6 +185,10 @@ class Query
         }
 
         foreach ($patterns as $pattern) {
+            if (!($pattern instanceof StructuralType)) {
+                throw new InvalidArgumentException("\$patterns should only consist of StructuralType objects");
+            }
+
             $matchClause->addPattern($pattern);
         }
 
@@ -212,6 +218,10 @@ class Query
         }
 
         foreach ($expressions as $maybeAlias => $expression) {
+            if (!($expression instanceof AnyType)) {
+                throw new InvalidArgumentException("\$expressions should only consist of AnyType objects");
+            }
+
             $alias = is_integer($maybeAlias) ? "" : $maybeAlias;
             $returnClause->addColumn($expression, $alias);
         }
@@ -241,6 +251,10 @@ class Query
         }
 
         foreach ($patterns as $pattern) {
+            if (!($pattern instanceof StructuralType)) {
+                throw new InvalidArgumentException("\$patterns should only consist of StructuralType objects");
+            }
+
             $createClause->addPattern($pattern);
         }
 
@@ -252,22 +266,26 @@ class Query
     /**
      * Creates the DELETE clause.
      *
-     * @param AnyType|AnyType[] $expressions The nodes to delete
-     *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
+     * @param NodeType|NodeType[] $nodes The nodes to delete
      *
      * @return $this
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
+     *
      */
-    public function delete($expressions): self
+    public function delete($nodes): self
     {
         $deleteClause = new DeleteClause();
 
-        if ($expressions instanceof AnyType) {
-            $expressions = [$expressions];
+        if ($nodes instanceof NodeType) {
+            $nodes = [$nodes];
         }
 
-        foreach ($expressions as $expression) {
-            $deleteClause->addNode($expression);
+        foreach ($nodes as $node) {
+            if (!($node instanceof NodeType)) {
+                throw new InvalidArgumentException("\$nodes should exist of only NodeType objects");
+            }
+
+            $deleteClause->addNode($node);
         }
 
         $this->clauses[] = $deleteClause;
@@ -278,23 +296,27 @@ class Query
     /**
      * Creates the DETACH DELETE clause.
      *
-     * @param AnyType|AnyType[] $expressions The nodes to delete
-     *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
+     * @param NodeType|NodeType[] $nodes The nodes to delete
      *
      * @return $this
+     *@see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
+     *
      */
-    public function detachDelete($expressions): self
+    public function detachDelete($nodes): self
     {
         $deleteClause = new DeleteClause();
         $deleteClause->setDetach(true);
 
-        if ($expressions instanceof AnyType) {
-            $expressions = [$expressions];
+        if ($nodes instanceof NodeType) {
+            $nodes = [$nodes];
         }
 
-        foreach ($expressions as $expression) {
-            $deleteClause->addNode($expression);
+        foreach ($nodes as $node) {
+            if (!($node instanceof NodeType)) {
+                throw new InvalidArgumentException("\$nodes should exist of only NodeType objects");
+            }
+
+            $deleteClause->addNode($node);
         }
 
         $this->clauses[] = $deleteClause;
@@ -305,16 +327,16 @@ class Query
     /**
      * Creates the LIMIT clause.
      *
-     * @param AnyType $expression An expression that returns an integer
-     *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/limit/
+     * @param NumeralType $limit The amount to use as the limit
      *
      * @return $this
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/limit/
+     *
      */
-    public function limit(AnyType $expression): self
+    public function limit(NumeralType $limit): self
     {
         $limitClause = new LimitClause();
-        $limitClause->setExpression($expression);
+        $limitClause->setLimit($limit);
 
         $this->clauses[] = $limitClause;
 
@@ -367,7 +389,11 @@ class Query
             $patterns = [$patterns];
         }
 
-        foreach ($patterns as  $pattern) {
+        foreach ($patterns as $pattern) {
+            if (!($pattern instanceof StructuralType)) {
+                throw new InvalidArgumentException("\$patterns should only consist of StructuralType objects");
+            }
+
             $optionalMatchClause->addPattern($pattern);
         }
 
@@ -396,6 +422,10 @@ class Query
         }
 
         foreach ( $properties as $property ) {
+            if (!($property instanceof Property)) {
+                throw new InvalidArgumentException("\$properties should only consist of Property objects");
+            }
+
             $orderByClause->addProperty($property);
         }
 
@@ -407,7 +437,7 @@ class Query
     /**
      * Creates the REMOVE clause.
      *
-     * @param AnyType[]|AnyType $expressions The expressions to remove (should either be a Node or a Property)
+     * @param Property|Label|Property[]|Label[] $expressions The expressions to remove (should either be a Node or a Property)
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/remove/
      *
@@ -422,6 +452,10 @@ class Query
         }
 
         foreach ($expressions as $expression) {
+            if (!($expression instanceof Property) && !($expression instanceof Label)) {
+                throw new InvalidArgumentException("\$expressions should consist of only Property or Label objects");
+            }
+
             $removeClause->addExpression($expression);
         }
 
@@ -448,7 +482,11 @@ class Query
         }
 
         foreach ($expressions as $expression) {
-            $setClause->addExpression($expression);
+            if (!($expression instanceof AnyType)) {
+                throw new InvalidArgumentException("\$expressions should only consist of AnyType objects");
+            }
+
+            $setClause->addAssignment($expression);
         }
 
         $this->clauses[] = $setClause;
@@ -494,6 +532,10 @@ class Query
         }
 
         foreach ($expressions as $maybeAlias => $expression) {
+            if (!($expression instanceof AnyType)) {
+                throw new InvalidArgumentException("\$expressions should only consist of AnyType objects");
+            }
+
             $alias = is_integer($maybeAlias) ? "" : $maybeAlias;
             $withClause->addEntry($expression, $alias);
         }
@@ -507,8 +549,8 @@ class Query
      * Creates the CALL procedure clause.
      *
      * @param string $procedure The procedure to call
-     * @param array  $arguments The arguments passed to the procedure
-     * @param array  $yields    The results field that will be returned
+     * @param AnyType[]  $arguments The arguments passed to the procedure
+     * @param Variable[]  $yields    The results field that will be returned
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/call/
      *
@@ -546,11 +588,13 @@ class Query
      */
     public function build(): string
     {
+        $builtClauses = array_map(
+            fn(Clause $clause): string => $clause->toQuery(),
+            $this->clauses
+        );
+
         return implode(
-            " ", array_map(
-                fn(Clause $clause): string => $clause->toQuery(),
-                $this->clauses
-            )
+            " ", array_filter($builtClauses, fn ($clause) => !empty($clause))
         );
     }
 }

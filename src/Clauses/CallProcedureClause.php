@@ -44,7 +44,7 @@ class CallProcedureClause extends Clause
     /**
      * @var Variable[] The results field that will be returned
      */
-    private array $yieldParameters = [];
+    private array $yieldVariables = [];
 
     /**
      * Sets the procedure to call. This can be for instance "apoc.load.json". This
@@ -72,6 +72,12 @@ class CallProcedureClause extends Clause
      */
     public function withArguments(array $arguments): self
     {
+        foreach ($arguments as $argument) {
+            if (!($argument instanceof AnyType)) {
+                throw new \InvalidArgumentException("\$arguments should only consist of AnyType objects");
+            }
+        }
+
         $this->arguments = $arguments;
 
         return $this;
@@ -99,7 +105,13 @@ class CallProcedureClause extends Clause
      */
     public function yields(array $variables): self
     {
-        $this->yieldParameters = $variables;
+        foreach ($variables as $variable) {
+            if (!($variable instanceof Variable)) {
+                throw new \InvalidArgumentException("\$variables should only consist of Variable objects");
+            }
+        }
+
+        $this->yieldVariables = $variables;
 
         return $this;
     }
@@ -126,10 +138,10 @@ class CallProcedureClause extends Clause
             array_map(fn (AnyType $pattern): string => $pattern->toQuery(), $this->arguments)
         );
 
-        if (count($this->yieldParameters) > 0) {
+        if (count($this->yieldVariables) > 0) {
             $yieldParameters = implode(
                 ", ",
-                array_map(fn (Variable $variable): string => $variable->toQuery(), $this->yieldParameters)
+                array_map(fn (Variable $variable): string => $variable->toQuery(), $this->yieldVariables)
             );
 
             return sprintf("%s(%s) YIELD %s", $this->procedure, $arguments, $yieldParameters);

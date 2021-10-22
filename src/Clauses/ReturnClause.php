@@ -41,7 +41,7 @@ class ReturnClause extends Clause
     /**
      * @var array The expressions to return
      */
-    private array $expressions = [];
+    private array $columns = [];
 
     /**
      * Sets this query to only retrieve unique rows.
@@ -60,18 +60,18 @@ class ReturnClause extends Clause
     /**
      * Add a new column to this RETURN clause.
      *
-     * @param AnyType $expression The expression to return
+     * @param AnyType $column The expression to return
      * @param string     $alias      The alias of this column
      *
-     * @see    https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
      * @return ReturnClause
+     *@see    https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
      */
-    public function addColumn(AnyType $expression, string $alias = ""): self
+    public function addColumn(AnyType $column, string $alias = ""): self
     {
         if ($alias !== "") {
-            $this->expressions[$alias] = $expression;
+            $this->columns[$alias] = $column;
         } else {
-            $this->expressions[] = $expression;
+            $this->columns[] = $column;
         }
 
         return $this;
@@ -94,7 +94,7 @@ class ReturnClause extends Clause
     {
         $expressions = [];
 
-        foreach ($this->expressions as $alias => $expression) {
+        foreach ($this->columns as $alias => $expression) {
             $expressionQuery = $expression->toQuery();
             $expressions[] = is_int($alias) ?
             $expressionQuery :

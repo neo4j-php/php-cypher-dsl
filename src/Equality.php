@@ -26,11 +26,10 @@ use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
- * Represents the application of the equality (=) operator. This operator is also used for assigning
- * values to properties.
+ * Represents the application of the equality (=) operator.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
- * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/#set-remove-properties-using-empty-map
+ * @see Assignment For a semantically different, but syntactically identical operator
  */
 class Equality extends BinaryOperator implements BooleanType
 {

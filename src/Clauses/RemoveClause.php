@@ -33,7 +33,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 class RemoveClause extends Clause
 {
     /**
-     * @var AnyType[] The expressions in this REMOVE clause.
+     * @var Property[]|Label[] The expressions in this REMOVE clause.
      */
     private array $expressions = [];
 

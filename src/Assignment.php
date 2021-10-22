@@ -19,34 +19,43 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Clauses;
+namespace WikibaseSolutions\CypherDSL;
 
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
- * This class represents a LIMIT clause.
+ * Represents the application of the assignment (=/+=) operator.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/clauses/limit/
+ * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/#set-set-a-property
+ * @see Equality For a semantically different, but syntactically identical operator
  */
-class LimitClause extends Clause
+class Assignment extends BinaryOperator
 {
     /**
-     * The expression of the LIMIT statement.
-     *
-     * @var NumeralType $limit
+     * @var bool Whether to use the property mutation instead of the property replacement
+     * operator.
      */
-    private NumeralType $limit;
+    private bool $mutate;
 
     /**
-     * Sets the expression that returns the limit.
-     *
-     * @param  NumeralType $limit The limit
-     * @return LimitClause
+     * @param Property|Variable $left
+     * @inheritDoc
      */
-    public function setLimit(NumeralType $limit): self
+    public function __construct(AnyType $left, AnyType $right)
     {
-        $this->limit = $limit;
+        parent::__construct($left, $right);
+    }
+
+    /**
+     * Whether to use the property mutation instead of the property replacement
+     * operator.
+     *
+     * @param bool $mutate
+     * @return $this
+     */
+    public function setMutate(bool $mutate = true): self
+    {
+        $this->mutate = $mutate;
 
         return $this;
     }
@@ -54,20 +63,8 @@ class LimitClause extends Clause
     /**
      * @inheritDoc
      */
-    protected function getClause(): string
+    protected function getOperator(): string
     {
-        return "LIMIT";
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function getSubject(): string
-    {
-        if (isset($this->limit) ) {
-            return $this->limit->toQuery();
-        }
-
-        return "";
+        return $this->mutate ? "+=" : "=";
     }
 }

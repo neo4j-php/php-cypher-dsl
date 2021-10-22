@@ -57,12 +57,12 @@ class Path implements PathType
     private AnyType $b;
 
     /**
-     * @var array The direction of the relationship
+     * @var string[] The direction of the relationship
      */
     private array $direction;
 
     /**
-     * @var array
+     * @var string[]
      */
     private array $types = [];
 
@@ -120,11 +120,13 @@ class Path implements PathType
      */
     public function withProperties($properties): self
     {
-        if (!($properties instanceof PropertyMap)) {
-            $properties = new PropertyMap($properties);
+        if (is_array($properties)) {
+            $this->properties = new PropertyMap($properties);
+        } elseif ($properties instanceof PropertyMap) {
+            $this->properties = $properties;
+        } else {
+            throw new InvalidArgumentException("\$properties must either be an array or a PropertyMap object");
         }
-
-        $this->properties = $properties;
 
         return $this;
     }

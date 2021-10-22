@@ -77,7 +77,7 @@ class DeleteClause extends Clause
      */
     protected function getClause(): string
     {
-        if ($this->detach ) {
+        if ($this->detach) {
             return "DETACH DELETE";
         }
 

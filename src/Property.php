@@ -23,11 +23,11 @@ namespace WikibaseSolutions\CypherDSL;
 
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
@@ -64,6 +64,17 @@ class Property implements BooleanType, NumeralType, StringType, MapType, ListTyp
     {
         $this->expression = $expression;
         $this->property = $property;
+    }
+
+    /**
+     * Assign a value to this property.
+     *
+     * @param AnyType $value The value to assign
+     * @return Assignment
+     */
+    public function assign(AnyType $value): Assignment
+    {
+        return new Assignment($this, $value);
     }
 
     /**

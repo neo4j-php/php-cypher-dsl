@@ -35,7 +35,7 @@ class Exists extends FunctionCall implements BooleanType
     use BooleanTypeTrait;
 
     /**
-     * @var AnyType A pattern or property
+     * @var AnyType The value to check whether it exists
      */
     private AnyType $expression;
 
@@ -44,7 +44,7 @@ class Exists extends FunctionCall implements BooleanType
      *
      * exists(input :: ANY?) :: (BOOLEAN?)
      *
-     * @param AnyType $expression A pattern or property
+     * @param AnyType $expression The value to check whether it exists
      */
     public function __construct(AnyType $expression)
     {

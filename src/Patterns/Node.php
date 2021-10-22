@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
+use InvalidArgumentException;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -72,6 +73,10 @@ class Node implements NodeType
     public function named($variable): self
     {
         if (!($variable instanceof Variable)) {
+            if (!is_string($variable)) {
+                throw new InvalidArgumentException("\$variable must either be a string or a Variable object");
+            }
+
             $variable = new Variable($variable);
         }
 
@@ -92,16 +97,18 @@ class Node implements NodeType
     }
 
     /**
-     * @param  MapType|array $properties
+     * @param  PropertyMap|array $properties
      * @return Node
      */
     public function withProperties($properties): self
     {
         if (is_array($properties)) {
-            $properties = new PropertyMap($properties);
+            $this->properties = new PropertyMap($properties);
+        } elseif ($properties instanceof PropertyMap) {
+            $this->properties = $properties;
+        } else {
+            throw new InvalidArgumentException("\$properties must either be an array or a PropertyMap object");
         }
-
-        $this->properties = $properties;
 
         return $this;
     }

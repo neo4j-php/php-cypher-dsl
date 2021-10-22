@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\ExpressionList;
 use WikibaseSolutions\CypherDSL\Label;
 use WikibaseSolutions\CypherDSL\Literals\Boolean;
@@ -31,7 +32,15 @@ use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Parameter;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\PropertyMap;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 use WikibaseSolutions\CypherDSL\Variable;
 use WikibaseSolutions\CypherDSL\Query;
 
@@ -55,15 +64,15 @@ class QueryTest extends TestCase
         $label = "m";
 
         $actual = Query::node($label);
-        $expected = (new Node())->withLabel($label);
+        $expected = (new Node())->labeled($label);
 
         $this->assertEquals($expected, $actual);
     }
 
     public function testRelationship()
     {
-        $a = $this->getPatternMock("a", $this);
-        $b = $this->getPatternMock("b", $this);
+        $a = $this->getQueryConvertableMock(NodeType::class, "a");
+        $b = $this->getQueryConvertableMock(PathType::class, "b");
 
         $directions = [Path::DIR_UNI, Path::DIR_LEFT, Path::DIR_RIGHT];
 
@@ -88,9 +97,9 @@ class QueryTest extends TestCase
     /**
      * @dataProvider provideLiteralData
      * @param        $literal
-     * @param        Literal $expected
+     * @param        PropertyType $expected
      */
-    public function testLiteral($literal, Literal $expected)
+    public function testLiteral($literal, PropertyType $expected)
     {
         $actual = Query::literal($literal);
 
@@ -113,7 +122,7 @@ class QueryTest extends TestCase
 
     public function testMatch()
     {
-        $m = $this->getPatternMock("(m:Movie)", $this);
+        $m = $this->getQueryConvertableMock(NodeType::class, "(m:Movie)");
 
         $statement = (new Query())->match($m)->build();
 
@@ -126,7 +135,7 @@ class QueryTest extends TestCase
 
     public function testReturning()
     {
-        $m = $this->getPatternMock("(m:Movie)", $this);
+        $m = $this->getQueryConvertableMock(StructuralType::class, "(m:Movie)");
 
         $statement = (new Query())->returning($m)->build();
 
@@ -139,20 +148,20 @@ class QueryTest extends TestCase
 
     public function testCreate()
     {
-        $m = $this->getPatternMock("(m:Movie)", $this);
+        $m = $this->getQueryConvertableMock(PathType::class, "(m:Movie)->(b)");
 
         $statement = (new Query())->create($m)->build();
 
-        $this->assertSame("CREATE (m:Movie)", $statement);
+        $this->assertSame("CREATE (m:Movie)->(b)", $statement);
 
         $statement = (new Query())->create([$m, $m])->build();
 
-        $this->assertSame("CREATE (m:Movie), (m:Movie)", $statement);
+        $this->assertSame("CREATE (m:Movie)->(b), (m:Movie)->(b)", $statement);
     }
 
     public function testDelete()
     {
-        $m = $this->getPatternMock("(m:Movie)", $this);
+        $m = $this->getQueryConvertableMock(NodeType::class, "(m:Movie)");
 
         $statement = (new Query())->delete($m)->build();
 
@@ -165,7 +174,7 @@ class QueryTest extends TestCase
 
     public function testDetachDelete()
     {
-        $m = $this->getPatternMock("(m:Movie)", $this);
+        $m = $this->getQueryConvertableMock(NodeType::class, "(m:Movie)");
 
         $statement = (new Query())->detachDelete($m)->build();
 
@@ -178,7 +187,7 @@ class QueryTest extends TestCase
 
     public function testLimit()
     {
-        $expression = $this->getExpressionMock("12", $this);
+        $expression = $this->getQueryConvertableMock(NumeralType::class, "12");
 
         $statement = (new Query())->limit($expression)->build();
 
@@ -187,23 +196,23 @@ class QueryTest extends TestCase
 
     public function testMerge()
     {
-        $pattern = $this->getPatternMock("(m)", $this);
+        $pattern = $this->getQueryConvertableMock(PathType::class, "(m)->(b)");
 
         $statement = (new Query())->merge($pattern)->build();
 
-        $this->assertSame("MERGE (m)", $statement);
+        $this->assertSame("MERGE (m)->(b)", $statement);
 
-        $onCreate = $this->getClauseMock("DELETE (m:Movie)", $this);
-        $onMatch = $this->getClauseMock("CREATE (m:Movie)", $this);
+        $onCreate = $this->getQueryConvertableMock(Clause::class, "DELETE (m:Movie)");
+        $onMatch = $this->getQueryConvertableMock(Clause::class, "CREATE (m:Movie)");
 
         $statement = (new Query())->merge($pattern, $onCreate, $onMatch)->build();
 
-        $this->assertSame("MERGE (m) ON CREATE DELETE (m:Movie) ON MATCH CREATE (m:Movie)", $statement);
+        $this->assertSame("MERGE (m)->(b) ON CREATE DELETE (m:Movie) ON MATCH CREATE (m:Movie)", $statement);
     }
 
     public function testOptionalMatch()
     {
-        $pattern = $this->getPatternMock("(m)", $this);
+        $pattern = $this->getQueryConvertableMock(NodeType::class, "(m)");
 
         $statement = (new Query())->optionalMatch($pattern)->build();
 
@@ -216,7 +225,7 @@ class QueryTest extends TestCase
 
     public function testOrderBy()
     {
-        $property = $this->getPropertyMock("a.foo", $this);
+        $property = $this->getQueryConvertableMock(Property::class, "a.foo");
 
         $statement = (new Query())->orderBy($property)->build();
 
@@ -237,7 +246,7 @@ class QueryTest extends TestCase
 
     public function testRemove()
     {
-        $expression = $this->getExpressionMock("a.age", $this);
+        $expression = $this->getQueryConvertableMock(Property::class, "a.age");
 
         $statement = (new Query())->remove($expression)->build();
 
@@ -246,7 +255,7 @@ class QueryTest extends TestCase
 
     public function testSet()
     {
-        $expression = $this->getExpressionMock("a.age", $this);
+        $expression = $this->getQueryConvertableMock(AnyType::class, "a.age");
 
         $statement = (new Query())->set($expression)->build();
 
@@ -259,16 +268,16 @@ class QueryTest extends TestCase
 
     public function testWhere()
     {
-        $expression = $this->getExpressionMock("(a)", $this);
+        $expression = $this->getQueryConvertableMock(BooleanType::class, "a.age");
 
         $statement = (new Query())->where($expression)->build();
 
-        $this->assertSame("WHERE (a)", $statement);
+        $this->assertSame("WHERE a.age", $statement);
     }
 
     public function testWith()
     {
-        $expression = $this->getExpressionMock("a < b", $this);
+        $expression = $this->getQueryConvertableMock(AnyType::class, "a < b");
 
         $statement = (new Query())->with($expression)->build();
 
@@ -287,13 +296,13 @@ class QueryTest extends TestCase
 
         $this->assertSame("CALL apoc.json()", $statement);
 
-        $expression = $this->getExpressionMock("a < b", $this);
+        $expression = $this->getQueryConvertableMock(AnyType::class, "a < b");
 
         $statement = (new Query())->callProcedure($procedure, [$expression])->build();
 
         $this->assertSame("CALL apoc.json(a < b)", $statement);
 
-        $variable = $this->getVariableMock("a", $this);
+        $variable = $this->getQueryConvertableMock(Variable::class, "a");
 
         $statement = (new Query())->callProcedure($procedure, [$expression], [$variable])->build();
 
@@ -303,7 +312,7 @@ class QueryTest extends TestCase
     public function testAddClause()
     {
         $clauseMockText = "FOOBAR foobar";
-        $clauseMock = $this->getClauseMock($clauseMockText, $this);
+        $clauseMock = $this->getQueryConvertableMock(Clause::class, $clauseMockText);
         $statement = (new Query())->addClause($clauseMock)->build();
 
         $this->assertSame($clauseMockText, $statement);
@@ -311,8 +320,8 @@ class QueryTest extends TestCase
 
     public function testBuild()
     {
-        $withClause = $this->getClauseMock("WITH foobar", $this);
-        $whereClause = $this->getClauseMock("WHERE foobar", $this);
+        $withClause = $this->getQueryConvertableMock(Clause::class,"WITH foobar");
+        $whereClause = $this->getQueryConvertableMock(Clause::class,"WHERE foobar");
 
         $query = new Query();
         $query->clauses = [$withClause, $whereClause];
@@ -321,27 +330,30 @@ class QueryTest extends TestCase
 
         $this->assertSame("WITH foobar WHERE foobar", $statement);
 
-        $patternMock = $this->getPatternMock("(a)", $this);
-        $propertyMock = $this->getPropertyMock("a.b", $this);
+        $pathMock = $this->getQueryConvertableMock(Path::class, "(a)->(b)");
+        $nodeMock = $this->getQueryConvertableMock(Node::class, "(a)");
+        $numeralMock = $this->getQueryConvertableMock(NumeralType::class, "12");
+        $booleanMock = $this->getQueryConvertableMock(BooleanType::class, "a > b");
+        $propertyMock = $this->getQueryConvertableMock(Property::class, "a.b");
 
         $query = new Query();
-        $statement = $query->match([$patternMock, $patternMock])
-            ->returning(["#" => $patternMock])
-            ->create([$patternMock, $patternMock])
-            ->create($patternMock)
-            ->delete([$patternMock, $patternMock])
-            ->detachDelete([$patternMock, $patternMock])
-            ->limit($patternMock)
-            ->merge($patternMock)
-            ->optionalMatch([$patternMock, $patternMock])
+        $statement = $query->match([$pathMock, $nodeMock])
+            ->returning(["#" => $nodeMock])
+            ->create([$pathMock, $nodeMock])
+            ->create($pathMock)
+            ->delete([$nodeMock, $nodeMock])
+            ->detachDelete([$nodeMock, $nodeMock])
+            ->limit($numeralMock)
+            ->merge($nodeMock)
+            ->optionalMatch([$nodeMock, $nodeMock])
             ->orderBy([$propertyMock, $propertyMock], true)
-            ->remove($patternMock)
-            ->set([$patternMock, $patternMock])
-            ->where($patternMock)
-            ->with(["#" => $patternMock])
+            ->remove($propertyMock)
+            ->set([])
+            ->where($booleanMock)
+            ->with(["#" => $nodeMock])
             ->build();
 
-        $this->assertSame("MATCH (a), (a) RETURN (a) AS `#` CREATE (a), (a) CREATE (a) DELETE (a), (a) DETACH DELETE (a), (a) LIMIT (a) MERGE (a) OPTIONAL MATCH (a), (a) ORDER BY a.b, a.b DESCENDING REMOVE (a) SET (a), (a) WHERE (a) WITH (a) AS `#`", $statement);
+        $this->assertSame("MATCH (a)->(b), (a) RETURN (a) AS `#` CREATE (a)->(b), (a) CREATE (a)->(b) DELETE (a), (a) DETACH DELETE (a), (a) LIMIT 12 MERGE (a) OPTIONAL MATCH (a), (a) ORDER BY a.b, a.b DESCENDING REMOVE a.b WHERE a > b WITH (a) AS `#`", $statement);
     }
 
     public function testBuildEmpty()

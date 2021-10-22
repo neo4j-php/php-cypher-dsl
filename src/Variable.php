@@ -21,8 +21,11 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
+use WikibaseSolutions\CypherDSL\Traits\AssignableTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\Assignable;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
@@ -80,6 +83,17 @@ class Variable implements
     public function withLabels(array $labels): Label
     {
         return new Label($this, $labels);
+    }
+
+    /**
+     * Assign a value to this variable.
+     *
+     * @param AnyType $value The value to assign
+     * @return Assignment
+     */
+    public function assign(AnyType $value): Assignment
+    {
+        return new Assignment($this, $value);
     }
 
     /**

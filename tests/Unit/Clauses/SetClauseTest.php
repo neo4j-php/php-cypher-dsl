@@ -44,7 +44,7 @@ class SetClauseTest extends TestCase
         $set = new SetClause();
         $expression = $this->getExpressionMock("(a)", $this);
 
-        $set->addExpression($expression);
+        $set->addAssignment($expression);
 
         $this->assertSame("SET (a)", $set->toQuery());
     }
@@ -55,8 +55,8 @@ class SetClauseTest extends TestCase
         $expressionA = $this->getExpressionMock("(a)", $this);
         $expressionB = $this->getExpressionMock("(b)", $this);
 
-        $set->addExpression($expressionA);
-        $set->addExpression($expressionB);
+        $set->addAssignment($expressionA);
+        $set->addAssignment($expressionB);
 
         $this->assertSame("SET (a), (b)", $set->toQuery());
     }

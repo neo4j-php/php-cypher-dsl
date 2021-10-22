@@ -44,7 +44,7 @@ class LimitClauseTest extends TestCase
         $limit = new LimitClause();
         $expression = $this->getExpressionMock("10", $this);
 
-        $limit->setExpression($expression);
+        $limit->setLimit($expression);
 
         $this->assertSame("LIMIT 10", $limit->toQuery());
     }

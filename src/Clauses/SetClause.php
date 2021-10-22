@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Assignment;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -31,19 +32,19 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 class SetClause extends Clause
 {
     /**
-     * @var AnyType[] $expressions The expressions to set
+     * @var AnyType[] $assignments The expressions to set
      */
-    private array $expressions = [];
+    private array $assignments = [];
 
     /**
-     * Add an expression to set. This expression is usually an "assignment" expression.
+     * Add an assignment.
      *
-     * @param  AnyType $expression The expression to set
+     * @param  Assignment $assignment The assignment to execute
      * @return SetClause
      */
-    public function addExpression(AnyType $expression): self
+    public function addAssignment(Assignment $assignment): self
     {
-        $this->expressions[] = $expression;
+        $this->assignments[] = $assignment;
 
         return $this;
     }
@@ -62,7 +63,7 @@ class SetClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (AnyType $expression): string => $expression->toQuery(), $this->expressions)
+            array_map(fn (Assignment $assignment): string => $assignment->toQuery(), $this->assignments)
         );
     }
 }
