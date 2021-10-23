@@ -24,6 +24,10 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\MatchClause;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\MatchClause
@@ -42,7 +46,7 @@ class MatchTest extends TestCase
     public function testSinglePattern()
     {
         $match = new MatchClause();
-        $match->addPattern($this->getPatternMock("(a)", $this));
+        $match->addPattern($this->getQueryConvertableMock(StructuralType::class, "(a)"));
 
         $this->assertSame("MATCH (a)", $match->toQuery());
     }
@@ -50,9 +54,41 @@ class MatchTest extends TestCase
     public function testMultiplePatterns()
     {
         $match = new MatchClause();
-        $match->addPattern($this->getPatternMock("(a)", $this));
-        $match->addPattern($this->getPatternMock("(b)", $this));
+        $match->addPattern($this->getQueryConvertableMock(StructuralType::class, "(a)"));
+        $match->addPattern($this->getQueryConvertableMock(StructuralType::class, "(b)"));
 
         $this->assertSame("MATCH (a), (b)", $match->toQuery());
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsNodeType()
+    {
+        $match = new MatchClause();
+        $match->addPattern($this->getQueryConvertableMock(NodeType::class, "(a)"));
+
+        $match->toQuery();
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsPathType()
+    {
+        $match = new MatchClause();
+        $match->addPattern($this->getQueryConvertableMock(PathType::class, "(a)"));
+
+        $match->toQuery();
+    }
+
+    public function testDoesNotAcceptAnyType()
+    {
+        $match = new MatchClause();
+        $match->addPattern($this->getQueryConvertableMock(AnyType::class, "(a)"));
+
+        $this->expectException(\TypeError::class);
+
+        $match->toQuery();
     }
 }

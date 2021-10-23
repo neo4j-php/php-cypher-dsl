@@ -25,6 +25,8 @@ use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause;
 use WikibaseSolutions\CypherDSL\Clauses\CreateClause;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Variable;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\CreateClause
@@ -53,7 +55,7 @@ class CallProcedureTest extends TestCase
         $callProcedureClause = new CallProcedureClause();
         $callProcedureClause->setProcedure("apoc.json");
 
-        $callProcedureClause->addArgument($this->getExpressionMock("'text'", $this));
+        $callProcedureClause->addArgument($this->getQueryConvertableMock(AnyType::class, "'text'"));
 
         $this->assertSame("CALL apoc.json('text')", $callProcedureClause->toQuery());
     }
@@ -63,7 +65,7 @@ class CallProcedureTest extends TestCase
         $callProcedureClause = new CallProcedureClause();
         $callProcedureClause->setProcedure("apoc.json");
 
-        $expression = $this->getExpressionMock("'text'", $this);
+        $expression = $this->getQueryConvertableMock(AnyType::class, "'text'");
 
         $callProcedureClause->addArgument($expression);
         $callProcedureClause->addArgument($expression);
@@ -77,7 +79,7 @@ class CallProcedureTest extends TestCase
         $callProcedureClause = new CallProcedureClause();
         $callProcedureClause->setProcedure("apoc.json");
 
-        $expression = $this->getExpressionMock("'text'", $this);
+        $expression = $this->getQueryConvertableMock(AnyType::class, "'text'");
 
         $callProcedureClause->addArgument($expression);
         $callProcedureClause->addArgument($expression);
@@ -94,9 +96,9 @@ class CallProcedureTest extends TestCase
         $callProcedureClause = new CallProcedureClause();
         $callProcedureClause->setProcedure("apoc.json");
 
-        $a = $this->getVariableMock("a", $this);
-        $b = $this->getVariableMock("b", $this);
-        $c = $this->getVariableMock("c", $this);
+        $a = $this->getQueryConvertableMock(Variable::class, "a");
+        $b = $this->getQueryConvertableMock(Variable::class,"b");
+        $c = $this->getQueryConvertableMock(Variable::class,"c");
 
         // This should overwrite the previous calls to addArgument
         $callProcedureClause->yields([$a, $b, $c]);

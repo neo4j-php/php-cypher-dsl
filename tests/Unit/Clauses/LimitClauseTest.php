@@ -22,8 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\LimitClause;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\LimitClause
@@ -42,10 +45,35 @@ class LimitClauseTest extends TestCase
     public function testPattern()
     {
         $limit = new LimitClause();
-        $expression = $this->getExpressionMock("10", $this);
+        $expression = $this->getQueryConvertableMock(NumeralType::class, "10");
 
         $limit->setLimit($expression);
 
         $this->assertSame("LIMIT 10", $limit->toQuery());
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsNumeralType()
+    {
+        $limit = new LimitClause();
+        $expression = $this->getQueryConvertableMock(NumeralType::class, "10");
+
+        $limit->setLimit($expression);
+
+        $limit->toQuery();
+    }
+
+    public function testDoesNotAcceptAnyType()
+    {
+        $limit = new LimitClause();
+        $expression = $this->getQueryConvertableMock(AnyType::class, "10");
+
+        $this->expectException(TypeError::class);
+
+        $limit->setLimit($expression);
+
+        $limit->toQuery();
     }
 }

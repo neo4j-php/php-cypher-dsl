@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL;
 
 use InvalidArgumentException;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\Clauses\CreateClause;
@@ -47,6 +48,9 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
+/**
+ * Builder class for building complex Cypher queries.
+ */
 class Query
 {
     /**
@@ -186,7 +190,7 @@ class Query
 
         foreach ($patterns as $pattern) {
             if (!($pattern instanceof StructuralType)) {
-                throw new InvalidArgumentException("\$patterns should only consist of StructuralType objects");
+                throw new TypeError("\$patterns should only consist of StructuralType objects");
             }
 
             $matchClause->addPattern($pattern);
@@ -219,7 +223,7 @@ class Query
 
         foreach ($expressions as $maybeAlias => $expression) {
             if (!($expression instanceof AnyType)) {
-                throw new InvalidArgumentException("\$expressions should only consist of AnyType objects");
+                throw new TypeError("\$expressions should only consist of AnyType objects");
             }
 
             $alias = is_integer($maybeAlias) ? "" : $maybeAlias;
@@ -252,7 +256,7 @@ class Query
 
         foreach ($patterns as $pattern) {
             if (!($pattern instanceof StructuralType)) {
-                throw new InvalidArgumentException("\$patterns should only consist of StructuralType objects");
+                throw new TypeError("\$patterns should only consist of StructuralType objects");
             }
 
             $createClause->addPattern($pattern);
@@ -282,7 +286,7 @@ class Query
 
         foreach ($nodes as $node) {
             if (!($node instanceof NodeType)) {
-                throw new InvalidArgumentException("\$nodes should exist of only NodeType objects");
+                throw new TypeError("\$nodes should exist of only NodeType objects");
             }
 
             $deleteClause->addNode($node);
@@ -313,7 +317,7 @@ class Query
 
         foreach ($nodes as $node) {
             if (!($node instanceof NodeType)) {
-                throw new InvalidArgumentException("\$nodes should exist of only NodeType objects");
+                throw new TypeError("\$nodes should exist of only NodeType objects");
             }
 
             $deleteClause->addNode($node);
@@ -391,7 +395,7 @@ class Query
 
         foreach ($patterns as $pattern) {
             if (!($pattern instanceof StructuralType)) {
-                throw new InvalidArgumentException("\$patterns should only consist of StructuralType objects");
+                throw new TypeError("\$patterns should only consist of StructuralType objects");
             }
 
             $optionalMatchClause->addPattern($pattern);
@@ -417,13 +421,13 @@ class Query
         $orderByClause = new OrderByClause();
         $orderByClause->setDescending($descending);
 
-        if ($properties instanceof Property ) {
+        if ($properties instanceof Property) {
             $properties = [$properties];
         }
 
-        foreach ( $properties as $property ) {
+        foreach ( $properties as $property) {
             if (!($property instanceof Property)) {
-                throw new InvalidArgumentException("\$properties should only consist of Property objects");
+                throw new TypeError("\$properties should only consist of Property objects");
             }
 
             $orderByClause->addProperty($property);
@@ -453,7 +457,7 @@ class Query
 
         foreach ($expressions as $expression) {
             if (!($expression instanceof Property) && !($expression instanceof Label)) {
-                throw new InvalidArgumentException("\$expressions should consist of only Property or Label objects");
+                throw new TypeError("\$expressions should consist of only Property or Label objects");
             }
 
             $removeClause->addExpression($expression);
@@ -483,7 +487,7 @@ class Query
 
         foreach ($expressions as $expression) {
             if (!($expression instanceof AnyType)) {
-                throw new InvalidArgumentException("\$expressions should only consist of AnyType objects");
+                throw new TypeError("\$expressions should only consist of AnyType objects");
             }
 
             $setClause->addAssignment($expression);
@@ -533,7 +537,7 @@ class Query
 
         foreach ($expressions as $maybeAlias => $expression) {
             if (!($expression instanceof AnyType)) {
-                throw new InvalidArgumentException("\$expressions should only consist of AnyType objects");
+                throw new TypeError("\$expressions should only consist of AnyType objects");
             }
 
             $alias = is_integer($maybeAlias) ? "" : $maybeAlias;

@@ -26,6 +26,10 @@ use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\OptionalMatchClause;
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\OptionalMatchClause
@@ -44,7 +48,7 @@ class OptionalMatchTest extends TestCase
     public function testSinglePattern()
     {
         $match = new OptionalMatchClause();
-        $match->addPattern($this->getPatternMock("(a)", $this));
+        $match->addPattern($this->getQueryConvertableMock(StructuralType::class, "(a)"));
 
         $this->assertSame("OPTIONAL MATCH (a)", $match->toQuery());
     }
@@ -52,9 +56,42 @@ class OptionalMatchTest extends TestCase
     public function testMultiplePatterns()
     {
         $match = new OptionalMatchClause();
-        $match->addPattern($this->getPatternMock("(a)", $this));
-        $match->addPattern($this->getPatternMock("(b)", $this));
+        $match->addPattern($this->getQueryConvertableMock(StructuralType::class, "(a)"));
+        $match->addPattern($this->getQueryConvertableMock(StructuralType::class, "(b)"));
 
         $this->assertSame("OPTIONAL MATCH (a), (b)", $match->toQuery());
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsNodeType()
+    {
+        $match = new OptionalMatchClause();
+        $match->addPattern($this->getQueryConvertableMock(NodeType::class, "(a)"));
+
+        $match->toQuery();
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsPathType()
+    {
+        $match = new OptionalMatchClause();
+        $match->addPattern($this->getQueryConvertableMock(PathType::class, "(a)"));
+
+        $match->toQuery();
+    }
+
+    public function testDoesNotAcceptAnyType()
+    {
+        $match = new OptionalMatchClause();
+
+        $this->expectException(\TypeError::class);
+
+        $match->addPattern($this->getQueryConvertableMock(AnyType::class, "(a)"));
+
+        $match->toQuery();
     }
 }
