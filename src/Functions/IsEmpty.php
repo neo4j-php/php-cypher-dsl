@@ -53,6 +53,10 @@ class IsEmpty extends FunctionCall implements BooleanType
      */
     public function __construct(AnyType $list)
     {
+        if (!($list instanceof ListType) && !($list instanceof MapType) && !($list instanceof StringType)) {
+            throw new \TypeError("\$list must be either a ListType, MapType or a StringType");
+        }
+
         $this->list = $list;
     }
 

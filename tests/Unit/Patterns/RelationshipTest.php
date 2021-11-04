@@ -19,34 +19,37 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Patterns;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Literals\Decimal;
 use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
-use WikibaseSolutions\CypherDSL\Patterns\Pattern;
+use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Patterns\Path
  */
 class RelationshipTest extends TestCase
 {
-    /**
-     * @var MockObject|Pattern
-     */
-    private Pattern $a;
+    use TestHelper;
 
     /**
-     * @var MockObject|Pattern
+     * @var MockObject|Path
      */
-    private Pattern $b;
+    private Path $a;
+
+    /**
+     * @var MockObject|Path
+     */
+    private Path $b;
 
     public function setUp(): void
     {
-        $this->a = $this->getPatternMock("(a)");
-        $this->b = $this->getPatternMock("(b)");
+        $this->a = $this->getQueryConvertableMock(Node::class, "(a)");
+        $this->b = $this->getQueryConvertableMock(Node::class, "(b)");
     }
 
     public function testDirRight()
@@ -209,7 +212,7 @@ class RelationshipTest extends TestCase
         ];
     }
 
-    public function provideWithPropertiesData()
+    public function provideWithPropertiesData(): array
     {
         return [
         [[], Path::DIR_LEFT, "(a)<-[{}]-(b)"],
@@ -232,7 +235,7 @@ class RelationshipTest extends TestCase
         ];
     }
 
-    public function provideWithNameAndPropertiesData()
+    public function provideWithNameAndPropertiesData(): array
     {
         return [
         ['a', [], Path::DIR_LEFT, "(a)<-[a {}]-(b)"],
@@ -242,7 +245,7 @@ class RelationshipTest extends TestCase
         ];
     }
 
-    public function provideWithTypeAndPropertiesData()
+    public function provideWithTypeAndPropertiesData(): array
     {
         return [
         ['a', [], Path::DIR_LEFT, "(a)<-[:a {}]-(b)"],
@@ -252,7 +255,7 @@ class RelationshipTest extends TestCase
         ];
     }
 
-    public function provideWithNameAndTypeAndPropertiesData()
+    public function provideWithNameAndTypeAndPropertiesData(): array
     {
         return [
         ['a', 'a', [], Path::DIR_LEFT, "(a)<-[a:a {}]-(b)"],
@@ -265,7 +268,7 @@ class RelationshipTest extends TestCase
         ];
     }
 
-    public function provideWithMultipleTypesData()
+    public function provideWithMultipleTypesData(): array
     {
         return [
         ['a', [], [], Path::DIR_LEFT, "(a)<-[a {}]-(b)"],
@@ -275,19 +278,5 @@ class RelationshipTest extends TestCase
         ['a', ['a', 'b', 'c'], [new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[a:a|b|c {`0`: 'a'}]-(b)"],
         ['a', ['a', 'b'], [], Path::DIR_LEFT, "(a)<-[a:a|b {}]-(b)"]
         ];
-    }
-
-    /**
-     * Creates a mock of the Pattern class that returns the given string when toQuery() is called.
-     *
-     * @param  string $pattern
-     * @return Pattern|MockObject
-     */
-    private function getPatternMock(string $pattern): Pattern
-    {
-        $mock = $this->getMockBuilder(Pattern::class)->getMock();
-        $mock->method('toQuery')->willReturn($pattern);
-
-        return $mock;
     }
 }

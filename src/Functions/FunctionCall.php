@@ -36,6 +36,19 @@ use WikibaseSolutions\CypherDSL\QueryConvertable;
 abstract class FunctionCall implements QueryConvertable
 {
     /**
+     * Produces a raw function call. This enables the usage of unimplemented functions in your
+     * Cypher queries. The parameters of this function are not type-checked.
+     *
+     * @param string $functionName The name of the function to call
+     * @param AnyType[] $parameters The parameters to pass to the function call
+     * @return FunctionCall
+     */
+    public static function raw(string $functionName, array $parameters): FunctionCall
+    {
+        return new RawFunction($functionName, $parameters);
+    }
+
+    /**
      * Calls the "all()" function. The signature of the "all()" function is:
      *
      * all(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)

@@ -22,8 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
+use WikibaseSolutions\CypherDSL\Assignment;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\SetClause
@@ -42,7 +45,7 @@ class SetClauseTest extends TestCase
     public function testSinglePattern()
     {
         $set = new SetClause();
-        $expression = $this->getExpressionMock("(a)", $this);
+        $expression = $this->getQueryConvertableMock(Assignment::class, "(a)");
 
         $set->addAssignment($expression);
 
@@ -52,12 +55,37 @@ class SetClauseTest extends TestCase
     public function testMultiplePattern()
     {
         $set = new SetClause();
-        $expressionA = $this->getExpressionMock("(a)", $this);
-        $expressionB = $this->getExpressionMock("(b)", $this);
+        $expressionA = $this->getQueryConvertableMock(Assignment::class, "(a)");
+        $expressionB = $this->getQueryConvertableMock(Assignment::class, "(b)");
 
         $set->addAssignment($expressionA);
         $set->addAssignment($expressionB);
 
         $this->assertSame("SET (a), (b)", $set->toQuery());
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsAssignment()
+    {
+        $set = new SetClause();
+        $expression = $this->getQueryConvertableMock(Assignment::class, "(a)");
+
+        $set->addAssignment($expression);
+
+        $set->toQuery();
+    }
+
+    public function testDoesNotAcceptAnyType()
+    {
+        $set = new SetClause();
+        $expression = $this->getQueryConvertableMock(AnyType::class, "(a)");
+
+        $this->expectException(TypeError::class);
+
+        $set->addAssignment($expression);
+
+        $set->toQuery();
     }
 }

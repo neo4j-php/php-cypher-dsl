@@ -19,10 +19,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Literals;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Literals;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Literals\Boolean;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Boolean
@@ -41,5 +42,10 @@ class BooleanTest extends TestCase
         $boolean = new Boolean(false);
 
         $this->assertSame("false", $boolean->toQuery());
+    }
+
+    public function testInstanceOfBooleanType()
+    {
+        $this->assertInstanceOf(BooleanType::class, new Boolean(false));
     }
 }

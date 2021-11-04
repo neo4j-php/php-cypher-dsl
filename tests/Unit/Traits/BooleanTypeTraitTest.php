@@ -19,27 +19,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\PropertyMutation;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\PropertyMutation
+ * @covers \WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait
  */
-class PropertyMutationTest extends TestCase
+class BooleanTypeTraitTest extends TestCase
 {
-    use TestHelper;
-
-    public function testToQuery()
-    {
-        $mutation = new PropertyMutation($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
-
-        $this->assertSame("(a += b)", $mutation->toQuery());
-
-        $mutation = new PropertyMutation($mutation, $mutation);
-
-        $this->assertSame("((a += b) += (a += b))", $mutation->toQuery());
-    }
+    // TODO
 }

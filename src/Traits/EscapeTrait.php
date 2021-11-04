@@ -36,7 +36,7 @@ trait EscapeTrait
      * @param  string $name
      * @return string
      */
-    private function escape(string $name): string
+    public static function escape(string $name): string
     {
         if ($name === "") {
             return "";

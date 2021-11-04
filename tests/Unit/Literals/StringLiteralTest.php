@@ -19,10 +19,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Literals;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Literals;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\StringLiteral
@@ -43,6 +44,11 @@ class StringLiteralTest extends TestCase
         $string->useDoubleQuotes(true);
 
         $this->assertSame('""', $string->toQuery());
+    }
+
+    public function testInstanceOfStringType()
+    {
+        $this->assertInstanceOf(StringType::class, new StringLiteral(""));
     }
 
     /**

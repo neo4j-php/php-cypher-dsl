@@ -24,6 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\WhereClause
@@ -42,10 +43,23 @@ class WhereClauseTest extends TestCase
     public function testExpression()
     {
         $where = new WhereClause();
-        $expression = $this->getExpressionMock("(a)", $this);
+        $expression = $this->getQueryConvertableMock(AnyType::class, "(a)");
 
         $where->setExpression($expression);
 
         $this->assertSame("WHERE (a)", $where->toQuery());
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsAnyType()
+    {
+        $where = new WhereClause();
+        $expression = $this->getQueryConvertableMock(AnyType::class, "(a)");
+
+        $where->setExpression($expression);
+
+        $where->toQuery();
     }
 }

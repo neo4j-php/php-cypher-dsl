@@ -19,18 +19,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Wildcard;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Wildcard
+ * @covers \WikibaseSolutions\CypherDSL\Assignment
  */
-class WildcardTest extends TestCase
+class AssignmentTest extends TestCase
 {
+    use TestHelper;
+
     public function testToQuery()
     {
-        $this->assertSame("*", (new Wildcard())->toQuery());
+        // TODO
     }
 }

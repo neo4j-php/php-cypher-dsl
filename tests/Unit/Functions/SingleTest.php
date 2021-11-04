@@ -19,11 +19,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Functions;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Functions\Single;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
+use WikibaseSolutions\CypherDSL\Variable;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Functions\Single
@@ -34,12 +38,38 @@ class SingleTest extends TestCase
 
     public function testToQuery()
     {
-        $variable = $this->getExpressionMock("variable", $this);
-        $list = $this->getExpressionMock("list", $this);
-        $predicate = $this->getExpressionMock("predicate", $this);
+        $variable = $this->getQueryConvertableMock(Variable::class, "variable");
+        $list = $this->getQueryConvertableMock(ListType::class, "list");
+        $predicate = $this->getQueryConvertableMock(AnyType::class, "predicate");
 
-        $single = new Single($variable, $list, $predicate);
+        $all = new Single($variable, $list, $predicate);
 
-        $this->assertSame("single(variable IN list WHERE predicate)", $single->toQuery());
+        $this->assertSame("single(variable IN list WHERE predicate)", $all->toQuery());
+    }
+
+    public function testDoesNotAcceptAnyTypeAsVariable()
+    {
+        $variable = $this->getQueryConvertableMock(AnyType::class, "variable");
+        $list = $this->getQueryConvertableMock(ListType::class, "list");
+        $predicate = $this->getQueryConvertableMock(AnyType::class, "predicate");
+
+        $this->expectException(TypeError::class);
+
+        $all = new Single($variable, $list, $predicate);
+
+        $all->toQuery();
+    }
+
+    public function testDoesNotAcceptAnyTypeAsList()
+    {
+        $variable = $this->getQueryConvertableMock(Variable::class, "variable");
+        $list = $this->getQueryConvertableMock(AnyType::class, "list");
+        $predicate = $this->getQueryConvertableMock(AnyType::class, "predicate");
+
+        $this->expectException(TypeError::class);
+
+        $all = new Single($variable, $list, $predicate);
+
+        $all->toQuery();
     }
 }

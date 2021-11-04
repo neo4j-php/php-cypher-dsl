@@ -19,10 +19,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Literals;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Literals;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Decimal
@@ -34,6 +35,11 @@ class DecimalTest extends TestCase
         $decimal = new Decimal(0);
 
         $this->assertSame("0", $decimal->toQuery());
+    }
+
+    public function testInstanceOfNumeralType()
+    {
+        $this->assertInstanceOf(NumeralType::class, new Decimal(0));
     }
 
     /**
@@ -51,11 +57,11 @@ class DecimalTest extends TestCase
     public function provideToQueryData(): array
     {
         return [
-        [1, "1"],
-        [2, "2"],
-        [3.14, "3.14"],
-        [-12, "-12"],
-        [69, "69"]
+            [1, "1"],
+            [2, "2"],
+            [3.14, "3.14"],
+            [-12, "-12"],
+            [69, "69"]
         ];
     }
 }

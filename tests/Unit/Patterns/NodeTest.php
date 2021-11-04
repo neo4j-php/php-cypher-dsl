@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Patterns;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\ExpressionList;
@@ -47,7 +47,7 @@ class NodeTest extends TestCase
     public function testOnlyLabel(string $label, string $expected)
     {
         $node = new Node();
-        $node->withLabel($label);
+        $node->labeled($label);
 
         $this->assertSame($expected, $node->toQuery());
     }
@@ -87,7 +87,7 @@ class NodeTest extends TestCase
     public function testWithNameAndLabel(string $name, string $label, string $expected)
     {
         $node = new Node();
-        $node->withLabel($label)->named($name);
+        $node->labeled($label)->named($name);
 
         $this->assertSame($expected, $node->toQuery());
     }
@@ -115,7 +115,7 @@ class NodeTest extends TestCase
     public function testWithLabelAndProperties(string $label, array $properties, string $expected)
     {
         $node = new Node();
-        $node->withLabel($label)->withProperties($properties);
+        $node->labeled($label)->withProperties($properties);
 
         $this->assertSame($expected, $node->toQuery());
     }
@@ -130,7 +130,7 @@ class NodeTest extends TestCase
     public function testWithNameAndLabelAndProperties(string $name, string $label, array $properties, string $expected)
     {
         $node = new Node();
-        $node->named($name)->withLabel($label)->withProperties($properties);
+        $node->named($name)->labeled($label)->withProperties($properties);
 
         $this->assertSame($expected, $node->toQuery());
     }
@@ -155,7 +155,7 @@ class NodeTest extends TestCase
         $node = new Node();
 
         foreach ($labels as $label) {
-            $node->withLabel($label);
+            $node->labeled($label);
         }
 
         $this->assertSame($expected, $node->toQuery());
@@ -165,7 +165,7 @@ class NodeTest extends TestCase
     {
         $label = "__test__";
         $viaConstructor = new Node($label);
-        $viaSetter = (new Node())->withLabel($label);
+        $viaSetter = (new Node())->labeled($label);
 
         $this->assertSame($viaConstructor->toQuery(), $viaSetter->toQuery(), "Setting label via setter has different effect than using constructor");
     }
@@ -206,7 +206,7 @@ class NodeTest extends TestCase
         ];
     }
 
-    public function provideWithNameAndPropertiesData()
+    public function provideWithNameAndPropertiesData(): array
     {
         return [
         ['a', ['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "(a {a: 'b', b: 'c'})"],
@@ -215,7 +215,7 @@ class NodeTest extends TestCase
         ];
     }
 
-    public function provideWithLabelAndPropertiesData()
+    public function provideWithLabelAndPropertiesData(): array
     {
         return [
         ['a', ['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "(:a {a: 'b', b: 'c'})"],
@@ -224,7 +224,7 @@ class NodeTest extends TestCase
         ];
     }
 
-    public function provideOnlyPropertiesData()
+    public function provideOnlyPropertiesData(): array
     {
         return [
         [['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "({a: 'b', b: 'c'})"],
@@ -233,7 +233,7 @@ class NodeTest extends TestCase
         ];
     }
 
-    public function provideWithNameAndLabelAndPropertiesData()
+    public function provideWithNameAndLabelAndPropertiesData(): array
     {
         return [
         ['a', 'd', ['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "(a:d {a: 'b', b: 'c'})"],
@@ -242,7 +242,7 @@ class NodeTest extends TestCase
         ];
     }
 
-    public function provideMultipleLabelsData()
+    public function provideMultipleLabelsData(): array
     {
         return [
         [['a'], '(:a)'],

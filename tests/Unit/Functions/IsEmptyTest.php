@@ -19,11 +19,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Functions;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Functions\IsEmpty;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Functions\IsEmpty
@@ -34,10 +39,57 @@ class IsEmptyTest extends TestCase
 
     public function testToQuery()
     {
-        $list = $this->getExpressionMock("list", $this);
+        $list = $this->getQueryConvertableMock(ListType::class, "list");
 
         $isEmpty = new IsEmpty($list);
 
         $this->assertSame("isEmpty(list)", $isEmpty->toQuery());
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsListType()
+    {
+        $list = $this->getQueryConvertableMock(ListType::class, "list");
+
+        $isEmpty = new IsEmpty($list);
+
+        $isEmpty->toQuery();
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsMapType()
+    {
+        $list = $this->getQueryConvertableMock(MapType::class, "list");
+
+        $isEmpty = new IsEmpty($list);
+
+        $isEmpty->toQuery();
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsStringType()
+    {
+        $list = $this->getQueryConvertableMock(StringType::class, "list");
+
+        $isEmpty = new IsEmpty($list);
+
+        $isEmpty->toQuery();
+    }
+
+    public function testDoestNotAcceptAnyType()
+    {
+        $list = $this->getQueryConvertableMock(AnyType::class, "list");
+
+        $this->expectException(TypeError::class);
+
+        $isEmpty = new IsEmpty($list);
+
+        $isEmpty->toQuery();
     }
 }
