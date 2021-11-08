@@ -22,8 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\AndOperator;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\AndOperator
@@ -34,12 +37,21 @@ class AndOperatorTest extends TestCase
 
     public function testToQuery()
     {
-        $and = new AndOperator($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
+        $and = new AndOperator($this->getQueryConvertableMock(BooleanType::class, "true"), $this->getQueryConvertableMock(BooleanType::class, "false"));
 
-        $this->assertSame("(a AND b)", $and->toQuery());
+        $this->assertSame("(true AND false)", $and->toQuery());
 
         $and = new AndOperator($and, $and);
 
-        $this->assertSame("((a AND b) AND (a AND b))", $and->toQuery());
+        $this->assertSame("((true AND false) AND (true AND false))", $and->toQuery());
     }
+
+    public function testDoesNotAcceptAnyTypeAsOperands()
+	{
+		$this->expectException(TypeError::class);
+
+		$and = new AndOperator($this->getQueryConvertableMock(AnyType::class, "true"), $this->getQueryConvertableMock(AnyType::class, "false"));
+
+		$and->toQuery();
+	}
 }

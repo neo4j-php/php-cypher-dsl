@@ -22,12 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Assignment;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\ExpressionList;
-use WikibaseSolutions\CypherDSL\Label;
 use WikibaseSolutions\CypherDSL\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Literals\Decimal;
-use WikibaseSolutions\CypherDSL\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Parameter;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
@@ -255,7 +254,7 @@ class QueryTest extends TestCase
 
     public function testSet()
     {
-        $expression = $this->getQueryConvertableMock(AnyType::class, "a.age");
+        $expression = $this->getQueryConvertableMock(Assignment::class, "a.age");
 
         $statement = (new Query())->set($expression)->build();
 

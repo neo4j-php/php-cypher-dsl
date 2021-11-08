@@ -22,8 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\GreaterThanOrEqual;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\GreaterThanOrEqual
@@ -34,12 +37,28 @@ class GreaterThanOrEqualTest extends TestCase
 
     public function testToQuery()
     {
-        $greaterThanOrEqual = new GreaterThanOrEqual($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
+        $greaterThanOrEqual = new GreaterThanOrEqual($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
-        $this->assertSame("(a >= b)", $greaterThanOrEqual->toQuery());
-
-        $greaterThanOrEqual = new GreaterThanOrEqual($greaterThanOrEqual, $greaterThanOrEqual);
-
-        $this->assertSame("((a >= b) >= (a >= b))", $greaterThanOrEqual->toQuery());
+        $this->assertSame("(10 >= 15)", $greaterThanOrEqual->toQuery());
     }
+
+    public function testCannotBeNested()
+	{
+		$greaterThanOrEqual = new GreaterThanOrEqual($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
+
+		$this->expectException(TypeError::class);
+
+		$greaterThanOrEqual = new GreaterThanOrEqual($greaterThanOrEqual, $greaterThanOrEqual);
+
+		$greaterThanOrEqual->toQuery();
+	}
+
+	public function testDoesNotAcceptAnyTypeAsOperands()
+	{
+		$this->expectException(TypeError::class);
+
+		$greaterThanOrEqual = new GreaterThanOrEqual($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
+
+		$greaterThanOrEqual->toQuery();
+	}
 }

@@ -32,7 +32,7 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\MatchClause
  */
-class MatchTest extends TestCase
+class MatchClauseTest extends TestCase
 {
     use TestHelper;
 
@@ -84,10 +84,10 @@ class MatchTest extends TestCase
 
     public function testDoesNotAcceptAnyType()
     {
+		$this->expectException(\TypeError::class);
+
         $match = new MatchClause();
         $match->addPattern($this->getQueryConvertableMock(AnyType::class, "(a)"));
-
-        $this->expectException(\TypeError::class);
 
         $match->toQuery();
     }

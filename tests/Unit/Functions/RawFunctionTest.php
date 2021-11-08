@@ -19,39 +19,28 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Functions;
 
 use PHPUnit\Framework\TestCase;
-use TypeError;
-use WikibaseSolutions\CypherDSL\Minus;
+use WikibaseSolutions\CypherDSL\Functions\RawFunction;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Minus
+ * @covers \WikibaseSolutions\CypherDSL\Functions\RawFunction
  */
-class MinusTest extends TestCase
+class RawFunctionTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
-    public function testToQuery()
-    {
-        $minus = new Minus($this->getQueryConvertableMock(NumeralType::class, "10"));
-
-        $this->assertSame("-10", $minus->toQuery());
-
-        $minus = new Minus($minus);
-
-        $this->assertSame("--10", $minus->toQuery());
-    }
-
-    public function testDoesNotAcceptAnyTypeAsOperand()
+	public function testToQuery()
 	{
-		$this->expectException(TypeError::class);
+		$a = $this->getQueryConvertableMock(AnyType::class, "a");
+		$b = $this->getQueryConvertableMock(AnyType::class, "b");
+		$c = $this->getQueryConvertableMock(AnyType::class, "c");
 
-		$minus = new Minus($this->getQueryConvertableMock(AnyType::class, "10"));
+		$raw = new RawFunction("foobar", [$a, $b, $c]);
 
-		$minus->toQuery();
+		$this->assertSame("foobar(a, b, c)", $raw->toQuery());
 	}
 }

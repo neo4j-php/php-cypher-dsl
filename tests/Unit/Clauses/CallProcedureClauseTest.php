@@ -29,9 +29,9 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Variable;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Clauses\CreateClause
+ * @covers \WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause
  */
-class CallProcedureTest extends TestCase
+class CallProcedureClauseTest extends TestCase
 {
     use TestHelper;
 

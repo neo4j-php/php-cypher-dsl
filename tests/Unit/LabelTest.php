@@ -24,6 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Label;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Variable;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Label
@@ -32,20 +33,30 @@ class LabelTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
+	public function testSingle()
+	{
+		$expression = $this->getQueryConvertableMock(Variable::class, "foo");
+		$label = ["Bar"];
+
+		$label = new Label($expression, $label);
+
+		$this->assertSame("foo:Bar", $label->toQuery());
+	}
+
+    public function testMultiple()
     {
-        $expression = $this->getExpressionMock("foo", $this);
-        $label = "Bar";
+        $expression = $this->getQueryConvertableMock(Variable::class, "foo");
+        $label = ["Bar", "Baz"];
 
         $label = new Label($expression, $label);
 
-        $this->assertSame("foo:Bar", $label->toQuery());
+        $this->assertSame("foo:Bar:Baz", $label->toQuery());
     }
 
     public function testLabelIsEscaped()
     {
-        $expression = $this->getExpressionMock("foo", $this);
-        $label = "{}";
+		$expression = $this->getQueryConvertableMock(Variable::class, "foo");
+        $label = ["{}"];
 
         $label = new Label($expression, $label);
 

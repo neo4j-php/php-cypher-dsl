@@ -22,8 +22,10 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Multiplication;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Multiplication
@@ -32,14 +34,23 @@ class MultiplicationTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
-    {
-        $multiplication = new Multiplication($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
+	public function testToQuery()
+	{
+		$multiplication = new Multiplication($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
-        $this->assertSame("(a * b)", $multiplication->toQuery());
+		$this->assertSame("(10 * 15)", $multiplication->toQuery());
 
-        $multiplication = new Multiplication($multiplication, $multiplication);
+		$multiplication = new Multiplication($multiplication, $multiplication);
 
-        $this->assertSame("((a * b) * (a * b))", $multiplication->toQuery());
-    }
+		$this->assertSame("((10 * 15) * (10 * 15))", $multiplication->toQuery());
+	}
+
+	public function testDoesNotAcceptAnyTypeAsOperands()
+	{
+		$this->expectException(TypeError::class);
+
+		$multiplication = new Multiplication($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
+
+		$multiplication->toQuery();
+	}
 }

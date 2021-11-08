@@ -19,39 +19,40 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use TypeError;
-use WikibaseSolutions\CypherDSL\Minus;
+use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Minus
+ * @covers \WikibaseSolutions\CypherDSL\Traits\MapTypeTrait
  */
-class MinusTest extends TestCase
+class MapTypeTraitTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
-    public function testToQuery()
-    {
-        $minus = new Minus($this->getQueryConvertableMock(NumeralType::class, "10"));
+	/**
+	 * @var MockObject|MapType
+	 */
+	private $a;
 
-        $this->assertSame("-10", $minus->toQuery());
+	/**
+	 * @var MockObject|MapType
+	 */
+	private $b;
 
-        $minus = new Minus($minus);
-
-        $this->assertSame("--10", $minus->toQuery());
-    }
-
-    public function testDoesNotAcceptAnyTypeAsOperand()
+	public function setUp(): void
 	{
-		$this->expectException(TypeError::class);
+		$this->a = $this->getQueryConvertableMock(MapType::class, "{}");
+	}
 
-		$minus = new Minus($this->getQueryConvertableMock(AnyType::class, "10"));
+	public function testProperty()
+	{
+		$property = $this->a->property("foo");
 
-		$minus->toQuery();
+		$this->assertInstanceOf(Property::class, $property);
 	}
 }

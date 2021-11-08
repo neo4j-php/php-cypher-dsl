@@ -22,8 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Division;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Division
@@ -34,12 +37,21 @@ class DivisionTest extends TestCase
 
     public function testToQuery()
     {
-        $division = new Division($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
+        $division = new Division($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
-        $this->assertSame("(a / b)", $division->toQuery());
+        $this->assertSame("(10 / 15)", $division->toQuery());
 
         $division = new Division($division, $division);
 
-        $this->assertSame("((a / b) / (a / b))", $division->toQuery());
+        $this->assertSame("((10 / 15) / (10 / 15))", $division->toQuery());
     }
+
+    public function testDoesNotAcceptAnyTypeAsOperands()
+	{
+		$this->expectException(TypeError::class);
+
+		$division = new Division($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
+
+		$division->toQuery();
+	}
 }

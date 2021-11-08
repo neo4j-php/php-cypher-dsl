@@ -22,8 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Contains;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Contains
@@ -34,12 +37,28 @@ class ContainsTest extends TestCase
 
     public function testToQuery()
     {
-        $contains = new Contains($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
+        $contains = new Contains($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
 
         $this->assertSame("(a CONTAINS b)", $contains->toQuery());
-
-        $contains = new Contains($contains, $contains);
-
-        $this->assertSame("((a CONTAINS b) CONTAINS (a CONTAINS b))", $contains->toQuery());
     }
+
+    public function testCannotBeNested()
+	{
+		$contains = new Contains($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
+
+		$this->expectException(TypeError::class);
+
+		$contains = new Contains($contains, $contains);
+
+		$contains->toQuery();
+	}
+
+	public function testDoesNotAcceptAnyTypeAsOperands()
+	{
+		$this->expectException(TypeError::class);
+
+		$contains = new Contains($this->getQueryConvertableMock(AnyType::class, "a"), $this->getQueryConvertableMock(AnyType::class, "b"));
+
+		$contains->toQuery();
+	}
 }

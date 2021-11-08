@@ -22,8 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Inequality;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Inequality
@@ -34,7 +37,7 @@ class InequalityTest extends TestCase
 
     public function testToQuery()
     {
-        $inequality = new Inequality($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
+        $inequality = new Inequality($this->getQueryConvertableMock(PropertyType::class, "a"), $this->getQueryConvertableMock(PropertyType::class, "b"));
 
         $this->assertSame("(a <> b)", $inequality->toQuery());
 
@@ -42,4 +45,13 @@ class InequalityTest extends TestCase
 
         $this->assertSame("((a <> b) <> (a <> b))", $inequality->toQuery());
     }
+
+    public function testDoesNotAcceptAnyTypeAsOperands()
+	{
+		$this->expectException(TypeError::class);
+
+		$inequality = new Inequality($this->getQueryConvertableMock(AnyType::class, "a"), $this->getQueryConvertableMock(AnyType::class, "b"));
+
+		$inequality->toQuery();
+	}
 }

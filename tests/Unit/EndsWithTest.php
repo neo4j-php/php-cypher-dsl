@@ -22,8 +22,12 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
+use WikibaseSolutions\CypherDSL\Contains;
 use WikibaseSolutions\CypherDSL\EndsWith;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\EndsWith
@@ -32,14 +36,30 @@ class EndsWithTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
-    {
-        $endsWith = new EndsWith($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
+	public function testToQuery()
+	{
+		$endsWith = new EndsWith($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
 
-        $this->assertSame("(a ENDS WITH b)", $endsWith->toQuery());
+		$this->assertSame("(a ENDS WITH b)", $endsWith->toQuery());
+	}
 
-        $endsWith = new EndsWith($endsWith, $endsWith);
+	public function testCannotBeNested()
+	{
+		$endsWith = new EndsWith($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
 
-        $this->assertSame("((a ENDS WITH b) ENDS WITH (a ENDS WITH b))", $endsWith->toQuery());
-    }
+		$this->expectException(TypeError::class);
+
+		$endsWith = new EndsWith($endsWith, $endsWith);
+
+		$endsWith->toQuery();
+	}
+
+	public function testDoesNotAcceptAnyTypeAsOperands()
+	{
+		$this->expectException(TypeError::class);
+
+		$endsWith = new EndsWith($this->getQueryConvertableMock(AnyType::class, "a"), $this->getQueryConvertableMock(AnyType::class, "b"));
+
+		$endsWith->toQuery();
+	}
 }

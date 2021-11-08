@@ -22,8 +22,12 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
+use WikibaseSolutions\CypherDSL\AndOperator;
 use WikibaseSolutions\CypherDSL\OrOperator;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\OrOperator
@@ -32,14 +36,23 @@ class OrOperatorTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
-    {
-        $or = new OrOperator($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
+	public function testToQuery()
+	{
+		$or = new OrOperator($this->getQueryConvertableMock(BooleanType::class, "true"), $this->getQueryConvertableMock(BooleanType::class, "false"));
 
-        $this->assertSame("(a OR b)", $or->toQuery());
+		$this->assertSame("(true OR false)", $or->toQuery());
 
-        $or = new OrOperator($or, $or);
+		$or = new OrOperator($or, $or);
 
-        $this->assertSame("((a OR b) OR (a OR b))", $or->toQuery());
-    }
+		$this->assertSame("((true OR false) OR (true OR false))", $or->toQuery());
+	}
+
+	public function testDoesNotAcceptAnyTypeAsOperands()
+	{
+		$this->expectException(TypeError::class);
+
+		$or = new OrOperator($this->getQueryConvertableMock(AnyType::class, "true"), $this->getQueryConvertableMock(AnyType::class, "false"));
+
+		$or->toQuery();
+	}
 }

@@ -19,39 +19,49 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use TypeError;
 use WikibaseSolutions\CypherDSL\Equality;
+use WikibaseSolutions\CypherDSL\Inequality;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Equality
+ * @covers \WikibaseSolutions\CypherDSL\Traits\PropertyTypeTrait
  */
-class EqualityTest extends TestCase
+class PropertyTypeTraitTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
-    public function testToQuery()
-    {
-        $equality = new Equality($this->getQueryConvertableMock(PropertyType::class, "10"), $this->getQueryConvertableMock(PropertyType::class, "15"));
+	/**
+	 * @var MockObject|PropertyType
+	 */
+	private $a;
 
-        $this->assertSame("(10 = 15)", $equality->toQuery());
+	/**
+	 * @var MockObject|PropertyType
+	 */
+	private $b;
 
-        $equality = new Equality($equality, $equality);
-
-        $this->assertSame("((10 = 15) = (10 = 15))", $equality->toQuery());
-    }
-
-    public function testDoesNotAcceptAnyTypeAsOperands()
+	public function setUp(): void
 	{
-		$this->expectException(TypeError::class);
+		$this->a = $this->getQueryConvertableMock(PropertyType::class, "10");
+		$this->b = $this->getQueryConvertableMock(PropertyType::class, "15");
+	}
 
-		$equality = new Equality($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
+	public function testEquals()
+	{
+		$equals = $this->a->equals($this->b);
 
-		$equality->toQuery();
+		$this->assertInstanceOf(Equality::class, $equals);
+	}
+
+	public function testNotEquals()
+	{
+		$notEquals = $this->a->notEquals($this->b);
+
+		$this->assertInstanceOf(Inequality::class, $notEquals);
 	}
 }

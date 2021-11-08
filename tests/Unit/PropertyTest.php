@@ -49,11 +49,11 @@ class PropertyTest extends TestCase
     public function provideToQueryData(): array
     {
         return [
-        [$this->getVariableMock("a", $this), "a", "a.a"],
-        [$this->getVariableMock("a", $this), "b", "a.b"],
-        [$this->getVariableMock("b", $this), "a", "b.a"],
-        [$this->getVariableMock("a", $this), ":", "a.`:`"],
-        [$this->getVariableMock("b", $this), ":", "b.`:`"]
+        [$this->getQueryConvertableMock(Variable::class, "a"), "a", "a.a"],
+        [$this->getQueryConvertableMock(Variable::class, "a"), "b", "a.b"],
+        [$this->getQueryConvertableMock(Variable::class, "b"), "a", "b.a"],
+        [$this->getQueryConvertableMock(Variable::class, "a"), ":", "a.`:`"],
+        [$this->getQueryConvertableMock(Variable::class, "b"), ":", "b.`:`"]
         ];
     }
 }

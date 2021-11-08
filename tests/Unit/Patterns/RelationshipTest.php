@@ -28,6 +28,7 @@ use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Patterns\Path
@@ -37,14 +38,14 @@ class RelationshipTest extends TestCase
     use TestHelper;
 
     /**
-     * @var MockObject|Path
+     * @var MockObject|StructuralType
      */
-    private Path $a;
+    private StructuralType $a;
 
     /**
-     * @var MockObject|Path
+     * @var MockObject|StructuralType
      */
-    private Path $b;
+    private StructuralType $b;
 
     public function setUp(): void
     {

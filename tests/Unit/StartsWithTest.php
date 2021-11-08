@@ -22,8 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\StartsWith;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\StartsWith
@@ -32,14 +35,30 @@ class StartsWithTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
-    {
-        $startsWith = new StartsWith($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
+	public function testToQuery()
+	{
+		$startsWith = new StartsWith($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
 
-        $this->assertSame("(a STARTS WITH b)", $startsWith->toQuery());
+		$this->assertSame("(a STARTS WITH b)", $startsWith->toQuery());
+	}
 
-        $startsWith = new StartsWith($startsWith, $startsWith);
+	public function testCannotBeNested()
+	{
+		$startsWith = new StartsWith($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
 
-        $this->assertSame("((a STARTS WITH b) STARTS WITH (a STARTS WITH b))", $startsWith->toQuery());
-    }
+		$this->expectException(TypeError::class);
+
+		$startsWith = new StartsWith($startsWith, $startsWith);
+
+		$startsWith->toQuery();
+	}
+
+	public function testDoesNotAcceptAnyTypeAsOperands()
+	{
+		$this->expectException(TypeError::class);
+
+		$startsWith = new StartsWith($this->getQueryConvertableMock(AnyType::class, "a"), $this->getQueryConvertableMock(AnyType::class, "b"));
+
+		$startsWith->toQuery();
+	}
 }

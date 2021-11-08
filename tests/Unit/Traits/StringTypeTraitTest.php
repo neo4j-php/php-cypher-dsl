@@ -23,53 +23,56 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\AndOperator;
-use WikibaseSolutions\CypherDSL\OrOperator;
+use WikibaseSolutions\CypherDSL\Contains;
+use WikibaseSolutions\CypherDSL\EndsWith;
+use WikibaseSolutions\CypherDSL\Equality;
+use WikibaseSolutions\CypherDSL\Inequality;
+use WikibaseSolutions\CypherDSL\StartsWith;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use WikibaseSolutions\CypherDSL\XorOperator;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait
+ * @covers \WikibaseSolutions\CypherDSL\Traits\StringTypeTrait
  */
-class BooleanTypeTraitTest extends TestCase
+class StringTypeTraitTest extends TestCase
 {
 	use TestHelper;
 
 	/**
-	 * @var MockObject|BooleanType
+	 * @var MockObject|StringType
 	 */
 	private $a;
 
 	/**
-	 * @var MockObject|BooleanType
+	 * @var MockObject|StringType
 	 */
 	private $b;
 
 	public function setUp(): void
 	{
-		$this->a = $this->getQueryConvertableMock(BooleanType::class, "true");
-		$this->b = $this->getQueryConvertableMock(BooleanType::class, "false");
+		$this->a = $this->getQueryConvertableMock(StringType::class, "10");
+		$this->b = $this->getQueryConvertableMock(StringType::class, "15");
 	}
 
-    public function testAnd()
+	public function testContains()
 	{
-		$and = $this->a->and($this->b);
+		$contains = $this->a->contains($this->b);
 
-		$this->assertInstanceOf(AndOperator::class, $and);
+		$this->assertInstanceOf(Contains::class, $contains);
 	}
 
-	public function testOr()
+	public function testEndsWith()
 	{
-		$or = $this->a->or($this->b);
+		$endsWith = $this->a->endsWith($this->b);
 
-		$this->assertInstanceOf(OrOperator::class, $or);
+		$this->assertInstanceOf(EndsWith::class, $endsWith);
 	}
 
-	public function testXor()
+	public function testStartsWith()
 	{
-		$xor = $this->a->xor($this->b);
+		$startsWith = $this->a->startsWith($this->b);
 
-		$this->assertInstanceOf(XorOperator::class, $xor);
+		$this->assertInstanceOf(StartsWith::class, $startsWith);
 	}
 }

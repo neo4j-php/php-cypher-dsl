@@ -24,6 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\PropertyMap
@@ -78,18 +79,18 @@ class PropertyMapTest extends TestCase
     public function provideNumericalKeysData(): array
     {
         return [
-        [[$this->getExpressionMock("'a'", $this)], "{`0`: 'a'}"],
-        [[$this->getExpressionMock("'a'", $this), $this->getExpressionMock("'b'", $this)], "{`0`: 'a', `1`: 'b'}"]
+        [[$this->getQueryConvertableMock(AnyType::class, "'a'")], "{`0`: 'a'}"],
+        [[$this->getQueryConvertableMock(AnyType::class, "'a'"), $this->getQueryConvertableMock(AnyType::class, "'b'")], "{`0`: 'a', `1`: 'b'}"]
         ];
     }
 
     public function provideStringKeysData(): array
     {
         return [
-        [['a' => $this->getExpressionMock("'a'", $this)], "{a: 'a'}"],
-        [['a' => $this->getExpressionMock("'a'", $this), 'b' => $this->getExpressionMock("'b'", $this)], "{a: 'a', b: 'b'}"],
-        [['a' => $this->getExpressionMock("'b'", $this)], "{a: 'b'}"],
-        [[':' => $this->getExpressionMock("'a'", $this)], "{`:`: 'a'}"]
+        [['a' => $this->getQueryConvertableMock(AnyType::class, "'a'")], "{a: 'a'}"],
+        [['a' => $this->getQueryConvertableMock(AnyType::class, "'a'"), 'b' => $this->getQueryConvertableMock(AnyType::class,"'b'")], "{a: 'a', b: 'b'}"],
+        [['a' => $this->getQueryConvertableMock(AnyType::class, "'b'")], "{a: 'b'}"],
+        [[':' => $this->getQueryConvertableMock(AnyType::class, "'a'")], "{`:`: 'a'}"]
         ];
     }
 
@@ -97,8 +98,8 @@ class PropertyMapTest extends TestCase
     {
         return [
         [['a' => new PropertyMap([])], "{a: {}}"],
-        [['a' => new PropertyMap(['a' => new PropertyMap(['a' => $this->getExpressionMock("'b'", $this)])])], "{a: {a: {a: 'b'}}}"],
-        [['a' => new PropertyMap(['b' => $this->getExpressionMock("'c'", $this)]), 'b' => $this->getExpressionMock("'d'", $this)], "{a: {b: 'c'}, b: 'd'}"]
+        [['a' => new PropertyMap(['a' => new PropertyMap(['a' => $this->getQueryConvertableMock(AnyType::class, "'b'")])])], "{a: {a: {a: 'b'}}}"],
+        [['a' => new PropertyMap(['b' => $this->getQueryConvertableMock(AnyType::class, "'c'")]), 'b' => $this->getQueryConvertableMock(AnyType::class, "'d'")], "{a: {b: 'c'}, b: 'd'}"]
         ];
     }
 }

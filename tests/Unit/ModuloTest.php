@@ -22,8 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Modulo;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Modulo
@@ -32,14 +35,23 @@ class ModuloTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
-    {
-        $modulo = new Modulo($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
+	public function testToQuery()
+	{
+		$modulo = new Modulo($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
-        $this->assertSame("(a % b)", $modulo->toQuery());
+		$this->assertSame("(10 % 15)", $modulo->toQuery());
 
-        $modulo = new Modulo($modulo, $modulo);
+		$modulo = new Modulo($modulo, $modulo);
 
-        $this->assertSame("((a % b) % (a % b))", $modulo->toQuery());
-    }
+		$this->assertSame("((10 % 15) % (10 % 15))", $modulo->toQuery());
+	}
+
+	public function testDoesNotAcceptAnyTypeAsOperands()
+	{
+		$this->expectException(TypeError::class);
+
+		$modulo = new Modulo($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
+
+		$modulo->toQuery();
+	}
 }

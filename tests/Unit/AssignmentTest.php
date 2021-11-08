@@ -22,6 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
+use WikibaseSolutions\CypherDSL\Assignment;
+use WikibaseSolutions\CypherDSL\Property;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Variable;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Assignment
@@ -32,6 +37,35 @@ class AssignmentTest extends TestCase
 
     public function testToQuery()
     {
-        // TODO
+        $assignment = new Assignment($this->getQueryConvertableMock(Property::class, "foo.bar"), $this->getQueryConvertableMock(AnyType::class, "true"));
+
+        $this->assertSame("(foo.bar = true)", $assignment->toQuery());
+
+        $assignment->setMutate();
+
+        $this->assertSame("(foo.bar += true)", $assignment->toQuery());
     }
+
+    public function testLeftDoesNotAcceptAnyType()
+	{
+		$this->expectException(TypeError::class);
+
+		$assignment = new Assignment($this->getQueryConvertableMock(AnyType::class, "foo.bar"), $this->getQueryConvertableMock(AnyType::class, "true"));
+
+		$assignment->toQuery();
+	}
+
+	public function testLeftAcceptsProperty()
+	{
+		$assignment = new Assignment($this->getQueryConvertableMock(Property::class, "foo.bar"), $this->getQueryConvertableMock(AnyType::class, "true"));
+
+		$this->assertSame("(foo.bar = true)", $assignment->toQuery());
+	}
+
+	public function testLeftAcceptsVariable()
+	{
+		$assignment = new Assignment($this->getQueryConvertableMock(Variable::class, "foo.bar"), $this->getQueryConvertableMock(AnyType::class, "true"));
+
+		$this->assertSame("(foo.bar = true)", $assignment->toQuery());
+	}
 }

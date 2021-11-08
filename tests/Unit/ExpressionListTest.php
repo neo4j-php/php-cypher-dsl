@@ -21,9 +21,10 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\ExpressionList;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Query;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\ExpressionList
@@ -66,18 +67,18 @@ class ExpressionListTest extends TestCase
     public function provideOneDimensionalData(): array
     {
         return [
-        [[$this->getExpressionMock("12", $this)], "[12]"],
-        [[$this->getExpressionMock("'12'", $this)], "['12']"],
-        [[$this->getExpressionMock("'12'", $this), $this->getExpressionMock("'13'", $this)], "['12', '13']"]
+        [[Query::literal(12)], "[12]"],
+        [[Query::literal('12')], "['12']"],
+        [[Query::literal('12'), Query::literal('13')], "['12', '13']"]
         ];
     }
 
     public function provideMultidimensionalData(): array
     {
         return [
-        [[new ExpressionList([$this->getExpressionMock("12", $this)])], "[[12]]"],
-        [[new ExpressionList([$this->getExpressionMock("'12'", $this)])], "[['12']]"],
-        [[new ExpressionList([$this->getExpressionMock("'12'", $this), $this->getExpressionMock("'14'", $this)]), $this->getExpressionMock("'13'", $this)], "[['12', '14'], '13']"]
+        [[new ExpressionList([Query::literal(12)])], "[[12]]"],
+        [[new ExpressionList([Query::literal('12')])], "[['12']]"],
+        [[new ExpressionList([Query::literal('12'), Query::literal('14')]), new ExpressionList([Query::literal('13')])], "[['12', '14'], ['13']]"]
         ];
     }
 }

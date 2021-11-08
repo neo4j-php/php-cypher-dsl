@@ -22,8 +22,13 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
+use WikibaseSolutions\CypherDSL\GreaterThanOrEqual;
 use WikibaseSolutions\CypherDSL\LessThan;
+use WikibaseSolutions\CypherDSL\LessThanOrEqual;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\LessThan
@@ -32,14 +37,30 @@ class LessThanTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
-    {
-        $lessThan = new LessThan($this->getExpressionMock("a", $this), $this->getExpressionMock("b", $this));
+	public function testToQuery()
+	{
+		$lessThan = new LessThan($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
-        $this->assertSame("(a < b)", $lessThan->toQuery());
+		$this->assertSame("(10 < 15)", $lessThan->toQuery());
+	}
 
-        $lessThan = new LessThan($lessThan, $lessThan);
+	public function testCannotBeNested()
+	{
+		$lessThan = new LessThan($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
-        $this->assertSame("((a < b) < (a < b))", $lessThan->toQuery());
-    }
+		$this->expectException(TypeError::class);
+
+		$lessThan = new LessThan($lessThan, $lessThan);
+
+		$this->assertSame("((10 < 15) < (10 < 15))", $lessThan->toQuery());
+	}
+
+	public function testDoesNotAcceptAnyTypeAsOperands()
+	{
+		$this->expectException(TypeError::class);
+
+		$lessThan = new LessThan($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
+
+		$lessThan->toQuery();
+	}
 }

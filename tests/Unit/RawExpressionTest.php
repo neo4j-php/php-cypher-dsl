@@ -22,36 +22,19 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use TypeError;
-use WikibaseSolutions\CypherDSL\Minus;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
+use WikibaseSolutions\CypherDSL\RawExpression;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Minus
+ * @covers \WikibaseSolutions\CypherDSL\RawExpression
  */
-class MinusTest extends TestCase
+class RawExpressionTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
-    public function testToQuery()
-    {
-        $minus = new Minus($this->getQueryConvertableMock(NumeralType::class, "10"));
-
-        $this->assertSame("-10", $minus->toQuery());
-
-        $minus = new Minus($minus);
-
-        $this->assertSame("--10", $minus->toQuery());
-    }
-
-    public function testDoesNotAcceptAnyTypeAsOperand()
+	public function testToQuery()
 	{
-		$this->expectException(TypeError::class);
+		$rawExpression = new RawExpression("foobar(3 > 4)");
 
-		$minus = new Minus($this->getQueryConvertableMock(AnyType::class, "10"));
-
-		$minus->toQuery();
+		$this->assertSame("foobar(3 > 4)", $rawExpression->toQuery());
 	}
 }

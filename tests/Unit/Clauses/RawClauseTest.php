@@ -19,39 +19,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
-use TypeError;
-use WikibaseSolutions\CypherDSL\Minus;
+use WikibaseSolutions\CypherDSL\Clauses\RawClause;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Minus
+ * @covers \WikibaseSolutions\CypherDSL\Clauses\RawClause
  */
-class MinusTest extends TestCase
+class RawClauseTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
-    public function testToQuery()
-    {
-        $minus = new Minus($this->getQueryConvertableMock(NumeralType::class, "10"));
-
-        $this->assertSame("-10", $minus->toQuery());
-
-        $minus = new Minus($minus);
-
-        $this->assertSame("--10", $minus->toQuery());
-    }
-
-    public function testDoesNotAcceptAnyTypeAsOperand()
+	public function testClause()
 	{
-		$this->expectException(TypeError::class);
+		$raw = new RawClause("UNIMPLEMENTED", "clause body");
 
-		$minus = new Minus($this->getQueryConvertableMock(AnyType::class, "10"));
-
-		$minus->toQuery();
+		$this->assertSame("UNIMPLEMENTED clause body", $raw->toQuery());
 	}
 }
