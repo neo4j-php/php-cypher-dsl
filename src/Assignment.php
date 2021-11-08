@@ -35,7 +35,7 @@ class Assignment extends BinaryOperator
      * @var bool Whether to use the property mutation instead of the property replacement
      * operator.
      */
-    private bool $mutate;
+    private bool $mutate = false;
 
     /**
      * @param Property|Variable $left
@@ -43,6 +43,10 @@ class Assignment extends BinaryOperator
      */
     public function __construct(AnyType $left, AnyType $right)
     {
+    	if (!($left instanceof Property) && !($left instanceof Variable)) {
+    		throw new \TypeError("\$left must be either a Property or a Variable");
+		}
+
         parent::__construct($left, $right);
     }
 

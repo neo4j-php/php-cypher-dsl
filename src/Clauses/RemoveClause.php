@@ -24,6 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Label;
 use WikibaseSolutions\CypherDSL\Property;
+use WikibaseSolutions\CypherDSL\QueryConvertable;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -44,7 +45,7 @@ class RemoveClause extends Clause
      * @param  Property|Label $expression The expression to add
      * @return RemoveClause
      */
-    public function addExpression(AnyType $expression): self
+    public function addExpression($expression): self
     {
         if (!($expression instanceof Property) && !($expression instanceof Label)) {
             throw new TypeError("\$expression must be either a Property or a Label");
@@ -70,7 +71,7 @@ class RemoveClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn(AnyType $expression) => $expression->toQuery(), $this->expressions)
+            array_map(fn(QueryConvertable $expression) => $expression->toQuery(), $this->expressions)
         );
     }
 }

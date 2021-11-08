@@ -474,7 +474,7 @@ class Query
     /**
      * Create the SET clause.
      *
-     * @param AnyType|AnyType[] $expressions A single expression or a list of expressions
+     * @param Assignment|Assignment[] $expressions A single expression or a list of expressions
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/
      *
@@ -484,13 +484,13 @@ class Query
     {
         $setClause = new SetClause();
 
-        if ($expressions instanceof AnyType) {
+        if ($expressions instanceof Assignment) {
             $expressions = [$expressions];
         }
 
         foreach ($expressions as $expression) {
-            if (!($expression instanceof AnyType)) {
-                throw new TypeError("\$expressions should only consist of AnyType objects");
+            if (!($expression instanceof Assignment)) {
+                throw new TypeError("\$expressions should only consist of Assignment objects");
             }
 
             $setClause->addAssignment($expression);

@@ -33,7 +33,6 @@ use WikibaseSolutions\CypherDSL\Modulo;
 use WikibaseSolutions\CypherDSL\Multiplication;
 use WikibaseSolutions\CypherDSL\Subtraction;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
-use WikibaseSolutions\CypherDSL\Traits\PropertyTypeTrait;
 
 /**
  * This trait should be used by any expression that returns a numeral.

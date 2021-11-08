@@ -33,7 +33,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 interface PropertyType extends AnyType
 {
     /**
-     * Perform an equality check or an assignment with the given expression.
+     * Perform an equality check with the given expression.
      *
      * @param  PropertyType $right
      * @return Equality

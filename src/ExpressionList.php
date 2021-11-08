@@ -21,6 +21,10 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
+use InvalidArgumentException;
+use ReflectionClass;
+use ReflectionException;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
@@ -45,18 +49,14 @@ class ExpressionList implements ListType
     /**
      * ExpressionList constructor.
      *
-     * @param AnyType[] $expressions The list of expressions
+     * @param AnyType[] $expressions The list of expressions, should be homogeneous
      */
     public function __construct(array $expressions)
     {
         foreach ($expressions as $expression) {
             if (!($expression instanceof AnyType)) {
-                throw new \InvalidArgumentException("\$expressions must be an array of only AnyType objects");
+                throw new TypeError("\$expressions must be an array of only AnyType objects");
             }
-        }
-
-        if (!self::isHomogenousList($expressions)) {
-            throw new \InvalidArgumentException("\$expressions must be a homogenous list of expressions (i.e. each expression should be of the same type)");
         }
 
         $this->expressions = $expressions;
@@ -73,27 +73,5 @@ class ExpressionList implements ListType
         );
 
         return sprintf("[%s]", implode(", ", $expressions));
-    }
-
-    /**
-     * Returns true if and only if the given array of expressions is homogenous.
-     *
-     * @param array $expressions
-     * @return bool
-     */
-    private function isHomogenousList(array $expressions): bool
-    {
-        if (count($expressions) === 0) {
-            return true;
-        }
-
-        $initialTypes = class_implements(array_pop($expressions));
-        $sharedTypes = array_reduce(
-            $expressions,
-            fn ($sharedTypes, $expression) => array_intersect($sharedTypes, $expression),
-            $initialTypes
-        );
-
-        return count($sharedTypes) >= 1;
     }
 }

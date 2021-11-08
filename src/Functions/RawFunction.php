@@ -92,7 +92,11 @@ class RawFunction extends FunctionCall implements
      */
     protected function getSignature(): string
     {
-        return $this->functionName . "(%s)";
+        return sprintf(
+        	"%s(%s)",
+			$this->functionName,
+			implode(", ", array_fill(0, count($this->parameters), "%s"))
+		);
     }
 
     /**
@@ -100,6 +104,6 @@ class RawFunction extends FunctionCall implements
      */
     protected function getParameters(): array
     {
-        return [$this->parameters];
+        return $this->parameters;
     }
 }

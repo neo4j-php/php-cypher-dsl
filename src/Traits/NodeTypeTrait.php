@@ -21,8 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
-use WikibaseSolutions\CypherDSL\Traits\StructuralTypeTrait;
-
 /**
  * This trait should be used by any expression that returns a node.
  */
