@@ -1,6 +1,6 @@
 # php-cypher-dsl
 
-The `php-cypher-dsl` library provides a way to programmatically construct advanced Cypher queries in an object-oriented manner.
+The `php-cypher-dsl` library provides a way to construct advanced Cypher queries in an object-oriented and type-safe manner.
 
 ## Documentation
 
@@ -43,3 +43,13 @@ $statement = Query::new()
 
 $this->assertSame("MATCH (tom:Person {name: 'Tom Hanks'})-[:`ACTED_IN`]->(m)<-[:`ACTED_IN`]-(coActors) RETURN coActors.name", $statement);
 ```
+
+## Roadmap
+
+Below are some things that still need to be implemented.
+
+- Add automatic identifier generation
+- Add more data types
+- Add missing clauses
+- Add missing function definitions
+- Add missing expressions
