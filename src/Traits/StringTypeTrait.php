@@ -24,7 +24,6 @@ namespace WikibaseSolutions\CypherDSL\Traits;
 use WikibaseSolutions\CypherDSL\Contains;
 use WikibaseSolutions\CypherDSL\EndsWith;
 use WikibaseSolutions\CypherDSL\StartsWith;
-use WikibaseSolutions\CypherDSL\Traits\PropertyTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
@@ -32,38 +31,38 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 trait StringTypeTrait
 {
-    use PropertyTypeTrait;
+	use PropertyTypeTrait;
 
-    /**
-     * Check whether this expression the given expression.
-     *
-     * @param  StringType $right
-     * @return Contains
-     */
-    public function contains(StringType $right): Contains
-    {
-        return new Contains($this, $right);
-    }
+	/**
+	 * Check whether this expression the given expression.
+	 *
+	 * @param StringType $right
+	 * @return Contains
+	 */
+	public function contains(StringType $right): Contains
+	{
+		return new Contains($this, $right);
+	}
 
-    /**
-     * Perform a suffix string search with the given expression.
-     *
-     * @param  StringType $right
-     * @return EndsWith
-     */
-    public function endsWith(StringType $right): EndsWith
-    {
-        return new EndsWith($this, $right);
-    }
+	/**
+	 * Perform a suffix string search with the given expression.
+	 *
+	 * @param StringType $right
+	 * @return EndsWith
+	 */
+	public function endsWith(StringType $right): EndsWith
+	{
+		return new EndsWith($this, $right);
+	}
 
-    /**
-     * Perform a prefix string search with the given expression.
-     *
-     * @param  StringType $right
-     * @return StartsWith
-     */
-    public function startsWith(StringType $right): StartsWith
-    {
-        return new StartsWith($this, $right);
-    }
+	/**
+	 * Perform a prefix string search with the given expression.
+	 *
+	 * @param StringType $right
+	 * @return StartsWith
+	 */
+	public function startsWith(StringType $right): StartsWith
+	{
+		return new StartsWith($this, $right);
+	}
 }

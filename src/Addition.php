@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
  * Represents the application of the addition (+) operator.
@@ -31,21 +31,21 @@ use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
  */
 class Addition extends BinaryOperator implements NumeralType
 {
-    use NumeralTypeTrait;
+	use NumeralTypeTrait;
 
-    /**
-     * @inheritDoc
-     */
-    public function __construct(NumeralType $left, NumeralType $right)
-    {
-        parent::__construct($left, $right);
-    }
+	/**
+	 * @inheritDoc
+	 */
+	public function __construct(NumeralType $left, NumeralType $right)
+	{
+		parent::__construct($left, $right);
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getOperator(): string
-    {
-        return "+";
-    }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getOperator(): string
+	{
+		return "+";
+	}
 }

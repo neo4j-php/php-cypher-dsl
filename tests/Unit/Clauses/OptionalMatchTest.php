@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\OptionalMatchClause;
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
@@ -36,62 +36,62 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
  */
 class OptionalMatchTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
-    public function testEmptyClause()
-    {
-        $match = new OptionalMatchClause();
+	public function testEmptyClause()
+	{
+		$match = new OptionalMatchClause();
 
-        $this->assertSame("", $match->toQuery());
-    }
+		$this->assertSame("", $match->toQuery());
+	}
 
-    public function testSinglePattern()
-    {
-        $match = new OptionalMatchClause();
-        $match->addPattern($this->getQueryConvertableMock(StructuralType::class, "(a)"));
+	public function testSinglePattern()
+	{
+		$match = new OptionalMatchClause();
+		$match->addPattern($this->getQueryConvertableMock(StructuralType::class, "(a)"));
 
-        $this->assertSame("OPTIONAL MATCH (a)", $match->toQuery());
-    }
+		$this->assertSame("OPTIONAL MATCH (a)", $match->toQuery());
+	}
 
-    public function testMultiplePatterns()
-    {
-        $match = new OptionalMatchClause();
-        $match->addPattern($this->getQueryConvertableMock(StructuralType::class, "(a)"));
-        $match->addPattern($this->getQueryConvertableMock(StructuralType::class, "(b)"));
+	public function testMultiplePatterns()
+	{
+		$match = new OptionalMatchClause();
+		$match->addPattern($this->getQueryConvertableMock(StructuralType::class, "(a)"));
+		$match->addPattern($this->getQueryConvertableMock(StructuralType::class, "(b)"));
 
-        $this->assertSame("OPTIONAL MATCH (a), (b)", $match->toQuery());
-    }
+		$this->assertSame("OPTIONAL MATCH (a), (b)", $match->toQuery());
+	}
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsNodeType()
-    {
-        $match = new OptionalMatchClause();
-        $match->addPattern($this->getQueryConvertableMock(NodeType::class, "(a)"));
+	/**
+	 * @doesNotPerformAssertions
+	 */
+	public function testAcceptsNodeType()
+	{
+		$match = new OptionalMatchClause();
+		$match->addPattern($this->getQueryConvertableMock(NodeType::class, "(a)"));
 
-        $match->toQuery();
-    }
+		$match->toQuery();
+	}
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsPathType()
-    {
-        $match = new OptionalMatchClause();
-        $match->addPattern($this->getQueryConvertableMock(PathType::class, "(a)"));
+	/**
+	 * @doesNotPerformAssertions
+	 */
+	public function testAcceptsPathType()
+	{
+		$match = new OptionalMatchClause();
+		$match->addPattern($this->getQueryConvertableMock(PathType::class, "(a)"));
 
-        $match->toQuery();
-    }
+		$match->toQuery();
+	}
 
-    public function testDoesNotAcceptAnyType()
-    {
-        $match = new OptionalMatchClause();
+	public function testDoesNotAcceptAnyType()
+	{
+		$match = new OptionalMatchClause();
 
-        $this->expectException(\TypeError::class);
+		$this->expectException(TypeError::class);
 
-        $match->addPattern($this->getQueryConvertableMock(AnyType::class, "(a)"));
+		$match->addPattern($this->getQueryConvertableMock(AnyType::class, "(a)"));
 
-        $match->toQuery();
-    }
+		$match->toQuery();
+	}
 }

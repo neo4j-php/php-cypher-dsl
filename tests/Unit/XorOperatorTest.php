@@ -26,14 +26,13 @@ use TypeError;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\XorOperator;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\XorOperator
  */
 class XorOperatorTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
 	public function testToQuery()
 	{

@@ -30,42 +30,42 @@ use WikibaseSolutions\CypherDSL\QueryConvertable;
  */
 abstract class Clause implements QueryConvertable
 {
-    /**
-     * @inheritDoc
-     */
-    public function toQuery(): string
-    {
-        if ($this->getSubject() === "") {
-            // If we have an empty subject, either return the empty clause, or nothing at all
-            return $this->canBeEmpty() ? $this->getClause() : "";
-        }
+	/**
+	 * @inheritDoc
+	 */
+	public function toQuery(): string
+	{
+		if ($this->getSubject() === "") {
+			// If we have an empty subject, either return the empty clause, or nothing at all
+			return $this->canBeEmpty() ? $this->getClause() : "";
+		}
 
-        return sprintf("%s %s", $this->getClause(), $this->getSubject());
-    }
+		return sprintf("%s %s", $this->getClause(), $this->getSubject());
+	}
 
-    /**
-     * Returns whether this clause is still valid if it has an empty subject.
-     *
-     * @return bool
-     */
-    public function canBeEmpty(): bool
-    {
-        return false;
-    }
+	/**
+	 * Returns whether this clause is still valid if it has an empty subject.
+	 *
+	 * @return bool
+	 */
+	public function canBeEmpty(): bool
+	{
+		return false;
+	}
 
-    /**
-     * Returns the clause this object describes. For instance "MATCH".
-     *
-     * @return string
-     */
-    abstract protected function getClause(): string;
+	/**
+	 * Returns the clause this object describes. For instance "MATCH".
+	 *
+	 * @return string
+	 */
+	abstract protected function getClause(): string;
 
-    /**
-     * Returns the subject of this object. The subject is anything after
-     * the clause. For example, in the partial query "MATCH (a)", the subject
-     * would be "(a)".
-     *
-     * @return string
-     */
-    abstract protected function getSubject(): string;
+	/**
+	 * Returns the subject of this object. The subject is anything after
+	 * the clause. For example, in the partial query "MATCH (a)", the subject
+	 * would be "(a)".
+	 *
+	 * @return string
+	 */
+	abstract protected function getSubject(): string;
 }

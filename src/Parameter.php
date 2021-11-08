@@ -21,16 +21,17 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
+use InvalidArgumentException;
+use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
-use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
-use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
 
 /**
  * Represents a parameter.
@@ -38,45 +39,45 @@ use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/parameters/
  */
 class Parameter implements
-    BooleanType,
-    ListType,
-    MapType,
-    NumeralType,
-    StringType
+	BooleanType,
+	ListType,
+	MapType,
+	NumeralType,
+	StringType
 {
-    use EscapeTrait;
-    use BooleanTypeTrait;
-    use MapTypeTrait;
-    use NumeralTypeTrait;
-    use StringTypeTrait;
+	use EscapeTrait;
+	use BooleanTypeTrait;
+	use MapTypeTrait;
+	use NumeralTypeTrait;
+	use StringTypeTrait;
 
-    /**
-     * @var string The parameter name
-     */
-    private string $parameter;
+	/**
+	 * @var string The parameter name
+	 */
+	private string $parameter;
 
-    /**
-     * Parameter constructor.
-     *
-     * @param string $parameter The parameter; this parameter may only consist of alphanumeric
-     *                          characters and underscores
-     */
-    public function __construct(string $parameter)
-    {
-    	$strippedParameter = str_replace("_", "", $parameter);
+	/**
+	 * Parameter constructor.
+	 *
+	 * @param string $parameter The parameter; this parameter may only consist of alphanumeric
+	 *                          characters and underscores
+	 */
+	public function __construct(string $parameter)
+	{
+		$strippedParameter = str_replace("_", "", $parameter);
 
-        if ($parameter === "" || (!ctype_alnum($strippedParameter) && $strippedParameter !== "")) {
-            throw new \InvalidArgumentException("A parameter may only consist of alphanumeric characters and underscores.");
-        }
+		if ($parameter === "" || (!ctype_alnum($strippedParameter) && $strippedParameter !== "")) {
+			throw new InvalidArgumentException("A parameter may only consist of alphanumeric characters and underscores.");
+		}
 
-        $this->parameter = $parameter;
-    }
+		$this->parameter = $parameter;
+	}
 
-    /**
-     * @inheritDoc
-     */
-    public function toQuery(): string
-    {
-        return sprintf('$%s', $this->parameter);
-    }
+	/**
+	 * @inheritDoc
+	 */
+	public function toQuery(): string
+	{
+		return sprintf('$%s', $this->parameter);
+	}
 }

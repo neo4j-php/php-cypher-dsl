@@ -22,11 +22,10 @@
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use InvalidArgumentException;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\PropertyMap;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Variable;
 
 /**
@@ -36,111 +35,111 @@ use WikibaseSolutions\CypherDSL\Variable;
  */
 class Node implements NodeType
 {
-    use EscapeTrait;
-    use NodeTypeTrait;
+	use EscapeTrait;
+	use NodeTypeTrait;
 
-    /**
-     * @var string[]
-     */
-    private array $labels = [];
+	/**
+	 * @var string[]
+	 */
+	private array $labels = [];
 
-    /**
-     * @var Variable
-     */
-    private Variable $variable;
+	/**
+	 * @var Variable
+	 */
+	private Variable $variable;
 
-    /**
-     * @var PropertyMap
-     */
-    private PropertyMap $properties;
+	/**
+	 * @var PropertyMap
+	 */
+	private PropertyMap $properties;
 
-    /**
-     * Node constructor.
-     *
-     * @param string|null $label
-     */
-    public function __construct(string $label = null)
-    {
-        if ($label !== null) {
-            $this->labels[] = $label;
-        }
-    }
+	/**
+	 * Node constructor.
+	 *
+	 * @param string|null $label
+	 */
+	public function __construct(string $label = null)
+	{
+		if ($label !== null) {
+			$this->labels[] = $label;
+		}
+	}
 
-    /**
-     * @param  Variable|string $variable
-     * @return Node
-     */
-    public function named($variable): self
-    {
-        if (!($variable instanceof Variable)) {
-            if (!is_string($variable)) {
-                throw new InvalidArgumentException("\$variable must either be a string or a Variable object");
-            }
+	/**
+	 * @param Variable|string $variable
+	 * @return Node
+	 */
+	public function named($variable): self
+	{
+		if (!($variable instanceof Variable)) {
+			if (!is_string($variable)) {
+				throw new InvalidArgumentException("\$variable must either be a string or a Variable object");
+			}
 
-            $variable = new Variable($variable);
-        }
+			$variable = new Variable($variable);
+		}
 
-        $this->variable = $variable;
+		$this->variable = $variable;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @param  string $label
-     * @return Node
-     */
-    public function labeled(string $label): self
-    {
-        $this->labels[] = $label;
+	/**
+	 * @param string $label
+	 * @return Node
+	 */
+	public function labeled(string $label): self
+	{
+		$this->labels[] = $label;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @param  PropertyMap|array $properties
-     * @return Node
-     */
-    public function withProperties($properties): self
-    {
-        if (is_array($properties)) {
-            $this->properties = new PropertyMap($properties);
-        } elseif ($properties instanceof PropertyMap) {
-            $this->properties = $properties;
-        } else {
-            throw new InvalidArgumentException("\$properties must either be an array or a PropertyMap object");
-        }
+	/**
+	 * @param PropertyMap|array $properties
+	 * @return Node
+	 */
+	public function withProperties($properties): self
+	{
+		if (is_array($properties)) {
+			$this->properties = new PropertyMap($properties);
+		} elseif ($properties instanceof PropertyMap) {
+			$this->properties = $properties;
+		} else {
+			throw new InvalidArgumentException("\$properties must either be an array or a PropertyMap object");
+		}
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Returns the string representation of this relationship that can be used directly
-     * in a query.
-     *
-     * @return string
-     */
-    public function toQuery(): string
-    {
-        $nodeInner = "";
+	/**
+	 * Returns the string representation of this relationship that can be used directly
+	 * in a query.
+	 *
+	 * @return string
+	 */
+	public function toQuery(): string
+	{
+		$nodeInner = "";
 
-        if (isset($this->variable)) {
-            $nodeInner .= $this->variable->toQuery();
-        }
+		if (isset($this->variable)) {
+			$nodeInner .= $this->variable->toQuery();
+		}
 
-        if ($this->labels !== []) {
-            foreach ($this->labels as $label) {
-                $nodeInner .= ":{$this->escape($label)}";
-            }
-        }
+		if ($this->labels !== []) {
+			foreach ($this->labels as $label) {
+				$nodeInner .= ":{$this->escape($label)}";
+			}
+		}
 
-        if (isset($this->properties)) {
-            if ($nodeInner !== "") {
-                $nodeInner .= " ";
-            }
+		if (isset($this->properties)) {
+			if ($nodeInner !== "") {
+				$nodeInner .= " ";
+			}
 
-            $nodeInner .= $this->properties->toQuery();
-        }
+			$nodeInner .= $this->properties->toQuery();
+		}
 
-        return "($nodeInner)";
-    }
+		return "($nodeInner)";
+	}
 }

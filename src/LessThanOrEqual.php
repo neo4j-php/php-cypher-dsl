@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
@@ -32,21 +32,21 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 class LessThanOrEqual extends BinaryOperator implements BooleanType
 {
-    use BooleanTypeTrait;
+	use BooleanTypeTrait;
 
-    /**
-     * @inheritDoc
-     */
-    public function __construct(NumeralType $left, NumeralType $right)
-    {
-        parent::__construct($left, $right);
-    }
+	/**
+	 * @inheritDoc
+	 */
+	public function __construct(NumeralType $left, NumeralType $right)
+	{
+		parent::__construct($left, $right);
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getOperator(): string
-    {
-        return "<=";
-    }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getOperator(): string
+	{
+		return "<=";
+	}
 }

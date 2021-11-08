@@ -21,11 +21,12 @@
 
 namespace WikibaseSolutions\CypherDSL\Functions;
 
-use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
@@ -35,44 +36,44 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 class IsEmpty extends FunctionCall implements BooleanType
 {
-    use BooleanTypeTrait;
+	use BooleanTypeTrait;
 
-    /**
-     * @var ListType|MapType|StringType An expression that returns a list
-     */
-    private AnyType $list;
+	/**
+	 * @var ListType|MapType|StringType An expression that returns a list
+	 */
+	private AnyType $list;
 
-    /**
-     * IsEmpty constructor. The signature of the "isEmpty()" function is:
-     *
-     * isEmpty(input :: LIST? OF ANY?) :: (BOOLEAN?) - to check whether a list is empty
-     * isEmpty(input :: MAP?) :: (BOOLEAN?) - to check whether a map is empty
-     * isEmpty(input :: STRING?) :: (BOOLEAN?) - to check whether a string is empty
-     *
-     * @param ListType|MapType|StringType $list An expression that returns a list
-     */
-    public function __construct(AnyType $list)
-    {
-        if (!($list instanceof ListType) && !($list instanceof MapType) && !($list instanceof StringType)) {
-            throw new \TypeError("\$list must be either a ListType, MapType or a StringType");
-        }
+	/**
+	 * IsEmpty constructor. The signature of the "isEmpty()" function is:
+	 *
+	 * isEmpty(input :: LIST? OF ANY?) :: (BOOLEAN?) - to check whether a list is empty
+	 * isEmpty(input :: MAP?) :: (BOOLEAN?) - to check whether a map is empty
+	 * isEmpty(input :: STRING?) :: (BOOLEAN?) - to check whether a string is empty
+	 *
+	 * @param ListType|MapType|StringType $list An expression that returns a list
+	 */
+	public function __construct(AnyType $list)
+	{
+		if (!($list instanceof ListType) && !($list instanceof MapType) && !($list instanceof StringType)) {
+			throw new TypeError("\$list must be either a ListType, MapType or a StringType");
+		}
 
-        $this->list = $list;
-    }
+		$this->list = $list;
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getSignature(): string
-    {
-        return "isEmpty(%s)";
-    }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getSignature(): string
+	{
+		return "isEmpty(%s)";
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getParameters(): array
-    {
-        return [$this->list];
-    }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getParameters(): array
+	{
+		return [$this->list];
+	}
 }

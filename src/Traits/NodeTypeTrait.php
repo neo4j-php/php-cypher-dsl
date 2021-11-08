@@ -26,5 +26,5 @@ namespace WikibaseSolutions\CypherDSL\Traits;
  */
 trait NodeTypeTrait
 {
-    use StructuralTypeTrait;
+	use StructuralTypeTrait;
 }

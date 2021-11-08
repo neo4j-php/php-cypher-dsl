@@ -24,7 +24,6 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Contains;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
@@ -33,16 +32,16 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 class ContainsTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
-    public function testToQuery()
-    {
-        $contains = new Contains($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
+	public function testToQuery()
+	{
+		$contains = new Contains($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
 
-        $this->assertSame("(a CONTAINS b)", $contains->toQuery());
-    }
+		$this->assertSame("(a CONTAINS b)", $contains->toQuery());
+	}
 
-    public function testCannotBeNested()
+	public function testCannotBeNested()
 	{
 		$contains = new Contains($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
 

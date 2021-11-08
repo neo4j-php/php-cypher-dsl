@@ -24,7 +24,6 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Inequality;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
@@ -33,20 +32,20 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
  */
 class InequalityTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
-    public function testToQuery()
-    {
-        $inequality = new Inequality($this->getQueryConvertableMock(PropertyType::class, "a"), $this->getQueryConvertableMock(PropertyType::class, "b"));
+	public function testToQuery()
+	{
+		$inequality = new Inequality($this->getQueryConvertableMock(PropertyType::class, "a"), $this->getQueryConvertableMock(PropertyType::class, "b"));
 
-        $this->assertSame("(a <> b)", $inequality->toQuery());
+		$this->assertSame("(a <> b)", $inequality->toQuery());
 
-        $inequality = new Inequality($inequality, $inequality);
+		$inequality = new Inequality($inequality, $inequality);
 
-        $this->assertSame("((a <> b) <> (a <> b))", $inequality->toQuery());
-    }
+		$this->assertSame("((a <> b) <> (a <> b))", $inequality->toQuery());
+	}
 
-    public function testDoesNotAcceptAnyTypeAsOperands()
+	public function testDoesNotAcceptAnyTypeAsOperands()
 	{
 		$this->expectException(TypeError::class);
 

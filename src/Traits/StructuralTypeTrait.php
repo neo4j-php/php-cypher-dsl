@@ -32,36 +32,36 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
  */
 trait StructuralTypeTrait
 {
-    /**
-     * Creates a new relationship from this node to the given pattern.
-     *
-     * @param  StructuralType $pattern
-     * @return Path
-     */
-    public function relationshipTo(StructuralType $pattern): Path
-    {
-        return new Path($this, $pattern, Path::DIR_RIGHT);
-    }
+	/**
+	 * Creates a new relationship from this node to the given pattern.
+	 *
+	 * @param StructuralType $pattern
+	 * @return Path
+	 */
+	public function relationshipTo(StructuralType $pattern): Path
+	{
+		return new Path($this, $pattern, Path::DIR_RIGHT);
+	}
 
-    /**
-     * Creates a new relationship from the given pattern to this node.
-     *
-     * @param  StructuralType $pattern
-     * @return Path
-     */
-    public function relationshipFrom(StructuralType $pattern): Path
-    {
-        return new Path($this, $pattern, Path::DIR_LEFT);
-    }
+	/**
+	 * Creates a new relationship from the given pattern to this node.
+	 *
+	 * @param StructuralType $pattern
+	 * @return Path
+	 */
+	public function relationshipFrom(StructuralType $pattern): Path
+	{
+		return new Path($this, $pattern, Path::DIR_LEFT);
+	}
 
-    /**
-     * Creates a new unidirectional relationship between this node and the given pattern.
-     *
-     * @param  StructuralType $pattern
-     * @return Path
-     */
-    public function relationshipUni(StructuralType $pattern): Path
-    {
-        return new Path($this, $pattern, Path::DIR_UNI);
-    }
+	/**
+	 * Creates a new unidirectional relationship between this node and the given pattern.
+	 *
+	 * @param StructuralType $pattern
+	 * @return Path
+	 */
+	public function relationshipUni(StructuralType $pattern): Path
+	{
+		return new Path($this, $pattern, Path::DIR_UNI);
+	}
 }

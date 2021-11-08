@@ -33,25 +33,25 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
  */
 trait PropertyTypeTrait
 {
-    /**
-     * Perform an equality check or an assignment with the given expression.
-     *
-     * @param  PropertyType $right
-     * @return Equality
-     */
-    public function equals(PropertyType $right): Equality
-    {
-        return new Equality($this, $right);
-    }
+	/**
+	 * Perform an equality check or an assignment with the given expression.
+	 *
+	 * @param PropertyType $right
+	 * @return Equality
+	 */
+	public function equals(PropertyType $right): Equality
+	{
+		return new Equality($this, $right);
+	}
 
-    /**
-     * Perform an inequality comparison against the given expression.
-     *
-     * @param  PropertyType $right
-     * @return Inequality
-     */
-    public function notEquals(PropertyType $right): Inequality
-    {
-        return new Inequality($this, $right);
-    }
+	/**
+	 * Perform an inequality comparison against the given expression.
+	 *
+	 * @param PropertyType $right
+	 * @return Inequality
+	 */
+	public function notEquals(PropertyType $right): Inequality
+	{
+		return new Inequality($this, $right);
+	}
 }

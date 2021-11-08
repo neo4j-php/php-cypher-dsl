@@ -30,40 +30,40 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
  */
 class CreateClause extends Clause
 {
-    /**
-     * @var StructuralType[] The patterns to create
-     */
-    private array $patterns = [];
+	/**
+	 * @var StructuralType[] The patterns to create
+	 */
+	private array $patterns = [];
 
-    /**
-     * Add a pattern to create.
-     *
-     * @param  StructuralType $pattern The pattern to create
-     * @return CreateClause
-     */
-    public function addPattern(StructuralType $pattern): self
-    {
-        $this->patterns[] = $pattern;
+	/**
+	 * Add a pattern to create.
+	 *
+	 * @param StructuralType $pattern The pattern to create
+	 * @return CreateClause
+	 */
+	public function addPattern(StructuralType $pattern): self
+	{
+		$this->patterns[] = $pattern;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getClause(): string
-    {
-        return "CREATE";
-    }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getClause(): string
+	{
+		return "CREATE";
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getSubject(): string
-    {
-        return implode(
-            ", ",
-            array_map(fn (StructuralType $pattern): string => $pattern->toQuery(), $this->patterns)
-        );
-    }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getSubject(): string
+	{
+		return implode(
+			", ",
+			array_map(fn (StructuralType $pattern): string => $pattern->toQuery(), $this->patterns)
+		);
+	}
 }

@@ -23,9 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\AndOperator;
 use WikibaseSolutions\CypherDSL\OrOperator;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
@@ -34,7 +32,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  */
 class OrOperatorTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
 	public function testToQuery()
 	{

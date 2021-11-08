@@ -24,34 +24,33 @@ namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 use WikibaseSolutions\CypherDSL\Contains;
 use WikibaseSolutions\CypherDSL\EndsWith;
 use WikibaseSolutions\CypherDSL\StartsWith;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
  * Represents the type "string".
  */
 interface StringType extends PropertyType
 {
-    /**
-     * Check whether this expression the given expression.
-     *
-     * @param  StringType $right
-     * @return Contains
-     */
-    public function contains(StringType $right): Contains;
+	/**
+	 * Check whether this expression the given expression.
+	 *
+	 * @param StringType $right
+	 * @return Contains
+	 */
+	public function contains(StringType $right): Contains;
 
-    /**
-     * Perform a suffix string search with the given expression.
-     *
-     * @param  StringType $right
-     * @return EndsWith
-     */
-    public function endsWith(StringType $right): EndsWith;
+	/**
+	 * Perform a suffix string search with the given expression.
+	 *
+	 * @param StringType $right
+	 * @return EndsWith
+	 */
+	public function endsWith(StringType $right): EndsWith;
 
-    /**
-     * Perform a prefix string search with the given expression.
-     *
-     * @param  StringType $right
-     * @return StartsWith
-     */
-    public function startsWith(StringType $right): StartsWith;
+	/**
+	 * Perform a prefix string search with the given expression.
+	 *
+	 * @param StringType $right
+	 * @return StartsWith
+	 */
+	public function startsWith(StringType $right): StartsWith;
 }

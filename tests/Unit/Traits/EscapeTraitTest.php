@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
@@ -30,104 +31,104 @@ use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
  */
 class EscapeTraitTest extends TestCase
 {
-    /**
-     * @var MockObject|EscapeTrait
-     */
-    private MockObject $trait;
+	/**
+	 * @var MockObject|EscapeTrait
+	 */
+	private MockObject $trait;
 
-    public function setUp(): void
-    {
-        parent::setUp();
+	public function setUp(): void
+	{
+		parent::setUp();
 
-        $this->trait = $this->getMockForTrait(EscapeTrait::class);
-    }
+		$this->trait = $this->getMockForTrait(EscapeTrait::class);
+	}
 
-    /**
-     * @param string $expected
-     * @dataProvider provideSafeValueIsNotEscapedData
-     */
-    public function testSafeValueIsNotEscaped(string $expected)
-    {
-        $actual = $this->trait->escape($expected);
+	/**
+	 * @param string $expected
+	 * @dataProvider provideSafeValueIsNotEscapedData
+	 */
+	public function testSafeValueIsNotEscaped(string $expected)
+	{
+		$actual = $this->trait->escape($expected);
 
-        $this->assertSame($expected, $actual);
-    }
+		$this->assertSame($expected, $actual);
+	}
 
-    /**
-     * @param string $value
-     * @dataProvider provideUnsafeValueIsEscapedData
-     */
-    public function testUnsafeValueIsEscaped(string $value)
-    {
-        $expected = sprintf("`%s`", $value);
-        $actual = $this->trait->escape($value);
+	/**
+	 * @param string $value
+	 * @dataProvider provideUnsafeValueIsEscapedData
+	 */
+	public function testUnsafeValueIsEscaped(string $value)
+	{
+		$expected = sprintf("`%s`", $value);
+		$actual = $this->trait->escape($value);
 
-        $this->assertSame($expected, $actual);
-    }
+		$this->assertSame($expected, $actual);
+	}
 
-    public function testValueWithBacktickThrowsException()
-    {
-        $this->expectException(\InvalidArgumentException::class);
+	public function testValueWithBacktickThrowsException()
+	{
+		$this->expectException(InvalidArgumentException::class);
 
-        $this->trait->escape("foo`bar");
-    }
+		$this->trait->escape("foo`bar");
+	}
 
-    public function provideSafeValueIsNotEscapedData(): array
-    {
-        return [
-            ['foobar'],
-            ['fooBar'],
-            ['FOOBAR'],
-            ['aaa'],
-            ['bbb'],
-            ['ccc'],
-            ['ddd'],
-            ['eee'],
-            ['fff'],
-            ['ggg'],
-            ['hhh'],
-            ['iii'],
-            ['jjj'],
-            ['kkk'],
-            ['lll'],
-            ['mmm'],
-            ['nnn'],
-            ['ooo'],
-            ['ppp'],
-            ['qqq'],
-            ['rrr'],
-            ['sss'],
-            ['ttt'],
-            ['uuu'],
-            ['vvv'],
-            ['www'],
-            ['xxx'],
-            ['yyy'],
-            ['zzz'],
-            ['']
-        ];
-    }
+	public function provideSafeValueIsNotEscapedData(): array
+	{
+		return [
+			['foobar'],
+			['fooBar'],
+			['FOOBAR'],
+			['aaa'],
+			['bbb'],
+			['ccc'],
+			['ddd'],
+			['eee'],
+			['fff'],
+			['ggg'],
+			['hhh'],
+			['iii'],
+			['jjj'],
+			['kkk'],
+			['lll'],
+			['mmm'],
+			['nnn'],
+			['ooo'],
+			['ppp'],
+			['qqq'],
+			['rrr'],
+			['sss'],
+			['ttt'],
+			['uuu'],
+			['vvv'],
+			['www'],
+			['xxx'],
+			['yyy'],
+			['zzz'],
+			['']
+		];
+	}
 
-    public function provideUnsafeValueIsEscapedData(): array
-    {
-        return [
-            ['12'],
-            ['foo_bar'],
-            ['FOO_BAR'],
-            ['1'],
-            ['2'],
-            ['3'],
-            ['4'],
-            ['5'],
-            ['6'],
-            ['7'],
-            ['8'],
-            ['9'],
-            ['0'],
-            ['_'],
-            ['__'],
-            ['\''],
-            ['"']
-        ];
-    }
+	public function provideUnsafeValueIsEscapedData(): array
+	{
+		return [
+			['12'],
+			['foo_bar'],
+			['FOO_BAR'],
+			['1'],
+			['2'],
+			['3'],
+			['4'],
+			['5'],
+			['6'],
+			['7'],
+			['8'],
+			['9'],
+			['0'],
+			['_'],
+			['__'],
+			['\''],
+			['"']
+		];
+	}
 }

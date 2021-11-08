@@ -24,36 +24,35 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\Variable;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Property
  */
 class PropertyTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
-    /**
-     * @dataProvider provideToQueryData
-     * @param        Variable $variable
-     * @param        string   $property
-     * @param        string   $expected
-     */
-    public function testToQuery(Variable $variable, string $property, string $expected)
-    {
-        $property = new Property($variable, $property);
+	/**
+	 * @dataProvider provideToQueryData
+	 * @param Variable $variable
+	 * @param string $property
+	 * @param string $expected
+	 */
+	public function testToQuery(Variable $variable, string $property, string $expected)
+	{
+		$property = new Property($variable, $property);
 
-        $this->assertSame($expected, $property->toQuery());
-    }
+		$this->assertSame($expected, $property->toQuery());
+	}
 
-    public function provideToQueryData(): array
-    {
-        return [
-        [$this->getQueryConvertableMock(Variable::class, "a"), "a", "a.a"],
-        [$this->getQueryConvertableMock(Variable::class, "a"), "b", "a.b"],
-        [$this->getQueryConvertableMock(Variable::class, "b"), "a", "b.a"],
-        [$this->getQueryConvertableMock(Variable::class, "a"), ":", "a.`:`"],
-        [$this->getQueryConvertableMock(Variable::class, "b"), ":", "b.`:`"]
-        ];
-    }
+	public function provideToQueryData(): array
+	{
+		return [
+			[$this->getQueryConvertableMock(Variable::class, "a"), "a", "a.a"],
+			[$this->getQueryConvertableMock(Variable::class, "a"), "b", "a.b"],
+			[$this->getQueryConvertableMock(Variable::class, "b"), "a", "b.a"],
+			[$this->getQueryConvertableMock(Variable::class, "a"), ":", "a.`:`"],
+			[$this->getQueryConvertableMock(Variable::class, "b"), ":", "b.`:`"]
+		];
+	}
 }

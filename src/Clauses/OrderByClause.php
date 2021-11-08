@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Property;
+use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 
 /**
  * This class represents an ORDER BY clause. This clause should always be preceded by a RETURN
@@ -32,60 +32,60 @@ use WikibaseSolutions\CypherDSL\Property;
  */
 class OrderByClause extends Clause
 {
-    use EscapeTrait;
+	use EscapeTrait;
 
-    /**
-     * @var Property[] The expressions to include in the clause
-     */
-    private array $properties = [];
+	/**
+	 * @var Property[] The expressions to include in the clause
+	 */
+	private array $properties = [];
 
-    /**
-     * @var bool
-     */
-    private bool $descending = false;
+	/**
+	 * @var bool
+	 */
+	private bool $descending = false;
 
-    /**
-     * Add a property to sort on.
-     *
-     * @param  Property $property The additional property to sort on
-     * @return OrderByClause
-     */
-    public function addProperty(Property $property): self
-    {
-        $this->properties[] = $property;
+	/**
+	 * Add a property to sort on.
+	 *
+	 * @param Property $property The additional property to sort on
+	 * @return OrderByClause
+	 */
+	public function addProperty(Property $property): self
+	{
+		$this->properties[] = $property;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Set to sort in a DESCENDING order.
-     *
-     * @param  bool $descending
-     * @return OrderByClause
-     */
-    public function setDescending(bool $descending = true): self
-    {
-        $this->descending = $descending;
+	/**
+	 * Set to sort in a DESCENDING order.
+	 *
+	 * @param bool $descending
+	 * @return OrderByClause
+	 */
+	public function setDescending(bool $descending = true): self
+	{
+		$this->descending = $descending;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getClause(): string
-    {
-        return "ORDER BY";
-    }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getClause(): string
+	{
+		return "ORDER BY";
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getSubject(): string
-    {
-        $properties = array_map(fn (Property $property): string => $property->toQuery(), $this->properties);
-        $subject = implode(", ", $properties);
+	/**
+	 * @inheritDoc
+	 */
+	protected function getSubject(): string
+	{
+		$properties = array_map(fn (Property $property): string => $property->toQuery(), $this->properties);
+		$subject = implode(", ", $properties);
 
-        return $this->descending ? sprintf("%s DESCENDING", $subject) : $subject;
-    }
+		return $this->descending ? sprintf("%s DESCENDING", $subject) : $subject;
+	}
 }

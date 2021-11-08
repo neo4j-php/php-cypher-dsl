@@ -23,7 +23,6 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\PropertyMap;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -31,75 +30,75 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 class PropertyMapTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
-    public function testEmpty()
-    {
-        $propertyMap = new PropertyMap([]);
+	public function testEmpty()
+	{
+		$propertyMap = new PropertyMap([]);
 
-        $this->assertSame("{}", $propertyMap->toQuery());
-    }
+		$this->assertSame("{}", $propertyMap->toQuery());
+	}
 
-    /**
-     * @dataProvider provideNumericalKeysData
-     * @param        array  $properties
-     * @param        string $expected
-     */
-    public function testNumericalKeys(array $properties, string $expected)
-    {
-        $propertyMap = new PropertyMap($properties);
+	/**
+	 * @dataProvider provideNumericalKeysData
+	 * @param array $properties
+	 * @param string $expected
+	 */
+	public function testNumericalKeys(array $properties, string $expected)
+	{
+		$propertyMap = new PropertyMap($properties);
 
-        $this->assertSame($expected, $propertyMap->toQuery());
-    }
+		$this->assertSame($expected, $propertyMap->toQuery());
+	}
 
-    /**
-     * @dataProvider provideStringKeysData
-     * @param        array  $properties
-     * @param        string $expected
-     */
-    public function testStringKeys(array $properties, string $expected)
-    {
-        $propertyMap = new PropertyMap($properties);
+	/**
+	 * @dataProvider provideStringKeysData
+	 * @param array $properties
+	 * @param string $expected
+	 */
+	public function testStringKeys(array $properties, string $expected)
+	{
+		$propertyMap = new PropertyMap($properties);
 
-        $this->assertSame($expected, $propertyMap->toQuery());
-    }
+		$this->assertSame($expected, $propertyMap->toQuery());
+	}
 
-    /**
-     * @dataProvider provideNestedPropertyMapsData
-     * @param        array  $properties
-     * @param        string $expected
-     */
-    public function testNestedPropertyMaps(array $properties, string $expected)
-    {
-        $propertyMap = new PropertyMap($properties);
+	/**
+	 * @dataProvider provideNestedPropertyMapsData
+	 * @param array $properties
+	 * @param string $expected
+	 */
+	public function testNestedPropertyMaps(array $properties, string $expected)
+	{
+		$propertyMap = new PropertyMap($properties);
 
-        $this->assertSame($expected, $propertyMap->toQuery());
-    }
+		$this->assertSame($expected, $propertyMap->toQuery());
+	}
 
-    public function provideNumericalKeysData(): array
-    {
-        return [
-        [[$this->getQueryConvertableMock(AnyType::class, "'a'")], "{`0`: 'a'}"],
-        [[$this->getQueryConvertableMock(AnyType::class, "'a'"), $this->getQueryConvertableMock(AnyType::class, "'b'")], "{`0`: 'a', `1`: 'b'}"]
-        ];
-    }
+	public function provideNumericalKeysData(): array
+	{
+		return [
+			[[$this->getQueryConvertableMock(AnyType::class, "'a'")], "{`0`: 'a'}"],
+			[[$this->getQueryConvertableMock(AnyType::class, "'a'"), $this->getQueryConvertableMock(AnyType::class, "'b'")], "{`0`: 'a', `1`: 'b'}"]
+		];
+	}
 
-    public function provideStringKeysData(): array
-    {
-        return [
-        [['a' => $this->getQueryConvertableMock(AnyType::class, "'a'")], "{a: 'a'}"],
-        [['a' => $this->getQueryConvertableMock(AnyType::class, "'a'"), 'b' => $this->getQueryConvertableMock(AnyType::class,"'b'")], "{a: 'a', b: 'b'}"],
-        [['a' => $this->getQueryConvertableMock(AnyType::class, "'b'")], "{a: 'b'}"],
-        [[':' => $this->getQueryConvertableMock(AnyType::class, "'a'")], "{`:`: 'a'}"]
-        ];
-    }
+	public function provideStringKeysData(): array
+	{
+		return [
+			[['a' => $this->getQueryConvertableMock(AnyType::class, "'a'")], "{a: 'a'}"],
+			[['a' => $this->getQueryConvertableMock(AnyType::class, "'a'"), 'b' => $this->getQueryConvertableMock(AnyType::class, "'b'")], "{a: 'a', b: 'b'}"],
+			[['a' => $this->getQueryConvertableMock(AnyType::class, "'b'")], "{a: 'b'}"],
+			[[':' => $this->getQueryConvertableMock(AnyType::class, "'a'")], "{`:`: 'a'}"]
+		];
+	}
 
-    public function provideNestedPropertyMapsData()
-    {
-        return [
-        [['a' => new PropertyMap([])], "{a: {}}"],
-        [['a' => new PropertyMap(['a' => new PropertyMap(['a' => $this->getQueryConvertableMock(AnyType::class, "'b'")])])], "{a: {a: {a: 'b'}}}"],
-        [['a' => new PropertyMap(['b' => $this->getQueryConvertableMock(AnyType::class, "'c'")]), 'b' => $this->getQueryConvertableMock(AnyType::class, "'d'")], "{a: {b: 'c'}, b: 'd'}"]
-        ];
-    }
+	public function provideNestedPropertyMapsData()
+	{
+		return [
+			[['a' => new PropertyMap([])], "{a: {}}"],
+			[['a' => new PropertyMap(['a' => new PropertyMap(['a' => $this->getQueryConvertableMock(AnyType::class, "'b'")])])], "{a: {a: {a: 'b'}}}"],
+			[['a' => new PropertyMap(['b' => $this->getQueryConvertableMock(AnyType::class, "'c'")]), 'b' => $this->getQueryConvertableMock(AnyType::class, "'d'")], "{a: {b: 'c'}, b: 'd'}"]
+		];
+	}
 }

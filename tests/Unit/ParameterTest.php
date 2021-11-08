@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Parameter;
 
@@ -31,8 +32,8 @@ class ParameterTest extends TestCase
 {
 	/**
 	 * @dataProvider provideToQueryData
-	 * @param        string $parameter
-	 * @param        string $expected
+	 * @param string $parameter
+	 * @param string $expected
 	 */
 	public function testToQuery(string $parameter, string $expected)
 	{
@@ -47,7 +48,7 @@ class ParameterTest extends TestCase
 	 */
 	public function testThrowsExceptionOnInvalid(string $parameter)
 	{
-		$this->expectException(\InvalidArgumentException::class);
+		$this->expectException(InvalidArgumentException::class);
 
 		new Parameter($parameter);
 	}

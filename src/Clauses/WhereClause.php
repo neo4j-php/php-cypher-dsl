@@ -32,41 +32,41 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  */
 class WhereClause extends Clause
 {
-    /**
-     * @var BooleanType|Label The expression to match
-     */
-    private AnyType $expression;
+	/**
+	 * @var BooleanType|Label The expression to match
+	 */
+	private AnyType $expression;
 
-    /**
-     * Sets the expression to match in this WHERE clause.
-     *
-     * @param  BooleanType|Label $expression The expression to match
-     * @return WhereClause
-     */
-    public function setExpression(AnyType $expression): self
-    {
-        $this->expression = $expression;
+	/**
+	 * Sets the expression to match in this WHERE clause.
+	 *
+	 * @param BooleanType|Label $expression The expression to match
+	 * @return WhereClause
+	 */
+	public function setExpression(AnyType $expression): self
+	{
+		$this->expression = $expression;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getClause(): string
-    {
-        return "WHERE";
-    }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getClause(): string
+	{
+		return "WHERE";
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getSubject(): string
-    {
-        if (!isset($this->expression)) {
-            return "";
-        }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getSubject(): string
+	{
+		if (!isset($this->expression)) {
+			return "";
+		}
 
-        return $this->expression->toQuery();
-    }
+		return $this->expression->toQuery();
+	}
 }

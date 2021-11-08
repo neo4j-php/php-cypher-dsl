@@ -24,7 +24,6 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Minus;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
@@ -33,20 +32,20 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 class MinusTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
-    public function testToQuery()
-    {
-        $minus = new Minus($this->getQueryConvertableMock(NumeralType::class, "10"));
+	public function testToQuery()
+	{
+		$minus = new Minus($this->getQueryConvertableMock(NumeralType::class, "10"));
 
-        $this->assertSame("-10", $minus->toQuery());
+		$this->assertSame("-10", $minus->toQuery());
 
-        $minus = new Minus($minus);
+		$minus = new Minus($minus);
 
-        $this->assertSame("--10", $minus->toQuery());
-    }
+		$this->assertSame("--10", $minus->toQuery());
+	}
 
-    public function testDoesNotAcceptAnyTypeAsOperand()
+	public function testDoesNotAcceptAnyTypeAsOperand()
 	{
 		$this->expectException(TypeError::class);
 

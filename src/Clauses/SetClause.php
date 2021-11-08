@@ -31,39 +31,40 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 class SetClause extends Clause
 {
-    /**
-     * @var AnyType[] $assignments The expressions to set
-     */
-    private array $assignments = [];
+	/**
+	 * @var AnyType[] $assignments The expressions to set
+	 */
+	private array $assignments = [];
 
-    /**
-     * Add an assignment.
-     *
-     * @param  Assignment $assignment The assignment to execute
-     * @return SetClause
-     */
-    public function addAssignment(Assignment $assignment): self
-    {
-        $this->assignments[] = $assignment;
+	/**
+	 * Add an assignment.
+	 *
+	 * @param Assignment $assignment The assignment to execute
+	 * @return SetClause
+	 */
+	public function addAssignment(Assignment $assignment): self
+	{
+		$this->assignments[] = $assignment;
 
-        return $this;
-    }
-    /**
-     * @inheritDoc
-     */
-    protected function getClause(): string
-    {
-        return "SET";
-    }
+		return $this;
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getSubject(): string
-    {
-        return implode(
-            ", ",
-            array_map(fn (Assignment $assignment): string => $assignment->toQuery(), $this->assignments)
-        );
-    }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getClause(): string
+	{
+		return "SET";
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function getSubject(): string
+	{
+		return implode(
+			", ",
+			array_map(fn (Assignment $assignment): string => $assignment->toQuery(), $this->assignments)
+		);
+	}
 }

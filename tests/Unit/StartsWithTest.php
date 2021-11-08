@@ -24,7 +24,6 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\StartsWith;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
@@ -33,7 +32,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 class StartsWithTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
 	public function testToQuery()
 	{

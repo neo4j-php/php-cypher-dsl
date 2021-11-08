@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
+use InvalidArgumentException;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 
 /**
@@ -28,51 +29,51 @@ use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
  */
 class Label implements QueryConvertable
 {
-    use EscapeTrait;
+	use EscapeTrait;
 
-    /**
-     * @var Variable The variable to which this label belongs
-     */
-    private Variable $variable;
+	/**
+	 * @var Variable The variable to which this label belongs
+	 */
+	private Variable $variable;
 
-    /**
-     * @var string[] The names of the labels
-     */
-    private array $labels;
+	/**
+	 * @var string[] The names of the labels
+	 */
+	private array $labels;
 
-    /**
-     * Label constructor.
-     *
-     * @param Variable $variable
-     * @param string[] $labels
-     */
-    public function __construct(Variable $variable, array $labels)
-    {
-        if (count($labels) === 0) {
-            throw new \InvalidArgumentException("\$labels must have at least one label");
-        }
+	/**
+	 * Label constructor.
+	 *
+	 * @param Variable $variable
+	 * @param string[] $labels
+	 */
+	public function __construct(Variable $variable, array $labels)
+	{
+		if (count($labels) === 0) {
+			throw new InvalidArgumentException("\$labels must have at least one label");
+		}
 
-        foreach ($labels as $label) {
-            if (!is_string($label)) {
-                throw new \InvalidArgumentException("\$labels must consist of only strings");
-            }
-        }
+		foreach ($labels as $label) {
+			if (!is_string($label)) {
+				throw new InvalidArgumentException("\$labels must consist of only strings");
+			}
+		}
 
-        $this->variable = $variable;
-        $this->labels = $labels;
-    }
+		$this->variable = $variable;
+		$this->labels = $labels;
+	}
 
-    /**
-     * @inheritDoc
-     */
-    public function toQuery(): string
-    {
-        $query = $this->variable->toQuery();
+	/**
+	 * @inheritDoc
+	 */
+	public function toQuery(): string
+	{
+		$query = $this->variable->toQuery();
 
-        foreach ($this->labels as $label) {
-            $query = sprintf("%s:%s", $query, $this->escape($label));
-        }
+		foreach ($this->labels as $label) {
+			$query = sprintf("%s:%s", $query, $this->escape($label));
+		}
 
-        return $query;
-    }
+		return $query;
+	}
 }

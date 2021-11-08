@@ -29,27 +29,27 @@ use InvalidArgumentException;
  */
 trait EscapeTrait
 {
-    /**
-     * Escapes the given 'name'. A name is an unquoted literal in a Cypher query, such as variables,
-     * types or property names.
-     *
-     * @param  string $name
-     * @return string
-     */
-    public static function escape(string $name): string
-    {
-        if ($name === "") {
-            return "";
-        }
+	/**
+	 * Escapes the given 'name'. A name is an unquoted literal in a Cypher query, such as variables,
+	 * types or property names.
+	 *
+	 * @param string $name
+	 * @return string
+	 */
+	public static function escape(string $name): string
+	{
+		if ($name === "") {
+			return "";
+		}
 
-        if (ctype_alpha($name)) {
-            return $name;
-        }
+		if (ctype_alpha($name)) {
+			return $name;
+		}
 
-        if (strpos($name, '`') !== false) {
-            throw new InvalidArgumentException("A name must not contain a backtick (`)");
-        }
+		if (strpos($name, '`') !== false) {
+			throw new InvalidArgumentException("A name must not contain a backtick (`)");
+		}
 
-        return sprintf("`%s`", $name);
-    }
+		return sprintf("`%s`", $name);
+	}
 }

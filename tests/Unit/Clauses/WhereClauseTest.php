@@ -31,35 +31,35 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 class WhereClauseTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
-    public function testEmptyClause()
-    {
-        $where = new WhereClause();
+	public function testEmptyClause()
+	{
+		$where = new WhereClause();
 
-        $this->assertSame("", $where->toQuery());
-    }
+		$this->assertSame("", $where->toQuery());
+	}
 
-    public function testExpression()
-    {
-        $where = new WhereClause();
-        $expression = $this->getQueryConvertableMock(AnyType::class, "(a)");
+	public function testExpression()
+	{
+		$where = new WhereClause();
+		$expression = $this->getQueryConvertableMock(AnyType::class, "(a)");
 
-        $where->setExpression($expression);
+		$where->setExpression($expression);
 
-        $this->assertSame("WHERE (a)", $where->toQuery());
-    }
+		$this->assertSame("WHERE (a)", $where->toQuery());
+	}
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsAnyType()
-    {
-        $where = new WhereClause();
-        $expression = $this->getQueryConvertableMock(AnyType::class, "(a)");
+	/**
+	 * @doesNotPerformAssertions
+	 */
+	public function testAcceptsAnyType()
+	{
+		$where = new WhereClause();
+		$expression = $this->getQueryConvertableMock(AnyType::class, "(a)");
 
-        $where->setExpression($expression);
+		$where->setExpression($expression);
 
-        $where->toQuery();
-    }
+		$where->toQuery();
+	}
 }

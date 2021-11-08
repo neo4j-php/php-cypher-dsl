@@ -21,8 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
-
 /**
  * Represents the type "node".
  */

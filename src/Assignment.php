@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
+use TypeError;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -31,44 +32,44 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 class Assignment extends BinaryOperator
 {
-    /**
-     * @var bool Whether to use the property mutation instead of the property replacement
-     * operator.
-     */
-    private bool $mutate = false;
+	/**
+	 * @var bool Whether to use the property mutation instead of the property replacement
+	 * operator.
+	 */
+	private bool $mutate = false;
 
-    /**
-     * @param Property|Variable $left
-     * @inheritDoc
-     */
-    public function __construct(AnyType $left, AnyType $right)
-    {
-    	if (!($left instanceof Property) && !($left instanceof Variable)) {
-    		throw new \TypeError("\$left must be either a Property or a Variable");
+	/**
+	 * @param Property|Variable $left
+	 * @inheritDoc
+	 */
+	public function __construct(AnyType $left, AnyType $right)
+	{
+		if (!($left instanceof Property) && !($left instanceof Variable)) {
+			throw new TypeError("\$left must be either a Property or a Variable");
 		}
 
-        parent::__construct($left, $right);
-    }
+		parent::__construct($left, $right);
+	}
 
-    /**
-     * Whether to use the property mutation instead of the property replacement
-     * operator.
-     *
-     * @param bool $mutate
-     * @return $this
-     */
-    public function setMutate(bool $mutate = true): self
-    {
-        $this->mutate = $mutate;
+	/**
+	 * Whether to use the property mutation instead of the property replacement
+	 * operator.
+	 *
+	 * @param bool $mutate
+	 * @return $this
+	 */
+	public function setMutate(bool $mutate = true): self
+	{
+		$this->mutate = $mutate;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getOperator(): string
-    {
-        return $this->mutate ? "+=" : "=";
-    }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getOperator(): string
+	{
+		return $this->mutate ? "+=" : "=";
+	}
 }

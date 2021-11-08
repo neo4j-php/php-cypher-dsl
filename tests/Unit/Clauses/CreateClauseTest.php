@@ -21,7 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\CreateClause;
@@ -36,73 +35,73 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
  */
 class CreateClauseTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
-    public function testEmptyClause()
-    {
-        $createClause = new CreateClause();
+	public function testEmptyClause()
+	{
+		$createClause = new CreateClause();
 
-        $this->assertSame("", $createClause->toQuery());
-    }
+		$this->assertSame("", $createClause->toQuery());
+	}
 
-    public function testSinglePattern()
-    {
-        $createClause = new CreateClause();
-        $pattern = $this->getQueryConvertableMock(StructuralType::class, "(a)");
+	public function testSinglePattern()
+	{
+		$createClause = new CreateClause();
+		$pattern = $this->getQueryConvertableMock(StructuralType::class, "(a)");
 
-        $createClause->addPattern($pattern);
+		$createClause->addPattern($pattern);
 
-        $this->assertSame("CREATE (a)", $createClause->toQuery());
-    }
+		$this->assertSame("CREATE (a)", $createClause->toQuery());
+	}
 
-    public function testMultiplePatterns()
-    {
-        $createClause = new CreateClause();
+	public function testMultiplePatterns()
+	{
+		$createClause = new CreateClause();
 
-        $patternA = $this->getQueryConvertableMock(StructuralType::class, "(a)");
-        $patternB = $this->getQueryConvertableMock(StructuralType::class, "(b)");
+		$patternA = $this->getQueryConvertableMock(StructuralType::class, "(a)");
+		$patternB = $this->getQueryConvertableMock(StructuralType::class, "(b)");
 
-        $createClause->addPattern($patternA);
-        $createClause->addPattern($patternB);
+		$createClause->addPattern($patternA);
+		$createClause->addPattern($patternB);
 
-        $this->assertSame("CREATE (a), (b)", $createClause->toQuery());
-    }
+		$this->assertSame("CREATE (a), (b)", $createClause->toQuery());
+	}
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsNodeType()
-    {
-        $createClause = new CreateClause();
+	/**
+	 * @doesNotPerformAssertions
+	 */
+	public function testAcceptsNodeType()
+	{
+		$createClause = new CreateClause();
 
-        $patternA = $this->getQueryConvertableMock(NodeType::class, "(a)");
+		$patternA = $this->getQueryConvertableMock(NodeType::class, "(a)");
 
-        $createClause->addPattern($patternA);
-        $createClause->toQuery();
-    }
+		$createClause->addPattern($patternA);
+		$createClause->toQuery();
+	}
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsPathType()
-    {
-        $createClause = new CreateClause();
+	/**
+	 * @doesNotPerformAssertions
+	 */
+	public function testAcceptsPathType()
+	{
+		$createClause = new CreateClause();
 
-        $patternA = $this->getQueryConvertableMock(PathType::class, "(a)");
+		$patternA = $this->getQueryConvertableMock(PathType::class, "(a)");
 
-        $createClause->addPattern($patternA);
-        $createClause->toQuery();
-    }
+		$createClause->addPattern($patternA);
+		$createClause->toQuery();
+	}
 
-    public function testDoesNotAcceptAnyType()
-    {
-        $createClause = new CreateClause();
+	public function testDoesNotAcceptAnyType()
+	{
+		$createClause = new CreateClause();
 
-        $patternA = $this->getQueryConvertableMock(AnyType::class, "(a)");
+		$patternA = $this->getQueryConvertableMock(AnyType::class, "(a)");
 
-        $this->expectException(TypeError::class);
+		$this->expectException(TypeError::class);
 
-        $createClause->addPattern($patternA);
-        $createClause->toQuery();
-    }
+		$createClause->addPattern($patternA);
+		$createClause->toQuery();
+	}
 }

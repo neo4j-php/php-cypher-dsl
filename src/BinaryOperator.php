@@ -28,40 +28,40 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 abstract class BinaryOperator implements QueryConvertable
 {
-    /**
-     * @var AnyType The left-hand of the expression
-     */
-    private AnyType $left;
+	/**
+	 * @var AnyType The left-hand of the expression
+	 */
+	private AnyType $left;
 
-    /**
-     * @var AnyType The right-hand of the expression
-     */
-    private AnyType $right;
+	/**
+	 * @var AnyType The right-hand of the expression
+	 */
+	private AnyType $right;
 
-    /**
-     * BinaryOperator constructor.
-     *
-     * @param AnyType $left  The left-hand of the expression
-     * @param AnyType $right The right-hand of the expression
-     */
-    public function __construct(AnyType $left, AnyType $right)
-    {
-        $this->left = $left;
-        $this->right = $right;
-    }
+	/**
+	 * BinaryOperator constructor.
+	 *
+	 * @param AnyType $left The left-hand of the expression
+	 * @param AnyType $right The right-hand of the expression
+	 */
+	public function __construct(AnyType $left, AnyType $right)
+	{
+		$this->left = $left;
+		$this->right = $right;
+	}
 
-    /**
-     * @inheritDoc
-     */
-    public function toQuery(): string
-    {
-        return sprintf("(%s %s %s)", $this->left->toQuery(), $this->getOperator(), $this->right->toQuery());
-    }
+	/**
+	 * @inheritDoc
+	 */
+	public function toQuery(): string
+	{
+		return sprintf("(%s %s %s)", $this->left->toQuery(), $this->getOperator(), $this->right->toQuery());
+	}
 
-    /**
-     * Returns the operator. For instance, this function would return "+" for the addition operator.
-     *
-     * @return string
-     */
-    abstract protected function getOperator(): string;
+	/**
+	 * Returns the operator. For instance, this function would return "+" for the addition operator.
+	 *
+	 * @return string
+	 */
+	abstract protected function getOperator(): string;
 }

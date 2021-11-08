@@ -52,7 +52,7 @@ class BooleanTypeTraitTest extends TestCase
 		$this->b = $this->getQueryConvertableMock(BooleanType::class, "false");
 	}
 
-    public function testAnd()
+	public function testAnd()
 	{
 		$and = $this->a->and($this->b);
 

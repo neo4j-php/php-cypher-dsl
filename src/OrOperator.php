@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * Represents the application of the disjunction (OR) operator.
@@ -31,21 +31,21 @@ use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
  */
 class OrOperator extends BinaryOperator implements BooleanType
 {
-    use BooleanTypeTrait;
+	use BooleanTypeTrait;
 
-    /**
-     * @inheritDoc
-     */
-    public function __construct(BooleanType $left, BooleanType $right)
-    {
-        parent::__construct($left, $right);
-    }
+	/**
+	 * @inheritDoc
+	 */
+	public function __construct(BooleanType $left, BooleanType $right)
+	{
+		parent::__construct($left, $right);
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getOperator(): string
-    {
-        return "OR";
-    }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getOperator(): string
+	{
+		return "OR";
+	}
 }

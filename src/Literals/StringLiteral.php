@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Literals;
 
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
  * Represents a string literal. The name of this class diverges from the naming scheme, because a class
@@ -32,50 +32,50 @@ use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
  */
 class StringLiteral implements StringType
 {
-    use StringTypeTrait;
+	use StringTypeTrait;
 
-    /**
-     * @var string
-     */
-    private string $value;
+	/**
+	 * @var string
+	 */
+	private string $value;
 
-    /**
-     * @var bool Whether to use double quotes or not.
-     */
-    private bool $useDoubleQuotes = false;
+	/**
+	 * @var bool Whether to use double quotes or not.
+	 */
+	private bool $useDoubleQuotes = false;
 
-    /**
-     * StringLiteral constructor.
-     *
-     * @param string $value
-     */
-    public function __construct(string $value)
-    {
-        $this->value = $value;
-    }
+	/**
+	 * StringLiteral constructor.
+	 *
+	 * @param string $value
+	 */
+	public function __construct(string $value)
+	{
+		$this->value = $value;
+	}
 
-    /**
-     * Whether to use double quotes or not.
-     *
-     * @param bool $useDoubleQuotes
-     */
-    public function useDoubleQuotes(bool $useDoubleQuotes = true)
-    {
-        $this->useDoubleQuotes = $useDoubleQuotes;
-    }
+	/**
+	 * Whether to use double quotes or not.
+	 *
+	 * @param bool $useDoubleQuotes
+	 */
+	public function useDoubleQuotes(bool $useDoubleQuotes = true)
+	{
+		$this->useDoubleQuotes = $useDoubleQuotes;
+	}
 
-    /**
-     * @inheritDoc
-     */
-    public function toQuery(): string
-    {
-        // Encode tabs, newlines, carriage returns and form feeds
-        $value = str_replace(["\t", "\n", "\r", "\f"], ["\\t", "\\n", "\\r", "\\f"], $this->value);
+	/**
+	 * @inheritDoc
+	 */
+	public function toQuery(): string
+	{
+		// Encode tabs, newlines, carriage returns and form feeds
+		$value = str_replace(["\t", "\n", "\r", "\f"], ["\\t", "\\n", "\\r", "\\f"], $this->value);
 
-        if ($this->useDoubleQuotes) {
-            return sprintf('"%s"', str_replace('"', '\"', $value));
-        } else {
-            return sprintf("'%s'", str_replace("'", "\'", $value));
-        }
-    }
+		if ($this->useDoubleQuotes) {
+			return sprintf('"%s"', str_replace('"', '\"', $value));
+		} else {
+			return sprintf("'%s'", str_replace("'", "\'", $value));
+		}
+	}
 }

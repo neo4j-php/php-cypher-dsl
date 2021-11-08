@@ -40,41 +40,41 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
  * unimplemented features.
  */
 class RawExpression implements
-    ListType,
-    MapType,
-    BooleanType,
-    NumeralType,
-    StringType,
-    NodeType,
-    PathType
+	ListType,
+	MapType,
+	BooleanType,
+	NumeralType,
+	StringType,
+	NodeType,
+	PathType
 {
-    use BooleanTypeTrait;
-    use MapTypeTrait;
-    use NodeTypeTrait;
-    use NumeralTypeTrait;
-    use PathTypeTrait;
-    use StringTypeTrait;
+	use BooleanTypeTrait;
+	use MapTypeTrait;
+	use NodeTypeTrait;
+	use NumeralTypeTrait;
+	use PathTypeTrait;
+	use StringTypeTrait;
 
-    /**
-     * @var string The raw expression
-     */
-    private string $expression;
+	/**
+	 * @var string The raw expression
+	 */
+	private string $expression;
 
-    /**
-     * RawExpression constructor.
-     *
-     * @param string $expression The raw expression
-     */
-    public function __construct(string $expression)
-    {
-        $this->expression = $expression;
-    }
+	/**
+	 * RawExpression constructor.
+	 *
+	 * @param string $expression The raw expression
+	 */
+	public function __construct(string $expression)
+	{
+		$this->expression = $expression;
+	}
 
-    /**
-     * @inheritDoc
-     */
-    public function toQuery(): string
-    {
-        return $this->expression;
-    }
+	/**
+	 * @inheritDoc
+	 */
+	public function toQuery(): string
+	{
+		return $this->expression;
+	}
 }

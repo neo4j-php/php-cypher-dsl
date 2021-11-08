@@ -33,47 +33,47 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 class LimitClauseTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
-    public function testEmptyClause()
-    {
-        $limit = new LimitClause();
+	public function testEmptyClause()
+	{
+		$limit = new LimitClause();
 
-        $this->assertSame("", $limit->toQuery());
-    }
+		$this->assertSame("", $limit->toQuery());
+	}
 
-    public function testPattern()
-    {
-        $limit = new LimitClause();
-        $expression = $this->getQueryConvertableMock(NumeralType::class, "10");
+	public function testPattern()
+	{
+		$limit = new LimitClause();
+		$expression = $this->getQueryConvertableMock(NumeralType::class, "10");
 
-        $limit->setLimit($expression);
+		$limit->setLimit($expression);
 
-        $this->assertSame("LIMIT 10", $limit->toQuery());
-    }
+		$this->assertSame("LIMIT 10", $limit->toQuery());
+	}
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsNumeralType()
-    {
-        $limit = new LimitClause();
-        $expression = $this->getQueryConvertableMock(NumeralType::class, "10");
+	/**
+	 * @doesNotPerformAssertions
+	 */
+	public function testAcceptsNumeralType()
+	{
+		$limit = new LimitClause();
+		$expression = $this->getQueryConvertableMock(NumeralType::class, "10");
 
-        $limit->setLimit($expression);
+		$limit->setLimit($expression);
 
-        $limit->toQuery();
-    }
+		$limit->toQuery();
+	}
 
-    public function testDoesNotAcceptAnyType()
-    {
-        $limit = new LimitClause();
-        $expression = $this->getQueryConvertableMock(AnyType::class, "10");
+	public function testDoesNotAcceptAnyType()
+	{
+		$limit = new LimitClause();
+		$expression = $this->getQueryConvertableMock(AnyType::class, "10");
 
-        $this->expectException(TypeError::class);
+		$this->expectException(TypeError::class);
 
-        $limit->setLimit($expression);
+		$limit->setLimit($expression);
 
-        $limit->toQuery();
-    }
+		$limit->toQuery();
+	}
 }

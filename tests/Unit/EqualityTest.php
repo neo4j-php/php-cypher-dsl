@@ -24,7 +24,6 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Equality;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
@@ -33,20 +32,20 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
  */
 class EqualityTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
-    public function testToQuery()
-    {
-        $equality = new Equality($this->getQueryConvertableMock(PropertyType::class, "10"), $this->getQueryConvertableMock(PropertyType::class, "15"));
+	public function testToQuery()
+	{
+		$equality = new Equality($this->getQueryConvertableMock(PropertyType::class, "10"), $this->getQueryConvertableMock(PropertyType::class, "15"));
 
-        $this->assertSame("(10 = 15)", $equality->toQuery());
+		$this->assertSame("(10 = 15)", $equality->toQuery());
 
-        $equality = new Equality($equality, $equality);
+		$equality = new Equality($equality, $equality);
 
-        $this->assertSame("((10 = 15) = (10 = 15))", $equality->toQuery());
-    }
+		$this->assertSame("((10 = 15) = (10 = 15))", $equality->toQuery());
+	}
 
-    public function testDoesNotAcceptAnyTypeAsOperands()
+	public function testDoesNotAcceptAnyTypeAsOperands()
 	{
 		$this->expectException(TypeError::class);
 

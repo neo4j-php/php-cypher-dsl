@@ -23,7 +23,6 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Label;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Variable;
 
 /**
@@ -31,7 +30,7 @@ use WikibaseSolutions\CypherDSL\Variable;
  */
 class LabelTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
 	public function testSingle()
 	{
@@ -43,23 +42,23 @@ class LabelTest extends TestCase
 		$this->assertSame("foo:Bar", $label->toQuery());
 	}
 
-    public function testMultiple()
-    {
-        $expression = $this->getQueryConvertableMock(Variable::class, "foo");
-        $label = ["Bar", "Baz"];
-
-        $label = new Label($expression, $label);
-
-        $this->assertSame("foo:Bar:Baz", $label->toQuery());
-    }
-
-    public function testLabelIsEscaped()
-    {
+	public function testMultiple()
+	{
 		$expression = $this->getQueryConvertableMock(Variable::class, "foo");
-        $label = ["{}"];
+		$label = ["Bar", "Baz"];
 
-        $label = new Label($expression, $label);
+		$label = new Label($expression, $label);
 
-        $this->assertSame("foo:`{}`", $label->toQuery());
-    }
+		$this->assertSame("foo:Bar:Baz", $label->toQuery());
+	}
+
+	public function testLabelIsEscaped()
+	{
+		$expression = $this->getQueryConvertableMock(Variable::class, "foo");
+		$label = ["{}"];
+
+		$label = new Label($expression, $label);
+
+		$this->assertSame("foo:`{}`", $label->toQuery());
+	}
 }

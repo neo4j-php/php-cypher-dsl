@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\ExpressionList;
 use WikibaseSolutions\CypherDSL\Literals\Decimal;
@@ -32,225 +33,225 @@ use WikibaseSolutions\CypherDSL\Patterns\Node;
  */
 class NodeTest extends TestCase
 {
-    public function testEmptyNode()
-    {
-        $node = new Node();
+	public function testEmptyNode()
+	{
+		$node = new Node();
 
-        $this->assertSame("()", $node->toQuery());
-    }
+		$this->assertSame("()", $node->toQuery());
+	}
 
-    /**
-     * @dataProvider provideOnlyLabelData
-     * @param        string $label
-     * @param        string $expected
-     */
-    public function testOnlyLabel(string $label, string $expected)
-    {
-        $node = new Node();
-        $node->labeled($label);
+	/**
+	 * @dataProvider provideOnlyLabelData
+	 * @param string $label
+	 * @param string $expected
+	 */
+	public function testOnlyLabel(string $label, string $expected)
+	{
+		$node = new Node();
+		$node->labeled($label);
 
-        $this->assertSame($expected, $node->toQuery());
-    }
+		$this->assertSame($expected, $node->toQuery());
+	}
 
-    /**
-     * @dataProvider provideOnlyNameData
-     * @param        string $name
-     * @param        string $expected
-     */
-    public function testOnlyName(string $name, string $expected)
-    {
-        $node = new Node();
-        $node->named($name);
+	/**
+	 * @dataProvider provideOnlyNameData
+	 * @param string $name
+	 * @param string $expected
+	 */
+	public function testOnlyName(string $name, string $expected)
+	{
+		$node = new Node();
+		$node->named($name);
 
-        $this->assertSame($expected, $node->toQuery());
-    }
+		$this->assertSame($expected, $node->toQuery());
+	}
 
-    /**
-     * @dataProvider provideOnlyPropertiesData
-     * @param        array  $properties
-     * @param        string $expected
-     */
-    public function testOnlyProperties(array $properties, string $expected)
-    {
-        $node = new Node();
-        $node->withProperties($properties);
+	/**
+	 * @dataProvider provideOnlyPropertiesData
+	 * @param array $properties
+	 * @param string $expected
+	 */
+	public function testOnlyProperties(array $properties, string $expected)
+	{
+		$node = new Node();
+		$node->withProperties($properties);
 
-        $this->assertSame($expected, $node->toQuery());
-    }
+		$this->assertSame($expected, $node->toQuery());
+	}
 
-    /**
-     * @dataProvider provideWithNameAndLabelData
-     * @param        string $name
-     * @param        string $label
-     * @param        string $expected
-     */
-    public function testWithNameAndLabel(string $name, string $label, string $expected)
-    {
-        $node = new Node();
-        $node->labeled($label)->named($name);
+	/**
+	 * @dataProvider provideWithNameAndLabelData
+	 * @param string $name
+	 * @param string $label
+	 * @param string $expected
+	 */
+	public function testWithNameAndLabel(string $name, string $label, string $expected)
+	{
+		$node = new Node();
+		$node->labeled($label)->named($name);
 
-        $this->assertSame($expected, $node->toQuery());
-    }
+		$this->assertSame($expected, $node->toQuery());
+	}
 
-    /**
-     * @dataProvider provideWithNameAndPropertiesData
-     * @param        string $name
-     * @param        array  $properties
-     * @param        string $expected
-     */
-    public function testWithNameAndProperties(string $name, array $properties, string $expected)
-    {
-        $node = new Node();
-        $node->named($name)->withProperties($properties);
+	/**
+	 * @dataProvider provideWithNameAndPropertiesData
+	 * @param string $name
+	 * @param array $properties
+	 * @param string $expected
+	 */
+	public function testWithNameAndProperties(string $name, array $properties, string $expected)
+	{
+		$node = new Node();
+		$node->named($name)->withProperties($properties);
 
-        $this->assertSame($expected, $node->toQuery());
-    }
+		$this->assertSame($expected, $node->toQuery());
+	}
 
-    /**
-     * @dataProvider provideWithLabelAndPropertiesData
-     * @param        string $label
-     * @param        array  $properties
-     * @param        string $expected
-     */
-    public function testWithLabelAndProperties(string $label, array $properties, string $expected)
-    {
-        $node = new Node();
-        $node->labeled($label)->withProperties($properties);
+	/**
+	 * @dataProvider provideWithLabelAndPropertiesData
+	 * @param string $label
+	 * @param array $properties
+	 * @param string $expected
+	 */
+	public function testWithLabelAndProperties(string $label, array $properties, string $expected)
+	{
+		$node = new Node();
+		$node->labeled($label)->withProperties($properties);
 
-        $this->assertSame($expected, $node->toQuery());
-    }
+		$this->assertSame($expected, $node->toQuery());
+	}
 
-    /**
-     * @dataProvider provideWithNameAndLabelAndPropertiesData
-     * @param        string $name
-     * @param        string $label
-     * @param        array  $properties
-     * @param        string $expected
-     */
-    public function testWithNameAndLabelAndProperties(string $name, string $label, array $properties, string $expected)
-    {
-        $node = new Node();
-        $node->named($name)->labeled($label)->withProperties($properties);
+	/**
+	 * @dataProvider provideWithNameAndLabelAndPropertiesData
+	 * @param string $name
+	 * @param string $label
+	 * @param array $properties
+	 * @param string $expected
+	 */
+	public function testWithNameAndLabelAndProperties(string $name, string $label, array $properties, string $expected)
+	{
+		$node = new Node();
+		$node->named($name)->labeled($label)->withProperties($properties);
 
-        $this->assertSame($expected, $node->toQuery());
-    }
+		$this->assertSame($expected, $node->toQuery());
+	}
 
-    /**
-     * @dataProvider provideBacktickThrowsExceptionData
-     * @param        Node $invalidNode
-     */
-    public function testBacktickThrowsException(Node $invalidNode)
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $invalidNode->toQuery();
-    }
+	/**
+	 * @dataProvider provideBacktickThrowsExceptionData
+	 * @param Node $invalidNode
+	 */
+	public function testBacktickThrowsException(Node $invalidNode)
+	{
+		$this->expectException(InvalidArgumentException::class);
+		$invalidNode->toQuery();
+	}
 
-    /**
-     * @dataProvider provideMultipleLabelsData
-     * @param        array  $labels
-     * @param        string $expected
-     */
-    public function testMultipleLabels(array $labels, string $expected)
-    {
-        $node = new Node();
+	/**
+	 * @dataProvider provideMultipleLabelsData
+	 * @param array $labels
+	 * @param string $expected
+	 */
+	public function testMultipleLabels(array $labels, string $expected)
+	{
+		$node = new Node();
 
-        foreach ($labels as $label) {
-            $node->labeled($label);
-        }
+		foreach ($labels as $label) {
+			$node->labeled($label);
+		}
 
-        $this->assertSame($expected, $node->toQuery());
-    }
+		$this->assertSame($expected, $node->toQuery());
+	}
 
-    public function testSetterSameAsConstructor()
-    {
-        $label = "__test__";
-        $viaConstructor = new Node($label);
-        $viaSetter = (new Node())->labeled($label);
+	public function testSetterSameAsConstructor()
+	{
+		$label = "__test__";
+		$viaConstructor = new Node($label);
+		$viaSetter = (new Node())->labeled($label);
 
-        $this->assertSame($viaConstructor->toQuery(), $viaSetter->toQuery(), "Setting label via setter has different effect than using constructor");
-    }
+		$this->assertSame($viaConstructor->toQuery(), $viaSetter->toQuery(), "Setting label via setter has different effect than using constructor");
+	}
 
-    public function provideOnlyLabelData(): array
-    {
-        return [
-        ['a', '(:a)'],
-        ['A', '(:A)'],
-        [':', '(:`:`)']
-        ];
-    }
+	public function provideOnlyLabelData(): array
+	{
+		return [
+			['a', '(:a)'],
+			['A', '(:A)'],
+			[':', '(:`:`)']
+		];
+	}
 
-    public function provideOnlyNameData(): array
-    {
-        return [
-        ['a', '(a)'],
-        ['A', '(A)'],
-        [':', '(`:`)']
-        ];
-    }
+	public function provideOnlyNameData(): array
+	{
+		return [
+			['a', '(a)'],
+			['A', '(A)'],
+			[':', '(`:`)']
+		];
+	}
 
-    public function provideBacktickThrowsExceptionData(): array
-    {
-        return [
-        [new Node('__`__')],
-        [(new Node())->named('__`__')],
-        [(new Node())->withProperties(['__`__' => new StringLiteral('a')])]
-        ];
-    }
+	public function provideBacktickThrowsExceptionData(): array
+	{
+		return [
+			[new Node('__`__')],
+			[(new Node())->named('__`__')],
+			[(new Node())->withProperties(['__`__' => new StringLiteral('a')])]
+		];
+	}
 
-    public function provideWithNameAndLabelData(): array
-    {
-        return [
-        ['a', 'a', '(a:a)'],
-        ['A', ':', '(A:`:`)'],
-        ['', 'b', '(:b)']
-        ];
-    }
+	public function provideWithNameAndLabelData(): array
+	{
+		return [
+			['a', 'a', '(a:a)'],
+			['A', ':', '(A:`:`)'],
+			['', 'b', '(:b)']
+		];
+	}
 
-    public function provideWithNameAndPropertiesData(): array
-    {
-        return [
-        ['a', ['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "(a {a: 'b', b: 'c'})"],
-        ['b', ['a' => new Decimal(0), 'b' => new Decimal(1)], "(b {a: 0, b: 1})"],
-        ['c', [':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "(c {`:`: [1, 'a']})"]
-        ];
-    }
+	public function provideWithNameAndPropertiesData(): array
+	{
+		return [
+			['a', ['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "(a {a: 'b', b: 'c'})"],
+			['b', ['a' => new Decimal(0), 'b' => new Decimal(1)], "(b {a: 0, b: 1})"],
+			['c', [':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "(c {`:`: [1, 'a']})"]
+		];
+	}
 
-    public function provideWithLabelAndPropertiesData(): array
-    {
-        return [
-        ['a', ['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "(:a {a: 'b', b: 'c'})"],
-        ['b', ['a' => new Decimal(0), 'b' => new Decimal(1)], "(:b {a: 0, b: 1})"],
-        ['c', [':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "(:c {`:`: [1, 'a']})"]
-        ];
-    }
+	public function provideWithLabelAndPropertiesData(): array
+	{
+		return [
+			['a', ['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "(:a {a: 'b', b: 'c'})"],
+			['b', ['a' => new Decimal(0), 'b' => new Decimal(1)], "(:b {a: 0, b: 1})"],
+			['c', [':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "(:c {`:`: [1, 'a']})"]
+		];
+	}
 
-    public function provideOnlyPropertiesData(): array
-    {
-        return [
-        [['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "({a: 'b', b: 'c'})"],
-        [['a' => new Decimal(0), 'b' => new Decimal(1)], "({a: 0, b: 1})"],
-        [[':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "({`:`: [1, 'a']})"]
-        ];
-    }
+	public function provideOnlyPropertiesData(): array
+	{
+		return [
+			[['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "({a: 'b', b: 'c'})"],
+			[['a' => new Decimal(0), 'b' => new Decimal(1)], "({a: 0, b: 1})"],
+			[[':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "({`:`: [1, 'a']})"]
+		];
+	}
 
-    public function provideWithNameAndLabelAndPropertiesData(): array
-    {
-        return [
-        ['a', 'd', ['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "(a:d {a: 'b', b: 'c'})"],
-        ['b', 'e', ['a' => new Decimal(0), 'b' => new Decimal(1)], "(b:e {a: 0, b: 1})"],
-        ['c', 'f', [':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "(c:f {`:`: [1, 'a']})"]
-        ];
-    }
+	public function provideWithNameAndLabelAndPropertiesData(): array
+	{
+		return [
+			['a', 'd', ['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "(a:d {a: 'b', b: 'c'})"],
+			['b', 'e', ['a' => new Decimal(0), 'b' => new Decimal(1)], "(b:e {a: 0, b: 1})"],
+			['c', 'f', [':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "(c:f {`:`: [1, 'a']})"]
+		];
+	}
 
-    public function provideMultipleLabelsData(): array
-    {
-        return [
-        [['a'], '(:a)'],
-        [['A'], '(:A)'],
-        [[':'], '(:`:`)'],
-        [['a', 'b'], '(:a:b)'],
-        [['A', 'B'], '(:A:B)'],
-        [[':', 'a'], '(:`:`:a)'],
-        ];
-    }
+	public function provideMultipleLabelsData(): array
+	{
+		return [
+			[['a'], '(:a)'],
+			[['A'], '(:A)'],
+			[[':'], '(:`:`)'],
+			[['a', 'b'], '(:a:b)'],
+			[['A', 'B'], '(:A:B)'],
+			[[':', 'a'], '(:`:`:a)'],
+		];
+	}
 }

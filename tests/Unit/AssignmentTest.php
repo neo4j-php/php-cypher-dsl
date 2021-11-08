@@ -33,20 +33,20 @@ use WikibaseSolutions\CypherDSL\Variable;
  */
 class AssignmentTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
-    public function testToQuery()
-    {
-        $assignment = new Assignment($this->getQueryConvertableMock(Property::class, "foo.bar"), $this->getQueryConvertableMock(AnyType::class, "true"));
+	public function testToQuery()
+	{
+		$assignment = new Assignment($this->getQueryConvertableMock(Property::class, "foo.bar"), $this->getQueryConvertableMock(AnyType::class, "true"));
 
-        $this->assertSame("(foo.bar = true)", $assignment->toQuery());
+		$this->assertSame("(foo.bar = true)", $assignment->toQuery());
 
-        $assignment->setMutate();
+		$assignment->setMutate();
 
-        $this->assertSame("(foo.bar += true)", $assignment->toQuery());
-    }
+		$this->assertSame("(foo.bar += true)", $assignment->toQuery());
+	}
 
-    public function testLeftDoesNotAcceptAnyType()
+	public function testLeftDoesNotAcceptAnyType()
 	{
 		$this->expectException(TypeError::class);
 

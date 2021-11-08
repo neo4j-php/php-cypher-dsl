@@ -24,7 +24,6 @@ namespace WikibaseSolutions\CypherDSL\Traits;
 use WikibaseSolutions\CypherDSL\AndOperator;
 use WikibaseSolutions\CypherDSL\OrOperator;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use WikibaseSolutions\CypherDSL\Traits\PropertyTypeTrait;
 use WikibaseSolutions\CypherDSL\XorOperator;
 
 /**
@@ -32,38 +31,38 @@ use WikibaseSolutions\CypherDSL\XorOperator;
  */
 trait BooleanTypeTrait
 {
-    use PropertyTypeTrait;
+	use PropertyTypeTrait;
 
-    /**
-     * Create a conjunction between this expression and the given expression.
-     *
-     * @param  BooleanType $right
-     * @return AndOperator
-     */
-    public function and(BooleanType $right): AndOperator
-    {
-        return new AndOperator($this, $right);
-    }
+	/**
+	 * Create a conjunction between this expression and the given expression.
+	 *
+	 * @param BooleanType $right
+	 * @return AndOperator
+	 */
+	public function and(BooleanType $right): AndOperator
+	{
+		return new AndOperator($this, $right);
+	}
 
-    /**
-     * Create a disjunction between this expression and the given expression.
-     *
-     * @param  BooleanType $right
-     * @return OrOperator
-     */
-    public function or(BooleanType $right): OrOperator
-    {
-        return new OrOperator($this, $right);
-    }
+	/**
+	 * Create a disjunction between this expression and the given expression.
+	 *
+	 * @param BooleanType $right
+	 * @return OrOperator
+	 */
+	public function or(BooleanType $right): OrOperator
+	{
+		return new OrOperator($this, $right);
+	}
 
-    /**
-     * Perform an XOR with the given expression.
-     *
-     * @param  BooleanType $right
-     * @return XorOperator
-     */
-    public function xor(BooleanType $right): XorOperator
-    {
-        return new XorOperator($this, $right);
-    }
+	/**
+	 * Perform an XOR with the given expression.
+	 *
+	 * @param BooleanType $right
+	 * @return XorOperator
+	 */
+	public function xor(BooleanType $right): XorOperator
+	{
+		return new XorOperator($this, $right);
+	}
 }

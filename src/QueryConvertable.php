@@ -28,10 +28,10 @@ namespace WikibaseSolutions\CypherDSL;
  */
 interface QueryConvertable
 {
-    /**
-     * Converts the object into a (partial) query.
-     *
-     * @return string
-     */
-    public function toQuery(): string;
+	/**
+	 * Converts the object into a (partial) query.
+	 *
+	 * @return string
+	 */
+	public function toQuery(): string;
 }

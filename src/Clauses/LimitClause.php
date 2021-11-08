@@ -21,7 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
@@ -31,43 +30,43 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 class LimitClause extends Clause
 {
-    /**
-     * The expression of the LIMIT statement.
-     *
-     * @var NumeralType $limit
-     */
-    private NumeralType $limit;
+	/**
+	 * The expression of the LIMIT statement.
+	 *
+	 * @var NumeralType $limit
+	 */
+	private NumeralType $limit;
 
-    /**
-     * Sets the expression that returns the limit.
-     *
-     * @param  NumeralType $limit The limit
-     * @return LimitClause
-     */
-    public function setLimit(NumeralType $limit): self
-    {
-        $this->limit = $limit;
+	/**
+	 * Sets the expression that returns the limit.
+	 *
+	 * @param NumeralType $limit The limit
+	 * @return LimitClause
+	 */
+	public function setLimit(NumeralType $limit): self
+	{
+		$this->limit = $limit;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getClause(): string
-    {
-        return "LIMIT";
-    }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getClause(): string
+	{
+		return "LIMIT";
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getSubject(): string
-    {
-        if (isset($this->limit) ) {
-            return $this->limit->toQuery();
-        }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getSubject(): string
+	{
+		if (isset($this->limit)) {
+			return $this->limit->toQuery();
+		}
 
-        return "";
-    }
+		return "";
+	}
 }
