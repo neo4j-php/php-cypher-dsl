@@ -36,6 +36,11 @@ class WhereClause extends Clause
     private Expression $expression;
 
     /**
+     * @var bool Whether this is an existential WHERE
+     */
+    private bool $exists = false;
+
+    /**
      * Sets the expression to match in this WHERE clause.
      *
      * @param  Expression $expression The expression to match
@@ -49,11 +54,24 @@ class WhereClause extends Clause
     }
 
     /**
+     * Sets this as an existential WHERE clause.
+     *
+     * @param bool $exists
+     * @return $this
+     */
+    public function setExists(bool $exists = true): self
+    {
+        $this->exists = $exists;
+
+        return $this;
+    }
+
+    /**
      * @inheritDoc
      */
     protected function getClause(): string
     {
-        return "WHERE";
+        return $this->exists ? "WHERE EXISTS" : "WHERE";
     }
 
     /**

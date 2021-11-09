@@ -509,6 +509,26 @@ class Query
     }
 
     /**
+     * Creates the WHERE EXISTS clause.
+     *
+     * @param Expression $expression The expression to match
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/#existential-subqueries
+     *
+     * @return $this
+     */
+    public function whereExists(Expression $expression): self
+    {
+        $whereClause = new WhereClause();
+        $whereClause->setExpression($expression);
+        $whereClause->setExists();
+
+        $this->clauses[] = $whereClause;
+
+        return $this;
+    }
+
+    /**
      * Creates the WITH clause.
      *
      * @param Expression[]|Expression $expressions The entries to add; if the array-key is

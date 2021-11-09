@@ -281,6 +281,15 @@ class QueryTest extends TestCase
         $this->assertSame("WHERE (a)", $statement);
     }
 
+    public function testWhereExists()
+    {
+        $expression = $this->getExpressionMock("(a)", $this);
+
+        $statement = (new Query())->whereExists($expression)->build();
+
+        $this->assertSame("WHERE EXISTS (a)", $statement);
+    }
+
     public function testWith()
     {
         $expression = $this->getExpressionMock("a < b", $this);

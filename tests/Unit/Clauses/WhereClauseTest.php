@@ -48,4 +48,15 @@ class WhereClauseTest extends TestCase
 
         $this->assertSame("WHERE (a)", $where->toQuery());
     }
+
+    public function testExistential()
+    {
+        $where = new WhereClause();
+        $expression = $this->getExpressionMock("(a)", $this);
+
+        $where->setExpression($expression);
+        $where->setExists();
+
+        $this->assertSame("WHERE EXISTS (a)", $where->toQuery());
+    }
 }
