@@ -37,7 +37,6 @@ use WikibaseSolutions\CypherDSL\Clauses\ReturnClause;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
-use WikibaseSolutions\CypherDSL\Functions\FunctionCall;
 use WikibaseSolutions\CypherDSL\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Literals\Decimal;
 use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
@@ -121,7 +120,7 @@ class Query implements QueryConvertable
 	 * class based on the type of the value given.
 	 *
 	 * @param integer|float|bool|string $literal The literal to construct
-	 * @return PropertyType
+	 * @return StringLiteral|Boolean|Decimal
 	 */
 	public static function literal($literal): PropertyType
 	{

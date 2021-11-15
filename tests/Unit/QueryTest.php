@@ -362,6 +362,103 @@ class QueryTest extends TestCase
 		$this->assertSame("", $query->build());
 	}
 
+	public function testWikiExamples()
+	{
+		$m = Query::variable("m");
+		$movie = Query::node("Movie")->named($m);
+
+		$query = new Query();
+		$statement = $query->match($movie)
+			->returning($m)
+			->build();
+
+		$this->assertSame("MATCH (m:Movie) RETURN m", $statement);
+
+		$tom = Query::variable("tom");
+		$tomHanks = Query::node()->named($tom)->withProperties([
+			"name" => Query::literal("Tom Hanks")
+		]);
+
+		$query = new Query();
+		$statement = $query->match($tomHanks)
+			->returning($tom)
+			->build();
+
+		$this->assertSame("MATCH (tom {name: 'Tom Hanks'}) RETURN tom", $statement);
+
+		$people = Query::variable("people");
+		$person = Query::node("Person")->named($people);
+
+		$statement = Query::new()
+			->match($person)
+			->returning($people->property("name"))
+			->limit(Query::literal(10))
+			->build();
+
+		$this->assertSame("MATCH (people:Person) RETURN people.name LIMIT 10", $statement);
+
+		$nineties = Query::variable("nineties");
+		$released = $nineties->property("released");
+		$movie = Query::node("Movie")->named($nineties);
+		$expression = $released->gte(Query::literal(1990))->and($released->lt(Query::literal(2000)));
+
+		$statement = Query::new()
+			->match($movie)
+			->where($expression)
+			->returning($nineties->property("title"))
+			->build();
+
+		$this->assertSame("MATCH (nineties:Movie) WHERE ((nineties.released >= 1990) AND (nineties.released < 2000)) RETURN nineties.title", $statement);
+
+		$tom = Query::variable("tom");
+		$person = Query::node("Person")->withProperties([
+			"name" => Query::literal("Tom Hanks")
+		])->named($tom);
+
+		$tomHanksMovies = Query::variable("tomHanksMovies");
+		$tomHanksMoviesNode = Query::node()->named($tomHanksMovies);
+
+		$statement = Query::new()
+			->match($person->relationshipTo($tomHanksMoviesNode)->withType("ACTED_IN"))
+			->returning([$tom, $tomHanksMovies])
+			->build();
+
+		$this->assertSame("MATCH (tom:Person {name: 'Tom Hanks'})-[:`ACTED_IN`]->(tomHanksMovies) RETURN tom, tomHanksMovies", $statement);
+
+		$cloudAtlas = Query::variable("cloudAtlas");
+		$cloudAtlasNode = Query::node()
+			->named($cloudAtlas)
+			->withProperties(["title" => Query::literal("Cloud Atlas")]);
+
+		$directors = Query::variable("directors");
+		$directorsNode = Query::node()->named($directors);
+
+		$statement = Query::new()
+			->match($cloudAtlasNode->relationshipFrom($directorsNode)->withType("DIRECTED"))
+			->returning($directors->property("name"))
+			->build();
+
+		$this->assertSame("MATCH (cloudAtlas {title: 'Cloud Atlas'})<-[:DIRECTED]-(directors) RETURN directors.name", $statement);
+
+		$tom = Query::variable("tom");
+		$tomNode = Query::node("Person")->withProperties([
+			"name" => Query::literal("Tom Hanks")
+		])->named($tom);
+
+		$movie = Query::variable("m");
+		$movieNode = Query::node()->named($movie);
+
+		$coActors = Query::variable("coActors");
+		$coActorsNode = Query::node()->named($coActors);
+
+		$statement = Query::new()
+			->match($tomNode->relationshipTo($movieNode)->withType("ACTED_IN")->relationshipFrom($coActorsNode)->withType("ACTED_IN"))
+			->returning($coActors->property("name"))
+			->build();
+
+		$this->assertSame("MATCH (tom:Person {name: 'Tom Hanks'})-[:`ACTED_IN`]->(m)<-[:`ACTED_IN`]-(coActors) RETURN coActors.name", $statement);
+	}
+
 	public function provideLiteralData(): array
 	{
 		return [
