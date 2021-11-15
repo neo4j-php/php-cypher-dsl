@@ -43,14 +43,14 @@ class PropertyMap implements MapType
 	/**
 	 * @var array The map of properties
 	 */
-	private array $properties;
+	public array $properties = [];
 
 	/**
 	 * PropertyMap constructor.
 	 *
 	 * @param AnyType[] $properties The map of properties as a number of key-expression pairs
 	 */
-	public function __construct(array $properties)
+	public function __construct(array $properties = [])
 	{
 		foreach ($properties as $property) {
 			if (!($property instanceof AnyType)) {
@@ -59,6 +59,33 @@ class PropertyMap implements MapType
 		}
 
 		$this->properties = $properties;
+	}
+
+	/**
+	 * Adds a property for the given name with the given value. Overrides the property if it already exists.
+	 *
+	 * @param string $key The name of the property
+	 * @param AnyType $value The value of the property
+	 * @return PropertyMap
+	 */
+	public function addProperty(string $key, AnyType $value): self
+	{
+		$this->properties[$key] = $value;
+
+		return $this;
+	}
+
+	/**
+	 * Merges the given PropertyMap with this PropertyMap.
+	 *
+	 * @param PropertyMap $propertyMap
+	 * @return PropertyMap
+	 */
+	public function mergeWith(PropertyMap $propertyMap): self
+	{
+		$this->properties = array_merge($this->properties, $propertyMap->properties);
+
+		return $this;
 	}
 
 	/**

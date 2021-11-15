@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
@@ -73,6 +74,30 @@ class PropertyMapTest extends TestCase
 		$propertyMap = new PropertyMap($properties);
 
 		$this->assertSame($expected, $propertyMap->toQuery());
+	}
+
+	public function testMergeWith()
+	{
+		$propertyMap = new PropertyMap(["foo" => new StringLiteral("bar")]);
+		$propertyMap->mergeWith(new PropertyMap(["boo" => new StringLiteral("far")]));
+
+		$this->assertSame("{foo: 'bar', boo: 'far'}", $propertyMap->toQuery());
+
+		$propertyMap->mergeWith($propertyMap);
+
+		$this->assertSame("{foo: 'bar', boo: 'far'}", $propertyMap->toQuery());
+	}
+
+	public function testAddProperty()
+	{
+		$propertyMap = new PropertyMap(["foo" => new StringLiteral("bar")]);
+		$propertyMap->addProperty('foo', new StringLiteral("baz"));
+
+		$this->assertSame("{foo: 'baz'}", $propertyMap->toQuery());
+
+		$propertyMap->addProperty('boo', new StringLiteral("far"));
+
+		$this->assertSame("{foo: 'baz', boo: 'far'}", $propertyMap->toQuery());
 	}
 
 	public function provideNumericalKeysData(): array

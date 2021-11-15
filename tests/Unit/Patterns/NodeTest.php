@@ -171,6 +171,27 @@ class NodeTest extends TestCase
 		$this->assertSame($viaConstructor->toQuery(), $viaSetter->toQuery(), "Setting label via setter has different effect than using constructor");
 	}
 
+	public function testAddingProperties()
+	{
+		$node = new Node();
+
+		$node->withProperty("foo", new StringLiteral("bar"));
+
+		$this->assertSame("({foo: 'bar'})", $node->toQuery());
+
+		$node->withProperty("foo", new StringLiteral("bar"));
+
+		$this->assertSame("({foo: 'bar'})", $node->toQuery());
+
+		$node->withProperty("baz", new StringLiteral("bar"));
+
+		$this->assertSame("({foo: 'bar', baz: 'bar'})", $node->toQuery());
+
+		$node->withProperties(["foo" => new StringLiteral("baz"), "qux" => new StringLiteral("baz")]);
+
+		$this->assertSame("({foo: 'baz', baz: 'bar', qux: 'baz'})", $node->toQuery());
+	}
+
 	public function provideOnlyLabelData(): array
 	{
 		return [
