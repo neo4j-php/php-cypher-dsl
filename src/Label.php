@@ -22,14 +22,17 @@
 namespace WikibaseSolutions\CypherDSL;
 
 use InvalidArgumentException;
+use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * Represents a label. A label in Cypher would be something like "n:German" or "n:German:Swedish".
  */
-class Label implements QueryConvertable
+class Label implements BooleanType
 {
 	use EscapeTrait;
+	use BooleanTypeTrait;
 
 	/**
 	 * @var Variable The variable to which this label belongs
