@@ -52,7 +52,7 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 /**
  * Builder class for building complex Cypher queries.
  */
-class Query
+class Query implements QueryConvertable
 {
 	use EscapeTrait;
 
@@ -603,5 +603,15 @@ class Query
 		return implode(
 			" ", array_filter($builtClauses, fn ($clause) => !empty($clause))
 		);
+	}
+
+	/**
+	 * Converts the object into a (partial) query.
+	 *
+	 * @return string
+	 */
+	public function toQuery(): string
+	{
+		return $this->build();
 	}
 }
