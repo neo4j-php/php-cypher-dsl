@@ -22,43 +22,85 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\RemoveClause;
+use WikibaseSolutions\CypherDSL\Label;
+use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\RemoveClause
  */
 class RemoveClauseTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
-    public function testEmptyClause()
-    {
-        $remove = new RemoveClause();
+	public function testEmptyClause()
+	{
+		$remove = new RemoveClause();
 
-        $this->assertSame("", $remove->toQuery());
-    }
+		$this->assertSame("", $remove->toQuery());
+	}
 
-    public function testSingleExpression()
-    {
-        $remove = new RemoveClause();
-        $expression = $this->getExpressionMock("(a)", $this);
+	public function testSingleExpression()
+	{
+		$remove = new RemoveClause();
+		$expression = $this->getQueryConvertableMock(Property::class, "(a)");
 
-        $remove->addExpression($expression);
+		$remove->addExpression($expression);
 
-        $this->assertSame("REMOVE (a)", $remove->toQuery());
-    }
+		$this->assertSame("REMOVE (a)", $remove->toQuery());
+	}
 
-    public function testMultipleExpressions()
-    {
-        $remove = new RemoveClause();
+	public function testMultipleExpressions()
+	{
+		$remove = new RemoveClause();
 
-        $a = $this->getExpressionMock("(a)", $this);
-        $b = $this->getExpressionMock("(b)", $this);
+		$a = $this->getQueryConvertableMock(Property::class, "(a)");
+		$b = $this->getQueryConvertableMock(Property::class, "(b)");
 
-        $remove->addExpression($a);
-        $remove->addExpression($b);
+		$remove->addExpression($a);
+		$remove->addExpression($b);
 
-        $this->assertSame("REMOVE (a), (b)", $remove->toQuery());
-    }
+		$this->assertSame("REMOVE (a), (b)", $remove->toQuery());
+	}
+
+	/**
+	 * @doesNotPerformAssertions
+	 */
+	public function testAcceptsProperty()
+	{
+		$remove = new RemoveClause();
+		$expression = $this->getQueryConvertableMock(Property::class, "(a)");
+
+		$remove->addExpression($expression);
+
+		$remove->toQuery();
+	}
+
+	/**
+	 * @doesNotPerformAssertions
+	 */
+	public function testAcceptsLabel()
+	{
+		$remove = new RemoveClause();
+		$expression = $this->getQueryConvertableMock(Label::class, "(a)");
+
+		$remove->addExpression($expression);
+
+		$remove->toQuery();
+	}
+
+	public function testDoesNotAcceptAnyType()
+	{
+		$remove = new RemoveClause();
+		$expression = $this->getQueryConvertableMock(AnyType::class, "(a)");
+
+		$this->expectException(TypeError::class);
+
+		$remove->addExpression($expression);
+
+		$remove->toQuery();
+	}
 }

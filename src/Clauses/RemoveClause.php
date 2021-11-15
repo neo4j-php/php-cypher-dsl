@@ -21,7 +21,10 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use TypeError;
+use WikibaseSolutions\CypherDSL\Label;
+use WikibaseSolutions\CypherDSL\Property;
+use WikibaseSolutions\CypherDSL\QueryConvertable;
 
 /**
  * This class represents a REMOVE clause.
@@ -30,40 +33,44 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  */
 class RemoveClause extends Clause
 {
-    /**
-     * @var Expression[] The expressions in this REMOVE clause.
-     */
-    private array $expressions = [];
+	/**
+	 * @var Property[]|Label[] The expressions in this REMOVE clause.
+	 */
+	private array $expressions = [];
 
-    /**
-     * Add an expression to the REMOVE clause. This expression usually returns a property (a.b) or a label (a:b).
-     *
-     * @param  Expression $expression The expression to add
-     * @return RemoveClause
-     */
-    public function addExpression(Expression $expression): self
-    {
-        $this->expressions[] = $expression;
+	/**
+	 * Add an expression to the REMOVE clause. This expression usually returns a property (a.b) or a label (a:b).
+	 *
+	 * @param Property|Label $expression The expression to add
+	 * @return RemoveClause
+	 */
+	public function addExpression($expression): self
+	{
+		if (!($expression instanceof Property) && !($expression instanceof Label)) {
+			throw new TypeError("\$expression must be either a Property or a Label");
+		}
 
-        return $this;
-    }
+		$this->expressions[] = $expression;
 
-    /**
-     * @inheritDoc
-     */
-    protected function getClause(): string
-    {
-        return "REMOVE";
-    }
+		return $this;
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getSubject(): string
-    {
-        return implode(
-            ", ",
-            array_map(fn(Expression $expression) => $expression->toQuery(), $this->expressions)
-        );
-    }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getClause(): string
+	{
+		return "REMOVE";
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function getSubject(): string
+	{
+		return implode(
+			", ",
+			array_map(fn (QueryConvertable $expression) => $expression->toQuery(), $this->expressions)
+		);
+	}
 }

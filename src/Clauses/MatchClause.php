@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * This class represents a MATCH clause.
@@ -30,40 +30,40 @@ use WikibaseSolutions\CypherDSL\Expressions\Patterns\Pattern;
  */
 class MatchClause extends Clause
 {
-    /**
-     * @var Pattern[] List of patterns
-     */
-    private array $patterns = [];
+	/**
+	 * @var StructuralType[] List of patterns
+	 */
+	private array $patterns = [];
 
-    /**
-     * Add a pattern to the match clause.
-     *
-     * @param  Pattern $pattern
-     * @return MatchClause
-     */
-    public function addPattern(Pattern $pattern): self
-    {
-        $this->patterns[] = $pattern;
+	/**
+	 * Add a pattern to the match clause.
+	 *
+	 * @param StructuralType $pattern
+	 * @return MatchClause
+	 */
+	public function addPattern(StructuralType $pattern): self
+	{
+		$this->patterns[] = $pattern;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getClause(): string
-    {
-        return "MATCH";
-    }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getClause(): string
+	{
+		return "MATCH";
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getSubject(): string
-    {
-        return implode(
-            ", ",
-            array_map(fn (Pattern $pattern): string => $pattern->toQuery(), $this->patterns)
-        );
-    }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getSubject(): string
+	{
+		return implode(
+			", ",
+			array_map(fn (StructuralType $pattern): string => $pattern->toQuery(), $this->patterns)
+		);
+	}
 }

@@ -21,7 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 
 /**
  * This class represents a DELETE clause.
@@ -30,67 +31,67 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  */
 class DeleteClause extends Clause
 {
-    /**
-     * Whether the DETACH modifier is needed.
-     *
-     * @var bool $detach
-     */
-    private bool $detach = false;
+	/**
+	 * Whether the DETACH modifier is needed.
+	 *
+	 * @var bool $detach
+	 */
+	private bool $detach = false;
 
-    /**
-     * The nodes that needs to be deleted.
-     *
-     * @var Expression[] $nodes
-     */
-    private array $nodes = [];
+	/**
+	 * The nodes that needs to be deleted.
+	 *
+	 * @var AnyType[] $nodes
+	 */
+	private array $nodes = [];
 
-    /**
-     * Sets the clause to DETACH DELETE. Without DETACH DELETE, all relationships need to be explicitly
-     * deleted.
-     *
-     * @param  bool $detach Whether or not to use DETACH DELETE.
-     * @return DeleteClause
-     */
-    public function setDetach(bool $detach = true): self
-    {
-        $this->detach = $detach;
+	/**
+	 * Sets the clause to DETACH DELETE. Without DETACH DELETE, all relationships need to be explicitly
+	 * deleted.
+	 *
+	 * @param bool $detach Whether to use DETACH DELETE.
+	 * @return DeleteClause
+	 */
+	public function setDetach(bool $detach = true): self
+	{
+		$this->detach = $detach;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Add the node to be deleted. The expresion must return a node when evaluated.
-     *
-     * @param  Expression $node Expression that returns the node the be deleted
-     * @return DeleteClause
-     */
-    public function addNode(Expression $node): self
-    {
-        $this->nodes[] = $node;
+	/**
+	 * Add the node to be deleted. The expression must return a node when evaluated.
+	 *
+	 * @param NodeType $node Expression that returns the node to be deleted
+	 * @return DeleteClause
+	 */
+	public function addNode(NodeType $node): self
+	{
+		$this->nodes[] = $node;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getClause(): string
-    {
-        if ($this->detach ) {
-            return "DETACH DELETE";
-        }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getClause(): string
+	{
+		if ($this->detach) {
+			return "DETACH DELETE";
+		}
 
-        return "DELETE";
-    }
+		return "DELETE";
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getSubject(): string
-    {
-        return implode(
-            ", ",
-            array_map(fn(Expression $node) => $node->toQuery(), $this->nodes)
-        );
-    }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getSubject(): string
+	{
+		return implode(
+			", ",
+			array_map(fn (NodeType $node) => $node->toQuery(), $this->nodes)
+		);
+	}
 }

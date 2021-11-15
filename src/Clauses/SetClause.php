@@ -21,7 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Assignment;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * This class represents a SET clause.
@@ -30,39 +31,40 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  */
 class SetClause extends Clause
 {
-    /**
-     * @var Expression[] $expressions The expressions to set
-     */
-    private array $expressions = [];
+	/**
+	 * @var AnyType[] $assignments The expressions to set
+	 */
+	private array $assignments = [];
 
-    /**
-     * Add an expression to set. This expression is usually an "assignment" expression.
-     *
-     * @param  Expression $expression The expression to set
-     * @return SetClause
-     */
-    public function addExpression(Expression $expression): self
-    {
-        $this->expressions[] = $expression;
+	/**
+	 * Add an assignment.
+	 *
+	 * @param Assignment $assignment The assignment to execute
+	 * @return SetClause
+	 */
+	public function addAssignment(Assignment $assignment): self
+	{
+		$this->assignments[] = $assignment;
 
-        return $this;
-    }
-    /**
-     * @inheritDoc
-     */
-    protected function getClause(): string
-    {
-        return "SET";
-    }
+		return $this;
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getSubject(): string
-    {
-        return implode(
-            ", ",
-            array_map(fn (Expression $expression): string => $expression->toQuery(), $this->expressions)
-        );
-    }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getClause(): string
+	{
+		return "SET";
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function getSubject(): string
+	{
+		return implode(
+			", ",
+			array_map(fn (Assignment $assignment): string => $assignment->toQuery(), $this->assignments)
+		);
+	}
 }

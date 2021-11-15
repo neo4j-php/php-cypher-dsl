@@ -21,7 +21,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Label;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * This class represents a WHERE clause.
@@ -30,59 +32,41 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  */
 class WhereClause extends Clause
 {
-    /**
-     * @var Expression The expression to match
-     */
-    private Expression $expression;
+	/**
+	 * @var BooleanType|Label|null The expression to match
+	 */
+	private ?AnyType $expression;
 
-    /**
-     * @var bool Whether this is an existential WHERE
-     */
-    private bool $exists = false;
+	/**
+	 * Sets the expression to match in this WHERE clause.
+	 *
+	 * @param BooleanType|Label $expression The expression to match
+	 * @return WhereClause
+	 */
+	public function setExpression(AnyType $expression): self
+	{
+		$this->expression = $expression;
 
-    /**
-     * Sets the expression to match in this WHERE clause.
-     *
-     * @param  Expression $expression The expression to match
-     * @return WhereClause
-     */
-    public function setExpression(Expression $expression): self
-    {
-        $this->expression = $expression;
+		return $this;
+	}
 
-        return $this;
-    }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getClause(): string
+	{
+		return "WHERE";
+	}
 
-    /**
-     * Sets this as an existential WHERE clause.
-     *
-     * @param bool $exists
-     * @return $this
-     */
-    public function setExists(bool $exists = true): self
-    {
-        $this->exists = $exists;
+	/**
+	 * @inheritDoc
+	 */
+	protected function getSubject(): string
+	{
+		if (!isset($this->expression)) {
+			return "";
+		}
 
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function getClause(): string
-    {
-        return $this->exists ? "WHERE EXISTS" : "WHERE";
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function getSubject(): string
-    {
-        if (!isset($this->expression)) {
-            return "";
-        }
-
-        return $this->expression->toQuery();
-    }
+		return $this->expression->toQuery();
+	}
 }

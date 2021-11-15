@@ -21,85 +21,97 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\ReturnClause;
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Expression;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\ReturnClause
  */
 class ReturnClauseTest extends TestCase
 {
-    use TestHelper;
+	use TestHelper;
 
-    public function testEmptyClause()
-    {
-        $return = new ReturnClause();
+	public function testEmptyClause()
+	{
+		$return = new ReturnClause();
 
-        $this->assertSame("", $return->toQuery());
-    }
+		$this->assertSame("", $return->toQuery());
+	}
 
-    public function testSingleColumn()
-    {
-        $return = new ReturnClause();
-        $return->addColumn($this->getExpressionMock("a", $this));
+	public function testSingleColumn()
+	{
+		$return = new ReturnClause();
+		$return->addColumn($this->getQueryConvertableMock(AnyType::class, "a"));
 
-        $this->assertSame("RETURN a", $return->toQuery());
-    }
+		$this->assertSame("RETURN a", $return->toQuery());
+	}
 
-    public function testMultipleColumns()
-    {
-        $return = new ReturnClause();
-        $return->addColumn($this->getExpressionMock("a", $this));
-        $return->addColumn($this->getExpressionMock("b", $this));
-        $return->addColumn($this->getExpressionMock("c", $this));
+	public function testMultipleColumns()
+	{
+		$return = new ReturnClause();
+		$return->addColumn($this->getQueryConvertableMock(AnyType::class, "a"));
+		$return->addColumn($this->getQueryConvertableMock(AnyType::class, "b"));
+		$return->addColumn($this->getQueryConvertableMock(AnyType::class, "c"));
 
-        $this->assertSame("RETURN a, b, c", $return->toQuery());
-    }
+		$this->assertSame("RETURN a, b, c", $return->toQuery());
+	}
 
-    public function testSingleAlias()
-    {
-        $return = new ReturnClause();
-        $return->addColumn($this->getExpressionMock("a", $this), "b");
+	public function testSingleAlias()
+	{
+		$return = new ReturnClause();
+		$return->addColumn($this->getQueryConvertableMock(AnyType::class, "a"), "b");
 
-        $this->assertSame("RETURN a AS b", $return->toQuery());
-    }
+		$this->assertSame("RETURN a AS b", $return->toQuery());
+	}
 
-    public function testMultipleAliases()
-    {
-        $return = new ReturnClause();
-        $return->addColumn($this->getExpressionMock("a", $this), "b");
-        $return->addColumn($this->getExpressionMock("b", $this), "c");
+	public function testMultipleAliases()
+	{
+		$return = new ReturnClause();
+		$return->addColumn($this->getQueryConvertableMock(AnyType::class, "a"), "b");
+		$return->addColumn($this->getQueryConvertableMock(AnyType::class, "b"), "c");
 
-        $this->assertSame("RETURN a AS b, b AS c", $return->toQuery());
-    }
+		$this->assertSame("RETURN a AS b, b AS c", $return->toQuery());
+	}
 
-    public function testMixedAliases()
-    {
-        $return = new ReturnClause();
-        $return->addColumn($this->getExpressionMock("a", $this), "b");
-        $return->addColumn($this->getExpressionMock("c", $this));
-        $return->addColumn($this->getExpressionMock("b", $this), "c");
+	public function testMixedAliases()
+	{
+		$return = new ReturnClause();
+		$return->addColumn($this->getQueryConvertableMock(AnyType::class, "a"), "b");
+		$return->addColumn($this->getQueryConvertableMock(AnyType::class, "c"));
+		$return->addColumn($this->getQueryConvertableMock(AnyType::class, "b"), "c");
 
-        $this->assertSame("RETURN a AS b, c, b AS c", $return->toQuery());
-    }
+		$this->assertSame("RETURN a AS b, c, b AS c", $return->toQuery());
+	}
 
-    public function testAliasIsEscaped()
-    {
-        $return = new ReturnClause();
-        $return->addColumn($this->getExpressionMock("a", $this), ":");
+	public function testAliasIsEscaped()
+	{
+		$return = new ReturnClause();
+		$return->addColumn($this->getQueryConvertableMock(AnyType::class, "a"), ":");
 
-        $this->assertSame("RETURN a AS `:`", $return->toQuery());
-    }
+		$this->assertSame("RETURN a AS `:`", $return->toQuery());
+	}
 
-    public function testReturnDistinct()
-    {
-        $return = new ReturnClause();
-        $return->addColumn($this->getExpressionMock("a", $this));
-        $return->setDistinct();
+	public function testReturnDistinct()
+	{
+		$return = new ReturnClause();
+		$return->addColumn($this->getQueryConvertableMock(AnyType::class, "a"));
+		$return->setDistinct();
 
-        $this->assertSame("RETURN DISTINCT a", $return->toQuery());
-    }
+		$this->assertSame("RETURN DISTINCT a", $return->toQuery());
+	}
+
+	/**
+	 * @doesNotPerformAssertions
+	 */
+	public function testAcceptsAnyType()
+	{
+		$return = new ReturnClause();
+		$return->addColumn($this->getQueryConvertableMock(AnyType::class, "a"));
+		$return->setDistinct();
+
+		$return->toQuery();
+	}
 }

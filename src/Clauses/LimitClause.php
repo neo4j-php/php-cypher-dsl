@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Expressions\Expression;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
  * This class represents a LIMIT clause.
@@ -30,43 +30,43 @@ use WikibaseSolutions\CypherDSL\Expressions\Expression;
  */
 class LimitClause extends Clause
 {
-    /**
-     * The expression of the LIMIT statement.
-     *
-     * @var Expression $expression
-     */
-    private Expression $expression;
+	/**
+	 * The expression of the LIMIT statement.
+	 *
+	 * @var NumeralType|null $limit
+	 */
+	private ?NumeralType $limit;
 
-    /**
-     * Sets the expression that returns the limit.
-     *
-     * @param  Expression $expression The expression that returns a scalar that is the limit
-     * @return LimitClause
-     */
-    public function setExpression(Expression $expression): self
-    {
-        $this->expression = $expression;
+	/**
+	 * Sets the expression that returns the limit.
+	 *
+	 * @param NumeralType $limit The limit
+	 * @return LimitClause
+	 */
+	public function setLimit(NumeralType $limit): self
+	{
+		$this->limit = $limit;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getClause(): string
-    {
-        return "LIMIT";
-    }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getClause(): string
+	{
+		return "LIMIT";
+	}
 
-    /**
-     * @inheritDoc
-     */
-    protected function getSubject(): string
-    {
-        if (isset($this->expression) ) {
-            return $this->expression->toQuery();
-        }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getSubject(): string
+	{
+		if (isset($this->limit)) {
+			return $this->limit->toQuery();
+		}
 
-        return "";
-    }
+		return "";
+	}
 }
