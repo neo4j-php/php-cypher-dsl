@@ -47,12 +47,12 @@ class Node implements NodeType
 	/**
 	 * @var Variable|null
 	 */
-	private Variable $variable;
+	private ?Variable $variable;
 
 	/**
 	 * @var PropertyMap|null
 	 */
-	private PropertyMap $properties;
+	private ?PropertyMap $properties;
 
 	/**
 	 * Node constructor.
@@ -135,6 +135,15 @@ class Node implements NodeType
 		$this->properties = $this->properties->mergeWith($properties);
 
 		return $this;
+	}
+
+	/**
+	 * Returns the name of this node.
+	 *
+	 * @return Variable|null The name of this node, or NULL if this node does not have a name
+	 */
+	public function getName(): ?Variable {
+		return $this->variable;
 	}
 
 	/**
