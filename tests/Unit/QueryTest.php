@@ -24,6 +24,8 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Assignment;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
+use WikibaseSolutions\CypherDSL\Clauses\MatchClause;
+use WikibaseSolutions\CypherDSL\Exists;
 use WikibaseSolutions\CypherDSL\ExpressionList;
 use WikibaseSolutions\CypherDSL\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Literals\Decimal;
@@ -364,6 +366,10 @@ class QueryTest extends TestCase
 
 	public function testWikiExamples()
 	{
+		/*
+		 * @see https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/Examples
+		 */
+
 		$m = Query::variable("m");
 		$movie = Query::node("Movie")->named($m);
 
@@ -457,6 +463,238 @@ class QueryTest extends TestCase
 			->build();
 
 		$this->assertSame("MATCH (tom:Person {name: 'Tom Hanks'})-[:`ACTED_IN`]->(m)<-[:`ACTED_IN`]-(coActors) RETURN coActors.name", $statement);
+
+		/*
+		 * @see https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/Usage/Clauses/CALL-procedure-clause
+		 */
+
+		$statement = Query::new()
+			->callProcedure("apoc.json")
+			->build();
+
+		$this->assertSame("CALL apoc.json()", $statement);
+
+		$name = Query::variable("name");
+		$signature = Query::variable("signature");
+
+		$statement = Query::new()
+			->callProcedure("dbms.procedures", [], [$name, $signature])
+			->build();
+
+		$this->assertSame("CALL dbms.procedures() YIELD name, signature", $statement);
+
+		$username = Query::literal("example_username");
+		$password = Query::literal("example_password");
+
+		$statement = Query::new()
+			->callProcedure("dbms.security.createUser", [$username, $password, Query::literal(false)])
+			->build();
+
+		$this->assertSame("CALL dbms.security.createUser('example_username', 'example_password', false)", $statement);
+
+		/*
+		 * @see https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/Usage/Clauses/CREATE-clause
+		 */
+
+		$tom = Query::node("Person")->named("tom");
+
+		$statement = Query::new()
+			->create($tom)
+			->build();
+
+		$this->assertSame("CREATE (tom:Person)", $statement);
+
+		/*
+		 * @see https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/Usage/Clauses/DELETE-clause
+		 */
+
+		$tom = Query::node("Person")->named("tom");
+
+		$statement = Query::new()
+			->delete($tom)
+			->build();
+
+		$this->assertSame("DELETE (tom:Person)", $statement);
+
+		$tom = Query::node("Person")->named("tom");
+
+		$statement = Query::new()
+			->detachDelete($tom)
+			->build();
+
+		$this->assertSame("DETACH DELETE (tom:Person)", $statement);
+
+		/*
+		 * @see https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/Usage/Clauses/LIMIT-clause
+		 */
+
+		$statement = Query::new()
+			->limit(Query::literal(10))
+			->build();
+
+		$this->assertSame("LIMIT 10", $statement);
+
+		/*
+		 * @see https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/Usage/Clauses/MATCH-clause
+		 */
+
+		$a = Query::node("a");
+		$b = Query::node("b");
+		$c = Query::node("c");
+
+		$statement = Query::new()
+			->match([$a, $b, $c])
+			->build();
+
+		$this->assertSame("MATCH (:a), (:b), (:c)", $statement);
+
+		/*
+		 * @see https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/Usage/Clauses/MERGE-clause
+		 */
+
+		$a = Query::node("a");
+
+		$statement = Query::new()
+			->merge($a)
+			->build();
+
+		$this->assertSame("MERGE (:a)", $statement);
+
+		/*
+		 * @see https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/Usage/Clauses/OPTIONAL-MATCH-clause
+		 */
+
+		$a = Query::node("a");
+		$b = Query::node("b");
+
+		$statement = Query::new()
+			->optionalMatch([$a, $b])
+			->build();
+
+		$this->assertSame("OPTIONAL MATCH (:a), (:b)", $statement);
+
+		/*
+		 * @see https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/Usage/Clauses/ORDER-BY-clause
+		 */
+
+		$n = Query::variable("n");
+
+		$name = $n->property("name");
+		$age = $n->property("age");
+
+		$statement = Query::new()
+			->orderBy([$name, $age], true)
+			->build();
+
+		$this->assertSame("ORDER BY n.name, n.age DESCENDING", $statement);
+
+		/*
+		 * @see https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/Usage/Clauses/RAW-clause
+		 */
+
+		$nested = Query::variable("nested");
+
+		$statement = Query::new()
+			->raw("UNWIND", sprintf("%s AS x", $nested->toQuery()))
+			->build();
+
+		$this->assertSame("UNWIND nested AS x", $statement);
+
+		/*
+		 * @see https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/Usage/Clauses/REMOVE-clause
+		 */
+
+		$n = Query::variable("n")->withLabels(["foo"]);
+
+		$statement = Query::new()
+			->remove($n)
+			->build();
+
+		$this->assertSame("REMOVE n:foo", $statement);
+
+		/*
+		 * @see https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/Usage/Clauses/RETURN-clause
+		 */
+
+		$a = Query::variable("a");
+		$b = Query::variable("b");
+
+		$statement = Query::new()
+			->returning([$a, $b], true)
+			->build();
+
+		$this->assertSame("RETURN DISTINCT a, b", $statement);
+
+		/*
+		 * @see https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/Usage/Clauses/SET-clause
+		 */
+
+		$a = Query::variable("a")->assign(Query::literal(10));
+		$b = Query::variable("b")->assign(Query::literal(15));
+
+		$statement = Query::new()
+			->set([$a, $b])
+			->build();
+
+		$this->assertSame("SET (a = 10), (b = 15)", $statement);
+
+		/*
+		 * @see https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/Usage/Clauses/WHERE-clause
+		 */
+
+		$expression = Query::variable("n")->gte(Query::literal(10));
+
+		$statement = Query::new()
+			->where($expression)
+			->build();
+
+		$this->assertSame("WHERE (n >= 10)", $statement);
+
+		$variable = Query::variable("n");
+
+		$exists = new Exists((new MatchClause())->addPattern(Query::node()->named($variable)));
+		$expression = $exists->and($variable->gte(Query::literal(10)));
+
+		$statement = Query::new()
+			->where($expression)
+			->build();
+
+		$this->assertSame("WHERE (EXISTS { MATCH (n) } AND (n >= 10))", $statement);
+
+		/*
+		 * @see https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/Usage/Clauses/WITH-clause
+		 */
+
+		$statement = Query::new()
+			->with(["n" => Query::variable("a")])
+			->build();
+
+		$this->assertSame("WITH a AS n", $statement);
+
+		/*
+		 * @see https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/Usage/Expressions
+		 */
+
+		$nineties = Query::variable("nineties");
+		$released = $nineties->property("released");
+
+		$expression = $released->gte(Query::literal(1990))->and($released->lt(Query::literal(2000)));
+
+		$this->assertSame("((nineties.released >= 1990) AND (nineties.released < 2000))", $expression->toQuery());
+
+		$actor = Query::variable("actor");
+		$name = $actor->property("name");
+
+		$expression = $name->notEquals(Query::literal("Tom Hanks"));
+
+		$this->assertSame("(actor.name <> 'Tom Hanks')", $expression->toQuery());
+
+		$nineties = Query::variable("nineties");
+		$released = $nineties->property("released");
+
+		$expression = $released->gte(Query::literal(1990))->and(Query::rawExpression("(nineties IS NOT NULL)"));
+
+		$this->assertSame("((nineties.released >= 1990) AND (nineties IS NOT NULL))", $expression->toQuery());
 	}
 
 	public function provideLiteralData(): array

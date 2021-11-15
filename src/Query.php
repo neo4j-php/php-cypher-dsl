@@ -32,6 +32,7 @@ use WikibaseSolutions\CypherDSL\Clauses\MatchClause;
 use WikibaseSolutions\CypherDSL\Clauses\MergeClause;
 use WikibaseSolutions\CypherDSL\Clauses\OptionalMatchClause;
 use WikibaseSolutions\CypherDSL\Clauses\OrderByClause;
+use WikibaseSolutions\CypherDSL\Clauses\RawClause;
 use WikibaseSolutions\CypherDSL\Clauses\RemoveClause;
 use WikibaseSolutions\CypherDSL\Clauses\ReturnClause;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
@@ -44,9 +45,14 @@ use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
@@ -175,6 +181,17 @@ class Query implements QueryConvertable
 	}
 
 	/**
+	 * Creates a raw expression.
+	 *
+	 * @param string $expression The raw expression
+	 * @return ListType|MapType|BooleanType|NumeralType|StringType|NodeType|PathType
+	 */
+	public static function rawExpression(string $expression): AnyType
+	{
+		return new RawExpression($expression);
+	}
+
+	/**
 	 * Creates the MATCH clause.
 	 *
 	 * @param StructuralType|StructuralType[] $patterns A single pattern or a list of patterns
@@ -187,7 +204,7 @@ class Query implements QueryConvertable
 	{
 		$matchClause = new MatchClause();
 
-		if ($patterns instanceof StructuralType) {
+		if (!is_array($patterns)) {
 			$patterns = [$patterns];
 		}
 
@@ -220,7 +237,7 @@ class Query implements QueryConvertable
 	{
 		$returnClause = new ReturnClause();
 
-		if ($expressions instanceof AnyType) {
+		if (!is_array($expressions)) {
 			$expressions = [$expressions];
 		}
 
@@ -253,7 +270,7 @@ class Query implements QueryConvertable
 	{
 		$createClause = new CreateClause();
 
-		if ($patterns instanceof StructuralType) {
+		if (!is_array($patterns)) {
 			$patterns = [$patterns];
 		}
 
@@ -283,7 +300,7 @@ class Query implements QueryConvertable
 	{
 		$deleteClause = new DeleteClause();
 
-		if ($nodes instanceof NodeType) {
+		if (!is_array($nodes)) {
 			$nodes = [$nodes];
 		}
 
@@ -314,7 +331,7 @@ class Query implements QueryConvertable
 		$deleteClause = new DeleteClause();
 		$deleteClause->setDetach(true);
 
-		if ($nodes instanceof NodeType) {
+		if (!is_array($nodes)) {
 			$nodes = [$nodes];
 		}
 
@@ -392,7 +409,7 @@ class Query implements QueryConvertable
 	{
 		$optionalMatchClause = new OptionalMatchClause();
 
-		if ($patterns instanceof StructuralType) {
+		if (!is_array($patterns)) {
 			$patterns = [$patterns];
 		}
 
@@ -424,7 +441,7 @@ class Query implements QueryConvertable
 		$orderByClause = new OrderByClause();
 		$orderByClause->setDescending($descending);
 
-		if ($properties instanceof Property) {
+		if (!is_array($properties)) {
 			$properties = [$properties];
 		}
 
@@ -454,7 +471,7 @@ class Query implements QueryConvertable
 	{
 		$removeClause = new RemoveClause();
 
-		if ($expressions instanceof AnyType) {
+		if (!is_array($expressions)) {
 			$expressions = [$expressions];
 		}
 
@@ -484,7 +501,7 @@ class Query implements QueryConvertable
 	{
 		$setClause = new SetClause();
 
-		if ($expressions instanceof Assignment) {
+		if (!is_array($expressions)) {
 			$expressions = [$expressions];
 		}
 
@@ -534,7 +551,7 @@ class Query implements QueryConvertable
 	{
 		$withClause = new WithClause();
 
-		if ($expressions instanceof AnyType) {
+		if (!is_array($expressions)) {
 			$expressions = [$expressions];
 		}
 
@@ -548,6 +565,20 @@ class Query implements QueryConvertable
 		}
 
 		$this->clauses[] = $withClause;
+
+		return $this;
+	}
+
+	/**
+	 * Creates a "RAW" query.
+	 *
+	 * @param string $clause The name of the clause; for instance "MATCH"
+	 * @param string $subject The subject/body of the clause
+	 * @return Query
+	 */
+	public function raw(string $clause, string $subject)
+	{
+		$this->clauses[] = new RawClause($clause, $subject);
 
 		return $this;
 	}
