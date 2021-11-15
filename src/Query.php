@@ -620,6 +620,16 @@ class Query implements QueryConvertable
 	}
 
 	/**
+	 * Converts the object into a (partial) query.
+	 *
+	 * @return string
+	 */
+	public function toQuery(): string
+	{
+		return $this->build();
+	}
+
+	/**
 	 * Builds the query.
 	 *
 	 * @return string The fully constructed query
@@ -634,15 +644,5 @@ class Query implements QueryConvertable
 		return implode(
 			" ", array_filter($builtClauses, fn ($clause) => !empty($clause))
 		);
-	}
-
-	/**
-	 * Converts the object into a (partial) query.
-	 *
-	 * @return string
-	 */
-	public function toQuery(): string
-	{
-		return $this->build();
 	}
 }

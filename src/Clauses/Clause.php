@@ -44,6 +44,15 @@ abstract class Clause implements QueryConvertable
 	}
 
 	/**
+	 * Returns the subject of this object. The subject is anything after
+	 * the clause. For example, in the partial query "MATCH (a)", the subject
+	 * would be "(a)".
+	 *
+	 * @return string
+	 */
+	abstract protected function getSubject(): string;
+
+	/**
 	 * Returns whether this clause is still valid if it has an empty subject.
 	 *
 	 * @return bool
@@ -59,13 +68,4 @@ abstract class Clause implements QueryConvertable
 	 * @return string
 	 */
 	abstract protected function getClause(): string;
-
-	/**
-	 * Returns the subject of this object. The subject is anything after
-	 * the clause. For example, in the partial query "MATCH (a)", the subject
-	 * would be "(a)".
-	 *
-	 * @return string
-	 */
-	abstract protected function getSubject(): string;
 }

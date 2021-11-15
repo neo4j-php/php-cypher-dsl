@@ -142,7 +142,8 @@ class Node implements NodeType
 	 *
 	 * @return Variable|null The name of this node, or NULL if this node does not have a name
 	 */
-	public function getName(): ?Variable {
+	public function getName(): ?Variable
+	{
 		return $this->variable;
 	}
 
