@@ -33,9 +33,9 @@ use WikibaseSolutions\CypherDSL\Variable;
 class CallProcedureClause extends Clause
 {
 	/**
-	 * @var string The procedure to call
+	 * @var string|null The procedure to call
 	 */
-	private string $procedure;
+	private ?string $procedure;
 
 	/**
 	 * @var AnyType[] The arguments passed to the procedure

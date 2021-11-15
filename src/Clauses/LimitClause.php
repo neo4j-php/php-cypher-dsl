@@ -33,9 +33,9 @@ class LimitClause extends Clause
 	/**
 	 * The expression of the LIMIT statement.
 	 *
-	 * @var NumeralType $limit
+	 * @var NumeralType|null $limit
 	 */
-	private NumeralType $limit;
+	private ?NumeralType $limit;
 
 	/**
 	 * Sets the expression that returns the limit.

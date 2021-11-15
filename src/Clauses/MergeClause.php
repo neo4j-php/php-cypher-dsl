@@ -31,19 +31,19 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 class MergeClause extends Clause
 {
 	/**
-	 * @var StructuralType $pattern The pattern to merge
+	 * @var StructuralType|null $pattern The pattern to merge
 	 */
-	private StructuralType $pattern;
+	private ?StructuralType $pattern;
 
 	/**
-	 * @var Clause $createClause The clause to execute when the pattern is created
+	 * @var Clause|null $createClause The clause to execute when the pattern is created
 	 */
-	private Clause $createClause;
+	private ?Clause $createClause;
 
 	/**
-	 * @var Clause $matchClause The clause to execute when the pattern is matched
+	 * @var Clause|null $matchClause The clause to execute when the pattern is matched
 	 */
-	private Clause $matchClause;
+	private ?Clause $matchClause;
 
 	/**
 	 * Sets the pattern to merge.
