@@ -4,7 +4,7 @@ The `php-cypher-dsl` library provides a way to construct advanced Cypher queries
 
 ## Documentation
 
-[The documentation can be found on the wiki here.](https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/home)
+[The documentation can be found on the wiki here.](https://github.com/WikibaseSolutions/php-cypher-dsl/wiki)
 
 ## Installation
 
