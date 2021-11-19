@@ -30,9 +30,9 @@
   ],
   "support": {
     "email": "info@wikibase-solutions.com",
-    "issues": "https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/issues",
-    "wiki": "https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/home",
-    "source": "https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl"
+    "issues": "https://github.com/WikibaseSolutions/php-cypher-dsl/issues",
+    "wiki": "https://github.com/WikibaseSolutions/php-cypher-dsl/wiki",
+    "source": "https://github.com/WikibaseSolutions/php-cypher-dsl"
   },
   "require": {
     "php": ">=7.4",
