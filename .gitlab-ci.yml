@@ -1,5 +1,0 @@
-test:
-  image: composer:1
-  script:
-    - composer update --ignore-platform-reqs
-    - composer test
