@@ -50,11 +50,6 @@ class Node implements NodeType
 	private ?Variable $variable;
 
 	/**
-	 * @var PropertyMap|null
-	 */
-	private ?PropertyMap $properties;
-
-	/**
 	 * Node constructor.
 	 *
 	 * @param string|null $label
@@ -92,47 +87,6 @@ class Node implements NodeType
 	public function labeled(string $label): self
 	{
 		$this->labels[] = $label;
-
-		return $this;
-	}
-
-	/**
-	 * Add the given property to the properties of this node.
-	 *
-	 * @param string $key The name of the property
-	 * @param AnyType $value The value of the property
-	 * @return Node
-	 */
-	public function withProperty(string $key, AnyType $value): self
-	{
-		if (!isset($this->properties)) {
-			$this->properties = new PropertyMap();
-		}
-
-		$this->properties->addProperty($key, $value);
-
-		return $this;
-	}
-
-	/**
-	 * Add the given properties to the properties of this node.
-	 *
-	 * @param PropertyMap|array $properties
-	 * @return Node
-	 */
-	public function withProperties($properties): self
-	{
-		if (!isset($this->properties)) {
-			$this->properties = new PropertyMap();
-		}
-
-		if (is_array($properties)) {
-			$properties = new PropertyMap($properties);
-		} elseif (!($properties instanceof PropertyMap)) {
-			throw new InvalidArgumentException("\$properties must either be an array or a PropertyMap object");
-		}
-
-		$this->properties = $this->properties->mergeWith($properties);
 
 		return $this;
 	}
