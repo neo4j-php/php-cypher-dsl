@@ -72,11 +72,6 @@ class Path implements PathType
 	private Variable $variable;
 
 	/**
-	 * @var MapType
-	 */
-	private MapType $properties;
-
-	/**
 	 * Path constructor.
 	 *
 	 * @param StructuralType $a The node left of the relationship
@@ -110,23 +105,6 @@ class Path implements PathType
 		}
 
 		$this->variable = $variable;
-
-		return $this;
-	}
-
-	/**
-	 * @param PropertyMap|array $properties
-	 * @return Path
-	 */
-	public function withProperties($properties): self
-	{
-		if (is_array($properties)) {
-			$this->properties = new PropertyMap($properties);
-		} elseif ($properties instanceof PropertyMap) {
-			$this->properties = $properties;
-		} else {
-			throw new InvalidArgumentException("\$properties must either be an array or a PropertyMap object");
-		}
 
 		return $this;
 	}
