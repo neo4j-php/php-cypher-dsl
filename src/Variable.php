@@ -74,15 +74,27 @@ class Variable implements
 		$this->variable = $variable;
 	}
 
+    /**
+     * Adds the given labels to this variable.
+     *
+     * @param array $labels
+     * @return Label
+     */
+	public function labeled(array $labels): Label
+    {
+        return new Label($this, $labels);
+    }
+
 	/**
 	 * Adds the given labels to this variable.
 	 *
+     * @deprecated Use Variable::labeled() instead
 	 * @param string[] $labels
 	 * @return Label
 	 */
 	public function withLabels(array $labels): Label
 	{
-		return new Label($this, $labels);
+        return $this->labeled($labels);
 	}
 
 	/**
