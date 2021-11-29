@@ -194,6 +194,142 @@ class RelationshipTest extends TestCase
         $this->assertSame($expected, $r->toQuery());
     }
 
+    /**
+     * @dataProvider provideVariableLengthRelationshipsWithNameData
+     * @param string $name
+     * @param int|null $minHops
+     * @param int|null $maxHops
+     * @param array $direction
+     * @param string $expected
+     */
+    public function testVariableLengthRelationshipsWithName(string $name, ?int $minHops, ?int $maxHops, array $direction, string $expected)
+    {
+        $r = new Path($this->a, $this->b, $direction);
+        $r->named($name);
+
+        if (isset($minHops)) {
+            $r->withMinHops($minHops);
+        }
+
+        if (isset($maxHops)) {
+            $r->withMaxHops($maxHops);
+        }
+
+        $this->assertSame($expected, $r->toQuery());
+    }
+
+    /**
+     * @dataProvider provideVariableLengthRelationshipsWithTypeData
+     * @param string $type
+     * @param int|null $minHops
+     * @param int|null $maxHops
+     * @param array $direction
+     * @param string $expected
+     */
+    public function testVariableLengthRelationshipsWithType(string $type, ?int $minHops, ?int $maxHops, array $direction, string $expected)
+    {
+        $r = new Path($this->a, $this->b, $direction);
+        $r->withType($type);
+
+        if (isset($minHops)) {
+            $r->withMinHops($minHops);
+        }
+
+        if (isset($maxHops)) {
+            $r->withMaxHops($maxHops);
+        }
+
+        $this->assertSame($expected, $r->toQuery());
+    }
+
+    /**
+     * @dataProvider provideVariableLengthRelationshipsWithPropertiesData
+     * @param array $properties
+     * @param int|null $minHops
+     * @param int|null $maxHops
+     * @param array $direction
+     * @param string $expected
+     */
+    public function testVariableLengthRelationshipsWithProperties(array $properties, ?int $minHops, ?int $maxHops, array $direction, string $expected)
+    {
+        $r = new Path($this->a, $this->b, $direction);
+        $r->withProperties($properties);
+
+        if (isset($minHops)) {
+            $r->withMinHops($minHops);
+        }
+
+        if (isset($maxHops)) {
+            $r->withMaxHops($maxHops);
+        }
+
+        $this->assertSame($expected, $r->toQuery());
+    }
+
+    /**
+     * @dataProvider provideVariableLengthRelationshipsWithNameAndTypeAndPropertiesData
+     * @param string $name
+     * @param string $type
+     * @param array $properties
+     * @param array $direction
+     * @param string $expected
+     */
+    public function testVariableLengthRelationshipsWithNameAndTypeAndProperties(string $name, string $type, array $properties, ?int $minHops, ?int $maxHops, array $direction, string $expected)
+    {
+        $r = new Path($this->a, $this->b, $direction);
+        $r->named($name)->withType($type)->withProperties($properties);
+
+        if (isset($minHops)) {
+            $r->withMinHops($minHops);
+        }
+
+        if (isset($maxHops)) {
+            $r->withMaxHops($maxHops);
+        }
+
+        $this->assertSame($expected, $r->toQuery());
+    }
+
+    public function provideVariableLengthRelationshipsWithNameData(): array
+    {
+        return [
+            ['', 1, 100, Path::DIR_UNI, '(a)-[*1..100]-(b)'],
+            ['a', 10, null, Path::DIR_UNI, '(a)-[a*10]-(b)'],
+            ['a', null, 10, Path::DIR_LEFT, '(a)<-[a*..10]-(b)'],
+        ];
+    }
+
+    public function provideVariableLengthRelationshipsWithTypeData(): array
+    {
+        return [
+            ['', 1, 100, Path::DIR_LEFT, '(a)<-[*1..100]-(b)'],
+            ['a', 10, null, Path::DIR_LEFT, '(a)<-[:a*10]-(b)'],
+            [':', null, 10, Path::DIR_LEFT, '(a)<-[:`:`*..10]-(b)']
+        ];
+    }
+
+    public function provideVariableLengthRelationshipsWithPropertiesData(): array
+    {
+        return [
+            [[], 10, 100, Path::DIR_LEFT, "(a)<-[*10..100 {}]-(b)"],
+            [[new StringLiteral('a')], 10, null, Path::DIR_LEFT, "(a)<-[*10 {`0`: 'a'}]-(b)"],
+            [['a' => new StringLiteral('b')], null, 10, Path::DIR_LEFT, "(a)<-[*..10 {a: 'b'}]-(b)"]
+        ];
+    }
+
+    public function provideVariableLengthRelationshipsWithNameAndTypeAndPropertiesData(): array
+    {
+        return [
+            ['a', 'a', [], 10, 100, Path::DIR_LEFT, "(a)<-[a:a*10..100 {}]-(b)"],
+            ['b', 'a', [new StringLiteral('a')], null, 10, Path::DIR_LEFT, "(a)<-[b:a*..10 {`0`: 'a'}]-(b)"],
+            ['', 'a', ['a' => new StringLiteral('b')], 10, null, Path::DIR_LEFT, "(a)<-[:a*10 {a: 'b'}]-(b)"],
+            [':', 'a', ['a' => new StringLiteral('b'), new StringLiteral('c')], null, null, Path::DIR_LEFT, "(a)<-[`:`:a {a: 'b', `0`: 'c'}]-(b)"],
+            ['a', 'b', [new StringLiteral('a')], 10, 100, Path::DIR_LEFT, "(a)<-[a:b*10..100 {`0`: 'a'}]-(b)"],
+            ['a', '', ['a' => new StringLiteral('b')], null, 10, Path::DIR_LEFT, "(a)<-[a*..10 {a: 'b'}]-(b)"],
+            ['a', ':', ['a' => new StringLiteral('b'), new StringLiteral('c')], 10, null, Path::DIR_LEFT, "(a)<-[a:`:`*10 {a: 'b', `0`: 'c'}]-(b)"]
+        ];
+    }
+
     public function provideWithNameData(): array
     {
         return [

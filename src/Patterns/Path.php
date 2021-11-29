@@ -70,6 +70,16 @@ class Path implements PathType
     private Variable $variable;
 
     /**
+     * @var int The minimum number of `relationship->node` hops away to search
+     */
+    private int $minHops;
+
+    /**
+     * @var int The maximum number of `relationship->node` hops away to search
+     */
+    private int $maxHops;
+
+    /**
      * Path constructor.
      *
      * @param StructuralType $a The node left of the relationship
@@ -103,6 +113,36 @@ class Path implements PathType
         }
 
         $this->variable = $variable;
+
+        return $this;
+    }
+
+    /**
+     * Set the minimum number of `relationship->node` hops away to search.
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels
+     *
+     * @param int $minHops
+     * @return Path
+     */
+    public function withMinHops(int $minHops): self
+    {
+        $this->minHops = $minHops;
+
+        return $this;
+    }
+
+    /**
+     * Set the maximum number of `relationship->node` hops away to search.
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels
+     *
+     * @param int $maxHops
+     * @return Path
+     */
+    public function withMaxHops(int $maxHops): self
+    {
+        $this->maxHops = $maxHops;
 
         return $this;
     }
@@ -150,6 +190,19 @@ class Path implements PathType
             // If we have at least one condition type, escape them and insert them into the query
             $escapedTypes = array_map(fn (string $type): string => $this->escape($type), $types);
             $conditionInner .= sprintf(":%s", implode("|", $escapedTypes));
+        }
+
+        if (isset($this->minHops) || isset($this->maxHops)) {
+            // We have either a minHop, maxHop or both
+            $conditionInner .= "*";
+
+            if (isset($this->minHops)) {
+                $conditionInner .= $this->minHops;
+            }
+
+            if (isset($this->maxHops)) {
+                $conditionInner .= sprintf("..%s", $this->maxHops);
+            }
         }
 
         if (isset($this->properties)) {
