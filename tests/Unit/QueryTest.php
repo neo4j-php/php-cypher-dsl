@@ -267,6 +267,15 @@ class QueryTest extends TestCase
 		$this->assertSame("SET a.age, a.age", $statement);
 	}
 
+	public function testSetWithLabel()
+    {
+        $label = Query::variable("n")->labeled(["LABEL1", "LABEL2", "LABEL3"]);
+
+        $statement = (new Query())->set($label)->build();
+
+        $this->assertSame("SET n:`LABEL1`:`LABEL2`:`LABEL3`", $statement);
+    }
+
 	public function testWhere()
 	{
 		$expression = $this->getQueryConvertableMock(BooleanType::class, "a.age");

@@ -1,7 +1,7 @@
 {
   "name": "wikibase-solutions/php-cypher-dsl",
   "description": "A PHP DSL for the Cypher Query Language",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "type": "library",
   "keywords": [
     "neo4j",

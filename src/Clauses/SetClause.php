@@ -22,6 +22,8 @@
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Assignment;
+use WikibaseSolutions\CypherDSL\Label;
+use WikibaseSolutions\CypherDSL\QueryConvertable;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -32,19 +34,23 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 class SetClause extends Clause
 {
 	/**
-	 * @var AnyType[] $assignments The expressions to set
+	 * @var Assignment[]|Label[] $expressions The expressions to set
 	 */
-	private array $assignments = [];
+	private array $expressions = [];
 
 	/**
 	 * Add an assignment.
 	 *
-	 * @param Assignment $assignment The assignment to execute
+	 * @param Assignment|Label $expression The assignment to execute
 	 * @return SetClause
 	 */
-	public function addAssignment(Assignment $assignment): self
+	public function addAssignment($expression): self
 	{
-		$this->assignments[] = $assignment;
+	    if (!($expression instanceof Assignment) && !($expression instanceof Label)) {
+	        throw new \TypeError("\$expression should be either an Assignment object or a Label object");
+        }
+
+		$this->expressions[] = $expression;
 
 		return $this;
 	}
@@ -64,7 +70,7 @@ class SetClause extends Clause
 	{
 		return implode(
 			", ",
-			array_map(fn (Assignment $assignment): string => $assignment->toQuery(), $this->assignments)
+			array_map(fn (QueryConvertable $expression): string => $expression->toQuery(), $this->expressions)
 		);
 	}
 }

@@ -491,7 +491,7 @@ class Query implements QueryConvertable
 	/**
 	 * Create the SET clause.
 	 *
-	 * @param Assignment|Assignment[] $expressions A single expression or a list of expressions
+	 * @param Assignment|Label|(Assignment|Label)[] $expressions A single expression or a list of expressions
 	 *
 	 * @return $this
 	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/
@@ -506,8 +506,8 @@ class Query implements QueryConvertable
 		}
 
 		foreach ($expressions as $expression) {
-			if (!($expression instanceof Assignment)) {
-				throw new TypeError("\$expressions should only consist of Assignment objects");
+			if (!($expression instanceof Assignment) && !($expression instanceof Label)) {
+				throw new TypeError("\$expressions should only consist of Assignment and Label objects");
 			}
 
 			$setClause->addAssignment($expression);
