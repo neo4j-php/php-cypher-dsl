@@ -103,8 +103,8 @@ class PropertyMapTest extends TestCase
 	public function provideNumericalKeysData(): array
 	{
 		return [
-			[[$this->getQueryConvertableMock(AnyType::class, "'a'")], "{`0`: 'a'}"],
-			[[$this->getQueryConvertableMock(AnyType::class, "'a'"), $this->getQueryConvertableMock(AnyType::class, "'b'")], "{`0`: 'a', `1`: 'b'}"]
+			[[$this->getQueryConvertableMock(AnyType::class, "'a'")], "{0: 'a'}"],
+			[[$this->getQueryConvertableMock(AnyType::class, "'a'"), $this->getQueryConvertableMock(AnyType::class, "'b'")], "{0: 'a', 1: 'b'}"]
 		];
 	}
 

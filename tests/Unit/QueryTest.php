@@ -273,7 +273,7 @@ class QueryTest extends TestCase
 
         $statement = (new Query())->set($label)->build();
 
-        $this->assertSame("SET n:`LABEL1`:`LABEL2`:`LABEL3`", $statement);
+        $this->assertSame("SET n:LABEL1:LABEL2:LABEL3", $statement);
     }
 
 	public function testWhere()

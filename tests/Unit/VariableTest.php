@@ -62,7 +62,7 @@ class VariableTest extends TestCase
 			["a", "a"],
 			["b", "b"],
 			[":", "`:`"],
-			["0", "`0`"]
+			["0", "0"]
 		];
 	}
 

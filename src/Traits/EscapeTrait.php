@@ -42,7 +42,7 @@ trait EscapeTrait
 			return "";
 		}
 
-		if (ctype_alpha($name)) {
+		if (ctype_alnum($name)) {
 			return $name;
 		}
 
