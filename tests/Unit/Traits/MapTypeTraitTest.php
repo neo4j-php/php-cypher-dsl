@@ -32,27 +32,27 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  */
 class MapTypeTraitTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	/**
-	 * @var MockObject|MapType
-	 */
-	private $a;
+    /**
+     * @var MockObject|MapType
+     */
+    private $a;
 
-	/**
-	 * @var MockObject|MapType
-	 */
-	private $b;
+    /**
+     * @var MockObject|MapType
+     */
+    private $b;
 
-	public function setUp(): void
-	{
-		$this->a = $this->getQueryConvertableMock(MapType::class, "{}");
-	}
+    public function setUp(): void
+    {
+        $this->a = $this->getQueryConvertableMock(MapType::class, "{}");
+    }
 
-	public function testProperty()
-	{
-		$property = $this->a->property("foo");
+    public function testProperty()
+    {
+        $property = $this->a->property("foo");
 
-		$this->assertInstanceOf(Property::class, $property);
-	}
+        $this->assertInstanceOf(Property::class, $property);
+    }
 }

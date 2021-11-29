@@ -31,26 +31,26 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 class ExistsTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$expression = $this->getQueryConvertableMock(AnyType::class, "expression");
+    public function testToQuery()
+    {
+        $expression = $this->getQueryConvertableMock(AnyType::class, "expression");
 
-		$exists = new Exists($expression);
+        $exists = new Exists($expression);
 
-		$this->assertSame("exists(expression)", $exists->toQuery());
-	}
+        $this->assertSame("exists(expression)", $exists->toQuery());
+    }
 
-	/**
-	 * @doesNotPerformAssertions
-	 */
-	public function testAcceptsAnyType()
-	{
-		$expression = $this->getQueryConvertableMock(AnyType::class, "expression");
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsAnyType()
+    {
+        $expression = $this->getQueryConvertableMock(AnyType::class, "expression");
 
-		$exists = new Exists($expression);
+        $exists = new Exists($expression);
 
-		$exists->toQuery();
-	}
+        $exists->toQuery();
+    }
 }

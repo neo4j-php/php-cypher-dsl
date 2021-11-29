@@ -21,10 +21,10 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use TypeError;
 use WikibaseSolutions\CypherDSL\Assignment;
 use WikibaseSolutions\CypherDSL\Label;
 use WikibaseSolutions\CypherDSL\QueryConvertable;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * This class represents a SET clause.
@@ -33,44 +33,44 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 class SetClause extends Clause
 {
-	/**
-	 * @var Assignment[]|Label[] $expressions The expressions to set
-	 */
-	private array $expressions = [];
+    /**
+     * @var Assignment[]|Label[] $expressions The expressions to set
+     */
+    private array $expressions = [];
 
-	/**
-	 * Add an assignment.
-	 *
-	 * @param Assignment|Label $expression The assignment to execute
-	 * @return SetClause
-	 */
-	public function addAssignment($expression): self
-	{
-	    if (!($expression instanceof Assignment) && !($expression instanceof Label)) {
-	        throw new \TypeError("\$expression should be either an Assignment object or a Label object");
+    /**
+     * Add an assignment.
+     *
+     * @param Assignment|Label $expression The assignment to execute
+     * @return SetClause
+     */
+    public function addAssignment($expression): self
+    {
+        if (!($expression instanceof Assignment) && !($expression instanceof Label)) {
+            throw new TypeError("\$expression should be either an Assignment object or a Label object");
         }
 
-		$this->expressions[] = $expression;
+        $this->expressions[] = $expression;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getClause(): string
-	{
-		return "SET";
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getClause(): string
+    {
+        return "SET";
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getSubject(): string
-	{
-		return implode(
-			", ",
-			array_map(fn (QueryConvertable $expression): string => $expression->toQuery(), $this->expressions)
-		);
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getSubject(): string
+    {
+        return implode(
+            ", ",
+            array_map(fn (QueryConvertable $expression): string => $expression->toQuery(), $this->expressions)
+        );
+    }
 }

@@ -26,15 +26,15 @@ use WikibaseSolutions\CypherDSL\QueryConvertable;
 
 trait TestHelper
 {
-	public function getQueryConvertableMock(string $class, string $value)
-	{
-		if (!is_subclass_of($class, QueryConvertable::class)) {
-			throw new InvalidArgumentException("\$class must be a subclass of " . QueryConvertable::class);
-		}
+    public function getQueryConvertableMock(string $class, string $value)
+    {
+        if (!is_subclass_of($class, QueryConvertable::class)) {
+            throw new InvalidArgumentException("\$class must be a subclass of " . QueryConvertable::class);
+        }
 
-		$mock = $this->getMockBuilder($class)->disableOriginalConstructor()->getMock();
-		$mock->method('toQuery')->willReturn($value);
+        $mock = $this->getMockBuilder($class)->disableOriginalConstructor()->getMock();
+        $mock->method('toQuery')->willReturn($value);
 
-		return $mock;
-	}
+        return $mock;
+    }
 }

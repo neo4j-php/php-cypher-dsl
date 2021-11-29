@@ -38,50 +38,50 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 class Property implements BooleanType, NumeralType, StringType, MapType, ListType
 {
-	use EscapeTrait;
-	use BooleanTypeTrait;
-	use NumeralTypeTrait;
-	use StringTypeTrait;
-	use MapTypeTrait;
+    use EscapeTrait;
+    use BooleanTypeTrait;
+    use NumeralTypeTrait;
+    use StringTypeTrait;
+    use MapTypeTrait;
 
-	/**
-	 * @var MapType The expression to which this property belongs
-	 */
-	private MapType $expression;
+    /**
+     * @var MapType The expression to which this property belongs
+     */
+    private MapType $expression;
 
-	/**
-	 * @var string The name of the property
-	 */
-	private string $property;
+    /**
+     * @var string The name of the property
+     */
+    private string $property;
 
-	/**
-	 * Property constructor.
-	 *
-	 * @param MapType $expression
-	 * @param string $property
-	 */
-	public function __construct(MapType $expression, string $property)
-	{
-		$this->expression = $expression;
-		$this->property = $property;
-	}
+    /**
+     * Property constructor.
+     *
+     * @param MapType $expression
+     * @param string $property
+     */
+    public function __construct(MapType $expression, string $property)
+    {
+        $this->expression = $expression;
+        $this->property = $property;
+    }
 
-	/**
-	 * Assign a value to this property.
-	 *
-	 * @param AnyType $value The value to assign
-	 * @return Assignment
-	 */
-	public function assign(AnyType $value): Assignment
-	{
-		return new Assignment($this, $value);
-	}
+    /**
+     * Assign a value to this property.
+     *
+     * @param AnyType $value The value to assign
+     * @return Assignment
+     */
+    public function assign(AnyType $value): Assignment
+    {
+        return new Assignment($this, $value);
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function toQuery(): string
-	{
-		return sprintf("%s.%s", $this->expression->toQuery(), $this->escape($this->property));
-	}
+    /**
+     * @inheritDoc
+     */
+    public function toQuery(): string
+    {
+        return sprintf("%s.%s", $this->expression->toQuery(), $this->escape($this->property));
+    }
 }

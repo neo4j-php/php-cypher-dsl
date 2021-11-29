@@ -32,25 +32,25 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  */
 class OrOperatorTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$or = new OrOperator($this->getQueryConvertableMock(BooleanType::class, "true"), $this->getQueryConvertableMock(BooleanType::class, "false"));
+    public function testToQuery()
+    {
+        $or = new OrOperator($this->getQueryConvertableMock(BooleanType::class, "true"), $this->getQueryConvertableMock(BooleanType::class, "false"));
 
-		$this->assertSame("(true OR false)", $or->toQuery());
+        $this->assertSame("(true OR false)", $or->toQuery());
 
-		$or = new OrOperator($or, $or);
+        $or = new OrOperator($or, $or);
 
-		$this->assertSame("((true OR false) OR (true OR false))", $or->toQuery());
-	}
+        $this->assertSame("((true OR false) OR (true OR false))", $or->toQuery());
+    }
 
-	public function testDoesNotAcceptAnyTypeAsOperands()
-	{
-		$this->expectException(TypeError::class);
+    public function testDoesNotAcceptAnyTypeAsOperands()
+    {
+        $this->expectException(TypeError::class);
 
-		$or = new OrOperator($this->getQueryConvertableMock(AnyType::class, "true"), $this->getQueryConvertableMock(AnyType::class, "false"));
+        $or = new OrOperator($this->getQueryConvertableMock(AnyType::class, "true"), $this->getQueryConvertableMock(AnyType::class, "false"));
 
-		$or->toQuery();
-	}
+        $or->toQuery();
+    }
 }

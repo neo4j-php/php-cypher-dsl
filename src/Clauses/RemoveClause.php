@@ -33,44 +33,44 @@ use WikibaseSolutions\CypherDSL\QueryConvertable;
  */
 class RemoveClause extends Clause
 {
-	/**
-	 * @var Property[]|Label[] The expressions in this REMOVE clause.
-	 */
-	private array $expressions = [];
+    /**
+     * @var Property[]|Label[] The expressions in this REMOVE clause.
+     */
+    private array $expressions = [];
 
-	/**
-	 * Add an expression to the REMOVE clause. This expression usually returns a property (a.b) or a label (a:b).
-	 *
-	 * @param Property|Label $expression The expression to add
-	 * @return RemoveClause
-	 */
-	public function addExpression($expression): self
-	{
-		if (!($expression instanceof Property) && !($expression instanceof Label)) {
-			throw new TypeError("\$expression must be either a Property or a Label");
-		}
+    /**
+     * Add an expression to the REMOVE clause. This expression usually returns a property (a.b) or a label (a:b).
+     *
+     * @param Property|Label $expression The expression to add
+     * @return RemoveClause
+     */
+    public function addExpression($expression): self
+    {
+        if (!($expression instanceof Property) && !($expression instanceof Label)) {
+            throw new TypeError("\$expression must be either a Property or a Label");
+        }
 
-		$this->expressions[] = $expression;
+        $this->expressions[] = $expression;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getClause(): string
-	{
-		return "REMOVE";
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getClause(): string
+    {
+        return "REMOVE";
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getSubject(): string
-	{
-		return implode(
-			", ",
-			array_map(fn (QueryConvertable $expression) => $expression->toQuery(), $this->expressions)
-		);
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getSubject(): string
+    {
+        return implode(
+            ", ",
+            array_map(fn (QueryConvertable $expression) => $expression->toQuery(), $this->expressions)
+        );
+    }
 }

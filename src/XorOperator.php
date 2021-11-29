@@ -31,21 +31,21 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  */
 class XorOperator extends BinaryOperator implements BooleanType
 {
-	use BooleanTypeTrait;
+    use BooleanTypeTrait;
 
-	/**
-	 * @inheritDoc
-	 */
-	public function __construct(BooleanType $left, BooleanType $right)
-	{
-		parent::__construct($left, $right);
-	}
+    /**
+     * @inheritDoc
+     */
+    public function __construct(BooleanType $left, BooleanType $right)
+    {
+        parent::__construct($left, $right);
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getOperator(): string
-	{
-		return "XOR";
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getOperator(): string
+    {
+        return "XOR";
+    }
 }

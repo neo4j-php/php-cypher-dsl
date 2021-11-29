@@ -33,35 +33,35 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
  */
 class PropertyTypeTraitTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	/**
-	 * @var MockObject|PropertyType
-	 */
-	private $a;
+    /**
+     * @var MockObject|PropertyType
+     */
+    private $a;
 
-	/**
-	 * @var MockObject|PropertyType
-	 */
-	private $b;
+    /**
+     * @var MockObject|PropertyType
+     */
+    private $b;
 
-	public function setUp(): void
-	{
-		$this->a = $this->getQueryConvertableMock(PropertyType::class, "10");
-		$this->b = $this->getQueryConvertableMock(PropertyType::class, "15");
-	}
+    public function setUp(): void
+    {
+        $this->a = $this->getQueryConvertableMock(PropertyType::class, "10");
+        $this->b = $this->getQueryConvertableMock(PropertyType::class, "15");
+    }
 
-	public function testEquals()
-	{
-		$equals = $this->a->equals($this->b);
+    public function testEquals()
+    {
+        $equals = $this->a->equals($this->b);
 
-		$this->assertInstanceOf(Equality::class, $equals);
-	}
+        $this->assertInstanceOf(Equality::class, $equals);
+    }
 
-	public function testNotEquals()
-	{
-		$notEquals = $this->a->notEquals($this->b);
+    public function testNotEquals()
+    {
+        $notEquals = $this->a->notEquals($this->b);
 
-		$this->assertInstanceOf(Inequality::class, $notEquals);
-	}
+        $this->assertInstanceOf(Inequality::class, $notEquals);
+    }
 }

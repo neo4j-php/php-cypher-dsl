@@ -32,21 +32,21 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 class Contains extends BinaryOperator implements BooleanType
 {
-	use BooleanTypeTrait;
+    use BooleanTypeTrait;
 
-	/**
-	 * @inheritDoc
-	 */
-	public function __construct(StringType $left, StringType $right)
-	{
-		parent::__construct($left, $right);
-	}
+    /**
+     * @inheritDoc
+     */
+    public function __construct(StringType $left, StringType $right)
+    {
+        parent::__construct($left, $right);
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getOperator(): string
-	{
-		return "CONTAINS";
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getOperator(): string
+    {
+        return "CONTAINS";
+    }
 }

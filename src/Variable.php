@@ -44,35 +44,47 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/variables/
  */
 class Variable implements
-	BooleanType,
-	ListType,
-	MapType,
-	NodeType,
-	NumeralType,
-	PathType,
-	StringType
+    BooleanType,
+    ListType,
+    MapType,
+    NodeType,
+    NumeralType,
+    PathType,
+    StringType
 {
-	use EscapeTrait;
-	use BooleanTypeTrait;
-	use MapTypeTrait;
-	use NumeralTypeTrait;
-	use PathTypeTrait;
-	use StringTypeTrait;
+    use EscapeTrait;
+    use BooleanTypeTrait;
+    use MapTypeTrait;
+    use NumeralTypeTrait;
+    use PathTypeTrait;
+    use StringTypeTrait;
 
-	/**
-	 * @var string The variable
-	 */
-	private string $variable;
+    /**
+     * @var string The variable
+     */
+    private string $variable;
 
-	/**
-	 * Variable constructor.
-	 *
-	 * @param string $variable The variable
-	 */
-	public function __construct(string $variable)
-	{
-		$this->variable = $variable;
-	}
+    /**
+     * Variable constructor.
+     *
+     * @param string $variable The variable
+     */
+    public function __construct(string $variable)
+    {
+        $this->variable = $variable;
+    }
+
+    /**
+     * Adds the given labels to this variable.
+     *
+     * @param string[] $labels
+     * @return Label
+     * @deprecated Use Variable::labeled() instead
+     */
+    public function withLabels(array $labels): Label
+    {
+        return $this->labeled($labels);
+    }
 
     /**
      * Adds the given labels to this variable.
@@ -80,39 +92,27 @@ class Variable implements
      * @param array $labels
      * @return Label
      */
-	public function labeled(array $labels): Label
+    public function labeled(array $labels): Label
     {
         return new Label($this, $labels);
     }
 
-	/**
-	 * Adds the given labels to this variable.
-	 *
-     * @deprecated Use Variable::labeled() instead
-	 * @param string[] $labels
-	 * @return Label
-	 */
-	public function withLabels(array $labels): Label
-	{
-        return $this->labeled($labels);
-	}
+    /**
+     * Assign a value to this variable.
+     *
+     * @param AnyType $value The value to assign
+     * @return Assignment
+     */
+    public function assign(AnyType $value): Assignment
+    {
+        return new Assignment($this, $value);
+    }
 
-	/**
-	 * Assign a value to this variable.
-	 *
-	 * @param AnyType $value The value to assign
-	 * @return Assignment
-	 */
-	public function assign(AnyType $value): Assignment
-	{
-		return new Assignment($this, $value);
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function toQuery(): string
-	{
-		return $this->escape($this->variable);
-	}
+    /**
+     * @inheritDoc
+     */
+    public function toQuery(): string
+    {
+        return $this->escape($this->variable);
+    }
 }

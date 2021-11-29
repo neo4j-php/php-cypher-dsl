@@ -31,21 +31,21 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 class Exponentiation extends BinaryOperator implements NumeralType
 {
-	use NumeralTypeTrait;
+    use NumeralTypeTrait;
 
-	/**
-	 * @inheritDoc
-	 */
-	public function __construct(NumeralType $left, NumeralType $right)
-	{
-		parent::__construct($left, $right);
-	}
+    /**
+     * @inheritDoc
+     */
+    public function __construct(NumeralType $left, NumeralType $right)
+    {
+        parent::__construct($left, $right);
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getOperator(): string
-	{
-		return "^";
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getOperator(): string
+    {
+        return "^";
+    }
 }

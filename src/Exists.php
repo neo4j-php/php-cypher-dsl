@@ -33,39 +33,39 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  */
 class Exists implements BooleanType
 {
-	use BooleanTypeTrait;
+    use BooleanTypeTrait;
 
-	/**
-	 * @var MatchClause The MATCH part of the EXISTS expression
-	 */
-	private MatchClause $match;
+    /**
+     * @var MatchClause The MATCH part of the EXISTS expression
+     */
+    private MatchClause $match;
 
-	/**
-	 * @var WhereClause|null The optional WHERE part of the EXISTS expression
-	 */
-	private ?WhereClause $where;
+    /**
+     * @var WhereClause|null The optional WHERE part of the EXISTS expression
+     */
+    private ?WhereClause $where;
 
-	/**
-	 * Exists constructor.
-	 *
-	 * @param MatchClause $match The MATCH part of the EXISTS expression
-	 * @param WhereClause $where The optional WHERE part of the EXISTS expression
-	 */
-	public function __construct(MatchClause $match, ?WhereClause $where = null)
-	{
-		$this->match = $match;
-		$this->where = $where;
-	}
+    /**
+     * Exists constructor.
+     *
+     * @param MatchClause $match The MATCH part of the EXISTS expression
+     * @param WhereClause $where The optional WHERE part of the EXISTS expression
+     */
+    public function __construct(MatchClause $match, ?WhereClause $where = null)
+    {
+        $this->match = $match;
+        $this->where = $where;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function toQuery(): string
-	{
-		if (isset($this->where)) {
-			return sprintf("EXISTS { %s %s }", $this->match->toQuery(), $this->where->toQuery());
-		} else {
-			return sprintf("EXISTS { %s }", $this->match->toQuery());
-		}
-	}
+    /**
+     * @inheritDoc
+     */
+    public function toQuery(): string
+    {
+        if (isset($this->where)) {
+            return sprintf("EXISTS { %s %s }", $this->match->toQuery(), $this->where->toQuery());
+        } else {
+            return sprintf("EXISTS { %s }", $this->match->toQuery());
+        }
+    }
 }

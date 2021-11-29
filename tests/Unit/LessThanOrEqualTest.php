@@ -33,32 +33,32 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 class LessThanOrEqualTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$lessThanOrEqual = new LessThanOrEqual($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
+    public function testToQuery()
+    {
+        $lessThanOrEqual = new LessThanOrEqual($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
-		$this->assertSame("(10 <= 15)", $lessThanOrEqual->toQuery());
-	}
+        $this->assertSame("(10 <= 15)", $lessThanOrEqual->toQuery());
+    }
 
-	public function testCannotBeNested()
-	{
-		$lessThanOrEqual = new LessThanOrEqual($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
+    public function testCannotBeNested()
+    {
+        $lessThanOrEqual = new LessThanOrEqual($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
-		$this->expectException(TypeError::class);
+        $this->expectException(TypeError::class);
 
-		$lessThanOrEqual = new GreaterThanOrEqual($lessThanOrEqual, $lessThanOrEqual);
+        $lessThanOrEqual = new GreaterThanOrEqual($lessThanOrEqual, $lessThanOrEqual);
 
-		$this->assertSame("((10 <= 15) <= (10 <= 15))", $lessThanOrEqual->toQuery());
-	}
+        $this->assertSame("((10 <= 15) <= (10 <= 15))", $lessThanOrEqual->toQuery());
+    }
 
-	public function testDoesNotAcceptAnyTypeAsOperands()
-	{
-		$this->expectException(TypeError::class);
+    public function testDoesNotAcceptAnyTypeAsOperands()
+    {
+        $this->expectException(TypeError::class);
 
-		$lessThanOrEqual = new LessThanOrEqual($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
+        $lessThanOrEqual = new LessThanOrEqual($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
 
-		$lessThanOrEqual->toQuery();
-	}
+        $lessThanOrEqual->toQuery();
+    }
 }

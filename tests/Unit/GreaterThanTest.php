@@ -32,32 +32,32 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 class GreaterThanTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$greaterThan = new GreaterThan($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
+    public function testToQuery()
+    {
+        $greaterThan = new GreaterThan($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
-		$this->assertSame("(10 > 15)", $greaterThan->toQuery());
-	}
+        $this->assertSame("(10 > 15)", $greaterThan->toQuery());
+    }
 
-	public function testCannotBeNested()
-	{
-		$greaterThan = new GreaterThan($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
+    public function testCannotBeNested()
+    {
+        $greaterThan = new GreaterThan($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
-		$this->expectException(TypeError::class);
+        $this->expectException(TypeError::class);
 
-		$greaterThan = new GreaterThan($greaterThan, $greaterThan);
+        $greaterThan = new GreaterThan($greaterThan, $greaterThan);
 
-		$greaterThan->toQuery();
-	}
+        $greaterThan->toQuery();
+    }
 
-	public function testDoesNotAcceptAnyTypeAsOperands()
-	{
-		$this->expectException(TypeError::class);
+    public function testDoesNotAcceptAnyTypeAsOperands()
+    {
+        $this->expectException(TypeError::class);
 
-		$greaterThan = new GreaterThan($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
+        $greaterThan = new GreaterThan($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
 
-		$greaterThan->toQuery();
-	}
+        $greaterThan->toQuery();
+    }
 }

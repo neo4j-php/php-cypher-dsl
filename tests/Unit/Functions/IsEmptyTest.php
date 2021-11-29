@@ -35,61 +35,61 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 class IsEmptyTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$list = $this->getQueryConvertableMock(ListType::class, "list");
+    public function testToQuery()
+    {
+        $list = $this->getQueryConvertableMock(ListType::class, "list");
 
-		$isEmpty = new IsEmpty($list);
+        $isEmpty = new IsEmpty($list);
 
-		$this->assertSame("isEmpty(list)", $isEmpty->toQuery());
-	}
+        $this->assertSame("isEmpty(list)", $isEmpty->toQuery());
+    }
 
-	/**
-	 * @doesNotPerformAssertions
-	 */
-	public function testAcceptsListType()
-	{
-		$list = $this->getQueryConvertableMock(ListType::class, "list");
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsListType()
+    {
+        $list = $this->getQueryConvertableMock(ListType::class, "list");
 
-		$isEmpty = new IsEmpty($list);
+        $isEmpty = new IsEmpty($list);
 
-		$isEmpty->toQuery();
-	}
+        $isEmpty->toQuery();
+    }
 
-	/**
-	 * @doesNotPerformAssertions
-	 */
-	public function testAcceptsMapType()
-	{
-		$list = $this->getQueryConvertableMock(MapType::class, "list");
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsMapType()
+    {
+        $list = $this->getQueryConvertableMock(MapType::class, "list");
 
-		$isEmpty = new IsEmpty($list);
+        $isEmpty = new IsEmpty($list);
 
-		$isEmpty->toQuery();
-	}
+        $isEmpty->toQuery();
+    }
 
-	/**
-	 * @doesNotPerformAssertions
-	 */
-	public function testAcceptsStringType()
-	{
-		$list = $this->getQueryConvertableMock(StringType::class, "list");
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsStringType()
+    {
+        $list = $this->getQueryConvertableMock(StringType::class, "list");
 
-		$isEmpty = new IsEmpty($list);
+        $isEmpty = new IsEmpty($list);
 
-		$isEmpty->toQuery();
-	}
+        $isEmpty->toQuery();
+    }
 
-	public function testDoestNotAcceptAnyType()
-	{
-		$list = $this->getQueryConvertableMock(AnyType::class, "list");
+    public function testDoestNotAcceptAnyType()
+    {
+        $list = $this->getQueryConvertableMock(AnyType::class, "list");
 
-		$this->expectException(TypeError::class);
+        $this->expectException(TypeError::class);
 
-		$isEmpty = new IsEmpty($list);
+        $isEmpty = new IsEmpty($list);
 
-		$isEmpty->toQuery();
-	}
+        $isEmpty->toQuery();
+    }
 }

@@ -32,122 +32,122 @@ use WikibaseSolutions\CypherDSL\Variable;
  */
 class CallProcedureClause extends Clause
 {
-	/**
-	 * @var string|null The procedure to call
-	 */
-	private ?string $procedure;
+    /**
+     * @var string|null The procedure to call
+     */
+    private ?string $procedure;
 
-	/**
-	 * @var AnyType[] The arguments passed to the procedure
-	 */
-	private array $arguments = [];
+    /**
+     * @var AnyType[] The arguments passed to the procedure
+     */
+    private array $arguments = [];
 
-	/**
-	 * @var Variable[] The results field that will be returned
-	 */
-	private array $yieldVariables = [];
+    /**
+     * @var Variable[] The results field that will be returned
+     */
+    private array $yieldVariables = [];
 
-	/**
-	 * Sets the procedure to call. This can be for instance "apoc.load.json". This
-	 * procedure name is passed unescaped to the query.
-	 *
-	 * @note The given procedure name is not escaped before being inserted into the
-	 * query.
-	 *
-	 * @param string $procedure
-	 * @return CallProcedureClause
-	 */
-	public function setProcedure(string $procedure): self
-	{
-		$this->procedure = $procedure;
+    /**
+     * Sets the procedure to call. This can be for instance "apoc.load.json". This
+     * procedure name is passed unescaped to the query.
+     *
+     * @note The given procedure name is not escaped before being inserted into the
+     * query.
+     *
+     * @param string $procedure
+     * @return CallProcedureClause
+     */
+    public function setProcedure(string $procedure): self
+    {
+        $this->procedure = $procedure;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Sets the arguments to pass to this procedure call. This overwrites any previously passed
-	 * arguments.
-	 *
-	 * @param AnyType[] $arguments
-	 * @return CallProcedureClause
-	 */
-	public function withArguments(array $arguments): self
-	{
-		foreach ($arguments as $argument) {
-			if (!($argument instanceof AnyType)) {
-				throw new InvalidArgumentException("\$arguments should only consist of AnyType objects");
-			}
-		}
+    /**
+     * Sets the arguments to pass to this procedure call. This overwrites any previously passed
+     * arguments.
+     *
+     * @param AnyType[] $arguments
+     * @return CallProcedureClause
+     */
+    public function withArguments(array $arguments): self
+    {
+        foreach ($arguments as $argument) {
+            if (!($argument instanceof AnyType)) {
+                throw new InvalidArgumentException("\$arguments should only consist of AnyType objects");
+            }
+        }
 
-		$this->arguments = $arguments;
+        $this->arguments = $arguments;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Add an argument to pass to this procedure call.
-	 *
-	 * @param AnyType $argument
-	 * @return CallProcedureClause
-	 */
-	public function addArgument(AnyType $argument): self
-	{
-		$this->arguments[] = $argument;
+    /**
+     * Add an argument to pass to this procedure call.
+     *
+     * @param AnyType $argument
+     * @return CallProcedureClause
+     */
+    public function addArgument(AnyType $argument): self
+    {
+        $this->arguments[] = $argument;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Used to explicitly select which available result fields are returned as newly-bound
-	 * variables.
-	 *
-	 * @param Variable[] $variables
-	 * @return CallProcedureClause
-	 */
-	public function yields(array $variables): self
-	{
-		foreach ($variables as $variable) {
-			if (!($variable instanceof Variable)) {
-				throw new InvalidArgumentException("\$variables should only consist of Variable objects");
-			}
-		}
+    /**
+     * Used to explicitly select which available result fields are returned as newly-bound
+     * variables.
+     *
+     * @param Variable[] $variables
+     * @return CallProcedureClause
+     */
+    public function yields(array $variables): self
+    {
+        foreach ($variables as $variable) {
+            if (!($variable instanceof Variable)) {
+                throw new InvalidArgumentException("\$variables should only consist of Variable objects");
+            }
+        }
 
-		$this->yieldVariables = $variables;
+        $this->yieldVariables = $variables;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getClause(): string
-	{
-		return "CALL";
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getClause(): string
+    {
+        return "CALL";
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getSubject(): string
-	{
-		if (!isset($this->procedure)) {
-			return "";
-		}
+    /**
+     * @inheritDoc
+     */
+    protected function getSubject(): string
+    {
+        if (!isset($this->procedure)) {
+            return "";
+        }
 
-		$arguments = implode(
-			", ",
-			array_map(fn (AnyType $pattern): string => $pattern->toQuery(), $this->arguments)
-		);
+        $arguments = implode(
+            ", ",
+            array_map(fn (AnyType $pattern): string => $pattern->toQuery(), $this->arguments)
+        );
 
-		if (count($this->yieldVariables) > 0) {
-			$yieldParameters = implode(
-				", ",
-				array_map(fn (Variable $variable): string => $variable->toQuery(), $this->yieldVariables)
-			);
+        if (count($this->yieldVariables) > 0) {
+            $yieldParameters = implode(
+                ", ",
+                array_map(fn (Variable $variable): string => $variable->toQuery(), $this->yieldVariables)
+            );
 
-			return sprintf("%s(%s) YIELD %s", $this->procedure, $arguments, $yieldParameters);
-		} else {
-			return sprintf("%s(%s)", $this->procedure, $arguments);
-		}
-	}
+            return sprintf("%s(%s) YIELD %s", $this->procedure, $arguments, $yieldParameters);
+        } else {
+            return sprintf("%s(%s)", $this->procedure, $arguments);
+        }
+    }
 }

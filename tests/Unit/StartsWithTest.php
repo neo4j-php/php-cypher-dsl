@@ -32,32 +32,32 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 class StartsWithTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$startsWith = new StartsWith($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
+    public function testToQuery()
+    {
+        $startsWith = new StartsWith($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
 
-		$this->assertSame("(a STARTS WITH b)", $startsWith->toQuery());
-	}
+        $this->assertSame("(a STARTS WITH b)", $startsWith->toQuery());
+    }
 
-	public function testCannotBeNested()
-	{
-		$startsWith = new StartsWith($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
+    public function testCannotBeNested()
+    {
+        $startsWith = new StartsWith($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
 
-		$this->expectException(TypeError::class);
+        $this->expectException(TypeError::class);
 
-		$startsWith = new StartsWith($startsWith, $startsWith);
+        $startsWith = new StartsWith($startsWith, $startsWith);
 
-		$startsWith->toQuery();
-	}
+        $startsWith->toQuery();
+    }
 
-	public function testDoesNotAcceptAnyTypeAsOperands()
-	{
-		$this->expectException(TypeError::class);
+    public function testDoesNotAcceptAnyTypeAsOperands()
+    {
+        $this->expectException(TypeError::class);
 
-		$startsWith = new StartsWith($this->getQueryConvertableMock(AnyType::class, "a"), $this->getQueryConvertableMock(AnyType::class, "b"));
+        $startsWith = new StartsWith($this->getQueryConvertableMock(AnyType::class, "a"), $this->getQueryConvertableMock(AnyType::class, "b"));
 
-		$startsWith->toQuery();
-	}
+        $startsWith->toQuery();
+    }
 }

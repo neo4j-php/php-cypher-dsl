@@ -31,76 +31,76 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 class WithClauseTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testEmptyClause()
-	{
-		$return = new WithClause();
+    public function testEmptyClause()
+    {
+        $return = new WithClause();
 
-		$this->assertSame("", $return->toQuery());
-	}
+        $this->assertSame("", $return->toQuery());
+    }
 
-	public function testSingleEntry()
-	{
-		$return = new WithClause();
-		$return->addEntry($this->getQueryConvertableMock(AnyType::class, "a"));
+    public function testSingleEntry()
+    {
+        $return = new WithClause();
+        $return->addEntry($this->getQueryConvertableMock(AnyType::class, "a"));
 
-		$this->assertSame("WITH a", $return->toQuery());
-	}
+        $this->assertSame("WITH a", $return->toQuery());
+    }
 
-	public function testMultipleEntries()
-	{
-		$return = new WithClause();
-		$return->addEntry($this->getQueryConvertableMock(AnyType::class, "a"));
-		$return->addEntry($this->getQueryConvertableMock(AnyType::class, "b"));
-		$return->addEntry($this->getQueryConvertableMock(AnyType::class, "c"));
+    public function testMultipleEntries()
+    {
+        $return = new WithClause();
+        $return->addEntry($this->getQueryConvertableMock(AnyType::class, "a"));
+        $return->addEntry($this->getQueryConvertableMock(AnyType::class, "b"));
+        $return->addEntry($this->getQueryConvertableMock(AnyType::class, "c"));
 
-		$this->assertSame("WITH a, b, c", $return->toQuery());
-	}
+        $this->assertSame("WITH a, b, c", $return->toQuery());
+    }
 
-	public function testSingleAlias()
-	{
-		$return = new WithClause();
-		$return->addEntry($this->getQueryConvertableMock(AnyType::class, "a"), "b");
+    public function testSingleAlias()
+    {
+        $return = new WithClause();
+        $return->addEntry($this->getQueryConvertableMock(AnyType::class, "a"), "b");
 
-		$this->assertSame("WITH a AS b", $return->toQuery());
-	}
+        $this->assertSame("WITH a AS b", $return->toQuery());
+    }
 
-	public function testMultipleAliases()
-	{
-		$return = new WithClause();
-		$return->addEntry($this->getQueryConvertableMock(AnyType::class, "a"), "b");
-		$return->addEntry($this->getQueryConvertableMock(AnyType::class, "b"), "c");
+    public function testMultipleAliases()
+    {
+        $return = new WithClause();
+        $return->addEntry($this->getQueryConvertableMock(AnyType::class, "a"), "b");
+        $return->addEntry($this->getQueryConvertableMock(AnyType::class, "b"), "c");
 
-		$this->assertSame("WITH a AS b, b AS c", $return->toQuery());
-	}
+        $this->assertSame("WITH a AS b, b AS c", $return->toQuery());
+    }
 
-	public function testMixedAliases()
-	{
-		$return = new WithClause();
-		$return->addEntry($this->getQueryConvertableMock(AnyType::class, "a"), "b");
-		$return->addEntry($this->getQueryConvertableMock(AnyType::class, "c"));
-		$return->addEntry($this->getQueryConvertableMock(AnyType::class, "b"), "c");
+    public function testMixedAliases()
+    {
+        $return = new WithClause();
+        $return->addEntry($this->getQueryConvertableMock(AnyType::class, "a"), "b");
+        $return->addEntry($this->getQueryConvertableMock(AnyType::class, "c"));
+        $return->addEntry($this->getQueryConvertableMock(AnyType::class, "b"), "c");
 
-		$this->assertSame("WITH a AS b, c, b AS c", $return->toQuery());
-	}
+        $this->assertSame("WITH a AS b, c, b AS c", $return->toQuery());
+    }
 
-	public function testAliasIsEscaped()
-	{
-		$return = new WithClause();
-		$return->addEntry($this->getQueryConvertableMock(AnyType::class, "a"), ":");
+    public function testAliasIsEscaped()
+    {
+        $return = new WithClause();
+        $return->addEntry($this->getQueryConvertableMock(AnyType::class, "a"), ":");
 
-		$this->assertSame("WITH a AS `:`", $return->toQuery());
-	}
+        $this->assertSame("WITH a AS `:`", $return->toQuery());
+    }
 
-	/**
-	 * @doesNotPerformAssertions
-	 */
-	public function testAcceptsAnyType()
-	{
-		$return = new WithClause();
-		$return->addEntry($this->getQueryConvertableMock(AnyType::class, "a"), ":");
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsAnyType()
+    {
+        $return = new WithClause();
+        $return->addEntry($this->getQueryConvertableMock(AnyType::class, "a"), ":");
 
-		$return->toQuery();
-	}
+        $return->toQuery();
+    }
 }

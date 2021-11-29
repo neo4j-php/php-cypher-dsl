@@ -28,15 +28,15 @@ use WikibaseSolutions\CypherDSL\Property;
  */
 trait MapTypeTrait
 {
-	/**
-	 * Returns the property of the given name for this expression. For instance, if this expression is the
-	 * variable "foo", a function call like $expression->property("bar") would yield "foo.bar".
-	 *
-	 * @param string $property
-	 * @return Property
-	 */
-	public function property(string $property): Property
-	{
-		return new Property($this, $property);
-	}
+    /**
+     * Returns the property of the given name for this expression. For instance, if this expression is the
+     * variable "foo", a function call like $expression->property("bar") would yield "foo.bar".
+     *
+     * @param string $property
+     * @return Property
+     */
+    public function property(string $property): Property
+    {
+        return new Property($this, $property);
+    }
 }

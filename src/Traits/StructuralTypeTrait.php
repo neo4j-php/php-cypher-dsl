@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
-use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
@@ -35,82 +35,82 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
  */
 trait StructuralTypeTrait
 {
-	/**
-	 * @var MapType|null
-	 */
-	private ?MapType $properties;
+    /**
+     * @var MapType|null
+     */
+    private ?MapType $properties;
 
-	/**
-	 * Add the given property to the properties of this node.
-	 *
-	 * @param string $key The name of the property
-	 * @param AnyType $value The value of the property
-	 * @return Node
-	 */
-	public function withProperty(string $key, AnyType $value): self
-	{
-		if (!isset($this->properties)) {
-			$this->properties = new PropertyMap();
-		}
+    /**
+     * Add the given property to the properties of this node.
+     *
+     * @param string $key The name of the property
+     * @param AnyType $value The value of the property
+     * @return Node
+     */
+    public function withProperty(string $key, AnyType $value): self
+    {
+        if (!isset($this->properties)) {
+            $this->properties = new PropertyMap();
+        }
 
-		$this->properties->addProperty($key, $value);
+        $this->properties->addProperty($key, $value);
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Add the given properties to the properties of this node.
-	 *
-	 * @param PropertyMap|array $properties
-	 * @return Node
-	 */
-	public function withProperties($properties): self
-	{
-		if (!isset($this->properties)) {
-			$this->properties = new PropertyMap();
-		}
+    /**
+     * Add the given properties to the properties of this node.
+     *
+     * @param PropertyMap|array $properties
+     * @return Node
+     */
+    public function withProperties($properties): self
+    {
+        if (!isset($this->properties)) {
+            $this->properties = new PropertyMap();
+        }
 
-		if (is_array($properties)) {
-			$properties = new PropertyMap($properties);
-		} elseif (!($properties instanceof PropertyMap)) {
-			throw new InvalidArgumentException("\$properties must either be an array or a PropertyMap object");
-		}
+        if (is_array($properties)) {
+            $properties = new PropertyMap($properties);
+        } elseif (!($properties instanceof PropertyMap)) {
+            throw new InvalidArgumentException("\$properties must either be an array or a PropertyMap object");
+        }
 
-		$this->properties = $this->properties->mergeWith($properties);
+        $this->properties = $this->properties->mergeWith($properties);
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Creates a new relationship from this node to the given pattern.
-	 *
-	 * @param StructuralType $pattern
-	 * @return Path
-	 */
-	public function relationshipTo(StructuralType $pattern): Path
-	{
-		return new Path($this, $pattern, Path::DIR_RIGHT);
-	}
+    /**
+     * Creates a new relationship from this node to the given pattern.
+     *
+     * @param StructuralType $pattern
+     * @return Path
+     */
+    public function relationshipTo(StructuralType $pattern): Path
+    {
+        return new Path($this, $pattern, Path::DIR_RIGHT);
+    }
 
-	/**
-	 * Creates a new relationship from the given pattern to this node.
-	 *
-	 * @param StructuralType $pattern
-	 * @return Path
-	 */
-	public function relationshipFrom(StructuralType $pattern): Path
-	{
-		return new Path($this, $pattern, Path::DIR_LEFT);
-	}
+    /**
+     * Creates a new relationship from the given pattern to this node.
+     *
+     * @param StructuralType $pattern
+     * @return Path
+     */
+    public function relationshipFrom(StructuralType $pattern): Path
+    {
+        return new Path($this, $pattern, Path::DIR_LEFT);
+    }
 
-	/**
-	 * Creates a new unidirectional relationship between this node and the given pattern.
-	 *
-	 * @param StructuralType $pattern
-	 * @return Path
-	 */
-	public function relationshipUni(StructuralType $pattern): Path
-	{
-		return new Path($this, $pattern, Path::DIR_UNI);
-	}
+    /**
+     * Creates a new unidirectional relationship between this node and the given pattern.
+     *
+     * @param StructuralType $pattern
+     * @return Path
+     */
+    public function relationshipUni(StructuralType $pattern): Path
+    {
+        return new Path($this, $pattern, Path::DIR_UNI);
+    }
 }

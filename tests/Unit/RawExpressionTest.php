@@ -29,12 +29,12 @@ use WikibaseSolutions\CypherDSL\RawExpression;
  */
 class RawExpressionTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$rawExpression = new RawExpression("foobar(3 > 4)");
+    public function testToQuery()
+    {
+        $rawExpression = new RawExpression("foobar(3 > 4)");
 
-		$this->assertSame("foobar(3 > 4)", $rawExpression->toQuery());
-	}
+        $this->assertSame("foobar(3 > 4)", $rawExpression->toQuery());
+    }
 }

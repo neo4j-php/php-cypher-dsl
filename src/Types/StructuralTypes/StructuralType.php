@@ -45,27 +45,27 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 interface StructuralType extends AnyType
 {
-	/**
-	 * Creates a new relationship from this node to the given pattern.
-	 *
-	 * @param StructuralType $pattern
-	 * @return Path
-	 */
-	public function relationshipTo(StructuralType $pattern): Path;
+    /**
+     * Creates a new relationship from this node to the given pattern.
+     *
+     * @param StructuralType $pattern
+     * @return Path
+     */
+    public function relationshipTo(StructuralType $pattern): Path;
 
-	/**
-	 * Creates a new relationship from the given pattern to this node.
-	 *
-	 * @param StructuralType $pattern
-	 * @return Path
-	 */
-	public function relationshipFrom(StructuralType $pattern): Path;
+    /**
+     * Creates a new relationship from the given pattern to this node.
+     *
+     * @param StructuralType $pattern
+     * @return Path
+     */
+    public function relationshipFrom(StructuralType $pattern): Path;
 
-	/**
-	 * Creates a new unidirectional relationship between this node and the given pattern.
-	 *
-	 * @param StructuralType $pattern
-	 * @return Path
-	 */
-	public function relationshipUni(StructuralType $pattern): Path;
+    /**
+     * Creates a new unidirectional relationship between this node and the given pattern.
+     *
+     * @param StructuralType $pattern
+     * @return Path
+     */
+    public function relationshipUni(StructuralType $pattern): Path;
 }

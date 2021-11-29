@@ -32,32 +32,32 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 class ContainsTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$contains = new Contains($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
+    public function testToQuery()
+    {
+        $contains = new Contains($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
 
-		$this->assertSame("(a CONTAINS b)", $contains->toQuery());
-	}
+        $this->assertSame("(a CONTAINS b)", $contains->toQuery());
+    }
 
-	public function testCannotBeNested()
-	{
-		$contains = new Contains($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
+    public function testCannotBeNested()
+    {
+        $contains = new Contains($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
 
-		$this->expectException(TypeError::class);
+        $this->expectException(TypeError::class);
 
-		$contains = new Contains($contains, $contains);
+        $contains = new Contains($contains, $contains);
 
-		$contains->toQuery();
-	}
+        $contains->toQuery();
+    }
 
-	public function testDoesNotAcceptAnyTypeAsOperands()
-	{
-		$this->expectException(TypeError::class);
+    public function testDoesNotAcceptAnyTypeAsOperands()
+    {
+        $this->expectException(TypeError::class);
 
-		$contains = new Contains($this->getQueryConvertableMock(AnyType::class, "a"), $this->getQueryConvertableMock(AnyType::class, "b"));
+        $contains = new Contains($this->getQueryConvertableMock(AnyType::class, "a"), $this->getQueryConvertableMock(AnyType::class, "b"));
 
-		$contains->toQuery();
-	}
+        $contains->toQuery();
+    }
 }

@@ -33,15 +33,15 @@ abstract class BinaryOperator implements QueryConvertable
      */
     private bool $insertParentheses = true;
 
-	/**
-	 * @var AnyType The left-hand of the expression
-	 */
-	private AnyType $left;
+    /**
+     * @var AnyType The left-hand of the expression
+     */
+    private AnyType $left;
 
-	/**
-	 * @var AnyType The right-hand of the expression
-	 */
-	private AnyType $right;
+    /**
+     * @var AnyType The right-hand of the expression
+     */
+    private AnyType $right;
 
     /**
      * BinaryOperator constructor.
@@ -50,30 +50,30 @@ abstract class BinaryOperator implements QueryConvertable
      * @param AnyType $right The right-hand of the expression
      * @param bool $insertParentheses Whether to insert parentheses around the expression
      */
-	public function __construct(AnyType $left, AnyType $right, bool $insertParentheses = true)
-	{
-		$this->left = $left;
-		$this->right = $right;
-		$this->insertParentheses = $insertParentheses;
-	}
+    public function __construct(AnyType $left, AnyType $right, bool $insertParentheses = true)
+    {
+        $this->left = $left;
+        $this->right = $right;
+        $this->insertParentheses = $insertParentheses;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function toQuery(): string
-	{
-		return sprintf(
-		    $this->insertParentheses ? "(%s %s %s)" : "%s %s %s",
+    /**
+     * @inheritDoc
+     */
+    public function toQuery(): string
+    {
+        return sprintf(
+            $this->insertParentheses ? "(%s %s %s)" : "%s %s %s",
             $this->left->toQuery(),
             $this->getOperator(),
             $this->right->toQuery()
         );
-	}
+    }
 
-	/**
-	 * Returns the operator. For instance, this function would return "+" for the addition operator.
-	 *
-	 * @return string
-	 */
-	abstract protected function getOperator(): string;
+    /**
+     * Returns the operator. For instance, this function would return "+" for the addition operator.
+     *
+     * @return string
+     */
+    abstract protected function getOperator(): string;
 }

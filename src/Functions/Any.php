@@ -34,53 +34,53 @@ use WikibaseSolutions\CypherDSL\Variable;
  */
 class Any extends FunctionCall implements BooleanType
 {
-	use BooleanTypeTrait;
+    use BooleanTypeTrait;
 
-	/**
-	 * @var Variable A variable that can be used from within the predicate
-	 */
-	private Variable $variable;
+    /**
+     * @var Variable A variable that can be used from within the predicate
+     */
+    private Variable $variable;
 
-	/**
-	 * @var ListType A list
-	 */
-	private ListType $list;
+    /**
+     * @var ListType A list
+     */
+    private ListType $list;
 
-	/**
-	 * @var AnyType A predicate that is tested against all items in the list
-	 */
-	private AnyType $predicate;
+    /**
+     * @var AnyType A predicate that is tested against all items in the list
+     */
+    private AnyType $predicate;
 
-	/**
-	 * Any constructor. The signature of the "any()" function is:
-	 *
-	 * any(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
-	 *
-	 * @param Variable $variable A variable that can be used from within the predicate
-	 * @param ListType $list A list
-	 * @param AnyType $predicate A predicate that is tested against all items in the list
-	 */
-	public function __construct(Variable $variable, ListType $list, AnyType $predicate)
-	{
-		$this->variable = $variable;
-		$this->list = $list;
-		$this->predicate = $predicate;
-	}
+    /**
+     * Any constructor. The signature of the "any()" function is:
+     *
+     * any(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
+     *
+     * @param Variable $variable A variable that can be used from within the predicate
+     * @param ListType $list A list
+     * @param AnyType $predicate A predicate that is tested against all items in the list
+     */
+    public function __construct(Variable $variable, ListType $list, AnyType $predicate)
+    {
+        $this->variable = $variable;
+        $this->list = $list;
+        $this->predicate = $predicate;
+    }
 
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getSignature(): string
-	{
-		return "any(%s IN %s WHERE %s)";
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getSignature(): string
+    {
+        return "any(%s IN %s WHERE %s)";
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getParameters(): array
-	{
-		return [$this->variable, $this->list, $this->predicate];
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getParameters(): array
+    {
+        return [$this->variable, $this->list, $this->predicate];
+    }
 }

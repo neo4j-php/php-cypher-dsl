@@ -40,74 +40,74 @@ use WikibaseSolutions\CypherDSL\Variable;
  */
 class FunctionCallTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testRaw()
-	{
-		$raw = FunctionCall::raw("foo", []);
+    public function testRaw()
+    {
+        $raw = FunctionCall::raw("foo", []);
 
-		$this->assertInstanceOf(RawFunction::class, $raw);
-	}
+        $this->assertInstanceOf(RawFunction::class, $raw);
+    }
 
-	public function testAll()
-	{
-		$variable = $this->getQueryConvertableMock(Variable::class, "a");
-		$list = $this->getQueryConvertableMock(ListType::class, "[]");
-		$predicate = $this->getQueryConvertableMock(AnyType::class, "b");
+    public function testAll()
+    {
+        $variable = $this->getQueryConvertableMock(Variable::class, "a");
+        $list = $this->getQueryConvertableMock(ListType::class, "[]");
+        $predicate = $this->getQueryConvertableMock(AnyType::class, "b");
 
-		$all = FunctionCall::all($variable, $list, $predicate);
+        $all = FunctionCall::all($variable, $list, $predicate);
 
-		$this->assertInstanceOf(All::class, $all);
-	}
+        $this->assertInstanceOf(All::class, $all);
+    }
 
-	public function testAny()
-	{
-		$variable = $this->getQueryConvertableMock(Variable::class, "a");
-		$list = $this->getQueryConvertableMock(ListType::class, "[]");
-		$predicate = $this->getQueryConvertableMock(AnyType::class, "b");
+    public function testAny()
+    {
+        $variable = $this->getQueryConvertableMock(Variable::class, "a");
+        $list = $this->getQueryConvertableMock(ListType::class, "[]");
+        $predicate = $this->getQueryConvertableMock(AnyType::class, "b");
 
-		$any = FunctionCall::any($variable, $list, $predicate);
+        $any = FunctionCall::any($variable, $list, $predicate);
 
-		$this->assertInstanceOf(Any::class, $any);
-	}
+        $this->assertInstanceOf(Any::class, $any);
+    }
 
-	public function testExists()
-	{
-		$expression = $this->getQueryConvertableMock(AnyType::class, "a");
+    public function testExists()
+    {
+        $expression = $this->getQueryConvertableMock(AnyType::class, "a");
 
-		$exists = FunctionCall::exists($expression);
+        $exists = FunctionCall::exists($expression);
 
-		$this->assertInstanceOf(Exists::class, $exists);
-	}
+        $this->assertInstanceOf(Exists::class, $exists);
+    }
 
-	public function testIsEmpty()
-	{
-		$list = $this->getQueryConvertableMock(ListType::class, "[]");
+    public function testIsEmpty()
+    {
+        $list = $this->getQueryConvertableMock(ListType::class, "[]");
 
-		$isEmpty = FunctionCall::isEmpty($list);
+        $isEmpty = FunctionCall::isEmpty($list);
 
-		$this->assertInstanceOf(IsEmpty::class, $isEmpty);
-	}
+        $this->assertInstanceOf(IsEmpty::class, $isEmpty);
+    }
 
-	public function testNone()
-	{
-		$variable = $this->getQueryConvertableMock(Variable::class, "a");
-		$list = $this->getQueryConvertableMock(ListType::class, "[]");
-		$predicate = $this->getQueryConvertableMock(AnyType::class, "b");
+    public function testNone()
+    {
+        $variable = $this->getQueryConvertableMock(Variable::class, "a");
+        $list = $this->getQueryConvertableMock(ListType::class, "[]");
+        $predicate = $this->getQueryConvertableMock(AnyType::class, "b");
 
-		$none = FunctionCall::none($variable, $list, $predicate);
+        $none = FunctionCall::none($variable, $list, $predicate);
 
-		$this->assertInstanceOf(None::class, $none);
-	}
+        $this->assertInstanceOf(None::class, $none);
+    }
 
-	public function testSingle()
-	{
-		$variable = $this->getQueryConvertableMock(Variable::class, "a");
-		$list = $this->getQueryConvertableMock(ListType::class, "[]");
-		$predicate = $this->getQueryConvertableMock(AnyType::class, "b");
+    public function testSingle()
+    {
+        $variable = $this->getQueryConvertableMock(Variable::class, "a");
+        $list = $this->getQueryConvertableMock(ListType::class, "[]");
+        $predicate = $this->getQueryConvertableMock(AnyType::class, "b");
 
-		$single = FunctionCall::single($variable, $list, $predicate);
+        $single = FunctionCall::single($variable, $list, $predicate);
 
-		$this->assertInstanceOf(Single::class, $single);
-	}
+        $this->assertInstanceOf(Single::class, $single);
+    }
 }

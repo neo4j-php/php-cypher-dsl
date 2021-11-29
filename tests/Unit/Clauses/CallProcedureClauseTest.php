@@ -32,76 +32,76 @@ use WikibaseSolutions\CypherDSL\Variable;
  */
 class CallProcedureClauseTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testEmptyClause()
-	{
-		$callProcedureClause = new CallProcedureClause();
+    public function testEmptyClause()
+    {
+        $callProcedureClause = new CallProcedureClause();
 
-		$this->assertSame("", $callProcedureClause->toQuery());
-	}
+        $this->assertSame("", $callProcedureClause->toQuery());
+    }
 
-	public function testZeroArguments()
-	{
-		$callProcedureClause = new CallProcedureClause();
-		$callProcedureClause->setProcedure("apoc.json");
+    public function testZeroArguments()
+    {
+        $callProcedureClause = new CallProcedureClause();
+        $callProcedureClause->setProcedure("apoc.json");
 
-		$this->assertSame("CALL apoc.json()", $callProcedureClause->toQuery());
-	}
+        $this->assertSame("CALL apoc.json()", $callProcedureClause->toQuery());
+    }
 
-	public function testOneArgument()
-	{
-		$callProcedureClause = new CallProcedureClause();
-		$callProcedureClause->setProcedure("apoc.json");
+    public function testOneArgument()
+    {
+        $callProcedureClause = new CallProcedureClause();
+        $callProcedureClause->setProcedure("apoc.json");
 
-		$callProcedureClause->addArgument($this->getQueryConvertableMock(AnyType::class, "'text'"));
+        $callProcedureClause->addArgument($this->getQueryConvertableMock(AnyType::class, "'text'"));
 
-		$this->assertSame("CALL apoc.json('text')", $callProcedureClause->toQuery());
-	}
+        $this->assertSame("CALL apoc.json('text')", $callProcedureClause->toQuery());
+    }
 
-	public function testMultipleArgument()
-	{
-		$callProcedureClause = new CallProcedureClause();
-		$callProcedureClause->setProcedure("apoc.json");
+    public function testMultipleArgument()
+    {
+        $callProcedureClause = new CallProcedureClause();
+        $callProcedureClause->setProcedure("apoc.json");
 
-		$expression = $this->getQueryConvertableMock(AnyType::class, "'text'");
+        $expression = $this->getQueryConvertableMock(AnyType::class, "'text'");
 
-		$callProcedureClause->addArgument($expression);
-		$callProcedureClause->addArgument($expression);
-		$callProcedureClause->addArgument($expression);
+        $callProcedureClause->addArgument($expression);
+        $callProcedureClause->addArgument($expression);
+        $callProcedureClause->addArgument($expression);
 
-		$this->assertSame("CALL apoc.json('text', 'text', 'text')", $callProcedureClause->toQuery());
-	}
+        $this->assertSame("CALL apoc.json('text', 'text', 'text')", $callProcedureClause->toQuery());
+    }
 
-	public function testWithArguments()
-	{
-		$callProcedureClause = new CallProcedureClause();
-		$callProcedureClause->setProcedure("apoc.json");
+    public function testWithArguments()
+    {
+        $callProcedureClause = new CallProcedureClause();
+        $callProcedureClause->setProcedure("apoc.json");
 
-		$expression = $this->getQueryConvertableMock(AnyType::class, "'text'");
+        $expression = $this->getQueryConvertableMock(AnyType::class, "'text'");
 
-		$callProcedureClause->addArgument($expression);
-		$callProcedureClause->addArgument($expression);
-		$callProcedureClause->addArgument($expression);
+        $callProcedureClause->addArgument($expression);
+        $callProcedureClause->addArgument($expression);
+        $callProcedureClause->addArgument($expression);
 
-		// This should overwrite the previous calls to addArgument
-		$callProcedureClause->withArguments([$expression]);
+        // This should overwrite the previous calls to addArgument
+        $callProcedureClause->withArguments([$expression]);
 
-		$this->assertSame("CALL apoc.json('text')", $callProcedureClause->toQuery());
-	}
+        $this->assertSame("CALL apoc.json('text')", $callProcedureClause->toQuery());
+    }
 
-	public function testWithYield()
-	{
-		$callProcedureClause = new CallProcedureClause();
-		$callProcedureClause->setProcedure("apoc.json");
+    public function testWithYield()
+    {
+        $callProcedureClause = new CallProcedureClause();
+        $callProcedureClause->setProcedure("apoc.json");
 
-		$a = $this->getQueryConvertableMock(Variable::class, "a");
-		$b = $this->getQueryConvertableMock(Variable::class, "b");
-		$c = $this->getQueryConvertableMock(Variable::class, "c");
+        $a = $this->getQueryConvertableMock(Variable::class, "a");
+        $b = $this->getQueryConvertableMock(Variable::class, "b");
+        $c = $this->getQueryConvertableMock(Variable::class, "c");
 
-		// This should overwrite the previous calls to addArgument
-		$callProcedureClause->yields([$a, $b, $c]);
+        // This should overwrite the previous calls to addArgument
+        $callProcedureClause->yields([$a, $b, $c]);
 
-		$this->assertSame("CALL apoc.json() YIELD a, b, c", $callProcedureClause->toQuery());
-	}
+        $this->assertSame("CALL apoc.json() YIELD a, b, c", $callProcedureClause->toQuery());
+    }
 }

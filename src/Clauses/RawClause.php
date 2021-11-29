@@ -26,41 +26,41 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
  */
 class RawClause extends Clause
 {
-	/**
-	 * @var string The name of the clause; for instance "MATCH"
-	 */
-	private string $clause;
+    /**
+     * @var string The name of the clause; for instance "MATCH"
+     */
+    private string $clause;
 
-	/**
-	 * @var string The subject/body of the clause
-	 */
-	private string $subject;
+    /**
+     * @var string The subject/body of the clause
+     */
+    private string $subject;
 
-	/**
-	 * RawClause constructor.
-	 *
-	 * @param string $clause The name of the clause; for instance "MATCH"
-	 * @param string $subject The subject/body of the clause
-	 */
-	public function __construct(string $clause, string $subject)
-	{
-		$this->clause = $clause;
-		$this->subject = $subject;
-	}
+    /**
+     * RawClause constructor.
+     *
+     * @param string $clause The name of the clause; for instance "MATCH"
+     * @param string $subject The subject/body of the clause
+     */
+    public function __construct(string $clause, string $subject)
+    {
+        $this->clause = $clause;
+        $this->subject = $subject;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getClause(): string
-	{
-		return $this->clause;
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getClause(): string
+    {
+        return $this->clause;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getSubject(): string
-	{
-		return $this->subject;
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getSubject(): string
+    {
+        return $this->subject;
+    }
 }

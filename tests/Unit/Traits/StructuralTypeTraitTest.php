@@ -32,42 +32,42 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
  */
 class StructuralTypeTraitTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	/**
-	 * @var MockObject|StructuralType
-	 */
-	private $a;
+    /**
+     * @var MockObject|StructuralType
+     */
+    private $a;
 
-	/**
-	 * @var MockObject|StructuralType
-	 */
-	private $b;
+    /**
+     * @var MockObject|StructuralType
+     */
+    private $b;
 
-	public function setUp(): void
-	{
-		$this->a = $this->getQueryConvertableMock(StructuralType::class, "10");
-		$this->b = $this->getQueryConvertableMock(StructuralType::class, "15");
-	}
+    public function setUp(): void
+    {
+        $this->a = $this->getQueryConvertableMock(StructuralType::class, "10");
+        $this->b = $this->getQueryConvertableMock(StructuralType::class, "15");
+    }
 
-	public function testRelationshipTo()
-	{
-		$relationshipTo = $this->a->relationshipTo($this->b);
+    public function testRelationshipTo()
+    {
+        $relationshipTo = $this->a->relationshipTo($this->b);
 
-		$this->assertInstanceOf(Path::class, $relationshipTo);
-	}
+        $this->assertInstanceOf(Path::class, $relationshipTo);
+    }
 
-	public function testRelationshipFrom()
-	{
-		$relationshipTo = $this->a->relationshipFrom($this->b);
+    public function testRelationshipFrom()
+    {
+        $relationshipTo = $this->a->relationshipFrom($this->b);
 
-		$this->assertInstanceOf(Path::class, $relationshipTo);
-	}
+        $this->assertInstanceOf(Path::class, $relationshipTo);
+    }
 
-	public function testRelationshipUni()
-	{
-		$relationshipTo = $this->a->relationshipUni($this->b);
+    public function testRelationshipUni()
+    {
+        $relationshipTo = $this->a->relationshipUni($this->b);
 
-		$this->assertInstanceOf(Path::class, $relationshipTo);
-	}
+        $this->assertInstanceOf(Path::class, $relationshipTo);
+    }
 }

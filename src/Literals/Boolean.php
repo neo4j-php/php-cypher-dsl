@@ -29,28 +29,28 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  */
 class Boolean implements BooleanType
 {
-	use BooleanTypeTrait;
+    use BooleanTypeTrait;
 
-	/**
-	 * @var bool The value
-	 */
-	private bool $value;
+    /**
+     * @var bool The value
+     */
+    private bool $value;
 
-	/**
-	 * Boolean constructor.
-	 *
-	 * @param bool $value
-	 */
-	public function __construct(bool $value)
-	{
-		$this->value = $value;
-	}
+    /**
+     * Boolean constructor.
+     *
+     * @param bool $value
+     */
+    public function __construct(bool $value)
+    {
+        $this->value = $value;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function toQuery(): string
-	{
-		return $this->value ? "true" : "false";
-	}
+    /**
+     * @inheritDoc
+     */
+    public function toQuery(): string
+    {
+        return $this->value ? "true" : "false";
+    }
 }

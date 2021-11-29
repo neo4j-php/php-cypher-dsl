@@ -31,28 +31,28 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 class Minus implements NumeralType
 {
-	use NumeralTypeTrait;
+    use NumeralTypeTrait;
 
-	/**
-	 * @var NumeralType The expression to negate
-	 */
-	private NumeralType $expression;
+    /**
+     * @var NumeralType The expression to negate
+     */
+    private NumeralType $expression;
 
-	/**
-	 * Minus constructor.
-	 *
-	 * @param NumeralType $expression The expression to negate
-	 */
-	public function __construct(NumeralType $expression)
-	{
-		$this->expression = $expression;
-	}
+    /**
+     * Minus constructor.
+     *
+     * @param NumeralType $expression The expression to negate
+     */
+    public function __construct(NumeralType $expression)
+    {
+        $this->expression = $expression;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function toQuery(): string
-	{
-		return sprintf("-%s", $this->expression->toQuery());
-	}
+    /**
+     * @inheritDoc
+     */
+    public function toQuery(): string
+    {
+        return sprintf("-%s", $this->expression->toQuery());
+    }
 }

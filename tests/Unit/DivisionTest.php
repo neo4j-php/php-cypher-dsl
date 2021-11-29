@@ -32,25 +32,25 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 class DivisionTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$division = new Division($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
+    public function testToQuery()
+    {
+        $division = new Division($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
-		$this->assertSame("(10 / 15)", $division->toQuery());
+        $this->assertSame("(10 / 15)", $division->toQuery());
 
-		$division = new Division($division, $division);
+        $division = new Division($division, $division);
 
-		$this->assertSame("((10 / 15) / (10 / 15))", $division->toQuery());
-	}
+        $this->assertSame("((10 / 15) / (10 / 15))", $division->toQuery());
+    }
 
-	public function testDoesNotAcceptAnyTypeAsOperands()
-	{
-		$this->expectException(TypeError::class);
+    public function testDoesNotAcceptAnyTypeAsOperands()
+    {
+        $this->expectException(TypeError::class);
 
-		$division = new Division($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
+        $division = new Division($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
 
-		$division->toQuery();
-	}
+        $division->toQuery();
+    }
 }

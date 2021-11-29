@@ -31,16 +31,16 @@ use WikibaseSolutions\CypherDSL\Exists;
  */
 class ExistsTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$exists = new Exists($this->getQueryConvertableMock(MatchClause::class, "MATCH (person)-[:HAS_DOG]->(dog:Dog)"));
+    public function testToQuery()
+    {
+        $exists = new Exists($this->getQueryConvertableMock(MatchClause::class, "MATCH (person)-[:HAS_DOG]->(dog:Dog)"));
 
-		$this->assertSame("EXISTS { MATCH (person)-[:HAS_DOG]->(dog:Dog) }", $exists->toQuery());
+        $this->assertSame("EXISTS { MATCH (person)-[:HAS_DOG]->(dog:Dog) }", $exists->toQuery());
 
-		$exists = new Exists($this->getQueryConvertableMock(MatchClause::class, "MATCH (person)-[:HAS_DOG]->(dog:Dog)"), $this->getQueryConvertableMock(WhereClause::class, "WHERE toy.name = 'Banana'"));
+        $exists = new Exists($this->getQueryConvertableMock(MatchClause::class, "MATCH (person)-[:HAS_DOG]->(dog:Dog)"), $this->getQueryConvertableMock(WhereClause::class, "WHERE toy.name = 'Banana'"));
 
-		$this->assertSame("EXISTS { MATCH (person)-[:HAS_DOG]->(dog:Dog) WHERE toy.name = 'Banana' }", $exists->toQuery());
-	}
+        $this->assertSame("EXISTS { MATCH (person)-[:HAS_DOG]->(dog:Dog) WHERE toy.name = 'Banana' }", $exists->toQuery());
+    }
 }

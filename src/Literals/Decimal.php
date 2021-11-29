@@ -29,28 +29,28 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 class Decimal implements NumeralType
 {
-	use NumeralTypeTrait;
+    use NumeralTypeTrait;
 
-	/**
-	 * @var string The value
-	 */
-	private string $value;
+    /**
+     * @var string The value
+     */
+    private string $value;
 
-	/**
-	 * Decimal constructor.
-	 *
-	 * @param int|float $value
-	 */
-	public function __construct($value)
-	{
-		$this->value = $value;
-	}
+    /**
+     * Decimal constructor.
+     *
+     * @param int|float $value
+     */
+    public function __construct($value)
+    {
+        $this->value = $value;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function toQuery(): string
-	{
-		return strval($this->value);
-	}
+    /**
+     * @inheritDoc
+     */
+    public function toQuery(): string
+    {
+        return strval($this->value);
+    }
 }

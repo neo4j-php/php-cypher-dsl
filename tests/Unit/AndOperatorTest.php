@@ -32,25 +32,25 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  */
 class AndOperatorTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$and = new AndOperator($this->getQueryConvertableMock(BooleanType::class, "true"), $this->getQueryConvertableMock(BooleanType::class, "false"));
+    public function testToQuery()
+    {
+        $and = new AndOperator($this->getQueryConvertableMock(BooleanType::class, "true"), $this->getQueryConvertableMock(BooleanType::class, "false"));
 
-		$this->assertSame("(true AND false)", $and->toQuery());
+        $this->assertSame("(true AND false)", $and->toQuery());
 
-		$and = new AndOperator($and, $and);
+        $and = new AndOperator($and, $and);
 
-		$this->assertSame("((true AND false) AND (true AND false))", $and->toQuery());
-	}
+        $this->assertSame("((true AND false) AND (true AND false))", $and->toQuery());
+    }
 
-	public function testDoesNotAcceptAnyTypeAsOperands()
-	{
-		$this->expectException(TypeError::class);
+    public function testDoesNotAcceptAnyTypeAsOperands()
+    {
+        $this->expectException(TypeError::class);
 
-		$and = new AndOperator($this->getQueryConvertableMock(AnyType::class, "true"), $this->getQueryConvertableMock(AnyType::class, "false"));
+        $and = new AndOperator($this->getQueryConvertableMock(AnyType::class, "true"), $this->getQueryConvertableMock(AnyType::class, "false"));
 
-		$and->toQuery();
-	}
+        $and->toQuery();
+    }
 }

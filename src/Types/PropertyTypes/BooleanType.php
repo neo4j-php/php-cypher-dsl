@@ -30,27 +30,27 @@ use WikibaseSolutions\CypherDSL\XorOperator;
  */
 interface BooleanType extends PropertyType
 {
-	/**
-	 * Create a conjunction between this expression and the given expression.
-	 *
-	 * @param BooleanType $right
-	 * @return AndOperator
-	 */
-	public function and(BooleanType $right): AndOperator;
+    /**
+     * Create a conjunction between this expression and the given expression.
+     *
+     * @param BooleanType $right
+     * @return AndOperator
+     */
+    public function and(BooleanType $right): AndOperator;
 
-	/**
-	 * Create a disjunction between this expression and the given expression.
-	 *
-	 * @param BooleanType $right
-	 * @return OrOperator
-	 */
-	public function or(BooleanType $right): OrOperator;
+    /**
+     * Create a disjunction between this expression and the given expression.
+     *
+     * @param BooleanType $right
+     * @return OrOperator
+     */
+    public function or(BooleanType $right): OrOperator;
 
-	/**
-	 * Perform an XOR with the given expression.
-	 *
-	 * @param BooleanType $right
-	 * @return XorOperator
-	 */
-	public function xor(BooleanType $right): XorOperator;
+    /**
+     * Perform an XOR with the given expression.
+     *
+     * @param BooleanType $right
+     * @return XorOperator
+     */
+    public function xor(BooleanType $right): XorOperator;
 }

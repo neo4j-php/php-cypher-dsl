@@ -36,39 +36,39 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
  */
 class ExpressionList implements ListType
 {
-	use EscapeTrait;
+    use EscapeTrait;
 
-	/**
-	 * @var array The list of expressions
-	 */
-	private array $expressions;
+    /**
+     * @var array The list of expressions
+     */
+    private array $expressions;
 
-	/**
-	 * ExpressionList constructor.
-	 *
-	 * @param AnyType[] $expressions The list of expressions, should be homogeneous
-	 */
-	public function __construct(array $expressions)
-	{
-		foreach ($expressions as $expression) {
-			if (!($expression instanceof AnyType)) {
-				throw new TypeError("\$expressions must be an array of only AnyType objects");
-			}
-		}
+    /**
+     * ExpressionList constructor.
+     *
+     * @param AnyType[] $expressions The list of expressions, should be homogeneous
+     */
+    public function __construct(array $expressions)
+    {
+        foreach ($expressions as $expression) {
+            if (!($expression instanceof AnyType)) {
+                throw new TypeError("\$expressions must be an array of only AnyType objects");
+            }
+        }
 
-		$this->expressions = $expressions;
-	}
+        $this->expressions = $expressions;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function toQuery(): string
-	{
-		$expressions = array_map(
-			fn (AnyType $expression): string => $expression->toQuery(),
-			$this->expressions
-		);
+    /**
+     * @inheritDoc
+     */
+    public function toQuery(): string
+    {
+        $expressions = array_map(
+            fn (AnyType $expression): string => $expression->toQuery(),
+            $this->expressions
+        );
 
-		return sprintf("[%s]", implode(", ", $expressions));
-	}
+        return sprintf("[%s]", implode(", ", $expressions));
+    }
 }

@@ -33,39 +33,39 @@ use WikibaseSolutions\CypherDSL\Variable;
  */
 class AssignmentTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$assignment = new Assignment($this->getQueryConvertableMock(Property::class, "foo.bar"), $this->getQueryConvertableMock(AnyType::class, "true"));
+    public function testToQuery()
+    {
+        $assignment = new Assignment($this->getQueryConvertableMock(Property::class, "foo.bar"), $this->getQueryConvertableMock(AnyType::class, "true"));
 
-		$this->assertSame("foo.bar = true", $assignment->toQuery());
+        $this->assertSame("foo.bar = true", $assignment->toQuery());
 
-		$assignment->setMutate();
+        $assignment->setMutate();
 
-		$this->assertSame("foo.bar += true", $assignment->toQuery());
-	}
+        $this->assertSame("foo.bar += true", $assignment->toQuery());
+    }
 
-	public function testLeftDoesNotAcceptAnyType()
-	{
-		$this->expectException(TypeError::class);
+    public function testLeftDoesNotAcceptAnyType()
+    {
+        $this->expectException(TypeError::class);
 
-		$assignment = new Assignment($this->getQueryConvertableMock(AnyType::class, "foo.bar"), $this->getQueryConvertableMock(AnyType::class, "true"));
+        $assignment = new Assignment($this->getQueryConvertableMock(AnyType::class, "foo.bar"), $this->getQueryConvertableMock(AnyType::class, "true"));
 
-		$assignment->toQuery();
-	}
+        $assignment->toQuery();
+    }
 
-	public function testLeftAcceptsProperty()
-	{
-		$assignment = new Assignment($this->getQueryConvertableMock(Property::class, "foo.bar"), $this->getQueryConvertableMock(AnyType::class, "true"));
+    public function testLeftAcceptsProperty()
+    {
+        $assignment = new Assignment($this->getQueryConvertableMock(Property::class, "foo.bar"), $this->getQueryConvertableMock(AnyType::class, "true"));
 
-		$this->assertSame("foo.bar = true", $assignment->toQuery());
-	}
+        $this->assertSame("foo.bar = true", $assignment->toQuery());
+    }
 
-	public function testLeftAcceptsVariable()
-	{
-		$assignment = new Assignment($this->getQueryConvertableMock(Variable::class, "foo.bar"), $this->getQueryConvertableMock(AnyType::class, "true"));
+    public function testLeftAcceptsVariable()
+    {
+        $assignment = new Assignment($this->getQueryConvertableMock(Variable::class, "foo.bar"), $this->getQueryConvertableMock(AnyType::class, "true"));
 
-		$this->assertSame("foo.bar = true", $assignment->toQuery());
-	}
+        $this->assertSame("foo.bar = true", $assignment->toQuery());
+    }
 }

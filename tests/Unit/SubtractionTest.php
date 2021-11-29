@@ -32,25 +32,25 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 class SubtractionTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$subtraction = new Subtraction($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
+    public function testToQuery()
+    {
+        $subtraction = new Subtraction($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
-		$this->assertSame("(10 - 15)", $subtraction->toQuery());
+        $this->assertSame("(10 - 15)", $subtraction->toQuery());
 
-		$subtraction = new Subtraction($subtraction, $subtraction);
+        $subtraction = new Subtraction($subtraction, $subtraction);
 
-		$this->assertSame("((10 - 15) - (10 - 15))", $subtraction->toQuery());
-	}
+        $this->assertSame("((10 - 15) - (10 - 15))", $subtraction->toQuery());
+    }
 
-	public function testDoesNotAcceptAnyTypeAsOperands()
-	{
-		$this->expectException(TypeError::class);
+    public function testDoesNotAcceptAnyTypeAsOperands()
+    {
+        $this->expectException(TypeError::class);
 
-		$subtraction = new Subtraction($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
+        $subtraction = new Subtraction($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
 
-		$subtraction->toQuery();
-	}
+        $subtraction->toQuery();
+    }
 }

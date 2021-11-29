@@ -35,61 +35,61 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
  */
 class MatchClauseTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testEmptyClause()
-	{
-		$match = new MatchClause();
+    public function testEmptyClause()
+    {
+        $match = new MatchClause();
 
-		$this->assertSame("", $match->toQuery());
-	}
+        $this->assertSame("", $match->toQuery());
+    }
 
-	public function testSinglePattern()
-	{
-		$match = new MatchClause();
-		$match->addPattern($this->getQueryConvertableMock(StructuralType::class, "(a)"));
+    public function testSinglePattern()
+    {
+        $match = new MatchClause();
+        $match->addPattern($this->getQueryConvertableMock(StructuralType::class, "(a)"));
 
-		$this->assertSame("MATCH (a)", $match->toQuery());
-	}
+        $this->assertSame("MATCH (a)", $match->toQuery());
+    }
 
-	public function testMultiplePatterns()
-	{
-		$match = new MatchClause();
-		$match->addPattern($this->getQueryConvertableMock(StructuralType::class, "(a)"));
-		$match->addPattern($this->getQueryConvertableMock(StructuralType::class, "(b)"));
+    public function testMultiplePatterns()
+    {
+        $match = new MatchClause();
+        $match->addPattern($this->getQueryConvertableMock(StructuralType::class, "(a)"));
+        $match->addPattern($this->getQueryConvertableMock(StructuralType::class, "(b)"));
 
-		$this->assertSame("MATCH (a), (b)", $match->toQuery());
-	}
+        $this->assertSame("MATCH (a), (b)", $match->toQuery());
+    }
 
-	/**
-	 * @doesNotPerformAssertions
-	 */
-	public function testAcceptsNodeType()
-	{
-		$match = new MatchClause();
-		$match->addPattern($this->getQueryConvertableMock(NodeType::class, "(a)"));
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsNodeType()
+    {
+        $match = new MatchClause();
+        $match->addPattern($this->getQueryConvertableMock(NodeType::class, "(a)"));
 
-		$match->toQuery();
-	}
+        $match->toQuery();
+    }
 
-	/**
-	 * @doesNotPerformAssertions
-	 */
-	public function testAcceptsPathType()
-	{
-		$match = new MatchClause();
-		$match->addPattern($this->getQueryConvertableMock(PathType::class, "(a)"));
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsPathType()
+    {
+        $match = new MatchClause();
+        $match->addPattern($this->getQueryConvertableMock(PathType::class, "(a)"));
 
-		$match->toQuery();
-	}
+        $match->toQuery();
+    }
 
-	public function testDoesNotAcceptAnyType()
-	{
-		$this->expectException(TypeError::class);
+    public function testDoesNotAcceptAnyType()
+    {
+        $this->expectException(TypeError::class);
 
-		$match = new MatchClause();
-		$match->addPattern($this->getQueryConvertableMock(AnyType::class, "(a)"));
+        $match = new MatchClause();
+        $match->addPattern($this->getQueryConvertableMock(AnyType::class, "(a)"));
 
-		$match->toQuery();
-	}
+        $match->toQuery();
+    }
 }

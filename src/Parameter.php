@@ -39,45 +39,45 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/parameters/
  */
 class Parameter implements
-	BooleanType,
-	ListType,
-	MapType,
-	NumeralType,
-	StringType
+    BooleanType,
+    ListType,
+    MapType,
+    NumeralType,
+    StringType
 {
-	use EscapeTrait;
-	use BooleanTypeTrait;
-	use MapTypeTrait;
-	use NumeralTypeTrait;
-	use StringTypeTrait;
+    use EscapeTrait;
+    use BooleanTypeTrait;
+    use MapTypeTrait;
+    use NumeralTypeTrait;
+    use StringTypeTrait;
 
-	/**
-	 * @var string The parameter name
-	 */
-	private string $parameter;
+    /**
+     * @var string The parameter name
+     */
+    private string $parameter;
 
-	/**
-	 * Parameter constructor.
-	 *
-	 * @param string $parameter The parameter; this parameter may only consist of alphanumeric
-	 *                          characters and underscores
-	 */
-	public function __construct(string $parameter)
-	{
-		$strippedParameter = str_replace("_", "", $parameter);
+    /**
+     * Parameter constructor.
+     *
+     * @param string $parameter The parameter; this parameter may only consist of alphanumeric
+     *                          characters and underscores
+     */
+    public function __construct(string $parameter)
+    {
+        $strippedParameter = str_replace("_", "", $parameter);
 
-		if ($parameter === "" || (!ctype_alnum($strippedParameter) && $strippedParameter !== "")) {
-			throw new InvalidArgumentException("A parameter may only consist of alphanumeric characters and underscores.");
-		}
+        if ($parameter === "" || (!ctype_alnum($strippedParameter) && $strippedParameter !== "")) {
+            throw new InvalidArgumentException("A parameter may only consist of alphanumeric characters and underscores.");
+        }
 
-		$this->parameter = $parameter;
-	}
+        $this->parameter = $parameter;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function toQuery(): string
-	{
-		return sprintf('$%s', $this->parameter);
-	}
+    /**
+     * @inheritDoc
+     */
+    public function toQuery(): string
+    {
+        return sprintf('$%s', $this->parameter);
+    }
 }

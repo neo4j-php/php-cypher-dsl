@@ -32,21 +32,21 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
  */
 class Inequality extends BinaryOperator implements BooleanType
 {
-	use BooleanTypeTrait;
+    use BooleanTypeTrait;
 
-	/**
-	 * @inheritDoc
-	 */
-	public function __construct(PropertyType $left, PropertyType $right)
-	{
-		parent::__construct($left, $right);
-	}
+    /**
+     * @inheritDoc
+     */
+    public function __construct(PropertyType $left, PropertyType $right)
+    {
+        parent::__construct($left, $right);
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getOperator(): string
-	{
-		return "<>";
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getOperator(): string
+    {
+        return "<>";
+    }
 }

@@ -30,54 +30,54 @@ use WikibaseSolutions\CypherDSL\Query;
  */
 class ExpressionListTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testEmpty()
-	{
-		$expressionList = new ExpressionList([]);
+    public function testEmpty()
+    {
+        $expressionList = new ExpressionList([]);
 
-		$this->assertSame("[]", $expressionList->toQuery());
-	}
+        $this->assertSame("[]", $expressionList->toQuery());
+    }
 
-	/**
-	 * @dataProvider provideOneDimensionalData
-	 * @param array $expressions
-	 * @param string $expected
-	 */
-	public function testOneDimensional(array $expressions, string $expected)
-	{
-		$expressionList = new ExpressionList($expressions);
+    /**
+     * @dataProvider provideOneDimensionalData
+     * @param array $expressions
+     * @param string $expected
+     */
+    public function testOneDimensional(array $expressions, string $expected)
+    {
+        $expressionList = new ExpressionList($expressions);
 
-		$this->assertSame($expected, $expressionList->toQuery());
-	}
+        $this->assertSame($expected, $expressionList->toQuery());
+    }
 
-	/**
-	 * @dataProvider provideMultidimensionalData
-	 * @param array $expressions
-	 * @param string $expected
-	 */
-	public function testMultidimensional(array $expressions, string $expected)
-	{
-		$expressionList = new ExpressionList($expressions);
+    /**
+     * @dataProvider provideMultidimensionalData
+     * @param array $expressions
+     * @param string $expected
+     */
+    public function testMultidimensional(array $expressions, string $expected)
+    {
+        $expressionList = new ExpressionList($expressions);
 
-		$this->assertSame($expected, $expressionList->toQuery());
-	}
+        $this->assertSame($expected, $expressionList->toQuery());
+    }
 
-	public function provideOneDimensionalData(): array
-	{
-		return [
-			[[Query::literal(12)], "[12]"],
-			[[Query::literal('12')], "['12']"],
-			[[Query::literal('12'), Query::literal('13')], "['12', '13']"]
-		];
-	}
+    public function provideOneDimensionalData(): array
+    {
+        return [
+            [[Query::literal(12)], "[12]"],
+            [[Query::literal('12')], "['12']"],
+            [[Query::literal('12'), Query::literal('13')], "['12', '13']"]
+        ];
+    }
 
-	public function provideMultidimensionalData(): array
-	{
-		return [
-			[[new ExpressionList([Query::literal(12)])], "[[12]]"],
-			[[new ExpressionList([Query::literal('12')])], "[['12']]"],
-			[[new ExpressionList([Query::literal('12'), Query::literal('14')]), new ExpressionList([Query::literal('13')])], "[['12', '14'], ['13']]"]
-		];
-	}
+    public function provideMultidimensionalData(): array
+    {
+        return [
+            [[new ExpressionList([Query::literal(12)])], "[[12]]"],
+            [[new ExpressionList([Query::literal('12')])], "[['12']]"],
+            [[new ExpressionList([Query::literal('12'), Query::literal('14')]), new ExpressionList([Query::literal('13')])], "[['12', '14'], ['13']]"]
+        ];
+    }
 }

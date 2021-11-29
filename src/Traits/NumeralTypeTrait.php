@@ -39,125 +39,125 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 trait NumeralTypeTrait
 {
-	use PropertyTypeTrait;
+    use PropertyTypeTrait;
 
-	/**
-	 * Add this expression to the given expression.
-	 *
-	 * @param NumeralType $right
-	 * @return Addition
-	 */
-	public function plus(NumeralType $right): Addition
-	{
-		return new Addition($this, $right);
-	}
+    /**
+     * Add this expression to the given expression.
+     *
+     * @param NumeralType $right
+     * @return Addition
+     */
+    public function plus(NumeralType $right): Addition
+    {
+        return new Addition($this, $right);
+    }
 
-	/**
-	 * Divide this expression by the given expression.
-	 *
-	 * @param NumeralType $right
-	 * @return Division
-	 */
-	public function divide(NumeralType $right): Division
-	{
-		return new Division($this, $right);
-	}
+    /**
+     * Divide this expression by the given expression.
+     *
+     * @param NumeralType $right
+     * @return Division
+     */
+    public function divide(NumeralType $right): Division
+    {
+        return new Division($this, $right);
+    }
 
-	/**
-	 * Perform an exponentiation with the given expression.
-	 *
-	 * @param NumeralType $right
-	 * @return Exponentiation
-	 */
-	public function exponentiate(NumeralType $right): Exponentiation
-	{
-		return new Exponentiation($this, $right);
-	}
+    /**
+     * Perform an exponentiation with the given expression.
+     *
+     * @param NumeralType $right
+     * @return Exponentiation
+     */
+    public function exponentiate(NumeralType $right): Exponentiation
+    {
+        return new Exponentiation($this, $right);
+    }
 
-	/**
-	 * Perform a greater than comparison against the given expression.
-	 *
-	 * @param NumeralType $right
-	 * @return GreaterThan
-	 */
-	public function gt(NumeralType $right): GreaterThan
-	{
-		return new GreaterThan($this, $right);
-	}
+    /**
+     * Perform a greater than comparison against the given expression.
+     *
+     * @param NumeralType $right
+     * @return GreaterThan
+     */
+    public function gt(NumeralType $right): GreaterThan
+    {
+        return new GreaterThan($this, $right);
+    }
 
-	/**
-	 * Perform a greater than or equal comparison against the given expression.
-	 *
-	 * @param NumeralType $right
-	 * @return GreaterThanOrEqual
-	 */
-	public function gte(NumeralType $right): GreaterThanOrEqual
-	{
-		return new GreaterThanOrEqual($this, $right);
-	}
+    /**
+     * Perform a greater than or equal comparison against the given expression.
+     *
+     * @param NumeralType $right
+     * @return GreaterThanOrEqual
+     */
+    public function gte(NumeralType $right): GreaterThanOrEqual
+    {
+        return new GreaterThanOrEqual($this, $right);
+    }
 
-	/**
-	 * Perform a less than comparison against the given expression.
-	 *
-	 * @param NumeralType $right
-	 * @return LessThan
-	 */
-	public function lt(NumeralType $right): LessThan
-	{
-		return new LessThan($this, $right);
-	}
+    /**
+     * Perform a less than comparison against the given expression.
+     *
+     * @param NumeralType $right
+     * @return LessThan
+     */
+    public function lt(NumeralType $right): LessThan
+    {
+        return new LessThan($this, $right);
+    }
 
-	/**
-	 * Perform a less than or equal comparison against the given expression.
-	 *
-	 * @param NumeralType $right
-	 * @return LessThanOrEqual
-	 */
-	public function lte(NumeralType $right): LessThanOrEqual
-	{
-		return new LessThanOrEqual($this, $right);
-	}
+    /**
+     * Perform a less than or equal comparison against the given expression.
+     *
+     * @param NumeralType $right
+     * @return LessThanOrEqual
+     */
+    public function lte(NumeralType $right): LessThanOrEqual
+    {
+        return new LessThanOrEqual($this, $right);
+    }
 
-	/**
-	 * Perform the modulo operation with the given expression.
-	 *
-	 * @param NumeralType $right
-	 * @return Modulo
-	 */
-	public function mod(NumeralType $right): Modulo
-	{
-		return new Modulo($this, $right);
-	}
+    /**
+     * Perform the modulo operation with the given expression.
+     *
+     * @param NumeralType $right
+     * @return Modulo
+     */
+    public function mod(NumeralType $right): Modulo
+    {
+        return new Modulo($this, $right);
+    }
 
-	/**
-	 * Perform a multiplication with the given expression.
-	 *
-	 * @param NumeralType $right
-	 * @return Multiplication
-	 */
-	public function times(NumeralType $right): Multiplication
-	{
-		return new Multiplication($this, $right);
-	}
+    /**
+     * Perform a multiplication with the given expression.
+     *
+     * @param NumeralType $right
+     * @return Multiplication
+     */
+    public function times(NumeralType $right): Multiplication
+    {
+        return new Multiplication($this, $right);
+    }
 
-	/**
-	 * Subtract the given expression from this expression.
-	 *
-	 * @param NumeralType $right
-	 * @return Subtraction
-	 */
-	public function minus(NumeralType $right): Subtraction
-	{
-		return new Subtraction($this, $right);
-	}
+    /**
+     * Subtract the given expression from this expression.
+     *
+     * @param NumeralType $right
+     * @return Subtraction
+     */
+    public function minus(NumeralType $right): Subtraction
+    {
+        return new Subtraction($this, $right);
+    }
 
-	/**
-	 * Negate this expression.
-	 *
-	 * @return Minus
-	 */
-	public function negate(): Minus
-	{
-		return new Minus($this);
-	}
+    /**
+     * Negate this expression.
+     *
+     * @return Minus
+     */
+    public function negate(): Minus
+    {
+        return new Minus($this);
+    }
 }

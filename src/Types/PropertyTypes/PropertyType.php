@@ -32,19 +32,19 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 interface PropertyType extends AnyType
 {
-	/**
-	 * Perform an equality check with the given expression.
-	 *
-	 * @param PropertyType $right
-	 * @return Equality
-	 */
-	public function equals(PropertyType $right): Equality;
+    /**
+     * Perform an equality check with the given expression.
+     *
+     * @param PropertyType $right
+     * @return Equality
+     */
+    public function equals(PropertyType $right): Equality;
 
-	/**
-	 * Perform an inequality comparison against the given expression.
-	 *
-	 * @param PropertyType $right
-	 * @return Inequality
-	 */
-	public function notEquals(PropertyType $right): Inequality;
+    /**
+     * Perform an inequality comparison against the given expression.
+     *
+     * @param PropertyType $right
+     * @return Inequality
+     */
+    public function notEquals(PropertyType $right): Inequality;
 }

@@ -32,25 +32,25 @@ use WikibaseSolutions\CypherDSL\XorOperator;
  */
 class XorOperatorTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$xor = new XorOperator($this->getQueryConvertableMock(BooleanType::class, "true"), $this->getQueryConvertableMock(BooleanType::class, "false"));
+    public function testToQuery()
+    {
+        $xor = new XorOperator($this->getQueryConvertableMock(BooleanType::class, "true"), $this->getQueryConvertableMock(BooleanType::class, "false"));
 
-		$this->assertSame("(true XOR false)", $xor->toQuery());
+        $this->assertSame("(true XOR false)", $xor->toQuery());
 
-		$xor = new XorOperator($xor, $xor);
+        $xor = new XorOperator($xor, $xor);
 
-		$this->assertSame("((true XOR false) XOR (true XOR false))", $xor->toQuery());
-	}
+        $this->assertSame("((true XOR false) XOR (true XOR false))", $xor->toQuery());
+    }
 
-	public function testDoesNotAcceptAnyTypeAsOperands()
-	{
-		$this->expectException(TypeError::class);
+    public function testDoesNotAcceptAnyTypeAsOperands()
+    {
+        $this->expectException(TypeError::class);
 
-		$and = new XorOperator($this->getQueryConvertableMock(AnyType::class, "true"), $this->getQueryConvertableMock(AnyType::class, "false"));
+        $and = new XorOperator($this->getQueryConvertableMock(AnyType::class, "true"), $this->getQueryConvertableMock(AnyType::class, "false"));
 
-		$and->toQuery();
-	}
+        $and->toQuery();
+    }
 }

@@ -32,25 +32,25 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 class MinusTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$minus = new Minus($this->getQueryConvertableMock(NumeralType::class, "10"));
+    public function testToQuery()
+    {
+        $minus = new Minus($this->getQueryConvertableMock(NumeralType::class, "10"));
 
-		$this->assertSame("-10", $minus->toQuery());
+        $this->assertSame("-10", $minus->toQuery());
 
-		$minus = new Minus($minus);
+        $minus = new Minus($minus);
 
-		$this->assertSame("--10", $minus->toQuery());
-	}
+        $this->assertSame("--10", $minus->toQuery());
+    }
 
-	public function testDoesNotAcceptAnyTypeAsOperand()
-	{
-		$this->expectException(TypeError::class);
+    public function testDoesNotAcceptAnyTypeAsOperand()
+    {
+        $this->expectException(TypeError::class);
 
-		$minus = new Minus($this->getQueryConvertableMock(AnyType::class, "10"));
+        $minus = new Minus($this->getQueryConvertableMock(AnyType::class, "10"));
 
-		$minus->toQuery();
-	}
+        $minus->toQuery();
+    }
 }

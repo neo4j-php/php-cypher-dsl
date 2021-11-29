@@ -41,70 +41,70 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
  * This class represents any function call.
  */
 class RawFunction extends FunctionCall implements
-	ListType,
-	MapType,
-	BooleanType,
-	NumeralType,
-	StringType,
-	NodeType,
-	PathType
+    ListType,
+    MapType,
+    BooleanType,
+    NumeralType,
+    StringType,
+    NodeType,
+    PathType
 {
-	use BooleanTypeTrait;
-	use MapTypeTrait;
-	use NodeTypeTrait;
-	use NumeralTypeTrait;
-	use PathTypeTrait;
-	use StringTypeTrait;
+    use BooleanTypeTrait;
+    use MapTypeTrait;
+    use NodeTypeTrait;
+    use NumeralTypeTrait;
+    use PathTypeTrait;
+    use StringTypeTrait;
 
-	/**
-	 * @var string $functionName The name of the function to call
-	 */
-	private string $functionName;
+    /**
+     * @var string $functionName The name of the function to call
+     */
+    private string $functionName;
 
-	/**
-	 * @var AnyType[] $parameters The parameters to pass to the function call
-	 */
-	private array $parameters;
+    /**
+     * @var AnyType[] $parameters The parameters to pass to the function call
+     */
+    private array $parameters;
 
-	/**
-	 * RawFunction constructor.
-	 *
-	 * @param string $functionName The name of the function to call
-	 * @param AnyType[] $parameters The parameters to pass to the function call
-	 */
-	public function __construct(string $functionName, array $parameters)
-	{
-		foreach ($parameters as $parameter) {
-			if (!($parameter instanceof AnyType)) {
-				throw new InvalidArgumentException("\$parameters should only consist of AnyType objects");
-			}
-		}
+    /**
+     * RawFunction constructor.
+     *
+     * @param string $functionName The name of the function to call
+     * @param AnyType[] $parameters The parameters to pass to the function call
+     */
+    public function __construct(string $functionName, array $parameters)
+    {
+        foreach ($parameters as $parameter) {
+            if (!($parameter instanceof AnyType)) {
+                throw new InvalidArgumentException("\$parameters should only consist of AnyType objects");
+            }
+        }
 
-		if (!preg_match("/^[a-zA-Z0-9_]+$/", $functionName)) {
-			throw new InvalidArgumentException("\$functionName should only consist of alphanumeric characters and underscores");
-		}
+        if (!preg_match("/^[a-zA-Z0-9_]+$/", $functionName)) {
+            throw new InvalidArgumentException("\$functionName should only consist of alphanumeric characters and underscores");
+        }
 
-		$this->functionName = $functionName;
-		$this->parameters = $parameters;
-	}
+        $this->functionName = $functionName;
+        $this->parameters = $parameters;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getSignature(): string
-	{
-		return sprintf(
-			"%s(%s)",
-			$this->functionName,
-			implode(", ", array_fill(0, count($this->parameters), "%s"))
-		);
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getSignature(): string
+    {
+        return sprintf(
+            "%s(%s)",
+            $this->functionName,
+            implode(", ", array_fill(0, count($this->parameters), "%s"))
+        );
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getParameters(): array
-	{
-		return $this->parameters;
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getParameters(): array
+    {
+        return $this->parameters;
+    }
 }

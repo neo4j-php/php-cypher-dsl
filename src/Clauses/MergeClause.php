@@ -30,91 +30,91 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
  */
 class MergeClause extends Clause
 {
-	/**
-	 * @var StructuralType|null $pattern The pattern to merge
-	 */
-	private ?StructuralType $pattern;
+    /**
+     * @var StructuralType|null $pattern The pattern to merge
+     */
+    private ?StructuralType $pattern;
 
-	/**
-	 * @var Clause|null $createClause The clause to execute when the pattern is created
-	 */
-	private ?Clause $createClause;
+    /**
+     * @var Clause|null $createClause The clause to execute when the pattern is created
+     */
+    private ?Clause $createClause;
 
-	/**
-	 * @var Clause|null $matchClause The clause to execute when the pattern is matched
-	 */
-	private ?Clause $matchClause;
+    /**
+     * @var Clause|null $matchClause The clause to execute when the pattern is matched
+     */
+    private ?Clause $matchClause;
 
-	/**
-	 * Sets the pattern to merge.
-	 *
-	 * @param StructuralType $pattern The pattern to merge
-	 * @return MergeClause
-	 */
-	public function setPattern(StructuralType $pattern): self
-	{
-		$this->pattern = $pattern;
+    /**
+     * Sets the pattern to merge.
+     *
+     * @param StructuralType $pattern The pattern to merge
+     * @return MergeClause
+     */
+    public function setPattern(StructuralType $pattern): self
+    {
+        $this->pattern = $pattern;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * The clause to execute on all nodes that need to be created.
-	 *
-	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/#merge-merge-with-on-create
-	 *
-	 * @param Clause $createClause
-	 * @return MergeClause
-	 */
-	public function setOnCreate(Clause $createClause): self
-	{
-		$this->createClause = $createClause;
+    /**
+     * The clause to execute on all nodes that need to be created.
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/#merge-merge-with-on-create
+     *
+     * @param Clause $createClause
+     * @return MergeClause
+     */
+    public function setOnCreate(Clause $createClause): self
+    {
+        $this->createClause = $createClause;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * The clause to execute on all found nodes.
-	 *
-	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/#merge-merge-with-on-match
-	 *
-	 * @param Clause $matchClause
-	 * @return MergeClause
-	 */
-	public function setOnMatch(Clause $matchClause): self
-	{
-		$this->matchClause = $matchClause;
+    /**
+     * The clause to execute on all found nodes.
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/#merge-merge-with-on-match
+     *
+     * @param Clause $matchClause
+     * @return MergeClause
+     */
+    public function setOnMatch(Clause $matchClause): self
+    {
+        $this->matchClause = $matchClause;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getClause(): string
-	{
-		return "MERGE";
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getClause(): string
+    {
+        return "MERGE";
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getSubject(): string
-	{
-		if (!isset($this->pattern)) {
-			return "";
-		}
+    /**
+     * @inheritDoc
+     */
+    protected function getSubject(): string
+    {
+        if (!isset($this->pattern)) {
+            return "";
+        }
 
-		$queryParts = [$this->pattern->toQuery()];
+        $queryParts = [$this->pattern->toQuery()];
 
-		if (isset($this->createClause)) {
-			$queryParts[] = sprintf("ON CREATE %s", $this->createClause->toQuery());
-		}
+        if (isset($this->createClause)) {
+            $queryParts[] = sprintf("ON CREATE %s", $this->createClause->toQuery());
+        }
 
-		if (isset($this->matchClause)) {
-			$queryParts[] = sprintf("ON MATCH %s", $this->matchClause->toQuery());
-		}
+        if (isset($this->matchClause)) {
+            $queryParts[] = sprintf("ON MATCH %s", $this->matchClause->toQuery());
+        }
 
-		return implode(" ", $queryParts);
-	}
+        return implode(" ", $queryParts);
+    }
 }

@@ -32,25 +32,25 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 class AdditionTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$addition = new Addition($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
+    public function testToQuery()
+    {
+        $addition = new Addition($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
-		$this->assertSame("(10 + 15)", $addition->toQuery());
+        $this->assertSame("(10 + 15)", $addition->toQuery());
 
-		$addition = new Addition($addition, $addition);
+        $addition = new Addition($addition, $addition);
 
-		$this->assertSame("((10 + 15) + (10 + 15))", $addition->toQuery());
-	}
+        $this->assertSame("((10 + 15) + (10 + 15))", $addition->toQuery());
+    }
 
-	public function testDoesNotAcceptAnyTypeAsOperands()
-	{
-		$this->expectException(TypeError::class);
+    public function testDoesNotAcceptAnyTypeAsOperands()
+    {
+        $this->expectException(TypeError::class);
 
-		$addition = new Addition($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
+        $addition = new Addition($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
 
-		$addition->toQuery();
-	}
+        $addition->toQuery();
+    }
 }

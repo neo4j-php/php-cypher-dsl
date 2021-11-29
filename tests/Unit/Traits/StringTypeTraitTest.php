@@ -34,42 +34,42 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 class StringTypeTraitTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	/**
-	 * @var MockObject|StringType
-	 */
-	private $a;
+    /**
+     * @var MockObject|StringType
+     */
+    private $a;
 
-	/**
-	 * @var MockObject|StringType
-	 */
-	private $b;
+    /**
+     * @var MockObject|StringType
+     */
+    private $b;
 
-	public function setUp(): void
-	{
-		$this->a = $this->getQueryConvertableMock(StringType::class, "10");
-		$this->b = $this->getQueryConvertableMock(StringType::class, "15");
-	}
+    public function setUp(): void
+    {
+        $this->a = $this->getQueryConvertableMock(StringType::class, "10");
+        $this->b = $this->getQueryConvertableMock(StringType::class, "15");
+    }
 
-	public function testContains()
-	{
-		$contains = $this->a->contains($this->b);
+    public function testContains()
+    {
+        $contains = $this->a->contains($this->b);
 
-		$this->assertInstanceOf(Contains::class, $contains);
-	}
+        $this->assertInstanceOf(Contains::class, $contains);
+    }
 
-	public function testEndsWith()
-	{
-		$endsWith = $this->a->endsWith($this->b);
+    public function testEndsWith()
+    {
+        $endsWith = $this->a->endsWith($this->b);
 
-		$this->assertInstanceOf(EndsWith::class, $endsWith);
-	}
+        $this->assertInstanceOf(EndsWith::class, $endsWith);
+    }
 
-	public function testStartsWith()
-	{
-		$startsWith = $this->a->startsWith($this->b);
+    public function testStartsWith()
+    {
+        $startsWith = $this->a->startsWith($this->b);
 
-		$this->assertInstanceOf(StartsWith::class, $startsWith);
-	}
+        $this->assertInstanceOf(StartsWith::class, $startsWith);
+    }
 }

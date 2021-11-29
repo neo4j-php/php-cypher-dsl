@@ -31,16 +31,16 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 class RawFunctionTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$a = $this->getQueryConvertableMock(AnyType::class, "a");
-		$b = $this->getQueryConvertableMock(AnyType::class, "b");
-		$c = $this->getQueryConvertableMock(AnyType::class, "c");
+    public function testToQuery()
+    {
+        $a = $this->getQueryConvertableMock(AnyType::class, "a");
+        $b = $this->getQueryConvertableMock(AnyType::class, "b");
+        $c = $this->getQueryConvertableMock(AnyType::class, "c");
 
-		$raw = new RawFunction("foobar", [$a, $b, $c]);
+        $raw = new RawFunction("foobar", [$a, $b, $c]);
 
-		$this->assertSame("foobar(a, b, c)", $raw->toQuery());
-	}
+        $this->assertSame("foobar(a, b, c)", $raw->toQuery());
+    }
 }

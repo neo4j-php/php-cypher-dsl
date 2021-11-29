@@ -34,42 +34,42 @@ use WikibaseSolutions\CypherDSL\XorOperator;
  */
 class BooleanTypeTraitTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	/**
-	 * @var MockObject|BooleanType
-	 */
-	private $a;
+    /**
+     * @var MockObject|BooleanType
+     */
+    private $a;
 
-	/**
-	 * @var MockObject|BooleanType
-	 */
-	private $b;
+    /**
+     * @var MockObject|BooleanType
+     */
+    private $b;
 
-	public function setUp(): void
-	{
-		$this->a = $this->getQueryConvertableMock(BooleanType::class, "true");
-		$this->b = $this->getQueryConvertableMock(BooleanType::class, "false");
-	}
+    public function setUp(): void
+    {
+        $this->a = $this->getQueryConvertableMock(BooleanType::class, "true");
+        $this->b = $this->getQueryConvertableMock(BooleanType::class, "false");
+    }
 
-	public function testAnd()
-	{
-		$and = $this->a->and($this->b);
+    public function testAnd()
+    {
+        $and = $this->a->and($this->b);
 
-		$this->assertInstanceOf(AndOperator::class, $and);
-	}
+        $this->assertInstanceOf(AndOperator::class, $and);
+    }
 
-	public function testOr()
-	{
-		$or = $this->a->or($this->b);
+    public function testOr()
+    {
+        $or = $this->a->or($this->b);
 
-		$this->assertInstanceOf(OrOperator::class, $or);
-	}
+        $this->assertInstanceOf(OrOperator::class, $or);
+    }
 
-	public function testXor()
-	{
-		$xor = $this->a->xor($this->b);
+    public function testXor()
+    {
+        $xor = $this->a->xor($this->b);
 
-		$this->assertInstanceOf(XorOperator::class, $xor);
-	}
+        $this->assertInstanceOf(XorOperator::class, $xor);
+    }
 }

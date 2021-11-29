@@ -32,32 +32,32 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 class LessThanTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$lessThan = new LessThan($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
+    public function testToQuery()
+    {
+        $lessThan = new LessThan($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
-		$this->assertSame("(10 < 15)", $lessThan->toQuery());
-	}
+        $this->assertSame("(10 < 15)", $lessThan->toQuery());
+    }
 
-	public function testCannotBeNested()
-	{
-		$lessThan = new LessThan($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
+    public function testCannotBeNested()
+    {
+        $lessThan = new LessThan($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
-		$this->expectException(TypeError::class);
+        $this->expectException(TypeError::class);
 
-		$lessThan = new LessThan($lessThan, $lessThan);
+        $lessThan = new LessThan($lessThan, $lessThan);
 
-		$this->assertSame("((10 < 15) < (10 < 15))", $lessThan->toQuery());
-	}
+        $this->assertSame("((10 < 15) < (10 < 15))", $lessThan->toQuery());
+    }
 
-	public function testDoesNotAcceptAnyTypeAsOperands()
-	{
-		$this->expectException(TypeError::class);
+    public function testDoesNotAcceptAnyTypeAsOperands()
+    {
+        $this->expectException(TypeError::class);
 
-		$lessThan = new LessThan($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
+        $lessThan = new LessThan($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
 
-		$lessThan->toQuery();
-	}
+        $lessThan->toQuery();
+    }
 }

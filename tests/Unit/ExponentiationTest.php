@@ -32,25 +32,25 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 class ExponentiationTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$exponentiation = new Exponentiation($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
+    public function testToQuery()
+    {
+        $exponentiation = new Exponentiation($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
-		$this->assertSame("(10 ^ 15)", $exponentiation->toQuery());
+        $this->assertSame("(10 ^ 15)", $exponentiation->toQuery());
 
-		$exponentiation = new Exponentiation($exponentiation, $exponentiation);
+        $exponentiation = new Exponentiation($exponentiation, $exponentiation);
 
-		$this->assertSame("((10 ^ 15) ^ (10 ^ 15))", $exponentiation->toQuery());
-	}
+        $this->assertSame("((10 ^ 15) ^ (10 ^ 15))", $exponentiation->toQuery());
+    }
 
-	public function testDoesNotAcceptAnyTypeAsOperands()
-	{
-		$this->expectException(TypeError::class);
+    public function testDoesNotAcceptAnyTypeAsOperands()
+    {
+        $this->expectException(TypeError::class);
 
-		$exponentiation = new Exponentiation($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
+        $exponentiation = new Exponentiation($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
 
-		$exponentiation->toQuery();
-	}
+        $exponentiation->toQuery();
+    }
 }

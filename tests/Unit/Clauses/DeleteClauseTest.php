@@ -33,69 +33,69 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
  */
 class DeleteClauseTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testEmptyClause()
-	{
-		$delete = new DeleteClause();
+    public function testEmptyClause()
+    {
+        $delete = new DeleteClause();
 
-		$this->assertSame("", $delete->toQuery());
-	}
+        $this->assertSame("", $delete->toQuery());
+    }
 
-	public function testSingleNode()
-	{
-		$delete = new DeleteClause();
-		$node = $this->getQueryConvertableMock(NodeType::class, "(a)");
+    public function testSingleNode()
+    {
+        $delete = new DeleteClause();
+        $node = $this->getQueryConvertableMock(NodeType::class, "(a)");
 
-		$delete->addNode($node);
+        $delete->addNode($node);
 
-		$this->assertSame("DELETE (a)", $delete->toQuery());
-	}
+        $this->assertSame("DELETE (a)", $delete->toQuery());
+    }
 
-	public function testMultipleNodes()
-	{
-		$delete = new DeleteClause();
+    public function testMultipleNodes()
+    {
+        $delete = new DeleteClause();
 
-		$a = $this->getQueryConvertableMock(NodeType::class, "(a)");
-		$b = $this->getQueryConvertableMock(NodeType::class, "(b)");
+        $a = $this->getQueryConvertableMock(NodeType::class, "(a)");
+        $b = $this->getQueryConvertableMock(NodeType::class, "(b)");
 
-		$delete->addNode($a);
-		$delete->addNode($b);
+        $delete->addNode($a);
+        $delete->addNode($b);
 
-		$this->assertSame("DELETE (a), (b)", $delete->toQuery());
-	}
+        $this->assertSame("DELETE (a), (b)", $delete->toQuery());
+    }
 
-	public function testDetachDelete()
-	{
-		$delete = new DeleteClause();
-		$pattern = $this->getQueryConvertableMock(NodeType::class, "(a)");
+    public function testDetachDelete()
+    {
+        $delete = new DeleteClause();
+        $pattern = $this->getQueryConvertableMock(NodeType::class, "(a)");
 
-		$delete->addNode($pattern);
-		$delete->setDetach(true);
+        $delete->addNode($pattern);
+        $delete->setDetach(true);
 
-		$this->assertSame("DETACH DELETE (a)", $delete->toQuery());
-	}
+        $this->assertSame("DETACH DELETE (a)", $delete->toQuery());
+    }
 
-	/**
-	 * @doesNotPerformAssertions
-	 */
-	public function testAcceptsNodeType()
-	{
-		$delete = new DeleteClause();
-		$pattern = $this->getQueryConvertableMock(NodeType::class, "(a)");
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsNodeType()
+    {
+        $delete = new DeleteClause();
+        $pattern = $this->getQueryConvertableMock(NodeType::class, "(a)");
 
-		$delete->addNode($pattern);
-		$delete->toQuery();
-	}
+        $delete->addNode($pattern);
+        $delete->toQuery();
+    }
 
-	public function testDoesNotAcceptAnyType()
-	{
-		$delete = new DeleteClause();
-		$pattern = $this->getQueryConvertableMock(AnyType::class, "(a)");
+    public function testDoesNotAcceptAnyType()
+    {
+        $delete = new DeleteClause();
+        $pattern = $this->getQueryConvertableMock(AnyType::class, "(a)");
 
-		$this->expectException(TypeError::class);
+        $this->expectException(TypeError::class);
 
-		$delete->addNode($pattern);
-		$delete->toQuery();
-	}
+        $delete->addNode($pattern);
+        $delete->toQuery();
+    }
 }

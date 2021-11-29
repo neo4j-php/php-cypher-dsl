@@ -32,25 +32,25 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 class ModuloTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testToQuery()
-	{
-		$modulo = new Modulo($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
+    public function testToQuery()
+    {
+        $modulo = new Modulo($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
-		$this->assertSame("(10 % 15)", $modulo->toQuery());
+        $this->assertSame("(10 % 15)", $modulo->toQuery());
 
-		$modulo = new Modulo($modulo, $modulo);
+        $modulo = new Modulo($modulo, $modulo);
 
-		$this->assertSame("((10 % 15) % (10 % 15))", $modulo->toQuery());
-	}
+        $this->assertSame("((10 % 15) % (10 % 15))", $modulo->toQuery());
+    }
 
-	public function testDoesNotAcceptAnyTypeAsOperands()
-	{
-		$this->expectException(TypeError::class);
+    public function testDoesNotAcceptAnyTypeAsOperands()
+    {
+        $this->expectException(TypeError::class);
 
-		$modulo = new Modulo($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
+        $modulo = new Modulo($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
 
-		$modulo->toQuery();
-	}
+        $modulo->toQuery();
+    }
 }

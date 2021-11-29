@@ -30,48 +30,48 @@ use WikibaseSolutions\CypherDSL\Parameter;
  */
 class ParameterTest extends TestCase
 {
-	/**
-	 * @dataProvider provideToQueryData
-	 * @param string $parameter
-	 * @param string $expected
-	 */
-	public function testToQuery(string $parameter, string $expected)
-	{
-		$parameter = new Parameter($parameter);
+    /**
+     * @dataProvider provideToQueryData
+     * @param string $parameter
+     * @param string $expected
+     */
+    public function testToQuery(string $parameter, string $expected)
+    {
+        $parameter = new Parameter($parameter);
 
-		$this->assertSame($expected, $parameter->toQuery());
-	}
+        $this->assertSame($expected, $parameter->toQuery());
+    }
 
-	/**
-	 * @dataProvider provideThrowsExceptionOnInvalidData
-	 * @param string $parameter
-	 */
-	public function testThrowsExceptionOnInvalid(string $parameter)
-	{
-		$this->expectException(InvalidArgumentException::class);
+    /**
+     * @dataProvider provideThrowsExceptionOnInvalidData
+     * @param string $parameter
+     */
+    public function testThrowsExceptionOnInvalid(string $parameter)
+    {
+        $this->expectException(InvalidArgumentException::class);
 
-		new Parameter($parameter);
-	}
+        new Parameter($parameter);
+    }
 
-	public function provideToQueryData(): array
-	{
-		return [
-			["a", '$a'],
-			["b", '$b'],
-			["0", '$0'],
-			["_", '$_'],
-			["foo_bar", '$foo_bar'],
-			["A", '$A']
-		];
-	}
+    public function provideToQueryData(): array
+    {
+        return [
+            ["a", '$a'],
+            ["b", '$b'],
+            ["0", '$0'],
+            ["_", '$_'],
+            ["foo_bar", '$foo_bar'],
+            ["A", '$A']
+        ];
+    }
 
-	public function provideThrowsExceptionOnInvalidData(): array
-	{
-		return [
-			[""],
-			["@"],
-			["!"],
-			["-"]
-		];
-	}
+    public function provideThrowsExceptionOnInvalidData(): array
+    {
+        return [
+            [""],
+            ["@"],
+            ["!"],
+            ["-"]
+        ];
+    }
 }

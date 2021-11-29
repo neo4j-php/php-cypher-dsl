@@ -28,12 +28,12 @@ use WikibaseSolutions\CypherDSL\Property;
  */
 interface MapType extends CompositeType
 {
-	/**
-	 * Returns the property of the given name for this expression. For instance, if this expression is the
-	 * variable "foo", a function call like $expression->property("bar") would yield "foo.bar".
-	 *
-	 * @param string $property
-	 * @return Property
-	 */
-	public function property(string $property): Property;
+    /**
+     * Returns the property of the given name for this expression. For instance, if this expression is the
+     * variable "foo", a function call like $expression->property("bar") would yield "foo.bar".
+     *
+     * @param string $property
+     * @return Property
+     */
+    public function property(string $property): Property;
 }

@@ -42,98 +42,98 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 class NumeralTypeTraitTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	/**
-	 * @var MockObject|NumeralType
-	 */
-	private $a;
+    /**
+     * @var MockObject|NumeralType
+     */
+    private $a;
 
-	/**
-	 * @var MockObject|NumeralType
-	 */
-	private $b;
+    /**
+     * @var MockObject|NumeralType
+     */
+    private $b;
 
-	public function setUp(): void
-	{
-		$this->a = $this->getQueryConvertableMock(NumeralType::class, "10");
-		$this->b = $this->getQueryConvertableMock(NumeralType::class, "15");
-	}
+    public function setUp(): void
+    {
+        $this->a = $this->getQueryConvertableMock(NumeralType::class, "10");
+        $this->b = $this->getQueryConvertableMock(NumeralType::class, "15");
+    }
 
-	public function testPlus()
-	{
-		$plus = $this->a->plus($this->b);
+    public function testPlus()
+    {
+        $plus = $this->a->plus($this->b);
 
-		$this->assertInstanceOf(Addition::class, $plus);
-	}
+        $this->assertInstanceOf(Addition::class, $plus);
+    }
 
-	public function testDivide()
-	{
-		$divide = $this->a->divide($this->b);
+    public function testDivide()
+    {
+        $divide = $this->a->divide($this->b);
 
-		$this->assertInstanceOf(Division::class, $divide);
-	}
+        $this->assertInstanceOf(Division::class, $divide);
+    }
 
-	public function testExponentiate()
-	{
-		$exponentiate = $this->a->exponentiate($this->b);
+    public function testExponentiate()
+    {
+        $exponentiate = $this->a->exponentiate($this->b);
 
-		$this->assertInstanceOf(Exponentiation::class, $exponentiate);
-	}
+        $this->assertInstanceOf(Exponentiation::class, $exponentiate);
+    }
 
-	public function testGt()
-	{
-		$gt = $this->a->gt($this->b);
+    public function testGt()
+    {
+        $gt = $this->a->gt($this->b);
 
-		$this->assertInstanceOf(GreaterThan::class, $gt);
-	}
+        $this->assertInstanceOf(GreaterThan::class, $gt);
+    }
 
-	public function testGte()
-	{
-		$gte = $this->a->gte($this->b);
+    public function testGte()
+    {
+        $gte = $this->a->gte($this->b);
 
-		$this->assertInstanceOf(GreaterThanOrEqual::class, $gte);
-	}
+        $this->assertInstanceOf(GreaterThanOrEqual::class, $gte);
+    }
 
-	public function testLt()
-	{
-		$lt = $this->a->lt($this->b);
+    public function testLt()
+    {
+        $lt = $this->a->lt($this->b);
 
-		$this->assertInstanceOf(LessThan::class, $lt);
-	}
+        $this->assertInstanceOf(LessThan::class, $lt);
+    }
 
-	public function testLte()
-	{
-		$lte = $this->a->lte($this->b);
+    public function testLte()
+    {
+        $lte = $this->a->lte($this->b);
 
-		$this->assertInstanceOf(LessThanOrEqual::class, $lte);
-	}
+        $this->assertInstanceOf(LessThanOrEqual::class, $lte);
+    }
 
-	public function testMod()
-	{
-		$mod = $this->a->mod($this->b);
+    public function testMod()
+    {
+        $mod = $this->a->mod($this->b);
 
-		$this->assertInstanceOf(Modulo::class, $mod);
-	}
+        $this->assertInstanceOf(Modulo::class, $mod);
+    }
 
-	public function testTimes()
-	{
-		$times = $this->a->times($this->b);
+    public function testTimes()
+    {
+        $times = $this->a->times($this->b);
 
-		$this->assertInstanceOf(Multiplication::class, $times);
-	}
+        $this->assertInstanceOf(Multiplication::class, $times);
+    }
 
-	public function testMinus()
-	{
-		$minus = $this->a->minus($this->b);
+    public function testMinus()
+    {
+        $minus = $this->a->minus($this->b);
 
-		$this->assertInstanceOf(Subtraction::class, $minus);
-	}
+        $this->assertInstanceOf(Subtraction::class, $minus);
+    }
 
-	public function testNegate()
-	{
-		$negate = $this->a->negate();
+    public function testNegate()
+    {
+        $negate = $this->a->negate();
 
-		$this->assertInstanceOf(Minus::class, $negate);
-	}
+        $this->assertInstanceOf(Minus::class, $negate);
+    }
 }

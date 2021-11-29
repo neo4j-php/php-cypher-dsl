@@ -30,12 +30,12 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
  */
 class RawClauseTest extends TestCase
 {
-	use TestHelper;
+    use TestHelper;
 
-	public function testClause()
-	{
-		$raw = new RawClause("UNIMPLEMENTED", "clause body");
+    public function testClause()
+    {
+        $raw = new RawClause("UNIMPLEMENTED", "clause body");
 
-		$this->assertSame("UNIMPLEMENTED clause body", $raw->toQuery());
-	}
+        $this->assertSame("UNIMPLEMENTED clause body", $raw->toQuery());
+    }
 }
