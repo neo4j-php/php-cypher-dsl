@@ -636,7 +636,7 @@ class QueryTest extends TestCase
 			->set([$a, $b])
 			->build();
 
-		$this->assertSame("SET (a = 10), (b = 15)", $statement);
+		$this->assertSame("SET a = 10, b = 15", $statement);
 
 		/*
 		 * @see https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/Usage/Clauses/WHERE-clause

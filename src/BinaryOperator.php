@@ -28,6 +28,11 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 abstract class BinaryOperator implements QueryConvertable
 {
+    /**
+     * @var bool Whether to insert parentheses around the expression
+     */
+    protected bool $insertParentheses = true;
+
 	/**
 	 * @var AnyType The left-hand of the expression
 	 */
@@ -55,7 +60,12 @@ abstract class BinaryOperator implements QueryConvertable
 	 */
 	public function toQuery(): string
 	{
-		return sprintf("(%s %s %s)", $this->left->toQuery(), $this->getOperator(), $this->right->toQuery());
+		return sprintf(
+		    $this->insertParentheses ? "(%s %s %s)" : "%s %s %s",
+            $this->left->toQuery(),
+            $this->getOperator(),
+            $this->right->toQuery()
+        );
 	}
 
 	/**

@@ -32,6 +32,11 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 class Assignment extends BinaryOperator
 {
+    /**
+     * @inheritDoc
+     */
+    protected bool $insertParentheses = false;
+
 	/**
 	 * @var bool Whether to use the property mutation instead of the property replacement
 	 * operator.
