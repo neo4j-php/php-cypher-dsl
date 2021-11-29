@@ -31,7 +31,7 @@ abstract class BinaryOperator implements QueryConvertable
     /**
      * @var bool Whether to insert parentheses around the expression
      */
-    protected bool $insertParentheses = true;
+    private bool $insertParentheses = true;
 
 	/**
 	 * @var AnyType The left-hand of the expression
@@ -43,16 +43,18 @@ abstract class BinaryOperator implements QueryConvertable
 	 */
 	private AnyType $right;
 
-	/**
-	 * BinaryOperator constructor.
-	 *
-	 * @param AnyType $left The left-hand of the expression
-	 * @param AnyType $right The right-hand of the expression
-	 */
-	public function __construct(AnyType $left, AnyType $right)
+    /**
+     * BinaryOperator constructor.
+     *
+     * @param AnyType $left The left-hand of the expression
+     * @param AnyType $right The right-hand of the expression
+     * @param bool $insertParentheses Whether to insert parentheses around the expression
+     */
+	public function __construct(AnyType $left, AnyType $right, bool $insertParentheses = true)
 	{
 		$this->left = $left;
 		$this->right = $right;
+		$this->insertParentheses = $insertParentheses;
 	}
 
 	/**

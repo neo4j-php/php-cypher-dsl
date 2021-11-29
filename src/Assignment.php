@@ -32,11 +32,6 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 class Assignment extends BinaryOperator
 {
-    /**
-     * @inheritDoc
-     */
-    protected bool $insertParentheses = false;
-
 	/**
 	 * @var bool Whether to use the property mutation instead of the property replacement
 	 * operator.
@@ -53,7 +48,7 @@ class Assignment extends BinaryOperator
 			throw new TypeError("\$left must be either a Property or a Variable");
 		}
 
-		parent::__construct($left, $right);
+		parent::__construct($left, $right, false);
 	}
 
 	/**
