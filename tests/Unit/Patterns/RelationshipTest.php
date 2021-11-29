@@ -217,9 +217,9 @@ class RelationshipTest extends TestCase
     {
         return [
             [[], Path::DIR_LEFT, "(a)<-[{}]-(b)"],
-            [[new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[{0: 'a'}]-(b)"],
+            [[new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[{`0`: 'a'}]-(b)"],
             [['a' => new StringLiteral('b')], Path::DIR_LEFT, "(a)<-[{a: 'b'}]-(b)"],
-            [['a' => new StringLiteral('b'), new StringLiteral('c')], Path::DIR_LEFT, "(a)<-[{a: 'b', 0: 'c'}]-(b)"],
+            [['a' => new StringLiteral('b'), new StringLiteral('c')], Path::DIR_LEFT, "(a)<-[{a: 'b', `0`: 'c'}]-(b)"],
             [[':' => new Decimal(12)], Path::DIR_LEFT, "(a)<-[{`:`: 12}]-(b)"]
         ];
     }
@@ -240,9 +240,9 @@ class RelationshipTest extends TestCase
     {
         return [
             ['a', [], Path::DIR_LEFT, "(a)<-[a {}]-(b)"],
-            ['b', [new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[b {0: 'a'}]-(b)"],
+            ['b', [new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[b {`0`: 'a'}]-(b)"],
             ['', ['a' => new StringLiteral('b')], Path::DIR_LEFT, "(a)<-[{a: 'b'}]-(b)"],
-            [':', ['a' => new StringLiteral('b'), new StringLiteral('c')], Path::DIR_LEFT, "(a)<-[`:` {a: 'b', 0: 'c'}]-(b)"]
+            [':', ['a' => new StringLiteral('b'), new StringLiteral('c')], Path::DIR_LEFT, "(a)<-[`:` {a: 'b', `0`: 'c'}]-(b)"]
         ];
     }
 
@@ -250,9 +250,9 @@ class RelationshipTest extends TestCase
     {
         return [
             ['a', [], Path::DIR_LEFT, "(a)<-[:a {}]-(b)"],
-            ['b', [new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[:b {0: 'a'}]-(b)"],
+            ['b', [new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[:b {`0`: 'a'}]-(b)"],
             ['', ['a' => new StringLiteral('b')], Path::DIR_LEFT, "(a)<-[{a: 'b'}]-(b)"],
-            [':', ['a' => new StringLiteral('b'), new StringLiteral('c')], Path::DIR_LEFT, "(a)<-[:`:` {a: 'b', 0: 'c'}]-(b)"]
+            [':', ['a' => new StringLiteral('b'), new StringLiteral('c')], Path::DIR_LEFT, "(a)<-[:`:` {a: 'b', `0`: 'c'}]-(b)"]
         ];
     }
 
@@ -260,12 +260,12 @@ class RelationshipTest extends TestCase
     {
         return [
             ['a', 'a', [], Path::DIR_LEFT, "(a)<-[a:a {}]-(b)"],
-            ['b', 'a', [new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[b:a {0: 'a'}]-(b)"],
+            ['b', 'a', [new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[b:a {`0`: 'a'}]-(b)"],
             ['', 'a', ['a' => new StringLiteral('b')], Path::DIR_LEFT, "(a)<-[:a {a: 'b'}]-(b)"],
-            [':', 'a', ['a' => new StringLiteral('b'), new StringLiteral('c')], Path::DIR_LEFT, "(a)<-[`:`:a {a: 'b', 0: 'c'}]-(b)"],
-            ['a', 'b', [new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[a:b {0: 'a'}]-(b)"],
+            [':', 'a', ['a' => new StringLiteral('b'), new StringLiteral('c')], Path::DIR_LEFT, "(a)<-[`:`:a {a: 'b', `0`: 'c'}]-(b)"],
+            ['a', 'b', [new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[a:b {`0`: 'a'}]-(b)"],
             ['a', '', ['a' => new StringLiteral('b')], Path::DIR_LEFT, "(a)<-[a {a: 'b'}]-(b)"],
-            ['a', ':', ['a' => new StringLiteral('b'), new StringLiteral('c')], Path::DIR_LEFT, "(a)<-[a:`:` {a: 'b', 0: 'c'}]-(b)"]
+            ['a', ':', ['a' => new StringLiteral('b'), new StringLiteral('c')], Path::DIR_LEFT, "(a)<-[a:`:` {a: 'b', `0`: 'c'}]-(b)"]
         ];
     }
 
@@ -273,10 +273,10 @@ class RelationshipTest extends TestCase
     {
         return [
             ['a', [], [], Path::DIR_LEFT, "(a)<-[a {}]-(b)"],
-            ['b', ['a'], [new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[b:a {0: 'a'}]-(b)"],
+            ['b', ['a'], [new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[b:a {`0`: 'a'}]-(b)"],
             ['', ['a', 'b'], ['a' => new StringLiteral('b')], Path::DIR_LEFT, "(a)<-[:a|b {a: 'b'}]-(b)"],
-            [':', ['a', ':'], ['a' => new StringLiteral('b'), new StringLiteral('c')], Path::DIR_LEFT, "(a)<-[`:`:a|`:` {a: 'b', 0: 'c'}]-(b)"],
-            ['a', ['a', 'b', 'c'], [new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[a:a|b|c {0: 'a'}]-(b)"],
+            [':', ['a', ':'], ['a' => new StringLiteral('b'), new StringLiteral('c')], Path::DIR_LEFT, "(a)<-[`:`:a|`:` {a: 'b', `0`: 'c'}]-(b)"],
+            ['a', ['a', 'b', 'c'], [new StringLiteral('a')], Path::DIR_LEFT, "(a)<-[a:a|b|c {`0`: 'a'}]-(b)"],
             ['a', ['a', 'b'], [], Path::DIR_LEFT, "(a)<-[a:a|b {}]-(b)"]
         ];
     }

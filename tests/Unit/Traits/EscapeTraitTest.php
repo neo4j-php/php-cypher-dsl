@@ -105,7 +105,11 @@ class EscapeTraitTest extends TestCase
             ['xxx'],
             ['yyy'],
             ['zzz'],
-            ['']
+            [''],
+            ['aaa100'],
+            ['a0'],
+            ['z10'],
+            ['z99']
         ];
     }
 
@@ -117,7 +121,12 @@ class EscapeTraitTest extends TestCase
             ['_'],
             ['__'],
             ['\''],
-            ['"']
+            ['"'],
+            ['0'],
+            ['10'],
+            ['100'],
+            ['1'],
+            ['2']
         ];
     }
 }
