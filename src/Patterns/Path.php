@@ -21,7 +21,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
+use DomainException;
 use InvalidArgumentException;
+use LogicException;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\PathTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
@@ -80,6 +82,11 @@ class Path implements PathType
     private int $maxHops;
 
     /**
+     * @var int The exact number of `relationship->node` hops away to search
+     */
+    private int $exactHops;
+
+    /**
      * Path constructor.
      *
      * @param StructuralType $a The node left of the relationship
@@ -127,6 +134,18 @@ class Path implements PathType
      */
     public function withMinHops(int $minHops): self
     {
+        if ($minHops < 1) {
+            throw new DomainException("minHops cannot be less than 1");
+        }
+
+        if (isset($this->maxHops) && $minHops > $this->maxHops) {
+            throw new DomainException("minHops cannot be greater than maxHops");
+        }
+
+        if (isset($this->exactHops)) {
+            throw new LogicException("Cannot use minHops in combination with exactHops");
+        }
+
         $this->minHops = $minHops;
 
         return $this;
@@ -142,6 +161,18 @@ class Path implements PathType
      */
     public function withMaxHops(int $maxHops): self
     {
+        if ($maxHops < 1) {
+            throw new DomainException("maxHops cannot be less than 1");
+        }
+
+        if (isset($this->minHops) && $maxHops < $this->minHops) {
+            throw new DomainException("maxHops cannot be less than minHops");
+        }
+
+        if (isset($this->exactHops)) {
+            throw new LogicException("Cannot use maxHops in combination with exactHops");
+        }
+
         $this->maxHops = $maxHops;
 
         return $this;
@@ -157,6 +188,14 @@ class Path implements PathType
      */
     public function withExactHops(int $exactHops) : self
     {
+        if ($exactHops < 1) {
+            throw new DomainException("exactHops cannot be less than 1");
+        }
+
+        if (isset($this->minHops) || isset($this->maxHops)) {
+            throw new LogicException("Cannot use exactHops in combination with minHops or maxHops");
+        }
+
         $this->exactHops = $exactHops;
 
         return $this;

@@ -21,12 +21,15 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 
+use DomainException;
+use LogicException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Literals\Decimal;
 use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
@@ -271,6 +274,8 @@ class RelationshipTest extends TestCase
      * @param string $name
      * @param string $type
      * @param array $properties
+     * @param int|null $minHops
+     * @param int|null $maxHops
      * @param array $direction
      * @param string $expected
      */
@@ -290,11 +295,148 @@ class RelationshipTest extends TestCase
         $this->assertSame($expected, $r->toQuery());
     }
 
+    public function testExactLengthRelationships()
+    {
+        $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
+        $r->named("tom")
+            ->withType("Person")
+            ->withProperties(['name' => Query::literal('Tom Hanks')]);
+
+        $r->withExactHops(10);
+
+        $this->assertSame("(a)-[tom:Person*10 {name: 'Tom Hanks'}]->(b)", $r->toQuery());
+    }
+
+    public function testMinAndExactHops()
+    {
+        $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
+        $r->withMinHops(1);
+
+        $this->expectException(LogicException::class);
+
+        $r->withExactHops(1);
+    }
+
+    public function testMaxAndExactHops()
+    {
+        $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
+        $r->withMaxHops(1);
+
+        $this->expectException(LogicException::class);
+
+        $r->withExactHops(1);
+    }
+
+    public function testMinMaxAndExactHops()
+    {
+        $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
+        $r->withMinHops(1);
+        $r->withMaxHops(1);
+
+        $this->expectException(LogicException::class);
+
+        $r->withExactHops(1);
+    }
+
+    public function testExactAndMinHops()
+    {
+        $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
+        $r->withExactHops(1);
+
+        $this->expectException(LogicException::class);
+
+        $r->withMinHops(1);
+    }
+
+    public function testExactAndMaxHops()
+    {
+        $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
+        $r->withExactHops(1);
+
+        $this->expectException(LogicException::class);
+
+        $r->withMaxHops(1);
+    }
+
+    public function testMaxHopsLessThanMinHops()
+    {
+        $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
+        $r->withMinHops(100);
+
+        $this->expectException(DomainException::class);
+
+        $r->withMaxHops(1);
+    }
+
+    public function testMinHopsGreaterThanMaxHops()
+    {
+        $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
+        $r->withMaxHops(1);
+
+        $this->expectException(DomainException::class);
+
+        $r->withMinHops(100);
+    }
+
+    public function testMinHopsLessThanOne()
+    {
+        $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
+
+        $this->expectException(DomainException::class);
+
+        $r->withMinHops(0);
+    }
+
+    public function testMinHopsLessThanZero()
+    {
+        $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
+
+        $this->expectException(DomainException::class);
+
+        $r->withMinHops(-1);
+    }
+
+    public function testMaxHopsLessThanOne()
+    {
+        $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
+
+        $this->expectException(DomainException::class);
+
+        $r->withMaxHops(0);
+    }
+
+    public function testMaxHopsLessThanZero()
+    {
+        $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
+
+        $this->expectException(DomainException::class);
+
+        $r->withMaxHops(-1);
+    }
+
+    public function testExactHopsLessThanOne()
+    {
+        $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
+
+        $this->expectException(DomainException::class);
+
+        $r->withExactHops(0);
+    }
+
+    public function testExactHopsLessThanZero()
+    {
+        $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
+
+        $this->expectException(DomainException::class);
+
+        $r->withExactHops(-1);
+    }
+
     public function provideVariableLengthRelationshipsWithNameData(): array
     {
         return [
             ['', 1, 100, Path::DIR_UNI, '(a)-[*1..100]-(b)'],
-            ['a', 10, null, Path::DIR_UNI, '(a)-[a*10]-(b)'],
+            ['a', 10, null, Path::DIR_UNI, '(a)-[a*10..]-(b)'],
             ['a', null, 10, Path::DIR_LEFT, '(a)<-[a*..10]-(b)'],
         ];
     }
@@ -303,7 +445,7 @@ class RelationshipTest extends TestCase
     {
         return [
             ['', 1, 100, Path::DIR_LEFT, '(a)<-[*1..100]-(b)'],
-            ['a', 10, null, Path::DIR_LEFT, '(a)<-[:a*10]-(b)'],
+            ['a', 10, null, Path::DIR_LEFT, '(a)<-[:a*10..]-(b)'],
             [':', null, 10, Path::DIR_LEFT, '(a)<-[:`:`*..10]-(b)']
         ];
     }
@@ -312,7 +454,7 @@ class RelationshipTest extends TestCase
     {
         return [
             [[], 10, 100, Path::DIR_LEFT, "(a)<-[*10..100 {}]-(b)"],
-            [[new StringLiteral('a')], 10, null, Path::DIR_LEFT, "(a)<-[*10 {`0`: 'a'}]-(b)"],
+            [[new StringLiteral('a')], 10, null, Path::DIR_LEFT, "(a)<-[*10.. {`0`: 'a'}]-(b)"],
             [['a' => new StringLiteral('b')], null, 10, Path::DIR_LEFT, "(a)<-[*..10 {a: 'b'}]-(b)"]
         ];
     }
@@ -322,11 +464,11 @@ class RelationshipTest extends TestCase
         return [
             ['a', 'a', [], 10, 100, Path::DIR_LEFT, "(a)<-[a:a*10..100 {}]-(b)"],
             ['b', 'a', [new StringLiteral('a')], null, 10, Path::DIR_LEFT, "(a)<-[b:a*..10 {`0`: 'a'}]-(b)"],
-            ['', 'a', ['a' => new StringLiteral('b')], 10, null, Path::DIR_LEFT, "(a)<-[:a*10 {a: 'b'}]-(b)"],
+            ['', 'a', ['a' => new StringLiteral('b')], 10, null, Path::DIR_LEFT, "(a)<-[:a*10.. {a: 'b'}]-(b)"],
             [':', 'a', ['a' => new StringLiteral('b'), new StringLiteral('c')], null, null, Path::DIR_LEFT, "(a)<-[`:`:a {a: 'b', `0`: 'c'}]-(b)"],
             ['a', 'b', [new StringLiteral('a')], 10, 100, Path::DIR_LEFT, "(a)<-[a:b*10..100 {`0`: 'a'}]-(b)"],
             ['a', '', ['a' => new StringLiteral('b')], null, 10, Path::DIR_LEFT, "(a)<-[a*..10 {a: 'b'}]-(b)"],
-            ['a', ':', ['a' => new StringLiteral('b'), new StringLiteral('c')], 10, null, Path::DIR_LEFT, "(a)<-[a:`:`*10 {a: 'b', `0`: 'c'}]-(b)"]
+            ['a', ':', ['a' => new StringLiteral('b'), new StringLiteral('c')], 10, null, Path::DIR_LEFT, "(a)<-[a:`:`*10.. {a: 'b', `0`: 'c'}]-(b)"]
         ];
     }
 
