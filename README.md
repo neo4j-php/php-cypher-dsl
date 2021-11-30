@@ -53,3 +53,4 @@ Below are some things that still need to be implemented.
 - Add missing clauses
 - Add missing function definitions
 - Add missing expressions
+- Improve documentation
