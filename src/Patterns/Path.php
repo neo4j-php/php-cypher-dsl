@@ -148,6 +148,21 @@ class Path implements PathType
     }
 
     /**
+     * Set the exact number of `relationship->node` hops away to search.
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels
+     *
+     * @param int $exactHops
+     * @return Path
+     */
+    public function withExactHops(int $exactHops) : self
+    {
+        $this->exactHops = $exactHops;
+
+        return $this;
+    }
+
+    /**
      * @param string $type
      * @return Path
      */
@@ -200,9 +215,13 @@ class Path implements PathType
                 $conditionInner .= $this->minHops;
             }
 
+            $conditionInner .= '..';
+
             if (isset($this->maxHops)) {
-                $conditionInner .= sprintf("..%s", $this->maxHops);
+                $conditionInner .= $this->maxHops;
             }
+        } elseif (isset($this->exactHops)) {
+            $conditionInner .= '*' . $this->exactHops;
         }
 
         if (isset($this->properties)) {
