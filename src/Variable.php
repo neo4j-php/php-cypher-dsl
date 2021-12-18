@@ -24,6 +24,7 @@ namespace WikibaseSolutions\CypherDSL;
 use WikibaseSolutions\CypherDSL\Traits\AssignableTrait;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\PathTypeTrait;
@@ -54,6 +55,7 @@ class Variable implements
 {
     use EscapeTrait;
     use BooleanTypeTrait;
+    use ListTypeTrait;
     use MapTypeTrait;
     use NumeralTypeTrait;
     use PathTypeTrait;

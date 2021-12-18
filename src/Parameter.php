@@ -24,6 +24,7 @@ namespace WikibaseSolutions\CypherDSL;
 use InvalidArgumentException;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
@@ -46,6 +47,7 @@ class Parameter implements
     StringType
 {
     use EscapeTrait;
+    use ListTypeTrait;
     use BooleanTypeTrait;
     use MapTypeTrait;
     use NumeralTypeTrait;

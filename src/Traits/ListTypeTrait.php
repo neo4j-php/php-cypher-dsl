@@ -19,15 +19,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Types\CompositeTypes;
+namespace WikibaseSolutions\CypherDSL\Traits;
 
 use WikibaseSolutions\CypherDSL\In;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
- * Represent the type "list".
+ * This trait should be used by any expression that returns a list.
  */
-interface ListType extends CompositeType
+trait ListTypeTrait
 {
     /**
      * Checks whether the given element exists in this list.
@@ -35,5 +35,8 @@ interface ListType extends CompositeType
      * @param PropertyType $left
      * @return In
      */
-    public function has(PropertyType $left): In;
+    public function has(PropertyType $left): In
+    {
+        return new In($left, $this);
+    }
 }

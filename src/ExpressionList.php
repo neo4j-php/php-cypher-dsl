@@ -23,6 +23,7 @@ namespace WikibaseSolutions\CypherDSL;
 
 use TypeError;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 
@@ -37,6 +38,7 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 class ExpressionList implements ListType
 {
     use EscapeTrait;
+    use ListTypeTrait;
 
     /**
      * @var array The list of expressions

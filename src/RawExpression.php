@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL;
 
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
@@ -49,6 +50,7 @@ class RawExpression implements
     PathType
 {
     use BooleanTypeTrait;
+    use ListTypeTrait;
     use MapTypeTrait;
     use NodeTypeTrait;
     use NumeralTypeTrait;

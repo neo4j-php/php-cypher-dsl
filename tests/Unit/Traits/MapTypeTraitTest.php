@@ -39,11 +39,6 @@ class MapTypeTraitTest extends TestCase
      */
     private $a;
 
-    /**
-     * @var MockObject|MapType
-     */
-    private $b;
-
     public function setUp(): void
     {
         $this->a = $this->getQueryConvertableMock(MapType::class, "{}");

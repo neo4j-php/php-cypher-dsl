@@ -19,21 +19,42 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Types\CompositeTypes;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\In;
+use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
- * Represent the type "list".
+ * @covers \WikibaseSolutions\CypherDSL\Traits\ListTypeTrait
  */
-interface ListType extends CompositeType
+class ListTypeTraitTest extends TestCase
 {
+    use TestHelper;
+
     /**
-     * Checks whether the given element exists in this list.
-     *
-     * @param PropertyType $left
-     * @return In
+     * @var MockObject|PropertyType
      */
-    public function has(PropertyType $left): In;
+    private $a;
+
+    /**
+     * @var MockObject|ListType
+     */
+    private $b;
+
+    public function setUp(): void
+    {
+        $this->a = $this->getQueryConvertableMock(PropertyType::class, "a");
+        $this->b = $this->getQueryConvertableMock(ListType::class, "[]");
+    }
+
+    public function testHas()
+    {
+        $has = $this->b->has($this->a);
+
+        $this->assertInstanceOf(In::class, $has);
+    }
 }
