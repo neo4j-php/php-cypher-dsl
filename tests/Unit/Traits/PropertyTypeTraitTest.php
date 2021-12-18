@@ -24,8 +24,10 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Equality;
+use WikibaseSolutions\CypherDSL\In;
 use WikibaseSolutions\CypherDSL\Inequality;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
@@ -45,10 +47,16 @@ class PropertyTypeTraitTest extends TestCase
      */
     private $b;
 
+    /**
+     * @var MockObject|ListType
+     */
+    private $list;
+
     public function setUp(): void
     {
         $this->a = $this->getQueryConvertableMock(PropertyType::class, "10");
         $this->b = $this->getQueryConvertableMock(PropertyType::class, "15");
+        $this->list = $this->getQueryConvertableMock(ListType::class, "['foobar']");
     }
 
     public function testEquals()
@@ -63,5 +71,12 @@ class PropertyTypeTraitTest extends TestCase
         $notEquals = $this->a->notEquals($this->b);
 
         $this->assertInstanceOf(Inequality::class, $notEquals);
+    }
+
+    public function testIn()
+    {
+        $in = $this->a->in($this->list);
+
+        $this->assertInstanceOf(In::class, $in);
     }
 }

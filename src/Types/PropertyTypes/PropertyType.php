@@ -3,8 +3,10 @@
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
 use WikibaseSolutions\CypherDSL\Equality;
+use WikibaseSolutions\CypherDSL\In;
 use WikibaseSolutions\CypherDSL\Inequality;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 
 /**
  * Represents any property type in Cypher.
@@ -47,4 +49,12 @@ interface PropertyType extends AnyType
      * @return Inequality
      */
     public function notEquals(PropertyType $right): Inequality;
+
+    /**
+     * Checks whether the element exists in the given list.
+     *
+     * @param ListType $right
+     * @return In
+     */
+    public function in(ListType $right): In;
 }

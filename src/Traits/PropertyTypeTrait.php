@@ -22,7 +22,9 @@
 namespace WikibaseSolutions\CypherDSL\Traits;
 
 use WikibaseSolutions\CypherDSL\Equality;
+use WikibaseSolutions\CypherDSL\In;
 use WikibaseSolutions\CypherDSL\Inequality;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
@@ -53,5 +55,16 @@ trait PropertyTypeTrait
     public function notEquals(PropertyType $right): Inequality
     {
         return new Inequality($this, $right);
+    }
+
+    /**
+     * Checks whether the element exists in the given list.
+     *
+     * @param ListType $right
+     * @return In
+     */
+    public function in(ListType $right): In
+    {
+        return new In($this, $right);
     }
 }
