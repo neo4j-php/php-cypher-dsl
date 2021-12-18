@@ -83,7 +83,7 @@ class OrderByClause extends Clause
      */
     protected function getSubject(): string
     {
-        $properties = array_map(fn (Property $property): string => $property->toQuery(), $this->properties);
+        $properties = array_map(fn(Property $property): string => $property->toQuery(), $this->properties);
         $subject = implode(", ", $properties);
 
         return $this->descending ? sprintf("%s DESCENDING", $subject) : $subject;

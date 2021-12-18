@@ -136,13 +136,13 @@ class CallProcedureClause extends Clause
 
         $arguments = implode(
             ", ",
-            array_map(fn (AnyType $pattern): string => $pattern->toQuery(), $this->arguments)
+            array_map(fn(AnyType $pattern): string => $pattern->toQuery(), $this->arguments)
         );
 
         if (count($this->yieldVariables) > 0) {
             $yieldParameters = implode(
                 ", ",
-                array_map(fn (Variable $variable): string => $variable->toQuery(), $this->yieldVariables)
+                array_map(fn(Variable $variable): string => $variable->toQuery(), $this->yieldVariables)
             );
 
             return sprintf("%s(%s) YIELD %s", $this->procedure, $arguments, $yieldParameters);

@@ -146,7 +146,7 @@ abstract class FunctionCall implements QueryConvertable
     {
         $signature = $this->getSignature();
         $parameters = array_map(
-            fn (QueryConvertable $convertable): string => $convertable->toQuery(),
+            fn(QueryConvertable $convertable): string => $convertable->toQuery(),
             $this->getParameters()
         );
 

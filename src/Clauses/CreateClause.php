@@ -63,7 +63,7 @@ class CreateClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (StructuralType $pattern): string => $pattern->toQuery(), $this->patterns)
+            array_map(fn(StructuralType $pattern): string => $pattern->toQuery(), $this->patterns)
         );
     }
 }

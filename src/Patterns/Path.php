@@ -186,7 +186,7 @@ class Path implements PathType
      * @param int $exactHops
      * @return Path
      */
-    public function withExactHops(int $exactHops) : self
+    public function withExactHops(int $exactHops): self
     {
         if ($exactHops < 1) {
             throw new DomainException("exactHops cannot be less than 1");
@@ -242,7 +242,7 @@ class Path implements PathType
 
         if (count($types) !== 0) {
             // If we have at least one condition type, escape them and insert them into the query
-            $escapedTypes = array_map(fn (string $type): string => $this->escape($type), $types);
+            $escapedTypes = array_map(fn(string $type): string => $this->escape($type), $types);
             $conditionInner .= sprintf(":%s", implode("|", $escapedTypes));
         }
 

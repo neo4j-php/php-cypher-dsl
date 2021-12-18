@@ -637,12 +637,12 @@ class Query implements QueryConvertable
     public function build(): string
     {
         $builtClauses = array_map(
-            fn (Clause $clause): string => $clause->toQuery(),
+            fn(Clause $clause): string => $clause->toQuery(),
             $this->clauses
         );
 
         return implode(
-            " ", array_filter($builtClauses, fn ($clause) => !empty($clause))
+            " ", array_filter($builtClauses, fn($clause) => !empty($clause))
         );
     }
 }

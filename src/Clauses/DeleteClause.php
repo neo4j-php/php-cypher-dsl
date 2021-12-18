@@ -91,7 +91,7 @@ class DeleteClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (NodeType $node) => $node->toQuery(), $this->nodes)
+            array_map(fn(NodeType $node) => $node->toQuery(), $this->nodes)
         );
     }
 }
