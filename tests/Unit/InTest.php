@@ -21,9 +21,13 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
+use phpDocumentor\Reflection\PseudoTypes\LiteralString;
 use PHPUnit\Framework\TestCase;
 use TypeError;
+use WikibaseSolutions\CypherDSL\ExpressionList;
 use WikibaseSolutions\CypherDSL\In;
+use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
+use WikibaseSolutions\CypherDSL\RawExpression;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
@@ -35,7 +39,7 @@ class InTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
+    public function testToQuery(): void
     {
         $inequality = new In($this->getQueryConvertableMock(PropertyType::class, "a"), $this->getQueryConvertableMock(ListType::class, "b"));
 
@@ -46,7 +50,18 @@ class InTest extends TestCase
         $this->assertSame("((a IN b) IN c)", $inequality->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands()
+    public function testInExpressionList(): void
+    {
+        $inequality = new In($this->getQueryConvertableMock(PropertyType::class, "a"), new ExpressionList([new StringLiteral('a'), new StringLiteral('b')]));
+
+        $this->assertSame("(a IN ['a', 'b'])", $inequality->toQuery());
+
+        $inequality = new In($inequality, $this->getQueryConvertableMock(ListType::class, "c"));
+
+        $this->assertSame("((a IN ['a', 'b']) IN c)", $inequality->toQuery());
+    }
+
+    public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 
