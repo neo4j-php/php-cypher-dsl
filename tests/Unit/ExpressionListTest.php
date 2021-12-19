@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\ExpressionList;
 use WikibaseSolutions\CypherDSL\Query;
 
@@ -32,11 +33,25 @@ class ExpressionListTest extends TestCase
 {
     use TestHelper;
 
-    public function testEmpty()
+    public function testEmpty(): void
     {
         $expressionList = new ExpressionList([]);
 
         $this->assertSame("[]", $expressionList->toQuery());
+    }
+
+    public function testFromLiterals(): void
+    {
+        $expressionList = ExpressionList::fromLiterals(['a', 'b', 234.3, 1, true, false]);
+
+        $this->assertSame("['a', 'b', 234.3, 1, true, false]", $expressionList->toQuery());
+    }
+
+    public function testFromLiteralsError(): void
+    {
+        $expressionList = ExpressionList::fromLiterals(['a', 'b', 234.3, 1, true, false]);
+        $this->expectException(TypeError::class);
+        $expressionList = ExpressionList::fromLiterals([$expressionList]);
     }
 
     /**
@@ -44,7 +59,7 @@ class ExpressionListTest extends TestCase
      * @param array $expressions
      * @param string $expected
      */
-    public function testOneDimensional(array $expressions, string $expected)
+    public function testOneDimensional(array $expressions, string $expected): void
     {
         $expressionList = new ExpressionList($expressions);
 
@@ -56,7 +71,7 @@ class ExpressionListTest extends TestCase
      * @param array $expressions
      * @param string $expected
      */
-    public function testMultidimensional(array $expressions, string $expected)
+    public function testMultidimensional(array $expressions, string $expected): void
     {
         $expressionList = new ExpressionList($expressions);
 
