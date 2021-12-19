@@ -24,6 +24,7 @@ namespace WikibaseSolutions\CypherDSL;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
@@ -82,16 +83,7 @@ class ExpressionList implements ListType
     {
         $tbr = [];
         foreach ($literals as $literal) {
-            if (is_string($literal) || (is_object($literal) && method_exists($literal, '__toString'))) {
-                $tbr[] = new StringLiteral((string) $literal);
-            } else if (is_bool($literal)) {
-                $tbr[] = new Boolean($literal);
-            } else if (is_int($literal) || is_float($literal)) {
-                $tbr[] = new Decimal($literal);
-            } else {
-                $actualType = is_object($literal) ? get_class($literal) : gettype($literal);
-                throw new TypeError(sprintf('Cannot create a literal from: "%s".', $actualType));
-            }
+            $tbr[] = Literal::fromLiteral($literal);
         }
 
         return new self($tbr);
