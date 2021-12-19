@@ -22,10 +22,22 @@
 namespace WikibaseSolutions\CypherDSL;
 
 use TypeError;
+use WikibaseSolutions\CypherDSL\Literals\Boolean;
+use WikibaseSolutions\CypherDSL\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
+use function get_class;
+use function get_debug_type;
+use function gettype;
+use function is_bool;
+use function is_float;
+use function is_int;
+use function is_object;
+use function is_string;
+use function method_exists;
 
 /**
  * This class represents a list of expressions. For example, this class can represent the following
@@ -59,6 +71,30 @@ class ExpressionList implements ListType
         }
 
         $this->expressions = $expressions;
+    }
+
+    /**
+     * Constructs an expression list from literals (eg. strings, numbers and booleans)
+     * @param iterable $literals
+     * @return static
+     */
+    public static function fromLiterals(iterable $literals): self
+    {
+        $tbr = [];
+        foreach ($literals as $literal) {
+            if (is_string($literal) || (is_object($literal) && method_exists($literal, '__toString'))) {
+                $tbr[] = new StringLiteral((string) $literal);
+            } else if (is_bool($literal)) {
+                $tbr[] = new Boolean($literal);
+            } else if (is_int($literal) || is_float($literal)) {
+                $tbr[] = new Decimal($literal);
+            } else {
+                $actualType = is_object($literal) ? get_class($literal) : gettype($literal);
+                throw new TypeError(sprintf('Cannot create a literal from: "%s".', $actualType));
+            }
+        }
+
+        return new self($tbr);
     }
 
     /**
