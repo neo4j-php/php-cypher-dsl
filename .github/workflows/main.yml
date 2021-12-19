@@ -1,0 +1,32 @@
+name: build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    env:
+      COMPOSER_VERSION: 2
+
+    steps:
+      # https://getcomposer.org/download/
+      - name: Install Composer
+        run: |
+          apt update
+          apt install -y unzip
+          php -r "copy('https://getcomposer.org/installer', 'installer');"
+          php -r "copy('https://composer.github.io/installer.sig', 'expected');"
+          echo `cat expected` " installer" | sha384sum -c -
+          php installer --${{ env.COMPOSER_VERSION }}
+          rm -f installer expected
+          mv composer.phar /usr/local/bin/composer
+
+      - name: Install dependencies
+        run: composer update
+
+      - name: Run unit tests
+        run: composer test
