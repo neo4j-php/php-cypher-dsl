@@ -27,7 +27,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 /**
  * Represents a decimal (integer or float) literal.
  */
-class Decimal extends Literal implements NumeralType
+class Decimal implements NumeralType
 {
     use NumeralTypeTrait;
 

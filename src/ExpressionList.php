@@ -75,21 +75,6 @@ class ExpressionList implements ListType
     }
 
     /**
-     * Constructs an expression list from literals (eg. strings, numbers and booleans)
-     * @param iterable $literals
-     * @return static
-     */
-    public static function fromLiterals(iterable $literals): self
-    {
-        $tbr = [];
-        foreach ($literals as $literal) {
-            $tbr[] = Literal::fromLiteral($literal);
-        }
-
-        return new self($tbr);
-    }
-
-    /**
      * @inheritDoc
      */
     public function toQuery(): string

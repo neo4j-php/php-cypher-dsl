@@ -40,20 +40,6 @@ class ExpressionListTest extends TestCase
         $this->assertSame("[]", $expressionList->toQuery());
     }
 
-    public function testFromLiterals(): void
-    {
-        $expressionList = ExpressionList::fromLiterals(['a', 'b', 234.3, 1, true, false]);
-
-        $this->assertSame("['a', 'b', 234.3, 1, true, false]", $expressionList->toQuery());
-    }
-
-    public function testFromLiteralsError(): void
-    {
-        $expressionList = ExpressionList::fromLiterals(['a', 'b', 234.3, 1, true, false]);
-        $this->expectException(TypeError::class);
-        $expressionList = ExpressionList::fromLiterals([$expressionList]);
-    }
-
     /**
      * @dataProvider provideOneDimensionalData
      * @param array $expressions
