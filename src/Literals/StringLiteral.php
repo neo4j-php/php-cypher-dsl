@@ -30,7 +30,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/expressions/#cypher-expressions-string-literals
  */
-class StringLiteral implements StringType
+class StringLiteral extends Literal implements StringType
 {
     use StringTypeTrait;
 
