@@ -1,0 +1,54 @@
+name: build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    continue-on-error: true
+
+    strategy:
+      matrix:
+        include:
+          - php_version: 7.4
+          - php_version: 8.0
+          - php_version: 8.1
+          - php_version: latest
+
+    container:
+      image: php:${{ matrix.php_version }}
+
+    env:
+      COMPOSER_VERSION: 2
+      INSTALL_PATH: php-cypher-dsl
+      REPOSITORY_NAME: php-cypher-dsl
+
+    steps:
+      # https://getcomposer.org/download/
+      - name: Install Composer
+        run: |
+          apt update
+          apt install -y unzip
+          php -r "copy('https://getcomposer.org/installer', 'installer');"
+          php -r "copy('https://composer.github.io/installer.sig', 'expected');"
+          echo `cat expected` " installer" | sha384sum -c -
+          php installer --${{ env.COMPOSER_VERSION }}
+          rm -f installer expected
+          mv composer.phar /usr/local/bin/composer
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          repository: WikibaseSolutions/${{ env.REPOSITORY_NAME }}
+          path: ${{ env.REPOSITORY_NAME }}
+
+      - name: Install dependencies
+        run: composer update --working-dir ${{ env.INSTALL_PATH }}
+
+      - name: Run unit tests
+        run: composer test --working-dir ${{ env.INSTALL_PATH }}
