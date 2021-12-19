@@ -16,12 +16,15 @@ jobs:
           - php_version: 7.4
           - php_version: 8.0
           - php_version: 8.1
+          - php_version: latest
 
     container:
       image: php:${{ matrix.php_version }}
 
     env:
       COMPOSER_VERSION: 2
+      INSTALL_PATH: php-cypher-dsl
+      REPOSITORY_NAME: php-cypher-dsl
 
     steps:
       # https://getcomposer.org/download/
@@ -36,8 +39,14 @@ jobs:
           rm -f installer expected
           mv composer.phar /usr/local/bin/composer
 
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          repository: WikibaseSolutions/${{ env.REPOSITORY_NAME }}
+          path: ${{ env.REPOSITORY_NAME }}
+
       - name: Install dependencies
-        run: composer update
+        run: composer update --working-dir ${{ env.INSTALL_PATH }}
 
       - name: Run unit tests
-        run: composer test
+        run: composer test --working-dir ${{ env.INSTALL_PATH }}
