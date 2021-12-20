@@ -23,7 +23,6 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use TypeError;
 use WikibaseSolutions\CypherDSL\Assignment;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\Clauses\MatchClause;
@@ -114,6 +113,77 @@ class QueryTest extends TestCase
         $list = Query::list([]);
 
         $this->assertInstanceOf(ExpressionList::class, $list);
+    }
+
+    public function testListOfLiterals()
+    {
+        $list = Query::list(["hello", "world", 1.0, 1, 2, 3, true]);
+
+        $this->assertInstanceOf(ExpressionList::class, $list);
+    }
+
+    public function testListOfMixed()
+    {
+        $list = Query::list([$this->getQueryConvertableMock(AnyType::class, "hello"), "world"]);
+
+        $this->assertInstanceOf(ExpressionList::class, $list);
+    }
+
+    public function testListOfAnyType()
+    {
+        $list = Query::list([$this->getQueryConvertableMock(AnyType::class, "hello"), $this->getQueryConvertableMock(AnyType::class, "world")]);
+
+        $this->assertInstanceOf(ExpressionList::class, $list);
+    }
+
+    public function testNestedList()
+    {
+        $list = Query::list([Query::list([])]);
+
+        $this->assertInstanceOf(ExpressionList::class, $list);
+    }
+
+    public function testIteratorList()
+    {
+        $iterator = new class implements \Iterator {
+            private int $count = 0;
+
+            public function current()
+            {
+                return 1;
+            }
+
+            public function next()
+            {
+                $this->count++;
+                return 1;
+            }
+
+            public function key()
+            {
+                return 0;
+            }
+
+            public function valid()
+            {
+                // In order to avoid an infinite loop
+                return $this->count < 10;
+            }
+
+            public function rewind()
+            {
+            }
+        };
+
+        $list = Query::list($iterator);
+
+        $this->assertInstanceOf(ExpressionList::class, $list);
+    }
+
+    public function testInvalidList()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        Query::list([new class() {}]);
     }
 
     public function testMap()
@@ -420,20 +490,6 @@ class QueryTest extends TestCase
         $literal = Query::literal(true);
         $this->expectException(InvalidArgumentException::class);
         Query::literal($literal);
-    }
-
-    public function testFromLiterals(): void
-    {
-        $expressionList = Query::literalList(['a', 'b', 234.3, 1, true, false]);
-
-        $this->assertSame("['a', 'b', 234.3, 1, true, false]", $expressionList->toQuery());
-    }
-
-    public function testFromLiteralsError(): void
-    {
-        $expressionList = Query::literalList(['a', 'b', 234.3, 1, true, false]);
-        $this->expectException(InvalidArgumentException::class);
-        $expressionList = Query::literalList([$expressionList]);
     }
 
     public function testWikiExamples()

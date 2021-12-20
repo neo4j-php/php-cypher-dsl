@@ -54,14 +54,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
-use function get_class;
-use function gettype;
-use function is_bool;
-use function is_float;
-use function is_int;
-use function is_object;
-use function is_string;
-use function method_exists;
 
 /**
  * Builder class for building complex Cypher queries.
@@ -151,35 +143,25 @@ class Query implements QueryConvertable
         }
 
         $actualType = is_object($literal) ? get_class($literal) : gettype($literal);
+
         throw new InvalidArgumentException("The literal type " . $actualType . " is not supported by Cypher");
     }
 
     /**
      * Creates a list of expressions.
      *
-     * @param AnyType[] $expressions
+     * @param iterable $values
      * @return ExpressionList
      */
-    public static function list(array $expressions): ExpressionList
+    public static function list(iterable $values): ExpressionList
     {
-        return new ExpressionList($expressions);
-    }
-
-    /**
-     * Creates a list of literal expressions.
-     *
-     * @param mixed[] $expressions
-     *
-     * @return ExpressionList
-     */
-    public static function literalList(iterable $literals): ExpressionList
-    {
-        $tbr = [];
-        foreach ($literals as $literal) {
-            $tbr[] = self::literal($literal);
+        $expressions = [];
+        foreach ($values as $value) {
+            $expressions[] = $value instanceof AnyType ?
+                $value : self::literal($value);
         }
 
-        return new ExpressionList($tbr);
+        return new ExpressionList($expressions);
     }
 
     /**

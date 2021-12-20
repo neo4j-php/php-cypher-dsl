@@ -22,23 +22,10 @@
 namespace WikibaseSolutions\CypherDSL;
 
 use TypeError;
-use WikibaseSolutions\CypherDSL\Literals\Boolean;
-use WikibaseSolutions\CypherDSL\Literals\Decimal;
-use WikibaseSolutions\CypherDSL\Literals\Literal;
-use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
-use function get_class;
-use function get_debug_type;
-use function gettype;
-use function is_bool;
-use function is_float;
-use function is_int;
-use function is_object;
-use function is_string;
-use function method_exists;
 
 /**
  * This class represents a list of expressions. For example, this class can represent the following
