@@ -125,35 +125,42 @@ class Query implements QueryConvertable
      * Creates a new literal from the given value. This function automatically constructs the appropriate
      * class based on the type of the value given.
      *
-     * @param integer|float|bool|string $literal The literal to construct
+     * @param mixed $literal The literal to construct
      * @return StringLiteral|Boolean|Decimal
      */
     public static function literal($literal): PropertyType
     {
-        $literalType = gettype($literal);
-
-        switch ($literalType) {
-            case "string":
-                return new StringLiteral($literal);
-            case "boolean":
-                return new Boolean($literal);
-            case "double":
-            case "float":
-            case "integer":
-                return new Decimal($literal);
-            default:
-                throw new InvalidArgumentException("The literal type " . $literalType . " is not supported by Cypher");
+        if (is_string($literal) || (is_object($literal) && method_exists($literal, '__toString'))) {
+            return new StringLiteral((string) $literal);
         }
+
+        if (is_bool($literal)) {
+            return new Boolean($literal);
+        }
+
+        if (is_int($literal) || is_float($literal)) {
+            return new Decimal($literal);
+        }
+
+        $actualType = is_object($literal) ? get_class($literal) : gettype($literal);
+
+        throw new InvalidArgumentException("The literal type " . $actualType . " is not supported by Cypher");
     }
 
     /**
      * Creates a list of expressions.
      *
-     * @param AnyType[] $expressions
+     * @param iterable $values
      * @return ExpressionList
      */
-    public static function list(array $expressions): ExpressionList
+    public static function list(iterable $values): ExpressionList
     {
+        $expressions = [];
+        foreach ($values as $value) {
+            $expressions[] = $value instanceof AnyType ?
+                $value : self::literal($value);
+        }
+
         return new ExpressionList($expressions);
     }
 

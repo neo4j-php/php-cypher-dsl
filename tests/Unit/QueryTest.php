@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Assignment;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
@@ -112,6 +113,77 @@ class QueryTest extends TestCase
         $list = Query::list([]);
 
         $this->assertInstanceOf(ExpressionList::class, $list);
+    }
+
+    public function testListOfLiterals()
+    {
+        $list = Query::list(["hello", "world", 1.0, 1, 2, 3, true]);
+
+        $this->assertInstanceOf(ExpressionList::class, $list);
+    }
+
+    public function testListOfMixed()
+    {
+        $list = Query::list([$this->getQueryConvertableMock(AnyType::class, "hello"), "world"]);
+
+        $this->assertInstanceOf(ExpressionList::class, $list);
+    }
+
+    public function testListOfAnyType()
+    {
+        $list = Query::list([$this->getQueryConvertableMock(AnyType::class, "hello"), $this->getQueryConvertableMock(AnyType::class, "world")]);
+
+        $this->assertInstanceOf(ExpressionList::class, $list);
+    }
+
+    public function testNestedList()
+    {
+        $list = Query::list([Query::list([])]);
+
+        $this->assertInstanceOf(ExpressionList::class, $list);
+    }
+
+    public function testIteratorList()
+    {
+        $iterator = new class implements \Iterator {
+            private int $count = 0;
+
+            public function current()
+            {
+                return 1;
+            }
+
+            public function next()
+            {
+                $this->count++;
+                return 1;
+            }
+
+            public function key()
+            {
+                return 0;
+            }
+
+            public function valid()
+            {
+                // In order to avoid an infinite loop
+                return $this->count < 10;
+            }
+
+            public function rewind()
+            {
+            }
+        };
+
+        $list = Query::list($iterator);
+
+        $this->assertInstanceOf(ExpressionList::class, $list);
+    }
+
+    public function testInvalidList()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        Query::list([new class() {}]);
     }
 
     public function testMap()
@@ -371,6 +443,53 @@ class QueryTest extends TestCase
         $query = new Query();
 
         $this->assertSame("", $query->build());
+    }
+
+    public function testInt()
+    {
+        $literal = Query::literal(1);
+        self::assertInstanceOf(Decimal::class, $literal);
+        self::assertEquals('1', $literal->toQuery());
+    }
+
+    public function testFloat()
+    {
+        $literal = Query::literal(1.2);
+        self::assertInstanceOf(Decimal::class, $literal);
+        self::assertEquals('1.2', $literal->toQuery());
+    }
+
+    public function testString()
+    {
+        $literal = Query::literal('abc');
+        self::assertInstanceOf(StringLiteral::class, $literal);
+        self::assertEquals("'abc'", $literal->toQuery());
+    }
+
+    public function testStringAble()
+    {
+        $literal = Query::literal(new class () {
+            public function __toString(): string
+            {
+                return 'stringable abc';
+            }
+        });
+        self::assertInstanceOf(StringLiteral::class, $literal);
+        self::assertEquals("'stringable abc'", $literal->toQuery());
+    }
+
+    public function testBool()
+    {
+        $literal = Query::literal(true);
+        self::assertInstanceOf(Boolean::class, $literal);
+        self::assertEquals("true", $literal->toQuery());
+    }
+
+    public function testInvalidLiteral()
+    {
+        $literal = Query::literal(true);
+        $this->expectException(InvalidArgumentException::class);
+        Query::literal($literal);
     }
 
     public function testWikiExamples()
