@@ -39,7 +39,8 @@
     "ext-ctype": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "~9.0"
+    "phpunit/phpunit": "~9.0",
+    "infection/infection": "^0.25.5"
   },
   "autoload": {
     "psr-4": {
@@ -52,7 +53,8 @@
     }
   },
   "scripts": {
-    "test": "phpunit tests/"
+    "test": "phpunit tests/",
+    "infect": "XDEBUG_MODE=coverage infection --show-mutations"
   },
   "minimum-stability": "stable",
   "prefer-stable": true

@@ -41,6 +41,11 @@ jobs:
           rm -f installer expected
           mv composer.phar /usr/local/bin/composer
 
+      - name: Install Xdebug
+        run: |
+          pecl install xdebug
+          docker-php-ext-enable xdebug
+
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
@@ -52,3 +57,6 @@ jobs:
 
       - name: Run unit tests
         run: composer test --working-dir ${{ env.INSTALL_PATH }}
+
+      - name: Run mutation tests
+        run: composer infect --working-dir ${{ env.INSTALL_PATH }}

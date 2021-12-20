@@ -26,7 +26,7 @@ use WikibaseSolutions\CypherDSL\Literals\Decimal;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Decimal
+ * @covers \WikibaseSolutions\CypherDSL\Literals\Decimal
  */
 class DecimalTest extends TestCase
 {
