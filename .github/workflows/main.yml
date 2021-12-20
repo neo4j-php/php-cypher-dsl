@@ -52,3 +52,6 @@ jobs:
 
       - name: Run unit tests
         run: composer test --working-dir ${{ env.INSTALL_PATH }}
+
+      - name: Run mutation tests
+        run: composer infect --working-dir ${{ env.INSTALL_PATH }}
