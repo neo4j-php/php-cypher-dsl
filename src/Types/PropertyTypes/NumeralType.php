@@ -119,7 +119,7 @@ interface NumeralType extends PropertyType
     public function minus(NumeralType $right): Subtraction;
 
     /**
-     * Negate this expression.
+     * Negate this expression (negate the numeral using "0").
      *
      * @return Minus
      */

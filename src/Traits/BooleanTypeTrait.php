@@ -22,6 +22,8 @@
 namespace WikibaseSolutions\CypherDSL\Traits;
 
 use WikibaseSolutions\CypherDSL\AndOperator;
+use WikibaseSolutions\CypherDSL\Minus;
+use WikibaseSolutions\CypherDSL\Not;
 use WikibaseSolutions\CypherDSL\OrOperator;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\XorOperator;
@@ -64,5 +66,15 @@ trait BooleanTypeTrait
     public function xor(BooleanType $right): XorOperator
     {
         return new XorOperator($this, $right);
+    }
+
+    /**
+     * Negate this expression (using the NOT operator).
+     *
+     * @return Not
+     */
+    public function not(): Not
+    {
+        return new Not($this);
     }
 }
