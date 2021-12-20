@@ -26,7 +26,7 @@ use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\StringLiteral
+ * @covers \WikibaseSolutions\CypherDSL\Literals\StringLiteral
  */
 class StringLiteralTest extends TestCase
 {

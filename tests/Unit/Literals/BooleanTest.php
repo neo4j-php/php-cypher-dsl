@@ -26,7 +26,7 @@ use WikibaseSolutions\CypherDSL\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Boolean
+ * @covers \WikibaseSolutions\CypherDSL\Literals\Boolean
  */
 class BooleanTest extends TestCase
 {
