@@ -22,7 +22,6 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use TypeError;
 use WikibaseSolutions\CypherDSL\ExpressionList;
 use WikibaseSolutions\CypherDSL\Query;
 
@@ -33,7 +32,7 @@ class ExpressionListTest extends TestCase
 {
     use TestHelper;
 
-    public function testEmpty(): void
+    public function testEmpty()
     {
         $expressionList = new ExpressionList([]);
 
@@ -45,7 +44,7 @@ class ExpressionListTest extends TestCase
      * @param array $expressions
      * @param string $expected
      */
-    public function testOneDimensional(array $expressions, string $expected): void
+    public function testOneDimensional(array $expressions, string $expected)
     {
         $expressionList = new ExpressionList($expressions);
 
@@ -57,7 +56,7 @@ class ExpressionListTest extends TestCase
      * @param array $expressions
      * @param string $expected
      */
-    public function testMultidimensional(array $expressions, string $expected): void
+    public function testMultidimensional(array $expressions, string $expected)
     {
         $expressionList = new ExpressionList($expressions);
 

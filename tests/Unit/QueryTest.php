@@ -445,28 +445,28 @@ class QueryTest extends TestCase
         $this->assertSame("", $query->build());
     }
 
-    public function testInt(): void
+    public function testInt()
     {
         $literal = Query::literal(1);
         self::assertInstanceOf(Decimal::class, $literal);
         self::assertEquals('1', $literal->toQuery());
     }
 
-    public function testFloat(): void
+    public function testFloat()
     {
         $literal = Query::literal(1.2);
         self::assertInstanceOf(Decimal::class, $literal);
         self::assertEquals('1.2', $literal->toQuery());
     }
 
-    public function testString(): void
+    public function testString()
     {
         $literal = Query::literal('abc');
         self::assertInstanceOf(StringLiteral::class, $literal);
         self::assertEquals("'abc'", $literal->toQuery());
     }
 
-    public function testStringAble(): void
+    public function testStringAble()
     {
         $literal = Query::literal(new class () {
             public function __toString(): string
@@ -478,14 +478,14 @@ class QueryTest extends TestCase
         self::assertEquals("'stringable abc'", $literal->toQuery());
     }
 
-    public function testBool(): void
+    public function testBool()
     {
         $literal = Query::literal(true);
         self::assertInstanceOf(Boolean::class, $literal);
         self::assertEquals("true", $literal->toQuery());
     }
 
-    public function testInvalidLiteral(): void
+    public function testInvalidLiteral()
     {
         $literal = Query::literal(true);
         $this->expectException(InvalidArgumentException::class);
