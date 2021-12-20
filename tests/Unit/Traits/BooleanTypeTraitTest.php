@@ -24,6 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\AndOperator;
+use WikibaseSolutions\CypherDSL\Not;
 use WikibaseSolutions\CypherDSL\OrOperator;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
@@ -71,5 +72,12 @@ class BooleanTypeTraitTest extends TestCase
         $xor = $this->a->xor($this->b);
 
         $this->assertInstanceOf(XorOperator::class, $xor);
+    }
+
+    public function testNot()
+    {
+        $not = $this->a->not();
+
+        $this->assertInstanceOf(Not::class, $not);
     }
 }

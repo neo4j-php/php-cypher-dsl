@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
 use WikibaseSolutions\CypherDSL\AndOperator;
+use WikibaseSolutions\CypherDSL\Not;
 use WikibaseSolutions\CypherDSL\OrOperator;
 use WikibaseSolutions\CypherDSL\XorOperator;
 
@@ -53,4 +54,11 @@ interface BooleanType extends PropertyType
      * @return XorOperator
      */
     public function xor(BooleanType $right): XorOperator;
+
+    /**
+     * Negate this expression (using the NOT operator).
+     *
+     * @return Not
+     */
+    public function not(): Not;
 }

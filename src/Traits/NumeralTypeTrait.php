@@ -152,7 +152,7 @@ trait NumeralTypeTrait
     }
 
     /**
-     * Negate this expression.
+     * Negate this expression (negate the numeral using "-").
      *
      * @return Minus
      */
