@@ -21,20 +21,18 @@
 
 namespace WikibaseSolutions\CypherDSL\Functions;
 
-use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
-use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\DateTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
 
 /**
  * This class represents the "date()" function.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/
+ * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-date
  */
 class Date extends FunctionCall implements DateType
 {
-    use BooleanTypeTrait;
+    use DateTrait;
 
     /**
      * @var AnyType|null The input to the date function, from which to construct the date

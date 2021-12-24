@@ -50,7 +50,6 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
@@ -63,7 +62,7 @@ class Query implements QueryConvertable
 {
     use EscapeTrait;
 
-    // A reference to the literal class
+    // A reference to the Literal class
     const literal = Literal::class;
 
     // A reference to the FunctionCall class

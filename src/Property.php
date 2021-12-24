@@ -22,10 +22,13 @@
 namespace WikibaseSolutions\CypherDSL;
 
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
+use WikibaseSolutions\CypherDSL\Traits\DateTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\PointTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
@@ -51,10 +54,13 @@ class Property implements
     ListType
 {
     use EscapeTrait;
+    use DateTrait;
+    use DateTimeTrait;
     use BooleanTypeTrait;
     use ListTypeTrait;
     use NumeralTypeTrait;
     use StringTypeTrait;
+    use PointTrait;
     use MapTypeTrait;
 
     /**

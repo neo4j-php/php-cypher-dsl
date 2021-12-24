@@ -23,10 +23,12 @@ namespace WikibaseSolutions\CypherDSL;
 
 use InvalidArgumentException;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\PointTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -53,10 +55,13 @@ class Parameter implements
     StringType
 {
     use EscapeTrait;
+    use DateTimeTrait;
+    use DateTimeTrait;
     use ListTypeTrait;
     use BooleanTypeTrait;
     use MapTypeTrait;
     use NumeralTypeTrait;
+    use PointTrait;
     use StringTypeTrait;
 
     /**

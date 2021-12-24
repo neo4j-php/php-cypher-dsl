@@ -23,11 +23,14 @@ namespace WikibaseSolutions\CypherDSL;
 
 use WikibaseSolutions\CypherDSL\Traits\AssignableTrait;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
+use WikibaseSolutions\CypherDSL\Traits\DateTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\PathTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\PointTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\Assignable;
@@ -60,11 +63,14 @@ class Variable implements
     StringType
 {
     use EscapeTrait;
+    use DateTrait;
+    use DateTimeTrait;
     use BooleanTypeTrait;
     use ListTypeTrait;
     use MapTypeTrait;
     use NumeralTypeTrait;
     use PathTypeTrait;
+    use PointTrait;
     use StringTypeTrait;
 
     /**

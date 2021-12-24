@@ -21,37 +21,34 @@
 
 namespace WikibaseSolutions\CypherDSL\Functions;
 
-use WikibaseSolutions\CypherDSL\Traits\PointTrait;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
+use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
 
 /**
- * This class represents the "point()" function.
+ * This class represents the "datetime()" function.
  *
- * @note You most likely do not want to use this function directly. You probably want to use the Literal
- * class to construct these objects for you.
- *
- * @see https://neo4j.com/docs/cypher-manual/current/functions/spatial/
+ * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime
  */
-class Point extends FunctionCall implements PointType
+class DateTime extends FunctionCall implements DateType
 {
-    use PointTrait;
+    use DateTimeTrait;
 
     /**
-     * @var MapType The map to use for constructing the point
+     * @var AnyType|null The input to the date function, from which to construct the date
      */
-    private MapType $map;
+    private ?AnyType $value;
 
     /**
-     * Point constructor. The signature of the "point()" function is:
+     * Date constructor. The signature of the "date()" function is:
      *
-     * point(input :: MAP?) :: (POINT?) - returns a point object
+     * date(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (DATE?)
      *
-     * @param MapType $map The map to use for constructing the point
+     * @param AnyType|null $value The input to the date function, from which to construct the date
      */
-    public function __construct(MapType $map)
+    public function __construct(?AnyType $value = null)
     {
-        $this->map = $map;
+        $this->value = $value;
     }
 
     /**
@@ -59,7 +56,7 @@ class Point extends FunctionCall implements PointType
      */
     protected function getSignature(): string
     {
-        return "point(%s)";
+        return $this->value ? "date(%s)" : "date()";
     }
 
     /**
@@ -67,6 +64,6 @@ class Point extends FunctionCall implements PointType
      */
     protected function getParameters(): array
     {
-        return [$this->map];
+        return $this->value ? [$this->value] : [];
     }
 }
