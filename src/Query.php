@@ -41,6 +41,7 @@ use WikibaseSolutions\CypherDSL\Clauses\WithClause;
 use WikibaseSolutions\CypherDSL\Functions\FunctionCall;
 use WikibaseSolutions\CypherDSL\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
@@ -50,7 +51,6 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
@@ -126,26 +126,29 @@ class Query implements QueryConvertable
      * Creates a new literal from the given value. This function automatically constructs the appropriate
      * class based on the type of the value given.
      *
+     * If no value is given, the name of the Literal class is returned, which allows for more fine grained
+     * control over what literal is constructed. For example, to create a string literal, you can do the
+     * following:
+     *
+     *  Query::literal()::string($value);
+     *
+     * You can create a Point literal by using any of the following functions:
+     *
+     *  Query::literal()::point2d(...)
+     *  Query::literal()::point3d(...)
+     *  Query::literal()::point2dWGS84(...)
+     *  Query::literal()::point3dWGS84(...)
+     *
      * @param mixed $literal The literal to construct
-     * @return StringLiteral|Boolean|Decimal
+     * @return StringLiteral|Boolean|Decimal|Literal|string
      */
-    public static function literal($literal): PropertyType
+    public static function literal($literal = null)
     {
-        if (is_string($literal) || (is_object($literal) && method_exists($literal, '__toString'))) {
-            return new StringLiteral((string) $literal);
+        if ($literal === null) {
+            return Literal::class;
         }
 
-        if (is_bool($literal)) {
-            return new Boolean($literal);
-        }
-
-        if (is_int($literal) || is_float($literal)) {
-            return new Decimal($literal);
-        }
-
-        $actualType = is_object($literal) ? get_class($literal) : gettype($literal);
-
-        throw new InvalidArgumentException("The literal type " . $actualType . " is not supported by Cypher");
+        return Literal::literal($literal);
     }
 
     /**

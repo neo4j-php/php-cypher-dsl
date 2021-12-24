@@ -27,6 +27,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
@@ -37,7 +38,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/spatial/
  */
-class Point extends FunctionCall implements BooleanType
+class Point extends FunctionCall implements PointType
 {
     use BooleanTypeTrait;
 
