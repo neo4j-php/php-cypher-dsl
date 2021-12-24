@@ -21,7 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use InvalidArgumentException;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
@@ -51,6 +50,7 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
@@ -62,6 +62,12 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 class Query implements QueryConvertable
 {
     use EscapeTrait;
+
+    // A reference to the literal class
+    const literal = Literal::class;
+
+    // A reference to the FunctionCall class
+    const function = FunctionCall::class;
 
     /**
      * @var Clause[] $clauses
@@ -126,18 +132,14 @@ class Query implements QueryConvertable
      * Creates a new literal from the given value. This function automatically constructs the appropriate
      * class based on the type of the value given.
      *
-     * If no value is given, the name of the Literal class is returned, which allows for more fine grained
-     * control over what literal is constructed. For example, to create a string literal, you can do the
-     * following:
-     *
-     *  Query::literal()::string($value);
+     * This function cannot be used directly to construct Point or Date types.
      *
      * You can create a Point literal by using any of the following functions:
      *
-     *  Query::literal()::point2d(...)
-     *  Query::literal()::point3d(...)
-     *  Query::literal()::point2dWGS84(...)
-     *  Query::literal()::point3dWGS84(...)
+     *  Query::literal()::point2d(...) - For a 2D cartesian point
+     *  Query::literal()::point3d(...) - For a 3D cartesian point
+     *  Query::literal()::point2dWGS84(...) - For a 2D WGS 84 point
+     *  Query::literal()::point3dWGS84(...) - For a 3D WGS 84 point
      *
      * @param mixed $literal The literal to construct
      * @return StringLiteral|Boolean|Decimal|Literal|string
@@ -145,7 +147,7 @@ class Query implements QueryConvertable
     public static function literal($literal = null)
     {
         if ($literal === null) {
-            return Literal::class;
+            return self::literal;
         }
 
         return Literal::literal($literal);
@@ -200,7 +202,7 @@ class Query implements QueryConvertable
      */
     public static function function(): string
     {
-        return FunctionCall::class;
+        return self::function;
     }
 
     /**

@@ -34,6 +34,7 @@ use WikibaseSolutions\CypherDSL\Types\Assignable;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
@@ -47,6 +48,7 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
  */
 class Variable implements
     BooleanType,
+    DateType,
     ListType,
     MapType,
     NodeType,

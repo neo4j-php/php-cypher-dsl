@@ -30,6 +30,7 @@ use WikibaseSolutions\CypherDSL\Exists;
 use WikibaseSolutions\CypherDSL\ExpressionList;
 use WikibaseSolutions\CypherDSL\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Parameter;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
@@ -191,6 +192,14 @@ class QueryTest extends TestCase
         $map = Query::map([]);
 
         $this->assertInstanceOf(PropertyMap::class, $map);
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testFunction()
+    {
+        Query::function()::raw("test", []);
     }
 
     public function testMatch()
@@ -490,6 +499,13 @@ class QueryTest extends TestCase
         $literal = Query::literal(true);
         $this->expectException(InvalidArgumentException::class);
         Query::literal($literal);
+    }
+
+    public function testLiteralReference()
+    {
+        $value = Query::literal();
+
+        $this->assertSame(Literal::class, $value);
     }
 
     public function testWikiExamples()

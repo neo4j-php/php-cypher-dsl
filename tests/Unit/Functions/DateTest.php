@@ -23,35 +23,43 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Functions;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Functions\Point;
+use WikibaseSolutions\CypherDSL\Functions\Date;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Functions\Point
+ * @covers \WikibaseSolutions\CypherDSL\Functions\Date
  */
-class PointTest extends TestCase
+class DateTest extends TestCase
 {
     use TestHelper;
 
     public function testToQuery()
     {
-        $map = $this->getQueryConvertableMock(MapType::class, "{latitude: toInteger('1'), longitude: toInteger('1')}");
+        $map = $this->getQueryConvertableMock(MapType::class, "map");
 
-        $point = new Point($map);
+        $date = new Date($map);
 
-        $this->assertSame("point({latitude: toInteger('1'), longitude: toInteger('1')})", $point->toQuery());
+        $this->assertSame("date(map)", $date->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsVariable()
+    public function testEmpty()
+    {
+        $date = new Date();
+
+        $this->assertSame("date()", $date->toQuery());
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsAnyType()
     {
         $map = $this->getQueryConvertableMock(AnyType::class, "map");
 
-        $this->expectException(TypeError::class);
+        $date = new Date($map);
 
-        $point = new Point($map);
-
-        $point->toQuery();
+        $date->toQuery();
     }
 }

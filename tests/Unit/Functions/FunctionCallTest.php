@@ -24,15 +24,18 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Functions;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Functions\All;
 use WikibaseSolutions\CypherDSL\Functions\Any;
+use WikibaseSolutions\CypherDSL\Functions\Date;
 use WikibaseSolutions\CypherDSL\Functions\Exists;
 use WikibaseSolutions\CypherDSL\Functions\FunctionCall;
 use WikibaseSolutions\CypherDSL\Functions\IsEmpty;
 use WikibaseSolutions\CypherDSL\Functions\None;
+use WikibaseSolutions\CypherDSL\Functions\Point;
 use WikibaseSolutions\CypherDSL\Functions\RawFunction;
 use WikibaseSolutions\CypherDSL\Functions\Single;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Variable;
 
 /**
@@ -109,5 +112,27 @@ class FunctionCallTest extends TestCase
         $single = FunctionCall::single($variable, $list, $predicate);
 
         $this->assertInstanceOf(Single::class, $single);
+    }
+
+    public function testPoint()
+    {
+        $map = $this->getQueryConvertableMock(MapType::class, "map");
+
+        $point = FunctionCall::point($map);
+
+        $this->assertInstanceOf(Point::class, $point);
+    }
+
+    public function testDate()
+    {
+        $map = $this->getQueryConvertableMock(MapType::class, "map");
+
+        $date = FunctionCall::date($map);
+
+        $this->assertInstanceOf(Date::class, $date);
+
+        $date = FunctionCall::date();
+
+        $this->assertInstanceOf(Date::class, $date);
     }
 }

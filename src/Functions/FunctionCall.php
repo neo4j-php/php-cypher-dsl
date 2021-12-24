@@ -146,11 +146,27 @@ abstract class FunctionCall implements QueryConvertable
      *
      * @param MapType $map The map to use for constructing the point
      * @note You probably want to use the Literal class instead of this function
+     *
      * @return Point
      */
     public static function point(MapType $map): Point
     {
         return new Point($map);
+    }
+
+    /**
+     * Calls the "date()" function. The signature of the "date()" function is:
+     *
+     * date(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (DATE?)
+     *
+     * @param AnyType|null $map The input to the date function, from which to construct the date
+     * @note You probably want to use the Literal class instead of this function
+     *
+     * @return Date
+     */
+    public static function date(?AnyType $map = null): Date
+    {
+        return new Date($map);
     }
 
     /**

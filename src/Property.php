@@ -31,6 +31,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
@@ -38,7 +39,14 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 /**
  * Represents a property. A property in Cypher would be something like "n.prop" or "n.a".
  */
-class Property implements BooleanType, NumeralType, StringType, MapType, PointType, ListType
+class Property implements
+    BooleanType,
+    DateType,
+    NumeralType,
+    StringType,
+    MapType,
+    PointType,
+    ListType
 {
     use EscapeTrait;
     use BooleanTypeTrait;
