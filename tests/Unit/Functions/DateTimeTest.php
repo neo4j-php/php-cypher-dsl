@@ -22,15 +22,15 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Functions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Functions\Date;
+use WikibaseSolutions\CypherDSL\Functions\DateTime;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Functions\Date
+ * @covers \WikibaseSolutions\CypherDSL\Functions\DateTime
  */
-class DateTest extends TestCase
+class DateTimeTest extends TestCase
 {
     use TestHelper;
 
@@ -38,16 +38,16 @@ class DateTest extends TestCase
     {
         $map = $this->getQueryConvertableMock(MapType::class, "map");
 
-        $date = new Date($map);
+        $date = new DateTime($map);
 
-        $this->assertSame("date(map)", $date->toQuery());
+        $this->assertSame("datetime(map)", $date->toQuery());
     }
 
     public function testEmpty()
     {
-        $date = new Date();
+        $date = new DateTime();
 
-        $this->assertSame("date()", $date->toQuery());
+        $this->assertSame("datetime()", $date->toQuery());
     }
 
     /**
@@ -57,7 +57,7 @@ class DateTest extends TestCase
     {
         $map = $this->getQueryConvertableMock(AnyType::class, "map");
 
-        $date = new Date($map);
+        $date = new DateTime($map);
 
         $date->toQuery();
     }

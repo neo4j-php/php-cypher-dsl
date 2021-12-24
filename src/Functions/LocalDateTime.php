@@ -21,33 +21,34 @@
 
 namespace WikibaseSolutions\CypherDSL\Functions;
 
-use WikibaseSolutions\CypherDSL\Traits\DateTrait;
+use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 
 /**
- * This class represents the "date()" function.
+ * This class represents the "localdatetime()" function.
  *
  * @note You most likely do not want to use this function directly. You probably want to use the Literal
  * class to construct these objects for you.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-date
+ * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime
  */
-class Date extends FunctionCall implements DateType
+class LocalDateTime extends FunctionCall implements LocalDateTimeType
 {
-    use DateTrait;
+    use LocalDateTimeTrait;
 
     /**
-     * @var AnyType|null The input to the date function, from which to construct the date
+     * @var AnyType|null The input to the localdatetime function, from which to construct the localdatetime
      */
     private ?AnyType $value;
 
     /**
-     * Date constructor. The signature of the "date()" function is:
+     * DateTime constructor. The signature of the "localdatetime()" function is:
      *
-     * date(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (DATE?)
+     * localdatetime(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (LOCALDATETIME?)
      *
-     * @param AnyType|null $value The input to the date function, from which to construct the date
+     * @param AnyType|null $value The input to the localdatetime function, from which to construct the localdatetime
      */
     public function __construct(?AnyType $value = null)
     {
@@ -59,7 +60,7 @@ class Date extends FunctionCall implements DateType
      */
     protected function getSignature(): string
     {
-        return $this->value ? "date(%s)" : "date()";
+        return $this->value ? "localdatetime(%s)" : "localdatetime()";
     }
 
     /**

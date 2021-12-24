@@ -25,9 +25,11 @@ use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Functions\All;
 use WikibaseSolutions\CypherDSL\Functions\Any;
 use WikibaseSolutions\CypherDSL\Functions\Date;
+use WikibaseSolutions\CypherDSL\Functions\DateTime;
 use WikibaseSolutions\CypherDSL\Functions\Exists;
 use WikibaseSolutions\CypherDSL\Functions\FunctionCall;
 use WikibaseSolutions\CypherDSL\Functions\IsEmpty;
+use WikibaseSolutions\CypherDSL\Functions\LocalDateTime;
 use WikibaseSolutions\CypherDSL\Functions\None;
 use WikibaseSolutions\CypherDSL\Functions\Point;
 use WikibaseSolutions\CypherDSL\Functions\RawFunction;
@@ -125,14 +127,40 @@ class FunctionCallTest extends TestCase
 
     public function testDate()
     {
-        $map = $this->getQueryConvertableMock(MapType::class, "map");
+        $value = $this->getQueryConvertableMock(AnyType::class, "value");
 
-        $date = FunctionCall::date($map);
+        $date = FunctionCall::date($value);
 
         $this->assertInstanceOf(Date::class, $date);
 
         $date = FunctionCall::date();
 
         $this->assertInstanceOf(Date::class, $date);
+    }
+
+    public function testDateTime()
+    {
+        $value = $this->getQueryConvertableMock(AnyType::class, "value");
+
+        $date = FunctionCall::datetime($value);
+
+        $this->assertInstanceOf(DateTime::class, $date);
+
+        $date = FunctionCall::datetime();
+
+        $this->assertInstanceOf(DateTime::class, $date);
+    }
+
+    public function testLocalDateTime()
+    {
+        $value = $this->getQueryConvertableMock(AnyType::class, "value");
+
+        $date = FunctionCall::localdatetime($value);
+
+        $this->assertInstanceOf(LocalDateTime::class, $date);
+
+        $date = FunctionCall::localdatetime();
+
+        $this->assertInstanceOf(LocalDateTime::class, $date);
     }
 }

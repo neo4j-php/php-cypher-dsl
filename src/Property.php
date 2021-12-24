@@ -26,6 +26,7 @@ use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\DateTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\PointTrait;
@@ -36,6 +37,7 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
@@ -51,7 +53,8 @@ class Property implements
     StringType,
     MapType,
     PointType,
-    ListType
+    ListType,
+    LocalDateTimeType
 {
     use EscapeTrait;
     use DateTrait;
@@ -62,6 +65,7 @@ class Property implements
     use StringTypeTrait;
     use PointTrait;
     use MapTypeTrait;
+    use LocalDateTimeTrait;
 
     /**
      * @var MapType The expression to which this property belongs

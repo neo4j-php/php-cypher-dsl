@@ -28,6 +28,9 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
 /**
  * This class represents the "datetime()" function.
  *
+ * @note You most likely do not want to use this function directly. You probably want to use the Literal
+ * class to construct these objects for you.
+ *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime
  */
 class DateTime extends FunctionCall implements DateType
@@ -35,16 +38,16 @@ class DateTime extends FunctionCall implements DateType
     use DateTimeTrait;
 
     /**
-     * @var AnyType|null The input to the date function, from which to construct the date
+     * @var AnyType|null The input to the datetime function, from which to construct the datetime
      */
     private ?AnyType $value;
 
     /**
-     * Date constructor. The signature of the "date()" function is:
+     * DateTime constructor. The signature of the "datetime()" function is:
      *
-     * date(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (DATE?)
+     * datetime(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (DATETIME?)
      *
-     * @param AnyType|null $value The input to the date function, from which to construct the date
+     * @param AnyType|null $value The input to the datetime function, from which to construct the datetime
      */
     public function __construct(?AnyType $value = null)
     {
@@ -56,7 +59,7 @@ class DateTime extends FunctionCall implements DateType
      */
     protected function getSignature(): string
     {
-        return $this->value ? "date(%s)" : "date()";
+        return $this->value ? "datetime(%s)" : "datetime()";
     }
 
     /**

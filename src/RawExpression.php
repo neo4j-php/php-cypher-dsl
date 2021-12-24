@@ -25,6 +25,7 @@ use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\DateTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
@@ -36,6 +37,7 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
@@ -50,6 +52,7 @@ class RawExpression implements
     DateType,
     DateTimeType,
     ListType,
+    LocalDateTimeType,
     MapType,
     BooleanType,
     NumeralType,
@@ -62,6 +65,7 @@ class RawExpression implements
     use DateTrait;
     use DateTimeTrait;
     use ListTypeTrait;
+    use LocalDateTimeTrait;
     use MapTypeTrait;
     use PointTrait;
     use NodeTypeTrait;

@@ -159,14 +159,44 @@ abstract class FunctionCall implements QueryConvertable
      *
      * date(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (DATE?)
      *
-     * @param AnyType|null $map The input to the date function, from which to construct the date
+     * @param AnyType|null $value The input to the date function, from which to construct the date
      * @note You probably want to use the Literal class instead of this function
      *
      * @return Date
      */
-    public static function date(?AnyType $map = null): Date
+    public static function date(?AnyType $value = null): Date
     {
-        return new Date($map);
+        return new Date($value);
+    }
+
+    /**
+     * Calls the "datetime()" function. The signature of the "datetime()" function is:
+     *
+     * datetime(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (DATETIME?)
+     *
+     * @param AnyType|null $value The input to the datetime function, from which to construct the datetime
+     * @note You probably want to use the Literal class instead of this function
+     *
+     * @return DateTime
+     */
+    public static function datetime(?AnyType $value = null): DateTime
+    {
+        return new DateTime($value);
+    }
+
+    /**
+     * Calls the "localdatetime()" function. The signature of the "localdatetime()" function is:
+     *
+     * datetime(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (LOCALDATETIME?)
+     *
+     * @param AnyType|null $value The input to the localdatetime function, from which to construct the localdatetime
+     * @note You probably want to use the Literal class instead of this function
+     *
+     * @return DateTime
+     */
+    public static function localdatetime(?AnyType $value = null): LocalDateTime
+    {
+        return new LocalDateTime($value);
     }
 
     /**
