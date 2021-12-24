@@ -38,6 +38,7 @@ use WikibaseSolutions\CypherDSL\Clauses\ReturnClause;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
+use WikibaseSolutions\CypherDSL\Functions\FunctionCall;
 use WikibaseSolutions\CypherDSL\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Literals\Decimal;
 use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
@@ -185,6 +186,18 @@ class Query implements QueryConvertable
     public static function parameter(string $parameter): Parameter
     {
         return new Parameter($parameter);
+    }
+
+    /**
+     * Returns the name of the FunctionCall class. This can be used to more easily create new functions calls, like so:
+     *
+     * Query::function()::raw(...)
+     *
+     * @return FunctionCall
+     */
+    public static function function(): string
+    {
+        return FunctionCall::class;
     }
 
     /**
