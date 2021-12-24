@@ -22,10 +22,10 @@
 namespace WikibaseSolutions\CypherDSL\Literals;
 
 use InvalidArgumentException;
-use WikibaseSolutions\CypherDSL\Functions\Date;
 use WikibaseSolutions\CypherDSL\Functions\FunctionCall;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
@@ -217,6 +217,62 @@ abstract class Literal
         }
 
         return FunctionCall::date($date);
+    }
+
+    /**
+     * Retrieves the current DateTime value, optionally for a different time zone. In reality, this
+     * function just returns a call to the "datetime()" function.
+     *
+     * @param string|StringType $timezone
+     * @return DateTimeType
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime-current
+     */
+    public static function dateTime($timezone = null): DateTimeType
+    {
+        if ($timezone === null) {
+            return FunctionCall::datetime();
+        }
+
+        if (!($timezone instanceof StringType)) {
+            $timezone = self::string($timezone);
+        }
+
+        return FunctionCall::datetime(Query::map(["timezone" => $timezone]));
+    }
+
+    /**
+     * Creates a date from the given year, month, day and time values.
+     *
+     * @param int|NumeralType $year
+     * @param null|int|NumeralType $month
+     * @param null|int|NumeralType $day
+     * @param null|int|NumeralType $hour
+     * @param null|int|NumeralType $minute
+     * @param null|int|NumeralType $second
+     * @param null|int|NumeralType $millisecond
+     * @param null|int|NumeralType $microsecond
+     * @param null|int|NumeralType $nanosecond
+     * @param null|string|StringType $timezone
+     * @return DateTimeType
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime-calendar
+     */
+    public static function dateTimeYMD($year, $month = null, $day = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null, $timezone = null): DateTimeType
+    {
+        // Only the least significant components may be omitted; check whether this is the case
+        $setVariables = [isset($month), isset($day), isset($hour), isset($minute), isset($second), isset($millisecond), isset($microsecond), isset($nanosecond)];
+        $previous = true;
+
+        foreach ($setVariables as $setVariable) {
+            if ($setVariable === true && $previous === false) {
+                throw new \LogicException("Only the least significant components may be omitted");
+            }
+
+            $previous = $setVariable;
+        }
+
+        // TODO
     }
 
     /**

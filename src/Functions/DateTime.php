@@ -23,7 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Functions;
 
 use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
 
 /**
  * This class represents the "datetime()" function.
@@ -33,7 +33,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime
  */
-class DateTime extends FunctionCall implements DateType
+class DateTime extends FunctionCall implements DateTimeType
 {
     use DateTimeTrait;
 
