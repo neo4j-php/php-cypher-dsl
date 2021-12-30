@@ -17,4 +17,15 @@
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>
+    <coverage cacheDirectory=".phpunit.cache/code-coverage"
+            includeUncoveredFiles="true"
+            processUncoveredFiles="true"
+            pathCoverage="false">
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+        <report>
+            <clover outputFile="clover.xml" />
+        </report>
+    </coverage>
 </phpunit>

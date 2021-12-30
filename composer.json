@@ -52,7 +52,7 @@
     }
   },
   "scripts": {
-    "test": "phpunit tests/",
+    "test": "XDEBUG_MODE=coverage phpunit tests/ --coverage-html 'coverage/'",
     "infect": "XDEBUG_MODE=coverage infection --show-mutations"
   },
   "minimum-stability": "stable",
