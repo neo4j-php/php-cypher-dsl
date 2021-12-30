@@ -65,6 +65,6 @@ jobs:
         uses: timkrase/phpunit-coverage-badge@v1.2.0
         with:
           report: ${{ env.INSTALL_PATH }}/clover.xml
-          coverage_badge_path: .github/phpunit_coverage_badge.svg
+          coverage_badge_path: ${{ env.INSTALL_PATH }}/.github/phpunit_coverage_badge.svg
           push_badge: true
           repo_token: ${{ secrets.GITHUB_TOKEN }}
