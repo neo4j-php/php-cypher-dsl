@@ -22,8 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use InvalidArgumentException;
+use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Variable;
 
@@ -48,6 +51,11 @@ class Node implements NodeType
     private ?Variable $variable;
 
     /**
+     * @var MapType|null
+     */
+    private ?MapType $properties;
+
+    /**
      * Node constructor.
      *
      * @param string|null $label
@@ -57,6 +65,47 @@ class Node implements NodeType
         if ($label !== null) {
             $this->labels[] = $label;
         }
+    }
+
+    /**
+     * Add the given property to the properties of this node.
+     *
+     * @param string $key The name of the property
+     * @param AnyType $value The value of the property
+     * @return NodeType
+     */
+    public function withProperty(string $key, AnyType $value): NodeType
+    {
+        if (!isset($this->properties)) {
+            $this->properties = new PropertyMap();
+        }
+
+        $this->properties->addProperty($key, $value);
+
+        return $this;
+    }
+
+    /**
+     * Add the given properties to the properties of this node.
+     *
+     * @param PropertyMap|array $properties
+     * @return NodeType
+     */
+    public function withProperties($properties): NodeType
+    {
+        if (!isset($this->properties)) {
+            $this->properties = new PropertyMap();
+        }
+
+        if (is_array($properties)) {
+            $properties = new PropertyMap($properties);
+        } elseif (!($properties instanceof PropertyMap)) {
+            throw new InvalidArgumentException("\$properties must either be an array or a PropertyMap object");
+        }
+
+        $this->properties = $this->properties->mergeWith($properties);
+
+        return $this;
     }
 
     /**
