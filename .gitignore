@@ -1,6 +1,8 @@
 .DS_Store
 composer.lock
 phpunit.xml
+.phpunit.cache/
 vendor/
 *.idea
 .phpunit.result.cache
+clover.xml
