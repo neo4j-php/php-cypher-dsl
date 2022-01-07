@@ -25,8 +25,6 @@ jobs:
 
     env:
       COMPOSER_VERSION: 2
-      INSTALL_PATH: php-cypher-dsl
-      REPOSITORY_NAME: php-cypher-dsl
 
     steps:
       # https://getcomposer.org/download/
@@ -48,8 +46,6 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v2
-        with:
-          repository: WikibaseSolutions/${{ env.REPOSITORY_NAME }}
 
       - name: Install dependencies
         run: composer update 
@@ -63,7 +59,6 @@ jobs:
       - name: Generate test coverage badge
         uses: timkrase/phpunit-coverage-badge@v1.2.0
         with:
-          report: clover.xml
           coverage_badge_path: phpunit_coverage_badge.svg
           push_badge: true
           repo_token: ${{ secrets.GITHUB_TOKEN }}
