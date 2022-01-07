@@ -50,16 +50,15 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: WikibaseSolutions/${{ env.REPOSITORY_NAME }}
-          path: ${{ env.REPOSITORY_NAME }}
 
       - name: Install dependencies
-        run: composer update --working-dir ${{ env.INSTALL_PATH }}
+        run: composer update 
 
       - name: Run unit tests
-        run: composer test --working-dir ${{ env.INSTALL_PATH }}
+        run: composer test
 
       - name: Run mutation tests
-        run: composer infect --working-dir ${{ env.INSTALL_PATH }}
+        run: composer infect
 
       - name: Generate test coverage badge
         uses: timkrase/phpunit-coverage-badge@v1.2.0
