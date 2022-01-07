@@ -41,6 +41,7 @@ abstract class FunctionCall implements QueryConvertable
      *
      * @param string $functionName The name of the function to call
      * @param AnyType[] $parameters The parameters to pass to the function call
+     *
      * @return RawFunction
      */
     public static function raw(string $functionName, array $parameters): RawFunction
@@ -56,6 +57,7 @@ abstract class FunctionCall implements QueryConvertable
      * @param Variable $variable A variable that can be used from within the predicate
      * @param ListType $list A list
      * @param AnyType $predicate A predicate that is tested against all items in the list
+     *
      * @return All
      */
     public static function all(Variable $variable, ListType $list, AnyType $predicate): All
@@ -85,6 +87,7 @@ abstract class FunctionCall implements QueryConvertable
      * exists(input :: ANY?) :: (BOOLEAN?)
      *
      * @param AnyType $expression A pattern or property
+     *
      * @return Exists
      */
     public static function exists(AnyType $expression): Exists
@@ -100,6 +103,7 @@ abstract class FunctionCall implements QueryConvertable
      * isEmpty(input :: STRING?) :: (BOOLEAN?) - to check whether a string is empty
      *
      * @param ListType|MapType|StringType $list An expression that returns a list
+     *
      * @return IsEmpty
      */
     public static function isEmpty(AnyType $list): IsEmpty
@@ -192,11 +196,41 @@ abstract class FunctionCall implements QueryConvertable
      * @param AnyType|null $value The input to the localdatetime function, from which to construct the localdatetime
      * @note You probably want to use the Literal class instead of this function
      *
-     * @return DateTime
+     * @return LocalDateTime
      */
     public static function localdatetime(?AnyType $value = null): LocalDateTime
     {
         return new LocalDateTime($value);
+    }
+
+    /**
+     * Calls the "localtime()" function. The signature of the "localtime()" function is:
+     *
+     * localtime(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (LOCALTIME?)
+     *
+     * @param AnyType|null $value The input to the localtime function, from which to construct the localtime
+     * @note You probably want to use the Literal class instead of this function
+     *
+     * @return LocalTime
+     */
+    public static function localtime(?AnyType $value = null): LocalTime
+    {
+        return new LocalTime($value);
+    }
+
+    /**
+     * Calls the "time()" function. The signature of the "time()" function is:
+     *
+     * time(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (TIME?)
+     *
+     * @param AnyType|null $value The input to the localtime function, from which to construct the time
+     * @note You probably want to use the Literal class instead of this function
+     *
+     * @return Time
+     */
+    public static function time(?AnyType $value = null): Time
+    {
+        return new Time($value);
     }
 
     /**
