@@ -22,15 +22,15 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Functions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Functions\LocalDateTime;
+use WikibaseSolutions\CypherDSL\Functions\LocalTime;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Functions\LocalDateTime
+ * @covers \WikibaseSolutions\CypherDSL\Functions\LocalTime
  */
-class LocalDateTimeTest extends TestCase
+class LocalTimeTest extends TestCase
 {
     use TestHelper;
 
@@ -38,16 +38,16 @@ class LocalDateTimeTest extends TestCase
     {
         $map = $this->getQueryConvertableMock(MapType::class, "map");
 
-        $date = new LocalDateTime($map);
+        $date = new LocalTime($map);
 
-        $this->assertSame("localdatetime(map)", $date->toQuery());
+        $this->assertSame("localtime(map)", $date->toQuery());
     }
 
     public function testEmpty()
     {
-        $date = new LocalDateTime();
+        $date = new LocalTime();
 
-        $this->assertSame("localdatetime()", $date->toQuery());
+        $this->assertSame("localtime()", $date->toQuery());
     }
 
     /**
@@ -57,7 +57,7 @@ class LocalDateTimeTest extends TestCase
     {
         $map = $this->getQueryConvertableMock(AnyType::class, "map");
 
-        $date = new LocalDateTime($map);
+        $date = new LocalTime($map);
 
         $date->toQuery();
     }

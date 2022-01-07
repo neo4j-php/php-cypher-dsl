@@ -26,21 +26,25 @@ use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\DateTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTrait;
+use WikibaseSolutions\CypherDSL\Traits\LocalTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\PathTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\PointTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TimeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 
@@ -53,25 +57,29 @@ class RawExpression implements
     DateTimeType,
     ListType,
     LocalDateTimeType,
+    LocalTimeType,
     MapType,
     BooleanType,
     NumeralType,
     StringType,
     PointType,
     NodeType,
-    PathType
+    PathType,
+    TimeType
 {
     use BooleanTypeTrait;
     use DateTrait;
     use DateTimeTrait;
     use ListTypeTrait;
     use LocalDateTimeTrait;
+    use LocalTimeTrait;
     use MapTypeTrait;
     use PointTrait;
     use NodeTypeTrait;
     use NumeralTypeTrait;
     use PathTypeTrait;
     use StringTypeTrait;
+    use TimeTrait;
 
     /**
      * @var string The raw expression

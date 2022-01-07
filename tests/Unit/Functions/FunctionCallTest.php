@@ -30,10 +30,12 @@ use WikibaseSolutions\CypherDSL\Functions\Exists;
 use WikibaseSolutions\CypherDSL\Functions\FunctionCall;
 use WikibaseSolutions\CypherDSL\Functions\IsEmpty;
 use WikibaseSolutions\CypherDSL\Functions\LocalDateTime;
+use WikibaseSolutions\CypherDSL\Functions\LocalTime;
 use WikibaseSolutions\CypherDSL\Functions\None;
 use WikibaseSolutions\CypherDSL\Functions\Point;
 use WikibaseSolutions\CypherDSL\Functions\RawFunction;
 use WikibaseSolutions\CypherDSL\Functions\Single;
+use WikibaseSolutions\CypherDSL\Functions\Time;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
@@ -162,5 +164,31 @@ class FunctionCallTest extends TestCase
         $date = FunctionCall::localdatetime();
 
         $this->assertInstanceOf(LocalDateTime::class, $date);
+    }
+
+    public function testLocalTime()
+    {
+        $value = $this->getQueryConvertableMock(AnyType::class, "value");
+
+        $date = FunctionCall::localtime($value);
+
+        $this->assertInstanceOf(LocalTime::class, $date);
+
+        $date = FunctionCall::localtime();
+
+        $this->assertInstanceOf(LocalTime::class, $date);
+    }
+
+    public function testTime()
+    {
+        $value = $this->getQueryConvertableMock(AnyType::class, "value");
+
+        $date = FunctionCall::time($value);
+
+        $this->assertInstanceOf(Time::class, $date);
+
+        $date = FunctionCall::time();
+
+        $this->assertInstanceOf(Time::class, $date);
     }
 }
