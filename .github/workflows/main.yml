@@ -64,7 +64,7 @@ jobs:
       - name: Generate test coverage badge
         uses: timkrase/phpunit-coverage-badge@v1.2.0
         with:
-          report: ${{ env.INSTALL_PATH }}/clover.xml
-          coverage_badge_path: ${{ env.INSTALL_PATH }}/phpunit_coverage_badge.svg
+          report: clover.xml
+          coverage_badge_path: phpunit_coverage_badge.svg
           push_badge: true
           repo_token: ${{ secrets.GITHUB_TOKEN }}
