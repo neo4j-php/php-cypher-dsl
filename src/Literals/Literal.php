@@ -260,20 +260,240 @@ abstract class Literal
      */
     public static function dateTimeYMD($year, $month = null, $day = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null, $timezone = null): DateTimeType
     {
-        // Only the least significant components may be omitted; check whether this is the case
-        $setVariables = [isset($month), isset($day), isset($hour), isset($minute), isset($second), isset($millisecond), isset($microsecond), isset($nanosecond)];
+        $setVariables = self::checkOrderAndConvert2Numeral([
+            "month"=> $month,
+            "day" => $day,
+            "hour" => $hour,
+            "minute" => $minute,
+            "second" => $second,
+            "millisecond" => $millisecond,
+            "microsecond" => $microsecond,
+            "nanosecond" => $nanosecond
+        ]);
+
+        if (!($year instanceof NumeralType)) {
+            $year = self::decimal($year);
+        }
+
+        $map = ["year" => $year];
+
+        if ($month !== null) $map["month"] = $setVariables["month"];
+        if ($day !== null) $map["day"] = $setVariables["day"];
+        if ($hour !== null) $map["hour"] = $setVariables["hour"];
+        if ($minute !== null) $map["minute"] = $setVariables["minute"];
+        if ($second !== null) $map["second"] = $setVariables["second"];
+        if ($millisecond !== null) $map["millisecond"] = $setVariables["millisecond"];
+        if ($microsecond !== null) $map["microsecond"] = $setVariables["microsecond"];
+        if ($nanosecond !== null) $map["nanosecond"] = $setVariables["nanosecond"];
+        if ($timezone !== null) {
+            if (!($timezone instanceof StringType)) {
+                $timezone = self::string($timezone);
+            }
+            $map["timezone"] = $timezone;
+        }
+
+        return FunctionCall::datetime(Query::map($map));
+    }
+
+    /**
+     * checks the order of the array items, and converts the items to NumeralType
+     *
+     * @param array $array
+     * @return array
+     */
+    private static function checkOrderAndConvert2Numeral(array $array): array {
         $previous = true;
 
-        foreach ($setVariables as $setVariable) {
-            if ($setVariable === true && $previous === false) {
+        foreach ($array as $key => $setVariable) {
+            // Only the least significant components may be omitted; check whether this is the case
+            if (isset($setVariable) === true && $previous === false) {
                 throw new \LogicException("Only the least significant components may be omitted");
             }
 
-            $previous = $setVariable;
+            // check if variable has been set and convert always to NumeralType
+            if (isset($setVariable)) {
+                if (!($setVariable instanceof NumeralType)) {
+                    $setVariable = self::decimal($setVariable);
+                    $array[$key] = $setVariable;
+                }
+            }
+
+            $previous = isset($setVariable);
         }
 
-        // TODO
+        return $array;
     }
+
+    /**
+     * Creates a datetime with the specified year, week, dayOfWeek, hour, minute, second, millisecond, microsecond, nanosecond and timezone component values.
+     *
+     * @param int|NumeralType $year
+     * @param null|int|NumeralType $week
+     * @param null|int|NumeralType $dayOfWeek
+     * @param null|int|NumeralType $hour
+     * @param null|int|NumeralType $minute
+     * @param null|int|NumeralType $second
+     * @param null|int|NumeralType $millisecond
+     * @param null|int|NumeralType $microsecond
+     * @param null|int|NumeralType $nanosecond
+     * @param null|string|StringType $timezone
+     * @return DateTimeType
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime-week
+     */
+    public static function datetimeYWD($year, $week = null, $dayOfWeek = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null, $timezone = null): DateTimeType
+    {
+        $setVariables = self::checkOrderAndConvert2Numeral([
+            "week" => $week,
+            "dayOfWeek" => $dayOfWeek,
+            "hour" => $hour,
+            "minute" => $minute,
+            "second" => $second,
+            "millisecond" => $millisecond,
+            "microsecond" => $microsecond,
+            "nanosecond" => $nanosecond
+        ]);
+
+        if (!($year instanceof NumeralType)) {
+            $year = self::decimal($year);
+        }
+
+        $map = ["year" => $year];
+
+        if ($week !== null) $map["week"] = $setVariables["week"];
+        if ($dayOfWeek !== null) $map["dayOfWeek"] = $setVariables["dayOfWeek"];
+        if ($hour !== null) $map["hour"] = $setVariables["hour"];
+        if ($minute !== null) $map["minute"] = $setVariables["minute"];
+        if ($second !== null) $map["second"] = $setVariables["second"];
+        if ($millisecond !== null) $map["millisecond"] = $setVariables["millisecond"];
+        if ($microsecond !== null) $map["microsecond"] = $setVariables["microsecond"];
+        if ($nanosecond !== null) $map["nanosecond"] = $setVariables["nanosecond"];
+        if ($timezone !== null) {
+            if (!($timezone instanceof StringType)) {
+                $timezone = self::string($timezone);
+            }
+            $map["timezone"] = $timezone;
+        }
+
+        return FunctionCall::datetime(Query::map($map));
+    }
+
+    /**
+     * Creates a datetime with the specified year, quarter, dayOfQuarter, hour, minute, second, millisecond, microsecond, nanosecond and timezone component values.
+     *
+     * @param int|NumeralType $year
+     * @param null|int|NumeralType $quarter
+     * @param null|int|NumeralType $dayOfQuarter
+     * @param null|int|NumeralType $hour
+     * @param null|int|NumeralType $minute
+     * @param null|int|NumeralType $second
+     * @param null|int|NumeralType $millisecond
+     * @param null|int|NumeralType $microsecond
+     * @param null|int|NumeralType $nanosecond
+     * @param null|string|StringType $timezone
+     * @return DateTimeType
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime-quarter
+     */
+    public static function datetimeYQD($year, $quarter = null, $dayOfQuarter = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null, $timezone = null): DateTimeType {
+        $setVariables = self::checkOrderAndConvert2Numeral([
+            "quarter" => $quarter,
+            "dayOfQuarter" => $dayOfQuarter,
+            "hour" => $hour,
+            "minute" => $minute,
+            "second" => $second,
+            "millisecond" => $millisecond,
+            "microsecond" => $microsecond,
+            "nanosecond" => $nanosecond
+        ]);
+
+        if (!($year instanceof NumeralType)) {
+            $year = self::decimal($year);
+        }
+
+        $map = ["year" => $year];
+
+        if ($quarter !== null) $map["quarter"] = $setVariables["quarter"];
+        if ($dayOfQuarter !== null) $map["dayOfQuarter"] = $setVariables["dayOfQuarter"];
+        if ($hour !== null) $map["hour"] = $setVariables["hour"];
+        if ($minute !== null) $map["minute"] = $setVariables["minute"];
+        if ($second !== null) $map["second"] = $setVariables["second"];
+        if ($millisecond !== null) $map["millisecond"] = $setVariables["millisecond"];
+        if ($microsecond !== null) $map["microsecond"] = $setVariables["microsecond"];
+        if ($nanosecond !== null) $map["nanosecond"] = $setVariables["nanosecond"];
+        if ($timezone !== null) {
+            if (!($timezone instanceof StringType)) {
+                $timezone = self::string($timezone);
+            }
+            $map["timezone"] = $timezone;
+        }
+
+        return FunctionCall::datetime(Query::map($map));
+    }
+
+    /**
+     * Creates a datetime with the specified year, ordinalDay, hour, minute, second, millisecond, microsecond, nanosecond and timezone component values.
+     *
+     * @param int|NumeralType $year
+     * @param null|int|NumeralType $ordinalDay
+     * @param null|int|NumeralType $hour
+     * @param null|int|NumeralType $minute
+     * @param null|int|NumeralType $second
+     * @param null|int|NumeralType $millisecond
+     * @param null|int|NumeralType $microsecond
+     * @param null|int|NumeralType $nanosecond
+     * @param null|string|StringType $timezone
+     * @return DateTimeType
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime-ordinal
+     */
+    public static function datetimeYD($year, $ordinalDay = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null, $timezone = null): DateTimeType {
+        $setVariables = self::checkOrderAndConvert2Numeral([
+            "ordinalDay" => $ordinalDay,
+            "hour" => $hour,
+            "minute" => $minute,
+            "second" => $second,
+            "millisecond" => $millisecond,
+            "microsecond" => $microsecond,
+            "nanosecond" => $nanosecond
+        ]);
+
+        if (!($year instanceof NumeralType)) {
+            $year = self::decimal($year);
+        }
+
+        $map = ["year" => $year];
+
+        if ($ordinalDay !== null) $map["ordinalDay"] = $setVariables["ordinalDay"];
+        if ($hour !== null) $map["hour"] = $setVariables["hour"];
+        if ($minute !== null) $map["minute"] = $setVariables["minute"];
+        if ($second !== null) $map["second"] = $setVariables["second"];
+        if ($millisecond !== null) $map["millisecond"] = $setVariables["millisecond"];
+        if ($microsecond !== null) $map["microsecond"] = $setVariables["microsecond"];
+        if ($nanosecond !== null) $map["nanosecond"] = $setVariables["nanosecond"];
+        if ($timezone !== null) {
+            if (!($timezone instanceof StringType)) {
+                $timezone = self::string($timezone);
+            }
+            $map["timezone"] = $timezone;
+        }
+
+        return FunctionCall::datetime(Query::map($map));
+    }
+
+    /**
+     * Creates a datetime by parsing a string representation of a temporal value
+     *
+     * @param string|StringType $dateString
+     * @return DateTimeType
+     */
+    public static function datetimeString($dateString): DateTimeType {
+        if (!($dateString instanceof StringType)) {
+            $dateString = self::string($dateString);
+        }
+        return FunctionCall::datetime($dateString);
+    }
+
 
     /**
      * Creates a 2d cartesian point.

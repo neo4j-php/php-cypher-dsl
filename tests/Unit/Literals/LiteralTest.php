@@ -23,6 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Literals;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Functions\Date;
+use WikibaseSolutions\CypherDSL\Functions\DateTime;
 use WikibaseSolutions\CypherDSL\Functions\Point;
 use WikibaseSolutions\CypherDSL\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Literals\Decimal;
@@ -236,6 +237,110 @@ class LiteralTest extends TestCase
         $this->assertEquals(new Date(new StringLiteral('2000-17-12')), $date);
     }
 
+    public function testDateTimeWithoutTimeZone()
+    {
+        $datetime = Literal::dateTime();
+
+        $this->assertEquals(new DateTime(), $datetime);
+    }
+
+    public function testDateTimeWithTimeZone()
+    {
+        $datetime = Literal::dateTime("America/Los Angeles");
+
+        $this->assertEquals(new DateTime(new PropertyMap(["timezone" => new StringLiteral("America/Los Angeles")])), $datetime);
+    }
+
+    /**
+     * @dataProvider provideDatetimeYMDData
+     * @param $year
+     * @param $month
+     * @param $day
+     * @param $hour
+     * @param $minute
+     * @param $second
+     * @param $millisecond
+     * @param $microsecond
+     * @param $nanosecond
+     * @param $timezone
+     * @param $expected
+     */
+    public function testDatetimeYMD($year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected)
+    {
+        $datetime = Literal::dateTimeYMD($year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone);
+
+        $this->assertEquals($expected, $datetime);
+    }
+
+    /**
+     * @dataProvider provideDatetimeYWDData
+     * @param $year
+     * @param $week
+     * @param $dayOfWeek
+     * @param $hour
+     * @param $minute
+     * @param $second
+     * @param $millisecond
+     * @param $microsecond
+     * @param $nanosecond
+     * @param $timezone
+     * @param $expected
+     */
+    public function testDatetimeYWD($year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected)
+    {
+        $datetime = Literal::datetimeYWD($year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone);
+
+        $this->assertEquals($expected, $datetime);
+    }
+
+    /**
+     * @dataProvider provideDatetimeYQDData
+     * @param $year
+     * @param $quarter
+     * @param $dayOfQuarter
+     * @param $hour
+     * @param $minute
+     * @param $second
+     * @param $millisecond
+     * @param $microsecond
+     * @param $nanosecond
+     * @param $timezone
+     * @param $expected
+     */
+    public function testDatetimeYQD($year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected)
+    {
+        $datetime = Literal::datetimeYQD($year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone);
+
+        $this->assertEquals($expected, $datetime);
+    }
+
+    /**
+     * @dataProvider provideDatetimeYQData
+     * @param $year
+     * @param $ordinalDay
+     * @param $hour
+     * @param $minute
+     * @param $second
+     * @param $millisecond
+     * @param $microsecond
+     * @param $nanosecond
+     * @param $timezone
+     * @param $expected
+     */
+    public function testDatetimeYD($year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected)
+    {
+        $datetime = Literal::datetimeYD($year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone);
+
+        $this->assertEquals($expected, $datetime);
+    }
+
+    public function testDatetimeString()
+    {
+        $datetime = Literal::datetimeString("2015-07-21T21:40:32.142+01:00");
+
+        $this->assertEquals(new DateTime(new StringLiteral("2015-07-21T21:40:32.142+01:00")), $datetime);
+    }
+
     public function provideDateYMDData()
     {
         return [
@@ -259,6 +364,117 @@ class LiteralTest extends TestCase
             [new Decimal(2000), new Decimal(12), null, new Date(new PropertyMap(["year" => new Decimal(2000), "week" => new Decimal(12)]))],
             [new Decimal(2000), new Decimal(12), new Decimal(17), new Date(new PropertyMap(["year" => new Decimal(2000), "week" => new Decimal(12), "dayOfWeek" => new Decimal(17)]))],
 
+        ];
+    }
+
+    public function provideDatetimeYMDData()
+    {
+        // [$year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
+        return [
+            [2000, null, null, null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000)]))],
+            [2000, 12, null, null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "month" => new Decimal(12)]))],
+            [2000, 12, 15, null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15)]))],
+            [2000, 12, 15, 8, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8)]))],
+            [2000, 12, 15, 8, 25, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
+            [2000, 12, 15, 8, 25, 44, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
+            [2000, 12, 15, 8, 25, 44, 18, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, 31, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new PropertyMap(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new StringLiteral("America/Los Angeles")]))],
+
+            // types
+            [new Decimal(2000), null, null, null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000)]))],
+            [new Decimal(2000), new Decimal(12), null, null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "month" => new Decimal(12)]))],
+            [new Decimal(2000), new Decimal(12), new Decimal(15), null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15)]))],
+            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8)]))],
+            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
+            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), new Decimal(44), null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
+            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
+            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
+            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
+            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), new StringLiteral("America/Los Angeles"), new DateTime(new PropertyMap(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new StringLiteral("America/Los Angeles")]))],
+        ];
+    }
+
+    public function provideDatetimeYWDData() {
+        // [$year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
+        return [
+            [2000, null, null, null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000)]))],
+            [2000, 9, null, null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "week" => new Decimal(9)]))],
+            [2000, 9, 4, null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4)]))],
+            [2000, 9, 4, 8, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8)]))],
+            [2000, 9, 4, 8, 25, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
+            [2000, 9, 4, 8, 25, 44, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
+            [2000, 9, 4, 8, 25, 44, 18, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, 31, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new PropertyMap(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new StringLiteral("America/Los Angeles")]))],
+
+            // types
+            [new Decimal(2000), null, null, null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000)]))],
+            [new Decimal(2000), new Decimal(9), null, null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "week" => new Decimal(9)]))],
+            [new Decimal(2000), new Decimal(9), new Decimal(4), null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4)]))],
+            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8)]))],
+            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
+            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
+            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
+            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
+            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
+            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), new StringLiteral("America/Los Angeles"), new DateTime(new PropertyMap(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new StringLiteral("America/Los Angeles")]))],
+        ];
+    }
+
+    public function provideDatetimeYQDData() {
+        // [$year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
+        return [
+            [2000, null, null, null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000)]))],
+            [2000, 3, null, null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "quarter" => new Decimal(3)]))],
+            [2000, 3, 4, null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4)]))],
+            [2000, 3, 4, 8, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8)]))],
+            [2000, 3, 4, 8, 25, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
+            [2000, 3, 4, 8, 25, 44, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
+            [2000, 3, 4, 8, 25, 44, 18, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, 31, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new PropertyMap(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new StringLiteral("America/Los Angeles")]))],
+
+            // types
+            [new Decimal(2000), null, null, null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000)]))],
+            [new Decimal(2000), new Decimal(3), null, null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "quarter" => new Decimal(3)]))],
+            [new Decimal(2000), new Decimal(3), new Decimal(4), null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4)]))],
+            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8)]))],
+            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
+            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
+            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
+            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
+            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
+            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), new StringLiteral("America/Los Angeles"), new DateTime(new PropertyMap(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new StringLiteral("America/Los Angeles")]))],
+        ];
+    }
+
+    public function provideDatetimeYQData() {
+        // [$year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
+        return [
+            [2000, null, null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000)]))],
+            [2000, 3, null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3)]))],
+            [2000, 3, 8, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8)]))],
+            [2000, 3, 8, 25, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
+            [2000, 3, 8, 25, 44, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
+            [2000, 3, 8, 25, 44, 18, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
+            [2000, 3, 8, 25, 44, 18, 6, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
+            [2000, 3, 8, 25, 44, 18, 6, 31, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
+            [2000, 3, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new PropertyMap(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new StringLiteral("America/Los Angeles")]))],
+
+            // types
+            [new Decimal(2000), null, null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000)]))],
+            [new Decimal(2000), new Decimal(3), null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3)]))],
+            [new Decimal(2000), new Decimal(3), new Decimal(8), null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8)]))],
+            [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
+            [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
+            [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
+            [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
+            [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), null, new DateTime(new PropertyMap(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
+            [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), new StringLiteral("America/Los Angeles"), new DateTime(new PropertyMap(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new StringLiteral("America/Los Angeles")]))],
         ];
     }
 }
