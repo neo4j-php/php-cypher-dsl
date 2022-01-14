@@ -27,10 +27,13 @@ use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 
 /**
  * Helper class to construct literals.
@@ -494,6 +497,370 @@ abstract class Literal
         return FunctionCall::datetime($dateString);
     }
 
+    /**
+     * Creates the current localDateTime value
+     *
+     * @param null|string|StringType $timezone
+     * @return LocalDateTimeType
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-current
+     */
+    public static function localDatetime($timezone = null): LocalDateTimeType {
+        if ($timezone === null) {
+            return FunctionCall::localdatetime();
+        }
+
+        if (!($timezone instanceof StringType)) {
+            $timezone = self::string($timezone);
+        }
+        return FunctionCall::localdatetime(Query::map(["timezone" => $timezone]));
+    }
+
+    /**
+     * Creates a LocalDateTime value with specified year, month, day and time props
+     *
+     * @param int|NumeralType $year
+     * @param null|int|NumeralType $month
+     * @param null|int|NumeralType $day
+     * @param null|int|NumeralType $hour
+     * @param null|int|NumeralType $minute
+     * @param null|int|NumeralType $second
+     * @param null|int|NumeralType $millisecond
+     * @param null|int|NumeralType $microsecond
+     * @param null|int|NumeralType $nanosecond
+     * @return LocalDateTimeType
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-calendar
+     */
+    public static function localDatetimeYMD($year, $month = null, $day = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null): LocalDateTimeType {
+        $setVariables = self::checkOrderAndConvert2Numeral([
+            "month" => $month,
+            "day" => $day,
+            "hour" => $hour,
+            "minute" => $minute,
+            "second" => $second,
+            "millisecond" => $millisecond,
+            "microsecond" => $microsecond,
+            "nanosecond" => $nanosecond
+        ]);
+
+        if (!($year instanceof NumeralType)) {
+            $year = self::decimal($year);
+        }
+
+        $map = ["year" => $year];
+
+        if ($month !== null) $map["month"] = $setVariables["month"];
+        if ($day !== null) $map["day"] = $setVariables["day"];
+        if ($hour !== null) $map["hour"] = $setVariables["hour"];
+        if ($minute !== null) $map["minute"] = $setVariables["minute"];
+        if ($second !== null) $map["second"] = $setVariables["second"];
+        if ($millisecond !== null) $map["millisecond"] = $setVariables["millisecond"];
+        if ($microsecond !== null) $map["microsecond"] = $setVariables["microsecond"];
+        if ($nanosecond !== null) $map["nanosecond"] = $setVariables["nanosecond"];
+
+        return FunctionCall::localdatetime(Query::map($map));
+    }
+
+    /**
+     * Creates a LocalDateTime value with the specified year, week, dayOfWeek, hour, minute,
+     * second, millisecond, microsecond and nanosecond component value
+     *
+     * @param int|NumeralType $year
+     * @param null|int|NumeralType $week
+     * @param null|int|NumeralType $dayOfWeek
+     * @param null|int|NumeralType $hour
+     * @param null|int|NumeralType $minute
+     * @param null|int|NumeralType $second
+     * @param null|int|NumeralType $millisecond
+     * @param null|int|NumeralType $microsecond
+     * @param null|int|NumeralType $nanosecond
+     * @return LocalDateTimeType
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-week
+     */
+    public static function localDatetimeYWD($year, $week = null, $dayOfWeek = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null): LocalDateTimeType {
+        $setVariables = self::checkOrderAndConvert2Numeral([
+            "week" => $week,
+            "dayOfWeek" => $dayOfWeek,
+            "hour" => $hour,
+            "minute" => $minute,
+            "second" => $second,
+            "millisecond" => $millisecond,
+            "microsecond" => $microsecond,
+            "nanosecond" => $nanosecond
+        ]);
+
+        if (!($year instanceof NumeralType)) {
+            $year = self::decimal($year);
+        }
+
+        $map = ["year" => $year];
+
+        if ($week !== null) $map["week"] = $setVariables["week"];
+        if ($dayOfWeek !== null) $map["dayOfWeek"] = $setVariables["dayOfWeek"];
+        if ($hour !== null) $map["hour"] = $setVariables["hour"];
+        if ($minute !== null) $map["minute"] = $setVariables["minute"];
+        if ($second !== null) $map["second"] = $setVariables["second"];
+        if ($millisecond !== null) $map["millisecond"] = $setVariables["millisecond"];
+        if ($microsecond !== null) $map["microsecond"] = $setVariables["microsecond"];
+        if ($nanosecond !== null) $map["nanosecond"] = $setVariables["nanosecond"];
+
+        return FunctionCall::localdatetime(Query::map($map));
+    }
+
+    /**
+     * Creates a LocalDateTime value with the specified year, quarter, dayOfQuarter, hour, minute, second, millisecond, microsecond and nanosecond component values
+     *
+     * @param $year
+     * @param null $quarter
+     * @param null $dayOfQuarter
+     * @param null $hour
+     * @param null $minute
+     * @param null $second
+     * @param null $millisecond
+     * @param null $microsecond
+     * @param null $nanosecond
+     * @return LocalDateTimeType
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-quarter
+     */
+    public static function localDatetimeYQD($year, $quarter = null, $dayOfQuarter = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null): LocalDateTimeType {
+        $setVariables = self::checkOrderAndConvert2Numeral([
+            "quarter" => $quarter,
+            "dayOfQuarter" => $dayOfQuarter,
+            "hour" => $hour,
+            "minute" => $minute,
+            "second" => $second,
+            "millisecond" => $millisecond,
+            "microsecond" => $microsecond,
+            "nanosecond" => $nanosecond
+        ]);
+
+        if (!($year instanceof NumeralType)) {
+            $year = self::decimal($year);
+        }
+
+        $map = ["year" => $year];
+
+        if ($quarter !== null) $map["quarter"] = $setVariables["quarter"];
+        if ($dayOfQuarter !== null) $map["dayOfQuarter"] = $setVariables["dayOfQuarter"];
+        if ($hour !== null) $map["hour"] = $setVariables["hour"];
+        if ($minute !== null) $map["minute"] = $setVariables["minute"];
+        if ($second !== null) $map["second"] = $setVariables["second"];
+        if ($millisecond !== null) $map["millisecond"] = $setVariables["millisecond"];
+        if ($microsecond !== null) $map["microsecond"] = $setVariables["microsecond"];
+        if ($nanosecond !== null) $map["nanosecond"] = $setVariables["nanosecond"];
+
+        return FunctionCall::localdatetime(Query::map($map));
+    }
+
+    /**
+     * Creates a LocalDateTime value with the specified year, ordinalDay, hour, minute, second, millisecond, microsecond and nanosecond component values
+     *
+     * @param int|NumeralType $year
+     * @param null|int|NumeralType $ordinalDay
+     * @param null|int|NumeralType $hour
+     * @param null|int|NumeralType $minute
+     * @param null|int|NumeralType $second
+     * @param null|int|NumeralType $millisecond
+     * @param null|int|NumeralType $microsecond
+     * @param null|int|NumeralType $nanosecond
+     * @return LocalDateTimeType
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-ordinal
+     */
+    public static function localDatetimeYD($year, $ordinalDay = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null): LocalDateTimeType {
+        $setVariables = self::checkOrderAndConvert2Numeral([
+            "ordinalDay" => $ordinalDay,
+            "hour" => $hour,
+            "minute" => $minute,
+            "second" => $second,
+            "millisecond" => $millisecond,
+            "microsecond" => $microsecond,
+            "nanosecond" => $nanosecond
+        ]);
+
+        if (!($year instanceof NumeralType)) {
+            $year = self::decimal($year);
+        }
+
+        $map = ["year" => $year];
+
+        if ($ordinalDay !== null) $map["ordinalDay"] = $setVariables["ordinalDay"];
+        if ($hour !== null) $map["hour"] = $setVariables["hour"];
+        if ($minute !== null) $map["minute"] = $setVariables["minute"];
+        if ($second !== null) $map["second"] = $setVariables["second"];
+        if ($millisecond !== null) $map["millisecond"] = $setVariables["millisecond"];
+        if ($microsecond !== null) $map["microsecond"] = $setVariables["microsecond"];
+        if ($nanosecond !== null) $map["nanosecond"] = $setVariables["nanosecond"];
+
+        return FunctionCall::localdatetime(Query::map($map));
+    }
+
+    /**
+     * Creates the LocalDateTime value obtained by parsing a string representation of a temporal value
+     *
+     * @param string|StringType $localDateTimeString
+     * @return LocalDateTimeType
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-create-string
+     */
+    public static function localDatetimeString($localDateTimeString): LocalDateTimeType {
+        if (!($localDateTimeString instanceof StringType)) {
+            $localDateTimeString = self::string($localDateTimeString);
+        }
+
+        return FunctionCall::localdatetime($localDateTimeString);
+    }
+
+    /**
+     * Creates the current LocalTime value
+     *
+     * @param null|string|StringType $timezone
+     * @return LocalTimeType
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localtime-current
+     */
+    public static function localTimeCurrent($timezone = null): LocalTimeType {
+        if ($timezone === null) {
+            return FunctionCall::localtime();
+        }
+
+        if (!($timezone instanceof StringType)) {
+            $timezone = self::string($timezone);
+        }
+        return FunctionCall::localtime(Query::map(["timezone" => $timezone]));
+    }
+
+    /**
+     * Creates a LocalTime value with the specified hour, minute, second, millisecond, microsecond and nanosecond component values
+     *
+     * @param int|NumeralType $hour
+     * @param null|int|NumeralType $minute
+     * @param null|int|NumeralType $second
+     * @param null|int|NumeralType $millisecond
+     * @param null|int|NumeralType $microsecond
+     * @param null|int|NumeralType $nanosecond
+     * @return LocalTimeType
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localtime-create
+     */
+    public static function localTime($hour, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null): LocalTimeType {
+        $setVariables = self::checkOrderAndConvert2Numeral([
+            "minute" => $minute,
+            "second" => $second,
+            "millisecond" => $millisecond,
+            "microsecond" => $microsecond,
+            "nanosecond" => $nanosecond
+        ]);
+
+        if (!($hour instanceof NumeralType)) {
+            $hour = self::decimal($hour);
+        }
+
+        $map = ["hour" => $hour];
+
+        if ($minute !== null) $map["minute"] = $setVariables["minute"];
+        if ($second !== null) $map["second"] = $setVariables["second"];
+        if ($millisecond !== null) $map["millisecond"] = $setVariables["millisecond"];
+        if ($microsecond !== null) $map["microsecond"] = $setVariables["microsecond"];
+        if ($nanosecond !== null) $map["nanosecond"] = $setVariables["nanosecond"];
+
+        return FunctionCall::localtime(Query::map($map));
+    }
+
+    /**
+     * Creates the LocalTime value obtained by parsing a string representation of a temporal value
+     *
+     * @param string|StringType $localTimeString
+     * @return LocalTimeType
+     */
+    public static function localTimeString($localTimeString): LocalTimeType {
+        if (!($localTimeString instanceof StringType)) {
+            $localTimeString = self::string($localTimeString);
+        }
+
+        return FunctionCall::localtime($localTimeString);
+    }
+
+    /**
+     * Creates the current Time value
+     *
+     * @param null|string|StringType $timezone
+     * @return TimeType
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-time-current
+     */
+    public static function timeCurrent($timezone = null): TimeType {
+        if ($timezone === null) {
+            return FunctionCall::time();
+        }
+
+        if (!($timezone instanceof StringType)) {
+            $timezone = self::string($timezone);
+        }
+        return FunctionCall::time(Query::map(["timezone" => $timezone]));
+    }
+
+    /**
+     * Creates  a Time value with the specified hour, minute, second, millisecond, microsecond, nanosecond and timezone component values
+     *
+     * @param int|NumeralType $hour
+     * @param null|int|NumeralType $minute
+     * @param null|int|NumeralType $second
+     * @param null|int|NumeralType $millisecond
+     * @param null|int|NumeralType $microsecond
+     * @param null|int|NumeralType $nanosecond
+     * @param null|string|StringType $timezone
+     * @return TimeType
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-time-create
+     */
+    public static function time($hour, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null, $timezone = null): TimeType {
+        $setVariables = self::checkOrderAndConvert2Numeral([
+            "minute" => $minute,
+            "second" => $second,
+            "millisecond" => $millisecond,
+            "microsecond" => $microsecond,
+            "nanosecond" => $nanosecond
+        ]);
+
+        if (!($hour instanceof NumeralType)) {
+            $hour = self::decimal($hour);
+        }
+
+        $map = ["hour" => $hour];
+
+        if ($minute !== null) $map["minute"] = $setVariables["minute"];
+        if ($second !== null) $map["second"] = $setVariables["second"];
+        if ($millisecond !== null) $map["millisecond"] = $setVariables["millisecond"];
+        if ($microsecond !== null) $map["microsecond"] = $setVariables["microsecond"];
+        if ($nanosecond !== null) $map["nanosecond"] = $setVariables["nanosecond"];
+        if ($timezone !== null) {
+            if (!($timezone instanceof StringType)) {
+                $timezone = self::string($timezone);
+            }
+            $map["timezone"] = $timezone;
+        }
+
+        return FunctionCall::time(Query::map($map));
+    }
+
+    /**
+     * Creates the Time value obtained by parsing a string representation of a temporal value
+     *
+     * @param string|StringType $timeString
+     * @return TimeType
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-time-create-string
+     */
+    public static function timeString($timeString): TimeType {
+        if (!($timeString instanceof StringType)) {
+            $timeString = self::string($timeString);
+        }
+        return FunctionCall::time($timeString);
+    }
 
     /**
      * Creates a 2d cartesian point.
