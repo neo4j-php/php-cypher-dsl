@@ -275,6 +275,15 @@ class LiteralTest extends TestCase
         $this->assertEquals($expected, $datetime);
     }
 
+	public function testDatetimeYMDMissingMonth()
+	{
+		$this->expectException(\LogicException::class);
+
+		$datetime = Literal::dateTimeYMD(2000, null, 17);
+
+		$datetime->toQuery();
+	}
+
     /**
      * @dataProvider provideDatetimeYWDData
      * @param $year
@@ -295,6 +304,15 @@ class LiteralTest extends TestCase
 
         $this->assertEquals($expected, $datetime);
     }
+
+	public function testDatetimeYWDMissingWeek()
+	{
+		$this->expectException(\LogicException::class);
+
+		$datetime = Literal::dateTimeYWD(2000, null, 17);
+
+		$datetime->toQuery();
+	}
 
     /**
      * @dataProvider provideDatetimeYQDData
@@ -317,7 +335,16 @@ class LiteralTest extends TestCase
         $this->assertEquals($expected, $datetime);
     }
 
-    /**
+	public function testDatetimeYQDMissingQuarter()
+	{
+		$this->expectException(\LogicException::class);
+
+		$datetime = Literal::dateTimeYQD(2000, null, 17);
+
+		$datetime->toQuery();
+	}
+
+	/**
      * @dataProvider provideDatetimeYQData
      * @param $year
      * @param $ordinalDay
@@ -337,7 +364,16 @@ class LiteralTest extends TestCase
         $this->assertEquals($expected, $datetime);
     }
 
-    public function testDatetimeString()
+	public function testDatetimeYDMissingOrdinalDay()
+	{
+		$this->expectException(\LogicException::class);
+
+		$datetime = Literal::dateTimeYD(2000, null, 17);
+
+		$datetime->toQuery();
+	}
+
+	public function testDatetimeString()
     {
         $datetime = Literal::datetimeString("2015-07-21T21:40:32.142+01:00");
 
@@ -375,7 +411,16 @@ class LiteralTest extends TestCase
         $this->assertEquals($expected, $localDatetime);
     }
 
-    /**
+	public function testLocalDateTimeYMDMissingMonth()
+	{
+		$this->expectException(\LogicException::class);
+
+		$datetime = Literal::localDatetimeYMD(2000, null, 17);
+
+		$datetime->toQuery();
+	}
+
+	/**
      * @dataProvider provideLocalDatetimeYWDData
      * @param $year
      * @param $week
@@ -393,6 +438,15 @@ class LiteralTest extends TestCase
 
         $this->assertEquals($expected, $localDatetime);
     }
+
+	public function testLocalDateTimeYWDMissingWeek()
+	{
+		$this->expectException(\LogicException::class);
+
+		$datetime = Literal::localDatetimeYWD(2000, null, 17);
+
+		$datetime->toQuery();
+	}
 
     /**
      * @dataProvider provideLocalDatetimeYQDData
@@ -414,6 +468,15 @@ class LiteralTest extends TestCase
         $this->assertEquals($expected, $localDatetime);
     }
 
+	public function testLocalDateTimeYQDMissingQuarter()
+	{
+		$this->expectException(\LogicException::class);
+
+		$datetime = Literal::localDatetimeYQD(2000, null, 17);
+
+		$datetime->toQuery();
+	}
+
     /**
      * @dataProvider provideLocalDatetimeYQData
      * @param $year
@@ -433,6 +496,15 @@ class LiteralTest extends TestCase
         $this->assertEquals($expected, $localDatetime);
     }
 
+	public function testLocalDateTimeYDMissingOrdinalDay()
+	{
+		$this->expectException(\LogicException::class);
+
+		$datetime = Literal::localDatetimeYD(2000, null, 17);
+
+		$datetime->toQuery();
+	}
+
     public function testLocalDatetimeString() {
         $localDatetime = Literal::localDatetimeString("2015-W30-2T214032.142");
 
@@ -449,7 +521,6 @@ class LiteralTest extends TestCase
         $this->assertEquals(new LocalTime(new PropertyMap(["timezone" => new StringLiteral("America/Los Angeles")])), $localTime);
     }
 
-
     /**
      * @dataProvider provideLocalTimeData
      * @param $hour
@@ -464,6 +535,15 @@ class LiteralTest extends TestCase
         $localTime = Literal::localTime($hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
         $this->assertEquals($localTime, $expected);
     }
+
+	public function testLocalTimeMissingMinute()
+	{
+		$this->expectException(\LogicException::class);
+
+		$localTime = Literal::localTime(9, null, 17);
+
+		$localTime->toQuery();
+	}
 
     public function testLocalTimeString() {
         $localTime = Literal::localTimeString("21:40:32.142");
@@ -494,6 +574,15 @@ class LiteralTest extends TestCase
         $time = Literal::time($hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
         $this->assertEquals($time, $expected);
     }
+
+	public function testTimeMissingMinute()
+	{
+		$this->expectException(\LogicException::class);
+
+		$time = Literal::time(9, null, 17);
+
+		$time->toQuery();
+	}
 
     public function testTimeString() {
         $time = Literal::timeString("21:40:32.142+0100");
@@ -778,6 +867,6 @@ class LiteralTest extends TestCase
             [new Decimal(11), new Decimal(23), new Decimal(2), new Decimal(54), null, null, new Time(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54)]))],
             [new Decimal(11), new Decimal(23), new Decimal(2), new Decimal(54), new Decimal(8), null, new Time(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54), "microsecond" => new Decimal(8)]))],
             [new Decimal(11), new Decimal(23), new Decimal(2), new Decimal(54), new Decimal(8), new Decimal(29), new Time(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54), "microsecond" => new Decimal(8), "nanosecond" => new Decimal(29)]))],
-        ];
+		];
     }
 }
