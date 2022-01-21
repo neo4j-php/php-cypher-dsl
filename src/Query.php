@@ -21,7 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use InvalidArgumentException;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
@@ -38,8 +37,10 @@ use WikibaseSolutions\CypherDSL\Clauses\ReturnClause;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
+use WikibaseSolutions\CypherDSL\Functions\FunctionCall;
 use WikibaseSolutions\CypherDSL\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
@@ -49,7 +50,6 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
@@ -61,6 +61,12 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 class Query implements QueryConvertable
 {
     use EscapeTrait;
+
+    // A reference to the Literal class
+    const literal = Literal::class;
+
+    // A reference to the FunctionCall class
+    const function = FunctionCall::class;
 
     /**
      * @var Clause[] $clauses
@@ -125,26 +131,25 @@ class Query implements QueryConvertable
      * Creates a new literal from the given value. This function automatically constructs the appropriate
      * class based on the type of the value given.
      *
+     * This function cannot be used directly to construct Point or Date types.
+     *
+     * You can create a Point literal by using any of the following functions:
+     *
+     *  Query::literal()::point2d(...) - For a 2D cartesian point
+     *  Query::literal()::point3d(...) - For a 3D cartesian point
+     *  Query::literal()::point2dWGS84(...) - For a 2D WGS 84 point
+     *  Query::literal()::point3dWGS84(...) - For a 3D WGS 84 point
+     *
      * @param mixed $literal The literal to construct
-     * @return StringLiteral|Boolean|Decimal
+     * @return StringLiteral|Boolean|Decimal|Literal|string
      */
-    public static function literal($literal): PropertyType
+    public static function literal($literal = null)
     {
-        if (is_string($literal) || (is_object($literal) && method_exists($literal, '__toString'))) {
-            return new StringLiteral((string) $literal);
+        if ($literal === null) {
+            return self::literal;
         }
 
-        if (is_bool($literal)) {
-            return new Boolean($literal);
-        }
-
-        if (is_int($literal) || is_float($literal)) {
-            return new Decimal($literal);
-        }
-
-        $actualType = is_object($literal) ? get_class($literal) : gettype($literal);
-
-        throw new InvalidArgumentException("The literal type " . $actualType . " is not supported by Cypher");
+        return Literal::literal($literal);
     }
 
     /**
@@ -185,6 +190,18 @@ class Query implements QueryConvertable
     public static function parameter(string $parameter): Parameter
     {
         return new Parameter($parameter);
+    }
+
+    /**
+     * Returns the name of the FunctionCall class. This can be used to more easily create new functions calls, like so:
+     *
+     * Query::function()::raw(...)
+     *
+     * @return FunctionCall
+     */
+    public static function function(): string
+    {
+        return self::function;
     }
 
     /**

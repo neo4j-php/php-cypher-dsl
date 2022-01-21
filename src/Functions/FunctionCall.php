@@ -41,9 +41,10 @@ abstract class FunctionCall implements QueryConvertable
      *
      * @param string $functionName The name of the function to call
      * @param AnyType[] $parameters The parameters to pass to the function call
-     * @return FunctionCall
+     *
+     * @return RawFunction
      */
-    public static function raw(string $functionName, array $parameters): FunctionCall
+    public static function raw(string $functionName, array $parameters): RawFunction
     {
         return new RawFunction($functionName, $parameters);
     }
@@ -56,9 +57,10 @@ abstract class FunctionCall implements QueryConvertable
      * @param Variable $variable A variable that can be used from within the predicate
      * @param ListType $list A list
      * @param AnyType $predicate A predicate that is tested against all items in the list
-     * @return FunctionCall
+     *
+     * @return All
      */
-    public static function all(Variable $variable, ListType $list, AnyType $predicate): FunctionCall
+    public static function all(Variable $variable, ListType $list, AnyType $predicate): All
     {
         return new All($variable, $list, $predicate);
     }
@@ -72,9 +74,9 @@ abstract class FunctionCall implements QueryConvertable
      * @param ListType $list A list
      * @param AnyType $predicate A predicate that is tested against all items in the list
      *
-     * @return FunctionCall
+     * @return Any
      */
-    public static function any(Variable $variable, ListType $list, AnyType $predicate): FunctionCall
+    public static function any(Variable $variable, ListType $list, AnyType $predicate): Any
     {
         return new Any($variable, $list, $predicate);
     }
@@ -85,9 +87,10 @@ abstract class FunctionCall implements QueryConvertable
      * exists(input :: ANY?) :: (BOOLEAN?)
      *
      * @param AnyType $expression A pattern or property
-     * @return FunctionCall
+     *
+     * @return Exists
      */
-    public static function exists(AnyType $expression): FunctionCall
+    public static function exists(AnyType $expression): Exists
     {
         return new Exists($expression);
     }
@@ -100,9 +103,10 @@ abstract class FunctionCall implements QueryConvertable
      * isEmpty(input :: STRING?) :: (BOOLEAN?) - to check whether a string is empty
      *
      * @param ListType|MapType|StringType $list An expression that returns a list
-     * @return FunctionCall
+     *
+     * @return IsEmpty
      */
-    public static function isEmpty(AnyType $list): FunctionCall
+    public static function isEmpty(AnyType $list): IsEmpty
     {
         return new IsEmpty($list);
     }
@@ -116,9 +120,9 @@ abstract class FunctionCall implements QueryConvertable
      * @param ListType $list A list
      * @param AnyType $predicate A predicate that is tested against all items in the list
      *
-     * @return FunctionCall
+     * @return None
      */
-    public static function none(Variable $variable, ListType $list, AnyType $predicate): FunctionCall
+    public static function none(Variable $variable, ListType $list, AnyType $predicate): None
     {
         return new None($variable, $list, $predicate);
     }
@@ -132,11 +136,101 @@ abstract class FunctionCall implements QueryConvertable
      * @param ListType $list A list
      * @param AnyType $predicate A predicate that is tested against all items in the list
      *
-     * @return FunctionCall
+     * @return Single
      */
-    public static function single(Variable $variable, ListType $list, AnyType $predicate): FunctionCall
+    public static function single(Variable $variable, ListType $list, AnyType $predicate): Single
     {
         return new Single($variable, $list, $predicate);
+    }
+
+    /**
+     * Calls the "point()" function. The signature of the "point()" function is:
+     *
+     * point(input :: MAP?) :: (POINT?)
+     *
+     * @param MapType $map The map to use for constructing the point
+     * @note You probably want to use the Literal class instead of this function
+     *
+     * @return Point
+     */
+    public static function point(MapType $map): Point
+    {
+        return new Point($map);
+    }
+
+    /**
+     * Calls the "date()" function. The signature of the "date()" function is:
+     *
+     * date(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (DATE?)
+     *
+     * @param AnyType|null $value The input to the date function, from which to construct the date
+     * @note You probably want to use the Literal class instead of this function
+     *
+     * @return Date
+     */
+    public static function date(?AnyType $value = null): Date
+    {
+        return new Date($value);
+    }
+
+    /**
+     * Calls the "datetime()" function. The signature of the "datetime()" function is:
+     *
+     * datetime(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (DATETIME?)
+     *
+     * @param AnyType|null $value The input to the datetime function, from which to construct the datetime
+     * @note You probably want to use the Literal class instead of this function
+     *
+     * @return DateTime
+     */
+    public static function datetime(?AnyType $value = null): DateTime
+    {
+        return new DateTime($value);
+    }
+
+    /**
+     * Calls the "localdatetime()" function. The signature of the "localdatetime()" function is:
+     *
+     * datetime(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (LOCALDATETIME?)
+     *
+     * @param AnyType|null $value The input to the localdatetime function, from which to construct the localdatetime
+     * @note You probably want to use the Literal class instead of this function
+     *
+     * @return LocalDateTime
+     */
+    public static function localdatetime(?AnyType $value = null): LocalDateTime
+    {
+        return new LocalDateTime($value);
+    }
+
+    /**
+     * Calls the "localtime()" function. The signature of the "localtime()" function is:
+     *
+     * localtime(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (LOCALTIME?)
+     *
+     * @param AnyType|null $value The input to the localtime function, from which to construct the localtime
+     * @note You probably want to use the Literal class instead of this function
+     *
+     * @return LocalTime
+     */
+    public static function localtime(?AnyType $value = null): LocalTime
+    {
+        return new LocalTime($value);
+    }
+
+    /**
+     * Calls the "time()" function. The signature of the "time()" function is:
+     *
+     * time(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (TIME?)
+     *
+     * @param AnyType|null $value The input to the localtime function, from which to construct the time
+     * @note You probably want to use the Literal class instead of this function
+     *
+     * @return Time
+     */
+    public static function time(?AnyType $value = null): Time
+    {
+        return new Time($value);
     }
 
     /**

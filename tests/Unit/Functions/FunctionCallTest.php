@@ -24,15 +24,22 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Functions;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Functions\All;
 use WikibaseSolutions\CypherDSL\Functions\Any;
+use WikibaseSolutions\CypherDSL\Functions\Date;
+use WikibaseSolutions\CypherDSL\Functions\DateTime;
 use WikibaseSolutions\CypherDSL\Functions\Exists;
 use WikibaseSolutions\CypherDSL\Functions\FunctionCall;
 use WikibaseSolutions\CypherDSL\Functions\IsEmpty;
+use WikibaseSolutions\CypherDSL\Functions\LocalDateTime;
+use WikibaseSolutions\CypherDSL\Functions\LocalTime;
 use WikibaseSolutions\CypherDSL\Functions\None;
+use WikibaseSolutions\CypherDSL\Functions\Point;
 use WikibaseSolutions\CypherDSL\Functions\RawFunction;
 use WikibaseSolutions\CypherDSL\Functions\Single;
+use WikibaseSolutions\CypherDSL\Functions\Time;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Variable;
 
 /**
@@ -109,5 +116,79 @@ class FunctionCallTest extends TestCase
         $single = FunctionCall::single($variable, $list, $predicate);
 
         $this->assertInstanceOf(Single::class, $single);
+    }
+
+    public function testPoint()
+    {
+        $map = $this->getQueryConvertableMock(MapType::class, "map");
+
+        $point = FunctionCall::point($map);
+
+        $this->assertInstanceOf(Point::class, $point);
+    }
+
+    public function testDate()
+    {
+        $value = $this->getQueryConvertableMock(AnyType::class, "value");
+
+        $date = FunctionCall::date($value);
+
+        $this->assertInstanceOf(Date::class, $date);
+
+        $date = FunctionCall::date();
+
+        $this->assertInstanceOf(Date::class, $date);
+    }
+
+    public function testDateTime()
+    {
+        $value = $this->getQueryConvertableMock(AnyType::class, "value");
+
+        $date = FunctionCall::datetime($value);
+
+        $this->assertInstanceOf(DateTime::class, $date);
+
+        $date = FunctionCall::datetime();
+
+        $this->assertInstanceOf(DateTime::class, $date);
+    }
+
+    public function testLocalDateTime()
+    {
+        $value = $this->getQueryConvertableMock(AnyType::class, "value");
+
+        $date = FunctionCall::localdatetime($value);
+
+        $this->assertInstanceOf(LocalDateTime::class, $date);
+
+        $date = FunctionCall::localdatetime();
+
+        $this->assertInstanceOf(LocalDateTime::class, $date);
+    }
+
+    public function testLocalTime()
+    {
+        $value = $this->getQueryConvertableMock(AnyType::class, "value");
+
+        $date = FunctionCall::localtime($value);
+
+        $this->assertInstanceOf(LocalTime::class, $date);
+
+        $date = FunctionCall::localtime();
+
+        $this->assertInstanceOf(LocalTime::class, $date);
+    }
+
+    public function testTime()
+    {
+        $value = $this->getQueryConvertableMock(AnyType::class, "value");
+
+        $date = FunctionCall::time($value);
+
+        $this->assertInstanceOf(Time::class, $date);
+
+        $date = FunctionCall::time();
+
+        $this->assertInstanceOf(Time::class, $date);
     }
 }
