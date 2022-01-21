@@ -51,7 +51,6 @@ $this->assertSame("MATCH (tom:Person {name: 'Tom Hanks'})-[:`ACTED_IN`]->(m)<-[:
 Below are some things that still need to be implemented.
 
 - Add automatic identifier generation
-- Add more data types
 - Add missing clauses
 - Add missing function definitions
 - Add missing expressions
