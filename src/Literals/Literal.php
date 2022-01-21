@@ -263,7 +263,7 @@ abstract class Literal
      */
     public static function dateTimeYMD($year, $month = null, $day = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null, $timezone = null): DateTimeType
     {
-        $setVariables = self::checkOrderAndConvertToNumeral([
+        $variables = self::checkOrderAndConvertToNumeral([
             "month"=> $month,
             "day" => $day,
             "hour" => $hour,
@@ -280,18 +280,43 @@ abstract class Literal
 
         $map = ["year" => $year];
 
-        if ($month !== null) $map["month"] = $setVariables["month"];
-        if ($day !== null) $map["day"] = $setVariables["day"];
-        if ($hour !== null) $map["hour"] = $setVariables["hour"];
-        if ($minute !== null) $map["minute"] = $setVariables["minute"];
-        if ($second !== null) $map["second"] = $setVariables["second"];
-        if ($millisecond !== null) $map["millisecond"] = $setVariables["millisecond"];
-        if ($microsecond !== null) $map["microsecond"] = $setVariables["microsecond"];
-        if ($nanosecond !== null) $map["nanosecond"] = $setVariables["nanosecond"];
+        if ($month !== null) {
+			$map["month"] = $variables["month"];
+		}
+
+        if ($day !== null) {
+			$map["day"] = $variables["day"];
+		}
+
+        if ($hour !== null) {
+			$map["hour"] = $variables["hour"];
+		}
+
+        if ($minute !== null) {
+			$map["minute"] = $variables["minute"];
+		}
+
+        if ($second !== null) {
+			$map["second"] = $variables["second"];
+		}
+
+        if ($millisecond !== null) {
+			$map["millisecond"] = $variables["millisecond"];
+		}
+
+        if ($microsecond !== null) {
+			$map["microsecond"] = $variables["microsecond"];
+		}
+
+        if ($nanosecond !== null) {
+			$map["nanosecond"] = $variables["nanosecond"];
+		}
+
         if ($timezone !== null) {
             if (!($timezone instanceof StringType)) {
                 $timezone = self::string($timezone);
             }
+
             $map["timezone"] = $timezone;
         }
 
@@ -576,7 +601,7 @@ abstract class Literal
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-calendar
      */
     public static function localDatetimeYMD($year, $month = null, $day = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null): LocalDateTimeType {
-        $setVariables = self::checkOrderAndConvertToNumeral([
+        $variables = self::checkOrderAndConvertToNumeral([
             "month" => $month,
             "day" => $day,
             "hour" => $hour,
@@ -593,14 +618,37 @@ abstract class Literal
 
         $map = ["year" => $year];
 
-        if ($month !== null) $map["month"] = $setVariables["month"];
-        if ($day !== null) $map["day"] = $setVariables["day"];
-        if ($hour !== null) $map["hour"] = $setVariables["hour"];
-        if ($minute !== null) $map["minute"] = $setVariables["minute"];
-        if ($second !== null) $map["second"] = $setVariables["second"];
-        if ($millisecond !== null) $map["millisecond"] = $setVariables["millisecond"];
-        if ($microsecond !== null) $map["microsecond"] = $setVariables["microsecond"];
-        if ($nanosecond !== null) $map["nanosecond"] = $setVariables["nanosecond"];
+        if ($month !== null) {
+			$map["month"] = $variables["month"];
+		}
+
+        if ($day !== null) {
+			$map["day"] = $variables["day"];
+		}
+
+        if ($hour !== null) {
+			$map["hour"] = $variables["hour"];
+		}
+
+        if ($minute !== null) {
+			$map["minute"] = $variables["minute"];
+		}
+
+        if ($second !== null) {
+			$map["second"] = $variables["second"];
+		}
+
+        if ($millisecond !== null) {
+			$map["millisecond"] = $variables["millisecond"];
+		}
+
+        if ($microsecond !== null) {
+			$map["microsecond"] = $variables["microsecond"];
+		}
+
+        if ($nanosecond !== null) {
+			$map["nanosecond"] = $variables["nanosecond"];
+		}
 
         return FunctionCall::localdatetime(Query::map($map));
     }
@@ -623,7 +671,7 @@ abstract class Literal
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-week
      */
     public static function localDatetimeYWD($year, $week = null, $dayOfWeek = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null): LocalDateTimeType {
-        $setVariables = self::checkOrderAndConvertToNumeral([
+        $variables = self::checkOrderAndConvertToNumeral([
             "week" => $week,
             "dayOfWeek" => $dayOfWeek,
             "hour" => $hour,
@@ -640,14 +688,37 @@ abstract class Literal
 
         $map = ["year" => $year];
 
-        if ($week !== null) $map["week"] = $setVariables["week"];
-        if ($dayOfWeek !== null) $map["dayOfWeek"] = $setVariables["dayOfWeek"];
-        if ($hour !== null) $map["hour"] = $setVariables["hour"];
-        if ($minute !== null) $map["minute"] = $setVariables["minute"];
-        if ($second !== null) $map["second"] = $setVariables["second"];
-        if ($millisecond !== null) $map["millisecond"] = $setVariables["millisecond"];
-        if ($microsecond !== null) $map["microsecond"] = $setVariables["microsecond"];
-        if ($nanosecond !== null) $map["nanosecond"] = $setVariables["nanosecond"];
+        if ($week !== null) {
+			$map["week"] = $variables["week"];
+		}
+
+        if ($dayOfWeek !== null) {
+			$map["dayOfWeek"] = $variables["dayOfWeek"];
+		}
+
+        if ($hour !== null) {
+			$map["hour"] = $variables["hour"];
+		}
+
+        if ($minute !== null) {
+			$map["minute"] = $variables["minute"];
+		}
+
+        if ($second !== null) {
+			$map["second"] = $variables["second"];
+		}
+
+        if ($millisecond !== null) {
+			$map["millisecond"] = $variables["millisecond"];
+		}
+
+        if ($microsecond !== null) {
+			$map["microsecond"] = $variables["microsecond"];
+		}
+
+        if ($nanosecond !== null) {
+			$map["nanosecond"] = $variables["nanosecond"];
+		}
 
         return FunctionCall::localdatetime(Query::map($map));
     }
@@ -669,7 +740,7 @@ abstract class Literal
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-quarter
      */
     public static function localDatetimeYQD($year, $quarter = null, $dayOfQuarter = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null): LocalDateTimeType {
-        $setVariables = self::checkOrderAndConvertToNumeral([
+        $variables = self::checkOrderAndConvertToNumeral([
             "quarter" => $quarter,
             "dayOfQuarter" => $dayOfQuarter,
             "hour" => $hour,
@@ -686,14 +757,37 @@ abstract class Literal
 
         $map = ["year" => $year];
 
-        if ($quarter !== null) $map["quarter"] = $setVariables["quarter"];
-        if ($dayOfQuarter !== null) $map["dayOfQuarter"] = $setVariables["dayOfQuarter"];
-        if ($hour !== null) $map["hour"] = $setVariables["hour"];
-        if ($minute !== null) $map["minute"] = $setVariables["minute"];
-        if ($second !== null) $map["second"] = $setVariables["second"];
-        if ($millisecond !== null) $map["millisecond"] = $setVariables["millisecond"];
-        if ($microsecond !== null) $map["microsecond"] = $setVariables["microsecond"];
-        if ($nanosecond !== null) $map["nanosecond"] = $setVariables["nanosecond"];
+        if ($quarter !== null) {
+			$map["quarter"] = $variables["quarter"];
+		}
+
+        if ($dayOfQuarter !== null) {
+			$map["dayOfQuarter"] = $variables["dayOfQuarter"];
+		}
+
+        if ($hour !== null) {
+			$map["hour"] = $variables["hour"];
+		}
+
+        if ($minute !== null) {
+			$map["minute"] = $variables["minute"];
+		}
+
+        if ($second !== null) {
+			$map["second"] = $variables["second"];
+		}
+
+        if ($millisecond !== null) {
+			$map["millisecond"] = $variables["millisecond"];
+		}
+
+        if ($microsecond !== null) {
+			$map["microsecond"] = $variables["microsecond"];
+		}
+
+        if ($nanosecond !== null) {
+			$map["nanosecond"] = $variables["nanosecond"];
+		}
 
         return FunctionCall::localdatetime(Query::map($map));
     }
@@ -714,7 +808,7 @@ abstract class Literal
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-ordinal
      */
     public static function localDatetimeYD($year, $ordinalDay = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null): LocalDateTimeType {
-        $setVariables = self::checkOrderAndConvertToNumeral([
+        $variables = self::checkOrderAndConvertToNumeral([
             "ordinalDay" => $ordinalDay,
             "hour" => $hour,
             "minute" => $minute,
@@ -730,13 +824,33 @@ abstract class Literal
 
         $map = ["year" => $year];
 
-        if ($ordinalDay !== null) $map["ordinalDay"] = $setVariables["ordinalDay"];
-        if ($hour !== null) $map["hour"] = $setVariables["hour"];
-        if ($minute !== null) $map["minute"] = $setVariables["minute"];
-        if ($second !== null) $map["second"] = $setVariables["second"];
-        if ($millisecond !== null) $map["millisecond"] = $setVariables["millisecond"];
-        if ($microsecond !== null) $map["microsecond"] = $setVariables["microsecond"];
-        if ($nanosecond !== null) $map["nanosecond"] = $setVariables["nanosecond"];
+        if ($ordinalDay !== null) {
+			$map["ordinalDay"] = $variables["ordinalDay"];
+		}
+
+        if ($hour !== null) {
+			$map["hour"] = $variables["hour"];
+		}
+
+        if ($minute !== null) {
+			$map["minute"] = $variables["minute"];
+		}
+
+        if ($second !== null) {
+			$map["second"] = $variables["second"];
+		}
+
+        if ($millisecond !== null) {
+			$map["millisecond"] = $variables["millisecond"];
+		}
+
+        if ($microsecond !== null) {
+			$map["microsecond"] = $variables["microsecond"];
+		}
+
+        if ($nanosecond !== null) {
+			$map["nanosecond"] = $variables["nanosecond"];
+		}
 
         return FunctionCall::localdatetime(Query::map($map));
     }
@@ -790,7 +904,7 @@ abstract class Literal
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localtime-create
      */
     public static function localTime($hour, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null): LocalTimeType {
-        $setVariables = self::checkOrderAndConvertToNumeral([
+        $variables = self::checkOrderAndConvertToNumeral([
             "minute" => $minute,
             "second" => $second,
             "millisecond" => $millisecond,
@@ -804,11 +918,25 @@ abstract class Literal
 
         $map = ["hour" => $hour];
 
-        if ($minute !== null) $map["minute"] = $setVariables["minute"];
-        if ($second !== null) $map["second"] = $setVariables["second"];
-        if ($millisecond !== null) $map["millisecond"] = $setVariables["millisecond"];
-        if ($microsecond !== null) $map["microsecond"] = $setVariables["microsecond"];
-        if ($nanosecond !== null) $map["nanosecond"] = $setVariables["nanosecond"];
+        if ($minute !== null) {
+			$map["minute"] = $variables["minute"];
+		}
+
+        if ($second !== null) {
+			$map["second"] = $variables["second"];
+		}
+
+        if ($millisecond !== null) {
+			$map["millisecond"] = $variables["millisecond"];
+		}
+
+        if ($microsecond !== null) {
+			$map["microsecond"] = $variables["microsecond"];
+		}
+
+        if ($nanosecond !== null) {
+			$map["nanosecond"] = $variables["nanosecond"];
+		}
 
         return FunctionCall::localtime(Query::map($map));
     }
@@ -835,7 +963,7 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-time-current
      */
-    public static function timeCurrent($timezone = null): TimeType {
+    public static function time($timezone = null): TimeType {
         if ($timezone === null) {
             return FunctionCall::time();
         }
@@ -843,6 +971,7 @@ abstract class Literal
         if (!($timezone instanceof StringType)) {
             $timezone = self::string($timezone);
         }
+
         return FunctionCall::time(Query::map(["timezone" => $timezone]));
     }
 
@@ -860,8 +989,8 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-time-create
      */
-    public static function time($hour, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null, $timezone = null): TimeType {
-        $setVariables = self::checkOrderAndConvertToNumeral([
+    public static function timeHMS($hour, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null, $timezone = null): TimeType {
+        $variables = self::checkOrderAndConvertToNumeral([
             "minute" => $minute,
             "second" => $second,
             "millisecond" => $millisecond,
@@ -875,15 +1004,31 @@ abstract class Literal
 
         $map = ["hour" => $hour];
 
-        if ($minute !== null) $map["minute"] = $setVariables["minute"];
-        if ($second !== null) $map["second"] = $setVariables["second"];
-        if ($millisecond !== null) $map["millisecond"] = $setVariables["millisecond"];
-        if ($microsecond !== null) $map["microsecond"] = $setVariables["microsecond"];
-        if ($nanosecond !== null) $map["nanosecond"] = $setVariables["nanosecond"];
+        if ($minute !== null) {
+			$map["minute"] = $variables["minute"];
+		}
+
+        if ($second !== null) {
+			$map["second"] = $variables["second"];
+		}
+
+        if ($millisecond !== null) {
+			$map["millisecond"] = $variables["millisecond"];
+		}
+
+        if ($microsecond !== null) {
+			$map["microsecond"] = $variables["microsecond"];
+		}
+
+        if ($nanosecond !== null) {
+			$map["nanosecond"] = $variables["nanosecond"];
+		}
+
         if ($timezone !== null) {
             if (!($timezone instanceof StringType)) {
                 $timezone = self::string($timezone);
             }
+
             $map["timezone"] = $timezone;
         }
 
@@ -902,6 +1047,7 @@ abstract class Literal
         if (!($timeString instanceof StringType)) {
             $timeString = self::string($timeString);
         }
+
         return FunctionCall::time($timeString);
     }
 

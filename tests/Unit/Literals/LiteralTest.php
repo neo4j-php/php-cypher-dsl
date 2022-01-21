@@ -551,12 +551,12 @@ class LiteralTest extends TestCase
     }
 
     public function testTimeCurrentWithoutTimezone() {
-        $time = Literal::timeCurrent();
+        $time = Literal::time();
         $this->assertEquals($time, new Time());
     }
 
     public function testTimeCurrentWithTimezone() {
-        $time = Literal::timeCurrent("America/Los Angeles");
+        $time = Literal::time("America/Los Angeles");
         $this->assertEquals($time, new Time(new PropertyMap(["timezone" => new StringLiteral("America/Los Angeles")])));
     }
 
@@ -571,7 +571,7 @@ class LiteralTest extends TestCase
      * @param $expected
      */
     public function testTime($hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected) {
-        $time = Literal::time($hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
+        $time = Literal::timeHMS($hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
         $this->assertEquals($time, $expected);
     }
 
@@ -579,7 +579,7 @@ class LiteralTest extends TestCase
 	{
 		$this->expectException(\LogicException::class);
 
-		$time = Literal::time(9, null, 17);
+		$time = Literal::timeHMS(9, null, 17);
 
 		$time->toQuery();
 	}
