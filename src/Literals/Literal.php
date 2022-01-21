@@ -280,35 +280,35 @@ abstract class Literal
 
         $map = ["year" => $year];
 
-        if ($month !== null) {
+        if (isset($variables["month"])) {
 			$map["month"] = $variables["month"];
 		}
 
-        if ($day !== null) {
+        if (isset($variables["day"])) {
 			$map["day"] = $variables["day"];
 		}
 
-        if ($hour !== null) {
+        if (isset($variables["hour"])) {
 			$map["hour"] = $variables["hour"];
 		}
 
-        if ($minute !== null) {
+        if (isset($variables["minute"])) {
 			$map["minute"] = $variables["minute"];
 		}
 
-        if ($second !== null) {
+        if (isset($variables["second"])) {
 			$map["second"] = $variables["second"];
 		}
 
-        if ($millisecond !== null) {
+        if (isset($variables["millisecond"])) {
 			$map["millisecond"] = $variables["millisecond"];
 		}
 
-        if ($microsecond !== null) {
+        if (isset($variables["microsecond"])) {
 			$map["microsecond"] = $variables["microsecond"];
 		}
 
-        if ($nanosecond !== null) {
+        if (isset($variables["nanosecond"])) {
 			$map["nanosecond"] = $variables["nanosecond"];
 		}
 
@@ -359,35 +359,35 @@ abstract class Literal
 
         $map = ["year" => $year];
 
-        if ($week !== null) {
+        if (isset($variables["week"])) {
 			$map["week"] = $variables["week"];
 		}
 
-        if ($dayOfWeek !== null) {
+        if (isset($variables["dayOfWeek"])) {
 			$map["dayOfWeek"] = $variables["dayOfWeek"];
 		}
 
-        if ($hour !== null) {
+        if (isset($variables["hour"])) {
 			$map["hour"] = $variables["hour"];
 		}
 
-        if ($minute !== null) {
+        if (isset($variables["minute"])) {
 			$map["minute"] = $variables["minute"];
 		}
 
-        if ($second !== null) {
+        if (isset($variables["second"])) {
 			$map["second"] = $variables["second"];
 		}
 
-        if ($millisecond !== null) {
+        if (isset($variables["millisecond"])) {
 			$map["millisecond"] = $variables["millisecond"];
 		}
 
-        if ($microsecond !== null) {
+        if (isset($variables["microsecond"])) {
 			$map["microsecond"] = $variables["microsecond"];
 		}
 
-        if ($nanosecond !== null) {
+        if (isset($variables["nanosecond"])) {
 			$map["nanosecond"] = $variables["nanosecond"];
 		}
 
@@ -437,35 +437,35 @@ abstract class Literal
 
         $map = ["year" => $year];
 
-        if ($quarter !== null) {
+        if (isset($variables["quarter"])) {
 			$map["quarter"] = $variables["quarter"];
 		}
 
-        if ($dayOfQuarter !== null) {
+        if (isset($variables["dayOfQuarter"])) {
 			$map["dayOfQuarter"] = $variables["dayOfQuarter"];
 		}
 
-        if ($hour !== null) {
+        if (isset($variables["hour"])) {
 			$map["hour"] = $variables["hour"];
 		}
 
-        if ($minute !== null) {
+        if (isset($variables["minute"])) {
 			$map["minute"] = $variables["minute"];
 		}
 
-        if ($second !== null) {
+        if (isset($variables["second"])) {
 			$map["second"] = $variables["second"];
 		}
 
-        if ($millisecond !== null) {
+        if (isset($variables["millisecond"])) {
 			$map["millisecond"] = $variables["millisecond"];
 		}
 
-        if ($microsecond !== null) {
+        if (isset($variables["microsecond"])) {
 			$map["microsecond"] = $variables["microsecond"];
 		}
 
-        if ($nanosecond !== null) {
+        if (isset($variables["nanosecond"])) {
 			$map["nanosecond"] = $variables["nanosecond"];
 		}
 
@@ -513,31 +513,31 @@ abstract class Literal
 
         $map = ["year" => $year];
 
-        if ($ordinalDay !== null) {
+        if (isset($variables["ordinalDay"])) {
 			$map["ordinalDay"] = $variables["ordinalDay"];
 		}
 
-        if ($hour !== null) {
+        if (isset($variables["hour"])) {
 			$map["hour"] = $variables["hour"];
 		}
 
-        if ($minute !== null) {
+        if (isset($variables["minute"])) {
 			$map["minute"] = $variables["minute"];
 		}
 
-        if ($second !== null) {
+        if (isset($variables["second"])) {
 			$map["second"] = $variables["second"];
 		}
 
-        if ($millisecond !== null) {
+        if (isset($variables["millisecond"])) {
 			$map["millisecond"] = $variables["millisecond"];
 		}
 
-        if ($microsecond !== null) {
+        if (isset($variables["microsecond"])) {
 			$map["microsecond"] = $variables["microsecond"];
 		}
 
-        if ($nanosecond !== null) {
+        if (isset($variables["nanosecond"])) {
 			$map["nanosecond"] = $variables["nanosecond"];
 		}
 
@@ -618,35 +618,35 @@ abstract class Literal
 
         $map = ["year" => $year];
 
-        if ($month !== null) {
+        if (isset($variables["month"])) {
 			$map["month"] = $variables["month"];
 		}
 
-        if ($day !== null) {
+        if (isset($variables["day"])) {
 			$map["day"] = $variables["day"];
 		}
 
-        if ($hour !== null) {
+        if (isset($variables["hour"])) {
 			$map["hour"] = $variables["hour"];
 		}
 
-        if ($minute !== null) {
+        if (isset($variables["minute"])) {
 			$map["minute"] = $variables["minute"];
 		}
 
-        if ($second !== null) {
+        if (isset($variables["second"])) {
 			$map["second"] = $variables["second"];
 		}
 
-        if ($millisecond !== null) {
+        if (isset($variables["millisecond"])) {
 			$map["millisecond"] = $variables["millisecond"];
 		}
 
-        if ($microsecond !== null) {
+        if (isset($variables["microsecond"])) {
 			$map["microsecond"] = $variables["microsecond"];
 		}
 
-        if ($nanosecond !== null) {
+        if (isset($variables["nanosecond"])) {
 			$map["nanosecond"] = $variables["nanosecond"];
 		}
 
@@ -688,35 +688,35 @@ abstract class Literal
 
         $map = ["year" => $year];
 
-        if ($week !== null) {
+        if (isset($variables["week"])) {
 			$map["week"] = $variables["week"];
 		}
 
-        if ($dayOfWeek !== null) {
+        if (isset($variables["dayOfWeek"])) {
 			$map["dayOfWeek"] = $variables["dayOfWeek"];
 		}
 
-        if ($hour !== null) {
+        if (isset($variables["hour"])) {
 			$map["hour"] = $variables["hour"];
 		}
 
-        if ($minute !== null) {
+        if (isset($variables["minute"])) {
 			$map["minute"] = $variables["minute"];
 		}
 
-        if ($second !== null) {
+        if (isset($variables["second"])) {
 			$map["second"] = $variables["second"];
 		}
 
-        if ($millisecond !== null) {
+        if (isset($variables["millisecond"])) {
 			$map["millisecond"] = $variables["millisecond"];
 		}
 
-        if ($microsecond !== null) {
+        if (isset($variables["microsecond"])) {
 			$map["microsecond"] = $variables["microsecond"];
 		}
 
-        if ($nanosecond !== null) {
+        if (isset($variables["nanosecond"])) {
 			$map["nanosecond"] = $variables["nanosecond"];
 		}
 
@@ -757,35 +757,35 @@ abstract class Literal
 
         $map = ["year" => $year];
 
-        if ($quarter !== null) {
+        if (isset($variables["quarter"])) {
 			$map["quarter"] = $variables["quarter"];
 		}
 
-        if ($dayOfQuarter !== null) {
+        if (isset($variables["dayOfQuarter"])) {
 			$map["dayOfQuarter"] = $variables["dayOfQuarter"];
 		}
 
-        if ($hour !== null) {
+        if (isset($variables["hour"])) {
 			$map["hour"] = $variables["hour"];
 		}
 
-        if ($minute !== null) {
+        if (isset($variables["minute"])) {
 			$map["minute"] = $variables["minute"];
 		}
 
-        if ($second !== null) {
+        if (isset($variables["second"])) {
 			$map["second"] = $variables["second"];
 		}
 
-        if ($millisecond !== null) {
+        if (isset($variables["millisecond"])) {
 			$map["millisecond"] = $variables["millisecond"];
 		}
 
-        if ($microsecond !== null) {
+        if (isset($variables["microsecond"])) {
 			$map["microsecond"] = $variables["microsecond"];
 		}
 
-        if ($nanosecond !== null) {
+        if (isset($variables["nanosecond"])) {
 			$map["nanosecond"] = $variables["nanosecond"];
 		}
 
@@ -824,31 +824,31 @@ abstract class Literal
 
         $map = ["year" => $year];
 
-        if ($ordinalDay !== null) {
+        if (isset($variables["ordinalDay"])) {
 			$map["ordinalDay"] = $variables["ordinalDay"];
 		}
 
-        if ($hour !== null) {
+        if (isset($variables["hour"])) {
 			$map["hour"] = $variables["hour"];
 		}
 
-        if ($minute !== null) {
+        if (isset($variables["minute"])) {
 			$map["minute"] = $variables["minute"];
 		}
 
-        if ($second !== null) {
+        if (isset($variables["second"])) {
 			$map["second"] = $variables["second"];
 		}
 
-        if ($millisecond !== null) {
+        if (isset($variables["millisecond"])) {
 			$map["millisecond"] = $variables["millisecond"];
 		}
 
-        if ($microsecond !== null) {
+        if (isset($variables["microsecond"])) {
 			$map["microsecond"] = $variables["microsecond"];
 		}
 
-        if ($nanosecond !== null) {
+        if (isset($variables["nanosecond"])) {
 			$map["nanosecond"] = $variables["nanosecond"];
 		}
 
@@ -918,23 +918,23 @@ abstract class Literal
 
         $map = ["hour" => $hour];
 
-        if ($minute !== null) {
+        if (isset($variables["minute"])) {
 			$map["minute"] = $variables["minute"];
 		}
 
-        if ($second !== null) {
+        if (isset($variables["second"])) {
 			$map["second"] = $variables["second"];
 		}
 
-        if ($millisecond !== null) {
+        if (isset($variables["millisecond"])) {
 			$map["millisecond"] = $variables["millisecond"];
 		}
 
-        if ($microsecond !== null) {
+        if (isset($variables["microsecond"])) {
 			$map["microsecond"] = $variables["microsecond"];
 		}
 
-        if ($nanosecond !== null) {
+        if (isset($variables["nanosecond"])) {
 			$map["nanosecond"] = $variables["nanosecond"];
 		}
 
@@ -1004,23 +1004,23 @@ abstract class Literal
 
         $map = ["hour" => $hour];
 
-        if ($minute !== null) {
+        if (isset($variables["minute"])) {
 			$map["minute"] = $variables["minute"];
 		}
 
-        if ($second !== null) {
+        if (isset($variables["second"])) {
 			$map["second"] = $variables["second"];
 		}
 
-        if ($millisecond !== null) {
+        if (isset($variables["millisecond"])) {
 			$map["millisecond"] = $variables["millisecond"];
 		}
 
-        if ($microsecond !== null) {
+        if (isset($variables["microsecond"])) {
 			$map["microsecond"] = $variables["microsecond"];
 		}
 
-        if ($nanosecond !== null) {
+        if (isset($variables["nanosecond"])) {
 			$map["nanosecond"] = $variables["nanosecond"];
 		}
 
