@@ -27,6 +27,7 @@ use WikibaseSolutions\CypherDSL\Functions\DateTime;
 use WikibaseSolutions\CypherDSL\Functions\LocalDateTime;
 use WikibaseSolutions\CypherDSL\Functions\LocalTime;
 use WikibaseSolutions\CypherDSL\Functions\Point;
+use WikibaseSolutions\CypherDSL\Functions\Time;
 use WikibaseSolutions\CypherDSL\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Literals\Decimal;
 use WikibaseSolutions\CypherDSL\Literals\Literal;
@@ -448,12 +449,56 @@ class LiteralTest extends TestCase
         $this->assertEquals(new LocalTime(new PropertyMap(["timezone" => new StringLiteral("America/Los Angeles")])), $localTime);
     }
 
+
+    /**
+     * @dataProvider provideLocalTimeData
+     * @param $hour
+     * @param $minute
+     * @param $second
+     * @param $millisecond
+     * @param $microsecond
+     * @param $nanosecond
+     * @param $expected
+     */
+    public function testLocalTime($hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected) {
+        $localTime = Literal::localTime($hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
+        $this->assertEquals($localTime, $expected);
+    }
+
     public function testLocalTimeString() {
         $localTime = Literal::localTimeString("21:40:32.142");
         $this->assertEquals(new LocalTime(new StringLiteral("21:40:32.142")), $localTime);
     }
 
-    
+    public function testTimeCurrentWithoutTimezone() {
+        $time = Literal::timeCurrent();
+        $this->assertEquals($time, new Time());
+    }
+
+    public function testTimeCurrentWithTimezone() {
+        $time = Literal::timeCurrent("America/Los Angeles");
+        $this->assertEquals($time, new Time(new PropertyMap(["timezone" => new StringLiteral("America/Los Angeles")])));
+    }
+
+    /**
+     * @dataProvider provideTimeData
+     * @param $hour
+     * @param $minute
+     * @param $second
+     * @param $millisecond
+     * @param $microsecond
+     * @param $nanosecond
+     * @param $expected
+     */
+    public function testTime($hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected) {
+        $time = Literal::time($hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
+        $this->assertEquals($time, $expected);
+    }
+
+    public function testTimeString() {
+        $time = Literal::timeString("21:40:32.142+0100");
+        $this->assertEquals($time, new Time(new StringLiteral("21:40:32.142+0100")));
+    }
 
     public function provideDateYMDData()
     {
@@ -693,6 +738,46 @@ class LiteralTest extends TestCase
             [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), null, null, new LocalDateTime(new PropertyMap(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
             [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), null, new LocalDateTime(new PropertyMap(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
             [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), new LocalDateTime(new PropertyMap(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
+        ];
+    }
+
+    public function provideLocalTimeData() {
+        // [$hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
+        return [
+            [11, null, null, null, null, null, new LocalTime(new PropertyMap(["hour" => new Decimal(11)]))],
+            [11, 23, null, null, null, null, new LocalTime(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23)]))],
+            [11, 23, 2, null, null, null, new LocalTime(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2)]))],
+            [11, 23, 2, 54, null, null, new LocalTime(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54)]))],
+            [11, 23, 2, 54, 8, null, new LocalTime(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54), "microsecond" => new Decimal(8)]))],
+            [11, 23, 2, 54, 8, 29, new LocalTime(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54), "microsecond" => new Decimal(8), "nanosecond" => new Decimal(29)]))],
+
+            // types
+            [new Decimal(11), null, null, null, null, null, new LocalTime(new PropertyMap(["hour" => new Decimal(11)]))],
+            [new Decimal(11), new Decimal(23), null, null, null, null, new LocalTime(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23)]))],
+            [new Decimal(11), new Decimal(23), new Decimal(2), null, null, null, new LocalTime(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2)]))],
+            [new Decimal(11), new Decimal(23), new Decimal(2), new Decimal(54), null, null, new LocalTime(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54)]))],
+            [new Decimal(11), new Decimal(23), new Decimal(2), new Decimal(54), new Decimal(8), null, new LocalTime(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54), "microsecond" => new Decimal(8)]))],
+            [new Decimal(11), new Decimal(23), new Decimal(2), new Decimal(54), new Decimal(8), new Decimal(29), new LocalTime(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54), "microsecond" => new Decimal(8), "nanosecond" => new Decimal(29)]))],
+        ];
+    }
+
+    public function provideTimeData() {
+        // [$hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
+        return [
+            [11, null, null, null, null, null, new Time(new PropertyMap(["hour" => new Decimal(11)]))],
+            [11, 23, null, null, null, null, new Time(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23)]))],
+            [11, 23, 2, null, null, null, new Time(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2)]))],
+            [11, 23, 2, 54, null, null, new Time(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54)]))],
+            [11, 23, 2, 54, 8, null, new Time(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54), "microsecond" => new Decimal(8)]))],
+            [11, 23, 2, 54, 8, 29, new Time(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54), "microsecond" => new Decimal(8), "nanosecond" => new Decimal(29)]))],
+
+            // types
+            [new Decimal(11), null, null, null, null, null, new Time(new PropertyMap(["hour" => new Decimal(11)]))],
+            [new Decimal(11), new Decimal(23), null, null, null, null, new Time(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23)]))],
+            [new Decimal(11), new Decimal(23), new Decimal(2), null, null, null, new Time(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2)]))],
+            [new Decimal(11), new Decimal(23), new Decimal(2), new Decimal(54), null, null, new Time(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54)]))],
+            [new Decimal(11), new Decimal(23), new Decimal(2), new Decimal(54), new Decimal(8), null, new Time(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54), "microsecond" => new Decimal(8)]))],
+            [new Decimal(11), new Decimal(23), new Decimal(2), new Decimal(54), new Decimal(8), new Decimal(29), new Time(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54), "microsecond" => new Decimal(8), "nanosecond" => new Decimal(29)]))],
         ];
     }
 }
