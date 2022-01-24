@@ -270,6 +270,20 @@ class Query implements QueryConvertable
                 throw new TypeError("\$expressions should only consist of AnyType objects");
             }
 
+
+            // check if expression is node, then replace with variable
+            if ($expression instanceof Node) {
+                print_r(["test" => $expression instanceof Node, "hasname" => $expression->hasName() === true, "expression" => $expression]);
+                // check if Node has Name setted
+                if (!($expression->hasName())) {
+                    $expression = $expression->named(uniqid())->getName();
+                } else {
+                    $expression = $expression->getName();
+                }
+                print_r(["test" => $expression instanceof AnyType, "expression" => $expression]);
+            }
+
+
             $alias = is_integer($maybeAlias) ? "" : $maybeAlias;
             $returnClause->addColumn($expression, $alias);
         }
@@ -582,6 +596,15 @@ class Query implements QueryConvertable
         foreach ($expressions as $maybeAlias => $expression) {
             if (!($expression instanceof AnyType)) {
                 throw new TypeError("\$expressions should only consist of AnyType objects");
+            }
+
+            // check if expression is node, then replace with variable
+            if ($expression instanceof Node) {
+                // check if Node has Name setted
+                if (!$expression->hasName()) {
+                    $expression->named(uniqid());
+                }
+                $expression = $expression->getName();
             }
 
             $alias = is_integer($maybeAlias) ? "" : $maybeAlias;

@@ -228,6 +228,15 @@ class QueryTest extends TestCase
         $this->assertSame("RETURN (m:Movie) AS n", $statement);
     }
 
+    public function testReturningWithNode()
+    {
+        $node = Query::node("(m)");
+
+        $statement = (new Query())->returning($node)->build();
+
+        $this->assertMatchesRegularExpression("/(RETURN [0-Z])\w+/", $statement);
+    }
+
     public function testCreate()
     {
         $m = $this->getQueryConvertableMock(PathType::class, "(m:Movie)->(b)");

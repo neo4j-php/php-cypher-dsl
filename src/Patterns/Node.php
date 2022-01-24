@@ -148,6 +148,14 @@ class Node implements NodeType
         return $this->variable;
     }
 
+
+    public function hasName(): bool {
+        if (!isset($this->variable)) {
+            return false;
+        }
+        return ($this->variable !== null);
+    }
+
     /**
      * Returns the string representation of this relationship that can be used directly
      * in a query.
@@ -178,4 +186,6 @@ class Node implements NodeType
 
         return "($nodeInner)";
     }
+
+
 }
