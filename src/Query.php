@@ -273,16 +273,13 @@ class Query implements QueryConvertable
 
             // check if expression is node, then replace with variable
             if ($expression instanceof Node) {
-                print_r(["test" => $expression instanceof Node, "hasname" => $expression->hasName() === true, "expression" => $expression]);
                 // check if Node has Name setted
-                if (!($expression->hasName())) {
-                    $expression = $expression->named(uniqid())->getName();
-                } else {
-                    $expression = $expression->getName();
+                if (!$expression->hasName()) {
+                    $expression->setName(uniqid());
                 }
-                print_r(["test" => $expression instanceof AnyType, "expression" => $expression]);
-            }
 
+                $expression = $expression->getName();
+            }
 
             $alias = is_integer($maybeAlias) ? "" : $maybeAlias;
             $returnClause->addColumn($expression, $alias);

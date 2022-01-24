@@ -148,12 +148,27 @@ class Node implements NodeType
         return $this->variable;
     }
 
+    /**
+     * Alias of Node::named().
+     *
+     * @param $variable
+     * @return $this
+     * @see Node::named()
+     *
+     */
+    public function setName($variable): self
+    {
+        return $this->named($variable);
+    }
 
-    public function hasName(): bool {
-        if (!isset($this->variable)) {
-            return false;
-        }
-        return ($this->variable !== null);
+    /**
+     * Returns true if and only if this node has a name.
+     *
+     * @return bool
+     */
+    public function hasName(): bool
+    {
+        return isset($this->variable);
     }
 
     /**
@@ -186,6 +201,4 @@ class Node implements NodeType
 
         return "($nodeInner)";
     }
-
-
 }

@@ -430,8 +430,10 @@ class QueryTest extends TestCase
 
         $this->assertSame("WITH foobar WHERE foobar", $statement);
 
-        $pathMock = $this->getQueryConvertableMock(Path::class, "(a)->(b)");
         $nodeMock = $this->getQueryConvertableMock(Node::class, "(a)");
+        $nodeMock->method('getName')->willReturn($this->getQueryConvertableMock(Variable::class, 'a'));
+
+        $pathMock = $this->getQueryConvertableMock(Path::class, "(a)->(b)");
         $numeralMock = $this->getQueryConvertableMock(NumeralType::class, "12");
         $booleanMock = $this->getQueryConvertableMock(BooleanType::class, "a > b");
         $propertyMock = $this->getQueryConvertableMock(Property::class, "a.b");
@@ -453,7 +455,7 @@ class QueryTest extends TestCase
             ->with(["#" => $nodeMock])
             ->build();
 
-        $this->assertSame("MATCH (a)->(b), (a) RETURN (a) AS `#` CREATE (a)->(b), (a) CREATE (a)->(b) DELETE (a), (a) DETACH DELETE (a), (a) LIMIT 12 MERGE (a) OPTIONAL MATCH (a), (a) ORDER BY a.b, a.b DESCENDING REMOVE a.b WHERE a > b WITH (a) AS `#`", $statement);
+        $this->assertSame("MATCH (a)->(b), (a) RETURN a AS `#` CREATE (a)->(b), (a) CREATE (a)->(b) DELETE (a), (a) DETACH DELETE (a), (a) LIMIT 12 MERGE (a) OPTIONAL MATCH (a), (a) ORDER BY a.b, a.b DESCENDING REMOVE a.b WHERE a > b WITH a AS `#`", $statement);
     }
 
     public function testBuildEmpty()
