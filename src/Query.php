@@ -62,7 +62,6 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 class Query implements QueryConvertable
 {
     use EscapeTrait;
-    use IdentifierGenerationTrait;
 
     // A reference to the Literal class
     const literal = Literal::class;
@@ -272,8 +271,12 @@ class Query implements QueryConvertable
                 throw new TypeError("\$expressions should only consist of AnyType objects");
             }
 
+            if ($expression instanceof Node) {
+                $expression = $expression->getName();
+            }
+
             $alias = is_integer($maybeAlias) ? "" : $maybeAlias;
-            $returnClause->addColumn($this->variableIfNode($expression), $alias);
+            $returnClause->addColumn($expression, $alias);
         }
 
         $returnClause->setDistinct($distinct);
@@ -586,8 +589,12 @@ class Query implements QueryConvertable
                 throw new TypeError("\$expressions should only consist of AnyType objects");
             }
 
+            if ($expression instanceof Node) {
+                $expression = $expression->getName();
+            }
+
             $alias = is_integer($maybeAlias) ? "" : $maybeAlias;
-            $withClause->addEntry($this->variableIfNode($expression), $alias);
+            $withClause->addEntry($expression, $alias);
         }
 
         $this->clauses[] = $withClause;

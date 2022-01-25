@@ -25,7 +25,6 @@ use InvalidArgumentException;
 use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\IdentifierGenerationTrait;
 use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -41,7 +40,6 @@ class Node implements NodeType
 {
     use EscapeTrait;
     use NodeTypeTrait;
-    use IdentifierGenerationTrait;
 
     /**
      * @var string[]
@@ -142,12 +140,17 @@ class Node implements NodeType
     }
 
     /**
-     * Returns the name of this node.
+     * Returns the name of this node. This function automatically generates a name if the node does not have a
+     * name yet.
      *
      * @return Variable|null The name of this node, or NULL if this node does not have a name
      */
     public function getName(): ?Variable
     {
+        if (!isset($this->variable)) {
+            $this->named($this->generateUUID());
+        }
+
         return $this->variable;
     }
 
@@ -177,12 +180,14 @@ class Node implements NodeType
      * Returns the property of the given name for this expression. For instance, if this expression is the
      * variable "foo", a function call like $expression->property("bar") would yield "foo.bar".
      *
+     * TODO: Maybe move this function to the NodeType trait and add it to the interface?
+     *
      * @param string $property
      * @return Property
      */
     public function property(string $property): Property
     {
-        return new Property($this->variableIfNode($this), $property);
+        return new Property($this->getName(), $property);
     }
 
     /**
@@ -214,5 +219,19 @@ class Node implements NodeType
         }
 
         return "($nodeInner)";
+    }
+
+    /**
+     * Generates a unique random identifier.
+     *
+     * @note It is not entirely guaranteed that this function gives a truly unique identifier. However, because the
+     * number of possible IDs is so huge, it should not be a problem.
+     *
+     * @param int $length
+     * @return string
+     */
+    private function generateUUID(int $length = 32): string
+    {
+        return substr(bin2hex(openssl_random_pseudo_bytes(ceil($length / 2))), 0, $length);
     }
 }
