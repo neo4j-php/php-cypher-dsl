@@ -35,7 +35,8 @@
   },
   "require": {
     "php": ">=7.4",
-    "ext-ctype": "*"
+    "ext-ctype": "*",
+    "ext-openssl": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "~9.0",

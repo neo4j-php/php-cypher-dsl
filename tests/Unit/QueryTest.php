@@ -230,11 +230,18 @@ class QueryTest extends TestCase
 
     public function testReturningWithNode()
     {
-        $node = Query::node("(m)");
+        $node = Query::node("m");
 
         $statement = (new Query())->returning($node)->build();
 
-        $this->assertMatchesRegularExpression("/(RETURN [0-Z])\w+/", $statement);
+        $this->assertMatchesRegularExpression("/(RETURN [0-9a-f]+)/", $statement);
+
+        $node = Query::node("m");
+        $node->named('example');
+
+        $statement = (new Query())->returning($node)->build();
+
+        $this->assertSame('RETURN example', $statement);
     }
 
     public function testCreate()
@@ -386,6 +393,22 @@ class QueryTest extends TestCase
         $statement = (new Query())->with(["foobar" => $expression])->build();
 
         $this->assertSame("WITH a < b AS foobar", $statement);
+    }
+
+    public function testWithWithNode()
+    {
+        $node = Query::node('m');
+
+        $statement = (new Query())->with($node)->build();
+
+        $this->assertMatchesRegularExpression("/(WITH [0-9a-f]+)/", $statement);
+
+        $node = Query::node("m");
+        $node->named('example');
+
+        $statement = (new Query())->with($node)->build();
+
+        $this->assertSame('WITH example', $statement);
     }
 
     public function testCallProcedure()

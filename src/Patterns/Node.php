@@ -22,8 +22,10 @@
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use InvalidArgumentException;
+use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\IdentifierGenerationTrait;
 use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -39,6 +41,7 @@ class Node implements NodeType
 {
     use EscapeTrait;
     use NodeTypeTrait;
+    use IdentifierGenerationTrait;
 
     /**
      * @var string[]
@@ -154,7 +157,6 @@ class Node implements NodeType
      * @param $variable
      * @return $this
      * @see Node::named()
-     *
      */
     public function setName($variable): self
     {
@@ -169,6 +171,18 @@ class Node implements NodeType
     public function hasName(): bool
     {
         return isset($this->variable);
+    }
+
+    /**
+     * Returns the property of the given name for this expression. For instance, if this expression is the
+     * variable "foo", a function call like $expression->property("bar") would yield "foo.bar".
+     *
+     * @param string $property
+     * @return Property
+     */
+    public function property(string $property): Property
+    {
+        return new Property($this->variableIfNode($this), $property);
     }
 
     /**

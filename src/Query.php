@@ -45,6 +45,7 @@ use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\IdentifierGenerationTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -61,6 +62,7 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 class Query implements QueryConvertable
 {
     use EscapeTrait;
+    use IdentifierGenerationTrait;
 
     // A reference to the Literal class
     const literal = Literal::class;
@@ -270,19 +272,8 @@ class Query implements QueryConvertable
                 throw new TypeError("\$expressions should only consist of AnyType objects");
             }
 
-
-            // check if expression is node, then replace with variable
-            if ($expression instanceof Node) {
-                // check if Node has Name setted
-                if (!$expression->hasName()) {
-                    $expression->setName(uniqid());
-                }
-
-                $expression = $expression->getName();
-            }
-
             $alias = is_integer($maybeAlias) ? "" : $maybeAlias;
-            $returnClause->addColumn($expression, $alias);
+            $returnClause->addColumn($this->variableIfNode($expression), $alias);
         }
 
         $returnClause->setDistinct($distinct);
@@ -575,8 +566,8 @@ class Query implements QueryConvertable
     /**
      * Creates the WITH clause.
      *
-     * @param AnyType[]|AnyType $expressions The entries to add; if the array-key is
-     *                                             non-numerical, it is used as the alias
+     * @param AnyType[]|AnyType $expressions The entries to add; if the array-key is non-numerical, it is used as the alias
+     *
      *
      * @return Query
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/with/
@@ -595,17 +586,8 @@ class Query implements QueryConvertable
                 throw new TypeError("\$expressions should only consist of AnyType objects");
             }
 
-            // check if expression is node, then replace with variable
-            if ($expression instanceof Node) {
-                // check if Node has Name setted
-                if (!$expression->hasName()) {
-                    $expression->named(uniqid());
-                }
-                $expression = $expression->getName();
-            }
-
             $alias = is_integer($maybeAlias) ? "" : $maybeAlias;
-            $withClause->addEntry($expression, $alias);
+            $withClause->addEntry($this->variableIfNode($expression), $alias);
         }
 
         $this->clauses[] = $withClause;
