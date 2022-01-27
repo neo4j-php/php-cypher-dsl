@@ -192,6 +192,21 @@ class NodeTest extends TestCase
         $this->assertSame("({foo: 'baz', baz: 'bar', qux: 'baz'})", $node->toQuery());
     }
 
+    public function testPropertyWithName()
+    {
+        $node = new Node();
+        $node->named('example');
+
+        $this->assertSame('example.foo', $node->property('foo')->toQuery());
+    }
+
+    public function testPropertyWithoutName()
+    {
+        $node = new Node();
+
+        $this->assertMatchesRegularExpression("/^[0-9a-f]+\.foo$/", $node->property('foo')->toQuery());
+    }
+
     public function provideOnlyLabelData(): array
     {
         return [

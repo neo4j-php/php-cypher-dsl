@@ -92,6 +92,13 @@ class QueryTest extends TestCase
         $this->assertInstanceOf(Variable::class, Query::variable("foo"));
     }
 
+    public function testVariableEmpty()
+    {
+        $this->assertInstanceOf(Variable::class, Query::variable());
+
+        $this->assertMatchesRegularExpression('/[0-9a-f]+/', Query::variable()->toQuery());
+    }
+
     public function testParameter()
     {
         $this->assertInstanceOf(Parameter::class, Query::parameter("foo"));
@@ -226,6 +233,22 @@ class QueryTest extends TestCase
         $statement = (new Query())->returning(["n" => $m])->build();
 
         $this->assertSame("RETURN (m:Movie) AS n", $statement);
+    }
+
+    public function testReturningWithNode()
+    {
+        $node = Query::node("m");
+
+        $statement = (new Query())->returning($node)->build();
+
+        $this->assertMatchesRegularExpression("/(RETURN [0-9a-f]+)/", $statement);
+
+        $node = Query::node("m");
+        $node->named('example');
+
+        $statement = (new Query())->returning($node)->build();
+
+        $this->assertSame('RETURN example', $statement);
     }
 
     public function testCreate()
@@ -379,6 +402,22 @@ class QueryTest extends TestCase
         $this->assertSame("WITH a < b AS foobar", $statement);
     }
 
+    public function testWithWithNode()
+    {
+        $node = Query::node('m');
+
+        $statement = (new Query())->with($node)->build();
+
+        $this->assertMatchesRegularExpression("/(WITH [0-9a-f]+)/", $statement);
+
+        $node = Query::node("m");
+        $node->named('example');
+
+        $statement = (new Query())->with($node)->build();
+
+        $this->assertSame('WITH example', $statement);
+    }
+
     public function testCallProcedure()
     {
         $procedure = "apoc.json";
@@ -421,8 +460,10 @@ class QueryTest extends TestCase
 
         $this->assertSame("WITH foobar WHERE foobar", $statement);
 
-        $pathMock = $this->getQueryConvertableMock(Path::class, "(a)->(b)");
         $nodeMock = $this->getQueryConvertableMock(Node::class, "(a)");
+        $nodeMock->method('getName')->willReturn($this->getQueryConvertableMock(Variable::class, 'a'));
+
+        $pathMock = $this->getQueryConvertableMock(Path::class, "(a)->(b)");
         $numeralMock = $this->getQueryConvertableMock(NumeralType::class, "12");
         $booleanMock = $this->getQueryConvertableMock(BooleanType::class, "a > b");
         $propertyMock = $this->getQueryConvertableMock(Property::class, "a.b");
@@ -444,7 +485,7 @@ class QueryTest extends TestCase
             ->with(["#" => $nodeMock])
             ->build();
 
-        $this->assertSame("MATCH (a)->(b), (a) RETURN (a) AS `#` CREATE (a)->(b), (a) CREATE (a)->(b) DELETE (a), (a) DETACH DELETE (a), (a) LIMIT 12 MERGE (a) OPTIONAL MATCH (a), (a) ORDER BY a.b, a.b DESCENDING REMOVE a.b WHERE a > b WITH (a) AS `#`", $statement);
+        $this->assertSame("MATCH (a)->(b), (a) RETURN a AS `#` CREATE (a)->(b), (a) CREATE (a)->(b) DELETE (a), (a) DETACH DELETE (a), (a) LIMIT 12 MERGE (a) OPTIONAL MATCH (a), (a) ORDER BY a.b, a.b DESCENDING REMOVE a.b WHERE a > b WITH a AS `#`", $statement);
     }
 
     public function testBuildEmpty()
@@ -839,6 +880,26 @@ class QueryTest extends TestCase
         $expression = $released->gte(Query::literal(1990))->and(Query::rawExpression("(nineties IS NOT NULL)"));
 
         $this->assertSame("((nineties.released >= 1990) AND (nineties IS NOT NULL))", $expression->toQuery());
+    }
+
+    public function testAutomaticIdentifierGeneration()
+    {
+        $node = Query::node();
+
+        $this->assertMatchesRegularExpression('/[0-9a-f]+\.foo/', $node->property('foo')->toQuery());
+
+        $node->named('foo');
+
+        $this->assertSame('foo.bar', $node->property('bar')->toQuery());
+
+        $node = Query::node();
+        $statement = Query::new()->match($node)->returning($node)->build();
+
+        $this->assertMatchesRegularExpression('/MATCH \([0-9a-f]+\) RETURN [0-9a-f]+/', $statement);
+
+        $node = Query::node();
+
+        $this->assertInstanceOf(Variable::class, $node->getName());
     }
 
     public function provideLiteralData(): array

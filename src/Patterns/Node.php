@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use InvalidArgumentException;
+use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
@@ -128,6 +129,33 @@ class Node implements NodeType
     }
 
     /**
+     * Returns the name of this node. This function automatically generates a name if the node does not have a
+     * name yet.
+     *
+     * @return Variable|null The name of this node, or NULL if this node does not have a name
+     */
+    public function getName(): ?Variable
+    {
+        if (!isset($this->variable)) {
+            $this->named(new Variable());
+        }
+
+        return $this->variable;
+    }
+
+    /**
+     * Alias of Node::named().
+     *
+     * @param $variable
+     * @return $this
+     * @see Node::named()
+     */
+    public function setName($variable): self
+    {
+        return $this->named($variable);
+    }
+
+    /**
      * @param string $label
      * @return Node
      */
@@ -139,13 +167,15 @@ class Node implements NodeType
     }
 
     /**
-     * Returns the name of this node.
+     * Returns the property of the given name for this node. For instance, if this node is "(foo:PERSON)", a function call
+     * like $node->property("bar") would yield "foo.bar".
      *
-     * @return Variable|null The name of this node, or NULL if this node does not have a name
+     * @param string $property
+     * @return Property
      */
-    public function getName(): ?Variable
+    public function property(string $property): Property
     {
-        return $this->variable;
+        return new Property($this->getName(), $property);
     }
 
     /**

@@ -45,6 +45,7 @@ use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\IdentifierGenerationTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -119,10 +120,10 @@ class Query implements QueryConvertable
     /**
      * Creates a variable.
      *
-     * @param string $variable
+     * @param string $variable The name of the variable; leave empty to automatically generate a variable name
      * @return Variable
      */
-    public static function variable(string $variable): Variable
+    public static function variable(?string $variable = null): Variable
     {
         return new Variable($variable);
     }
@@ -268,6 +269,10 @@ class Query implements QueryConvertable
         foreach ($expressions as $maybeAlias => $expression) {
             if (!($expression instanceof AnyType)) {
                 throw new TypeError("\$expressions should only consist of AnyType objects");
+            }
+
+            if ($expression instanceof Node) {
+                $expression = $expression->getName();
             }
 
             $alias = is_integer($maybeAlias) ? "" : $maybeAlias;
@@ -564,8 +569,8 @@ class Query implements QueryConvertable
     /**
      * Creates the WITH clause.
      *
-     * @param AnyType[]|AnyType $expressions The entries to add; if the array-key is
-     *                                             non-numerical, it is used as the alias
+     * @param AnyType[]|AnyType $expressions The entries to add; if the array-key is non-numerical, it is used as the alias
+     *
      *
      * @return Query
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/with/
@@ -582,6 +587,10 @@ class Query implements QueryConvertable
         foreach ($expressions as $maybeAlias => $expression) {
             if (!($expression instanceof AnyType)) {
                 throw new TypeError("\$expressions should only consist of AnyType objects");
+            }
+
+            if ($expression instanceof Node) {
+                $expression = $expression->getName();
             }
 
             $alias = is_integer($maybeAlias) ? "" : $maybeAlias;
