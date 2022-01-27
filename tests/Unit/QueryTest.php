@@ -96,7 +96,7 @@ class QueryTest extends TestCase
     {
         $this->assertInstanceOf(Variable::class, Query::variable());
 
-        $this->assertMatchesRegularExpression('/[0-9a-f]+/', Query::variable()->toQuery());
+        $this->assertMatchesRegularExpression('/var[0-9a-f]+/', Query::variable()->toQuery());
     }
 
     public function testParameter()
@@ -241,7 +241,7 @@ class QueryTest extends TestCase
 
         $statement = (new Query())->returning($node)->build();
 
-        $this->assertMatchesRegularExpression("/(RETURN [0-9a-f]+)/", $statement);
+        $this->assertMatchesRegularExpression("/(RETURN var[0-9a-f]+)/", $statement);
 
         $node = Query::node("m");
         $node->named('example');
@@ -408,7 +408,7 @@ class QueryTest extends TestCase
 
         $statement = (new Query())->with($node)->build();
 
-        $this->assertMatchesRegularExpression("/(WITH [0-9a-f]+)/", $statement);
+        $this->assertMatchesRegularExpression("/(WITH var[0-9a-f]+)/", $statement);
 
         $node = Query::node("m");
         $node->named('example');
@@ -886,7 +886,7 @@ class QueryTest extends TestCase
     {
         $node = Query::node();
 
-        $this->assertMatchesRegularExpression('/[0-9a-f]+\.foo/', $node->property('foo')->toQuery());
+        $this->assertMatchesRegularExpression('/var[0-9a-f]+\.foo/', $node->property('foo')->toQuery());
 
         $node->named('foo');
 
@@ -895,7 +895,7 @@ class QueryTest extends TestCase
         $node = Query::node();
         $statement = Query::new()->match($node)->returning($node)->build();
 
-        $this->assertMatchesRegularExpression('/MATCH \([0-9a-f]+\) RETURN [0-9a-f]+/', $statement);
+        $this->assertMatchesRegularExpression('/MATCH \(var[0-9a-f]+\) RETURN var[0-9a-f]+/', $statement);
 
         $node = Query::node();
 
