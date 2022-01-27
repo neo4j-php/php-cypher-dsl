@@ -129,17 +129,6 @@ class Node implements NodeType
     }
 
     /**
-     * @param string $label
-     * @return Node
-     */
-    public function labeled(string $label): self
-    {
-        $this->labels[] = $label;
-
-        return $this;
-    }
-
-    /**
      * Returns the name of this node. This function automatically generates a name if the node does not have a
      * name yet.
      *
@@ -148,7 +137,7 @@ class Node implements NodeType
     public function getName(): ?Variable
     {
         if (!isset($this->variable)) {
-            $this->named($this->generateUUID());
+            $this->named(new Variable());
         }
 
         return $this->variable;
@@ -167,20 +156,19 @@ class Node implements NodeType
     }
 
     /**
-     * Returns true if and only if this node has a name.
-     *
-     * @return bool
+     * @param string $label
+     * @return Node
      */
-    public function hasName(): bool
+    public function labeled(string $label): self
     {
-        return isset($this->variable);
+        $this->labels[] = $label;
+
+        return $this;
     }
 
     /**
-     * Returns the property of the given name for this expression. For instance, if this expression is the
-     * variable "foo", a function call like $expression->property("bar") would yield "foo.bar".
-     *
-     * TODO: Maybe move this function to the NodeType trait and add it to the interface?
+     * Returns the property of the given name for this node. For instance, if this node is "(foo:PERSON)", a function call
+     * like $node->property("bar") would yield "foo.bar".
      *
      * @param string $property
      * @return Property
@@ -219,19 +207,5 @@ class Node implements NodeType
         }
 
         return "($nodeInner)";
-    }
-
-    /**
-     * Generates a unique random identifier.
-     *
-     * @note It is not entirely guaranteed that this function gives a truly unique identifier. However, because the
-     * number of possible IDs is so huge, it should not be a problem.
-     *
-     * @param int $length
-     * @return string
-     */
-    private function generateUUID(int $length = 32): string
-    {
-        return substr(bin2hex(openssl_random_pseudo_bytes(ceil($length / 2))), 0, $length);
     }
 }

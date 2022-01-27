@@ -92,6 +92,13 @@ class QueryTest extends TestCase
         $this->assertInstanceOf(Variable::class, Query::variable("foo"));
     }
 
+    public function testVariableEmpty()
+    {
+        $this->assertInstanceOf(Variable::class, Query::variable());
+
+        $this->assertMatchesRegularExpression('/[0-9a-f]+/', Query::variable()->toQuery());
+    }
+
     public function testParameter()
     {
         $this->assertInstanceOf(Parameter::class, Query::parameter("foo"));
@@ -873,6 +880,26 @@ class QueryTest extends TestCase
         $expression = $released->gte(Query::literal(1990))->and(Query::rawExpression("(nineties IS NOT NULL)"));
 
         $this->assertSame("((nineties.released >= 1990) AND (nineties IS NOT NULL))", $expression->toQuery());
+    }
+
+    public function testAutomaticIdentifierGeneration()
+    {
+        $node = Query::node();
+
+        $this->assertMatchesRegularExpression('/[0-9a-f]+\.foo/', $node->property('foo')->toQuery());
+
+        $node->named('foo');
+
+        $this->assertSame('foo.bar', $node->property('bar')->toQuery());
+
+        $node = Query::node();
+        $statement = Query::new()->match($node)->returning($node)->build();
+
+        $this->assertMatchesRegularExpression('/MATCH \([0-9a-f]+\) RETURN [0-9a-f]+/', $statement);
+
+        $node = Query::node();
+
+        $this->assertInstanceOf(Variable::class, $node->getName());
     }
 
     public function provideLiteralData(): array
