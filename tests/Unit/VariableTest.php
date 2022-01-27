@@ -42,6 +42,17 @@ class VariableTest extends TestCase
         $this->assertSame($expected, $variable->toQuery());
     }
 
+    public function testEmptyConstructor()
+    {
+        $variable = new Variable();
+
+        $this->assertMatchesRegularExpression('/[0-9a-f]+/', $variable->toQuery());
+
+        $variable = new Variable(null);
+
+        $this->assertMatchesRegularExpression('/[0-9a-f]+/', $variable->toQuery());
+    }
+
     /**
      * @dataProvider providePropertyData
      * @param string $variable
