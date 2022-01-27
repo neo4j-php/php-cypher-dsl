@@ -46,11 +46,11 @@ class VariableTest extends TestCase
     {
         $variable = new Variable();
 
-        $this->assertMatchesRegularExpression('/[0-9a-f]+/', $variable->toQuery());
+        $this->assertMatchesRegularExpression('/var[0-9a-f]+/', $variable->toQuery());
 
         $variable = new Variable(null);
 
-        $this->assertMatchesRegularExpression('/[0-9a-f]+/', $variable->toQuery());
+        $this->assertMatchesRegularExpression('/var[0-9a-f]+/', $variable->toQuery());
     }
 
     /**

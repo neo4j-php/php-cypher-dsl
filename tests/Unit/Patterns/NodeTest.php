@@ -204,7 +204,7 @@ class NodeTest extends TestCase
     {
         $node = new Node();
 
-        $this->assertMatchesRegularExpression("/^[0-9a-f]+\.foo$/", $node->property('foo')->toQuery());
+        $this->assertMatchesRegularExpression("/^var[0-9a-f]+\.foo$/", $node->property('foo')->toQuery());
     }
 
     public function provideOnlyLabelData(): array
