@@ -36,6 +36,16 @@ class MatchClause extends Clause
     private array $patterns = [];
 
     /**
+     * Returns the patterns to match.
+     *
+     * @return StructuralType[]
+     */
+    public function getPatterns(): array
+    {
+        return $this->patterns;
+    }
+
+    /**
      * Add a pattern to the match clause.
      *
      * @param StructuralType $pattern

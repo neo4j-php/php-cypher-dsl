@@ -36,6 +36,16 @@ class OptionalMatchClause extends Clause
     private array $patterns = [];
 
     /**
+     * Returns the patterns to optionally match.
+     *
+     * @return StructuralType[]
+     */
+    public function getPatterns(): array
+    {
+        return $this->patterns;
+    }
+
+    /**
      * Add a pattern to the optional match clause.
      *
      * @param StructuralType $pattern

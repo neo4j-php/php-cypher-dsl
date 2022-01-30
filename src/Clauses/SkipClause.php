@@ -51,6 +51,16 @@ class SkipClause extends Clause
     }
 
     /**
+     * Returns the amount to skip.
+     *
+     * @return NumeralType|null
+     */
+    public function getSkip(): ?NumeralType
+    {
+        return $this->skip;
+    }
+
+    /**
      * @inheritDoc
      */
     protected function getClause(): string

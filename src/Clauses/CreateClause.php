@@ -49,6 +49,16 @@ class CreateClause extends Clause
     }
 
     /**
+     * Returns the patterns of the create clause.
+     *
+     * @return StructuralType[]
+     */
+    public function getPatterns(): array
+    {
+        return $this->patterns;
+    }
+
+    /**
      * @inheritDoc
      */
     protected function getClause(): string

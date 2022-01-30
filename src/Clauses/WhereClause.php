@@ -51,6 +51,16 @@ class WhereClause extends Clause
     }
 
     /**
+     * Returns the expression to match.
+     *
+     * @return Label|BooleanType|null
+     */
+    public function getExpression()
+    {
+        return $this->expression;
+    }
+
+    /**
      * @inheritDoc
      */
     protected function getClause(): string

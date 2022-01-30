@@ -39,6 +39,16 @@ class SetClause extends Clause
     private array $expressions = [];
 
     /**
+     * Returns the expressions to SET.
+     *
+     * @return Assignment[]|Label[]
+     */
+    public function getExpressions(): array
+    {
+        return $this->expressions;
+    }
+
+    /**
      * Add an assignment.
      *
      * @param Assignment|Label $expression The assignment to execute

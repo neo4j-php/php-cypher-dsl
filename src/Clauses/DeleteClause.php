@@ -73,6 +73,26 @@ class DeleteClause extends Clause
     }
 
     /**
+     * Returns whether the deletion detaches the relationships.
+     *
+     * @return bool
+     */
+    public function detachesDeletion(): bool
+    {
+        return $this->detach;
+    }
+
+    /**
+     * Returns the nodes to delete.
+     *
+     * @return AnyType[]
+     */
+    public function getNodes(): array
+    {
+        return $this->nodes;
+    }
+
+    /**
      * @inheritDoc
      */
     protected function getClause(): string

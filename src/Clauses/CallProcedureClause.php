@@ -65,6 +65,36 @@ class CallProcedureClause extends Clause
     }
 
     /**
+     * Returns the variables to yield.
+     *
+     * @return Variable[]
+     */
+    public function getYieldVariables(): array
+    {
+        return $this->yieldVariables;
+    }
+
+    /**
+     * Returns the procedure to call.
+     *
+     * @return string|null
+     */
+    public function getProcedure(): ?string
+    {
+        return $this->procedure;
+    }
+
+    /**
+     * Returns the arguments of the procedure.
+     *
+     * @return AnyType[]
+     */
+    public function getArguments(): array
+    {
+        return $this->arguments;
+    }
+
+    /**
      * Sets the arguments to pass to this procedure call. This overwrites any previously passed
      * arguments.
      *

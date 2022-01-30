@@ -39,7 +39,7 @@ class ReturnClause extends Clause
     private bool $distinct = false;
 
     /**
-     * @var array The expressions to return
+     * @var AnyType[] The expressions to return
      */
     private array $columns = [];
 
@@ -55,6 +55,26 @@ class ReturnClause extends Clause
         $this->distinct = $distinct;
 
         return $this;
+    }
+
+    /**
+     * Returns the columns to return. Aliased columns have string keys instead of integers.
+     *
+     * @return AnyType[]
+     */
+    public function getColumns(): array
+    {
+        return $this->columns;
+    }
+
+    /**
+     * Returns whether the returned results are distinct.
+     *
+     * @return bool
+     */
+    public function isDistinct(): bool
+    {
+        return $this->distinct;
     }
 
     /**

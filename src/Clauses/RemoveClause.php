@@ -39,6 +39,16 @@ class RemoveClause extends Clause
     private array $expressions = [];
 
     /**
+     * Returns the expressions in the REMOVE clause.
+     *
+     * @return Label[]|Property[]
+     */
+    public function getExpressions(): array
+    {
+        return $this->expressions;
+    }
+
+    /**
      * Add an expression to the REMOVE clause. This expression usually returns a property (a.b) or a label (a:b).
      *
      * @param Property|Label $expression The expression to add
