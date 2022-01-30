@@ -37,6 +37,16 @@ class Decimal implements NumeralType
     private string $value;
 
     /**
+     * Returns the numeric string value.
+     *
+     * @return string
+     */
+    public function getValue(): string
+    {
+        return $this->value;
+    }
+
+    /**
      * Decimal constructor.
      *
      * @param int|float $value
@@ -51,6 +61,6 @@ class Decimal implements NumeralType
      */
     public function toQuery(): string
     {
-        return strval($this->value);
+        return (string)$this->value;
     }
 }
