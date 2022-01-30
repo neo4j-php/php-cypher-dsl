@@ -38,9 +38,9 @@ class In extends BinaryOperator implements BooleanType
     /**
      * @inheritDoc
      */
-    public function __construct(PropertyType $left, ListType $right)
+    public function __construct(PropertyType $left, ListType $right, bool $insertParentheses = true)
     {
-        parent::__construct($left, $right);
+        parent::__construct($left, $right, $insertParentheses);
     }
 
     /**

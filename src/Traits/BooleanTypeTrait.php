@@ -22,7 +22,6 @@
 namespace WikibaseSolutions\CypherDSL\Traits;
 
 use WikibaseSolutions\CypherDSL\AndOperator;
-use WikibaseSolutions\CypherDSL\Minus;
 use WikibaseSolutions\CypherDSL\Not;
 use WikibaseSolutions\CypherDSL\OrOperator;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;

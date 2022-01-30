@@ -37,9 +37,9 @@ class LessThanOrEqual extends BinaryOperator implements BooleanType
     /**
      * @inheritDoc
      */
-    public function __construct(NumeralType $left, NumeralType $right)
+    public function __construct(NumeralType $left, NumeralType $right, bool $insertParentheses = true)
     {
-        parent::__construct($left, $right);
+        parent::__construct($left, $right, $insertParentheses);
     }
 
     /**
