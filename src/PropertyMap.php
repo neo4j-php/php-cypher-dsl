@@ -89,6 +89,16 @@ class PropertyMap implements MapType
     }
 
     /**
+     * Returns the map of properties as a number of key-expression pairs.
+     *
+     * @return AnyType[]
+     */
+    public function getProperties(): array
+    {
+        return $this->properties;
+    }
+
+    /**
      * @inheritDoc
      */
     public function toQuery(): string

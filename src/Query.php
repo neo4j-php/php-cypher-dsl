@@ -35,6 +35,7 @@ use WikibaseSolutions\CypherDSL\Clauses\RawClause;
 use WikibaseSolutions\CypherDSL\Clauses\RemoveClause;
 use WikibaseSolutions\CypherDSL\Clauses\ReturnClause;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
+use WikibaseSolutions\CypherDSL\Clauses\SkipClause;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
 use WikibaseSolutions\CypherDSL\Functions\FunctionCall;
@@ -45,7 +46,6 @@ use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\IdentifierGenerationTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -120,7 +120,7 @@ class Query implements QueryConvertable
     /**
      * Creates a variable.
      *
-     * @param string $variable The name of the variable; leave empty to automatically generate a variable name
+     * @param ?string $variable The name of the variable; leave empty to automatically generate a variable name.
      * @return Variable
      */
     public static function variable(?string $variable = null): Variable
@@ -275,7 +275,7 @@ class Query implements QueryConvertable
                 $expression = $expression->getName();
             }
 
-            $alias = is_integer($maybeAlias) ? "" : $maybeAlias;
+            $alias = is_int($maybeAlias) ? "" : $maybeAlias;
             $returnClause->addColumn($expression, $alias);
         }
 
@@ -390,6 +390,24 @@ class Query implements QueryConvertable
     {
         $limitClause = new LimitClause();
         $limitClause->setLimit($limit);
+
+        $this->clauses[] = $limitClause;
+
+        return $this;
+    }
+
+    /**
+     * Creates the SKIP clause.
+     *
+     * @param NumeralType $limit The amount to use as the limit
+     *
+     * @return $this
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/skip/
+     */
+    public function skip(NumeralType $limit): self
+    {
+        $limitClause = new SkipClause();
+        $limitClause->setSkip($limit);
 
         $this->clauses[] = $limitClause;
 
@@ -593,7 +611,7 @@ class Query implements QueryConvertable
                 $expression = $expression->getName();
             }
 
-            $alias = is_integer($maybeAlias) ? "" : $maybeAlias;
+            $alias = is_int($maybeAlias) ? "" : $maybeAlias;
             $withClause->addEntry($expression, $alias);
         }
 
@@ -650,6 +668,16 @@ class Query implements QueryConvertable
         $this->clauses[] = $clause;
 
         return $this;
+    }
+
+    /**
+     * Returns the clauses in the query.
+     *
+     * @return Clause[]
+     */
+    public function getClauses(): array
+    {
+        return $this->clauses;
     }
 
     /**

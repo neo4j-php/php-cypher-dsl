@@ -67,6 +67,26 @@ class Label implements BooleanType
     }
 
     /**
+     * Returns the labels.
+     *
+     * @return string[]
+     */
+    public function getLabels(): array
+    {
+        return $this->labels;
+    }
+
+    /**
+     * Returns the variable of the label.
+     *
+     * @return Variable
+     */
+    public function getVariable(): Variable
+    {
+        return $this->variable;
+    }
+
+    /**
      * @inheritDoc
      */
     public function toQuery(): string

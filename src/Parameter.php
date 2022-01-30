@@ -65,7 +65,6 @@ class Parameter implements
 {
     use EscapeTrait;
     use DateTimeTrait;
-    use DateTimeTrait;
     use ListTypeTrait;
     use LocalDateTimeTrait;
     use LocalTimeTrait;
@@ -96,6 +95,16 @@ class Parameter implements
         }
 
         $this->parameter = $parameter;
+    }
+
+    /**
+     * Returns the parameter name.
+     *
+     * @return string
+     */
+    public function getParameter(): string
+    {
+        return $this->parameter;
     }
 
     /**

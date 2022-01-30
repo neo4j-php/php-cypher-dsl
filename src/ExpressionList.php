@@ -62,6 +62,16 @@ class ExpressionList implements ListType
     }
 
     /**
+     * The homogeneous list of expressions.
+     *
+     * @return AnyType[]
+     */
+    public function getExpressions(): array
+    {
+        return $this->expressions;
+    }
+
+    /**
      * @inheritDoc
      */
     public function toQuery(): string

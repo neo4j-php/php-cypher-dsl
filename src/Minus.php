@@ -49,6 +49,16 @@ class Minus implements NumeralType
     }
 
     /**
+     * Returns the expression to negate.
+     *
+     * @return NumeralType
+     */
+    public function getExpression(): NumeralType
+    {
+        return $this->expression;
+    }
+
+    /**
      * @inheritDoc
      */
     public function toQuery(): string

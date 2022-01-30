@@ -76,4 +76,34 @@ abstract class BinaryOperator implements QueryConvertable
      * @return string
      */
     abstract protected function getOperator(): string;
+
+    /**
+     * Gets the left-hand of the expression.
+     *
+     * @return AnyType
+     */
+    public function getLeft(): AnyType
+    {
+        return $this->left;
+    }
+
+    /**
+     * Gets the right-hand of the expression.
+     *
+     * @return AnyType
+     */
+    public function getRight(): AnyType
+    {
+        return $this->right;
+    }
+
+    /**
+     * Returns whether or not the operator inserts parenthesis.
+     *
+     * @return bool
+     */
+    public function insertsParentheses(): bool
+    {
+        return $this->insertParentheses;
+    }
 }

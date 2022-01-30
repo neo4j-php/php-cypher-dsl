@@ -49,12 +49,32 @@ class Exists implements BooleanType
      * Exists constructor.
      *
      * @param MatchClause $match The MATCH part of the EXISTS expression
-     * @param WhereClause $where The optional WHERE part of the EXISTS expression
+     * @param ?WhereClause $where The optional WHERE part of the EXISTS expression
      */
     public function __construct(MatchClause $match, ?WhereClause $where = null)
     {
         $this->match = $match;
         $this->where = $where;
+    }
+
+    /**
+     * Returns the MATCH part of the EXISTS expression.
+     *
+     * @return MatchClause
+     */
+    public function getMatch(): MatchClause
+    {
+        return $this->match;
+    }
+
+    /**
+     * Returns the WHERE part of the expression.
+     *
+     * @return WhereClause|null
+     */
+    public function getWhere(): ?WhereClause
+    {
+        return $this->where;
     }
 
     /**

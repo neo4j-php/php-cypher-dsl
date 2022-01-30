@@ -66,6 +66,16 @@ class Assignment extends BinaryOperator
     }
 
     /**
+     * Returns whether the assignment uses property mutation instead of replacement.
+     *
+     * @return bool
+     */
+    public function mutates(): bool
+    {
+        return $this->mutate;
+    }
+
+    /**
      * @inheritDoc
      */
     protected function getOperator(): string
