@@ -44,9 +44,9 @@ class Path implements PathType
     use EscapeTrait;
     use PathTypeTrait;
 
-    const DIR_RIGHT = ["-", "->"];
-    const DIR_LEFT = ["<-", "-"];
-    const DIR_UNI = ["-", "-"];
+    public const DIR_RIGHT = ["-", "->"];
+    public const DIR_LEFT = ["<-", "-"];
+    public const DIR_UNI = ["-", "-"];
 
     /**
      * @var StructuralType The pattern left of the relationship
@@ -69,24 +69,24 @@ class Path implements PathType
     private array $types = [];
 
     /**
-     * @var Variable
+     * @var ?Variable
      */
-    private Variable $variable;
+    private ?Variable $variable;
 
     /**
-     * @var int The minimum number of `relationship->node` hops away to search
+     * @var ?int The minimum number of `relationship->node` hops away to search
      */
-    private int $minHops;
+    private ?int $minHops;
 
     /**
-     * @var int The maximum number of `relationship->node` hops away to search
+     * @var ?int The maximum number of `relationship->node` hops away to search
      */
-    private int $maxHops;
+    private ?int $maxHops;
 
     /**
-     * @var int The exact number of `relationship->node` hops away to search
+     * @var ?int The exact number of `relationship->node` hops away to search
      */
-    private int $exactHops;
+    private ?int $exactHops;
 
     /**
      * @var MapType|null
@@ -321,5 +321,93 @@ class Path implements PathType
         }
 
         return sprintf("[%s]", $conditionInner);
+    }
+
+    /**
+     * @return MapType|null
+     */
+    public function getProperties(): ?MapType
+    {
+        return $this->properties;
+    }
+
+    /**
+     * Returns the variable of the path.
+     *
+     * @return Variable
+     */
+    public function getVariable(): ?Variable
+    {
+        return $this->variable;
+    }
+
+    /**
+     * Returns the left structure of the relationship.
+     *
+     * @return StructuralType
+     */
+    public function getA(): StructuralType
+    {
+        return $this->a;
+    }
+
+    /**
+     * Returns the right structure of the relationship.
+     *
+     * @return StructuralType
+     */
+    public function getB(): StructuralType
+    {
+        return $this->b;
+    }
+
+    /**
+     * Returns the direction of the path.
+     *
+     * @return string[]
+     */
+    public function getDirection(): array
+    {
+        return $this->direction;
+    }
+
+    /**
+     * Returns the exact amount of hops configured.
+     *
+     * @return ?int
+     */
+    public function getExactHops(): ?int
+    {
+        return $this->exactHops;
+    }
+
+    /**
+     * Returns the maximum amount of hops configured
+     *
+     * @return ?int
+     */
+    public function getMaxHops(): ?int
+    {
+        return $this->maxHops;
+    }
+
+    /**
+     * Returns the minimum amount of hops configured.
+     *
+     * @return ?int
+     */
+    public function getMinHops(): int
+    {
+        return $this->minHops;
+    }
+
+    /**
+     * Returns the types of the relationship.
+     *
+     * @return string[]
+     */
+    public function getTypes(): array
+    {
+        return $this->types;
     }
 }
