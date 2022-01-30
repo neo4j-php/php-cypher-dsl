@@ -39,32 +39,35 @@ trait PropertyTypeTrait
      * Perform an equality check or an assignment with the given expression.
      *
      * @param PropertyType $right
+     * @param bool $insertParentheses
      * @return Equality
      */
-    public function equals(PropertyType $right): Equality
+    public function equals(PropertyType $right, bool $insertParentheses = true): Equality
     {
-        return new Equality($this, $right);
+        return new Equality($this, $right, $insertParentheses);
     }
 
     /**
      * Perform an inequality comparison against the given expression.
      *
      * @param PropertyType $right
+     * @param bool $insertParentheses
      * @return Inequality
      */
-    public function notEquals(PropertyType $right): Inequality
+    public function notEquals(PropertyType $right, bool $insertParentheses = true): Inequality
     {
-        return new Inequality($this, $right);
+        return new Inequality($this, $right, $insertParentheses);
     }
 
     /**
      * Checks whether the element exists in the given list.
      *
      * @param ListType $right
+     * @param bool $insertParentheses
      * @return In
      */
-    public function in(ListType $right): In
+    public function in(ListType $right, bool $insertParentheses = true): In
     {
-        return new In($this, $right);
+        return new In($this, $right, $insertParentheses);
     }
 }

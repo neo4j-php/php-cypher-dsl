@@ -45,110 +45,120 @@ trait NumeralTypeTrait
      * Add this expression to the given expression.
      *
      * @param NumeralType $right
+     * @param bool $insertParentheses
      * @return Addition
      */
-    public function plus(NumeralType $right): Addition
+    public function plus(NumeralType $right, bool $insertParentheses = true): Addition
     {
-        return new Addition($this, $right);
+        return new Addition($this, $right, $insertParentheses);
     }
 
     /**
      * Divide this expression by the given expression.
      *
      * @param NumeralType $right
+     * @param bool $insertParentheses
      * @return Division
      */
-    public function divide(NumeralType $right): Division
+    public function divide(NumeralType $right, bool $insertParentheses = true): Division
     {
-        return new Division($this, $right);
+        return new Division($this, $right, $insertParentheses);
     }
 
     /**
      * Perform an exponentiation with the given expression.
      *
      * @param NumeralType $right
+     * @param bool $insertParentheses
      * @return Exponentiation
      */
-    public function exponentiate(NumeralType $right): Exponentiation
+    public function exponentiate(NumeralType $right, bool $insertParentheses = true): Exponentiation
     {
-        return new Exponentiation($this, $right);
+        return new Exponentiation($this, $right, $insertParentheses);
     }
 
     /**
      * Perform a greater than comparison against the given expression.
      *
      * @param NumeralType $right
+     * @param bool $insertParentheses
      * @return GreaterThan
      */
-    public function gt(NumeralType $right): GreaterThan
+    public function gt(NumeralType $right, bool $insertParentheses = true): GreaterThan
     {
-        return new GreaterThan($this, $right);
+        return new GreaterThan($this, $right, $insertParentheses);
     }
 
     /**
      * Perform a greater than or equal comparison against the given expression.
      *
      * @param NumeralType $right
+     * @param bool $insertParentheses
      * @return GreaterThanOrEqual
      */
-    public function gte(NumeralType $right): GreaterThanOrEqual
+    public function gte(NumeralType $right, bool $insertParentheses = true): GreaterThanOrEqual
     {
-        return new GreaterThanOrEqual($this, $right);
+        return new GreaterThanOrEqual($this, $right, $insertParentheses);
     }
 
     /**
      * Perform a less than comparison against the given expression.
      *
      * @param NumeralType $right
+     * @param bool $insertParentheses
      * @return LessThan
      */
-    public function lt(NumeralType $right): LessThan
+    public function lt(NumeralType $right, bool $insertParentheses = true): LessThan
     {
-        return new LessThan($this, $right);
+        return new LessThan($this, $right, $insertParentheses);
     }
 
     /**
      * Perform a less than or equal comparison against the given expression.
      *
      * @param NumeralType $right
+     * @param bool $insertParentheses
      * @return LessThanOrEqual
      */
-    public function lte(NumeralType $right): LessThanOrEqual
+    public function lte(NumeralType $right, bool $insertParentheses = true): LessThanOrEqual
     {
-        return new LessThanOrEqual($this, $right);
+        return new LessThanOrEqual($this, $right, $insertParentheses);
     }
 
     /**
      * Perform the modulo operation with the given expression.
      *
      * @param NumeralType $right
+     * @param bool $insertParentheses
      * @return Modulo
      */
-    public function mod(NumeralType $right): Modulo
+    public function mod(NumeralType $right, bool $insertParentheses = true): Modulo
     {
-        return new Modulo($this, $right);
+        return new Modulo($this, $right, $insertParentheses);
     }
 
     /**
      * Perform a multiplication with the given expression.
      *
      * @param NumeralType $right
+     * @param bool $insertParentheses
      * @return Multiplication
      */
-    public function times(NumeralType $right): Multiplication
+    public function times(NumeralType $right, bool $insertParentheses = true): Multiplication
     {
-        return new Multiplication($this, $right);
+        return new Multiplication($this, $right, $insertParentheses);
     }
 
     /**
      * Subtract the given expression from this expression.
      *
      * @param NumeralType $right
+     * @param bool $insertParentheses
      * @return Subtraction
      */
-    public function minus(NumeralType $right): Subtraction
+    public function minus(NumeralType $right, bool $insertParentheses = true): Subtraction
     {
-        return new Subtraction($this, $right);
+        return new Subtraction($this, $right, $insertParentheses);
     }
 
     /**
