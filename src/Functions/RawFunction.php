@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Functions;
 
 use InvalidArgumentException;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
@@ -37,6 +38,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
+use WikibaseSolutions\CypherDSL\ErrorHandling\ErrorTextHelper;
 
 /**
  * This class represents any function call.
@@ -78,7 +80,13 @@ class RawFunction extends FunctionCall implements
     {
         foreach ($parameters as $parameter) {
             if (!($parameter instanceof AnyType)) {
-                throw new InvalidArgumentException("\$parameters should only consist of AnyType objects");
+                throw new TypeError(
+                    ErrorTextHelper::getTypeErrorObjectArrayText(
+                        'parameters',
+                        'AnyType',
+                        $parameter
+                    )
+                );
             }
         }
 

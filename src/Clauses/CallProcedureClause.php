@@ -22,6 +22,8 @@
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use InvalidArgumentException;
+use TypeError;
+use WikibaseSolutions\CypherDSL\ErrorHandling\ErrorTextHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Variable;
 
@@ -75,7 +77,13 @@ class CallProcedureClause extends Clause
     {
         foreach ($arguments as $argument) {
             if (!($argument instanceof AnyType)) {
-                throw new InvalidArgumentException("\$arguments should only consist of AnyType objects");
+                throw new TypeError(
+                    ErrorTextHelper::getTypeErrorObjectArrayText(
+                        'arguments',
+                        'AnyType',
+                        $argument
+                    )
+                );
             }
         }
 
