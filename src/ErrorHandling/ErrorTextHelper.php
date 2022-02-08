@@ -22,7 +22,8 @@ class ErrorTextHelper {
         if ( $info === 'object' ) {
             $info = get_class( $userInput );
         } else {
-            $givenType .= ' "' . (string) $userInput . '"';
+            $info .= ' "' . (string) $userInput . '"';
         }
+        return $info;
     }
 }
