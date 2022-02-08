@@ -23,6 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
 use WikibaseSolutions\CypherDSL\Contains;
 use WikibaseSolutions\CypherDSL\EndsWith;
+use WikibaseSolutions\CypherDSL\Regex;
 use WikibaseSolutions\CypherDSL\StartsWith;
 
 /**
@@ -53,4 +54,12 @@ interface StringType extends PropertyType
      * @return StartsWith
      */
     public function startsWith(StringType $right): StartsWith;
+
+	/**
+	 * Perform a regex comparison with the given expression.
+	 *
+	 * @param StringType $right
+	 * @return Regex
+	 */
+    public function regex(StringType $right): Regex;
 }

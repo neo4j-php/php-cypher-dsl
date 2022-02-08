@@ -23,6 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Traits;
 
 use WikibaseSolutions\CypherDSL\Contains;
 use WikibaseSolutions\CypherDSL\EndsWith;
+use WikibaseSolutions\CypherDSL\Regex;
 use WikibaseSolutions\CypherDSL\StartsWith;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
@@ -65,4 +66,15 @@ trait StringTypeTrait
     {
         return new StartsWith($this, $right);
     }
+
+	/**
+	 * Perform a regex comparison with the given expression.
+	 *
+	 * @param StringType $right
+	 * @return Regex
+	 */
+    public function regex(StringType $right): Regex
+	{
+		return new Regex($this, $right);
+	}
 }

@@ -25,6 +25,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Contains;
 use WikibaseSolutions\CypherDSL\EndsWith;
+use WikibaseSolutions\CypherDSL\Regex;
 use WikibaseSolutions\CypherDSL\StartsWith;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
@@ -72,4 +73,11 @@ class StringTypeTraitTest extends TestCase
 
         $this->assertInstanceOf(StartsWith::class, $startsWith);
     }
+
+    public function testRegex()
+	{
+		$regex = $this->a->regex($this->b);
+
+		$this->assertInstanceOf(Regex::class, $regex);
+	}
 }
