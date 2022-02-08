@@ -44,21 +44,21 @@ class RegexTest extends TestCase
 
     public function testCannotBeNested()
     {
-		$regex = new Regex($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
+        $regex = new Regex($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
 
         $this->expectException(TypeError::class);
 
-		$regex = new Regex($regex, $regex);
+        $regex = new Regex($regex, $regex);
 
-		$regex->toQuery();
+        $regex->toQuery();
     }
 
     public function testDoesNotAcceptAnyTypeAsOperands()
     {
         $this->expectException(TypeError::class);
 
-		$regex = new Regex($this->getQueryConvertableMock(AnyType::class, "a"), $this->getQueryConvertableMock(AnyType::class, "b"));
+        $regex = new Regex($this->getQueryConvertableMock(AnyType::class, "a"), $this->getQueryConvertableMock(AnyType::class, "b"));
 
-		$regex->toQuery();
+        $regex->toQuery();
     }
 }

@@ -67,14 +67,14 @@ trait StringTypeTrait
         return new StartsWith($this, $right);
     }
 
-	/**
-	 * Perform a regex comparison with the given expression.
-	 *
-	 * @param StringType $right
-	 * @return Regex
-	 */
+    /**
+     * Perform a regex comparison with the given expression.
+     *
+     * @param StringType $right
+     * @return Regex
+     */
     public function regex(StringType $right): Regex
-	{
-		return new Regex($this, $right);
-	}
+    {
+        return new Regex($this, $right);
+    }
 }

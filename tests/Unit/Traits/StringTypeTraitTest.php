@@ -75,9 +75,9 @@ class StringTypeTraitTest extends TestCase
     }
 
     public function testRegex()
-	{
-		$regex = $this->a->regex($this->b);
+    {
+        $regex = $this->a->regex($this->b);
 
-		$this->assertInstanceOf(Regex::class, $regex);
-	}
+        $this->assertInstanceOf(Regex::class, $regex);
+    }
 }

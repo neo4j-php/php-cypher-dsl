@@ -55,11 +55,11 @@ interface StringType extends PropertyType
      */
     public function startsWith(StringType $right): StartsWith;
 
-	/**
-	 * Perform a regex comparison with the given expression.
-	 *
-	 * @param StringType $right
-	 * @return Regex
-	 */
+    /**
+     * Perform a regex comparison with the given expression.
+     *
+     * @param StringType $right
+     * @return Regex
+     */
     public function regex(StringType $right): Regex;
 }
