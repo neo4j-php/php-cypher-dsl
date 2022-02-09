@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Assignment;
 use WikibaseSolutions\CypherDSL\ErrorHandling\ErrorHelper;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 

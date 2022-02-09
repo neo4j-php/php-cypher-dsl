@@ -23,6 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
+use WikibaseSolutions\CypherDSL\Assignment;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\Clauses\MergeClause;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
@@ -115,6 +116,19 @@ class MergeClauseTest extends TestCase
     {
         $merge = new MergeClause();
         $pattern = $this->getQueryConvertableMock(PathType::class, "(a)");
+
+        $merge->setPattern($pattern);
+
+        $merge->toQuery();
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsAssignment()
+    {
+        $merge = new MergeClause();
+        $pattern = $this->getQueryConvertableMock(Assignment::class, "p = (a)-->(b)");
 
         $merge->setPattern($pattern);
 
