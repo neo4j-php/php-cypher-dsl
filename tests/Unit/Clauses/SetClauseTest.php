@@ -24,6 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Assignment;
+use WikibaseSolutions\CypherDSL\Label;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
@@ -71,6 +72,19 @@ class SetClauseTest extends TestCase
     {
         $set = new SetClause();
         $expression = $this->getQueryConvertableMock(Assignment::class, "(a)");
+
+        $set->addAssignment($expression);
+
+        $set->toQuery();
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsLabel()
+    {
+        $set = new SetClause();
+        $expression = $this->getQueryConvertableMock(Label::class, "(a)");
 
         $set->addAssignment($expression);
 

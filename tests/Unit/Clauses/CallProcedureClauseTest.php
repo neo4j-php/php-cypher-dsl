@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
@@ -93,6 +94,7 @@ class CallProcedureClauseTest extends TestCase
     public function testWithYield()
     {
         $callProcedureClause = new CallProcedureClause();
+
         $callProcedureClause->setProcedure("apoc.json");
 
         $a = $this->getQueryConvertableMock(Variable::class, "a");
@@ -103,5 +105,27 @@ class CallProcedureClauseTest extends TestCase
         $callProcedureClause->yields([$a, $b, $c]);
 
         $this->assertSame("CALL apoc.json() YIELD a, b, c", $callProcedureClause->toQuery());
+    }
+
+    public function testYieldDoesNotAcceptAnyType() {
+        $callProcedureClause = new CallProcedureClause();
+
+        $a = $this->getQueryConvertableMock(AnyType::class, "a");
+
+        $this->expectException(TypeError::class);
+
+        // callProcedureClause->yields requires a Variable
+        $callProcedureClause->yields([$a]);
+    }
+
+    public function testArgumentsOnlyAcceptsAnyType() {
+        $callProcedureClause = new CallProcedureClause();
+
+        $a = new class() {};
+
+        $this->expectException(TypeError::class);
+
+        // $callProcedureClause->withArguments() requires Anytype
+        $callProcedureClause->withArguments([$a]);
     }
 }

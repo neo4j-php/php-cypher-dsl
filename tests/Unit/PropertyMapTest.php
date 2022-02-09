@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
+use TypeError;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\PropertyMap;
@@ -125,5 +126,13 @@ class PropertyMapTest extends TestCase
             [['a' => new PropertyMap(['a' => new PropertyMap(['a' => $this->getQueryConvertableMock(AnyType::class, "'b'")])])], "{a: {a: {a: 'b'}}}"],
             [['a' => new PropertyMap(['b' => $this->getQueryConvertableMock(AnyType::class, "'c'")]), 'b' => $this->getQueryConvertableMock(AnyType::class, "'d'")], "{a: {b: 'c'}, b: 'd'}"]
         ];
+    }
+
+    public function testRequiresAnyTypeProperties() {
+        $a = new class() {};
+
+        $this->expectException( TypeError::class );
+
+        new PropertyMap([$a]);
     }
 }
