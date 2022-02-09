@@ -21,9 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use InvalidArgumentException;
-use TypeError;
-use WikibaseSolutions\CypherDSL\ErrorHandling\ErrorTextHelper;
+use WikibaseSolutions\CypherDSL\ErrorHandling\ErrorHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Variable;
 
@@ -76,15 +74,7 @@ class CallProcedureClause extends Clause
     public function withArguments(array $arguments): self
     {
         foreach ($arguments as $argument) {
-            if (!($argument instanceof AnyType)) {
-                throw new TypeError(
-                    ErrorTextHelper::getTypeErrorObjectArrayText(
-                        'arguments',
-                        'AnyType',
-                        $argument
-                    )
-                );
-            }
+            ErrorHelper::assertClass('argument', AnyType::class, $argument);
         }
 
         $this->arguments = $arguments;
@@ -115,9 +105,7 @@ class CallProcedureClause extends Clause
     public function yields(array $variables): self
     {
         foreach ($variables as $variable) {
-            if (!($variable instanceof Variable)) {
-                throw new InvalidArgumentException("\$variables should only consist of Variable objects");
-            }
+            ErrorHelper::assertClass('variable', Variable::class, $variable);
         }
 
         $this->yieldVariables = $variables;

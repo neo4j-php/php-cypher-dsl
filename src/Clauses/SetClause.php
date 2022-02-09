@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use TypeError;
 use WikibaseSolutions\CypherDSL\Assignment;
+use WikibaseSolutions\CypherDSL\ErrorHandling\ErrorHelper;
 use WikibaseSolutions\CypherDSL\Label;
 use WikibaseSolutions\CypherDSL\QueryConvertable;
 
@@ -46,9 +46,7 @@ class SetClause extends Clause
      */
     public function addAssignment($expression): self
     {
-        if (!($expression instanceof Assignment) && !($expression instanceof Label)) {
-            throw new TypeError("\$expression should be either an Assignment object or a Label object");
-        }
+        ErrorHelper::assertClass('expression', [Assignment::class, Label::class], $expression);
 
         $this->expressions[] = $expression;
 

@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use TypeError;
+use WikibaseSolutions\CypherDSL\ErrorHandling\ErrorHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -44,9 +44,7 @@ class Assignment extends BinaryOperator
      */
     public function __construct(AnyType $left, AnyType $right)
     {
-        if (!($left instanceof Property) && !($left instanceof Variable)) {
-            throw new TypeError("\$left must be either a Property or a Variable");
-        }
+        ErrorHelper::assertClass('left', [Property::class, Variable::class], $left);
 
         parent::__construct($left, $right, false);
     }

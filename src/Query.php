@@ -21,7 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\Clauses\CreateClause;
@@ -37,8 +36,8 @@ use WikibaseSolutions\CypherDSL\Clauses\ReturnClause;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
+use WikibaseSolutions\CypherDSL\ErrorHandling\ErrorHelper;
 use WikibaseSolutions\CypherDSL\Functions\FunctionCall;
-use WikibaseSolutions\CypherDSL\ErrorHandling\ErrorTextHelper;
 use WikibaseSolutions\CypherDSL\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Literals\Decimal;
 use WikibaseSolutions\CypherDSL\Literals\Literal;
@@ -235,11 +234,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-            if (!($pattern instanceof StructuralType)) {
-                throw new TypeError(
-                    ErrorTextHelper::getTypeErrorObjectArrayText('patterns', 'StructuralType', $pattern)
-                );
-            }
+            ErrorHelper::assertClass('pattern', StructuralType::class, $pattern);
 
             $matchClause->addPattern($pattern);
         }
@@ -270,15 +265,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($expressions as $maybeAlias => $expression) {
-            if (!($expression instanceof AnyType)) {
-                throw new TypeError(
-                    ErrorTextHelper::getTypeErrorObjectArrayText(
-                        'expressions',
-                        'AnyType',
-                        $expression
-                    )
-                );
-            }
+            ErrorHelper::assertClass('expression', AnyType::class, $expression);
 
             if ($expression instanceof Node) {
                 $expression = $expression->getName();
@@ -313,15 +300,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-            if (!($pattern instanceof StructuralType)) {
-                throw new TypeError(
-                    ErrorTextHelper::getTypeErrorObjectArrayText(
-                        'patterns',
-                        'StructuralType',
-                        $pattern
-                    )
-                );
-            }
+            ErrorHelper::assertClass('pattern', StructuralType::class, $pattern);
 
             $createClause->addPattern($pattern);
         }
@@ -349,15 +328,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($nodes as $node) {
-            if (!($node instanceof NodeType)) {
-                throw new TypeError(
-                    ErrorTextHelper::getTypeErrorObjectArrayText(
-                        'nodes',
-                        'NodeType',
-                        $node
-                    )
-                );
-            }
+            ErrorHelper::assertClass('node', NodeType::class, $node);
 
             $deleteClause->addNode($node);
         }
@@ -386,15 +357,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($nodes as $node) {
-            if (!($node instanceof NodeType)) {
-                throw new TypeError(
-                    ErrorTextHelper::getTypeErrorObjectArrayText(
-                        'nodes',
-                        'NodeType',
-                        $node
-                    )
-                );
-            }
+            ErrorHelper::assertClass('node', NodeType::class, $node);
 
             $deleteClause->addNode($node);
         }
@@ -470,15 +433,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-            if (!($pattern instanceof StructuralType)) {
-                throw new TypeError(
-                    ErrorTextHelper::getTypeErrorObjectArrayText(
-                        'patterns',
-                        'StructuralType',
-                        $pattern
-                    )
-                );
-            }
+            ErrorHelper::assertClass('pattern', StructuralType::class, $pattern);
 
             $optionalMatchClause->addPattern($pattern);
         }
@@ -508,15 +463,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($properties as $property) {
-            if (!($property instanceof Property)) {
-                throw new TypeError(
-                    ErrorTextHelper::getTypeErrorObjectArrayText(
-                        'properties',
-                        'PropertyType',
-                        $property
-                    )
-                );
-            }
+            ErrorHelper::assertClass('property', Property::class, $property);
 
             $orderByClause->addProperty($property);
         }
@@ -544,15 +491,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($expressions as $expression) {
-            if (!($expression instanceof Property) && !($expression instanceof Label)) {
-                throw new TypeError(
-                    ErrorTextHelper::getTypeErrorObjectArrayText(
-                        'expressions',
-                        'Property or Label',
-                        $expression
-                    )
-                );
-            }
+            ErrorHelper::assertClass('expression', [Property::class, Label::class], $expression);
 
             $removeClause->addExpression($expression);
         }
@@ -580,13 +519,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($expressions as $expression) {
-            if (!($expression instanceof Assignment) && !($expression instanceof Label)) {
-                throw new TypeError(
-                    'expressions',
-                    'Assignment and Label',
-                    $expression
-                );
-            }
+            ErrorHelper::assertClass('expression', [Assignment::class, Label::class], $expression);
 
             $setClause->addAssignment($expression);
         }
@@ -634,15 +567,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($expressions as $maybeAlias => $expression) {
-            if (!($expression instanceof AnyType)) {
-                throw new TypeError(
-                    ErrorTextHelper::getTypeErrorObjectArrayText(
-                        'expressions',
-                        'AnyType',
-                        $expression
-                    )
-                );
-            }
+            ErrorHelper::assertClass('expression', AnyType::class, $expression);
 
             if ($expression instanceof Node) {
                 $expression = $expression->getName();

@@ -22,7 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Functions;
 
 use InvalidArgumentException;
-use TypeError;
+use WikibaseSolutions\CypherDSL\ErrorHandling\ErrorHelper;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
@@ -79,15 +79,7 @@ class RawFunction extends FunctionCall implements
     public function __construct(string $functionName, array $parameters)
     {
         foreach ($parameters as $parameter) {
-            if (!($parameter instanceof AnyType)) {
-                throw new TypeError(
-                    ErrorTextHelper::getTypeErrorObjectArrayText(
-                        'parameters',
-                        'AnyType',
-                        $parameter
-                    )
-                );
-            }
+            ErrorHelper::assertClass('parameter', AnyType::class, $parameter);
         }
 
         if (!preg_match("/^[a-zA-Z0-9_]+$/", $functionName)) {
