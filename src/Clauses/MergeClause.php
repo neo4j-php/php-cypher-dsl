@@ -21,6 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\ErrorHandling\ErrorHelper;
+use WikibaseSolutions\CypherDSL\Assignment;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
@@ -31,9 +33,9 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 class MergeClause extends Clause
 {
     /**
-     * @var StructuralType|null $pattern The pattern to merge
+     * @var StructuralType|Assignment|null $pattern The pattern to merge
      */
-    private ?StructuralType $pattern;
+    private $pattern;
 
     /**
      * @var Clause|null $createClause The clause to execute when the pattern is created
@@ -48,11 +50,13 @@ class MergeClause extends Clause
     /**
      * Sets the pattern to merge.
      *
-     * @param StructuralType $pattern The pattern to merge
+     * @param StructuralType|Assignment $pattern The pattern to merge
      * @return MergeClause
      */
-    public function setPattern(StructuralType $pattern): self
+    public function setPattern($pattern): self
     {
+        ErrorHelper::assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
+
         $this->pattern = $pattern;
 
         return $this;
