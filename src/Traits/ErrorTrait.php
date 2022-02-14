@@ -19,15 +19,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\ErrorHandling;
+namespace WikibaseSolutions\CypherDSL\Traits;
 
 use TypeError;
 use ReflectionClass;
 
 /**
- * Convenience class including simple assertions and error reporting functions
+ * Convenience trait including simple assertions and error reporting functions
  */
-class ErrorHelper {
+trait ErrorTrait {
 
     /**
      * Asserts that $userInput is an instance of one of the provided $classNames (polyfill for php 8.0 Union types)
@@ -37,7 +37,7 @@ class ErrorHelper {
      * @param  mixed           $userInput   The input that should be tested
      * @throws TypeError
      */
-    public static function assertClass(string $varName, $classNames, $userInput) : void {
+    private function assertClass(string $varName, $classNames, $userInput) : void {
         if (!is_array($classNames)) {
             $classNames = [$classNames];
         }
@@ -46,7 +46,7 @@ class ErrorHelper {
                 return;
         }
         throw new TypeError(
-            self::getTypeErrorText(
+            $this->getTypeErrorText(
                 $varName,
                 $classNames,
                 $userInput
@@ -61,7 +61,7 @@ class ErrorHelper {
      * @param array  $classNames  The classnames that should be mentioned in the message
      * @param mixed  $userInput   The input that has been given.
      */
-    public static function getTypeErrorText(
+    private function getTypeErrorText(
         string $varName,
         array $classNames,
         $userInput
@@ -69,7 +69,7 @@ class ErrorHelper {
         return
             "\$$varName should be a " .
             implode(' or ', $classNames) . " object, " .
-            self::getUserInputInfo($userInput) . " given.";
+            $this->getUserInputInfo($userInput) . " given.";
     }
 
     /**
@@ -78,7 +78,7 @@ class ErrorHelper {
      * @param mixed $userInput
      * @return string A description of $userInput.
      */
-    public static function getUserInputInfo($userInput) : string {
+    private function getUserInputInfo($userInput) : string {
         $info = gettype( $userInput );
         if ( $info === 'object' ) {
             if ((new ReflectionClass($userInput))->isAnonymous()) {

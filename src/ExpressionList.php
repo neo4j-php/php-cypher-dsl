@@ -22,7 +22,7 @@
 namespace WikibaseSolutions\CypherDSL;
 
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\ErrorHandling\ErrorHelper;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
@@ -38,6 +38,7 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 class ExpressionList implements ListType
 {
     use EscapeTrait;
+    use ErrorTrait;
     use ListTypeTrait;
 
     /**
@@ -53,7 +54,7 @@ class ExpressionList implements ListType
     public function __construct(array $expressions)
     {
         foreach ($expressions as $expression) {
-            ErrorHelper::assertClass('expression', AnyType::class, $expression);
+            $this->assertClass('expression', AnyType::class, $expression);
         }
 
         $this->expressions = $expressions;

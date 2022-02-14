@@ -22,7 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Assignment;
-use WikibaseSolutions\CypherDSL\ErrorHandling\ErrorHelper;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Label;
 use WikibaseSolutions\CypherDSL\QueryConvertable;
 
@@ -33,6 +33,8 @@ use WikibaseSolutions\CypherDSL\QueryConvertable;
  */
 class SetClause extends Clause
 {
+    use ErrorTrait;
+
     /**
      * @var Assignment[]|Label[] $expressions The expressions to set
      */
@@ -46,7 +48,7 @@ class SetClause extends Clause
      */
     public function addAssignment($expression): self
     {
-        ErrorHelper::assertClass('expression', [Assignment::class, Label::class], $expression);
+        $this->assertClass('expression', [Assignment::class, Label::class], $expression);
 
         $this->expressions[] = $expression;
 

@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Functions;
 
-use WikibaseSolutions\CypherDSL\ErrorHandling\ErrorHelper;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
@@ -37,6 +37,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 class IsEmpty extends FunctionCall implements BooleanType
 {
     use BooleanTypeTrait;
+    use ErrorTrait;
 
     /**
      * @var ListType|MapType|StringType An expression that returns a list
@@ -54,7 +55,7 @@ class IsEmpty extends FunctionCall implements BooleanType
      */
     public function __construct(AnyType $list)
     {
-        ErrorHelper::assertClass('list', [ListType::class, MapType::class, StringType::class], $list);
+        $this->assertClass('list', [ListType::class, MapType::class, StringType::class], $list);
 
         $this->list = $list;
     }

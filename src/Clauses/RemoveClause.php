@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\ErrorHandling\ErrorHelper;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Label;
 use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\QueryConvertable;
@@ -33,6 +33,8 @@ use WikibaseSolutions\CypherDSL\QueryConvertable;
  */
 class RemoveClause extends Clause
 {
+    use ErrorTrait;
+
     /**
      * @var Property[]|Label[] The expressions in this REMOVE clause.
      */
@@ -46,7 +48,7 @@ class RemoveClause extends Clause
      */
     public function addExpression($expression): self
     {
-        ErrorHelper::assertClass('expression', [Property::class, Label::class], $expression);
+        $this->assertClass('expression', [Property::class, Label::class], $expression);
 
         $this->expressions[] = $expression;
 
