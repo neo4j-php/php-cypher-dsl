@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\ErrorHandling;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
 use TypeError;
 use PHPUnit\Framework\TestCase;
@@ -93,13 +93,13 @@ class ErrorTraitTest extends TestCase
 
     public function testGetTypeErrorText() {
         $this->assertEquals(
-            '$foo should be a WikibaseSolutions\CypherDSL\Tests\Unit\ErrorHandling\ErrorHelperDummyA object, integer "5" given.',
+            '$foo should be a WikibaseSolutions\CypherDSL\Tests\Unit\Traits\ErrorHelperDummyA object, integer "5" given.',
             $this->errorImpl->call('getTypeErrorText', ['foo', [ErrorHelperDummyA::class], 5])
         );
         $this->assertEquals(
             '$foo should be a ' .
-            'WikibaseSolutions\CypherDSL\Tests\Unit\ErrorHandling\ErrorHelperDummyA or ' .
-            'WikibaseSolutions\CypherDSL\Tests\Unit\ErrorHandling\ErrorHelperDummyB object, integer "5" given.',
+            'WikibaseSolutions\CypherDSL\Tests\Unit\Traits\ErrorHelperDummyA or ' .
+            'WikibaseSolutions\CypherDSL\Tests\Unit\Traits\ErrorHelperDummyB object, integer "5" given.',
             $this->errorImpl->call('getTypeErrorText', ['foo', [ErrorHelperDummyA::class, ErrorHelperDummyB::class], 5])
         );
     }
@@ -122,7 +122,7 @@ class ErrorTraitTest extends TestCase
             [ 'boolean "1"',              true           ],
             [ 'array',                    ['foo', 'bar'] ],
             [ 'anonymous class instance', new class(){}  ],
-            [ 'WikibaseSolutions\CypherDSL\Tests\Unit\ErrorHandling\ErrorHelperDummyA', new ErrorHelperDummyA()]
+            [ 'WikibaseSolutions\CypherDSL\Tests\Unit\Traits\ErrorHelperDummyA', new ErrorHelperDummyA()]
         ];
     }
 }
