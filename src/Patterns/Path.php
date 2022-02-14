@@ -182,8 +182,8 @@ class Path implements PathType
      */
     public function withMinHops(int $minHops): self
     {
-        if ($minHops < 1) {
-            throw new DomainException("minHops cannot be less than 1");
+        if ($minHops < 0) {
+            throw new DomainException("minHops cannot be less than 0");
         }
 
         if (isset($this->maxHops) && $minHops > $this->maxHops) {
