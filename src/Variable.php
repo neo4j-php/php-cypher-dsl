@@ -69,8 +69,6 @@ class Variable implements
     StringType,
     TimeType
 {
-    public const AUTOMATIC_VARIABLE_LENGTH = 32;
-
     use EscapeTrait;
     use DateTrait;
     use DateTimeTrait;
@@ -84,6 +82,8 @@ class Variable implements
     use PointTrait;
     use StringTypeTrait;
     use TimeTrait;
+
+    public const AUTOMATIC_VARIABLE_LENGTH = 32;
 
     /**
      * @var string The variable

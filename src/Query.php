@@ -65,10 +65,10 @@ class Query implements QueryConvertable
     use ErrorTrait;
 
     // A reference to the Literal class
-    const literal = Literal::class;
+    public const literal = Literal::class;
 
     // A reference to the FunctionCall class
-    const function = FunctionCall::class;
+    public const function = FunctionCall::class;
 
     /**
      * @var Clause[] $clauses
@@ -235,7 +235,6 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-
             $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
 
             $matchClause->addPattern($pattern);
@@ -654,12 +653,13 @@ class Query implements QueryConvertable
     public function build(): string
     {
         $builtClauses = array_map(
-            fn(Clause $clause): string => $clause->toQuery(),
+            fn (Clause $clause): string => $clause->toQuery(),
             $this->clauses
         );
 
         return implode(
-            " ", array_filter($builtClauses, fn($clause) => !empty($clause))
+            " ",
+            array_filter($builtClauses, fn ($clause) => !empty($clause))
         );
     }
 }

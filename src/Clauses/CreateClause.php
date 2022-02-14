@@ -45,7 +45,7 @@ class CreateClause extends Clause
      * @param StructuralType|Assignment $pattern The pattern to create
      * @return CreateClause
      */
-    public function addPattern( $pattern ): self
+    public function addPattern($pattern): self
     {
         $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
 
@@ -69,7 +69,7 @@ class CreateClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn($pattern): string => $pattern->toQuery(), $this->patterns)
+            array_map(fn ($pattern): string => $pattern->toQuery(), $this->patterns)
         );
     }
 }

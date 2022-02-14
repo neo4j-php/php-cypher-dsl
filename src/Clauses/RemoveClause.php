@@ -70,7 +70,7 @@ class RemoveClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn(QueryConvertable $expression) => $expression->toQuery(), $this->expressions)
+            array_map(fn (QueryConvertable $expression) => $expression->toQuery(), $this->expressions)
         );
     }
 }

@@ -92,7 +92,9 @@ class Parameter implements
         $strippedParameter = str_replace("_", "", $parameter);
 
         if ($parameter === "" || (!ctype_alnum($strippedParameter) && $strippedParameter !== "")) {
-            throw new InvalidArgumentException("A parameter may only consist of alphanumeric characters and underscores.");
+            throw new InvalidArgumentException(
+                "A parameter may only consist of alphanumeric characters and underscores."
+            );
         }
 
         $this->parameter = $parameter;

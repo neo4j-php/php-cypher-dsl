@@ -44,9 +44,9 @@ class Path implements PathType
     use EscapeTrait;
     use PathTypeTrait;
 
-    const DIR_RIGHT = ["-", "->"];
-    const DIR_LEFT = ["<-", "-"];
-    const DIR_UNI = ["-", "-"];
+    public const DIR_RIGHT = ["-", "->"];
+    public const DIR_LEFT = ["<-", "-"];
+    public const DIR_UNI = ["-", "-"];
 
     /**
      * @var StructuralType The pattern left of the relationship
@@ -290,7 +290,7 @@ class Path implements PathType
 
         if (count($types) !== 0) {
             // If we have at least one condition type, escape them and insert them into the query
-            $escapedTypes = array_map(fn(string $type): string => $this->escape($type), $types);
+            $escapedTypes = array_map(fn (string $type): string => $this->escape($type), $types);
             $conditionInner .= sprintf(":%s", implode("|", $escapedTypes));
         }
 

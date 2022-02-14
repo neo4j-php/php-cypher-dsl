@@ -107,7 +107,8 @@ class CallProcedureClauseTest extends TestCase
         $this->assertSame("CALL apoc.json() YIELD a, b, c", $callProcedureClause->toQuery());
     }
 
-    public function testYieldDoesNotAcceptAnyType() {
+    public function testYieldDoesNotAcceptAnyType()
+    {
         $callProcedureClause = new CallProcedureClause();
 
         $a = $this->getQueryConvertableMock(AnyType::class, "a");
@@ -118,10 +119,11 @@ class CallProcedureClauseTest extends TestCase
         $callProcedureClause->yields([$a]);
     }
 
-    public function testArgumentsOnlyAcceptsAnyType() {
+    public function testArgumentsOnlyAcceptsAnyType()
+    {
         $callProcedureClause = new CallProcedureClause();
 
-        $a = new class() {};
+        $a = new class () {};
 
         $this->expectException(TypeError::class);
 

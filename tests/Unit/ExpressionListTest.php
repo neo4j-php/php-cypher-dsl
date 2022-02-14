@@ -82,8 +82,9 @@ class ExpressionListTest extends TestCase
         ];
     }
 
-    public function testRequiresAnyType() {
-        $a = new class() {};
+    public function testRequiresAnyType()
+    {
+        $a = new class () {};
 
         $this->expectException(TypeError::class);
 

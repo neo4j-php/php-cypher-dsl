@@ -36,13 +36,15 @@ class ErrorHelperDummyExtendsB extends ErrorHelperDummyB {};
 /**
  * Tester/Mock class
  */
-class ErrorImpl {
+class ErrorImpl
+{
     use ErrorTrait;
 
     /**
      * Overcome private method problems
      */
-    public function call($funcName, $args) {
+    public function call($funcName, $args)
+    {
         return call_user_func_array([self::class, $funcName], $args);
     }
 }
@@ -54,7 +56,8 @@ class ErrorTraitTest extends TestCase
 {
     protected ErrorImpl $errorImpl;
 
-    public function setUp() : void {
+    public function setUp(): void
+    {
         $this->errorImpl = new ErrorImpl();
     }
 
@@ -62,19 +65,22 @@ class ErrorTraitTest extends TestCase
      * @doesNotPerformAssertions
      * @dataProvider CorrectAssertionsProvider
      */
-    public function testAssertClass($classNames, $userInput) {
+    public function testAssertClass($classNames, $userInput)
+    {
         $this->errorImpl->call('assertClass', ['foo', $classNames, $userInput]);
     }
 
     /**
      * @dataProvider failingAssertionsProvider
      */
-    public function testAssertClassFailure($classNames, $userInput) {
+    public function testAssertClassFailure($classNames, $userInput)
+    {
         $this->expectException(TypeError::class);
         $this->errorImpl->call('assertClass', ['foo', $classNames, $userInput]);
     }
 
-    public function correctAssertionsProvider() {
+    public function correctAssertionsProvider()
+    {
         return [
             [ErrorHelperDummyA::class, new ErrorHelperDummyA()],
             [ErrorHelperDummyA::class, new ErrorHelperDummyExtendsA()],
@@ -83,7 +89,8 @@ class ErrorTraitTest extends TestCase
         ];
     }
 
-    public function failingAssertionsProvider() {
+    public function failingAssertionsProvider()
+    {
         return [
             [ErrorHelperDummyA::class, new ErrorHelperDummyB()],
             [ErrorHelperDummyExtendsA::class, new ErrorHelperDummyA()],
@@ -91,7 +98,8 @@ class ErrorTraitTest extends TestCase
         ];
     }
 
-    public function testGetTypeErrorText() {
+    public function testGetTypeErrorText()
+    {
         $this->assertEquals(
             '$foo should be a WikibaseSolutions\CypherDSL\Tests\Unit\Traits\ErrorHelperDummyA object, integer "5" given.',
             $this->errorImpl->call('getTypeErrorText', ['foo', [ErrorHelperDummyA::class], 5])
@@ -107,21 +115,23 @@ class ErrorTraitTest extends TestCase
     /**
      * @dataProvider getUserInputInfoProvider
      */
-    public function testGetUserInputInfo($expected, $input) {
+    public function testGetUserInputInfo($expected, $input)
+    {
         $this->assertEquals(
             $expected,
             $this->errorImpl->call('getUserInputInfo', [$input])
         );
     }
 
-    public function getUserInputInfoProvider() {
+    public function getUserInputInfoProvider()
+    {
         return [
             [ 'string "foo"',             'foo'          ],
             [ 'integer "5"',              5              ],
             [ 'double "3.14"',            3.14           ],
             [ 'boolean "1"',              true           ],
             [ 'array',                    ['foo', 'bar'] ],
-            [ 'anonymous class instance', new class(){}  ],
+            [ 'anonymous class instance', new class () {}  ],
             [ 'WikibaseSolutions\CypherDSL\Tests\Unit\Traits\ErrorHelperDummyA', new ErrorHelperDummyA()]
         ];
     }

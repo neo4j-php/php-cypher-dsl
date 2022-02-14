@@ -70,7 +70,7 @@ class SetClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn(QueryConvertable $expression): string => $expression->toQuery(), $this->expressions)
+            array_map(fn (QueryConvertable $expression): string => $expression->toQuery(), $this->expressions)
         );
     }
 }
