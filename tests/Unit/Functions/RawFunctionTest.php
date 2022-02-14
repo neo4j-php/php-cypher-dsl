@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Functions;
 
+use TypeError;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Functions\RawFunction;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
@@ -42,5 +43,13 @@ class RawFunctionTest extends TestCase
         $raw = new RawFunction("foobar", [$a, $b, $c]);
 
         $this->assertSame("foobar(a, b, c)", $raw->toQuery());
+    }
+
+    public function testRequiresAnyTypeParameters() {
+        $a = new class() {};
+
+        $this->expectException( TypeError::class );
+
+        new RawFunction('foobar', [$a]);
     }
 }
