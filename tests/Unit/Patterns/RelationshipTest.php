@@ -378,15 +378,6 @@ class RelationshipTest extends TestCase
         $r->withMinHops(100);
     }
 
-    public function testMinHopsLessThanOne()
-    {
-        $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
-
-        $this->expectException(DomainException::class);
-
-        $r->withMinHops(0);
-    }
-
     public function testMinHopsLessThanZero()
     {
         $r = new Path($this->a, $this->b, Path::DIR_RIGHT);

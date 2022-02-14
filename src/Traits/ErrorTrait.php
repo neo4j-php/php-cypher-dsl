@@ -21,30 +21,34 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
-use TypeError;
 use ReflectionClass;
+use TypeError;
 
 /**
  * Convenience trait including simple assertions and error reporting functions
  */
-trait ErrorTrait {
+trait ErrorTrait
+{
 
     /**
      * Asserts that $userInput is an instance of one of the provided $classNames (polyfill for php 8.0 Union types)
      *
-     * @param  string          $varName     The name of the userinput variable, to be used in the error message.
-     * @param  string|string[] $classNames  The classnames that should be tested against
-     * @param  mixed           $userInput   The input that should be tested
+     * @param string $varName The name of the userinput variable, to be used in the error message.
+     * @param string|string[] $classNames The classnames that should be tested against
+     * @param mixed $userInput The input that should be tested
      * @throws TypeError
      */
-    private function assertClass(string $varName, $classNames, $userInput) : void {
+    private function assertClass(string $varName, $classNames, $userInput): void
+    {
         if (!is_array($classNames)) {
             $classNames = [$classNames];
         }
+
         foreach ($classNames as $class) {
             if ($userInput instanceof $class)
                 return;
         }
+
         throw new TypeError(
             $this->getTypeErrorText(
                 $varName,
@@ -57,38 +61,41 @@ trait ErrorTrait {
     /**
      * Give a nice error message about $userInput not being an object with one of the $classNames types.
      *
-     * @param string $varname     The name of the variable to be used in the message (without trailing '$')
-     * @param array  $classNames  The classnames that should be mentioned in the message
-     * @param mixed  $userInput   The input that has been given.
+     * @param string $varName The name of the variable to be used in the message (without trailing '$')
+     * @param array $classNames The class names that should be mentioned in the message
+     * @param mixed $userInput The input that has been given
+     * @return string
      */
-    private function getTypeErrorText(
-        string $varName,
-        array $classNames,
-        $userInput
-    ) : string {
-        return
-            "\$$varName should be a " .
-            implode(' or ', $classNames) . " object, " .
-            $this->getUserInputInfo($userInput) . " given.";
+    private function getTypeErrorText(string $varName, array $classNames, $userInput): string
+    {
+        return sprintf(
+            '$%s should be a %s object, %s given.',
+            $varName,
+            implode(' or ', $classNames),
+            $this->getUserInputInfo($userInput)
+        );
     }
 
     /**
      * Simple function to determine what $userInput is.
      *
      * @param mixed $userInput
-     * @return string A description of $userInput.
+     * @return string A description of $userInput
      */
-    private function getUserInputInfo($userInput) : string {
-        $info = gettype( $userInput );
-        if ( $info === 'object' ) {
+    private function getUserInputInfo($userInput): string
+    {
+        $info = gettype($userInput);
+
+        if ($info === 'object') {
             if ((new ReflectionClass($userInput))->isAnonymous()) {
                 $info = 'anonymous class instance';
             } else {
-                $info = get_class( $userInput );
+                $info = get_class($userInput);
             }
         } elseif (is_scalar($userInput)) {
-            $info .= ' "' . (string) $userInput . '"';
+            $info .= ' "' . (string)$userInput . '"';
         }
+
         return $info;
     }
 }
