@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use WikibaseSolutions\CypherDSL\ErrorHandling\ErrorHelper;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -32,6 +32,8 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 class Assignment extends BinaryOperator
 {
+    use ErrorTrait;
+
     /**
      * @var bool Whether to use the property mutation instead of the property replacement
      * operator.
@@ -44,7 +46,7 @@ class Assignment extends BinaryOperator
      */
     public function __construct(AnyType $left, AnyType $right)
     {
-        ErrorHelper::assertClass('left', [Property::class, Variable::class], $left);
+        $this->assertClass('left', [Property::class, Variable::class], $left);
 
         parent::__construct($left, $right, false);
     }

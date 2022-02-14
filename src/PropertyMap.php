@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use WikibaseSolutions\CypherDSL\ErrorHandling\ErrorHelper;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
@@ -38,6 +38,7 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 class PropertyMap implements MapType
 {
     use EscapeTrait;
+    use ErrorTrait;
     use MapTypeTrait;
 
     /**
@@ -53,7 +54,7 @@ class PropertyMap implements MapType
     public function __construct(array $properties = [])
     {
         foreach ($properties as $property) {
-            ErrorHelper::assertClass('property', AnyType::class, $property);
+            $this->assertClass('property', AnyType::class, $property);
         }
 
         $this->properties = $properties;

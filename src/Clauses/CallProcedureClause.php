@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\ErrorHandling\ErrorHelper;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Variable;
 
@@ -32,6 +32,8 @@ use WikibaseSolutions\CypherDSL\Variable;
  */
 class CallProcedureClause extends Clause
 {
+    use ErrorTrait;
+
     /**
      * @var string|null The procedure to call
      */
@@ -74,7 +76,7 @@ class CallProcedureClause extends Clause
     public function withArguments(array $arguments): self
     {
         foreach ($arguments as $argument) {
-            ErrorHelper::assertClass('argument', AnyType::class, $argument);
+            $this->assertClass('argument', AnyType::class, $argument);
         }
 
         $this->arguments = $arguments;
@@ -105,7 +107,7 @@ class CallProcedureClause extends Clause
     public function yields(array $variables): self
     {
         foreach ($variables as $variable) {
-            ErrorHelper::assertClass('variable', Variable::class, $variable);
+            $this->assertClass('variable', Variable::class, $variable);
         }
 
         $this->yieldVariables = $variables;

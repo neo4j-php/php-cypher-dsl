@@ -36,7 +36,7 @@ use WikibaseSolutions\CypherDSL\Clauses\ReturnClause;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
-use WikibaseSolutions\CypherDSL\ErrorHandling\ErrorHelper;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Functions\FunctionCall;
 use WikibaseSolutions\CypherDSL\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Literals\Decimal;
@@ -62,6 +62,7 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 class Query implements QueryConvertable
 {
     use EscapeTrait;
+    use ErrorTrait;
 
     // A reference to the Literal class
     const literal = Literal::class;
@@ -234,7 +235,8 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-            ErrorHelper::assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
+
+            $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
 
             $matchClause->addPattern($pattern);
         }
@@ -265,7 +267,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($expressions as $maybeAlias => $expression) {
-            ErrorHelper::assertClass('expression', AnyType::class, $expression);
+            $this->assertClass('expression', AnyType::class, $expression);
 
             if ($expression instanceof Node) {
                 $expression = $expression->getName();
@@ -300,7 +302,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-            ErrorHelper::assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
+            $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
 
             $createClause->addPattern($pattern);
         }
@@ -328,7 +330,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($nodes as $node) {
-            ErrorHelper::assertClass('node', NodeType::class, $node);
+            $this->assertClass('node', NodeType::class, $node);
 
             $deleteClause->addNode($node);
         }
@@ -357,7 +359,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($nodes as $node) {
-            ErrorHelper::assertClass('node', NodeType::class, $node);
+            $this->assertClass('node', NodeType::class, $node);
 
             $deleteClause->addNode($node);
         }
@@ -399,7 +401,7 @@ class Query implements QueryConvertable
      */
     public function merge($pattern, Clause $createClause = null, Clause $matchClause = null): self
     {
-        ErrorHelper::assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
+        $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
 
         $mergeClause = new MergeClause();
         $mergeClause->setPattern($pattern);
@@ -435,7 +437,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-            ErrorHelper::assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
+            $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
 
             $optionalMatchClause->addPattern($pattern);
         }
@@ -465,7 +467,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($properties as $property) {
-            ErrorHelper::assertClass('property', Property::class, $property);
+            $this->assertClass('property', Property::class, $property);
 
             $orderByClause->addProperty($property);
         }
@@ -493,7 +495,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($expressions as $expression) {
-            ErrorHelper::assertClass('expression', [Property::class, Label::class], $expression);
+            $this->assertClass('expression', [Property::class, Label::class], $expression);
 
             $removeClause->addExpression($expression);
         }
@@ -521,7 +523,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($expressions as $expression) {
-            ErrorHelper::assertClass('expression', [Assignment::class, Label::class], $expression);
+            $this->assertClass('expression', [Assignment::class, Label::class], $expression);
 
             $setClause->addAssignment($expression);
         }
@@ -569,7 +571,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($expressions as $maybeAlias => $expression) {
-            ErrorHelper::assertClass('expression', AnyType::class, $expression);
+            $this->assertClass('expression', AnyType::class, $expression);
 
             if ($expression instanceof Node) {
                 $expression = $expression->getName();

@@ -23,7 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\ErrorHandling;
 
 use TypeError;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\ErrorHandling\ErrorHelper;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 
 /**
  * Dummy classes
@@ -34,16 +34,36 @@ class ErrorHelperDummyExtendsA extends ErrorHelperDummyA {};
 class ErrorHelperDummyExtendsB extends ErrorHelperDummyB {};
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\ErrorHandling\ErrorHelper
+ * Tester/Mock class
  */
-class ErrorHelperTest extends TestCase
+class ErrorImpl {
+    use ErrorTrait;
+
+    /**
+     * Overcome private method problems
+     */
+    public function call($funcName, $args) {
+        return call_user_func_array([self::class, $funcName], $args);
+    }
+}
+
+/**
+ * @covers \WikibaseSolutions\CypherDSL\Traits\ErrorTrait
+ */
+class ErrorTraitTest extends TestCase
 {
+    protected ErrorImpl $errorImpl;
+
+    public function setUp() : void {
+        $this->errorImpl = new ErrorImpl();
+    }
+
     /**
      * @doesNotPerformAssertions
      * @dataProvider CorrectAssertionsProvider
      */
     public function testAssertClass($classNames, $userInput) {
-        ErrorHelper::assertClass('foo', $classNames, $userInput);
+        $this->errorImpl->call('assertClass', ['foo', $classNames, $userInput]);
     }
 
     /**
@@ -51,7 +71,7 @@ class ErrorHelperTest extends TestCase
      */
     public function testAssertClassFailure($classNames, $userInput) {
         $this->expectException(TypeError::class);
-        ErrorHelper::assertClass('foo', $classNames, $userInput);
+        $this->errorImpl->call('assertClass', ['foo', $classNames, $userInput]);
     }
 
     public function correctAssertionsProvider() {
@@ -74,44 +94,35 @@ class ErrorHelperTest extends TestCase
     public function testGetTypeErrorText() {
         $this->assertEquals(
             '$foo should be a WikibaseSolutions\CypherDSL\Tests\Unit\ErrorHandling\ErrorHelperDummyA object, integer "5" given.',
-            ErrorHelper::getTypeErrorText('foo', [ErrorHelperDummyA::class], 5)
+            $this->errorImpl->call('getTypeErrorText', ['foo', [ErrorHelperDummyA::class], 5])
         );
         $this->assertEquals(
             '$foo should be a ' .
             'WikibaseSolutions\CypherDSL\Tests\Unit\ErrorHandling\ErrorHelperDummyA or ' .
             'WikibaseSolutions\CypherDSL\Tests\Unit\ErrorHandling\ErrorHelperDummyB object, integer "5" given.',
-            ErrorHelper::getTypeErrorText('foo', [ErrorHelperDummyA::class, ErrorHelperDummyB::class], 5)
+            $this->errorImpl->call('getTypeErrorText', ['foo', [ErrorHelperDummyA::class, ErrorHelperDummyB::class], 5])
         );
     }
 
-    public function testGetUserInputInfo() {
+    /**
+     * @dataProvider getUserInputInfoProvider
+     */
+    public function testGetUserInputInfo($expected, $input) {
         $this->assertEquals(
-            'string "foo"',
-            ErrorHelper::getUserInputInfo('foo')
+            $expected,
+            $this->errorImpl->call('getUserInputInfo', [$input])
         );
-        $this->assertEquals(
-            'integer "5"',
-            ErrorHelper::getUserInputInfo(5)
-        );
-        $this->assertEquals(
-            'double "3.14"',
-            ErrorHelper::getUserInputInfo(3.14)
-        );
-        $this->assertEquals(
-            'boolean "1"',
-            ErrorHelper::getUserInputInfo(true)
-        );
-        $this->assertEquals(
-            'array',
-            ErrorHelper::getUserInputInfo(['foo', 'bar'])
-        );
-        $this->assertEquals(
-            'anonymous class instance',
-            ErrorHelper::getUserInputInfo(new class(){})
-        );
-        $this->assertEquals(
-            'WikibaseSolutions\CypherDSL\Tests\Unit\ErrorHandling\ErrorHelperDummyA',
-            ErrorHelper::getUserInputInfo(new ErrorHelperDummyA())
-        );
+    }
+
+    public function getUserInputInfoProvider() {
+        return [
+            [ 'string "foo"',             'foo'          ],
+            [ 'integer "5"',              5              ],
+            [ 'double "3.14"',            3.14           ],
+            [ 'boolean "1"',              true           ],
+            [ 'array',                    ['foo', 'bar'] ],
+            [ 'anonymous class instance', new class(){}  ],
+            [ 'WikibaseSolutions\CypherDSL\Tests\Unit\ErrorHandling\ErrorHelperDummyA', new ErrorHelperDummyA()]
+        ];
     }
 }
