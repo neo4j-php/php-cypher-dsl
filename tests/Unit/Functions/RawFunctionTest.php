@@ -45,10 +45,11 @@ class RawFunctionTest extends TestCase
         $this->assertSame("foobar(a, b, c)", $raw->toQuery());
     }
 
-    public function testRequiresAnyTypeParameters() {
-        $a = new class() {};
+    public function testRequiresAnyTypeParameters()
+    {
+        $a = new class () {};
 
-        $this->expectException( TypeError::class );
+        $this->expectException(TypeError::class);
 
         new RawFunction('foobar', [$a]);
     }

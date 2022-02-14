@@ -83,7 +83,9 @@ class RawFunction extends FunctionCall implements
         }
 
         if (!preg_match("/^[a-zA-Z0-9_]+$/", $functionName)) {
-            throw new InvalidArgumentException("\$functionName should only consist of alphanumeric characters and underscores");
+            throw new InvalidArgumentException(
+                "\$functionName should only consist of alphanumeric characters and underscores"
+            );
         }
 
         $this->functionName = $functionName;

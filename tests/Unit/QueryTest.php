@@ -157,7 +157,7 @@ class QueryTest extends TestCase
 
     public function testIteratorList()
     {
-        $iterator = new class implements \Iterator {
+        $iterator = new class () implements \Iterator {
             private int $count = 0;
 
             public function current()
@@ -195,7 +195,7 @@ class QueryTest extends TestCase
     public function testInvalidList()
     {
         $this->expectException(InvalidArgumentException::class);
-        Query::list([new class() {}]);
+        Query::list([new class () {}]);
     }
 
     public function testMap()
@@ -226,7 +226,20 @@ class QueryTest extends TestCase
         $this->assertSame("MATCH (m:Movie), (m:Movie)", $statement);
     }
 
-    public function testMatchRejectsAnyType() {
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testMatchTypeAcceptance()
+    {
+        $assignment = $this->getQueryConvertableMock(Assignment::class, 'p = (a)-->(b)');
+        $path = $this->getQueryConvertableMock(PathType::class, '(a)-->(b)');
+        $node = $this->getQueryConvertableMock(NodeType::class, '(a)');
+
+        (new Query())->match([$assignment, $path, $node]);
+    }
+
+    public function testMatchRejectsAnyType()
+    {
         $m = $this->getQueryConvertableMock(AnyType::class, 'foo');
 
         $this->expectException(TypeError::class);
@@ -247,8 +260,9 @@ class QueryTest extends TestCase
         $this->assertSame("RETURN (m:Movie) AS n", $statement);
     }
 
-    public function testReturningRejectsNotAnyType() {
-        $m = new class() {};
+    public function testReturningRejectsNotAnyType()
+    {
+        $m = new class () {};
 
         $this->expectException(TypeError::class);
 
@@ -284,7 +298,20 @@ class QueryTest extends TestCase
         $this->assertSame("CREATE (m:Movie)-[:RELATED]->(b), (m:Movie)-[:RELATED]->(b)", $statement);
     }
 
-    public function testCreateRejectsAnyType() {
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testCreateTypeAcceptance()
+    {
+        $assignment = $this->getQueryConvertableMock(Assignment::class, 'p = (a)-->(b)');
+        $path = $this->getQueryConvertableMock(PathType::class, '(a)-->(b)');
+        $node = $this->getQueryConvertableMock(NodeType::class, '(a)');
+
+        (new Query())->create([$assignment, $path, $node]);
+    }
+
+    public function testCreateRejectsAnyType()
+    {
         $m = $this->getQueryConvertableMock(AnyType::class, 'foo');
 
         $this->expectException(TypeError::class);
@@ -305,7 +332,8 @@ class QueryTest extends TestCase
         $this->assertSame("DELETE (m:Movie), (m:Movie)", $statement);
     }
 
-    public function testDeleteRejectsAnyType() {
+    public function testDeleteRejectsAnyType()
+    {
         $m = $this->getQueryConvertableMock(AnyType::class, 'foo');
 
         $this->expectException(TypeError::class);
@@ -326,7 +354,8 @@ class QueryTest extends TestCase
         $this->assertSame("DETACH DELETE (m:Movie), (m:Movie)", $statement);
     }
 
-    public function testDetachDeleteRejectsAnyType() {
+    public function testDetachDeleteRejectsAnyType()
+    {
         $m = $this->getQueryConvertableMock(AnyType::class, 'foo');
 
         $this->expectException(TypeError::class);
@@ -359,6 +388,29 @@ class QueryTest extends TestCase
         $this->assertSame("MERGE (m)->(b) ON CREATE DELETE (m:Movie) ON MATCH CREATE (m:Movie)", $statement);
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testMergeTypeAcceptance()
+    {
+        $assignment = $this->getQueryConvertableMock(Assignment::class, 'p = (a)-->(b)');
+        $path = $this->getQueryConvertableMock(PathType::class, '(a)-->(b)');
+        $node = $this->getQueryConvertableMock(NodeType::class, '(a)');
+
+        (new Query())->merge($assignment);
+        (new Query())->merge($path);
+        (new Query())->merge($node);
+    }
+
+    public function testMergeRejectsAnyType()
+    {
+        $m = $this->getQueryConvertableMock(AnyType::class, 'foo');
+
+        $this->expectException(TypeError::class);
+
+        (new Query())->optionalMatch([$m, $m]);
+    }
+
     public function testOptionalMatch()
     {
         $pattern = $this->getQueryConvertableMock(NodeType::class, "(m)");
@@ -372,8 +424,21 @@ class QueryTest extends TestCase
         $this->assertSame("OPTIONAL MATCH (m), (m)", $statement);
     }
 
-    public function testOptionalMatchRejectsAnyType() {
-       $m = $this->getQueryConvertableMock(AnyType::class, 'foo');
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testOptionalMatchTypeAcceptance()
+    {
+        $assignment = $this->getQueryConvertableMock(Assignment::class, 'p = (a)-->(b)');
+        $path = $this->getQueryConvertableMock(PathType::class, '(a)-->(b)');
+        $node = $this->getQueryConvertableMock(NodeType::class, '(a)');
+
+        (new Query())->optionalMatch([$assignment, $path, $node]);
+    }
+
+    public function testOptionalMatchRejectsAnyType()
+    {
+        $m = $this->getQueryConvertableMock(AnyType::class, 'foo');
 
         $this->expectException(TypeError::class);
 
@@ -401,7 +466,8 @@ class QueryTest extends TestCase
         $this->assertSame("ORDER BY a.foo, a.foo DESCENDING", $statement);
     }
 
-    public function testOrderByRejectsAnyType() {
+    public function testOrderByRejectsAnyType()
+    {
         $m = $this->getQueryConvertableMock(AnyType::class, 'foo');
 
         $this->expectException(TypeError::class);
@@ -418,7 +484,8 @@ class QueryTest extends TestCase
         $this->assertSame("REMOVE a.age", $statement);
     }
 
-    public function testRemoveRejectsAnyType() {
+    public function testRemoveRejectsAnyType()
+    {
         $m = $this->getQueryConvertableMock(AnyType::class, 'foo');
 
         $this->expectException(TypeError::class);
@@ -439,7 +506,8 @@ class QueryTest extends TestCase
         $this->assertSame("SET a.age, a.age", $statement);
     }
 
-    public function testSetRejectsAnyType() {
+    public function testSetRejectsAnyType()
+    {
         $m = $this->getQueryConvertableMock(AnyType::class, 'foo');
 
         $this->expectException(TypeError::class);
@@ -478,7 +546,8 @@ class QueryTest extends TestCase
         $this->assertSame("WITH a < b AS foobar", $statement);
     }
 
-    public function testWithRejectsAnyType() {
+    public function testWithRejectsAnyType()
+    {
         $m = $this->getQueryConvertableMock(AnyType::class, 'foo');
 
         $this->expectException(TypeError::class);

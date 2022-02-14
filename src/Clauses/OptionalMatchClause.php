@@ -21,6 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Assignment;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
@@ -30,19 +32,23 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
  */
 class OptionalMatchClause extends Clause
 {
+    use ErrorTrait;
+
     /**
-     * @var StructuralType[] List of patterns
+     * @var StructuralType[]|Assignment[] List of patterns
      */
     private array $patterns = [];
 
     /**
      * Add a pattern to the optional match clause.
      *
-     * @param StructuralType $pattern
+     * @param StructuralType|Assignment $pattern
      * @return OptionalMatchClause
      */
-    public function addPattern(StructuralType $pattern): self
+    public function addPattern($pattern): self
     {
+        $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
+
         $this->patterns[] = $pattern;
 
         return $this;
@@ -63,7 +69,7 @@ class OptionalMatchClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn(StructuralType $pattern): string => $pattern->toQuery(), $this->patterns)
+            array_map(fn ($pattern): string => $pattern->toQuery(), $this->patterns)
         );
     }
 }

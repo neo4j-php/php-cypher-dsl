@@ -128,10 +128,11 @@ class PropertyMapTest extends TestCase
         ];
     }
 
-    public function testRequiresAnyTypeProperties() {
-        $a = new class() {};
+    public function testRequiresAnyTypeProperties()
+    {
+        $a = new class () {};
 
-        $this->expectException( TypeError::class );
+        $this->expectException(TypeError::class);
 
         new PropertyMap([$a]);
     }

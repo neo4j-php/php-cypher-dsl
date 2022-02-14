@@ -65,10 +65,10 @@ class Query implements QueryConvertable
     use ErrorTrait;
 
     // A reference to the Literal class
-    const literal = Literal::class;
+    public const literal = Literal::class;
 
     // A reference to the FunctionCall class
-    const function = FunctionCall::class;
+    public const function = FunctionCall::class;
 
     /**
      * @var Clause[] $clauses
@@ -220,7 +220,7 @@ class Query implements QueryConvertable
     /**
      * Creates the MATCH clause.
      *
-     * @param StructuralType|StructuralType[] $patterns A single pattern or a list of patterns
+     * @param StructuralType|StructuralType[]|Assignment|Assignment[] $patterns A single pattern or a list of patterns
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/
@@ -235,7 +235,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-            $this->assertClass('pattern', StructuralType::class, $pattern);
+            $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
 
             $matchClause->addPattern($pattern);
         }
@@ -286,7 +286,7 @@ class Query implements QueryConvertable
     /**
      * Creates the CREATE clause.
      *
-     * @param StructuralType|StructuralType[] $patterns A single pattern or a list of patterns
+     * @param StructuralType|StructuralType[]|Assignment|Assignment[] $patterns A single pattern or a list of patterns
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/create/
@@ -301,7 +301,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-            $this->assertClass('pattern', StructuralType::class, $pattern);
+            $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
 
             $createClause->addPattern($pattern);
         }
@@ -390,7 +390,7 @@ class Query implements QueryConvertable
     /**
      * Creates the MERGE clause.
      *
-     * @param StructuralType $pattern The pattern to merge
+     * @param StructuralType|Assignment $pattern The pattern to merge
      * @param Clause|null $createClause The clause to execute when the pattern is created
      * @param Clause|null $matchClause The clause to execute when the pattern is matched
      *
@@ -398,8 +398,10 @@ class Query implements QueryConvertable
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/
      *
      */
-    public function merge(StructuralType $pattern, Clause $createClause = null, Clause $matchClause = null): self
+    public function merge($pattern, Clause $createClause = null, Clause $matchClause = null): self
     {
+        $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
+
         $mergeClause = new MergeClause();
         $mergeClause->setPattern($pattern);
 
@@ -419,7 +421,7 @@ class Query implements QueryConvertable
     /**
      * Creates the OPTIONAL MATCH clause.
      *
-     * @param StructuralType|StructuralType[] $patterns A single pattern or a list of patterns
+     * @param StructuralType|StructuralType[]|Assignment|Assignment[] $patterns A single pattern or a list of patterns
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/optional-match/
@@ -434,7 +436,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-            $this->assertClass('pattern', StructuralType::class, $pattern);
+            $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
 
             $optionalMatchClause->addPattern($pattern);
         }
@@ -651,12 +653,13 @@ class Query implements QueryConvertable
     public function build(): string
     {
         $builtClauses = array_map(
-            fn(Clause $clause): string => $clause->toQuery(),
+            fn (Clause $clause): string => $clause->toQuery(),
             $this->clauses
         );
 
         return implode(
-            " ", array_filter($builtClauses, fn($clause) => !empty($clause))
+            " ",
+            array_filter($builtClauses, fn ($clause) => !empty($clause))
         );
     }
 }

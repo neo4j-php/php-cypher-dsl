@@ -29,7 +29,6 @@ use TypeError;
  */
 trait ErrorTrait
 {
-
     /**
      * Asserts that $userInput is an instance of one of the provided $classNames (polyfill for php 8.0 Union types)
      *
@@ -45,8 +44,9 @@ trait ErrorTrait
         }
 
         foreach ($classNames as $class) {
-            if ($userInput instanceof $class)
+            if ($userInput instanceof $class) {
                 return;
+            }
         }
 
         throw new TypeError(

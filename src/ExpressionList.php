@@ -66,7 +66,7 @@ class ExpressionList implements ListType
     public function toQuery(): string
     {
         $expressions = array_map(
-            fn(AnyType $expression): string => $expression->toQuery(),
+            fn (AnyType $expression): string => $expression->toQuery(),
             $this->expressions
         );
 

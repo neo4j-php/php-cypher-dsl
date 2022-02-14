@@ -261,8 +261,18 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime-calendar
      */
-    public static function dateTimeYMD($year, $month = null, $day = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null, $timezone = null): DateTimeType
-    {
+    public static function dateTimeYMD(
+        $year,
+        $month = null,
+        $day = null,
+        $hour = null,
+        $minute = null,
+        $second = null,
+        $millisecond = null,
+        $microsecond = null,
+        $nanosecond = null,
+        $timezone = null
+    ): DateTimeType {
         $variables = self::checkOrderAndConvertToNumeral([
             "month"=> $month,
             "day" => $day,
@@ -281,36 +291,36 @@ abstract class Literal
         $map = ["year" => $year];
 
         if (isset($variables["month"])) {
-			$map["month"] = $variables["month"];
-		}
+            $map["month"] = $variables["month"];
+        }
 
         if (isset($variables["day"])) {
-			$map["day"] = $variables["day"];
-		}
+            $map["day"] = $variables["day"];
+        }
 
         if (isset($variables["hour"])) {
-			$map["hour"] = $variables["hour"];
-		}
+            $map["hour"] = $variables["hour"];
+        }
 
         if (isset($variables["minute"])) {
-			$map["minute"] = $variables["minute"];
-		}
+            $map["minute"] = $variables["minute"];
+        }
 
         if (isset($variables["second"])) {
-			$map["second"] = $variables["second"];
-		}
+            $map["second"] = $variables["second"];
+        }
 
         if (isset($variables["millisecond"])) {
-			$map["millisecond"] = $variables["millisecond"];
-		}
+            $map["millisecond"] = $variables["millisecond"];
+        }
 
         if (isset($variables["microsecond"])) {
-			$map["microsecond"] = $variables["microsecond"];
-		}
+            $map["microsecond"] = $variables["microsecond"];
+        }
 
         if (isset($variables["nanosecond"])) {
-			$map["nanosecond"] = $variables["nanosecond"];
-		}
+            $map["nanosecond"] = $variables["nanosecond"];
+        }
 
         if ($timezone !== null) {
             if (!($timezone instanceof StringType)) {
@@ -340,8 +350,18 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime-week
      */
-    public static function datetimeYWD($year, $week = null, $dayOfWeek = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null, $timezone = null): DateTimeType
-    {
+    public static function datetimeYWD(
+        $year,
+        $week = null,
+        $dayOfWeek = null,
+        $hour = null,
+        $minute = null,
+        $second = null,
+        $millisecond = null,
+        $microsecond = null,
+        $nanosecond = null,
+        $timezone = null
+    ): DateTimeType {
         $variables = self::checkOrderAndConvertToNumeral([
             "week" => $week,
             "dayOfWeek" => $dayOfWeek,
@@ -360,36 +380,36 @@ abstract class Literal
         $map = ["year" => $year];
 
         if (isset($variables["week"])) {
-			$map["week"] = $variables["week"];
-		}
+            $map["week"] = $variables["week"];
+        }
 
         if (isset($variables["dayOfWeek"])) {
-			$map["dayOfWeek"] = $variables["dayOfWeek"];
-		}
+            $map["dayOfWeek"] = $variables["dayOfWeek"];
+        }
 
         if (isset($variables["hour"])) {
-			$map["hour"] = $variables["hour"];
-		}
+            $map["hour"] = $variables["hour"];
+        }
 
         if (isset($variables["minute"])) {
-			$map["minute"] = $variables["minute"];
-		}
+            $map["minute"] = $variables["minute"];
+        }
 
         if (isset($variables["second"])) {
-			$map["second"] = $variables["second"];
-		}
+            $map["second"] = $variables["second"];
+        }
 
         if (isset($variables["millisecond"])) {
-			$map["millisecond"] = $variables["millisecond"];
-		}
+            $map["millisecond"] = $variables["millisecond"];
+        }
 
         if (isset($variables["microsecond"])) {
-			$map["microsecond"] = $variables["microsecond"];
-		}
+            $map["microsecond"] = $variables["microsecond"];
+        }
 
         if (isset($variables["nanosecond"])) {
-			$map["nanosecond"] = $variables["nanosecond"];
-		}
+            $map["nanosecond"] = $variables["nanosecond"];
+        }
 
         if ($timezone !== null) {
             if (!($timezone instanceof StringType)) {
@@ -419,7 +439,18 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime-quarter
      */
-    public static function datetimeYQD($year, $quarter = null, $dayOfQuarter = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null, $timezone = null): DateTimeType {
+    public static function datetimeYQD(
+        $year,
+        $quarter = null,
+        $dayOfQuarter = null,
+        $hour = null,
+        $minute = null,
+        $second = null,
+        $millisecond = null,
+        $microsecond = null,
+        $nanosecond = null,
+        $timezone = null
+    ): DateTimeType {
         $variables = self::checkOrderAndConvertToNumeral([
             "quarter" => $quarter,
             "dayOfQuarter" => $dayOfQuarter,
@@ -438,36 +469,36 @@ abstract class Literal
         $map = ["year" => $year];
 
         if (isset($variables["quarter"])) {
-			$map["quarter"] = $variables["quarter"];
-		}
+            $map["quarter"] = $variables["quarter"];
+        }
 
         if (isset($variables["dayOfQuarter"])) {
-			$map["dayOfQuarter"] = $variables["dayOfQuarter"];
-		}
+            $map["dayOfQuarter"] = $variables["dayOfQuarter"];
+        }
 
         if (isset($variables["hour"])) {
-			$map["hour"] = $variables["hour"];
-		}
+            $map["hour"] = $variables["hour"];
+        }
 
         if (isset($variables["minute"])) {
-			$map["minute"] = $variables["minute"];
-		}
+            $map["minute"] = $variables["minute"];
+        }
 
         if (isset($variables["second"])) {
-			$map["second"] = $variables["second"];
-		}
+            $map["second"] = $variables["second"];
+        }
 
         if (isset($variables["millisecond"])) {
-			$map["millisecond"] = $variables["millisecond"];
-		}
+            $map["millisecond"] = $variables["millisecond"];
+        }
 
         if (isset($variables["microsecond"])) {
-			$map["microsecond"] = $variables["microsecond"];
-		}
+            $map["microsecond"] = $variables["microsecond"];
+        }
 
         if (isset($variables["nanosecond"])) {
-			$map["nanosecond"] = $variables["nanosecond"];
-		}
+            $map["nanosecond"] = $variables["nanosecond"];
+        }
 
         if ($timezone !== null) {
             if (!($timezone instanceof StringType)) {
@@ -496,7 +527,17 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime-ordinal
      */
-    public static function datetimeYD($year, $ordinalDay = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null, $timezone = null): DateTimeType {
+    public static function datetimeYD(
+        $year,
+        $ordinalDay = null,
+        $hour = null,
+        $minute = null,
+        $second = null,
+        $millisecond = null,
+        $microsecond = null,
+        $nanosecond = null,
+        $timezone = null
+    ): DateTimeType {
         $variables = self::checkOrderAndConvertToNumeral([
             "ordinalDay" => $ordinalDay,
             "hour" => $hour,
@@ -514,32 +555,32 @@ abstract class Literal
         $map = ["year" => $year];
 
         if (isset($variables["ordinalDay"])) {
-			$map["ordinalDay"] = $variables["ordinalDay"];
-		}
+            $map["ordinalDay"] = $variables["ordinalDay"];
+        }
 
         if (isset($variables["hour"])) {
-			$map["hour"] = $variables["hour"];
-		}
+            $map["hour"] = $variables["hour"];
+        }
 
         if (isset($variables["minute"])) {
-			$map["minute"] = $variables["minute"];
-		}
+            $map["minute"] = $variables["minute"];
+        }
 
         if (isset($variables["second"])) {
-			$map["second"] = $variables["second"];
-		}
+            $map["second"] = $variables["second"];
+        }
 
         if (isset($variables["millisecond"])) {
-			$map["millisecond"] = $variables["millisecond"];
-		}
+            $map["millisecond"] = $variables["millisecond"];
+        }
 
         if (isset($variables["microsecond"])) {
-			$map["microsecond"] = $variables["microsecond"];
-		}
+            $map["microsecond"] = $variables["microsecond"];
+        }
 
         if (isset($variables["nanosecond"])) {
-			$map["nanosecond"] = $variables["nanosecond"];
-		}
+            $map["nanosecond"] = $variables["nanosecond"];
+        }
 
         if ($timezone !== null) {
             if (!($timezone instanceof StringType)) {
@@ -558,7 +599,8 @@ abstract class Literal
      * @param string|StringType $dateString
      * @return DateTimeType
      */
-    public static function datetimeString($dateString): DateTimeType {
+    public static function datetimeString($dateString): DateTimeType
+    {
         if (!($dateString instanceof StringType)) {
             $dateString = self::string($dateString);
         }
@@ -573,7 +615,8 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-current
      */
-    public static function localDatetime($timezone = null): LocalDateTimeType {
+    public static function localDatetime($timezone = null): LocalDateTimeType
+    {
         if ($timezone === null) {
             return FunctionCall::localdatetime();
         }
@@ -600,7 +643,17 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-calendar
      */
-    public static function localDatetimeYMD($year, $month = null, $day = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null): LocalDateTimeType {
+    public static function localDatetimeYMD(
+        $year,
+        $month = null,
+        $day = null,
+        $hour = null,
+        $minute = null,
+        $second = null,
+        $millisecond = null,
+        $microsecond = null,
+        $nanosecond = null
+    ): LocalDateTimeType {
         $variables = self::checkOrderAndConvertToNumeral([
             "month" => $month,
             "day" => $day,
@@ -619,36 +672,36 @@ abstract class Literal
         $map = ["year" => $year];
 
         if (isset($variables["month"])) {
-			$map["month"] = $variables["month"];
-		}
+            $map["month"] = $variables["month"];
+        }
 
         if (isset($variables["day"])) {
-			$map["day"] = $variables["day"];
-		}
+            $map["day"] = $variables["day"];
+        }
 
         if (isset($variables["hour"])) {
-			$map["hour"] = $variables["hour"];
-		}
+            $map["hour"] = $variables["hour"];
+        }
 
         if (isset($variables["minute"])) {
-			$map["minute"] = $variables["minute"];
-		}
+            $map["minute"] = $variables["minute"];
+        }
 
         if (isset($variables["second"])) {
-			$map["second"] = $variables["second"];
-		}
+            $map["second"] = $variables["second"];
+        }
 
         if (isset($variables["millisecond"])) {
-			$map["millisecond"] = $variables["millisecond"];
-		}
+            $map["millisecond"] = $variables["millisecond"];
+        }
 
         if (isset($variables["microsecond"])) {
-			$map["microsecond"] = $variables["microsecond"];
-		}
+            $map["microsecond"] = $variables["microsecond"];
+        }
 
         if (isset($variables["nanosecond"])) {
-			$map["nanosecond"] = $variables["nanosecond"];
-		}
+            $map["nanosecond"] = $variables["nanosecond"];
+        }
 
         return FunctionCall::localdatetime(Query::map($map));
     }
@@ -670,7 +723,17 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-week
      */
-    public static function localDatetimeYWD($year, $week = null, $dayOfWeek = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null): LocalDateTimeType {
+    public static function localDatetimeYWD(
+        $year,
+        $week = null,
+        $dayOfWeek = null,
+        $hour = null,
+        $minute = null,
+        $second = null,
+        $millisecond = null,
+        $microsecond = null,
+        $nanosecond = null
+    ): LocalDateTimeType {
         $variables = self::checkOrderAndConvertToNumeral([
             "week" => $week,
             "dayOfWeek" => $dayOfWeek,
@@ -689,36 +752,36 @@ abstract class Literal
         $map = ["year" => $year];
 
         if (isset($variables["week"])) {
-			$map["week"] = $variables["week"];
-		}
+            $map["week"] = $variables["week"];
+        }
 
         if (isset($variables["dayOfWeek"])) {
-			$map["dayOfWeek"] = $variables["dayOfWeek"];
-		}
+            $map["dayOfWeek"] = $variables["dayOfWeek"];
+        }
 
         if (isset($variables["hour"])) {
-			$map["hour"] = $variables["hour"];
-		}
+            $map["hour"] = $variables["hour"];
+        }
 
         if (isset($variables["minute"])) {
-			$map["minute"] = $variables["minute"];
-		}
+            $map["minute"] = $variables["minute"];
+        }
 
         if (isset($variables["second"])) {
-			$map["second"] = $variables["second"];
-		}
+            $map["second"] = $variables["second"];
+        }
 
         if (isset($variables["millisecond"])) {
-			$map["millisecond"] = $variables["millisecond"];
-		}
+            $map["millisecond"] = $variables["millisecond"];
+        }
 
         if (isset($variables["microsecond"])) {
-			$map["microsecond"] = $variables["microsecond"];
-		}
+            $map["microsecond"] = $variables["microsecond"];
+        }
 
         if (isset($variables["nanosecond"])) {
-			$map["nanosecond"] = $variables["nanosecond"];
-		}
+            $map["nanosecond"] = $variables["nanosecond"];
+        }
 
         return FunctionCall::localdatetime(Query::map($map));
     }
@@ -739,7 +802,17 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-quarter
      */
-    public static function localDatetimeYQD($year, $quarter = null, $dayOfQuarter = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null): LocalDateTimeType {
+    public static function localDatetimeYQD(
+        $year,
+        $quarter = null,
+        $dayOfQuarter = null,
+        $hour = null,
+        $minute = null,
+        $second = null,
+        $millisecond = null,
+        $microsecond = null,
+        $nanosecond = null
+    ): LocalDateTimeType {
         $variables = self::checkOrderAndConvertToNumeral([
             "quarter" => $quarter,
             "dayOfQuarter" => $dayOfQuarter,
@@ -758,36 +831,36 @@ abstract class Literal
         $map = ["year" => $year];
 
         if (isset($variables["quarter"])) {
-			$map["quarter"] = $variables["quarter"];
-		}
+            $map["quarter"] = $variables["quarter"];
+        }
 
         if (isset($variables["dayOfQuarter"])) {
-			$map["dayOfQuarter"] = $variables["dayOfQuarter"];
-		}
+            $map["dayOfQuarter"] = $variables["dayOfQuarter"];
+        }
 
         if (isset($variables["hour"])) {
-			$map["hour"] = $variables["hour"];
-		}
+            $map["hour"] = $variables["hour"];
+        }
 
         if (isset($variables["minute"])) {
-			$map["minute"] = $variables["minute"];
-		}
+            $map["minute"] = $variables["minute"];
+        }
 
         if (isset($variables["second"])) {
-			$map["second"] = $variables["second"];
-		}
+            $map["second"] = $variables["second"];
+        }
 
         if (isset($variables["millisecond"])) {
-			$map["millisecond"] = $variables["millisecond"];
-		}
+            $map["millisecond"] = $variables["millisecond"];
+        }
 
         if (isset($variables["microsecond"])) {
-			$map["microsecond"] = $variables["microsecond"];
-		}
+            $map["microsecond"] = $variables["microsecond"];
+        }
 
         if (isset($variables["nanosecond"])) {
-			$map["nanosecond"] = $variables["nanosecond"];
-		}
+            $map["nanosecond"] = $variables["nanosecond"];
+        }
 
         return FunctionCall::localdatetime(Query::map($map));
     }
@@ -807,7 +880,16 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-ordinal
      */
-    public static function localDatetimeYD($year, $ordinalDay = null, $hour = null, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null): LocalDateTimeType {
+    public static function localDatetimeYD(
+        $year,
+        $ordinalDay = null,
+        $hour = null,
+        $minute = null,
+        $second = null,
+        $millisecond = null,
+        $microsecond = null,
+        $nanosecond = null
+    ): LocalDateTimeType {
         $variables = self::checkOrderAndConvertToNumeral([
             "ordinalDay" => $ordinalDay,
             "hour" => $hour,
@@ -825,32 +907,32 @@ abstract class Literal
         $map = ["year" => $year];
 
         if (isset($variables["ordinalDay"])) {
-			$map["ordinalDay"] = $variables["ordinalDay"];
-		}
+            $map["ordinalDay"] = $variables["ordinalDay"];
+        }
 
         if (isset($variables["hour"])) {
-			$map["hour"] = $variables["hour"];
-		}
+            $map["hour"] = $variables["hour"];
+        }
 
         if (isset($variables["minute"])) {
-			$map["minute"] = $variables["minute"];
-		}
+            $map["minute"] = $variables["minute"];
+        }
 
         if (isset($variables["second"])) {
-			$map["second"] = $variables["second"];
-		}
+            $map["second"] = $variables["second"];
+        }
 
         if (isset($variables["millisecond"])) {
-			$map["millisecond"] = $variables["millisecond"];
-		}
+            $map["millisecond"] = $variables["millisecond"];
+        }
 
         if (isset($variables["microsecond"])) {
-			$map["microsecond"] = $variables["microsecond"];
-		}
+            $map["microsecond"] = $variables["microsecond"];
+        }
 
         if (isset($variables["nanosecond"])) {
-			$map["nanosecond"] = $variables["nanosecond"];
-		}
+            $map["nanosecond"] = $variables["nanosecond"];
+        }
 
         return FunctionCall::localdatetime(Query::map($map));
     }
@@ -863,7 +945,8 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-create-string
      */
-    public static function localDatetimeString($localDateTimeString): LocalDateTimeType {
+    public static function localDatetimeString($localDateTimeString): LocalDateTimeType
+    {
         if (!($localDateTimeString instanceof StringType)) {
             $localDateTimeString = self::string($localDateTimeString);
         }
@@ -879,7 +962,8 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localtime-current
      */
-    public static function localTimeCurrent($timezone = null): LocalTimeType {
+    public static function localTimeCurrent($timezone = null): LocalTimeType
+    {
         if ($timezone === null) {
             return FunctionCall::localtime();
         }
@@ -903,7 +987,14 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localtime-create
      */
-    public static function localTime($hour, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null): LocalTimeType {
+    public static function localTime(
+        $hour,
+        $minute = null,
+        $second = null,
+        $millisecond = null,
+        $microsecond = null,
+        $nanosecond = null
+    ): LocalTimeType {
         $variables = self::checkOrderAndConvertToNumeral([
             "minute" => $minute,
             "second" => $second,
@@ -919,24 +1010,24 @@ abstract class Literal
         $map = ["hour" => $hour];
 
         if (isset($variables["minute"])) {
-			$map["minute"] = $variables["minute"];
-		}
+            $map["minute"] = $variables["minute"];
+        }
 
         if (isset($variables["second"])) {
-			$map["second"] = $variables["second"];
-		}
+            $map["second"] = $variables["second"];
+        }
 
         if (isset($variables["millisecond"])) {
-			$map["millisecond"] = $variables["millisecond"];
-		}
+            $map["millisecond"] = $variables["millisecond"];
+        }
 
         if (isset($variables["microsecond"])) {
-			$map["microsecond"] = $variables["microsecond"];
-		}
+            $map["microsecond"] = $variables["microsecond"];
+        }
 
         if (isset($variables["nanosecond"])) {
-			$map["nanosecond"] = $variables["nanosecond"];
-		}
+            $map["nanosecond"] = $variables["nanosecond"];
+        }
 
         return FunctionCall::localtime(Query::map($map));
     }
@@ -947,7 +1038,8 @@ abstract class Literal
      * @param string|StringType $localTimeString
      * @return LocalTimeType
      */
-    public static function localTimeString($localTimeString): LocalTimeType {
+    public static function localTimeString($localTimeString): LocalTimeType
+    {
         if (!($localTimeString instanceof StringType)) {
             $localTimeString = self::string($localTimeString);
         }
@@ -963,7 +1055,8 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-time-current
      */
-    public static function time($timezone = null): TimeType {
+    public static function time($timezone = null): TimeType
+    {
         if ($timezone === null) {
             return FunctionCall::time();
         }
@@ -989,7 +1082,15 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-time-create
      */
-    public static function timeHMS($hour, $minute = null, $second = null, $millisecond = null, $microsecond = null, $nanosecond = null, $timezone = null): TimeType {
+    public static function timeHMS(
+        $hour,
+        $minute = null,
+        $second = null,
+        $millisecond = null,
+        $microsecond = null,
+        $nanosecond = null,
+        $timezone = null
+    ): TimeType {
         $variables = self::checkOrderAndConvertToNumeral([
             "minute" => $minute,
             "second" => $second,
@@ -1005,24 +1106,24 @@ abstract class Literal
         $map = ["hour" => $hour];
 
         if (isset($variables["minute"])) {
-			$map["minute"] = $variables["minute"];
-		}
+            $map["minute"] = $variables["minute"];
+        }
 
         if (isset($variables["second"])) {
-			$map["second"] = $variables["second"];
-		}
+            $map["second"] = $variables["second"];
+        }
 
         if (isset($variables["millisecond"])) {
-			$map["millisecond"] = $variables["millisecond"];
-		}
+            $map["millisecond"] = $variables["millisecond"];
+        }
 
         if (isset($variables["microsecond"])) {
-			$map["microsecond"] = $variables["microsecond"];
-		}
+            $map["microsecond"] = $variables["microsecond"];
+        }
 
         if (isset($variables["nanosecond"])) {
-			$map["nanosecond"] = $variables["nanosecond"];
-		}
+            $map["nanosecond"] = $variables["nanosecond"];
+        }
 
         if ($timezone !== null) {
             if (!($timezone instanceof StringType)) {
@@ -1043,7 +1144,8 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-time-create-string
      */
-    public static function timeString($timeString): TimeType {
+    public static function timeString($timeString): TimeType
+    {
         if (!($timeString instanceof StringType)) {
             $timeString = self::string($timeString);
         }
@@ -1183,33 +1285,34 @@ abstract class Literal
         return FunctionCall::point(Query::map($map));
     }
 
-	/**
-	 * Checks the order of the array items, and converts the items to NumeralType.
-	 *
-	 * @param array $variables
-	 * @return array
-	 */
-	private static function checkOrderAndConvertToNumeral(array $variables): array {
-		$previousExists = true;
+    /**
+     * Checks the order of the array items, and converts the items to NumeralType.
+     *
+     * @param array $variables
+     * @return array
+     */
+    private static function checkOrderAndConvertToNumeral(array $variables): array
+    {
+        $previousExists = true;
 
-		foreach ($variables as $key => $variable) {
-			$currentExists = $variable !== null;
+        foreach ($variables as $key => $variable) {
+            $currentExists = $variable !== null;
 
-			// Only the least significant components may be omitted; check whether this is the case
-			if ($currentExists === true && $previousExists === false) {
-				throw new \LogicException("Only the least significant components may be omitted");
-			}
+            // Only the least significant components may be omitted; check whether this is the case
+            if ($currentExists === true && $previousExists === false) {
+                throw new \LogicException("Only the least significant components may be omitted");
+            }
 
-			// Check if variable has been set and convert always to NumeralType
-			if ($currentExists) {
-				if (!($variable instanceof NumeralType)) {
-					$variables[$key] = self::decimal($variable);
-				}
-			}
+            // Check if variable has been set and convert always to NumeralType
+            if ($currentExists) {
+                if (!($variable instanceof NumeralType)) {
+                    $variables[$key] = self::decimal($variable);
+                }
+            }
 
-			$previousExists = $variable !== null;
-		}
+            $previousExists = $variable !== null;
+        }
 
-		return $variables;
-	}
+        return $variables;
+    }
 }
