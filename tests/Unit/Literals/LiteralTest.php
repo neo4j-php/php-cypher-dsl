@@ -115,21 +115,21 @@ class LiteralTest extends TestCase
     {
         $point = Literal::point2d(1, 2);
 
-        $this->assertEquals(new Point(new PropertyMap(["x" => new Decimal(1), "y" => new Decimal(2), "crs" => new StringLiteral("cartesian"), "srid" => new Decimal(7203)])), $point);
+        $this->assertEquals(new Point(new PropertyMap(["x" => new Decimal(1), "y" => new Decimal(2), "crs" => new StringLiteral("cartesian")])), $point);
 
         $point = Literal::point2d(
             new Decimal(1),
             new Decimal(2)
         );
 
-        $this->assertEquals(new Point(new PropertyMap(["x" => new Decimal(1), "y" => new Decimal(2), "crs" => new StringLiteral("cartesian"), "srid" => new Decimal(7203)])), $point);
+        $this->assertEquals(new Point(new PropertyMap(["x" => new Decimal(1), "y" => new Decimal(2), "crs" => new StringLiteral("cartesian")])), $point);
     }
 
     public function testPoint3d()
     {
         $point = Literal::point3d(1, 2, 3);
 
-        $this->assertEquals(new Point(new PropertyMap(["x" => new Decimal(1), "y" => new Decimal(2), "z" => new Decimal(3), "crs" => new StringLiteral("cartesian-3D"), "srid" => new Decimal(9157)])), $point);
+        $this->assertEquals(new Point(new PropertyMap(["x" => new Decimal(1), "y" => new Decimal(2), "z" => new Decimal(3), "crs" => new StringLiteral("cartesian-3D")])), $point);
 
         $point = Literal::point3d(
             new Decimal(1),
@@ -137,28 +137,28 @@ class LiteralTest extends TestCase
             new Decimal(3)
         );
 
-        $this->assertEquals(new Point(new PropertyMap(["x" => new Decimal(1), "y" => new Decimal(2), "z" => new Decimal(3), "crs" => new StringLiteral("cartesian-3D"), "srid" => new Decimal(9157)])), $point);
+        $this->assertEquals(new Point(new PropertyMap(["x" => new Decimal(1), "y" => new Decimal(2), "z" => new Decimal(3), "crs" => new StringLiteral("cartesian-3D")])), $point);
     }
 
     public function testPoint2dWGS84()
     {
         $point = Literal::point2dWGS84(1, 2);
 
-        $this->assertEquals(new Point(new PropertyMap(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "crs" => new StringLiteral("WGS-84"), "srid" => new Decimal(4326)])), $point);
+        $this->assertEquals(new Point(new PropertyMap(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "crs" => new StringLiteral("WGS-84")])), $point);
 
         $point = Literal::point2dWGS84(
             new Decimal(1),
             new Decimal(2)
         );
 
-        $this->assertEquals(new Point(new PropertyMap(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "crs" => new StringLiteral("WGS-84"), "srid" => new Decimal(4326)])), $point);
+        $this->assertEquals(new Point(new PropertyMap(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "crs" => new StringLiteral("WGS-84")])), $point);
     }
 
     public function testPoint3dWGS84()
     {
         $point = Literal::point3dWGS84(1, 2, 3);
 
-        $this->assertEquals(new Point(new PropertyMap(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "height" => new Decimal(3), "crs" => new StringLiteral("WGS-84-3D"), "srid" => new Decimal(4979)])), $point);
+        $this->assertEquals(new Point(new PropertyMap(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "height" => new Decimal(3), "crs" => new StringLiteral("WGS-84-3D")])), $point);
 
         $point = Literal::point3dWGS84(
             new Decimal(1),
@@ -166,7 +166,7 @@ class LiteralTest extends TestCase
             new Decimal(3)
         );
 
-        $this->assertEquals(new Point(new PropertyMap(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "height" => new Decimal(3), "crs" => new StringLiteral("WGS-84-3D"), "srid" => new Decimal(4979)])), $point);
+        $this->assertEquals(new Point(new PropertyMap(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "height" => new Decimal(3), "crs" => new StringLiteral("WGS-84-3D")])), $point);
     }
 
     public function testDate()
