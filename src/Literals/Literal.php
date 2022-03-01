@@ -1244,7 +1244,6 @@ abstract class Literal
         ];
 
         $map["crs"] = self::string("WGS-84");
-        $map["srid"] = self::decimal(4326);
 
         return FunctionCall::point(Query::map($map));
     }
@@ -1280,7 +1279,6 @@ abstract class Literal
         ];
 
         $map["crs"] = self::string("WGS-84-3D");
-        $map["srid"] = self::decimal(4979);
 
         return FunctionCall::point(Query::map($map));
     }
