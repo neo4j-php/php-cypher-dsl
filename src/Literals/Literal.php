@@ -1178,7 +1178,6 @@ abstract class Literal
         ];
 
         $map["crs"] = self::string("cartesian");
-        $map["srid"] = self::decimal(7203);
 
         return FunctionCall::point(Query::map($map));
     }
@@ -1214,7 +1213,6 @@ abstract class Literal
         ];
 
         $map["crs"] = self::string("cartesian-3D");
-        $map["srid"] = self::decimal(9157);
 
         return FunctionCall::point(Query::map($map));
     }
