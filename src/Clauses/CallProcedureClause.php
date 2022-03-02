@@ -37,7 +37,7 @@ class CallProcedureClause extends Clause
     /**
      * @var string|null The procedure to call
      */
-    private ?string $procedure;
+    private ?string $procedure = null;
 
     /**
      * @var AnyType[] The arguments passed to the procedure

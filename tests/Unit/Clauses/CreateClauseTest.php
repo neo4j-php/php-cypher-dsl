@@ -38,14 +38,14 @@ class CreateClauseTest extends TestCase
 {
     use TestHelper;
 
-    public function testEmptyClause()
+    public function testEmptyClause(): void
     {
         $createClause = new CreateClause();
 
         $this->assertSame("", $createClause->toQuery());
     }
 
-    public function testSinglePattern()
+    public function testSinglePattern(): void
     {
         $createClause = new CreateClause();
         $pattern = $this->getQueryConvertableMock(StructuralType::class, "(a)");
@@ -55,7 +55,7 @@ class CreateClauseTest extends TestCase
         $this->assertSame("CREATE (a)", $createClause->toQuery());
     }
 
-    public function testMultiplePatterns()
+    public function testMultiplePatterns(): void
     {
         $createClause = new CreateClause();
 
@@ -71,7 +71,7 @@ class CreateClauseTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testAcceptsNodeType()
+    public function testAcceptsNodeType(): void
     {
         $createClause = new CreateClause();
 
@@ -84,7 +84,7 @@ class CreateClauseTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testAcceptsPathType()
+    public function testAcceptsPathType(): void
     {
         $createClause = new CreateClause();
 
@@ -97,7 +97,7 @@ class CreateClauseTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testAcceptsAssignment()
+    public function testAcceptsAssignment(): void
     {
         $createClause = new CreateClause();
 
@@ -107,7 +107,7 @@ class CreateClauseTest extends TestCase
         $createClause->toQuery();
     }
 
-    public function testDoesNotAcceptAnyType()
+    public function testDoesNotAcceptAnyType(): void
     {
         $createClause = new CreateClause();
 
