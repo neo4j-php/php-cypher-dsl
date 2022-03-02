@@ -35,7 +35,7 @@ class SkipClause extends Clause
      *
      * @var NumeralType|null $skip
      */
-    private ?NumeralType $skip;
+    private ?NumeralType $skip = null;
 
     /**
      * Sets the expression that returns the skip.
