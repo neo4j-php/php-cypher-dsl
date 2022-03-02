@@ -182,8 +182,8 @@ class Path implements PathType
      */
     public function withMinHops(int $minHops): self
     {
-        if ($minHops < 1) {
-            throw new DomainException("minHops cannot be less than 1");
+        if ($minHops < 0) {
+            throw new DomainException("minHops cannot be less than 0");
         }
 
         if (isset($this->maxHops) && $minHops > $this->maxHops) {
@@ -290,7 +290,7 @@ class Path implements PathType
 
         if (count($types) !== 0) {
             // If we have at least one condition type, escape them and insert them into the query
-            $escapedTypes = array_map(fn(string $type): string => $this->escape($type), $types);
+            $escapedTypes = array_map(fn (string $type): string => $this->escape($type), $types);
             $conditionInner .= sprintf(":%s", implode("|", $escapedTypes));
         }
 

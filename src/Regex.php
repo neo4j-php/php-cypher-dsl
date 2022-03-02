@@ -19,38 +19,34 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit;
+namespace WikibaseSolutions\CypherDSL;
 
-use PHPUnit\Framework\TestCase;
-use TypeError;
-use WikibaseSolutions\CypherDSL\Not;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Not
+ * Represents the application of the regex operator.
+ *
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-string
  */
-class NotTest extends TestCase
+class Regex extends BinaryOperator implements BooleanType
 {
-    use TestHelper;
+    use BooleanTypeTrait;
 
-    public function testToQuery()
+    /**
+     * @inheritDoc
+     */
+    public function __construct(StringType $left, StringType $right)
     {
-        $not = new Not($this->getQueryConvertableMock(BooleanType::class, "true"));
-
-        $this->assertSame("(NOT true)", $not->toQuery());
-
-        $not = new Not($not);
-
-        $this->assertSame("(NOT (NOT true))", $not->toQuery());
+        parent::__construct($left, $right);
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands()
+    /**
+     * @inheritDoc
+     */
+    protected function getOperator(): string
     {
-        $this->expectException(TypeError::class);
-
-        $and = new Not($this->getQueryConvertableMock(AnyType::class, "true"));
-
-        $and->toQuery();
+        return "=~";
     }
 }

@@ -21,7 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\Clauses\CreateClause;
@@ -38,6 +37,7 @@ use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 use WikibaseSolutions\CypherDSL\Clauses\SkipClause;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Functions\FunctionCall;
 use WikibaseSolutions\CypherDSL\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Literals\Decimal;
@@ -62,12 +62,13 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 class Query implements QueryConvertable
 {
     use EscapeTrait;
+    use ErrorTrait;
 
     // A reference to the Literal class
-    const literal = Literal::class;
+    public const literal = Literal::class;
 
     // A reference to the FunctionCall class
-    const function = FunctionCall::class;
+    public const function = FunctionCall::class;
 
     /**
      * @var Clause[] $clauses
@@ -219,7 +220,7 @@ class Query implements QueryConvertable
     /**
      * Creates the MATCH clause.
      *
-     * @param StructuralType|StructuralType[] $patterns A single pattern or a list of patterns
+     * @param StructuralType|StructuralType[]|Assignment|Assignment[] $patterns A single pattern or a list of patterns
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/
@@ -234,9 +235,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-            if (!($pattern instanceof StructuralType)) {
-                throw new TypeError("\$patterns should only consist of StructuralType objects");
-            }
+            $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
 
             $matchClause->addPattern($pattern);
         }
@@ -267,9 +266,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($expressions as $maybeAlias => $expression) {
-            if (!($expression instanceof AnyType)) {
-                throw new TypeError("\$expressions should only consist of AnyType objects");
-            }
+            $this->assertClass('expression', AnyType::class, $expression);
 
             if ($expression instanceof Node) {
                 $expression = $expression->getName();
@@ -289,7 +286,7 @@ class Query implements QueryConvertable
     /**
      * Creates the CREATE clause.
      *
-     * @param StructuralType|StructuralType[] $patterns A single pattern or a list of patterns
+     * @param StructuralType|StructuralType[]|Assignment|Assignment[] $patterns A single pattern or a list of patterns
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/create/
@@ -304,9 +301,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-            if (!($pattern instanceof StructuralType)) {
-                throw new TypeError("\$patterns should only consist of StructuralType objects");
-            }
+            $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
 
             $createClause->addPattern($pattern);
         }
@@ -334,9 +329,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($nodes as $node) {
-            if (!($node instanceof NodeType)) {
-                throw new TypeError("\$nodes should exist of only NodeType objects");
-            }
+            $this->assertClass('node', NodeType::class, $node);
 
             $deleteClause->addNode($node);
         }
@@ -365,9 +358,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($nodes as $node) {
-            if (!($node instanceof NodeType)) {
-                throw new TypeError("\$nodes should exist of only NodeType objects");
-            }
+            $this->assertClass('node', NodeType::class, $node);
 
             $deleteClause->addNode($node);
         }
@@ -417,7 +408,7 @@ class Query implements QueryConvertable
     /**
      * Creates the MERGE clause.
      *
-     * @param StructuralType $pattern The pattern to merge
+     * @param StructuralType|Assignment $pattern The pattern to merge
      * @param Clause|null $createClause The clause to execute when the pattern is created
      * @param Clause|null $matchClause The clause to execute when the pattern is matched
      *
@@ -425,8 +416,10 @@ class Query implements QueryConvertable
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/
      *
      */
-    public function merge(StructuralType $pattern, Clause $createClause = null, Clause $matchClause = null): self
+    public function merge($pattern, Clause $createClause = null, Clause $matchClause = null): self
     {
+        $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
+
         $mergeClause = new MergeClause();
         $mergeClause->setPattern($pattern);
 
@@ -446,7 +439,7 @@ class Query implements QueryConvertable
     /**
      * Creates the OPTIONAL MATCH clause.
      *
-     * @param StructuralType|StructuralType[] $patterns A single pattern or a list of patterns
+     * @param StructuralType|StructuralType[]|Assignment|Assignment[] $patterns A single pattern or a list of patterns
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/optional-match/
@@ -461,9 +454,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-            if (!($pattern instanceof StructuralType)) {
-                throw new TypeError("\$patterns should only consist of StructuralType objects");
-            }
+            $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
 
             $optionalMatchClause->addPattern($pattern);
         }
@@ -493,9 +484,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($properties as $property) {
-            if (!($property instanceof Property)) {
-                throw new TypeError("\$properties should only consist of Property objects");
-            }
+            $this->assertClass('property', Property::class, $property);
 
             $orderByClause->addProperty($property);
         }
@@ -523,9 +512,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($expressions as $expression) {
-            if (!($expression instanceof Property) && !($expression instanceof Label)) {
-                throw new TypeError("\$expressions should consist of only Property or Label objects");
-            }
+            $this->assertClass('expression', [Property::class, Label::class], $expression);
 
             $removeClause->addExpression($expression);
         }
@@ -553,9 +540,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($expressions as $expression) {
-            if (!($expression instanceof Assignment) && !($expression instanceof Label)) {
-                throw new TypeError("\$expressions should only consist of Assignment and Label objects");
-            }
+            $this->assertClass('expression', [Assignment::class, Label::class], $expression);
 
             $setClause->addAssignment($expression);
         }
@@ -603,9 +588,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($expressions as $maybeAlias => $expression) {
-            if (!($expression instanceof AnyType)) {
-                throw new TypeError("\$expressions should only consist of AnyType objects");
-            }
+            $this->assertClass('expression', AnyType::class, $expression);
 
             if ($expression instanceof Node) {
                 $expression = $expression->getName();
@@ -698,12 +681,13 @@ class Query implements QueryConvertable
     public function build(): string
     {
         $builtClauses = array_map(
-            fn(Clause $clause): string => $clause->toQuery(),
+            fn (Clause $clause): string => $clause->toQuery(),
             $this->clauses
         );
 
         return implode(
-            " ", array_filter($builtClauses, fn($clause) => !empty($clause))
+            " ",
+            array_filter($builtClauses, fn ($clause) => !empty($clause))
         );
     }
 }

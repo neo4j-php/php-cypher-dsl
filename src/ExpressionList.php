@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use TypeError;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
@@ -38,6 +38,7 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 class ExpressionList implements ListType
 {
     use EscapeTrait;
+    use ErrorTrait;
     use ListTypeTrait;
 
     /**
@@ -53,9 +54,7 @@ class ExpressionList implements ListType
     public function __construct(array $expressions)
     {
         foreach ($expressions as $expression) {
-            if (!($expression instanceof AnyType)) {
-                throw new TypeError("\$expressions must be an array of only AnyType objects");
-            }
+            $this->assertClass('expression', AnyType::class, $expression);
         }
 
         $this->expressions = $expressions;
@@ -77,7 +76,7 @@ class ExpressionList implements ListType
     public function toQuery(): string
     {
         $expressions = array_map(
-            fn(AnyType $expression): string => $expression->toQuery(),
+            fn (AnyType $expression): string => $expression->toQuery(),
             $this->expressions
         );
 

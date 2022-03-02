@@ -23,6 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
+use WikibaseSolutions\CypherDSL\Assignment;
 use WikibaseSolutions\CypherDSL\Clauses\MatchClause;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
@@ -79,6 +80,18 @@ class MatchClauseTest extends TestCase
     {
         $match = new MatchClause();
         $match->addPattern($this->getQueryConvertableMock(PathType::class, "(a)"));
+
+        $match->toQuery();
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsAssignment()
+    {
+        $match = new MatchClause();
+
+        $match->addPattern($this->getQueryConvertableMock(Assignment::class, "p = (a)-->(b)"));
 
         $match->toQuery();
     }

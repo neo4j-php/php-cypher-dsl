@@ -23,6 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
+use WikibaseSolutions\CypherDSL\Assignment;
 use WikibaseSolutions\CypherDSL\Clauses\OptionalMatchClause;
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
@@ -80,6 +81,17 @@ class OptionalMatchTest extends TestCase
     {
         $match = new OptionalMatchClause();
         $match->addPattern($this->getQueryConvertableMock(PathType::class, "(a)"));
+
+        $match->toQuery();
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsAssignment()
+    {
+        $match = new OptionalMatchClause();
+        $match->addPattern($this->getQueryConvertableMock(Assignment::class, "p = (a)-->(b)"));
 
         $match->toQuery();
     }

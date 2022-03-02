@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use InvalidArgumentException;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Variable;
 
@@ -32,6 +32,8 @@ use WikibaseSolutions\CypherDSL\Variable;
  */
 class CallProcedureClause extends Clause
 {
+    use ErrorTrait;
+
     /**
      * @var string|null The procedure to call
      */
@@ -104,9 +106,7 @@ class CallProcedureClause extends Clause
     public function withArguments(array $arguments): self
     {
         foreach ($arguments as $argument) {
-            if (!($argument instanceof AnyType)) {
-                throw new InvalidArgumentException("\$arguments should only consist of AnyType objects");
-            }
+            $this->assertClass('argument', AnyType::class, $argument);
         }
 
         $this->arguments = $arguments;
@@ -137,9 +137,7 @@ class CallProcedureClause extends Clause
     public function yields(array $variables): self
     {
         foreach ($variables as $variable) {
-            if (!($variable instanceof Variable)) {
-                throw new InvalidArgumentException("\$variables should only consist of Variable objects");
-            }
+            $this->assertClass('variable', Variable::class, $variable);
         }
 
         $this->yieldVariables = $variables;
@@ -166,13 +164,13 @@ class CallProcedureClause extends Clause
 
         $arguments = implode(
             ", ",
-            array_map(fn(AnyType $pattern): string => $pattern->toQuery(), $this->arguments)
+            array_map(fn (AnyType $pattern): string => $pattern->toQuery(), $this->arguments)
         );
 
         if (count($this->yieldVariables) > 0) {
             $yieldParameters = implode(
                 ", ",
-                array_map(fn(Variable $variable): string => $variable->toQuery(), $this->yieldVariables)
+                array_map(fn (Variable $variable): string => $variable->toQuery(), $this->yieldVariables)
             );
 
             return sprintf("%s(%s) YIELD %s", $this->procedure, $arguments, $yieldParameters);

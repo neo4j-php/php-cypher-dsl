@@ -23,34 +23,42 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Not;
+use WikibaseSolutions\CypherDSL\Contains;
+use WikibaseSolutions\CypherDSL\Regex;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Not
+ * @covers \WikibaseSolutions\CypherDSL\Regex
  */
-class NotTest extends TestCase
+class RegexTest extends TestCase
 {
     use TestHelper;
 
     public function testToQuery()
     {
-        $not = new Not($this->getQueryConvertableMock(BooleanType::class, "true"));
+        $regex = new Regex($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
 
-        $this->assertSame("(NOT true)", $not->toQuery());
+        $this->assertSame("(a =~ b)", $regex->toQuery());
+    }
 
-        $not = new Not($not);
+    public function testCannotBeNested()
+    {
+        $regex = new Regex($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
 
-        $this->assertSame("(NOT (NOT true))", $not->toQuery());
+        $this->expectException(TypeError::class);
+
+        $regex = new Regex($regex, $regex);
+
+        $regex->toQuery();
     }
 
     public function testDoesNotAcceptAnyTypeAsOperands()
     {
         $this->expectException(TypeError::class);
 
-        $and = new Not($this->getQueryConvertableMock(AnyType::class, "true"));
+        $regex = new Regex($this->getQueryConvertableMock(AnyType::class, "a"), $this->getQueryConvertableMock(AnyType::class, "b"));
 
-        $and->toQuery();
+        $regex->toQuery();
     }
 }

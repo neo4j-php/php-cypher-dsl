@@ -72,7 +72,7 @@ class LiteralTest extends TestCase
 
     public function testStringable()
     {
-        $stringable = Literal::literal(new class {
+        $stringable = Literal::literal(new class () {
             public function __toString()
             {
                 return 'Testing is a virtue!';
@@ -84,107 +84,107 @@ class LiteralTest extends TestCase
 
     public function testBoolean()
     {
-       $boolean = Literal::boolean(true);
+        $boolean = Literal::boolean(true);
 
-       $this->assertInstanceOf(Boolean::class, $boolean);
+        $this->assertInstanceOf(Boolean::class, $boolean);
 
-       $boolean = Literal::boolean(false);
+        $boolean = Literal::boolean(false);
 
-       $this->assertInstanceOf(Boolean::class, $boolean);
+        $this->assertInstanceOf(Boolean::class, $boolean);
     }
 
     public function testString()
     {
-       $string = Literal::string('Testing is a virtue!');
+        $string = Literal::string('Testing is a virtue!');
 
-       $this->assertInstanceOf(StringLiteral::class, $string);
+        $this->assertInstanceOf(StringLiteral::class, $string);
     }
 
     public function testDecimal()
     {
-       $decimal = Literal::decimal(1);
+        $decimal = Literal::decimal(1);
 
-       $this->assertInstanceOf(Decimal::class, $decimal);
+        $this->assertInstanceOf(Decimal::class, $decimal);
 
-       $decimal = Literal::decimal(1.0);
+        $decimal = Literal::decimal(1.0);
 
-       $this->assertInstanceOf(Decimal::class, $decimal);
+        $this->assertInstanceOf(Decimal::class, $decimal);
     }
 
     public function testPoint2d()
     {
-       $point = Literal::point2d(1, 2);
+        $point = Literal::point2d(1, 2);
 
-       $this->assertEquals(new Point(new PropertyMap(["x" => new Decimal(1), "y" => new Decimal(2), "crs" => new StringLiteral("cartesian"), "srid" => new Decimal(7203)])), $point);
+        $this->assertEquals(new Point(new PropertyMap(["x" => new Decimal(1), "y" => new Decimal(2), "crs" => new StringLiteral("cartesian"), "srid" => new Decimal(7203)])), $point);
 
-       $point = Literal::point2d(
-           new Decimal(1),
-           new Decimal(2)
-       );
+        $point = Literal::point2d(
+            new Decimal(1),
+            new Decimal(2)
+        );
 
-       $this->assertEquals(new Point(new PropertyMap(["x" => new Decimal(1), "y" => new Decimal(2), "crs" => new StringLiteral("cartesian"), "srid" => new Decimal(7203)])), $point);
+        $this->assertEquals(new Point(new PropertyMap(["x" => new Decimal(1), "y" => new Decimal(2), "crs" => new StringLiteral("cartesian"), "srid" => new Decimal(7203)])), $point);
     }
 
     public function testPoint3d()
     {
-       $point = Literal::point3d(1, 2, 3);
+        $point = Literal::point3d(1, 2, 3);
 
-       $this->assertEquals(new Point(new PropertyMap(["x" => new Decimal(1), "y" => new Decimal(2), "z" => new Decimal(3), "crs" => new StringLiteral("cartesian-3D"), "srid" => new Decimal(9157)])), $point);
+        $this->assertEquals(new Point(new PropertyMap(["x" => new Decimal(1), "y" => new Decimal(2), "z" => new Decimal(3), "crs" => new StringLiteral("cartesian-3D"), "srid" => new Decimal(9157)])), $point);
 
-       $point = Literal::point3d(
-           new Decimal(1),
-           new Decimal(2),
-           new Decimal(3)
-       );
+        $point = Literal::point3d(
+            new Decimal(1),
+            new Decimal(2),
+            new Decimal(3)
+        );
 
-       $this->assertEquals(new Point(new PropertyMap(["x" => new Decimal(1), "y" => new Decimal(2), "z" => new Decimal(3), "crs" => new StringLiteral("cartesian-3D"), "srid" => new Decimal(9157)])), $point);
+        $this->assertEquals(new Point(new PropertyMap(["x" => new Decimal(1), "y" => new Decimal(2), "z" => new Decimal(3), "crs" => new StringLiteral("cartesian-3D"), "srid" => new Decimal(9157)])), $point);
     }
 
     public function testPoint2dWGS84()
     {
-       $point = Literal::point2dWGS84(1, 2);
+        $point = Literal::point2dWGS84(1, 2);
 
-       $this->assertEquals(new Point(new PropertyMap(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "crs" => new StringLiteral("WGS-84"), "srid" => new Decimal(4326)])), $point);
+        $this->assertEquals(new Point(new PropertyMap(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "crs" => new StringLiteral("WGS-84"), "srid" => new Decimal(4326)])), $point);
 
-       $point = Literal::point2dWGS84(
-           new Decimal(1),
-           new Decimal(2)
-       );
+        $point = Literal::point2dWGS84(
+            new Decimal(1),
+            new Decimal(2)
+        );
 
-       $this->assertEquals(new Point(new PropertyMap(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "crs" => new StringLiteral("WGS-84"), "srid" => new Decimal(4326)])), $point);
+        $this->assertEquals(new Point(new PropertyMap(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "crs" => new StringLiteral("WGS-84"), "srid" => new Decimal(4326)])), $point);
     }
 
     public function testPoint3dWGS84()
     {
-       $point = Literal::point3dWGS84(1, 2, 3);
+        $point = Literal::point3dWGS84(1, 2, 3);
 
-       $this->assertEquals(new Point(new PropertyMap(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "height" => new Decimal(3), "crs" => new StringLiteral("WGS-84-3D"), "srid" => new Decimal(4979)])), $point);
+        $this->assertEquals(new Point(new PropertyMap(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "height" => new Decimal(3), "crs" => new StringLiteral("WGS-84-3D"), "srid" => new Decimal(4979)])), $point);
 
-       $point = Literal::point3dWGS84(
-           new Decimal(1),
-           new Decimal(2),
-           new Decimal(3)
-       );
+        $point = Literal::point3dWGS84(
+            new Decimal(1),
+            new Decimal(2),
+            new Decimal(3)
+        );
 
-       $this->assertEquals(new Point(new PropertyMap(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "height" => new Decimal(3), "crs" => new StringLiteral("WGS-84-3D"), "srid" => new Decimal(4979)])), $point);
+        $this->assertEquals(new Point(new PropertyMap(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "height" => new Decimal(3), "crs" => new StringLiteral("WGS-84-3D"), "srid" => new Decimal(4979)])), $point);
     }
 
     public function testDate()
     {
-       $date = Literal::date();
+        $date = Literal::date();
 
-       $this->assertEquals(new Date(), $date);
+        $this->assertEquals(new Date(), $date);
     }
 
     public function testDateTimezone()
     {
-       $date = Literal::date("Europe/Amsterdam");
+        $date = Literal::date("Europe/Amsterdam");
 
-       $this->assertEquals(new Date(new PropertyMap(["timezone" => new StringLiteral("Europe/Amsterdam")])), $date);
+        $this->assertEquals(new Date(new PropertyMap(["timezone" => new StringLiteral("Europe/Amsterdam")])), $date);
 
-       $date = Literal::date(new StringLiteral("Europe/Amsterdam"));
+        $date = Literal::date(new StringLiteral("Europe/Amsterdam"));
 
-       $this->assertEquals(new Date(new PropertyMap(["timezone" => new StringLiteral("Europe/Amsterdam")])), $date);
+        $this->assertEquals(new Date(new PropertyMap(["timezone" => new StringLiteral("Europe/Amsterdam")])), $date);
     }
 
     /**
@@ -203,11 +203,11 @@ class LiteralTest extends TestCase
 
     public function testDateYMDMissingMonth()
     {
-       $this->expectException(\LogicException::class);
+        $this->expectException(\LogicException::class);
 
-       $date = Literal::dateYMD(2000, null, 17);
+        $date = Literal::dateYMD(2000, null, 17);
 
-       $date->toQuery();
+        $date->toQuery();
     }
 
     /**
@@ -275,14 +275,14 @@ class LiteralTest extends TestCase
         $this->assertEquals($expected, $datetime);
     }
 
-	public function testDatetimeYMDMissingMonth()
-	{
-		$this->expectException(\LogicException::class);
+    public function testDatetimeYMDMissingMonth()
+    {
+        $this->expectException(\LogicException::class);
 
-		$datetime = Literal::dateTimeYMD(2000, null, 17);
+        $datetime = Literal::dateTimeYMD(2000, null, 17);
 
-		$datetime->toQuery();
-	}
+        $datetime->toQuery();
+    }
 
     /**
      * @dataProvider provideDatetimeYWDData
@@ -305,14 +305,14 @@ class LiteralTest extends TestCase
         $this->assertEquals($expected, $datetime);
     }
 
-	public function testDatetimeYWDMissingWeek()
-	{
-		$this->expectException(\LogicException::class);
+    public function testDatetimeYWDMissingWeek()
+    {
+        $this->expectException(\LogicException::class);
 
-		$datetime = Literal::dateTimeYWD(2000, null, 17);
+        $datetime = Literal::dateTimeYWD(2000, null, 17);
 
-		$datetime->toQuery();
-	}
+        $datetime->toQuery();
+    }
 
     /**
      * @dataProvider provideDatetimeYQDData
@@ -335,16 +335,16 @@ class LiteralTest extends TestCase
         $this->assertEquals($expected, $datetime);
     }
 
-	public function testDatetimeYQDMissingQuarter()
-	{
-		$this->expectException(\LogicException::class);
+    public function testDatetimeYQDMissingQuarter()
+    {
+        $this->expectException(\LogicException::class);
 
-		$datetime = Literal::dateTimeYQD(2000, null, 17);
+        $datetime = Literal::dateTimeYQD(2000, null, 17);
 
-		$datetime->toQuery();
-	}
+        $datetime->toQuery();
+    }
 
-	/**
+    /**
      * @dataProvider provideDatetimeYQData
      * @param $year
      * @param $ordinalDay
@@ -364,29 +364,31 @@ class LiteralTest extends TestCase
         $this->assertEquals($expected, $datetime);
     }
 
-	public function testDatetimeYDMissingOrdinalDay()
-	{
-		$this->expectException(\LogicException::class);
+    public function testDatetimeYDMissingOrdinalDay()
+    {
+        $this->expectException(\LogicException::class);
 
-		$datetime = Literal::dateTimeYD(2000, null, 17);
+        $datetime = Literal::dateTimeYD(2000, null, 17);
 
-		$datetime->toQuery();
-	}
+        $datetime->toQuery();
+    }
 
-	public function testDatetimeString()
+    public function testDatetimeString()
     {
         $datetime = Literal::datetimeString("2015-07-21T21:40:32.142+01:00");
 
         $this->assertEquals(new DateTime(new StringLiteral("2015-07-21T21:40:32.142+01:00")), $datetime);
     }
 
-    public function testLocalDateTimeWithoutTimezone() {
+    public function testLocalDateTimeWithoutTimezone()
+    {
         $localDateTime = Literal::localDatetime();
 
         $this->assertEquals(new LocalDateTime(), $localDateTime);
     }
 
-    public function testLocalDateTimeWithTimezone() {
+    public function testLocalDateTimeWithTimezone()
+    {
         $localDateTime = Literal::localDatetime("America/Los Angeles");
 
         $this->assertEquals(new LocalDateTime(new PropertyMap(["timezone" => new StringLiteral("America/Los Angeles")])), $localDateTime);
@@ -405,22 +407,23 @@ class LiteralTest extends TestCase
      * @param $nanosecond
      * @param $expected
      */
-    public function testLocalDateTimeYMD($year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected) {
+    public function testLocalDateTimeYMD($year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected)
+    {
         $localDatetime = Literal::localDatetimeYMD($year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
 
         $this->assertEquals($expected, $localDatetime);
     }
 
-	public function testLocalDateTimeYMDMissingMonth()
-	{
-		$this->expectException(\LogicException::class);
+    public function testLocalDateTimeYMDMissingMonth()
+    {
+        $this->expectException(\LogicException::class);
 
-		$datetime = Literal::localDatetimeYMD(2000, null, 17);
+        $datetime = Literal::localDatetimeYMD(2000, null, 17);
 
-		$datetime->toQuery();
-	}
+        $datetime->toQuery();
+    }
 
-	/**
+    /**
      * @dataProvider provideLocalDatetimeYWDData
      * @param $year
      * @param $week
@@ -433,20 +436,21 @@ class LiteralTest extends TestCase
      * @param $nanosecond
      * @param $expected
      */
-    public function testLocalDateTimeYWD($year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected) {
+    public function testLocalDateTimeYWD($year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected)
+    {
         $localDatetime = Literal::localDatetimeYWD($year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
 
         $this->assertEquals($expected, $localDatetime);
     }
 
-	public function testLocalDateTimeYWDMissingWeek()
-	{
-		$this->expectException(\LogicException::class);
+    public function testLocalDateTimeYWDMissingWeek()
+    {
+        $this->expectException(\LogicException::class);
 
-		$datetime = Literal::localDatetimeYWD(2000, null, 17);
+        $datetime = Literal::localDatetimeYWD(2000, null, 17);
 
-		$datetime->toQuery();
-	}
+        $datetime->toQuery();
+    }
 
     /**
      * @dataProvider provideLocalDatetimeYQDData
@@ -468,14 +472,14 @@ class LiteralTest extends TestCase
         $this->assertEquals($expected, $localDatetime);
     }
 
-	public function testLocalDateTimeYQDMissingQuarter()
-	{
-		$this->expectException(\LogicException::class);
+    public function testLocalDateTimeYQDMissingQuarter()
+    {
+        $this->expectException(\LogicException::class);
 
-		$datetime = Literal::localDatetimeYQD(2000, null, 17);
+        $datetime = Literal::localDatetimeYQD(2000, null, 17);
 
-		$datetime->toQuery();
-	}
+        $datetime->toQuery();
+    }
 
     /**
      * @dataProvider provideLocalDatetimeYQData
@@ -496,27 +500,30 @@ class LiteralTest extends TestCase
         $this->assertEquals($expected, $localDatetime);
     }
 
-	public function testLocalDateTimeYDMissingOrdinalDay()
-	{
-		$this->expectException(\LogicException::class);
+    public function testLocalDateTimeYDMissingOrdinalDay()
+    {
+        $this->expectException(\LogicException::class);
 
-		$datetime = Literal::localDatetimeYD(2000, null, 17);
+        $datetime = Literal::localDatetimeYD(2000, null, 17);
 
-		$datetime->toQuery();
-	}
+        $datetime->toQuery();
+    }
 
-    public function testLocalDatetimeString() {
+    public function testLocalDatetimeString()
+    {
         $localDatetime = Literal::localDatetimeString("2015-W30-2T214032.142");
 
         $this->assertEquals(new LocalDateTime(new StringLiteral("2015-W30-2T214032.142")), $localDatetime);
     }
 
-    public function testLocalTimeCurrentWithoutTimezone() {
+    public function testLocalTimeCurrentWithoutTimezone()
+    {
         $localTime = Literal::localTimeCurrent();
         $this->assertEquals(new LocalTime(), $localTime);
     }
 
-    public function testLocalTimeCurrentWithTimezone() {
+    public function testLocalTimeCurrentWithTimezone()
+    {
         $localTime = Literal::localTimeCurrent("America/Los Angeles");
         $this->assertEquals(new LocalTime(new PropertyMap(["timezone" => new StringLiteral("America/Los Angeles")])), $localTime);
     }
@@ -531,31 +538,35 @@ class LiteralTest extends TestCase
      * @param $nanosecond
      * @param $expected
      */
-    public function testLocalTime($hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected) {
+    public function testLocalTime($hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected)
+    {
         $localTime = Literal::localTime($hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
         $this->assertEquals($localTime, $expected);
     }
 
-	public function testLocalTimeMissingMinute()
-	{
-		$this->expectException(\LogicException::class);
+    public function testLocalTimeMissingMinute()
+    {
+        $this->expectException(\LogicException::class);
 
-		$localTime = Literal::localTime(9, null, 17);
+        $localTime = Literal::localTime(9, null, 17);
 
-		$localTime->toQuery();
-	}
+        $localTime->toQuery();
+    }
 
-    public function testLocalTimeString() {
+    public function testLocalTimeString()
+    {
         $localTime = Literal::localTimeString("21:40:32.142");
         $this->assertEquals(new LocalTime(new StringLiteral("21:40:32.142")), $localTime);
     }
 
-    public function testTimeCurrentWithoutTimezone() {
+    public function testTimeCurrentWithoutTimezone()
+    {
         $time = Literal::time();
         $this->assertEquals($time, new Time());
     }
 
-    public function testTimeCurrentWithTimezone() {
+    public function testTimeCurrentWithTimezone()
+    {
         $time = Literal::time("America/Los Angeles");
         $this->assertEquals($time, new Time(new PropertyMap(["timezone" => new StringLiteral("America/Los Angeles")])));
     }
@@ -570,21 +581,23 @@ class LiteralTest extends TestCase
      * @param $nanosecond
      * @param $expected
      */
-    public function testTime($hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected) {
+    public function testTime($hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected)
+    {
         $time = Literal::timeHMS($hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
         $this->assertEquals($time, $expected);
     }
 
-	public function testTimeMissingMinute()
-	{
-		$this->expectException(\LogicException::class);
+    public function testTimeMissingMinute()
+    {
+        $this->expectException(\LogicException::class);
 
-		$time = Literal::timeHMS(9, null, 17);
+        $time = Literal::timeHMS(9, null, 17);
 
-		$time->toQuery();
-	}
+        $time->toQuery();
+    }
 
-    public function testTimeString() {
+    public function testTimeString()
+    {
         $time = Literal::timeString("21:40:32.142+0100");
         $this->assertEquals($time, new Time(new StringLiteral("21:40:32.142+0100")));
     }
@@ -644,7 +657,8 @@ class LiteralTest extends TestCase
         ];
     }
 
-    public function provideDatetimeYWDData() {
+    public function provideDatetimeYWDData()
+    {
         // [$year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
         return [
             [2000, null, null, null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000)]))],
@@ -672,7 +686,8 @@ class LiteralTest extends TestCase
         ];
     }
 
-    public function provideDatetimeYQDData() {
+    public function provideDatetimeYQDData()
+    {
         // [$year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
         return [
             [2000, null, null, null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000)]))],
@@ -700,7 +715,8 @@ class LiteralTest extends TestCase
         ];
     }
 
-    public function provideDatetimeYQData() {
+    public function provideDatetimeYQData()
+    {
         // [$year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
         return [
             [2000, null, null, null, null, null, null, null, null, new DateTime(new PropertyMap(["year" => new Decimal(2000)]))],
@@ -753,7 +769,8 @@ class LiteralTest extends TestCase
         ];
     }
 
-    public function provideLocalDatetimeYWDData() {
+    public function provideLocalDatetimeYWDData()
+    {
         // [$year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
             [2000, null, null, null, null, null, null, null, null, new LocalDateTime(new PropertyMap(["year" => new Decimal(2000)]))],
@@ -780,7 +797,8 @@ class LiteralTest extends TestCase
     }
 
 
-    public function provideLocalDatetimeYQDData() {
+    public function provideLocalDatetimeYQDData()
+    {
         // [$year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
             [2000, null, null, null, null, null, null, null, null, new LocalDateTime(new PropertyMap(["year" => new Decimal(2000)]))],
@@ -806,7 +824,8 @@ class LiteralTest extends TestCase
         ];
     }
 
-    public function provideLocalDatetimeYQData() {
+    public function provideLocalDatetimeYQData()
+    {
         // [$year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
             [2000, null, null, null, null, null, null, null, new LocalDateTime(new PropertyMap(["year" => new Decimal(2000)]))],
@@ -830,7 +849,8 @@ class LiteralTest extends TestCase
         ];
     }
 
-    public function provideLocalTimeData() {
+    public function provideLocalTimeData()
+    {
         // [$hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
             [11, null, null, null, null, null, new LocalTime(new PropertyMap(["hour" => new Decimal(11)]))],
@@ -850,7 +870,8 @@ class LiteralTest extends TestCase
         ];
     }
 
-    public function provideTimeData() {
+    public function provideTimeData()
+    {
         // [$hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
             [11, null, null, null, null, null, new Time(new PropertyMap(["hour" => new Decimal(11)]))],
@@ -867,6 +888,6 @@ class LiteralTest extends TestCase
             [new Decimal(11), new Decimal(23), new Decimal(2), new Decimal(54), null, null, new Time(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54)]))],
             [new Decimal(11), new Decimal(23), new Decimal(2), new Decimal(54), new Decimal(8), null, new Time(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54), "microsecond" => new Decimal(8)]))],
             [new Decimal(11), new Decimal(23), new Decimal(2), new Decimal(54), new Decimal(8), new Decimal(29), new Time(new PropertyMap(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54), "microsecond" => new Decimal(8), "nanosecond" => new Decimal(29)]))],
-		];
+        ];
     }
 }

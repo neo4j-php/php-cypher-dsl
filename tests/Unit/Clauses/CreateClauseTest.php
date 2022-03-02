@@ -25,6 +25,7 @@ use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\CreateClause;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Assignment;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
@@ -88,6 +89,19 @@ class CreateClauseTest extends TestCase
         $createClause = new CreateClause();
 
         $patternA = $this->getQueryConvertableMock(PathType::class, "(a)");
+
+        $createClause->addPattern($patternA);
+        $createClause->toQuery();
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAcceptsAssignment()
+    {
+        $createClause = new CreateClause();
+
+        $patternA = $this->getQueryConvertableMock(Assignment::class, "p = (a)-->(b)");
 
         $createClause->addPattern($patternA);
         $createClause->toQuery();
