@@ -32,7 +32,7 @@ class RawClauseTest extends TestCase
 {
     use TestHelper;
 
-    public function testClause()
+    public function testClause(): void
     {
         $raw = new RawClause("UNIMPLEMENTED", "clause body");
 

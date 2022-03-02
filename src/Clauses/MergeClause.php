@@ -37,17 +37,17 @@ class MergeClause extends Clause
     /**
      * @var StructuralType|Assignment|null $pattern The pattern to merge
      */
-    private $pattern;
+    private $pattern = null;
 
     /**
      * @var Clause|null $createClause The clause to execute when the pattern is created
      */
-    private ?Clause $createClause;
+    private ?Clause $createClause = null;
 
     /**
      * @var Clause|null $matchClause The clause to execute when the pattern is matched
      */
-    private ?Clause $matchClause;
+    private ?Clause $matchClause = null;
 
     /**
      * Returns the clause to execute when the pattern is matched.

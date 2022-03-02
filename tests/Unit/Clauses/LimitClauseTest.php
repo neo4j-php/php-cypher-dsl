@@ -35,14 +35,15 @@ class LimitClauseTest extends TestCase
 {
     use TestHelper;
 
-    public function testEmptyClause()
+    public function testEmptyClause(): void
     {
         $limit = new LimitClause();
 
         $this->assertSame("", $limit->toQuery());
+        $this->assertNull($limit->getLimit());
     }
 
-    public function testPattern()
+    public function testPattern(): void
     {
         $limit = new LimitClause();
         $expression = $this->getQueryConvertableMock(NumeralType::class, "10");
@@ -50,12 +51,10 @@ class LimitClauseTest extends TestCase
         $limit->setLimit($expression);
 
         $this->assertSame("LIMIT 10", $limit->toQuery());
+        $this->assertEquals($expression, $limit->getLimit());
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsNumeralType()
+    public function testAcceptsNumeralType(): void
     {
         $limit = new LimitClause();
         $expression = $this->getQueryConvertableMock(NumeralType::class, "10");
@@ -63,9 +62,10 @@ class LimitClauseTest extends TestCase
         $limit->setLimit($expression);
 
         $limit->toQuery();
+        $this->assertEquals($expression, $limit->getLimit());
     }
 
-    public function testDoesNotAcceptAnyType()
+    public function testDoesNotAcceptAnyType(): void
     {
         $limit = new LimitClause();
         $expression = $this->getQueryConvertableMock(AnyType::class, "10");

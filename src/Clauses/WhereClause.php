@@ -35,7 +35,7 @@ class WhereClause extends Clause
     /**
      * @var BooleanType|Label|null The expression to match
      */
-    private ?AnyType $expression;
+    private ?AnyType $expression = null;
 
     /**
      * Sets the expression to match in this WHERE clause.

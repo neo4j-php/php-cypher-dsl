@@ -39,34 +39,41 @@ class OptionalMatchTest extends TestCase
 {
     use TestHelper;
 
-    public function testEmptyClause()
+    public function testEmptyClause(): void
     {
         $match = new OptionalMatchClause();
 
         $this->assertSame("", $match->toQuery());
+        $this->assertEquals([], $match->getPatterns());
     }
 
-    public function testSinglePattern()
+    public function testSinglePattern(): void
     {
         $match = new OptionalMatchClause();
-        $match->addPattern($this->getQueryConvertableMock(StructuralType::class, "(a)"));
+        $pattern = $this->getQueryConvertableMock(StructuralType::class, "(a)");
+        $match->addPattern($pattern);
 
         $this->assertSame("OPTIONAL MATCH (a)", $match->toQuery());
+        $this->assertEquals([$pattern], $match->getPatterns());
     }
 
-    public function testMultiplePatterns()
+    public function testMultiplePatterns(): void
     {
         $match = new OptionalMatchClause();
-        $match->addPattern($this->getQueryConvertableMock(StructuralType::class, "(a)"));
-        $match->addPattern($this->getQueryConvertableMock(StructuralType::class, "(b)"));
+        $patternA = $this->getQueryConvertableMock(StructuralType::class, "(a)");
+        $patternB = $this->getQueryConvertableMock(StructuralType::class, "(b)");
+
+        $match->addPattern($patternA);
+        $match->addPattern($patternB);
 
         $this->assertSame("OPTIONAL MATCH (a), (b)", $match->toQuery());
+        $this->assertEquals([$patternA, $patternB], $match->getPatterns());
     }
 
     /**
      * @doesNotPerformAssertions
      */
-    public function testAcceptsNodeType()
+    public function testAcceptsNodeType(): void
     {
         $match = new OptionalMatchClause();
         $match->addPattern($this->getQueryConvertableMock(NodeType::class, "(a)"));
@@ -77,7 +84,7 @@ class OptionalMatchTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testAcceptsPathType()
+    public function testAcceptsPathType(): void
     {
         $match = new OptionalMatchClause();
         $match->addPattern($this->getQueryConvertableMock(PathType::class, "(a)"));
@@ -88,7 +95,7 @@ class OptionalMatchTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testAcceptsAssignment()
+    public function testAcceptsAssignment(): void
     {
         $match = new OptionalMatchClause();
         $match->addPattern($this->getQueryConvertableMock(Assignment::class, "p = (a)-->(b)"));
@@ -96,7 +103,7 @@ class OptionalMatchTest extends TestCase
         $match->toQuery();
     }
 
-    public function testDoesNotAcceptAnyType()
+    public function testDoesNotAcceptAnyType(): void
     {
         $match = new OptionalMatchClause();
 
