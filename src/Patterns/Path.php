@@ -51,12 +51,12 @@ class Path implements PathType
     /**
      * @var StructuralType The pattern left of the relationship
      */
-    private StructuralType $a;
+    private StructuralType $left;
 
     /**
      * @var StructuralType The pattern right of the relationship
      */
-    private StructuralType $b;
+    private StructuralType $right;
 
     /**
      * @var string[] The direction of the relationship
@@ -96,18 +96,18 @@ class Path implements PathType
     /**
      * Path constructor.
      *
-     * @param StructuralType $a The node left of the relationship
-     * @param StructuralType $b The node right of the relationship
+     * @param StructuralType $left The node left of the relationship
+     * @param StructuralType $right The node right of the relationship
      * @param array $direction The direction of the relationship, should be either:
      *                           - Path::DIR_RIGHT (for a relation of
      *                           (a)-->(b)) - Path::DIR_LEFT (for a relation
      *                           of (a)<--(b)) - Path::DIR_UNI (for a
      *                           relation of (a)--(b))
      */
-    public function __construct(StructuralType $a, StructuralType $b, array $direction)
+    public function __construct(StructuralType $left, StructuralType $right, array $direction)
     {
-        $this->a = $a;
-        $this->b = $b;
+        $this->left = $left;
+        $this->right = $right;
 
         if ($direction !== self::DIR_RIGHT && $direction !== self::DIR_LEFT && $direction !== self::DIR_UNI) {
             throw new InvalidArgumentException("The direction must be either 'DIR_LEFT', 'DIR_RIGHT' or 'RELATED_TO'");
@@ -268,8 +268,8 @@ class Path implements PathType
      */
     public function toQuery(): string
     {
-        $a = $this->a->toQuery();
-        $b = $this->b->toQuery();
+        $a = $this->left->toQuery();
+        $b = $this->right->toQuery();
 
         return $a . $this->direction[0] . $this->conditionToString() . $this->direction[1] . $b;
     }
@@ -346,9 +346,9 @@ class Path implements PathType
      *
      * @return StructuralType
      */
-    public function getA(): StructuralType
+    public function getLeft(): StructuralType
     {
-        return $this->a;
+        return $this->left;
     }
 
     /**
@@ -356,9 +356,9 @@ class Path implements PathType
      *
      * @return StructuralType
      */
-    public function getB(): StructuralType
+    public function getRight(): StructuralType
     {
-        return $this->b;
+        return $this->right;
     }
 
     /**
