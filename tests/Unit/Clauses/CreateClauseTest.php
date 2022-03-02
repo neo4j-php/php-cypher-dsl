@@ -43,6 +43,7 @@ class CreateClauseTest extends TestCase
         $createClause = new CreateClause();
 
         $this->assertSame("", $createClause->toQuery());
+        $this->assertEquals([], $createClause->getPatterns());
     }
 
     public function testSinglePattern(): void
@@ -53,6 +54,7 @@ class CreateClauseTest extends TestCase
         $createClause->addPattern($pattern);
 
         $this->assertSame("CREATE (a)", $createClause->toQuery());
+        $this->assertEquals([$pattern], $createClause->getPatterns());
     }
 
     public function testMultiplePatterns(): void
@@ -66,11 +68,9 @@ class CreateClauseTest extends TestCase
         $createClause->addPattern($patternB);
 
         $this->assertSame("CREATE (a), (b)", $createClause->toQuery());
+        $this->assertEquals([$patternA, $patternB], $createClause->getPatterns());
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
     public function testAcceptsNodeType(): void
     {
         $createClause = new CreateClause();
@@ -79,11 +79,10 @@ class CreateClauseTest extends TestCase
 
         $createClause->addPattern($patternA);
         $createClause->toQuery();
+
+        $this->assertEquals([$patternA], $createClause->getPatterns());
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
     public function testAcceptsPathType(): void
     {
         $createClause = new CreateClause();
@@ -92,11 +91,9 @@ class CreateClauseTest extends TestCase
 
         $createClause->addPattern($patternA);
         $createClause->toQuery();
+        $this->assertEquals([$patternA], $createClause->getPatterns());
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
     public function testAcceptsAssignment(): void
     {
         $createClause = new CreateClause();
@@ -105,6 +102,7 @@ class CreateClauseTest extends TestCase
 
         $createClause->addPattern($patternA);
         $createClause->toQuery();
+        $this->assertEquals([$patternA], $createClause->getPatterns());
     }
 
     public function testDoesNotAcceptAnyType(): void
