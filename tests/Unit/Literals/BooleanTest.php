@@ -30,21 +30,23 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  */
 class BooleanTest extends TestCase
 {
-    public function testTrue()
+    public function testTrue(): void
     {
         $boolean = new Boolean(true);
 
         $this->assertSame("true", $boolean->toQuery());
+        $this->assertTrue($boolean->getValue());
     }
 
-    public function testFalse()
+    public function testFalse(): void
     {
         $boolean = new Boolean(false);
 
         $this->assertSame("false", $boolean->toQuery());
+        $this->assertFalse($boolean->getValue());
     }
 
-    public function testInstanceOfBooleanType()
+    public function testInstanceOfBooleanType(): void
     {
         $this->assertInstanceOf(BooleanType::class, new Boolean(false));
     }

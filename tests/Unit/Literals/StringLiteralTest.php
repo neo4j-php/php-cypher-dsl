@@ -30,23 +30,27 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 class StringLiteralTest extends TestCase
 {
-    public function testEmptySingleQuotes()
+    public function testEmptySingleQuotes(): void
     {
         $string = new StringLiteral("");
         $string->useDoubleQuotes(false);
 
         $this->assertSame("''", $string->toQuery());
+        $this->assertEquals('', $string->getValue());
+        $this->assertFalse($string->usesDoubleQuotes());
     }
 
-    public function testEmptyDoubleQuotes()
+    public function testEmptyDoubleQuotes(): void
     {
         $string = new StringLiteral("");
         $string->useDoubleQuotes(true);
 
         $this->assertSame('""', $string->toQuery());
+        $this->assertEquals('', $string->getValue());
+        $this->assertTrue($string->usesDoubleQuotes());
     }
 
-    public function testInstanceOfStringType()
+    public function testInstanceOfStringType(): void
     {
         $this->assertInstanceOf(StringType::class, new StringLiteral(""));
     }
@@ -56,12 +60,14 @@ class StringLiteralTest extends TestCase
      * @param string $string
      * @param string $expected
      */
-    public function testSingleQuotes(string $string, string $expected)
+    public function testSingleQuotes(string $string, string $expected): void
     {
-        $string = new StringLiteral($string);
-        $string->useDoubleQuotes(false);
+        $literal = new StringLiteral($string);
+        $literal->useDoubleQuotes(false);
 
-        $this->assertSame($expected, $string->toQuery());
+        $this->assertSame($expected, $literal->toQuery());
+        $this->assertEquals($string, $literal->getValue());
+        $this->assertFalse($literal->usesDoubleQuotes());
     }
 
     /**
@@ -69,12 +75,14 @@ class StringLiteralTest extends TestCase
      * @param string $string
      * @param string $expected
      */
-    public function testDoubleQuotes(string $string, string $expected)
+    public function testDoubleQuotes(string $string, string $expected): void
     {
-        $string = new StringLiteral($string);
-        $string->useDoubleQuotes(true);
+        $literal = new StringLiteral($string);
+        $literal->useDoubleQuotes(true);
 
-        $this->assertSame($expected, $string->toQuery());
+        $this->assertSame($expected, $literal->toQuery());
+        $this->assertEquals($string, $literal->getValue());
+        $this->assertTrue($literal->usesDoubleQuotes());
     }
 
     public function provideSingleQuotesData(): array
