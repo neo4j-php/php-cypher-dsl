@@ -49,12 +49,12 @@ class Node implements NodeType
     /**
      * @var Variable|null
      */
-    private ?Variable $variable;
+    private ?Variable $variable = null;
 
     /**
      * @var MapType|null
      */
-    private ?MapType $properties;
+    private ?MapType $properties = null;
 
     /**
      * Returns the labels of the node.

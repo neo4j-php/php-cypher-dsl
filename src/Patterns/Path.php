@@ -71,27 +71,27 @@ class Path implements PathType
     /**
      * @var Variable|null
      */
-    private ?Variable $variable;
+    private ?Variable $variable = null;
 
     /**
      * @var int|null The minimum number of `relationship->node` hops away to search
      */
-    private ?int $minHops;
+    private ?int $minHops = null;
 
     /**
      * @var int|null The maximum number of `relationship->node` hops away to search
      */
-    private ?int $maxHops;
+    private ?int $maxHops = null;
 
     /**
      * @var int|null The exact number of `relationship->node` hops away to search
      */
-    private ?int $exactHops;
+    private ?int $exactHops = null;
 
     /**
      * @var MapType|null
      */
-    private ?MapType $properties;
+    private ?MapType $properties = null;
 
     /**
      * Path constructor.
@@ -334,7 +334,7 @@ class Path implements PathType
     /**
      * Returns the variable of the path.
      *
-     * @return Variable
+     * @return Variable|null
      */
     public function getVariable(): ?Variable
     {
