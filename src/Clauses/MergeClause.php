@@ -37,17 +37,47 @@ class MergeClause extends Clause
     /**
      * @var StructuralType|Assignment|null $pattern The pattern to merge
      */
-    private $pattern;
+    private $pattern = null;
 
     /**
      * @var Clause|null $createClause The clause to execute when the pattern is created
      */
-    private ?Clause $createClause;
+    private ?Clause $createClause = null;
 
     /**
      * @var Clause|null $matchClause The clause to execute when the pattern is matched
      */
-    private ?Clause $matchClause;
+    private ?Clause $matchClause = null;
+
+    /**
+     * Returns the clause to execute when the pattern is matched.
+     *
+     * @return Clause|null
+     */
+    public function getOnCreateClause(): ?Clause
+    {
+        return $this->createClause;
+    }
+
+    /**
+     * Returns the clause to execute when the pattern is matched.
+     *
+     * @return Clause|null
+     */
+    public function getOnMatchClause(): ?Clause
+    {
+        return $this->matchClause;
+    }
+
+    /**
+     * Returns the pattern to MERGE.
+     *
+     * @return StructuralType|null
+     */
+    public function getPattern(): ?StructuralType
+    {
+        return $this->pattern;
+    }
 
     /**
      * Sets the pattern to merge.

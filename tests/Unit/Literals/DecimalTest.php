@@ -30,14 +30,15 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 class DecimalTest extends TestCase
 {
-    public function testZero()
+    public function testZero(): void
     {
         $decimal = new Decimal(0);
 
         $this->assertSame("0", $decimal->toQuery());
+        $this->assertEquals('0', $decimal->getValue());
     }
 
-    public function testInstanceOfNumeralType()
+    public function testInstanceOfNumeralType(): void
     {
         $this->assertInstanceOf(NumeralType::class, new Decimal(0));
     }
@@ -47,11 +48,12 @@ class DecimalTest extends TestCase
      * @param        $number
      * @param string $expected
      */
-    public function testToQuery($number, string $expected)
+    public function testToQuery($number, string $expected): void
     {
         $decimal = new Decimal($number);
 
         $this->assertSame($expected, $decimal->toQuery());
+        $this->assertEquals($expected, $decimal->getValue());
     }
 
     public function provideToQueryData(): array

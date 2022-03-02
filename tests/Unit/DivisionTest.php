@@ -34,7 +34,7 @@ class DivisionTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
+    public function testToQuery(): void
     {
         $division = new Division($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
@@ -45,7 +45,18 @@ class DivisionTest extends TestCase
         $this->assertSame("((10 / 15) / (10 / 15))", $division->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands()
+    public function testToQueryNoParentheses(): void
+    {
+        $division = new Division($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"), false);
+
+        $this->assertSame("10 / 15", $division->toQuery());
+
+        $division = new Division($division, $division);
+
+        $this->assertSame("(10 / 15 / 10 / 15)", $division->toQuery());
+    }
+
+    public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 

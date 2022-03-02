@@ -22,7 +22,6 @@
 namespace WikibaseSolutions\CypherDSL\Traits;
 
 use WikibaseSolutions\CypherDSL\AndOperator;
-use WikibaseSolutions\CypherDSL\Minus;
 use WikibaseSolutions\CypherDSL\Not;
 use WikibaseSolutions\CypherDSL\OrOperator;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
@@ -39,33 +38,36 @@ trait BooleanTypeTrait
      * Create a conjunction between this expression and the given expression.
      *
      * @param BooleanType $right
+     * @param bool $insertParentheses
      * @return AndOperator
      */
-    public function and(BooleanType $right): AndOperator
+    public function and(BooleanType $right, bool $insertParentheses = true): AndOperator
     {
-        return new AndOperator($this, $right);
+        return new AndOperator($this, $right, $insertParentheses);
     }
 
     /**
      * Create a disjunction between this expression and the given expression.
      *
      * @param BooleanType $right
+     * @param bool $insertParentheses
      * @return OrOperator
      */
-    public function or(BooleanType $right): OrOperator
+    public function or(BooleanType $right, bool $insertParentheses = true): OrOperator
     {
-        return new OrOperator($this, $right);
+        return new OrOperator($this, $right, $insertParentheses);
     }
 
     /**
      * Perform an XOR with the given expression.
      *
      * @param BooleanType $right
+     * @param bool $insertParentheses
      * @return XorOperator
      */
-    public function xor(BooleanType $right): XorOperator
+    public function xor(BooleanType $right, bool $insertParentheses = true): XorOperator
     {
-        return new XorOperator($this, $right);
+        return new XorOperator($this, $right, $insertParentheses);
     }
 
     /**

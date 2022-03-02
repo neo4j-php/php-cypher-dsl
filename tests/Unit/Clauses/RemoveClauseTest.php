@@ -36,14 +36,15 @@ class RemoveClauseTest extends TestCase
 {
     use TestHelper;
 
-    public function testEmptyClause()
+    public function testEmptyClause(): void
     {
         $remove = new RemoveClause();
 
         $this->assertSame("", $remove->toQuery());
+        $this->assertEquals([], $remove->getExpressions());
     }
 
-    public function testSingleExpression()
+    public function testSingleExpression(): void
     {
         $remove = new RemoveClause();
         $expression = $this->getQueryConvertableMock(Property::class, "(a)");
@@ -51,9 +52,10 @@ class RemoveClauseTest extends TestCase
         $remove->addExpression($expression);
 
         $this->assertSame("REMOVE (a)", $remove->toQuery());
+        $this->assertEquals([$expression], $remove->getExpressions());
     }
 
-    public function testMultipleExpressions()
+    public function testMultipleExpressions(): void
     {
         $remove = new RemoveClause();
 
@@ -64,12 +66,13 @@ class RemoveClauseTest extends TestCase
         $remove->addExpression($b);
 
         $this->assertSame("REMOVE (a), (b)", $remove->toQuery());
+        $this->assertEquals([$a, $b], $remove->getExpressions());
     }
 
     /**
      * @doesNotPerformAssertions
      */
-    public function testAcceptsProperty()
+    public function testAcceptsProperty(): void
     {
         $remove = new RemoveClause();
         $expression = $this->getQueryConvertableMock(Property::class, "(a)");
@@ -82,7 +85,7 @@ class RemoveClauseTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testAcceptsLabel()
+    public function testAcceptsLabel(): void
     {
         $remove = new RemoveClause();
         $expression = $this->getQueryConvertableMock(Label::class, "(a)");
@@ -92,7 +95,7 @@ class RemoveClauseTest extends TestCase
         $remove->toQuery();
     }
 
-    public function testDoesNotAcceptAnyType()
+    public function testDoesNotAcceptAnyType(): void
     {
         $remove = new RemoveClause();
         $expression = $this->getQueryConvertableMock(AnyType::class, "(a)");

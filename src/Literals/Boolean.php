@@ -37,6 +37,16 @@ class Boolean implements BooleanType
     private bool $value;
 
     /**
+     * Returns the boolean value.
+     *
+     * @return bool
+     */
+    public function getValue(): bool
+    {
+        return $this->value;
+    }
+
+    /**
      * Boolean constructor.
      *
      * @param bool $value

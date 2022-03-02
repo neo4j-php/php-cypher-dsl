@@ -29,6 +29,7 @@ use WikibaseSolutions\CypherDSL\Literals\Decimal;
 use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
@@ -56,22 +57,58 @@ class RelationshipTest extends TestCase
         $this->b = $this->getQueryConvertableMock(Node::class, "(b)");
     }
 
-    public function testDirRight()
+    public function testDirRight(): void
     {
         $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
+
         $this->assertSame("(a)-[]->(b)", $r->toQuery());
+
+        $this->assertEquals($this->a, $r->getLeft());
+        $this->assertEquals($this->b, $r->getRight());
+        $this->assertEquals(Path::DIR_RIGHT, $r->getDirection());
+        $this->assertEquals([], $r->getTypes());
+        $this->assertNull($r->getProperties());
+        $this->assertNull($r->getVariable());
+
+        $this->assertNull($r->getExactHops());
+        $this->assertNull($r->getMaxHops());
+        $this->assertNull($r->getMinHops());
     }
 
-    public function testDirLeft()
+    public function testDirLeft(): void
     {
         $r = new Path($this->a, $this->b, Path::DIR_LEFT);
+
         $this->assertSame("(a)<-[]-(b)", $r->toQuery());
+
+        $this->assertEquals($this->a, $r->getLeft());
+        $this->assertEquals($this->b, $r->getRight());
+        $this->assertEquals(Path::DIR_LEFT, $r->getDirection());
+        $this->assertEquals([], $r->getTypes());
+        $this->assertNull($r->getProperties());
+        $this->assertNull($r->getVariable());
+
+        $this->assertNull($r->getExactHops());
+        $this->assertNull($r->getMaxHops());
+        $this->assertNull($r->getMinHops());
     }
 
-    public function testDirUni()
+    public function testDirUni(): void
     {
         $r = new Path($this->a, $this->b, Path::DIR_UNI);
+
         $this->assertSame("(a)-[]-(b)", $r->toQuery());
+
+        $this->assertEquals($this->a, $r->getLeft());
+        $this->assertEquals($this->b, $r->getRight());
+        $this->assertEquals(Path::DIR_UNI, $r->getDirection());
+        $this->assertEquals([], $r->getTypes());
+        $this->assertNull($r->getProperties());
+        $this->assertNull($r->getVariable());
+
+        $this->assertNull($r->getExactHops());
+        $this->assertNull($r->getMaxHops());
+        $this->assertNull($r->getMinHops());
     }
 
     /**
@@ -80,12 +117,24 @@ class RelationshipTest extends TestCase
      * @param array $direction
      * @param string $expected
      */
-    public function testWithName(string $name, array $direction, string $expected)
+    public function testWithName(string $name, array $direction, string $expected): void
     {
         $r = new Path($this->a, $this->b, $direction);
         $r->named($name);
 
         $this->assertSame($expected, $r->toQuery());
+
+        $this->assertEquals($this->a, $r->getLeft());
+        $this->assertEquals($this->b, $r->getRight());
+        $this->assertEquals($direction, $r->getDirection());
+        $this->assertEquals([], $r->getTypes());
+        $this->assertNull($r->getProperties());
+        $this->assertNotNull($r->getVariable());
+        $this->assertEquals($name, $r->getVariable()->getVariable());
+
+        $this->assertNull($r->getExactHops());
+        $this->assertNull($r->getMaxHops());
+        $this->assertNull($r->getMinHops());
     }
 
     /**
@@ -94,12 +143,23 @@ class RelationshipTest extends TestCase
      * @param array $direction
      * @param string $expected
      */
-    public function testWithType(string $type, array $direction, string $expected)
+    public function testWithType(string $type, array $direction, string $expected): void
     {
         $r = new Path($this->a, $this->b, $direction);
         $r->withType($type);
 
         $this->assertSame($expected, $r->toQuery());
+
+        $this->assertEquals($this->a, $r->getLeft());
+        $this->assertEquals($this->b, $r->getRight());
+        $this->assertEquals($direction, $r->getDirection());
+        $this->assertEquals([$type], $r->getTypes());
+        $this->assertNull($r->getProperties());
+        $this->assertNull($r->getVariable());
+
+        $this->assertNull($r->getExactHops());
+        $this->assertNull($r->getMaxHops());
+        $this->assertNull($r->getMinHops());
     }
 
     /**
@@ -108,12 +168,23 @@ class RelationshipTest extends TestCase
      * @param array $direction
      * @param string $expected
      */
-    public function testWithProperties(array $properties, array $direction, string $expected)
+    public function testWithProperties(array $properties, array $direction, string $expected): void
     {
         $r = new Path($this->a, $this->b, $direction);
         $r->withProperties($properties);
 
         $this->assertSame($expected, $r->toQuery());
+
+        $this->assertEquals($this->a, $r->getLeft());
+        $this->assertEquals($this->b, $r->getRight());
+        $this->assertEquals($direction, $r->getDirection());
+        $this->assertEquals([], $r->getTypes());
+        $this->assertEquals(new PropertyMap($properties), $r->getProperties());
+        $this->assertNull($r->getVariable());
+
+        $this->assertNull($r->getExactHops());
+        $this->assertNull($r->getMaxHops());
+        $this->assertNull($r->getMinHops());
     }
 
     /**
@@ -123,12 +194,24 @@ class RelationshipTest extends TestCase
      * @param array $direction
      * @param string $expected
      */
-    public function testWithNameAndType(string $name, string $type, array $direction, string $expected)
+    public function testWithNameAndType(string $name, string $type, array $direction, string $expected): void
     {
         $r = new Path($this->a, $this->b, $direction);
         $r->named($name)->withType($type);
 
         $this->assertSame($expected, $r->toQuery());
+
+        $this->assertEquals($this->a, $r->getLeft());
+        $this->assertEquals($this->b, $r->getRight());
+        $this->assertEquals($direction, $r->getDirection());
+        $this->assertEquals([$type], $r->getTypes());
+        $this->assertNull($r->getProperties());
+        $this->assertNotNull($r->getVariable());
+        $this->assertEquals($name, $r->getVariable()->getVariable());
+
+        $this->assertNull($r->getExactHops());
+        $this->assertNull($r->getMaxHops());
+        $this->assertNull($r->getMinHops());
     }
 
     /**
@@ -138,12 +221,24 @@ class RelationshipTest extends TestCase
      * @param array $direction
      * @param string $expected
      */
-    public function testWithNameAndProperties(string $name, array $properties, array $direction, string $expected)
+    public function testWithNameAndProperties(string $name, array $properties, array $direction, string $expected): void
     {
         $r = new Path($this->a, $this->b, $direction);
         $r->named($name)->withProperties($properties);
 
         $this->assertSame($expected, $r->toQuery());
+
+        $this->assertEquals($this->a, $r->getLeft());
+        $this->assertEquals($this->b, $r->getRight());
+        $this->assertEquals($direction, $r->getDirection());
+        $this->assertEquals([], $r->getTypes());
+        $this->assertEquals(new PropertyMap($properties), $r->getProperties());
+        $this->assertNotNull($r->getVariable());
+        $this->assertEquals($name, $r->getVariable()->getVariable());
+
+        $this->assertNull($r->getExactHops());
+        $this->assertNull($r->getMaxHops());
+        $this->assertNull($r->getMinHops());
     }
 
     /**
@@ -153,12 +248,23 @@ class RelationshipTest extends TestCase
      * @param array $direction
      * @param string $expected
      */
-    public function testWithTypeAndProperties(string $type, array $properties, array $direction, string $expected)
+    public function testWithTypeAndProperties(string $type, array $properties, array $direction, string $expected): void
     {
         $r = new Path($this->a, $this->b, $direction);
         $r->withType($type)->withProperties($properties);
 
         $this->assertSame($expected, $r->toQuery());
+
+        $this->assertEquals($this->a, $r->getLeft());
+        $this->assertEquals($this->b, $r->getRight());
+        $this->assertEquals($direction, $r->getDirection());
+        $this->assertEquals([$type], $r->getTypes());
+        $this->assertEquals(new PropertyMap($properties), $r->getProperties());
+        $this->assertNull($r->getVariable());
+
+        $this->assertNull($r->getExactHops());
+        $this->assertNull($r->getMaxHops());
+        $this->assertNull($r->getMinHops());
     }
 
     /**
@@ -169,12 +275,24 @@ class RelationshipTest extends TestCase
      * @param array $direction
      * @param string $expected
      */
-    public function testWithNameAndTypeAndProperties(string $name, string $type, array $properties, array $direction, string $expected)
+    public function testWithNameAndTypeAndProperties(string $name, string $type, array $properties, array $direction, string $expected): void
     {
         $r = new Path($this->a, $this->b, $direction);
         $r->named($name)->withType($type)->withProperties($properties);
 
         $this->assertSame($expected, $r->toQuery());
+
+        $this->assertEquals($this->a, $r->getLeft());
+        $this->assertEquals($this->b, $r->getRight());
+        $this->assertEquals($direction, $r->getDirection());
+        $this->assertEquals([$type], $r->getTypes());
+        $this->assertEquals(new PropertyMap($properties), $r->getProperties());
+        $this->assertNotNull($r->getVariable());
+        $this->assertEquals($name, $r->getVariable()->getVariable());
+
+        $this->assertNull($r->getExactHops());
+        $this->assertNull($r->getMaxHops());
+        $this->assertNull($r->getMinHops());
     }
 
     /**
@@ -185,7 +303,7 @@ class RelationshipTest extends TestCase
      * @param array $direction
      * @param string $expected
      */
-    public function testWithMultipleTypes(string $name, array $types, array $properties, array $direction, string $expected)
+    public function testWithMultipleTypes(string $name, array $types, array $properties, array $direction, string $expected): void
     {
         $r = new Path($this->a, $this->b, $direction);
         $r->named($name)->withProperties($properties);
@@ -194,7 +312,20 @@ class RelationshipTest extends TestCase
             $r->withType($type);
         }
 
+
         $this->assertSame($expected, $r->toQuery());
+
+        $this->assertEquals($this->a, $r->getLeft());
+        $this->assertEquals($this->b, $r->getRight());
+        $this->assertEquals($direction, $r->getDirection());
+        $this->assertEquals($types, $r->getTypes());
+        $this->assertEquals(new PropertyMap($properties), $r->getProperties());
+        $this->assertNotNull($r->getVariable());
+        $this->assertEquals($name, $r->getVariable()->getVariable());
+
+        $this->assertNull($r->getExactHops());
+        $this->assertNull($r->getMaxHops());
+        $this->assertNull($r->getMinHops());
     }
 
     /**
@@ -205,7 +336,7 @@ class RelationshipTest extends TestCase
      * @param array $direction
      * @param string $expected
      */
-    public function testVariableLengthRelationshipsWithName(string $name, ?int $minHops, ?int $maxHops, array $direction, string $expected)
+    public function testVariableLengthRelationshipsWithName(string $name, ?int $minHops, ?int $maxHops, array $direction, string $expected): void
     {
         $r = new Path($this->a, $this->b, $direction);
         $r->named($name);
@@ -219,6 +350,18 @@ class RelationshipTest extends TestCase
         }
 
         $this->assertSame($expected, $r->toQuery());
+
+        $this->assertEquals($this->a, $r->getLeft());
+        $this->assertEquals($this->b, $r->getRight());
+        $this->assertEquals($direction, $r->getDirection());
+        $this->assertEquals([], $r->getTypes());
+        $this->assertNull($r->getProperties());
+        $this->assertNotNull($r->getVariable());
+        $this->assertEquals($name, $r->getVariable()->getVariable());
+
+        $this->assertNull($r->getExactHops());
+        $this->assertEquals($maxHops, $r->getMaxHops());
+        $this->assertEquals($minHops, $r->getMinHops());
     }
 
     /**
@@ -229,7 +372,7 @@ class RelationshipTest extends TestCase
      * @param array $direction
      * @param string $expected
      */
-    public function testVariableLengthRelationshipsWithType(string $type, ?int $minHops, ?int $maxHops, array $direction, string $expected)
+    public function testVariableLengthRelationshipsWithType(string $type, ?int $minHops, ?int $maxHops, array $direction, string $expected): void
     {
         $r = new Path($this->a, $this->b, $direction);
         $r->withType($type);
@@ -243,6 +386,17 @@ class RelationshipTest extends TestCase
         }
 
         $this->assertSame($expected, $r->toQuery());
+
+        $this->assertEquals($this->a, $r->getLeft());
+        $this->assertEquals($this->b, $r->getRight());
+        $this->assertEquals($direction, $r->getDirection());
+        $this->assertEquals([$type], $r->getTypes());
+        $this->assertNull($r->getProperties());
+        $this->assertNull($r->getVariable());
+
+        $this->assertNull($r->getExactHops());
+        $this->assertEquals($maxHops, $r->getMaxHops());
+        $this->assertEquals($minHops, $r->getMinHops());
     }
 
     /**
@@ -253,7 +407,7 @@ class RelationshipTest extends TestCase
      * @param array $direction
      * @param string $expected
      */
-    public function testVariableLengthRelationshipsWithProperties(array $properties, ?int $minHops, ?int $maxHops, array $direction, string $expected)
+    public function testVariableLengthRelationshipsWithProperties(array $properties, ?int $minHops, ?int $maxHops, array $direction, string $expected): void
     {
         $r = new Path($this->a, $this->b, $direction);
         $r->withProperties($properties);
@@ -267,6 +421,17 @@ class RelationshipTest extends TestCase
         }
 
         $this->assertSame($expected, $r->toQuery());
+
+        $this->assertEquals($this->a, $r->getLeft());
+        $this->assertEquals($this->b, $r->getRight());
+        $this->assertEquals($direction, $r->getDirection());
+        $this->assertEquals([], $r->getTypes());
+        $this->assertEquals(new PropertyMap($properties), $r->getProperties());
+        $this->assertNull($r->getVariable());
+
+        $this->assertNull($r->getExactHops());
+        $this->assertEquals($maxHops, $r->getMaxHops());
+        $this->assertEquals($minHops, $r->getMinHops());
     }
 
     /**
@@ -279,7 +444,7 @@ class RelationshipTest extends TestCase
      * @param array $direction
      * @param string $expected
      */
-    public function testVariableLengthRelationshipsWithNameAndTypeAndProperties(string $name, string $type, array $properties, ?int $minHops, ?int $maxHops, array $direction, string $expected)
+    public function testVariableLengthRelationshipsWithNameAndTypeAndProperties(string $name, string $type, array $properties, ?int $minHops, ?int $maxHops, array $direction, string $expected): void
     {
         $r = new Path($this->a, $this->b, $direction);
         $r->named($name)->withType($type)->withProperties($properties);
@@ -293,9 +458,21 @@ class RelationshipTest extends TestCase
         }
 
         $this->assertSame($expected, $r->toQuery());
+
+        $this->assertEquals($this->a, $r->getLeft());
+        $this->assertEquals($this->b, $r->getRight());
+        $this->assertEquals($direction, $r->getDirection());
+        $this->assertEquals([$type], $r->getTypes());
+        $this->assertEquals(new PropertyMap($properties), $r->getProperties());
+        $this->assertNotNull($r->getVariable());
+        $this->assertEquals($name, $r->getVariable()->getVariable());
+
+        $this->assertNull($r->getExactHops());
+        $this->assertEquals($maxHops, $r->getMaxHops());
+        $this->assertEquals($minHops, $r->getMinHops());
     }
 
-    public function testExactLengthRelationships()
+    public function testExactLengthRelationships(): void
     {
         $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
         $r->named("tom")
@@ -305,9 +482,21 @@ class RelationshipTest extends TestCase
         $r->withExactHops(10);
 
         $this->assertSame("(a)-[tom:Person*10 {name: 'Tom Hanks'}]->(b)", $r->toQuery());
+
+        $this->assertEquals($this->a, $r->getLeft());
+        $this->assertEquals($this->b, $r->getRight());
+        $this->assertEquals(Path::DIR_RIGHT, $r->getDirection());
+        $this->assertEquals(['Person'], $r->getTypes());
+        $this->assertEquals(new PropertyMap(['name' => Query::literal('Tom Hanks')]), $r->getProperties());
+        $this->assertNotNull($r->getVariable());
+        $this->assertEquals('tom', $r->getVariable()->getVariable());
+
+        $this->assertEquals(10, $r->getExactHops());
+        $this->assertNull($r->getMaxHops());
+        $this->assertNull($r->getMinHops());
     }
 
-    public function testMinAndExactHops()
+    public function testMinAndExactHops(): void
     {
         $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
         $r->withMinHops(1);
@@ -317,7 +506,7 @@ class RelationshipTest extends TestCase
         $r->withExactHops(1);
     }
 
-    public function testMaxAndExactHops()
+    public function testMaxAndExactHops(): void
     {
         $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
         $r->withMaxHops(1);
@@ -327,7 +516,7 @@ class RelationshipTest extends TestCase
         $r->withExactHops(1);
     }
 
-    public function testMinMaxAndExactHops()
+    public function testMinMaxAndExactHops(): void
     {
         $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
         $r->withMinHops(1);
@@ -338,7 +527,7 @@ class RelationshipTest extends TestCase
         $r->withExactHops(1);
     }
 
-    public function testExactAndMinHops()
+    public function testExactAndMinHops(): void
     {
         $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
         $r->withExactHops(1);
@@ -348,7 +537,7 @@ class RelationshipTest extends TestCase
         $r->withMinHops(1);
     }
 
-    public function testExactAndMaxHops()
+    public function testExactAndMaxHops(): void
     {
         $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
         $r->withExactHops(1);
@@ -358,7 +547,7 @@ class RelationshipTest extends TestCase
         $r->withMaxHops(1);
     }
 
-    public function testMaxHopsLessThanMinHops()
+    public function testMaxHopsLessThanMinHops(): void
     {
         $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
         $r->withMinHops(100);
@@ -368,7 +557,7 @@ class RelationshipTest extends TestCase
         $r->withMaxHops(1);
     }
 
-    public function testMinHopsGreaterThanMaxHops()
+    public function testMinHopsGreaterThanMaxHops(): void
     {
         $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
         $r->withMaxHops(1);
@@ -378,7 +567,7 @@ class RelationshipTest extends TestCase
         $r->withMinHops(100);
     }
 
-    public function testMinHopsLessThanZero()
+    public function testMinHopsLessThanZero(): void
     {
         $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
 
@@ -387,7 +576,7 @@ class RelationshipTest extends TestCase
         $r->withMinHops(-1);
     }
 
-    public function testMaxHopsLessThanOne()
+    public function testMaxHopsLessThanOne(): void
     {
         $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
 
@@ -396,7 +585,7 @@ class RelationshipTest extends TestCase
         $r->withMaxHops(0);
     }
 
-    public function testMaxHopsLessThanZero()
+    public function testMaxHopsLessThanZero(): void
     {
         $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
 
@@ -405,7 +594,7 @@ class RelationshipTest extends TestCase
         $r->withMaxHops(-1);
     }
 
-    public function testExactHopsLessThanOne()
+    public function testExactHopsLessThanOne(): void
     {
         $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
 
@@ -414,7 +603,7 @@ class RelationshipTest extends TestCase
         $r->withExactHops(0);
     }
 
-    public function testExactHopsLessThanZero()
+    public function testExactHopsLessThanZero(): void
     {
         $r = new Path($this->a, $this->b, Path::DIR_RIGHT);
 

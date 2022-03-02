@@ -34,7 +34,7 @@ class OrOperatorTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
+    public function testToQuery(): void
     {
         $or = new OrOperator($this->getQueryConvertableMock(BooleanType::class, "true"), $this->getQueryConvertableMock(BooleanType::class, "false"));
 
@@ -45,7 +45,18 @@ class OrOperatorTest extends TestCase
         $this->assertSame("((true OR false) OR (true OR false))", $or->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands()
+    public function testToQueryNoParentheses(): void
+    {
+        $or = new OrOperator($this->getQueryConvertableMock(BooleanType::class, "true"), $this->getQueryConvertableMock(BooleanType::class, "false"), false);
+
+        $this->assertSame("true OR false", $or->toQuery());
+
+        $or = new OrOperator($or, $or);
+
+        $this->assertSame("(true OR false OR true OR false)", $or->toQuery());
+    }
+
+    public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 

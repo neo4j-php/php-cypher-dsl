@@ -109,6 +109,26 @@ class Property implements
     }
 
     /**
+     * Returns the property name.
+     *
+     * @return string
+     */
+    public function getProperty(): string
+    {
+        return $this->property;
+    }
+
+    /**
+     * Returns the map type of the property.
+     *
+     * @return MapType
+     */
+    public function getExpression(): MapType
+    {
+        return $this->expression;
+    }
+
+    /**
      * @inheritDoc
      */
     public function toQuery(): string

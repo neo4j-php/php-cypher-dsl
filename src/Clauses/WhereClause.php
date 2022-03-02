@@ -35,7 +35,7 @@ class WhereClause extends Clause
     /**
      * @var BooleanType|Label|null The expression to match
      */
-    private ?AnyType $expression;
+    private ?AnyType $expression = null;
 
     /**
      * Sets the expression to match in this WHERE clause.
@@ -48,6 +48,16 @@ class WhereClause extends Clause
         $this->expression = $expression;
 
         return $this;
+    }
+
+    /**
+     * Returns the expression to match.
+     *
+     * @return Label|BooleanType|null
+     */
+    public function getExpression()
+    {
+        return $this->expression;
     }
 
     /**

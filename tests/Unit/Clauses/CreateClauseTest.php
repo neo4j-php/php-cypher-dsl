@@ -38,14 +38,15 @@ class CreateClauseTest extends TestCase
 {
     use TestHelper;
 
-    public function testEmptyClause()
+    public function testEmptyClause(): void
     {
         $createClause = new CreateClause();
 
         $this->assertSame("", $createClause->toQuery());
+        $this->assertEquals([], $createClause->getPatterns());
     }
 
-    public function testSinglePattern()
+    public function testSinglePattern(): void
     {
         $createClause = new CreateClause();
         $pattern = $this->getQueryConvertableMock(StructuralType::class, "(a)");
@@ -53,9 +54,10 @@ class CreateClauseTest extends TestCase
         $createClause->addPattern($pattern);
 
         $this->assertSame("CREATE (a)", $createClause->toQuery());
+        $this->assertEquals([$pattern], $createClause->getPatterns());
     }
 
-    public function testMultiplePatterns()
+    public function testMultiplePatterns(): void
     {
         $createClause = new CreateClause();
 
@@ -66,12 +68,10 @@ class CreateClauseTest extends TestCase
         $createClause->addPattern($patternB);
 
         $this->assertSame("CREATE (a), (b)", $createClause->toQuery());
+        $this->assertEquals([$patternA, $patternB], $createClause->getPatterns());
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsNodeType()
+    public function testAcceptsNodeType(): void
     {
         $createClause = new CreateClause();
 
@@ -79,12 +79,11 @@ class CreateClauseTest extends TestCase
 
         $createClause->addPattern($patternA);
         $createClause->toQuery();
+
+        $this->assertEquals([$patternA], $createClause->getPatterns());
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsPathType()
+    public function testAcceptsPathType(): void
     {
         $createClause = new CreateClause();
 
@@ -92,12 +91,10 @@ class CreateClauseTest extends TestCase
 
         $createClause->addPattern($patternA);
         $createClause->toQuery();
+        $this->assertEquals([$patternA], $createClause->getPatterns());
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsAssignment()
+    public function testAcceptsAssignment(): void
     {
         $createClause = new CreateClause();
 
@@ -105,9 +102,10 @@ class CreateClauseTest extends TestCase
 
         $createClause->addPattern($patternA);
         $createClause->toQuery();
+        $this->assertEquals([$patternA], $createClause->getPatterns());
     }
 
-    public function testDoesNotAcceptAnyType()
+    public function testDoesNotAcceptAnyType(): void
     {
         $createClause = new CreateClause();
 

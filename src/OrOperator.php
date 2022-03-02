@@ -36,9 +36,9 @@ class OrOperator extends BinaryOperator implements BooleanType
     /**
      * @inheritDoc
      */
-    public function __construct(BooleanType $left, BooleanType $right)
+    public function __construct(BooleanType $left, BooleanType $right, bool $insertParentheses = true)
     {
-        parent::__construct($left, $right);
+        parent::__construct($left, $right, $insertParentheses);
     }
 
     /**

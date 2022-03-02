@@ -37,9 +37,9 @@ class Inequality extends BinaryOperator implements BooleanType
     /**
      * @inheritDoc
      */
-    public function __construct(PropertyType $left, PropertyType $right)
+    public function __construct(PropertyType $left, PropertyType $right, bool $insertParentheses = true)
     {
-        parent::__construct($left, $right);
+        parent::__construct($left, $right, $insertParentheses);
     }
 
     /**

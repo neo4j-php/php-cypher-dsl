@@ -49,12 +49,42 @@ class Node implements NodeType
     /**
      * @var Variable|null
      */
-    private ?Variable $variable;
+    private ?Variable $variable = null;
 
     /**
      * @var MapType|null
      */
-    private ?MapType $properties;
+    private ?MapType $properties = null;
+
+    /**
+     * Returns the labels of the node.
+     *
+     * @return string[]
+     */
+    public function getLabels(): array
+    {
+        return $this->labels;
+    }
+
+    /**
+     * Returns the properties added to the node.
+     *
+     * @return MapType|null
+     */
+    public function getProperties(): ?MapType
+    {
+        return $this->properties;
+    }
+
+    /**
+     * Returns the variable name of the node.
+     *
+     * @return Variable|null
+     */
+    public function getVariable(): ?Variable
+    {
+        return $this->variable;
+    }
 
     /**
      * Node constructor.
