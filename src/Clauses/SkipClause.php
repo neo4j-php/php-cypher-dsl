@@ -24,28 +24,28 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
- * This class represents a LIMIT clause.
+ * This class represents a SKIP clause.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/clauses/limit/
+ * @see https://neo4j.com/docs/cypher-manual/current/clauses/skip/
  */
 class SkipClause extends Clause
 {
     /**
-     * The expression of the LIMIT statement.
+     * The expression of the SKIP statement.
      *
      * @var NumeralType|null $skip
      */
     private ?NumeralType $skip;
 
     /**
-     * Sets the expression that returns the limit.
+     * Sets the expression that returns the skip.
      *
-     * @param NumeralType $limit The limit
+     * @param NumeralType $skip The amount to skip
      * @return SkipClause
      */
-    public function setSkip(NumeralType $limit): self
+    public function setSkip(NumeralType $skip): self
     {
-        $this->skip = $limit;
+        $this->skip = $skip;
 
         return $this;
     }
