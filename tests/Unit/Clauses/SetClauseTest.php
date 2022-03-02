@@ -36,14 +36,15 @@ class SetClauseTest extends TestCase
 {
     use TestHelper;
 
-    public function testEmptyClause()
+    public function testEmptyClause(): void
     {
         $set = new SetClause();
 
         $this->assertSame("", $set->toQuery());
+        $this->assertEquals([], $set->getExpressions());
     }
 
-    public function testSinglePattern()
+    public function testSinglePattern(): void
     {
         $set = new SetClause();
         $expression = $this->getQueryConvertableMock(Assignment::class, "(a)");
@@ -51,9 +52,10 @@ class SetClauseTest extends TestCase
         $set->addAssignment($expression);
 
         $this->assertSame("SET (a)", $set->toQuery());
+        $this->assertEquals([$expression], $set->getExpressions());
     }
 
-    public function testMultiplePattern()
+    public function testMultiplePattern(): void
     {
         $set = new SetClause();
         $expressionA = $this->getQueryConvertableMock(Assignment::class, "(a)");
@@ -63,12 +65,13 @@ class SetClauseTest extends TestCase
         $set->addAssignment($expressionB);
 
         $this->assertSame("SET (a), (b)", $set->toQuery());
+        $this->assertEquals([$expressionA, $expressionB], $set->getExpressions());
     }
 
     /**
      * @doesNotPerformAssertions
      */
-    public function testAcceptsAssignment()
+    public function testAcceptsAssignment(): void
     {
         $set = new SetClause();
         $expression = $this->getQueryConvertableMock(Assignment::class, "(a)");
@@ -81,7 +84,7 @@ class SetClauseTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testAcceptsLabel()
+    public function testAcceptsLabel(): void
     {
         $set = new SetClause();
         $expression = $this->getQueryConvertableMock(Label::class, "(a)");
@@ -91,7 +94,7 @@ class SetClauseTest extends TestCase
         $set->toQuery();
     }
 
-    public function testDoesNotAcceptAnyType()
+    public function testDoesNotAcceptAnyType(): void
     {
         $set = new SetClause();
         $expression = $this->getQueryConvertableMock(AnyType::class, "(a)");

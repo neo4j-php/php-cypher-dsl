@@ -128,6 +128,16 @@ class Variable implements
     }
 
     /**
+     * Returns the variable name.
+     *
+     * @return string
+     */
+    public function getVariable(): string
+    {
+        return $this->variable;
+    }
+
+    /**
      * Assign a value to this variable.
      *
      * @param AnyType $value The value to assign

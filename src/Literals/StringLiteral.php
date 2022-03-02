@@ -55,11 +55,31 @@ class StringLiteral implements StringType
     }
 
     /**
+     * Returns the string value.
+     *
+     * @return string
+     */
+    public function getValue(): string
+    {
+        return $this->value;
+    }
+
+    /**
+     * Returns whether the string uses double quotes. Single quotes are used if false.
+     *
+     * @return bool
+     */
+    public function usesDoubleQuotes(): bool
+    {
+        return $this->useDoubleQuotes;
+    }
+
+    /**
      * Whether to use double quotes or not.
      *
      * @param bool $useDoubleQuotes
      */
-    public function useDoubleQuotes(bool $useDoubleQuotes = true)
+    public function useDoubleQuotes(bool $useDoubleQuotes = true): void
     {
         $this->useDoubleQuotes = $useDoubleQuotes;
     }

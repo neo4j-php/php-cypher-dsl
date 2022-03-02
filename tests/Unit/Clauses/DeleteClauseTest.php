@@ -35,14 +35,16 @@ class DeleteClauseTest extends TestCase
 {
     use TestHelper;
 
-    public function testEmptyClause()
+    public function testEmptyClause(): void
     {
         $delete = new DeleteClause();
 
         $this->assertSame("", $delete->toQuery());
+        $this->assertEquals([], $delete->getNodes());
+        $this->assertFalse($delete->detachesDeletion());
     }
 
-    public function testSingleNode()
+    public function testSingleNode(): void
     {
         $delete = new DeleteClause();
         $node = $this->getQueryConvertableMock(NodeType::class, "(a)");
@@ -50,9 +52,11 @@ class DeleteClauseTest extends TestCase
         $delete->addNode($node);
 
         $this->assertSame("DELETE (a)", $delete->toQuery());
+        $this->assertEquals([$node], $delete->getNodes());
+        $this->assertFalse($delete->detachesDeletion());
     }
 
-    public function testMultipleNodes()
+    public function testMultipleNodes(): void
     {
         $delete = new DeleteClause();
 
@@ -63,9 +67,11 @@ class DeleteClauseTest extends TestCase
         $delete->addNode($b);
 
         $this->assertSame("DELETE (a), (b)", $delete->toQuery());
+        $this->assertEquals([$a, $b], $delete->getNodes());
+        $this->assertFalse($delete->detachesDeletion());
     }
 
-    public function testDetachDelete()
+    public function testDetachDelete(): void
     {
         $delete = new DeleteClause();
         $pattern = $this->getQueryConvertableMock(NodeType::class, "(a)");
@@ -74,21 +80,22 @@ class DeleteClauseTest extends TestCase
         $delete->setDetach(true);
 
         $this->assertSame("DETACH DELETE (a)", $delete->toQuery());
+        $this->assertEquals([$pattern], $delete->getNodes());
+        $this->assertTrue($delete->detachesDeletion());
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsNodeType()
+    public function testAcceptsNodeType(): void
     {
         $delete = new DeleteClause();
         $pattern = $this->getQueryConvertableMock(NodeType::class, "(a)");
 
         $delete->addNode($pattern);
         $delete->toQuery();
+        $this->assertEquals([$pattern], $delete->getNodes());
+        $this->assertFalse($delete->detachesDeletion());
     }
 
-    public function testDoesNotAcceptAnyType()
+    public function testDoesNotAcceptAnyType(): void
     {
         $delete = new DeleteClause();
         $pattern = $this->getQueryConvertableMock(AnyType::class, "(a)");

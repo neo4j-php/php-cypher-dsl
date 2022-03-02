@@ -34,14 +34,21 @@ class ContainsTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
+    public function testToQuery(): void
     {
         $contains = new Contains($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
 
         $this->assertSame("(a CONTAINS b)", $contains->toQuery());
     }
 
-    public function testCannotBeNested()
+    public function testToQueryNoParentheses(): void
+    {
+        $contains = new Contains($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"), false);
+
+        $this->assertSame("a CONTAINS b", $contains->toQuery());
+    }
+
+    public function testCannotBeNested(): void
     {
         $contains = new Contains($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
 
@@ -52,7 +59,7 @@ class ContainsTest extends TestCase
         $contains->toQuery();
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands()
+    public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 

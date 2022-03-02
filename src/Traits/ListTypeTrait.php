@@ -33,10 +33,11 @@ trait ListTypeTrait
      * Checks whether the given element exists in this list.
      *
      * @param PropertyType $left
+     * @param bool $insertParentheses
      * @return In
      */
-    public function has(PropertyType $left): In
+    public function has(PropertyType $left, bool $insertParentheses = true): In
     {
-        return new In($left, $this);
+        return new In($left, $this, $insertParentheses);
     }
 }

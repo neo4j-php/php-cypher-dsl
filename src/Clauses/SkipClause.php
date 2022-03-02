@@ -21,48 +21,43 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Assignment;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Label;
-use WikibaseSolutions\CypherDSL\QueryConvertable;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
- * This class represents a SET clause.
+ * This class represents a SKIP clause.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/
+ * @see https://neo4j.com/docs/cypher-manual/current/clauses/skip/
  */
-class SetClause extends Clause
+class SkipClause extends Clause
 {
-    use ErrorTrait;
-
     /**
-     * @var Assignment[]|Label[] $expressions The expressions to set
-     */
-    private array $expressions = [];
-
-    /**
-     * Returns the expressions to SET.
+     * The expression of the SKIP statement.
      *
-     * @return Assignment[]|Label[]
+     * @var NumeralType|null $skip
      */
-    public function getExpressions(): array
+    private ?NumeralType $skip = null;
+
+    /**
+     * Sets the expression that returns the skip.
+     *
+     * @param NumeralType $skip The amount to skip
+     * @return SkipClause
+     */
+    public function setSkip(NumeralType $skip): self
     {
-        return $this->expressions;
+        $this->skip = $skip;
+
+        return $this;
     }
 
     /**
-     * Add an assignment.
+     * Returns the amount to skip.
      *
-     * @param Assignment|Label $expression The assignment to execute
-     * @return SetClause
+     * @return NumeralType|null
      */
-    public function addAssignment($expression): self
+    public function getSkip(): ?NumeralType
     {
-        $this->assertClass('expression', [Assignment::class, Label::class], $expression);
-
-        $this->expressions[] = $expression;
-
-        return $this;
+        return $this->skip;
     }
 
     /**
@@ -70,7 +65,7 @@ class SetClause extends Clause
      */
     protected function getClause(): string
     {
-        return "SET";
+        return "SKIP";
     }
 
     /**
@@ -78,9 +73,10 @@ class SetClause extends Clause
      */
     protected function getSubject(): string
     {
-        return implode(
-            ", ",
-            array_map(fn (QueryConvertable $expression): string => $expression->toQuery(), $this->expressions)
-        );
+        if (isset($this->skip)) {
+            return $this->skip->toQuery();
+        }
+
+        return "";
     }
 }

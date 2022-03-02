@@ -37,7 +37,7 @@ class InTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
+    public function testToQuery(): void
     {
         $inequality = new In($this->getQueryConvertableMock(PropertyType::class, "a"), $this->getQueryConvertableMock(ListType::class, "b"));
 
@@ -48,7 +48,18 @@ class InTest extends TestCase
         $this->assertSame("((a IN b) IN c)", $inequality->toQuery());
     }
 
-    public function testInExpressionList()
+    public function testToQueryNoParentheses(): void
+    {
+        $inequality = new In($this->getQueryConvertableMock(PropertyType::class, "a"), $this->getQueryConvertableMock(ListType::class, "b"), false);
+
+        $this->assertSame("a IN b", $inequality->toQuery());
+
+        $inequality = new In($inequality, $this->getQueryConvertableMock(ListType::class, "c"));
+
+        $this->assertSame("(a IN b IN c)", $inequality->toQuery());
+    }
+
+    public function testInExpressionList(): void
     {
         $inequality = new In($this->getQueryConvertableMock(PropertyType::class, "a"), new ExpressionList([new StringLiteral('a'), new StringLiteral('b')]));
 
@@ -59,7 +70,7 @@ class InTest extends TestCase
         $this->assertSame("((a IN ['a', 'b']) IN c)", $inequality->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands()
+    public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 

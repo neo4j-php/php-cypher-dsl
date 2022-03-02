@@ -49,6 +49,16 @@ class Not implements BooleanType
     }
 
     /**
+     * Returns the expression to negate.
+     *
+     * @return BooleanType
+     */
+    public function getExpression(): BooleanType
+    {
+        return $this->expression;
+    }
+
+    /**
      * @inheritDoc
      */
     public function toQuery(): string

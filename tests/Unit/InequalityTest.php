@@ -34,7 +34,7 @@ class InequalityTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
+    public function testToQuery(): void
     {
         $inequality = new Inequality($this->getQueryConvertableMock(PropertyType::class, "a"), $this->getQueryConvertableMock(PropertyType::class, "b"));
 
@@ -45,7 +45,18 @@ class InequalityTest extends TestCase
         $this->assertSame("((a <> b) <> (a <> b))", $inequality->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands()
+    public function testToQueryNoParentheses(): void
+    {
+        $inequality = new Inequality($this->getQueryConvertableMock(PropertyType::class, "a"), $this->getQueryConvertableMock(PropertyType::class, "b"), false);
+
+        $this->assertSame("a <> b", $inequality->toQuery());
+
+        $inequality = new Inequality($inequality, $inequality);
+
+        $this->assertSame("(a <> b <> a <> b)", $inequality->toQuery());
+    }
+
+    public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 

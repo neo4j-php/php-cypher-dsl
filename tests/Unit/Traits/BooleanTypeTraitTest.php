@@ -27,6 +27,7 @@ use WikibaseSolutions\CypherDSL\AndOperator;
 use WikibaseSolutions\CypherDSL\Not;
 use WikibaseSolutions\CypherDSL\OrOperator;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\XorOperator;
 
@@ -49,32 +50,84 @@ class BooleanTypeTraitTest extends TestCase
 
     public function setUp(): void
     {
-        $this->a = $this->getQueryConvertableMock(BooleanType::class, "true");
+        $this->a = new class implements BooleanType {
+            use BooleanTypeTrait;
+
+            public function toQuery(): string
+            {
+                return '';
+            }
+        };
         $this->b = $this->getQueryConvertableMock(BooleanType::class, "false");
     }
 
-    public function testAnd()
+    public function testAnd(): void
     {
         $and = $this->a->and($this->b);
 
         $this->assertInstanceOf(AndOperator::class, $and);
+
+        $this->assertTrue($and->insertsParentheses());
+        $this->assertEquals($this->a, $and->getLeft());
+        $this->assertEquals($this->b, $and->getRight());
     }
 
-    public function testOr()
+    public function testAndNoParentheses(): void
+    {
+        $and = $this->a->and($this->b, false);
+
+        $this->assertInstanceOf(AndOperator::class, $and);
+
+        $this->assertFalse($and->insertsParentheses());
+        $this->assertEquals($this->a, $and->getLeft());
+        $this->assertEquals($this->b, $and->getRight());
+    }
+
+    public function testOr(): void
     {
         $or = $this->a->or($this->b);
 
         $this->assertInstanceOf(OrOperator::class, $or);
+
+        $this->assertTrue($or->insertsParentheses());
+        $this->assertEquals($this->a, $or->getLeft());
+        $this->assertEquals($this->b, $or->getRight());
     }
 
-    public function testXor()
+    public function testOrNoParentheses(): void
+    {
+        $or = $this->a->or($this->b, false);
+
+        $this->assertInstanceOf(OrOperator::class, $or);
+
+        $this->assertFalse($or->insertsParentheses());
+        $this->assertEquals($this->a, $or->getLeft());
+        $this->assertEquals($this->b, $or->getRight());
+    }
+
+    public function testXor(): void
     {
         $xor = $this->a->xor($this->b);
 
         $this->assertInstanceOf(XorOperator::class, $xor);
+
+        $this->assertTrue($xor->insertsParentheses());
+        $this->assertEquals($this->a, $xor->getLeft());
+        $this->assertEquals($this->b, $xor->getRight());
     }
 
-    public function testNot()
+    public function testXorNoParentheses(): void
+    {
+        $xor = $this->a->xor($this->b, false);
+
+        $this->assertInstanceOf(XorOperator::class, $xor);
+
+        $this->assertFalse($xor->insertsParentheses());
+        $this->assertEquals($this->a, $xor->getLeft());
+        $this->assertEquals($this->b, $xor->getRight());
+    }
+
+    public function testNot(): void
     {
         $not = $this->a->not();
 

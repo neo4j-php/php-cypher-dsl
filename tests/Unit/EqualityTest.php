@@ -34,7 +34,7 @@ class EqualityTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
+    public function testToQuery(): void
     {
         $equality = new Equality($this->getQueryConvertableMock(PropertyType::class, "10"), $this->getQueryConvertableMock(PropertyType::class, "15"));
 
@@ -45,7 +45,18 @@ class EqualityTest extends TestCase
         $this->assertSame("((10 = 15) = (10 = 15))", $equality->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands()
+    public function testToQueryNoParentheses(): void
+    {
+        $equality = new Equality($this->getQueryConvertableMock(PropertyType::class, "10"), $this->getQueryConvertableMock(PropertyType::class, "15"), false);
+
+        $this->assertSame("10 = 15", $equality->toQuery());
+
+        $equality = new Equality($equality, $equality);
+
+        $this->assertSame("(10 = 15 = 10 = 15)", $equality->toQuery());
+    }
+
+    public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 

@@ -58,6 +58,26 @@ class OrderByClause extends Clause
     }
 
     /**
+     * Returns the properties to order.
+     *
+     * @return Property[]
+     */
+    public function getProperties(): array
+    {
+        return $this->properties;
+    }
+
+    /**
+     * Returns whether the ordering is in descending order.
+     *
+     * @return bool
+     */
+    public function isDescending(): bool
+    {
+        return $this->descending;
+    }
+
+    /**
      * Set to sort in a DESCENDING order.
      *
      * @param bool $descending

@@ -34,7 +34,7 @@ class SubtractionTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
+    public function testToQuery(): void
     {
         $subtraction = new Subtraction($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
@@ -45,7 +45,18 @@ class SubtractionTest extends TestCase
         $this->assertSame("((10 - 15) - (10 - 15))", $subtraction->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands()
+    public function testToQueryNoParentheses(): void
+    {
+        $subtraction = new Subtraction($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"), false);
+
+        $this->assertSame("10 - 15", $subtraction->toQuery());
+
+        $subtraction = new Subtraction($subtraction, $subtraction);
+
+        $this->assertSame("(10 - 15 - 10 - 15)", $subtraction->toQuery());
+    }
+
+    public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 
