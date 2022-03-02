@@ -34,14 +34,21 @@ class EndsWithTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
+    public function testToQuery(): void
     {
         $endsWith = new EndsWith($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
 
         $this->assertSame("(a ENDS WITH b)", $endsWith->toQuery());
     }
 
-    public function testCannotBeNested()
+    public function testToQueryNoParentheses(): void
+    {
+        $endsWith = new EndsWith($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"), false);
+
+        $this->assertSame("a ENDS WITH b", $endsWith->toQuery());
+    }
+
+    public function testCannotBeNested(): void
     {
         $endsWith = new EndsWith($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
 
@@ -52,7 +59,7 @@ class EndsWithTest extends TestCase
         $endsWith->toQuery();
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands()
+    public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 

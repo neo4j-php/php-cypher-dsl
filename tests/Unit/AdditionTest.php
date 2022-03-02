@@ -34,18 +34,35 @@ class AdditionTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
+    public function testToQuery(): void
     {
-        $addition = new Addition($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
+        $left = $this->getQueryConvertableMock(NumeralType::class, "10");
+        $right = $this->getQueryConvertableMock(NumeralType::class, "15");
+        $addition = new Addition($left, $right);
 
         $this->assertSame("(10 + 15)", $addition->toQuery());
 
-        $addition = new Addition($addition, $addition);
+        $this->assertEquals($left, $addition->getLeft());
+        $this->assertEquals($right, $addition->getRight());
 
-        $this->assertSame("((10 + 15) + (10 + 15))", $addition->toQuery());
+        $newAddition = new Addition($addition, $addition);
+
+        $this->assertSame("((10 + 15) + (10 + 15))", $newAddition->toQuery());
+
+        $this->assertTrue($newAddition->insertsParentheses());
+        $this->assertEquals($addition, $newAddition->getLeft());
+        $this->assertEquals($addition, $newAddition->getRight());
+
+        $newAddition = new Addition($addition, $addition, false);
+
+        $this->assertSame("(10 + 15) + (10 + 15)", $newAddition->toQuery());
+
+        $this->assertFalse($newAddition->insertsParentheses());
+        $this->assertEquals($addition, $newAddition->getLeft());
+        $this->assertEquals($addition, $newAddition->getRight());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands()
+    public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 

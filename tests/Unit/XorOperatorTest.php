@@ -34,7 +34,7 @@ class XorOperatorTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
+    public function testToQuery(): void
     {
         $xor = new XorOperator($this->getQueryConvertableMock(BooleanType::class, "true"), $this->getQueryConvertableMock(BooleanType::class, "false"));
 
@@ -45,7 +45,18 @@ class XorOperatorTest extends TestCase
         $this->assertSame("((true XOR false) XOR (true XOR false))", $xor->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands()
+    public function testToQueryNoParentheses(): void
+    {
+        $xor = new XorOperator($this->getQueryConvertableMock(BooleanType::class, "true"), $this->getQueryConvertableMock(BooleanType::class, "false"), false);
+
+        $this->assertSame("true XOR false", $xor->toQuery());
+
+        $xor = new XorOperator($xor, $xor);
+
+        $this->assertSame("(true XOR false XOR true XOR false)", $xor->toQuery());
+    }
+
+    public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 
