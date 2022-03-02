@@ -35,25 +35,28 @@ interface BooleanType extends PropertyType
      * Create a conjunction between this expression and the given expression.
      *
      * @param BooleanType $right
+     * @param bool $insertParentheses
      * @return AndOperator
      */
-    public function and(BooleanType $right): AndOperator;
+    public function and(BooleanType $right, bool $insertParentheses = true): AndOperator;
 
     /**
      * Create a disjunction between this expression and the given expression.
      *
      * @param BooleanType $right
+     * @param bool $insertParentheses
      * @return OrOperator
      */
-    public function or(BooleanType $right): OrOperator;
+    public function or(BooleanType $right, bool $insertParentheses = true): OrOperator;
 
     /**
      * Perform an XOR with the given expression.
      *
      * @param BooleanType $right
+     * @param bool $insertParentheses
      * @return XorOperator
      */
-    public function xor(BooleanType $right): XorOperator;
+    public function xor(BooleanType $right, bool $insertParentheses = true): XorOperator;
 
     /**
      * Negate this expression (using the NOT operator).
