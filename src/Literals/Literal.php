@@ -24,6 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Literals;
 use InvalidArgumentException;
 use WikibaseSolutions\CypherDSL\Functions\FunctionCall;
 use WikibaseSolutions\CypherDSL\Query;
+use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
@@ -135,33 +136,11 @@ abstract class Literal
      */
     public static function dateYMD($year, $month = null, $day = null): DateType
     {
-        if ($month === null && $day !== null) {
-            throw new \LogicException("If \$month is omitted, \$day must also be omitted");
-        }
-
-        if (!($year instanceof NumeralType)) {
-            $year = self::decimal($year);
-        }
-
-        $map = ["year" => $year];
-
-        if ($month !== null) {
-            if (!($month instanceof NumeralType)) {
-                $month = self::decimal($month);
-            }
-
-            $map["month"] = $month;
-        }
-
-        if ($day !== null) {
-            if (!($day instanceof NumeralType)) {
-                $day = self::decimal($day);
-            }
-
-            $map["day"] = $day;
-        }
-
-        return FunctionCall::date(Query::map($map));
+        return FunctionCall::date(self::makeTemporalMap([
+            "year" => $year,
+            "month" => $month,
+            "day" => $day,
+        ]));
     }
 
     /**
@@ -176,33 +155,11 @@ abstract class Literal
      */
     public static function dateYWD($year, $week = null, $weekday = null): DateType
     {
-        if ($week === null && $weekday !== null) {
-            throw new \LogicException("If \$week is omitted, \$weekday must also be omitted");
-        }
-
-        if (!($year instanceof NumeralType)) {
-            $year = self::decimal($year);
-        }
-
-        $map = ["year" => $year];
-
-        if ($week !== null) {
-            if (!($week instanceof NumeralType)) {
-                $week = self::decimal($week);
-            }
-
-            $map["week"] = $week;
-        }
-
-        if ($weekday !== null) {
-            if (!($weekday instanceof NumeralType)) {
-                $weekday = self::decimal($weekday);
-            }
-
-            $map["dayOfWeek"] = $weekday;
-        }
-
-        return FunctionCall::date(Query::map($map));
+        return FunctionCall::date(self::makeTemporalMap([
+            "year" => $year,
+            "week" => $week,
+            "dayOfWeek" => $weekday,
+        ]));
     }
 
     /**
@@ -273,64 +230,18 @@ abstract class Literal
         $nanosecond = null,
         $timezone = null
     ): DateTimeType {
-        $variables = self::checkOrderAndConvertToNumeral([
-            "month"=> $month,
+        return FunctionCall::datetime(self::makeTemporalMap([
+            "year" => $year,
+            "month" => $month,
             "day" => $day,
             "hour" => $hour,
             "minute" => $minute,
             "second" => $second,
             "millisecond" => $millisecond,
             "microsecond" => $microsecond,
-            "nanosecond" => $nanosecond
-        ]);
-
-        if (!($year instanceof NumeralType)) {
-            $year = self::decimal($year);
-        }
-
-        $map = ["year" => $year];
-
-        if (isset($variables["month"])) {
-            $map["month"] = $variables["month"];
-        }
-
-        if (isset($variables["day"])) {
-            $map["day"] = $variables["day"];
-        }
-
-        if (isset($variables["hour"])) {
-            $map["hour"] = $variables["hour"];
-        }
-
-        if (isset($variables["minute"])) {
-            $map["minute"] = $variables["minute"];
-        }
-
-        if (isset($variables["second"])) {
-            $map["second"] = $variables["second"];
-        }
-
-        if (isset($variables["millisecond"])) {
-            $map["millisecond"] = $variables["millisecond"];
-        }
-
-        if (isset($variables["microsecond"])) {
-            $map["microsecond"] = $variables["microsecond"];
-        }
-
-        if (isset($variables["nanosecond"])) {
-            $map["nanosecond"] = $variables["nanosecond"];
-        }
-
-        if ($timezone !== null) {
-            if (!($timezone instanceof StringType)) {
-                $timezone = self::string($timezone);
-            }
-
-            $map["timezone"] = $timezone;
-        }
-
-        return FunctionCall::datetime(Query::map($map));
+            "nanosecond" => $nanosecond,
+            "timezone" => $timezone
+        ]));
     }
 
     /**
@@ -362,7 +273,8 @@ abstract class Literal
         $nanosecond = null,
         $timezone = null
     ): DateTimeType {
-        $variables = self::checkOrderAndConvertToNumeral([
+        return FunctionCall::datetime(self::makeTemporalMap([
+            "year" => $year,
             "week" => $week,
             "dayOfWeek" => $dayOfWeek,
             "hour" => $hour,
@@ -370,56 +282,9 @@ abstract class Literal
             "second" => $second,
             "millisecond" => $millisecond,
             "microsecond" => $microsecond,
-            "nanosecond" => $nanosecond
-        ]);
-
-        if (!($year instanceof NumeralType)) {
-            $year = self::decimal($year);
-        }
-
-        $map = ["year" => $year];
-
-        if (isset($variables["week"])) {
-            $map["week"] = $variables["week"];
-        }
-
-        if (isset($variables["dayOfWeek"])) {
-            $map["dayOfWeek"] = $variables["dayOfWeek"];
-        }
-
-        if (isset($variables["hour"])) {
-            $map["hour"] = $variables["hour"];
-        }
-
-        if (isset($variables["minute"])) {
-            $map["minute"] = $variables["minute"];
-        }
-
-        if (isset($variables["second"])) {
-            $map["second"] = $variables["second"];
-        }
-
-        if (isset($variables["millisecond"])) {
-            $map["millisecond"] = $variables["millisecond"];
-        }
-
-        if (isset($variables["microsecond"])) {
-            $map["microsecond"] = $variables["microsecond"];
-        }
-
-        if (isset($variables["nanosecond"])) {
-            $map["nanosecond"] = $variables["nanosecond"];
-        }
-
-        if ($timezone !== null) {
-            if (!($timezone instanceof StringType)) {
-                $timezone = self::string($timezone);
-            }
-
-            $map["timezone"] = $timezone;
-        }
-
-        return FunctionCall::datetime(Query::map($map));
+            "nanosecond" => $nanosecond,
+            "timezone" => $timezone,
+        ]));
     }
 
     /**
@@ -451,7 +316,8 @@ abstract class Literal
         $nanosecond = null,
         $timezone = null
     ): DateTimeType {
-        $variables = self::checkOrderAndConvertToNumeral([
+        return FunctionCall::datetime(self::makeTemporalMap([
+            "year" => $year,
             "quarter" => $quarter,
             "dayOfQuarter" => $dayOfQuarter,
             "hour" => $hour,
@@ -459,56 +325,9 @@ abstract class Literal
             "second" => $second,
             "millisecond" => $millisecond,
             "microsecond" => $microsecond,
-            "nanosecond" => $nanosecond
-        ]);
-
-        if (!($year instanceof NumeralType)) {
-            $year = self::decimal($year);
-        }
-
-        $map = ["year" => $year];
-
-        if (isset($variables["quarter"])) {
-            $map["quarter"] = $variables["quarter"];
-        }
-
-        if (isset($variables["dayOfQuarter"])) {
-            $map["dayOfQuarter"] = $variables["dayOfQuarter"];
-        }
-
-        if (isset($variables["hour"])) {
-            $map["hour"] = $variables["hour"];
-        }
-
-        if (isset($variables["minute"])) {
-            $map["minute"] = $variables["minute"];
-        }
-
-        if (isset($variables["second"])) {
-            $map["second"] = $variables["second"];
-        }
-
-        if (isset($variables["millisecond"])) {
-            $map["millisecond"] = $variables["millisecond"];
-        }
-
-        if (isset($variables["microsecond"])) {
-            $map["microsecond"] = $variables["microsecond"];
-        }
-
-        if (isset($variables["nanosecond"])) {
-            $map["nanosecond"] = $variables["nanosecond"];
-        }
-
-        if ($timezone !== null) {
-            if (!($timezone instanceof StringType)) {
-                $timezone = self::string($timezone);
-            }
-
-            $map["timezone"] = $timezone;
-        }
-
-        return FunctionCall::datetime(Query::map($map));
+            "nanosecond" => $nanosecond,
+            "timezone"   => $timezone,
+        ]));
     }
 
     /**
@@ -538,59 +357,17 @@ abstract class Literal
         $nanosecond = null,
         $timezone = null
     ): DateTimeType {
-        $variables = self::checkOrderAndConvertToNumeral([
+        return FunctionCall::datetime(self::makeTemporalMap([
+            "year" => $year,
             "ordinalDay" => $ordinalDay,
             "hour" => $hour,
             "minute" => $minute,
             "second" => $second,
             "millisecond" => $millisecond,
             "microsecond" => $microsecond,
-            "nanosecond" => $nanosecond
-        ]);
-
-        if (!($year instanceof NumeralType)) {
-            $year = self::decimal($year);
-        }
-
-        $map = ["year" => $year];
-
-        if (isset($variables["ordinalDay"])) {
-            $map["ordinalDay"] = $variables["ordinalDay"];
-        }
-
-        if (isset($variables["hour"])) {
-            $map["hour"] = $variables["hour"];
-        }
-
-        if (isset($variables["minute"])) {
-            $map["minute"] = $variables["minute"];
-        }
-
-        if (isset($variables["second"])) {
-            $map["second"] = $variables["second"];
-        }
-
-        if (isset($variables["millisecond"])) {
-            $map["millisecond"] = $variables["millisecond"];
-        }
-
-        if (isset($variables["microsecond"])) {
-            $map["microsecond"] = $variables["microsecond"];
-        }
-
-        if (isset($variables["nanosecond"])) {
-            $map["nanosecond"] = $variables["nanosecond"];
-        }
-
-        if ($timezone !== null) {
-            if (!($timezone instanceof StringType)) {
-                $timezone = self::string($timezone);
-            }
-
-            $map["timezone"] = $timezone;
-        }
-
-        return FunctionCall::datetime(Query::map($map));
+            "nanosecond" => $nanosecond,
+            "timezone"   => $timezone,
+        ]));
     }
 
     /**
@@ -654,7 +431,8 @@ abstract class Literal
         $microsecond = null,
         $nanosecond = null
     ): LocalDateTimeType {
-        $variables = self::checkOrderAndConvertToNumeral([
+        return FunctionCall::localdatetime(self::makeTemporalMap([
+            "year" => $year,
             "month" => $month,
             "day" => $day,
             "hour" => $hour,
@@ -663,47 +441,7 @@ abstract class Literal
             "millisecond" => $millisecond,
             "microsecond" => $microsecond,
             "nanosecond" => $nanosecond
-        ]);
-
-        if (!($year instanceof NumeralType)) {
-            $year = self::decimal($year);
-        }
-
-        $map = ["year" => $year];
-
-        if (isset($variables["month"])) {
-            $map["month"] = $variables["month"];
-        }
-
-        if (isset($variables["day"])) {
-            $map["day"] = $variables["day"];
-        }
-
-        if (isset($variables["hour"])) {
-            $map["hour"] = $variables["hour"];
-        }
-
-        if (isset($variables["minute"])) {
-            $map["minute"] = $variables["minute"];
-        }
-
-        if (isset($variables["second"])) {
-            $map["second"] = $variables["second"];
-        }
-
-        if (isset($variables["millisecond"])) {
-            $map["millisecond"] = $variables["millisecond"];
-        }
-
-        if (isset($variables["microsecond"])) {
-            $map["microsecond"] = $variables["microsecond"];
-        }
-
-        if (isset($variables["nanosecond"])) {
-            $map["nanosecond"] = $variables["nanosecond"];
-        }
-
-        return FunctionCall::localdatetime(Query::map($map));
+        ]));
     }
 
     /**
@@ -734,7 +472,8 @@ abstract class Literal
         $microsecond = null,
         $nanosecond = null
     ): LocalDateTimeType {
-        $variables = self::checkOrderAndConvertToNumeral([
+        return FunctionCall::localdatetime(self::makeTemporalMap([
+            "year" => $year,
             "week" => $week,
             "dayOfWeek" => $dayOfWeek,
             "hour" => $hour,
@@ -743,47 +482,7 @@ abstract class Literal
             "millisecond" => $millisecond,
             "microsecond" => $microsecond,
             "nanosecond" => $nanosecond
-        ]);
-
-        if (!($year instanceof NumeralType)) {
-            $year = self::decimal($year);
-        }
-
-        $map = ["year" => $year];
-
-        if (isset($variables["week"])) {
-            $map["week"] = $variables["week"];
-        }
-
-        if (isset($variables["dayOfWeek"])) {
-            $map["dayOfWeek"] = $variables["dayOfWeek"];
-        }
-
-        if (isset($variables["hour"])) {
-            $map["hour"] = $variables["hour"];
-        }
-
-        if (isset($variables["minute"])) {
-            $map["minute"] = $variables["minute"];
-        }
-
-        if (isset($variables["second"])) {
-            $map["second"] = $variables["second"];
-        }
-
-        if (isset($variables["millisecond"])) {
-            $map["millisecond"] = $variables["millisecond"];
-        }
-
-        if (isset($variables["microsecond"])) {
-            $map["microsecond"] = $variables["microsecond"];
-        }
-
-        if (isset($variables["nanosecond"])) {
-            $map["nanosecond"] = $variables["nanosecond"];
-        }
-
-        return FunctionCall::localdatetime(Query::map($map));
+        ]));
     }
 
     /**
@@ -813,7 +512,8 @@ abstract class Literal
         $microsecond = null,
         $nanosecond = null
     ): LocalDateTimeType {
-        $variables = self::checkOrderAndConvertToNumeral([
+        return FunctionCall::localdatetime(self::MakeTemporalMap([
+            "year" => $year,
             "quarter" => $quarter,
             "dayOfQuarter" => $dayOfQuarter,
             "hour" => $hour,
@@ -822,47 +522,7 @@ abstract class Literal
             "millisecond" => $millisecond,
             "microsecond" => $microsecond,
             "nanosecond" => $nanosecond
-        ]);
-
-        if (!($year instanceof NumeralType)) {
-            $year = self::decimal($year);
-        }
-
-        $map = ["year" => $year];
-
-        if (isset($variables["quarter"])) {
-            $map["quarter"] = $variables["quarter"];
-        }
-
-        if (isset($variables["dayOfQuarter"])) {
-            $map["dayOfQuarter"] = $variables["dayOfQuarter"];
-        }
-
-        if (isset($variables["hour"])) {
-            $map["hour"] = $variables["hour"];
-        }
-
-        if (isset($variables["minute"])) {
-            $map["minute"] = $variables["minute"];
-        }
-
-        if (isset($variables["second"])) {
-            $map["second"] = $variables["second"];
-        }
-
-        if (isset($variables["millisecond"])) {
-            $map["millisecond"] = $variables["millisecond"];
-        }
-
-        if (isset($variables["microsecond"])) {
-            $map["microsecond"] = $variables["microsecond"];
-        }
-
-        if (isset($variables["nanosecond"])) {
-            $map["nanosecond"] = $variables["nanosecond"];
-        }
-
-        return FunctionCall::localdatetime(Query::map($map));
+        ]));
     }
 
     /**
@@ -890,7 +550,8 @@ abstract class Literal
         $microsecond = null,
         $nanosecond = null
     ): LocalDateTimeType {
-        $variables = self::checkOrderAndConvertToNumeral([
+        return FunctionCall::localdatetime(self::makeTemporalMap([
+            "year" => $year,
             "ordinalDay" => $ordinalDay,
             "hour" => $hour,
             "minute" => $minute,
@@ -898,43 +559,7 @@ abstract class Literal
             "millisecond" => $millisecond,
             "microsecond" => $microsecond,
             "nanosecond" => $nanosecond
-        ]);
-
-        if (!($year instanceof NumeralType)) {
-            $year = self::decimal($year);
-        }
-
-        $map = ["year" => $year];
-
-        if (isset($variables["ordinalDay"])) {
-            $map["ordinalDay"] = $variables["ordinalDay"];
-        }
-
-        if (isset($variables["hour"])) {
-            $map["hour"] = $variables["hour"];
-        }
-
-        if (isset($variables["minute"])) {
-            $map["minute"] = $variables["minute"];
-        }
-
-        if (isset($variables["second"])) {
-            $map["second"] = $variables["second"];
-        }
-
-        if (isset($variables["millisecond"])) {
-            $map["millisecond"] = $variables["millisecond"];
-        }
-
-        if (isset($variables["microsecond"])) {
-            $map["microsecond"] = $variables["microsecond"];
-        }
-
-        if (isset($variables["nanosecond"])) {
-            $map["nanosecond"] = $variables["nanosecond"];
-        }
-
-        return FunctionCall::localdatetime(Query::map($map));
+        ]));
     }
 
     /**
@@ -995,41 +620,14 @@ abstract class Literal
         $microsecond = null,
         $nanosecond = null
     ): LocalTimeType {
-        $variables = self::checkOrderAndConvertToNumeral([
+        return FunctionCall::localtime(self::makeTemporalMap([
+            "hour" => $hour,
             "minute" => $minute,
             "second" => $second,
             "millisecond" => $millisecond,
             "microsecond" => $microsecond,
             "nanosecond" => $nanosecond
-        ]);
-
-        if (!($hour instanceof NumeralType)) {
-            $hour = self::decimal($hour);
-        }
-
-        $map = ["hour" => $hour];
-
-        if (isset($variables["minute"])) {
-            $map["minute"] = $variables["minute"];
-        }
-
-        if (isset($variables["second"])) {
-            $map["second"] = $variables["second"];
-        }
-
-        if (isset($variables["millisecond"])) {
-            $map["millisecond"] = $variables["millisecond"];
-        }
-
-        if (isset($variables["microsecond"])) {
-            $map["microsecond"] = $variables["microsecond"];
-        }
-
-        if (isset($variables["nanosecond"])) {
-            $map["nanosecond"] = $variables["nanosecond"];
-        }
-
-        return FunctionCall::localtime(Query::map($map));
+        ]));
     }
 
     /**
@@ -1091,49 +689,15 @@ abstract class Literal
         $nanosecond = null,
         $timezone = null
     ): TimeType {
-        $variables = self::checkOrderAndConvertToNumeral([
+        return FunctionCall::time(self::makeTemporalMap([
+            "hour" => $hour,
             "minute" => $minute,
             "second" => $second,
             "millisecond" => $millisecond,
             "microsecond" => $microsecond,
-            "nanosecond" => $nanosecond
-        ]);
-
-        if (!($hour instanceof NumeralType)) {
-            $hour = self::decimal($hour);
-        }
-
-        $map = ["hour" => $hour];
-
-        if (isset($variables["minute"])) {
-            $map["minute"] = $variables["minute"];
-        }
-
-        if (isset($variables["second"])) {
-            $map["second"] = $variables["second"];
-        }
-
-        if (isset($variables["millisecond"])) {
-            $map["millisecond"] = $variables["millisecond"];
-        }
-
-        if (isset($variables["microsecond"])) {
-            $map["microsecond"] = $variables["microsecond"];
-        }
-
-        if (isset($variables["nanosecond"])) {
-            $map["nanosecond"] = $variables["nanosecond"];
-        }
-
-        if ($timezone !== null) {
-            if (!($timezone instanceof StringType)) {
-                $timezone = self::string($timezone);
-            }
-
-            $map["timezone"] = $timezone;
-        }
-
-        return FunctionCall::time(Query::map($map));
+            "nanosecond" => $nanosecond,
+            "timezone" => $timezone
+        ]));
     }
 
     /**
@@ -1286,33 +850,62 @@ abstract class Literal
     }
 
     /**
-     * Checks the order of the array items, and converts the items to NumeralType.
+     * Prepares the variables to be used by temporal (i.e. time-like) CYPHER-functions.
+     *
+     * The following are done:
+     * - For all $variables except for the 'timezone' it is checked if any one of them exists without the previous variable existing, up to & including the 'second' variable.
+     * - If a 'second' variable is encountered, it is checked if 'seconds' is not-null when milliseconds/microseconds/nanoseconds are provided.
+     * - All variables except 'timezone' are made into NumeralType.
+     * - 'timezone' is made into StringLiteral.
      *
      * @param array $variables
-     * @return array
+     * @return Map
      */
-    private static function checkOrderAndConvertToNumeral(array $variables): array
+    private static function makeTemporalMap(array $variables): PropertyMap
     {
-        $previousExists = true;
+        $map = [];
+
+        $nullEncountered = false;
+        $secondsFound = false;
 
         foreach ($variables as $key => $variable) {
-            $currentExists = $variable !== null;
-
-            // Only the least significant components may be omitted; check whether this is the case
-            if ($currentExists === true && $previousExists === false) {
-                throw new \LogicException("Only the least significant components may be omitted");
+            if ($variable === null) {
+                $nullEncountered = true;
+                continue;
             }
 
-            // Check if variable has been set and convert always to NumeralType
-            if ($currentExists) {
-                if (!($variable instanceof NumeralType)) {
-                    $variables[$key] = self::decimal($variable);
+            if ($key === 'timezone') {
+                // Timezone can always be added, and is a string.
+                $map[$key] = self::convertToString($variable);
+            } else {
+                if (!$secondsFound && $nullEncountered) {
+                    // Check if none of the previous, i.e. more important components, are null.
+                    // sub-second values are not interdependend, but seconds must then be provided.
+                    throw new \LogicException("The key $key can only be provided when all more significant components are provided as well.");
                 }
-            }
 
-            $previousExists = $variable !== null;
+                if ($key === 'second') {
+                    $secondsFound = true;
+                }
+
+                $map[$key] = self::convertToNumeral($variable);
+            }
         }
 
-        return $variables;
+        return Query::map($map);
+    }
+
+    private static function convertToNumeral($var) : NumeralType {
+        if ($var instanceof NumeralType) {
+            return $var;
+        }
+        return self::decimal($var);
+    }
+
+    private static function convertToString($var) : StringLiteral {
+        if ($var instanceof StringLiteral) {
+            return $var;
+        }
+        return self::string($var);
     }
 }
