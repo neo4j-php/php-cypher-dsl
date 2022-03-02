@@ -74,10 +74,11 @@ trait StringTypeTrait
      * Perform a regex comparison with the given expression.
      *
      * @param StringType $right
+     * @param bool $insertParentheses
      * @return Regex
      */
-    public function regex(StringType $right): Regex
+    public function regex(StringType $right, bool $insertParentheses = true): Regex
     {
-        return new Regex($this, $right);
+        return new Regex($this, $right, $insertParentheses);
     }
 }
