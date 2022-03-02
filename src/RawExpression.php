@@ -97,6 +97,16 @@ class RawExpression implements
     }
 
     /**
+     * Returns the RAW expression.
+     *
+     * @return string
+     */
+    public function getExpression(): string
+    {
+        return $this->expression;
+    }
+
+    /**
      * @inheritDoc
      */
     public function toQuery(): string

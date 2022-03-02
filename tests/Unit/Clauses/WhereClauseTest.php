@@ -33,14 +33,15 @@ class WhereClauseTest extends TestCase
 {
     use TestHelper;
 
-    public function testEmptyClause()
+    public function testEmptyClause(): void
     {
         $where = new WhereClause();
 
         $this->assertSame("", $where->toQuery());
+        $this->assertNull($where->getExpression());
     }
 
-    public function testExpression()
+    public function testExpression(): void
     {
         $where = new WhereClause();
         $expression = $this->getQueryConvertableMock(AnyType::class, "(a)");
@@ -48,12 +49,13 @@ class WhereClauseTest extends TestCase
         $where->setExpression($expression);
 
         $this->assertSame("WHERE (a)", $where->toQuery());
+        $this->assertEquals($expression, $where->getExpression());
     }
 
     /**
      * @doesNotPerformAssertions
      */
-    public function testAcceptsAnyType()
+    public function testAcceptsAnyType(): void
     {
         $where = new WhereClause();
         $expression = $this->getQueryConvertableMock(AnyType::class, "(a)");

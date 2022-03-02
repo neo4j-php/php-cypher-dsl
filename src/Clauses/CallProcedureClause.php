@@ -37,7 +37,7 @@ class CallProcedureClause extends Clause
     /**
      * @var string|null The procedure to call
      */
-    private ?string $procedure;
+    private ?string $procedure = null;
 
     /**
      * @var AnyType[] The arguments passed to the procedure
@@ -64,6 +64,36 @@ class CallProcedureClause extends Clause
         $this->procedure = $procedure;
 
         return $this;
+    }
+
+    /**
+     * Returns the variables to yield.
+     *
+     * @return Variable[]
+     */
+    public function getYieldVariables(): array
+    {
+        return $this->yieldVariables;
+    }
+
+    /**
+     * Returns the procedure to call.
+     *
+     * @return string|null
+     */
+    public function getProcedure(): ?string
+    {
+        return $this->procedure;
+    }
+
+    /**
+     * Returns the arguments of the procedure.
+     *
+     * @return AnyType[]
+     */
+    public function getArguments(): array
+    {
+        return $this->arguments;
     }
 
     /**

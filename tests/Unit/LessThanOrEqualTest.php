@@ -35,14 +35,21 @@ class LessThanOrEqualTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
+    public function testToQuery(): void
     {
         $lessThanOrEqual = new LessThanOrEqual($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
         $this->assertSame("(10 <= 15)", $lessThanOrEqual->toQuery());
     }
 
-    public function testCannotBeNested()
+    public function testToQueryNoParentheses(): void
+    {
+        $lessThanOrEqual = new LessThanOrEqual($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"), false);
+
+        $this->assertSame("10 <= 15", $lessThanOrEqual->toQuery());
+    }
+
+    public function testCannotBeNested(): void
     {
         $lessThanOrEqual = new LessThanOrEqual($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
@@ -53,7 +60,7 @@ class LessThanOrEqualTest extends TestCase
         $this->assertSame("((10 <= 15) <= (10 <= 15))", $lessThanOrEqual->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands()
+    public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 

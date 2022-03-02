@@ -37,9 +37,9 @@ class Regex extends BinaryOperator implements BooleanType
     /**
      * @inheritDoc
      */
-    public function __construct(StringType $left, StringType $right)
+    public function __construct(StringType $left, StringType $right, bool $insertParentheses = true)
     {
-        parent::__construct($left, $right);
+        parent::__construct($left, $right, $insertParentheses);
     }
 
     /**

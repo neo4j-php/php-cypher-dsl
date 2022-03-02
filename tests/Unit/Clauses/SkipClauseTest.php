@@ -24,6 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\LimitClause;
+use WikibaseSolutions\CypherDSL\Clauses\SkipClause;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
@@ -31,49 +32,51 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\LimitClause
  */
-class LimitClauseTest extends TestCase
+class SkipClauseTest extends TestCase
 {
     use TestHelper;
 
     public function testEmptyClause(): void
     {
-        $limit = new LimitClause();
+        $skip = new SkipClause();
 
-        $this->assertSame("", $limit->toQuery());
-        $this->assertNull($limit->getLimit());
+        $this->assertSame("", $skip->toQuery());
+        $this->assertNull($skip->getSkip());
     }
 
     public function testPattern(): void
     {
-        $limit = new LimitClause();
+        $skip = new SkipClause();
         $expression = $this->getQueryConvertableMock(NumeralType::class, "10");
 
-        $limit->setLimit($expression);
+        $skip->setSkip($expression);
 
-        $this->assertSame("LIMIT 10", $limit->toQuery());
-        $this->assertEquals($expression, $limit->getLimit());
+        $this->assertSame("SKIP 10", $skip->toQuery());
+        $this->assertEquals($expression, $skip->getSkip());
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testAcceptsNumeralType(): void
     {
-        $limit = new LimitClause();
+        $skip = new SkipClause();
         $expression = $this->getQueryConvertableMock(NumeralType::class, "10");
 
-        $limit->setLimit($expression);
+        $skip->setSkip($expression);
 
-        $limit->toQuery();
-        $this->assertEquals($expression, $limit->getLimit());
+        $skip->toQuery();
     }
 
     public function testDoesNotAcceptAnyType(): void
     {
-        $limit = new LimitClause();
+        $skip = new SkipClause();
         $expression = $this->getQueryConvertableMock(AnyType::class, "10");
 
         $this->expectException(TypeError::class);
 
-        $limit->setLimit($expression);
+        $skip->setSkip($expression);
 
-        $limit->toQuery();
+        $skip->toQuery();
     }
 }

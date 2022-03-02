@@ -34,14 +34,21 @@ class StartsWithTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
+    public function testToQuery(): void
     {
         $startsWith = new StartsWith($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
 
         $this->assertSame("(a STARTS WITH b)", $startsWith->toQuery());
     }
 
-    public function testCannotBeNested()
+    public function testToQueryNoParentheses(): void
+    {
+        $startsWith = new StartsWith($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"), false);
+
+        $this->assertSame("a STARTS WITH b", $startsWith->toQuery());
+    }
+
+    public function testCannotBeNested(): void
     {
         $startsWith = new StartsWith($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
 
@@ -52,7 +59,7 @@ class StartsWithTest extends TestCase
         $startsWith->toQuery();
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands()
+    public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 

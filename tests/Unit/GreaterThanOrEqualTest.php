@@ -34,14 +34,21 @@ class GreaterThanOrEqualTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
+    public function testToQuery(): void
     {
         $greaterThanOrEqual = new GreaterThanOrEqual($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
         $this->assertSame("(10 >= 15)", $greaterThanOrEqual->toQuery());
     }
 
-    public function testCannotBeNested()
+    public function testToQueryNoParentheses(): void
+    {
+        $greaterThanOrEqual = new GreaterThanOrEqual($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"), false);
+
+        $this->assertSame("10 >= 15", $greaterThanOrEqual->toQuery());
+    }
+
+    public function testCannotBeNested(): void
     {
         $greaterThanOrEqual = new GreaterThanOrEqual($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
@@ -52,7 +59,7 @@ class GreaterThanOrEqualTest extends TestCase
         $greaterThanOrEqual->toQuery();
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands()
+    public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 

@@ -58,6 +58,16 @@ class WithClause extends Clause
     }
 
     /**
+     * Returns the expression to include in the clause.
+     *
+     * @return array
+     */
+    public function getExpressions(): array
+    {
+        return $this->expressions;
+    }
+
+    /**
      * @inheritDoc
      */
     protected function getClause(): string

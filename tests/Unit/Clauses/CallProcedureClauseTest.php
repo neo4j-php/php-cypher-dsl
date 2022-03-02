@@ -35,32 +35,42 @@ class CallProcedureClauseTest extends TestCase
 {
     use TestHelper;
 
-    public function testEmptyClause()
+    public function testEmptyClause(): void
     {
         $callProcedureClause = new CallProcedureClause();
 
         $this->assertSame("", $callProcedureClause->toQuery());
+        $this->assertEquals([], $callProcedureClause->getArguments());
+        $this->assertNull($callProcedureClause->getProcedure());
+        $this->assertEquals([], $callProcedureClause->getYieldVariables());
     }
 
-    public function testZeroArguments()
+    public function testZeroArguments(): void
     {
         $callProcedureClause = new CallProcedureClause();
         $callProcedureClause->setProcedure("apoc.json");
 
         $this->assertSame("CALL apoc.json()", $callProcedureClause->toQuery());
+        $this->assertEquals([], $callProcedureClause->getArguments());
+        $this->assertEquals('apoc.json', $callProcedureClause->getProcedure());
+        $this->assertEquals([], $callProcedureClause->getYieldVariables());
     }
 
-    public function testOneArgument()
+    public function testOneArgument(): void
     {
         $callProcedureClause = new CallProcedureClause();
         $callProcedureClause->setProcedure("apoc.json");
 
-        $callProcedureClause->addArgument($this->getQueryConvertableMock(AnyType::class, "'text'"));
+        $param = $this->getQueryConvertableMock(AnyType::class, "'text'");
+        $callProcedureClause->addArgument($param);
 
         $this->assertSame("CALL apoc.json('text')", $callProcedureClause->toQuery());
+        $this->assertEquals('apoc.json', $callProcedureClause->getProcedure());
+        $this->assertEquals([$param], $callProcedureClause->getArguments());
+        $this->assertEquals([], $callProcedureClause->getYieldVariables());
     }
 
-    public function testMultipleArgument()
+    public function testMultipleArgument(): void
     {
         $callProcedureClause = new CallProcedureClause();
         $callProcedureClause->setProcedure("apoc.json");
@@ -72,9 +82,12 @@ class CallProcedureClauseTest extends TestCase
         $callProcedureClause->addArgument($expression);
 
         $this->assertSame("CALL apoc.json('text', 'text', 'text')", $callProcedureClause->toQuery());
+        $this->assertEquals([$expression, $expression, $expression], $callProcedureClause->getArguments());
+        $this->assertEquals('apoc.json', $callProcedureClause->getProcedure());
+        $this->assertEquals([], $callProcedureClause->getYieldVariables());
     }
 
-    public function testWithArguments()
+    public function testWithArguments(): void
     {
         $callProcedureClause = new CallProcedureClause();
         $callProcedureClause->setProcedure("apoc.json");
@@ -89,9 +102,12 @@ class CallProcedureClauseTest extends TestCase
         $callProcedureClause->withArguments([$expression]);
 
         $this->assertSame("CALL apoc.json('text')", $callProcedureClause->toQuery());
+        $this->assertEquals([$expression], $callProcedureClause->getArguments());
+        $this->assertEquals('apoc.json', $callProcedureClause->getProcedure());
+        $this->assertEquals([], $callProcedureClause->getYieldVariables());
     }
 
-    public function testWithYield()
+    public function testWithYield(): void
     {
         $callProcedureClause = new CallProcedureClause();
 
@@ -105,9 +121,12 @@ class CallProcedureClauseTest extends TestCase
         $callProcedureClause->yields([$a, $b, $c]);
 
         $this->assertSame("CALL apoc.json() YIELD a, b, c", $callProcedureClause->toQuery());
+        $this->assertEquals([], $callProcedureClause->getArguments());
+        $this->assertEquals('apoc.json', $callProcedureClause->getProcedure());
+        $this->assertEquals([$a, $b, $c], $callProcedureClause->getYieldVariables());
     }
 
-    public function testYieldDoesNotAcceptAnyType()
+    public function testYieldDoesNotAcceptAnyType(): void
     {
         $callProcedureClause = new CallProcedureClause();
 
@@ -119,7 +138,7 @@ class CallProcedureClauseTest extends TestCase
         $callProcedureClause->yields([$a]);
     }
 
-    public function testArgumentsOnlyAcceptsAnyType()
+    public function testArgumentsOnlyAcceptsAnyType(): void
     {
         $callProcedureClause = new CallProcedureClause();
 

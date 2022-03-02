@@ -34,7 +34,7 @@ class AndOperatorTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
+    public function testToQuery(): void
     {
         $and = new AndOperator($this->getQueryConvertableMock(BooleanType::class, "true"), $this->getQueryConvertableMock(BooleanType::class, "false"));
 
@@ -45,7 +45,18 @@ class AndOperatorTest extends TestCase
         $this->assertSame("((true AND false) AND (true AND false))", $and->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands()
+    public function testToQueryNoParentheses(): void
+    {
+        $and = new AndOperator($this->getQueryConvertableMock(BooleanType::class, "true"), $this->getQueryConvertableMock(BooleanType::class, "false"), false);
+
+        $this->assertSame("true AND false", $and->toQuery());
+
+        $and = new AndOperator($and, $and);
+
+        $this->assertSame("(true AND false AND true AND false)", $and->toQuery());
+    }
+
+    public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 

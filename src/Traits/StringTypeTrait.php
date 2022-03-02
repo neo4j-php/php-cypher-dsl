@@ -38,43 +38,47 @@ trait StringTypeTrait
      * Check whether this expression the given expression.
      *
      * @param StringType $right
+     * @param bool $insertParentheses
      * @return Contains
      */
-    public function contains(StringType $right): Contains
+    public function contains(StringType $right, bool $insertParentheses = true): Contains
     {
-        return new Contains($this, $right);
+        return new Contains($this, $right, $insertParentheses);
     }
 
     /**
      * Perform a suffix string search with the given expression.
      *
      * @param StringType $right
+     * @param bool $insertParentheses
      * @return EndsWith
      */
-    public function endsWith(StringType $right): EndsWith
+    public function endsWith(StringType $right, bool $insertParentheses = true): EndsWith
     {
-        return new EndsWith($this, $right);
+        return new EndsWith($this, $right, $insertParentheses);
     }
 
     /**
      * Perform a prefix string search with the given expression.
      *
      * @param StringType $right
+     * @param bool $insertParentheses
      * @return StartsWith
      */
-    public function startsWith(StringType $right): StartsWith
+    public function startsWith(StringType $right, bool $insertParentheses = true): StartsWith
     {
-        return new StartsWith($this, $right);
+        return new StartsWith($this, $right, $insertParentheses);
     }
 
     /**
      * Perform a regex comparison with the given expression.
      *
      * @param StringType $right
+     * @param bool $insertParentheses
      * @return Regex
      */
-    public function regex(StringType $right): Regex
+    public function regex(StringType $right, bool $insertParentheses = true): Regex
     {
-        return new Regex($this, $right);
+        return new Regex($this, $right, $insertParentheses);
     }
 }

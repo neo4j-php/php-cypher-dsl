@@ -34,7 +34,7 @@ class ModuloTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery()
+    public function testToQuery(): void
     {
         $modulo = new Modulo($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
 
@@ -45,7 +45,18 @@ class ModuloTest extends TestCase
         $this->assertSame("((10 % 15) % (10 % 15))", $modulo->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands()
+    public function testToQueryNoParentheses(): void
+    {
+        $modulo = new Modulo($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"), false);
+
+        $this->assertSame("10 % 15", $modulo->toQuery());
+
+        $modulo = new Modulo($modulo, $modulo);
+
+        $this->assertSame("(10 % 15 % 10 % 15)", $modulo->toQuery());
+    }
+
+    public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 

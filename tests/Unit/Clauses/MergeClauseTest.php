@@ -39,14 +39,17 @@ class MergeClauseTest extends TestCase
 {
     use TestHelper;
 
-    public function testEmptyClause()
+    public function testEmptyClause(): void
     {
         $merge = new MergeClause();
 
         $this->assertSame("", $merge->toQuery());
+        $this->assertNull($merge->getOnCreateClause());
+        $this->assertNull($merge->getPattern());
+        $this->assertNull($merge->getOnMatchClause());
     }
 
-    public function testPattern()
+    public function testPattern(): void
     {
         $merge = new MergeClause();
         $pattern = $this->getQueryConvertableMock(StructuralType::class, "(a)");
@@ -54,9 +57,12 @@ class MergeClauseTest extends TestCase
         $merge->setPattern($pattern);
 
         $this->assertSame("MERGE (a)", $merge->toQuery());
+        $this->assertNull($merge->getOnCreateClause());
+        $this->assertEquals($pattern, $merge->getPattern());
+        $this->assertNull($merge->getOnMatchClause());
     }
 
-    public function testSetOnCreate()
+    public function testSetOnCreate(): void
     {
         $merge = new MergeClause();
 
@@ -67,9 +73,12 @@ class MergeClauseTest extends TestCase
         $merge->setOnCreate($clause);
 
         $this->assertSame("MERGE (a) ON CREATE SET a = 10", $merge->toQuery());
+        $this->assertEquals($clause, $merge->getOnCreateClause());
+        $this->assertEquals($pattern, $merge->getPattern());
+        $this->assertNull($merge->getOnMatchClause());
     }
 
-    public function testSetOnMatch()
+    public function testSetOnMatch(): void
     {
         $merge = new MergeClause();
 
@@ -80,9 +89,12 @@ class MergeClauseTest extends TestCase
         $merge->setOnMatch($clause);
 
         $this->assertSame("MERGE (a) ON MATCH SET a = 10", $merge->toQuery());
+        $this->assertNull($merge->getOnCreateClause());
+        $this->assertEquals($pattern, $merge->getPattern());
+        $this->assertEquals($clause, $merge->getOnMatchClause());
     }
 
-    public function testSetOnBoth()
+    public function testSetOnBoth(): void
     {
         $merge = new MergeClause();
 
@@ -94,12 +106,15 @@ class MergeClauseTest extends TestCase
         $merge->setOnMatch($clause);
 
         $this->assertSame("MERGE (a) ON CREATE SET a = 10 ON MATCH SET a = 10", $merge->toQuery());
+        $this->assertEquals($clause, $merge->getOnCreateClause());
+        $this->assertEquals($pattern, $merge->getPattern());
+        $this->assertEquals($clause, $merge->getOnMatchClause());
     }
 
     /**
      * @doesNotPerformAssertions
      */
-    public function testAcceptsNodeType()
+    public function testAcceptsNodeType(): void
     {
         $merge = new MergeClause();
         $pattern = $this->getQueryConvertableMock(NodeType::class, "(a)");
@@ -112,7 +127,7 @@ class MergeClauseTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testAcceptsPathType()
+    public function testAcceptsPathType(): void
     {
         $merge = new MergeClause();
         $pattern = $this->getQueryConvertableMock(PathType::class, "(a)");
@@ -125,7 +140,7 @@ class MergeClauseTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testAcceptsAssignment()
+    public function testAcceptsAssignment(): void
     {
         $merge = new MergeClause();
         $pattern = $this->getQueryConvertableMock(Assignment::class, "p = (a)-->(b)");
@@ -135,7 +150,7 @@ class MergeClauseTest extends TestCase
         $merge->toQuery();
     }
 
-    public function testDoesNotAcceptAnyType()
+    public function testDoesNotAcceptAnyType(): void
     {
         $merge = new MergeClause();
         $pattern = $this->getQueryConvertableMock(AnyType::class, "(a)");

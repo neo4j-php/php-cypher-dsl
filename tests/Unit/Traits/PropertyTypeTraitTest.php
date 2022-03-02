@@ -27,6 +27,7 @@ use WikibaseSolutions\CypherDSL\Equality;
 use WikibaseSolutions\CypherDSL\In;
 use WikibaseSolutions\CypherDSL\Inequality;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Traits\PropertyTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
@@ -54,29 +55,81 @@ class PropertyTypeTraitTest extends TestCase
 
     public function setUp(): void
     {
-        $this->a = $this->getQueryConvertableMock(PropertyType::class, "10");
+        $this->a = new class implements PropertyType {
+            use PropertyTypeTrait;
+
+            public function toQuery(): string
+            {
+                return '10';
+            }
+        };
         $this->b = $this->getQueryConvertableMock(PropertyType::class, "15");
         $this->list = $this->getQueryConvertableMock(ListType::class, "['foobar']");
     }
 
-    public function testEquals()
+    public function testEquals(): void
     {
         $equals = $this->a->equals($this->b);
 
         $this->assertInstanceOf(Equality::class, $equals);
+
+        $this->assertTrue($equals->insertsParentheses());
+        $this->assertEquals($this->a, $equals->getLeft());
+        $this->assertEquals($this->b, $equals->getRight());
     }
 
-    public function testNotEquals()
+    public function testEqualsNoParentheses(): void
+    {
+        $equals = $this->a->equals($this->b, false);
+
+        $this->assertInstanceOf(Equality::class, $equals);
+
+        $this->assertFalse($equals->insertsParentheses());
+        $this->assertEquals($this->a, $equals->getLeft());
+        $this->assertEquals($this->b, $equals->getRight());
+    }
+
+    public function testNotEquals(): void
     {
         $notEquals = $this->a->notEquals($this->b);
 
         $this->assertInstanceOf(Inequality::class, $notEquals);
+
+        $this->assertTrue($notEquals->insertsParentheses());
+        $this->assertEquals($this->a, $notEquals->getLeft());
+        $this->assertEquals($this->b, $notEquals->getRight());
     }
 
-    public function testIn()
+    public function testNotEqualsNoParentheses(): void
+    {
+        $notEquals = $this->a->notEquals($this->b, false);
+
+        $this->assertInstanceOf(Inequality::class, $notEquals);
+
+        $this->assertFalse($notEquals->insertsParentheses());
+        $this->assertEquals($this->a, $notEquals->getLeft());
+        $this->assertEquals($this->b, $notEquals->getRight());
+    }
+
+    public function testIn(): void
     {
         $in = $this->a->in($this->list);
 
         $this->assertInstanceOf(In::class, $in);
+
+        $this->assertTrue($in->insertsParentheses());
+        $this->assertEquals($this->a, $in->getLeft());
+        $this->assertEquals($this->list, $in->getRight());
+    }
+
+    public function testInNoParentheses(): void
+    {
+        $in = $this->a->in($this->list, false);
+
+        $this->assertInstanceOf(In::class, $in);
+
+        $this->assertFalse($in->insertsParentheses());
+        $this->assertEquals($this->a, $in->getLeft());
+        $this->assertEquals($this->list, $in->getRight());
     }
 }

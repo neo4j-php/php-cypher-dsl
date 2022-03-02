@@ -42,81 +42,91 @@ interface NumeralType extends PropertyType
      * Add this expression to the given expression.
      *
      * @param NumeralType $right
+     * @param bool $insertParentheses
      * @return Addition
      */
-    public function plus(NumeralType $right): Addition;
+    public function plus(NumeralType $right, bool $insertParentheses = true): Addition;
 
     /**
      * Divide this expression by the given expression.
      *
      * @param NumeralType $right
+     * @param bool $insertParentheses
      * @return Division
      */
-    public function divide(NumeralType $right): Division;
+    public function divide(NumeralType $right, bool $insertParentheses = true): Division;
 
     /**
      * Perform an exponentiation with the given expression.
      *
      * @param NumeralType $right
+     * @param bool $insertParentheses
      * @return Exponentiation
      */
-    public function exponentiate(NumeralType $right): Exponentiation;
+    public function exponentiate(NumeralType $right, bool $insertParentheses = true): Exponentiation;
 
     /**
      * Perform a greater than comparison against the given expression.
      *
      * @param NumeralType $right
+     * @param bool $insertParentheses
      * @return GreaterThan
      */
-    public function gt(NumeralType $right): GreaterThan;
+    public function gt(NumeralType $right, bool $insertParentheses = true): GreaterThan;
 
     /**
      * Perform a greater than or equal comparison against the given expression.
      *
      * @param NumeralType $right
+     * @param bool $insertParentheses
      * @return GreaterThanOrEqual
      */
-    public function gte(NumeralType $right): GreaterThanOrEqual;
+    public function gte(NumeralType $right, bool $insertParentheses = true): GreaterThanOrEqual;
 
     /**
      * Perform a less than comparison against the given expression.
      *
      * @param NumeralType $right
+     * @param bool $insertParentheses
      * @return LessThan
      */
-    public function lt(NumeralType $right): LessThan;
+    public function lt(NumeralType $right, bool $insertParentheses = true): LessThan;
 
     /**
      * Perform a less than or equal comparison against the given expression.
      *
      * @param NumeralType $right
+     * @param bool $insertParentheses
      * @return LessThanOrEqual
      */
-    public function lte(NumeralType $right): LessThanOrEqual;
+    public function lte(NumeralType $right, bool $insertParentheses = true): LessThanOrEqual;
 
     /**
      * Perform the modulo operation with the given expression.
      *
      * @param NumeralType $right
+     * @param bool $insertParentheses
      * @return Modulo
      */
-    public function mod(NumeralType $right): Modulo;
+    public function mod(NumeralType $right, bool $insertParentheses = true): Modulo;
 
     /**
      * Perform a multiplication with the given expression.
      *
      * @param NumeralType $right
+     * @param bool $insertParentheses
      * @return Multiplication
      */
-    public function times(NumeralType $right): Multiplication;
+    public function times(NumeralType $right, bool $insertParentheses = true): Multiplication;
 
     /**
      * Subtract the given expression from this expression.
      *
      * @param NumeralType $right
+     * @param bool $insertParentheses
      * @return Subtraction
      */
-    public function minus(NumeralType $right): Subtraction;
+    public function minus(NumeralType $right, bool $insertParentheses = true): Subtraction;
 
     /**
      * Negate this expression (negate the numeral using "0").
