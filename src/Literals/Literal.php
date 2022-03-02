@@ -1178,7 +1178,6 @@ abstract class Literal
         ];
 
         $map["crs"] = self::string("cartesian");
-        $map["srid"] = self::decimal(7203);
 
         return FunctionCall::point(Query::map($map));
     }
@@ -1214,7 +1213,6 @@ abstract class Literal
         ];
 
         $map["crs"] = self::string("cartesian-3D");
-        $map["srid"] = self::decimal(9157);
 
         return FunctionCall::point(Query::map($map));
     }
@@ -1244,7 +1242,6 @@ abstract class Literal
         ];
 
         $map["crs"] = self::string("WGS-84");
-        $map["srid"] = self::decimal(4326);
 
         return FunctionCall::point(Query::map($map));
     }
@@ -1280,7 +1277,6 @@ abstract class Literal
         ];
 
         $map["crs"] = self::string("WGS-84-3D");
-        $map["srid"] = self::decimal(4979);
 
         return FunctionCall::point(Query::map($map));
     }
