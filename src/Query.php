@@ -397,10 +397,10 @@ class Query implements QueryConvertable
      */
     public function skip(NumeralType $limit): self
     {
-        $limitClause = new SkipClause();
-        $limitClause->setSkip($limit);
+        $skipClause = new SkipClause();
+        $skipClause->setSkip($limit);
 
-        $this->clauses[] = $limitClause;
+        $this->clauses[] = $skipClause;
 
         return $this;
     }
