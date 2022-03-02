@@ -69,22 +69,22 @@ class Path implements PathType
     private array $types = [];
 
     /**
-     * @var ?Variable
+     * @var Variable|null
      */
     private ?Variable $variable;
 
     /**
-     * @var ?int The minimum number of `relationship->node` hops away to search
+     * @var int|null The minimum number of `relationship->node` hops away to search
      */
     private ?int $minHops;
 
     /**
-     * @var ?int The maximum number of `relationship->node` hops away to search
+     * @var int|null The maximum number of `relationship->node` hops away to search
      */
     private ?int $maxHops;
 
     /**
-     * @var ?int The exact number of `relationship->node` hops away to search
+     * @var int|null The exact number of `relationship->node` hops away to search
      */
     private ?int $exactHops;
 
@@ -374,7 +374,7 @@ class Path implements PathType
     /**
      * Returns the exact amount of hops configured.
      *
-     * @return ?int
+     * @return int|null
      */
     public function getExactHops(): ?int
     {
@@ -384,7 +384,7 @@ class Path implements PathType
     /**
      * Returns the maximum amount of hops configured
      *
-     * @return ?int
+     * @return int|null
      */
     public function getMaxHops(): ?int
     {
@@ -394,9 +394,9 @@ class Path implements PathType
     /**
      * Returns the minimum amount of hops configured.
      *
-     * @return ?int
+     * @return int|null
      */
-    public function getMinHops(): int
+    public function getMinHops(): ?int
     {
         return $this->minHops;
     }

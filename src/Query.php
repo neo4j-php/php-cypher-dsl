@@ -121,7 +121,7 @@ class Query implements QueryConvertable
     /**
      * Creates a variable.
      *
-     * @param ?string $variable The name of the variable; leave empty to automatically generate a variable name.
+     * @param string|null $variable The name of the variable; leave empty to automatically generate a variable name.
      * @return Variable
      */
     public static function variable(?string $variable = null): Variable
