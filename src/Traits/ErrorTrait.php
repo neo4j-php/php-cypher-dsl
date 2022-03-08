@@ -37,6 +37,7 @@ trait ErrorTrait
      * @param string $varName The name of the userinput variable, to be used in the error message.
      * @param string|string[] $classNames The classnames that should be tested against
      * @param mixed $userInput The input that should be tested
+     *
      * @throws TypeError
      */
     private function assertClass(string $varName, $classNames, $userInput): void
@@ -54,8 +55,9 @@ trait ErrorTrait
 
     private function assertClassOrType(string $varName, $classOrTypes, $userInput): void
     {
-        $this->assertClass($varName, $classOrTypes, $userInput);
-        $this->assertType($varName, $classOrTypes, $userInput);
+        if (!$this->isClass($classOrTypes, $userInput) && !$this->isType($classOrTypes, $userInput)) {
+            throw new TypeError($this->getTypeErrorText($varName, $classOrTypes, $userInput));
+        }
     }
 
     private function assertType(string $varName, $types, $userInput): void

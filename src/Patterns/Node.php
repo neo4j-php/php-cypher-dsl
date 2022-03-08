@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
+use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\HasPropertiesTrait;
@@ -56,8 +57,6 @@ class Node implements NodeType
         if ($label !== null) {
             $this->labels[] = $label;
         }
-
-        $this->properties = new PropertyMap();
     }
 
     /**
@@ -110,5 +109,10 @@ class Node implements NodeType
         }
 
         return "($nodeInner)";
+    }
+
+    public function property(string $property): Property
+    {
+        return new Property($this->getName(), $property);
     }
 }

@@ -26,14 +26,17 @@ use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\DateTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\HasNameTrait;
+use WikibaseSolutions\CypherDSL\Traits\HasPropertiesTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\LocalTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\PropertyTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\RelationshipTrait;
 use WikibaseSolutions\CypherDSL\Traits\PointTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\StructuralTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TimeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
@@ -77,13 +80,13 @@ class Variable implements
     use ListTypeTrait;
     use LocalDateTimeTrait;
     use LocalTimeTrait;
-    use MapTypeTrait;
     use NumeralTypeTrait;
-    use RelationshipTrait;
+    use StructuralTypeTrait;
     use PointTrait;
     use StringTypeTrait;
     use TimeTrait;
     use HasNameTrait;
+    use MapTypeTrait;
 
     /**
      * @var string The variable
@@ -130,16 +133,6 @@ class Variable implements
     }
 
     /**
-     * Returns the variable name.
-     *
-     * @return string
-     */
-    public function getVariable(): string
-    {
-        return $this->variable;
-    }
-
-    /**
      * Assign a value to this variable.
      *
      * @param AnyType $value The value to assign
@@ -148,6 +141,16 @@ class Variable implements
     public function assign(AnyType $value): Assignment
     {
         return new Assignment($this, $value);
+    }
+
+    public function getName(): string
+    {
+        return $this->variable;
+    }
+
+    public function getVariable(): string
+    {
+        return $this->variable;
     }
 
     /**

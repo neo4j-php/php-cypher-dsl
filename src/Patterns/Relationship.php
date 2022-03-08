@@ -24,15 +24,10 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 use DomainException;
 use InvalidArgumentException;
 use LogicException;
-use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\HasPropertiesTrait;
-use WikibaseSolutions\CypherDSL\Traits\HasVariableTrait;
 use WikibaseSolutions\CypherDSL\Traits\RelationshipTrait;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
-use WikibaseSolutions\CypherDSL\Variable;
 
 /**
  * This class represents an arbitrary relationship between two nodes, a node and a
@@ -40,7 +35,7 @@ use WikibaseSolutions\CypherDSL\Variable;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
  */
-class Relationship implements PathType
+class Relationship implements RelationshipType
 {
     use EscapeTrait;
     use RelationshipTrait;
@@ -85,11 +80,6 @@ class Relationship implements PathType
     private ?int $exactHops = null;
 
     /**
-     * @var MapType|null
-     */
-    private ?MapType $properties = null;
-
-    /**
      * Path constructor.
      *
      * @param StructuralType $left The node left of the relationship
@@ -110,7 +100,6 @@ class Relationship implements PathType
         }
 
         $this->direction = $direction;
-        $this->properties = new PropertyMap();
     }
 
     /**
@@ -332,5 +321,10 @@ class Relationship implements PathType
     public function getTypes(): array
     {
         return $this->types;
+    }
+
+    public function property(string $property): Property
+    {
+        return new Property($this->getName(), $property);
     }
 }

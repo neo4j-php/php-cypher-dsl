@@ -9,10 +9,7 @@ use function is_array;
 
 trait HasPropertiesTrait
 {
-    use ErrorTrait;
-    use MapTypeTrait;
-
-    private PropertyMap $properties;
+    private ?PropertyMap $properties = null;
 
     /**
      * Add the given property to the properties of this node.
@@ -24,6 +21,8 @@ trait HasPropertiesTrait
      */
     public function withProperty(string $key, AnyType $value): self
     {
+        $this->initialiseProperties();
+
         $this->properties->addProperty($key, $value);
 
         return $this;
@@ -40,6 +39,8 @@ trait HasPropertiesTrait
     {
         $this->assertClassOrType('properties', [PropertyMap::class, 'array'], $properties);
 
+        $this->initialiseProperties();
+
         $properties = is_array($properties) ? new PropertyMap($properties) : $properties;
 
         $this->properties->mergeWith($properties);
@@ -47,20 +48,18 @@ trait HasPropertiesTrait
         return $this;
     }
 
-    public function getProperties(): PropertyMap
+    public function getProperties(): ?PropertyMap
     {
         return $this->properties;
     }
 
     /**
-     * Returns the property of the given name for this node. For instance, if this node is "(foo:PERSON)", a function call
-     * like $node->property("bar") would yield "foo.bar".
-     *
-     * @param string $property
-     * @return Property
+     * @return void
      */
-    public function property(string $property): Property
+    private function initialiseProperties(): void
     {
-        return new Property($this->getName(), $property);
+        if ($this->properties === null) {
+            $this->properties = new PropertyMap();
+        }
     }
 }

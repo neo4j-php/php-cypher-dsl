@@ -615,7 +615,7 @@ class RelationshipTest extends TestCase
     public function provideVariableLengthRelationshipsWithNameData(): array
     {
         return [
-            ['', 1, 100, Relationship::DIR_UNI, '(a)-[*1..100]-(b)'],
+            ['b', 1, 100, Relationship::DIR_UNI, '(a)-[b*1..100]-(b)'],
             ['a', 10, null, Relationship::DIR_UNI, '(a)-[a*10..]-(b)'],
             ['a', null, 10, Relationship::DIR_LEFT, '(a)<-[a*..10]-(b)'],
         ];
@@ -644,8 +644,6 @@ class RelationshipTest extends TestCase
         return [
             ['a', 'a', [], 10, 100, Relationship::DIR_LEFT, "(a)<-[a:a*10..100 {}]-(b)"],
             ['b', 'a', [new StringLiteral('a')], null, 10, Relationship::DIR_LEFT, "(a)<-[b:a*..10 {`0`: 'a'}]-(b)"],
-            ['', 'a', ['a' => new StringLiteral('b')], 10, null, Relationship::DIR_LEFT, "(a)<-[:a*10.. {a: 'b'}]-(b)"],
-            [':', 'a', ['a' => new StringLiteral('b'), new StringLiteral('c')], null, null, Relationship::DIR_LEFT, "(a)<-[`:`:a {a: 'b', `0`: 'c'}]-(b)"],
             ['a', 'b', [new StringLiteral('a')], 10, 100, Relationship::DIR_LEFT, "(a)<-[a:b*10..100 {`0`: 'a'}]-(b)"],
             ['a', '', ['a' => new StringLiteral('b')], null, 10, Relationship::DIR_LEFT, "(a)<-[a*..10 {a: 'b'}]-(b)"],
             ['a', ':', ['a' => new StringLiteral('b'), new StringLiteral('c')], 10, null, Relationship::DIR_LEFT, "(a)<-[a:`:`*10.. {a: 'b', `0`: 'c'}]-(b)"]
@@ -655,10 +653,8 @@ class RelationshipTest extends TestCase
     public function provideWithNameData(): array
     {
         return [
-            ['', Relationship::DIR_UNI, '(a)-[]-(b)'],
             ['a', Relationship::DIR_UNI, '(a)-[a]-(b)'],
-            ['a', Relationship::DIR_LEFT, '(a)<-[a]-(b)'],
-            [':', Relationship::DIR_RIGHT, '(a)-[`:`]->(b)']
+            ['a', Relationship::DIR_LEFT, '(a)<-[a]-(b)']
         ];
     }
 
@@ -685,12 +681,8 @@ class RelationshipTest extends TestCase
     public function provideWithNameAndTypeData(): array
     {
         return [
-            ['', '', Relationship::DIR_LEFT, '(a)<-[]-(b)'],
             ['a', '', Relationship::DIR_LEFT, '(a)<-[a]-(b)'],
-            ['', 'a', Relationship::DIR_LEFT, '(a)<-[:a]-(b)'],
             ['a', 'b', Relationship::DIR_LEFT, '(a)<-[a:b]-(b)'],
-            [':', 'b', Relationship::DIR_LEFT, '(a)<-[`:`:b]-(b)'],
-            [':', ':', Relationship::DIR_LEFT, '(a)<-[`:`:`:`]-(b)']
         ];
     }
 
@@ -699,8 +691,6 @@ class RelationshipTest extends TestCase
         return [
             ['a', [], Relationship::DIR_LEFT, "(a)<-[a {}]-(b)"],
             ['b', [new StringLiteral('a')], Relationship::DIR_LEFT, "(a)<-[b {`0`: 'a'}]-(b)"],
-            ['', ['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "(a)<-[{a: 'b'}]-(b)"],
-            [':', ['a' => new StringLiteral('b'), new StringLiteral('c')], Relationship::DIR_LEFT, "(a)<-[`:` {a: 'b', `0`: 'c'}]-(b)"]
         ];
     }
 
@@ -719,8 +709,6 @@ class RelationshipTest extends TestCase
         return [
             ['a', 'a', [], Relationship::DIR_LEFT, "(a)<-[a:a {}]-(b)"],
             ['b', 'a', [new StringLiteral('a')], Relationship::DIR_LEFT, "(a)<-[b:a {`0`: 'a'}]-(b)"],
-            ['', 'a', ['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "(a)<-[:a {a: 'b'}]-(b)"],
-            [':', 'a', ['a' => new StringLiteral('b'), new StringLiteral('c')], Relationship::DIR_LEFT, "(a)<-[`:`:a {a: 'b', `0`: 'c'}]-(b)"],
             ['a', 'b', [new StringLiteral('a')], Relationship::DIR_LEFT, "(a)<-[a:b {`0`: 'a'}]-(b)"],
             ['a', '', ['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "(a)<-[a {a: 'b'}]-(b)"],
             ['a', ':', ['a' => new StringLiteral('b'), new StringLiteral('c')], Relationship::DIR_LEFT, "(a)<-[a:`:` {a: 'b', `0`: 'c'}]-(b)"]
@@ -732,8 +720,6 @@ class RelationshipTest extends TestCase
         return [
             ['a', [], [], Relationship::DIR_LEFT, "(a)<-[a {}]-(b)"],
             ['b', ['a'], [new StringLiteral('a')], Relationship::DIR_LEFT, "(a)<-[b:a {`0`: 'a'}]-(b)"],
-            ['', ['a', 'b'], ['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "(a)<-[:a|b {a: 'b'}]-(b)"],
-            [':', ['a', ':'], ['a' => new StringLiteral('b'), new StringLiteral('c')], Relationship::DIR_LEFT, "(a)<-[`:`:a|`:` {a: 'b', `0`: 'c'}]-(b)"],
             ['a', ['a', 'b', 'c'], [new StringLiteral('a')], Relationship::DIR_LEFT, "(a)<-[a:a|b|c {`0`: 'a'}]-(b)"],
             ['a', ['a', 'b'], [], Relationship::DIR_LEFT, "(a)<-[a:a|b {}]-(b)"]
         ];

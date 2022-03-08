@@ -30,6 +30,7 @@ use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\RelationshipTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\StructuralTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -52,13 +53,12 @@ class RawFunction extends FunctionCall implements
     PathType
 {
     use BooleanTypeTrait;
-    use ErrorTrait;
     use ListTypeTrait;
     use MapTypeTrait;
-    use NodeTypeTrait;
     use NumeralTypeTrait;
-    use RelationshipTrait;
     use StringTypeTrait;
+    use StructuralTypeTrait;
+    use ErrorTrait;
 
     /**
      * @var string $functionName The name of the function to call
