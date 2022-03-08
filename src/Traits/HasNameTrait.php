@@ -2,9 +2,11 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
+use InvalidArgumentException;
 use function bin2hex;
 use function ceil;
 use function openssl_random_pseudo_bytes;
+use function str_replace;
 use function substr;
 
 trait HasNameTrait
@@ -30,5 +32,16 @@ trait HasNameTrait
         $length ??= self::automaticVariableLength();
 
         return $prefix . substr(bin2hex(openssl_random_pseudo_bytes(ceil($length / 2))), 0, $length);
+    }
+
+    public static function validateName(string $name): void
+    {
+        $strippedParameter = str_replace("_", "", $name);
+
+        if ($name === "" || (!ctype_alnum($strippedParameter) && $strippedParameter !== "")) {
+            throw new InvalidArgumentException(
+                "A parameter may only consist of alphanumeric characters and underscores."
+            );
+        }
     }
 }

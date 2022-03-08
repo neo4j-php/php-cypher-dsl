@@ -85,20 +85,14 @@ class Parameter implements
     /**
      * Parameter constructor.
      *
-     * @param string $parameter The parameter; this parameter may only consist of alphanumeric
+     * @param string|null $parameter The parameter; this parameter may only consist of alphanumeric
      *                          characters and underscores
      */
     public function __construct(?string $parameter = null)
     {
         $parameter ??= self::generateName('param');
 
-        $strippedParameter = str_replace("_", "", $parameter);
-
-        if ($parameter === "" || (!ctype_alnum($strippedParameter) && $strippedParameter !== "")) {
-            throw new InvalidArgumentException(
-                "A parameter may only consist of alphanumeric characters and underscores."
-            );
-        }
+        self::validateName($parameter);
 
         $this->parameter = $parameter;
     }

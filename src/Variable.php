@@ -97,9 +97,9 @@ class Variable implements
      */
     public function __construct(?string $variable = null)
     {
-        if ($variable === null) {
-            $variable = self::generateName('var');
-        }
+        $variable ??= self::generateName('var');
+
+        self::validateName($variable);
 
         $this->variable = $variable;
     }
