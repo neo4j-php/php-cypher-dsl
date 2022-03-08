@@ -25,6 +25,7 @@ use InvalidArgumentException;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\HasNameTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\LocalTimeTrait;
@@ -74,6 +75,7 @@ class Parameter implements
     use PointTrait;
     use StringTypeTrait;
     use TimeTrait;
+    use HasNameTrait;
 
     /**
      * @var string The parameter name
@@ -86,8 +88,10 @@ class Parameter implements
      * @param string $parameter The parameter; this parameter may only consist of alphanumeric
      *                          characters and underscores
      */
-    public function __construct(string $parameter)
+    public function __construct(?string $parameter = null)
     {
+        $parameter ??= self::generateName('param');
+
         $strippedParameter = str_replace("_", "", $parameter);
 
         if ($parameter === "" || (!ctype_alnum($strippedParameter) && $strippedParameter !== "")) {
