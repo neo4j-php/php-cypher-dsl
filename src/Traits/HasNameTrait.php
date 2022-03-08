@@ -2,7 +2,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
-use InvalidArgumentException;
 use function bin2hex;
 use function ceil;
 use function openssl_random_pseudo_bytes;

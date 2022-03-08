@@ -21,12 +21,22 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
+use __PHP_Incomplete_Class;
 use InvalidArgumentException;
 use ReflectionClass;
+use ReflectionException;
 use TypeError;
+use function get_class;
 use function gettype;
+use function implode;
 use function is_array;
+use function is_bool;
+use function is_float;
+use function is_int;
 use function is_numeric;
+use function is_object;
+use function is_string;
+use function sprintf;
 use function strlen;
 use function trim;
 
@@ -44,78 +54,62 @@ trait ErrorTrait
      *
      * @throws TypeError
      */
-    private function assertClass(string $varName, $classNames, $userInput): void
+    private static function assertClass(string $varName, $classNames, $userInput): void
     {
-        if (!$this->isClass($classNames, $userInput)) {
-            throw new TypeError(
-                $this->getTypeErrorText(
-                    $varName,
-                    $classNames,
-                    $userInput
-                )
-            );
+        if (!self::isClass($classNames, $userInput)) {
+            throw self::typeError($varName, $classNames, $userInput);
         }
     }
 
-    private function assertClassOrType(string $varName, $classOrTypes, $userInput): void
+    private static function assertClassOrType(string $varName, $classOrTypes, $userInput): void
     {
-        if (!$this->isClass($classOrTypes, $userInput) && !$this->isType($classOrTypes, $userInput)) {
-            throw new TypeError($this->getTypeErrorText($varName, $classOrTypes, $userInput));
+        if (!self::isClass($classOrTypes, $userInput) && !self::isType($classOrTypes, $userInput)) {
+            throw self::typeError($varName, $classOrTypes, $userInput);
         }
     }
 
-    private function assertType(string $varName, $types, $userInput): void
+    private static function assertType(string $varName, $types, $userInput): void
     {
-        if (!$this->isType($types, $userInput)) {
-            throw new TypeError(
-                $this->getTypeErrorText(
-                    $varName,
-                    $types,
-                    $userInput
-                )
-            );
+        if (!self::isType($types, $userInput)) {
+            throw self::typeError($varName, $types, $userInput);
         }
     }
 
     /**
-     * Give a nice error message about $userInput not being an object with one of the $classNames types.
+     * Get debug type method stolen from the symfony polyfill
      *
-     * @param string $varName The name of the variable to be used in the message (without trailing '$')
-     * @param array $classNames The class names that should be mentioned in the message
-     * @param mixed $userInput The input that has been given
-     * @return string
+     * @see https://github.com/symfony/polyfill/blob/main/src/Php80/Php80.php
      */
-    private function getTypeErrorText(string $varName, array $classNames, $userInput): string
+    public static function getDebugType($value): string
     {
-        return sprintf(
-            '$%s should be a %s object, %s given.',
-            $varName,
-            implode(' or ', $classNames),
-            $this->getUserInputInfo($userInput)
-        );
-    }
+        switch (true) {
+            case null === $value: return 'null';
+            case is_bool($value): return 'bool';
+            case is_string($value): return 'string';
+            case is_array($value): return 'array';
+            case is_int($value): return 'int';
+            case is_float($value): return 'float';
+            case is_object($value): break;
+            case $value instanceof __PHP_Incomplete_Class: return '__PHP_Incomplete_Class';
+            default:
+                if (null === $type = @get_resource_type($value)) {
+                    return 'unknown';
+                }
 
-    /**
-     * Simple function to determine what $userInput is.
-     *
-     * @param mixed $userInput
-     * @return string A description of $userInput
-     */
-    private function getUserInputInfo($userInput): string
-    {
-        $info = gettype($userInput);
+                if ('Unknown' === $type) {
+                    $type = 'closed';
+                }
 
-        if ($info === 'object') {
-            if ((new ReflectionClass($userInput))->isAnonymous()) {
-                $info = 'anonymous class instance';
-            } else {
-                $info = get_class($userInput);
-            }
-        } elseif (is_scalar($userInput)) {
-            $info .= ' "' . (string)$userInput . '"';
+                return "resource ($type)";
         }
 
-        return $info;
+        $class = get_class($value);
+
+        if (false === strpos($class, '@')) {
+            return $class;
+        }
+
+        return (get_parent_class($class) ?: key(class_implements($class)) ?: 'class').'@anonymous';
     }
 
     /**
@@ -123,7 +117,7 @@ trait ErrorTrait
      * @param $userInput
      * @return bool
      */
-    private function isClass($classNames, $userInput): bool
+    private static function isClass($classNames, $userInput): bool
     {
         if (!is_array($classNames)) {
             $classNames = [$classNames];
@@ -143,7 +137,7 @@ trait ErrorTrait
      * @param $userInput
      * @return bool
      */
-    private function isType($types, $userInput): bool
+    private static function isType($types, $userInput): bool
     {
         if (!is_array($types)) {
             $types = [$types];
@@ -168,7 +162,7 @@ trait ErrorTrait
      *
      * @return void
      */
-    private static function validateName(string $name): void
+    private static function assertValidName(string $name): void
     {
         $name = trim($name);
 
@@ -187,5 +181,21 @@ trait ErrorTrait
         if (strlen($name) >= 65535) {
             throw new InvalidArgumentException('A name cannot be longer than 65534 characters');
         }
+    }
+
+    /**
+     * @param string $varName
+     * @param $classNames
+     * @param $userInput
+     * @return TypeError
+     */
+    private static function typeError(string $varName, $classNames, $userInput): TypeError
+    {
+        return new TypeError(sprintf(
+            '$%s should be a %s object, %s given.',
+            $varName,
+            implode(' or ', $classNames),
+            self::getDebugType($userInput)
+        ));
     }
 }
