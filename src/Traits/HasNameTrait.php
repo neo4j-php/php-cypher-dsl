@@ -19,14 +19,16 @@ trait HasNameTrait
      * @note It is not entirely guaranteed that this function gives a truly unique identifier. However, because the
      * number of possible IDs is so huge, it should not be a problem.
      *
-     * @param int|null $length
+     * @param string $prefix The prefix to put before the name. Must start with a letter to adhere to cypher namings.
+     *
+     * @param int|null $length The length of the generated name in bytes.
      *
      * @return string
      */
-    public static function generateUUID(int $length = null): string
+    public static function generateName(string $prefix = 'var', int $length = null): string
     {
         $length ??= self::automaticVariableLength();
 
-        return substr(bin2hex(openssl_random_pseudo_bytes(ceil($length / 2))), 0, $length);
+        return $prefix . substr(bin2hex(openssl_random_pseudo_bytes(ceil($length / 2))), 0, $length);
     }
 }

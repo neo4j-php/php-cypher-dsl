@@ -98,7 +98,7 @@ class Variable implements
     public function __construct(?string $variable = null)
     {
         if ($variable === null) {
-            $variable = 'var' . self::generateUUID();
+            $variable = self::generateName('var');
         }
 
         $this->variable = $variable;
