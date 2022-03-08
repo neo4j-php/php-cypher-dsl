@@ -44,7 +44,7 @@ use WikibaseSolutions\CypherDSL\Literals\Decimal;
 use WikibaseSolutions\CypherDSL\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
-use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
@@ -109,13 +109,13 @@ class Query implements QueryConvertable
      *                           - Path::DIR_LEFT (for a relation of (a)<--(b))
      *                           - Path::DIR_UNI (for a relation of (a)--(b))
      *
-     * @return Path
+     * @return Relationship
      * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
      *
      */
-    public static function relationship(StructuralType $a, StructuralType $b, array $direction): Path
+    public static function relationship(StructuralType $a, StructuralType $b, array $direction): Relationship
     {
-        return new Path($a, $b, $direction);
+        return new Relationship($a, $b, $direction);
     }
 
     /**

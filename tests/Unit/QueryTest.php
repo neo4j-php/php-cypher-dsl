@@ -35,7 +35,7 @@ use WikibaseSolutions\CypherDSL\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Parameter;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
-use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Query;
@@ -78,10 +78,10 @@ class QueryTest extends TestCase
         $a = $this->getQueryConvertableMock(NodeType::class, "a");
         $b = $this->getQueryConvertableMock(PathType::class, "b");
 
-        $directions = [Path::DIR_UNI, Path::DIR_LEFT, Path::DIR_RIGHT];
+        $directions = [Relationship::DIR_UNI, Relationship::DIR_LEFT, Relationship::DIR_RIGHT];
 
         foreach ($directions as $direction) {
-            $expected = new Path($a, $b, $direction);
+            $expected = new Relationship($a, $b, $direction);
             $actual = Query::relationship($a, $b, $direction);
 
             $this->assertEquals($expected, $actual);
@@ -616,7 +616,7 @@ class QueryTest extends TestCase
         $nodeMock = $this->getQueryConvertableMock(Node::class, "(a)");
         $nodeMock->method('getName')->willReturn($this->getQueryConvertableMock(Variable::class, 'a'));
 
-        $pathMock = $this->getQueryConvertableMock(Path::class, "(a)->(b)");
+        $pathMock = $this->getQueryConvertableMock(Relationship::class, "(a)->(b)");
         $numeralMock = $this->getQueryConvertableMock(NumeralType::class, "12");
         $booleanMock = $this->getQueryConvertableMock(BooleanType::class, "a > b");
         $propertyMock = $this->getQueryConvertableMock(Property::class, "a.b");

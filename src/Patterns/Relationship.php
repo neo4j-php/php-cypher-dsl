@@ -39,7 +39,7 @@ use WikibaseSolutions\CypherDSL\Variable;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
  */
-class Path implements PathType
+class Relationship implements PathType
 {
     use EscapeTrait;
     use PathTypeTrait;
@@ -159,7 +159,7 @@ class Path implements PathType
 
     /**
      * @param Variable|string $variable
-     * @return Path
+     * @return Relationship
      */
     public function named($variable): self
     {
@@ -178,7 +178,7 @@ class Path implements PathType
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels
      *
      * @param int $minHops
-     * @return Path
+     * @return Relationship
      */
     public function withMinHops(int $minHops): self
     {
@@ -205,7 +205,7 @@ class Path implements PathType
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels
      *
      * @param int $maxHops
-     * @return Path
+     * @return Relationship
      */
     public function withMaxHops(int $maxHops): self
     {
@@ -232,7 +232,7 @@ class Path implements PathType
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels
      *
      * @param int $exactHops
-     * @return Path
+     * @return Relationship
      */
     public function withExactHops(int $exactHops): self
     {
@@ -251,7 +251,7 @@ class Path implements PathType
 
     /**
      * @param string $type
-     * @return Path
+     * @return Relationship
      */
     public function withType(string $type): self
     {

@@ -23,7 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
@@ -54,20 +54,20 @@ class StructuralTypeTraitTest extends TestCase
     {
         $relationshipTo = $this->a->relationshipTo($this->b);
 
-        $this->assertInstanceOf(Path::class, $relationshipTo);
+        $this->assertInstanceOf(Relationship::class, $relationshipTo);
     }
 
     public function testRelationshipFrom()
     {
         $relationshipTo = $this->a->relationshipFrom($this->b);
 
-        $this->assertInstanceOf(Path::class, $relationshipTo);
+        $this->assertInstanceOf(Relationship::class, $relationshipTo);
     }
 
     public function testRelationshipUni()
     {
         $relationshipTo = $this->a->relationshipUni($this->b);
 
-        $this->assertInstanceOf(Path::class, $relationshipTo);
+        $this->assertInstanceOf(Relationship::class, $relationshipTo);
     }
 }
