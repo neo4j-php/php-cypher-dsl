@@ -6,7 +6,6 @@ use InvalidArgumentException;
 use function bin2hex;
 use function ceil;
 use function openssl_random_pseudo_bytes;
-use function str_replace;
 use function substr;
 
 trait HasNameTrait
@@ -34,14 +33,33 @@ trait HasNameTrait
         return $prefix . substr(bin2hex(openssl_random_pseudo_bytes(ceil($length / 2))), 0, $length);
     }
 
+    /**
+     * Validates the name to see if it can be used as a parameter or variable.
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/syntax/naming/#_naming_rules
+     *
+     * @param string $name
+     *
+     * @return void
+     */
     public static function validateName(string $name): void
     {
-        $strippedParameter = str_replace("_", "", $name);
+        $name = trim($name);
 
-        if ($name === "" || (!ctype_alnum($strippedParameter) && $strippedParameter !== "")) {
-            throw new InvalidArgumentException(
-                "A parameter may only consist of alphanumeric characters and underscores."
-            );
+        if ($name === "") {
+            throw new InvalidArgumentException("A name cannot be an empty string");
+        }
+
+        if(!ctype_alnum($name)) {
+            throw new InvalidArgumentException('A name can only contain alphanumeric characters');
+        }
+
+        if (is_numeric($name[0])) {
+            throw new InvalidArgumentException('A name cannot begin with a numeric character');
+        }
+
+        if (strlen($name) >= 65535) {
+            throw new InvalidArgumentException('A name cannot be longer than 65534 characters');
         }
     }
 }
