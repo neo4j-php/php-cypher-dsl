@@ -26,8 +26,8 @@ use InvalidArgumentException;
 use LogicException;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\HasPropertiesTrait;
 use WikibaseSolutions\CypherDSL\Traits\PathTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
@@ -43,6 +43,7 @@ class Relationship implements PathType
 {
     use EscapeTrait;
     use PathTypeTrait;
+    use HasPropertiesTrait;
 
     public const DIR_RIGHT = ["-", "->"];
     public const DIR_LEFT = ["<-", "-"];
@@ -114,47 +115,7 @@ class Relationship implements PathType
         }
 
         $this->direction = $direction;
-    }
-
-    /**
-     * Add the given property to the properties of this path.
-     *
-     * @param string $key The name of the property
-     * @param AnyType $value The value of the property
-     * @return PathType
-     */
-    public function withProperty(string $key, AnyType $value): PathType
-    {
-        if (!isset($this->properties)) {
-            $this->properties = new PropertyMap();
-        }
-
-        $this->properties->addProperty($key, $value);
-
-        return $this;
-    }
-
-    /**
-     * Add the given properties to the properties of this path.
-     *
-     * @param PropertyMap|array $properties
-     * @return PathType
-     */
-    public function withProperties($properties): PathType
-    {
-        if (!isset($this->properties)) {
-            $this->properties = new PropertyMap();
-        }
-
-        if (is_array($properties)) {
-            $properties = new PropertyMap($properties);
-        } elseif (!($properties instanceof PropertyMap)) {
-            throw new InvalidArgumentException("\$properties must either be an array or a PropertyMap object");
-        }
-
-        $this->properties = $this->properties->mergeWith($properties);
-
-        return $this;
+        $this->properties = new PropertyMap();
     }
 
     /**
@@ -321,14 +282,6 @@ class Relationship implements PathType
         }
 
         return sprintf("[%s]", $conditionInner);
-    }
-
-    /**
-     * @return MapType|null
-     */
-    public function getProperties(): ?MapType
-    {
-        return $this->properties;
     }
 
     /**
