@@ -23,6 +23,8 @@ namespace WikibaseSolutions\CypherDSL\Traits;
 
 use ReflectionClass;
 use TypeError;
+use function gettype;
+use function is_array;
 
 /**
  * Convenience trait including simple assertions and error reporting functions
@@ -39,23 +41,34 @@ trait ErrorTrait
      */
     private function assertClass(string $varName, $classNames, $userInput): void
     {
-        if (!is_array($classNames)) {
-            $classNames = [$classNames];
+        if (!$this->isClass($classNames, $userInput)) {
+            throw new TypeError(
+                $this->getTypeErrorText(
+                    $varName,
+                    $classNames,
+                    $userInput
+                )
+            );
         }
+    }
 
-        foreach ($classNames as $class) {
-            if ($userInput instanceof $class) {
-                return;
-            }
+    private function assertClassOrType(string $varName, $classOrTypes, $userInput): void
+    {
+        $this->assertClass($varName, $classOrTypes, $userInput);
+        $this->assertType($varName, $classOrTypes, $userInput);
+    }
+
+    private function assertType(string $varName, $types, $userInput): void
+    {
+        if (!$this->isType($types, $userInput)) {
+            throw new TypeError(
+                $this->getTypeErrorText(
+                    $varName,
+                    $types,
+                    $userInput
+                )
+            );
         }
-
-        throw new TypeError(
-            $this->getTypeErrorText(
-                $varName,
-                $classNames,
-                $userInput
-            )
-        );
     }
 
     /**
@@ -97,5 +110,46 @@ trait ErrorTrait
         }
 
         return $info;
+    }
+
+    /**
+     * @param $classNames
+     * @param $userInput
+     * @return bool
+     */
+    private function isClass($classNames, $userInput): bool
+    {
+        if (!is_array($classNames)) {
+            $classNames = [$classNames];
+        }
+
+        foreach ($classNames as $class) {
+            if (is_a($userInput, $class)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $types
+     * @param $userInput
+     * @return bool
+     */
+    private function isType($types, $userInput): bool
+    {
+        if (!is_array($types)) {
+            $types = [$types];
+        }
+
+        $actualType = gettype($userInput);
+        foreach ($types as $type) {
+            if ($actualType === $type) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
