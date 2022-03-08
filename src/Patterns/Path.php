@@ -342,6 +342,21 @@ class Path implements PathType
     }
 
     /**
+     * Returns the name of this Relationship. This function automatically generates a name if the node does not have a
+     * name yet.
+     *
+     * @return Variable The name of this node
+     */
+    public function getName(): Variable
+    {
+        if (!isset($this->variable)) {
+            $this->named(new Variable());
+        }
+
+        return $this->variable;
+    }
+
+    /**
      * Returns the left structure of the relationship.
      *
      * @return StructuralType

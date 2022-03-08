@@ -23,6 +23,7 @@ namespace WikibaseSolutions\CypherDSL;
 
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\HasPropertiesTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
