@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use InvalidArgumentException;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
@@ -30,6 +31,8 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Variable;
+use function is_string;
+use function trim;
 
 /**
  * This class represents a node.
@@ -140,18 +143,25 @@ class Node implements NodeType
     }
 
     /**
-     * @param Variable|string $variable
+     * Names the node with a variable. If the variable is an empty string or null, it will be unset.
+     *
+     * @param Variable|string|null $variable
      * @return Node
      */
     public function named($variable): self
     {
-        if (!($variable instanceof Variable)) {
-            if (!is_string($variable)) {
-                throw new InvalidArgumentException("\$variable must either be a string or a Variable object");
-            }
-
-            $variable = new Variable($variable);
+        if (!($variable instanceof Variable || $variable === null || is_string($variable))) {
+            throw new TypeError("\$variable must be null, a string or a Variable object");
         }
+
+        if (is_string($variable)) {
+            if (trim($variable) === '') {
+                $variable = null;
+            } else {
+                $variable = new Variable($variable);
+            }
+        }
+
 
         $this->variable = $variable;
 

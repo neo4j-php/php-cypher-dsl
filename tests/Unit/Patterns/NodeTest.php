@@ -298,7 +298,7 @@ class NodeTest extends TestCase
         return [
             ['a', '(a)'],
             ['A', '(A)'],
-            [':', '(`:`)']
+            ['', '(`:`)']
         ];
     }
 
