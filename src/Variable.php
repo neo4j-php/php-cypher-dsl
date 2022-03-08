@@ -99,6 +99,8 @@ class Variable implements
     {
         $variable ??= self::generateName('var');
 
+        $variable = trim($variable);
+
         self::validateName($variable);
 
         $this->variable = $variable;
