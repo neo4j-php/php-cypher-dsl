@@ -23,6 +23,7 @@ namespace WikibaseSolutions\CypherDSL;
 
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\HasNameTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
@@ -75,11 +76,7 @@ class Parameter implements
     use StringTypeTrait;
     use TimeTrait;
     use HasNameTrait;
-
-    /**
-     * @var string The parameter name
-     */
-    private string $parameter;
+    use ErrorTrait;
 
     /**
      * Parameter constructor.
@@ -89,11 +86,11 @@ class Parameter implements
      */
     public function __construct(?string $parameter = null)
     {
-        $parameter ??= self::generateName('param');
+        $parameter ??= $this->generateName('param');
 
-        self::validateName($parameter);
+        self::assertValidName($parameter);
 
-        $this->parameter = $parameter;
+        $this->name = $parameter;
     }
 
     /**
@@ -103,7 +100,7 @@ class Parameter implements
      */
     public function getParameter(): string
     {
-        return $this->parameter;
+        return $this->getName();
     }
 
     /**
@@ -111,6 +108,6 @@ class Parameter implements
      */
     public function toQuery(): string
     {
-        return sprintf('$%s', $this->parameter);
+        return sprintf('$%s', $this->getName());
     }
 }

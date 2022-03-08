@@ -9,9 +9,21 @@ use function substr;
 
 trait HasNameTrait
 {
+    private string $name;
+
     public static function automaticVariableLength(): int
     {
         return 32;
+    }
+
+    /**
+     * Returns the name.
+     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
     }
 
     /**
@@ -26,7 +38,7 @@ trait HasNameTrait
      *
      * @return string
      */
-    private static function generateName(string $prefix = 'var', int $length = null): string
+    private function generateName(string $prefix = 'var', int $length = null): string
     {
         $length ??= self::automaticVariableLength();
 

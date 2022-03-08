@@ -71,8 +71,7 @@ class VariableTest extends TestCase
     {
         return [
             ["a", "a"],
-            ["b", "b"],
-            ["0", "`0`"]
+            ["b", "b"]
         ];
     }
 
@@ -80,8 +79,7 @@ class VariableTest extends TestCase
     {
         return [
             ["a", "a", new Property(new Variable("a"), "a")],
-            ["a", "b", new Property(new Variable("a"), "b")],
-            ["0", "0", new Property(new Variable("0"), "0")]
+            ["a", "b", new Property(new Variable("a"), "b")]
         ];
     }
 }

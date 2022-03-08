@@ -24,16 +24,14 @@ namespace WikibaseSolutions\CypherDSL;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\DateTrait;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\HasNameTrait;
-use WikibaseSolutions\CypherDSL\Traits\HasPropertiesTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\LocalTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\PropertyTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\RelationshipTrait;
 use WikibaseSolutions\CypherDSL\Traits\PointTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\StructuralTypeTrait;
@@ -87,11 +85,7 @@ class Variable implements
     use TimeTrait;
     use HasNameTrait;
     use MapTypeTrait;
-
-    /**
-     * @var string The variable
-     */
-    private string $variable;
+    use ErrorTrait;
 
     /**
      * Variable constructor.
@@ -100,13 +94,11 @@ class Variable implements
      */
     public function __construct(?string $variable = null)
     {
-        $variable ??= self::generateName('var');
+        $variable ??= $this->generateName('var');
 
-        $variable = trim($variable);
+        self::assertValidName($variable);
 
-        self::validateName($variable);
-
-        $this->variable = $variable;
+        $this->name = $variable;
     }
 
     /**
@@ -143,14 +135,9 @@ class Variable implements
         return new Assignment($this, $value);
     }
 
-    public function getName(): string
-    {
-        return $this->variable;
-    }
-
     public function getVariable(): string
     {
-        return $this->variable;
+        return $this->getName();
     }
 
     /**
@@ -158,6 +145,6 @@ class Variable implements
      */
     public function toQuery(): string
     {
-        return $this->escape($this->variable);
+        return self::escape($this->getName());
     }
 }

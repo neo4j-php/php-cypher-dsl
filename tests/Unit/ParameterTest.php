@@ -59,8 +59,6 @@ class ParameterTest extends TestCase
         return [
             ["a", '$a'],
             ["b", '$b'],
-            ["0", '$0'],
-            ["_", '$_'],
             ["foo_bar", '$foo_bar'],
             ["A", '$A']
         ];
@@ -72,7 +70,8 @@ class ParameterTest extends TestCase
             [""],
             ["@"],
             ["!"],
-            ["-"]
+            ["-"],
+            ['']
         ];
     }
 }

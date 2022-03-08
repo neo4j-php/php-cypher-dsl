@@ -170,8 +170,8 @@ trait ErrorTrait
             throw new InvalidArgumentException("A name cannot be an empty string");
         }
 
-        if (!ctype_alnum($name)) {
-            throw new InvalidArgumentException('A name can only contain alphanumeric characters');
+        if (!ctype_alnum(str_replace('_', '', $name))) {
+            throw new InvalidArgumentException('A name can only contain alphanumeric characters and underscores');
         }
 
         if (is_numeric($name[0])) {
@@ -191,11 +191,22 @@ trait ErrorTrait
      */
     private static function typeError(string $varName, $classNames, $userInput): TypeError
     {
-        return new TypeError(sprintf(
+        return new TypeError(self::getTypeErrorText($varName, $classNames, $userInput));
+    }
+
+    /**
+     * @param string $varName
+     * @param $classNames
+     * @param $userInput
+     * @return string
+     */
+    private static function getTypeErrorText(string $varName, $classNames, $userInput): string
+    {
+        return sprintf(
             '$%s should be a %s object, %s given.',
             $varName,
             implode(' or ', $classNames),
             self::getDebugType($userInput)
-        ));
+        );
     }
 }
