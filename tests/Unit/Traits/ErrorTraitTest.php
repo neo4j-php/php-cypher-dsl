@@ -24,7 +24,6 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 use TypeError;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Traits\ErrorHelperDummyA;
 
 /**
  * Dummy classes

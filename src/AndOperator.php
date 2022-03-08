@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
+use WikibaseSolutions\CypherDSL\Traits\AliasableTrait;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 

@@ -2,7 +2,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
-use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use function is_array;

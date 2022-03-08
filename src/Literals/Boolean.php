@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Literals;
 
+use WikibaseSolutions\CypherDSL\Traits\AliasableTrait;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
@@ -30,6 +31,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 class Boolean implements BooleanType
 {
     use BooleanTypeTrait;
+    use AliasableTrait;
 
     /**
      * @var bool The value

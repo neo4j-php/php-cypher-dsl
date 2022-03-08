@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Functions;
 
 use WikibaseSolutions\CypherDSL\QueryConvertable;
+use WikibaseSolutions\CypherDSL\Traits\AliasableTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -35,6 +36,8 @@ use WikibaseSolutions\CypherDSL\Variable;
  */
 abstract class FunctionCall implements QueryConvertable
 {
+    use AliasableTrait;
+
     /**
      * Produces a raw function call. This enables the usage of unimplemented functions in your
      * Cypher queries. The parameters of this function are not type-checked.

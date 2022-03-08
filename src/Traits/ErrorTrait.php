@@ -23,8 +23,6 @@ namespace WikibaseSolutions\CypherDSL\Traits;
 
 use __PHP_Incomplete_Class;
 use InvalidArgumentException;
-use ReflectionClass;
-use ReflectionException;
 use TypeError;
 use function get_class;
 use function gettype;

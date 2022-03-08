@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
+use WikibaseSolutions\CypherDSL\Traits\AliasableTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -28,10 +29,12 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 abstract class BinaryOperator implements QueryConvertable
 {
+    use AliasableTrait;
+    
     /**
      * @var bool Whether to insert parentheses around the expression
      */
-    private bool $insertParentheses = true;
+    private bool $insertParentheses;
 
     /**
      * @var AnyType The left-hand of the expression

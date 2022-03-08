@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Literals;
 
+use WikibaseSolutions\CypherDSL\Traits\AliasableTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
@@ -30,6 +31,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 class Decimal implements NumeralType
 {
     use NumeralTypeTrait;
+    use AliasableTrait;
 
     /**
      * @var string The value

@@ -22,15 +22,9 @@
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use WikibaseSolutions\CypherDSL\Property;
-use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\HasPropertiesTrait;
-use WikibaseSolutions\CypherDSL\Traits\HasVariableTrait;
 use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
-use WikibaseSolutions\CypherDSL\Variable;
-use function is_string;
-use function trim;
 
 /**
  * This class represents a node.

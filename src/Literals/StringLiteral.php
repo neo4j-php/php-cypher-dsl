@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Literals;
 
+use WikibaseSolutions\CypherDSL\Traits\AliasableTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
@@ -33,6 +34,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 class StringLiteral implements StringType
 {
     use StringTypeTrait;
+    use AliasableTrait;
 
     /**
      * @var string
