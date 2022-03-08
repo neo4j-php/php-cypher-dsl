@@ -25,6 +25,7 @@ use InvalidArgumentException;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\PropertyMap;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
@@ -43,6 +44,7 @@ class Node implements NodeType
 {
     use EscapeTrait;
     use NodeTypeTrait;
+    use ErrorTrait;
 
     /**
      * @var string[]
@@ -127,14 +129,14 @@ class Node implements NodeType
      */
     public function withProperties($properties): NodeType
     {
+        $this->assertClassOrType('properties', [PropertyMap::class, 'array'], $properties);
+
         if (!isset($this->properties)) {
             $this->properties = new PropertyMap();
         }
 
         if (is_array($properties)) {
             $properties = new PropertyMap($properties);
-        } elseif (!($properties instanceof PropertyMap)) {
-            throw new InvalidArgumentException("\$properties must either be an array or a PropertyMap object");
         }
 
         $this->properties = $this->properties->mergeWith($properties);
@@ -150,9 +152,7 @@ class Node implements NodeType
      */
     public function named($variable): self
     {
-        if (!($variable instanceof Variable || $variable === null || is_string($variable))) {
-            throw new TypeError("\$variable must be null, a string or a Variable object");
-        }
+        $this->assertClassOrType('variable', ['string', 'null', Variable::class], $variable);
 
         if (is_string($variable)) {
             if (trim($variable) === '') {
