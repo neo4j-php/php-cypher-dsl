@@ -24,6 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\HasPropertiesTrait;
+use WikibaseSolutions\CypherDSL\Traits\HasVariableTrait;
 use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Variable;
@@ -39,17 +40,11 @@ class Node implements NodeType
 {
     use EscapeTrait;
     use NodeTypeTrait;
-    use HasPropertiesTrait;
 
     /**
      * @var string[]
      */
     private array $labels = [];
-
-    /**
-     * @var Variable|null
-     */
-    private ?Variable $variable = null;
 
     /**
      * Node constructor.
@@ -73,67 +68,6 @@ class Node implements NodeType
     public function getLabels(): array
     {
         return $this->labels;
-    }
-
-    /**
-     * Returns the variable name of the node.
-     *
-     * @return Variable|null
-     */
-    public function getVariable(): ?Variable
-    {
-        return $this->variable;
-    }
-
-    /**
-     * Names the node with a variable. If the variable is an empty string or null, it will be unset.
-     *
-     * @param Variable|string|null $variable
-     * @return Node
-     */
-    public function named($variable): self
-    {
-        $this->assertClassOrType('variable', ['string', 'null', Variable::class], $variable);
-
-        if (is_string($variable)) {
-            if (trim($variable) === '') {
-                $variable = null;
-            } else {
-                $variable = new Variable($variable);
-            }
-        }
-
-
-        $this->variable = $variable;
-
-        return $this;
-    }
-
-    /**
-     * Returns the name of this node. This function automatically generates a name if the node does not have a
-     * name yet.
-     *
-     * @return Variable The name of this node
-     */
-    public function getName(): Variable
-    {
-        if (!isset($this->variable)) {
-            $this->named(new Variable());
-        }
-
-        return $this->variable;
-    }
-
-    /**
-     * Alias of Node::named().
-     *
-     * @param $variable
-     * @return $this
-     * @see Node::named()
-     */
-    public function setName($variable): self
-    {
-        return $this->named($variable);
     }
 
     /**

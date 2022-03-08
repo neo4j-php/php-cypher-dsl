@@ -28,7 +28,7 @@ use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\PathTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\RelationshipTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
@@ -57,7 +57,7 @@ class RawFunction extends FunctionCall implements
     use MapTypeTrait;
     use NodeTypeTrait;
     use NumeralTypeTrait;
-    use PathTypeTrait;
+    use RelationshipTrait;
     use StringTypeTrait;
 
     /**

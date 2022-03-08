@@ -31,7 +31,7 @@ use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\LocalTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\PathTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\RelationshipTrait;
 use WikibaseSolutions\CypherDSL\Traits\PointTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TimeTrait;
@@ -79,7 +79,7 @@ class Variable implements
     use LocalTimeTrait;
     use MapTypeTrait;
     use NumeralTypeTrait;
-    use PathTypeTrait;
+    use RelationshipTrait;
     use PointTrait;
     use StringTypeTrait;
     use TimeTrait;

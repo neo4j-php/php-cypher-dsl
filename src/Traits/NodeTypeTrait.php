@@ -27,4 +27,6 @@ namespace WikibaseSolutions\CypherDSL\Traits;
 trait NodeTypeTrait
 {
     use StructuralTypeTrait;
+    use HasPropertiesTrait;
+    use HasVariableTrait;
 }

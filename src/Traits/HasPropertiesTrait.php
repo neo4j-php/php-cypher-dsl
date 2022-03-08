@@ -11,7 +11,6 @@ trait HasPropertiesTrait
 {
     use ErrorTrait;
     use MapTypeTrait;
-    use StructuralTypeTrait;
 
     private PropertyMap $properties;
 
@@ -46,6 +45,11 @@ trait HasPropertiesTrait
         $this->properties->mergeWith($properties);
 
         return $this;
+    }
+
+    public function getProperties(): PropertyMap
+    {
+        return $this->properties;
     }
 
     /**

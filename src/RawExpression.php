@@ -30,7 +30,7 @@ use WikibaseSolutions\CypherDSL\Traits\LocalTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\PathTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\RelationshipTrait;
 use WikibaseSolutions\CypherDSL\Traits\PointTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TimeTrait;
@@ -77,7 +77,7 @@ class RawExpression implements
     use PointTrait;
     use NodeTypeTrait;
     use NumeralTypeTrait;
-    use PathTypeTrait;
+    use RelationshipTrait;
     use StringTypeTrait;
     use TimeTrait;
 

@@ -27,7 +27,8 @@ use LogicException;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\HasPropertiesTrait;
-use WikibaseSolutions\CypherDSL\Traits\PathTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\HasVariableTrait;
+use WikibaseSolutions\CypherDSL\Traits\RelationshipTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
@@ -42,8 +43,7 @@ use WikibaseSolutions\CypherDSL\Variable;
 class Relationship implements PathType
 {
     use EscapeTrait;
-    use PathTypeTrait;
-    use HasPropertiesTrait;
+    use RelationshipTrait;
 
     public const DIR_RIGHT = ["-", "->"];
     public const DIR_LEFT = ["<-", "-"];
@@ -68,11 +68,6 @@ class Relationship implements PathType
      * @var string[]
      */
     private array $types = [];
-
-    /**
-     * @var Variable|null
-     */
-    private ?Variable $variable = null;
 
     /**
      * @var int|null The minimum number of `relationship->node` hops away to search
@@ -116,21 +111,6 @@ class Relationship implements PathType
 
         $this->direction = $direction;
         $this->properties = new PropertyMap();
-    }
-
-    /**
-     * @param Variable|string $variable
-     * @return Relationship
-     */
-    public function named($variable): self
-    {
-        if (!($variable instanceof Variable)) {
-            $variable = new Variable($variable);
-        }
-
-        $this->variable = $variable;
-
-        return $this;
     }
 
     /**
@@ -282,31 +262,6 @@ class Relationship implements PathType
         }
 
         return sprintf("[%s]", $conditionInner);
-    }
-
-    /**
-     * Returns the variable of the path.
-     *
-     * @return Variable|null
-     */
-    public function getVariable(): ?Variable
-    {
-        return $this->variable;
-    }
-
-    /**
-     * Returns the name of this Relationship. This function automatically generates a name if the node does not have a
-     * name yet.
-     *
-     * @return Variable The name of this node
-     */
-    public function getName(): Variable
-    {
-        if (!isset($this->variable)) {
-            $this->named(new Variable());
-        }
-
-        return $this->variable;
     }
 
     /**
