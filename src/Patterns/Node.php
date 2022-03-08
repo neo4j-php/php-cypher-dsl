@@ -162,9 +162,9 @@ class Node implements NodeType
      * Returns the name of this node. This function automatically generates a name if the node does not have a
      * name yet.
      *
-     * @return Variable|null The name of this node, or NULL if this node does not have a name
+     * @return Variable The name of this node
      */
-    public function getName(): ?Variable
+    public function getName(): Variable
     {
         if (!isset($this->variable)) {
             $this->named(new Variable());
