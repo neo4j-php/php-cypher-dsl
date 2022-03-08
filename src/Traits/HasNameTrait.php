@@ -10,7 +10,8 @@ use function substr;
 
 trait HasNameTrait
 {
-    public static function automaticVariableLength(): int {
+    public static function automaticVariableLength(): int
+    {
         return 32;
     }
 
@@ -26,40 +27,10 @@ trait HasNameTrait
      *
      * @return string
      */
-    public static function generateName(string $prefix = 'var', int $length = null): string
+    private static function generateName(string $prefix = 'var', int $length = null): string
     {
         $length ??= self::automaticVariableLength();
 
         return $prefix . substr(bin2hex(openssl_random_pseudo_bytes(ceil($length / 2))), 0, $length);
-    }
-
-    /**
-     * Validates the name to see if it can be used as a parameter or variable.
-     *
-     * @see https://neo4j.com/docs/cypher-manual/current/syntax/naming/#_naming_rules
-     *
-     * @param string $name
-     *
-     * @return void
-     */
-    public static function validateName(string $name): void
-    {
-        $name = trim($name);
-
-        if ($name === "") {
-            throw new InvalidArgumentException("A name cannot be an empty string");
-        }
-
-        if(!ctype_alnum($name)) {
-            throw new InvalidArgumentException('A name can only contain alphanumeric characters');
-        }
-
-        if (is_numeric($name[0])) {
-            throw new InvalidArgumentException('A name cannot begin with a numeric character');
-        }
-
-        if (strlen($name) >= 65535) {
-            throw new InvalidArgumentException('A name cannot be longer than 65534 characters');
-        }
     }
 }

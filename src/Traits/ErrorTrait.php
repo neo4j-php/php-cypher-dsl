@@ -21,10 +21,14 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
+use InvalidArgumentException;
 use ReflectionClass;
 use TypeError;
 use function gettype;
 use function is_array;
+use function is_numeric;
+use function strlen;
+use function trim;
 
 /**
  * Convenience trait including simple assertions and error reporting functions
@@ -153,5 +157,35 @@ trait ErrorTrait
         }
 
         return false;
+    }
+
+    /**
+     * Validates the name to see if it can be used as a parameter or variable.
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/syntax/naming/#_naming_rules
+     *
+     * @param string $name
+     *
+     * @return void
+     */
+    private static function validateName(string $name): void
+    {
+        $name = trim($name);
+
+        if ($name === "") {
+            throw new InvalidArgumentException("A name cannot be an empty string");
+        }
+
+        if (!ctype_alnum($name)) {
+            throw new InvalidArgumentException('A name can only contain alphanumeric characters');
+        }
+
+        if (is_numeric($name[0])) {
+            throw new InvalidArgumentException('A name cannot begin with a numeric character');
+        }
+
+        if (strlen($name) >= 65535) {
+            throw new InvalidArgumentException('A name cannot be longer than 65534 characters');
+        }
     }
 }
