@@ -25,6 +25,7 @@ use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\DateTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\HasNameTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\LocalTimeTrait;
@@ -82,8 +83,7 @@ class Variable implements
     use PointTrait;
     use StringTypeTrait;
     use TimeTrait;
-
-    public const AUTOMATIC_VARIABLE_LENGTH = 32;
+    use HasNameTrait;
 
     /**
      * @var string The variable
@@ -93,12 +93,12 @@ class Variable implements
     /**
      * Variable constructor.
      *
-     * @param string $variable The variable
+     * @param string|null $variable The variable
      */
     public function __construct(?string $variable = null)
     {
         if ($variable === null) {
-            $variable = $this->generateUUID(self::AUTOMATIC_VARIABLE_LENGTH);
+            $variable = 'var' . self::generateUUID();
         }
 
         $this->variable = $variable;
@@ -154,19 +154,5 @@ class Variable implements
     public function toQuery(): string
     {
         return $this->escape($this->variable);
-    }
-
-    /**
-     * Generates a unique random identifier.
-     *
-     * @note It is not entirely guaranteed that this function gives a truly unique identifier. However, because the
-     * number of possible IDs is so huge, it should not be a problem.
-     *
-     * @param int $length
-     * @return string
-     */
-    private static function generateUUID(int $length): string
-    {
-        return 'var' . substr(bin2hex(openssl_random_pseudo_bytes(ceil($length / 2))), 0, $length);
     }
 }
