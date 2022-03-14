@@ -21,9 +21,11 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+
 /**
  * Represents the type "node".
  */
-interface PathType extends StructuralType
+interface PathType extends AnyType
 {
 }

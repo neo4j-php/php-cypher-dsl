@@ -24,6 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 use DomainException;
 use InvalidArgumentException;
 use LogicException;
+use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\RelationshipTrait;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
@@ -201,7 +202,7 @@ class Relationship implements RelationshipType
         $a = $this->left->toQuery();
         $b = $this->right->toQuery();
 
-        return $a . $this->direction[0] . $this->conditionToString() . $this->direction[1] . $b;
+        return $a . $this->toRelationshipQuery() . $b;
     }
 
     /**
@@ -326,5 +327,15 @@ class Relationship implements RelationshipType
     public function property(string $property): Property
     {
         return new Property($this->getName(), $property);
+    }
+
+    /**
+     * Returns the relationship part of the pattern without the nodes.
+     *
+     * @return string
+     */
+    public function toRelationshipQuery(): string
+    {
+        return $this->direction[0] . $this->conditionToString() . $this->direction[1];
     }
 }
