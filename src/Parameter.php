@@ -86,11 +86,7 @@ class Parameter implements
      */
     public function __construct(?string $parameter = null)
     {
-        $parameter ??= $this->generateName('param');
-
-        self::assertValidName($parameter);
-
-        $this->name = $parameter;
+        $this->configureName($parameter, 'param');
     }
 
     /**

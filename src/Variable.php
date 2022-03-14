@@ -94,11 +94,7 @@ class Variable implements
      */
     public function __construct(?string $variable = null)
     {
-        $variable ??= $this->generateName('var');
-
-        self::assertValidName($variable);
-
-        $this->name = $variable;
+        $this->configureName($variable, 'var');
     }
 
     /**

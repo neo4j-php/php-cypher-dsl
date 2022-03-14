@@ -11,6 +11,11 @@ trait HasNameTrait
 {
     private string $name;
 
+    /**
+     * Returns the length in bytes of the auto-generated part of a name.
+     *
+     * @return int
+     */
     public static function automaticVariableLength(): int
     {
         return 32;
@@ -43,5 +48,14 @@ trait HasNameTrait
         $length ??= self::automaticVariableLength();
 
         return $prefix . substr(bin2hex(openssl_random_pseudo_bytes(ceil($length / 2))), 0, $length);
+    }
+
+    private function configureName(?string $givenName, string $prefix, int $length = null): void
+    {
+        $name = $givenName ?? $this->generateName($prefix, $length);
+
+        self::assertValidName($name);
+
+        $this->name = $name;
     }
 }
