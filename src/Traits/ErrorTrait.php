@@ -25,7 +25,6 @@ use __PHP_Incomplete_Class;
 use InvalidArgumentException;
 use TypeError;
 use function get_class;
-use function gettype;
 use function implode;
 use function is_array;
 use function is_bool;
@@ -54,6 +53,10 @@ trait ErrorTrait
      */
     private static function assertClass(string $varName, $classNames, $userInput): void
     {
+        if (!is_array($classNames)) {
+            $classNames = [$classNames];
+        }
+
         if (!self::isClass($classNames, $userInput)) {
             throw self::typeError($varName, $classNames, $userInput);
         }
@@ -97,19 +100,14 @@ trait ErrorTrait
     }
 
     /**
-     * @param string|array $classNames
+     * @param string[] $classNames
      * @param mixed $userInput
      * @return bool
      */
-    private static function isClass($classNames, $userInput): bool
+    private static function isClass(array $classNames, $userInput): bool
     {
-        if (!is_array($classNames)) {
-            $classNames = [$classNames];
-        }
-
         foreach ($classNames as $class) {
-            $type = self::getDebugType($userInput);
-            if ($class === $type || is_a($userInput, $class)) {
+            if (is_a($userInput, $class) || $class === self::getDebugType($userInput)) {
                 return true;
             }
         }
@@ -149,22 +147,22 @@ trait ErrorTrait
 
     /**
      * @param string $varName
-     * @param $classNames
-     * @param $userInput
+     * @param string[] $classNames
+     * @param mixed $userInput
      * @return TypeError
      */
-    private static function typeError(string $varName, $classNames, $userInput): TypeError
+    private static function typeError(string $varName, array $classNames, $userInput): TypeError
     {
         return new TypeError(self::getTypeErrorText($varName, $classNames, $userInput));
     }
 
     /**
      * @param string $varName
-     * @param $classNames
-     * @param $userInput
+     * @param string[] $classNames
+     * @param mixed $userInput
      * @return string
      */
-    private static function getTypeErrorText(string $varName, $classNames, $userInput): string
+    private static function getTypeErrorText(string $varName, array $classNames, $userInput): string
     {
         return sprintf(
             '$%s should be a %s object, %s given.',
