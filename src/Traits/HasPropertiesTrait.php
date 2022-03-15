@@ -36,7 +36,7 @@ trait HasPropertiesTrait
      */
     public function withProperties($properties): self
     {
-        $this->assertClassOrType('properties', [PropertyMap::class, 'array'], $properties);
+        self::assertClass('properties', [PropertyMap::class, 'array'], $properties);
 
         $this->initialiseProperties();
 

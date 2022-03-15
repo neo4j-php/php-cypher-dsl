@@ -59,20 +59,6 @@ trait ErrorTrait
         }
     }
 
-    private static function assertClassOrType(string $varName, $classOrTypes, $userInput): void
-    {
-        if (!self::isClass($classOrTypes, $userInput) && !self::isType($classOrTypes, $userInput)) {
-            throw self::typeError($varName, $classOrTypes, $userInput);
-        }
-    }
-
-    private static function assertType(string $varName, $types, $userInput): void
-    {
-        if (!self::isType($types, $userInput)) {
-            throw self::typeError($varName, $types, $userInput);
-        }
-    }
-
     /**
      * Get debug type method stolen from the symfony polyfill
      *
@@ -111,8 +97,8 @@ trait ErrorTrait
     }
 
     /**
-     * @param $classNames
-     * @param $userInput
+     * @param string|array $classNames
+     * @param mixed $userInput
      * @return bool
      */
     private static function isClass($classNames, $userInput): bool
@@ -122,28 +108,8 @@ trait ErrorTrait
         }
 
         foreach ($classNames as $class) {
-            if (is_a($userInput, $class)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param $types
-     * @param $userInput
-     * @return bool
-     */
-    private static function isType($types, $userInput): bool
-    {
-        if (!is_array($types)) {
-            $types = [$types];
-        }
-
-        $actualType = gettype($userInput);
-        foreach ($types as $type) {
-            if ($actualType === $type) {
+            $type = self::getDebugType($userInput);
+            if ($class === $type || is_a($userInput, $class)) {
                 return true;
             }
         }

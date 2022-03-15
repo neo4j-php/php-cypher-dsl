@@ -25,7 +25,7 @@ trait HasVariableTrait
      */
     public function named($variable): self
     {
-        $this->assertClassOrType('variable', ['string', 'null', Variable::class], $variable);
+        self::assertClass('variable', ['string', 'null', Variable::class], $variable);
 
         if (is_string($variable)) {
             if (trim($variable) === '') {

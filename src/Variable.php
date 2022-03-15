@@ -21,6 +21,9 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
+use WikibaseSolutions\CypherDSL\Patterns\Node;
+use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\DateTrait;
@@ -50,6 +53,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
  * Represents a variable.
@@ -79,7 +83,6 @@ class Variable implements
     use LocalDateTimeTrait;
     use LocalTimeTrait;
     use NumeralTypeTrait;
-    use StructuralTypeTrait;
     use PointTrait;
     use StringTypeTrait;
     use TimeTrait;
@@ -142,5 +145,26 @@ class Variable implements
     public function toQuery(): string
     {
         return self::escape($this->getName());
+    }
+
+
+    public function relationship(RelationshipType $relationship, NodeType $node): Path
+    {
+        return (new Path((new Node())->named($this)))->relationship($relationship, $node);
+    }
+
+    public function relationshipTo(NodeType $node, $properties = null, $name = null): Path
+    {
+        return (new Path((new Node())->named($this)))->relationshipTo($node, $properties, $name);
+    }
+
+    public function relationshipFrom(NodeType $node, $properties = null, $name = null): Path
+    {
+        return (new Path((new Node())->named($this)))->relationshipFrom($node, $properties, $name);
+    }
+
+    public function relationshipUni(NodeType $node, $properties = null, $name = null): Path
+    {
+        return (new Path((new Node())->named($this)))->relationshipUni($node, $properties, $name);
     }
 }

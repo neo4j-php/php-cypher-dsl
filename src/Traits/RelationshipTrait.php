@@ -26,7 +26,6 @@ namespace WikibaseSolutions\CypherDSL\Traits;
  */
 trait RelationshipTrait
 {
-    use StructuralTypeTrait;
     use HasPropertiesTrait;
     use HasVariableTrait;
 }

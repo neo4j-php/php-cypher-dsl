@@ -9,6 +9,7 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 use WikibaseSolutions\CypherDSL\Variable;
+use function array_key_exists;
 use function is_array;
 
 class Path implements PathType
@@ -22,13 +23,16 @@ class Path implements PathType
     private array $nodes;
 
     /**
-     * @param Node|Node[] $nodes
-     * @param Relationship|Relationship[] $relationships
+     * @param Node|Node[]|null $nodes
+     * @param Relationship|Relationship[]|null $relationships
      */
-    public function __construct($nodes, $relationships = null)
+    public function __construct($nodes = null, $relationships = null)
     {
-        self::assertClassOrType('relationships', [Relationship::class, 'array'], $relationships);
-        self::assertClassOrType('nodes', [Node::class, 'array'], $nodes);
+        self::assertClass('relationships', [Relationship::class, 'array', 'null'], $relationships);
+        self::assertClass('nodes', [Node::class, 'array', 'null'], $nodes);
+
+        $nodes ??= [];
+        $relationships ??= [];
 
         $this->nodes = is_array($nodes) ? array_values($nodes) : [$nodes];
         $this->relationships = is_array($relationships) ? array_values($relationships) : [$relationships];
@@ -46,14 +50,15 @@ class Path implements PathType
         }
 
         foreach ($this->relationships as $i => $relationship) {
-            if (count($this->nodes) <= $i) {
+            if (!array_key_exists($i + 1, $this->nodes)) {
+                --$i;
                 break;
             }
             $cql .= $this->nodes[$i]->toQuery();
             $cql .= $relationship->toQuery();
         }
 
-        $cql .= $this->nodes[$i ?? 0]->toQuery();
+        $cql .= $this->nodes[($i ?? -1) + 1]->toQuery();
 
         return $cql;
     }
@@ -116,8 +121,8 @@ class Path implements PathType
      */
     private function buildRelationship(array $direction,  $properties, $name): Relationship
     {
-        self::assertClassOrType('properties', ['array', PropertyMap::class, null], $properties);
-        self::assertClassOrType('name', ['string', Variable::class, null], $name);
+        self::assertClass('properties', ['array', PropertyMap::class, 'null'], $properties);
+        self::assertClass('name', ['string', Variable::class, 'null'], $name);
 
         $relationship = new Relationship($direction);
         if ($properties !== null) {

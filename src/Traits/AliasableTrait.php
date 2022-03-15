@@ -18,7 +18,7 @@ trait AliasableTrait
      */
     public function alias($variable): Alias
     {
-        self::assertClassOrType($variable, [Variable::class, 'string'], 'variable');
+        self::assertClass($variable, [Variable::class, 'string'], 'variable');
 
         $variable = is_string($variable) ? new Variable($variable) : $variable;
 
