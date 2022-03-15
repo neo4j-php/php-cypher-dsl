@@ -57,5 +57,23 @@ class PathTest extends TestCase
             ->named('a');
 
         self::assertEquals('a = ()-[]-(:Label)-[]->(b)<-[c:TYPE {x: \'y\'}]-()-[]-(d)', $path->toQuery());
+
+        self::assertEquals([
+            new Node(),
+            new Node('Label'),
+            (new Node())->named('b'),
+            new Node(),
+            (new Node())->named('d')
+        ], $path->getNodes());
+
+        self::assertEquals([
+            new Relationship(Relationship::DIR_UNI),
+            new Relationship(Relationship::DIR_RIGHT),
+            (new Relationship(Relationship::DIR_LEFT))
+                ->withType('TYPE')
+                ->withProperties(['x' => Query::literal('y')])
+                ->named('c'),
+            new Relationship(Relationship::DIR_UNI)
+        ], $path->getRelationships());
     }
 }
