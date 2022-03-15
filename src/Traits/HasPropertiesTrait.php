@@ -8,6 +8,8 @@ use function is_array;
 
 trait HasPropertiesTrait
 {
+    use ErrorTrait;
+
     private ?PropertyMap $properties = null;
 
     /**
