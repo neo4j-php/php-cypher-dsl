@@ -21,8 +21,11 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 
+use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
+use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Variable;
 
 /**
  * Represents any structural type in Cypher.
@@ -40,32 +43,48 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  * - relationship
  * - path
  *
- * @note This interface should not be implemented by any class directly.
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#structural-types
  */
 interface StructuralType extends AnyType
 {
     /**
-     * Creates a new relationship from this node to the given pattern.
-     *
-     * @param StructuralType $pattern
-     * @return Relationship
+     * Adds a new relationship from the end of the structural type to the node pattern.
+     * @param RelationshipType $relationship
+     * @param NodeType $node
+     * @return Path
      */
-    public function relationshipTo(StructuralType $pattern): Relationship;
+    public function relationship(RelationshipType $relationship, NodeType $node): Path;
 
     /**
-     * Creates a new relationship from the given pattern to this node.
+     * Adds a new relationship to the node pattern at the end of the structural type to form a path.
      *
-     * @param StructuralType $pattern
-     * @return Relationship
+     * @param NodeType $node The node to attach to the end of the structural type.
+     * @param array|PropertyMap|null $properties The properties to attach to the relationship
+     * @param string|Variable|null $name The name fo the relationship
+     *
+     * @return Path
      */
-    public function relationshipFrom(StructuralType $pattern): Relationship;
+    public function relationshipTo(NodeType $node, $properties = null, $name = null): Path;
 
     /**
-     * Creates a new unidirectional relationship between this node and the given pattern.
+     * Adds a new relationship from the node pattern at the end of the structural type to form a path.
      *
-     * @param StructuralType $pattern
-     * @return Relationship
+     * @param NodeType $node The node to attach to the end of the structural type.
+     * @param array|PropertyMap|null $properties The properties to attach to the relationship
+     * @param string|Variable|null $name The name fo the relationship
+     *
+     * @return Path
      */
-    public function relationshipUni(StructuralType $pattern): Relationship;
+    public function relationshipFrom(NodeType $node, $properties = null, $name = null): Path;
+
+    /**
+     * Adds a new unidirectional relationship to the node pattern at the end of the structural type to form a path.
+     *
+     * @param NodeType $node The node to attach to the end of the structural type.
+     * @param array|PropertyMap|null $properties The properties to attach to the relationship
+     * @param string|Variable|null $name The name fo the relationship
+     *
+     * @return Path
+     */
+    public function relationshipUni(NodeType $node, $properties = null, $name = null): Path;
 }

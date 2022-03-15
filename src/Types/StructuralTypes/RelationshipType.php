@@ -2,7 +2,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 
-interface RelationshipType extends StructuralType
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+
+interface RelationshipType extends AnyType
 {
 
 }
