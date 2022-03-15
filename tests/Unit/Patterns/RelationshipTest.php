@@ -41,30 +41,12 @@ class RelationshipTest extends TestCase
 {
     use TestHelper;
 
-    /**
-     * @var MockObject|StructuralType
-     */
-    private StructuralType $a;
-
-    /**
-     * @var MockObject|StructuralType
-     */
-    private StructuralType $b;
-
-    public function setUp(): void
-    {
-        $this->a = $this->getQueryConvertableMock(Node::class, "(a)");
-        $this->b = $this->getQueryConvertableMock(Node::class, "(b)");
-    }
-
     public function testDirRight(): void
     {
-        $r = new Relationship($this->a, $this->b, Relationship::DIR_RIGHT);
+        $r = new Relationship( Relationship::DIR_RIGHT);
 
-        $this->assertSame("(a)-[]->(b)", $r->toQuery());
+        $this->assertSame("-[]->", $r->toQuery());
 
-        $this->assertEquals($this->a, $r->getLeft());
-        $this->assertEquals($this->b, $r->getRight());
         $this->assertEquals(Relationship::DIR_RIGHT, $r->getDirection());
         $this->assertEquals([], $r->getTypes());
         $this->assertNull($r->getProperties());
@@ -77,12 +59,10 @@ class RelationshipTest extends TestCase
 
     public function testDirLeft(): void
     {
-        $r = new Relationship($this->a, $this->b, Relationship::DIR_LEFT);
+        $r = new Relationship(Relationship::DIR_LEFT);
 
-        $this->assertSame("(a)<-[]-(b)", $r->toQuery());
+        $this->assertSame("<-[]-", $r->toQuery());
 
-        $this->assertEquals($this->a, $r->getLeft());
-        $this->assertEquals($this->b, $r->getRight());
         $this->assertEquals(Relationship::DIR_LEFT, $r->getDirection());
         $this->assertEquals([], $r->getTypes());
         $this->assertNull($r->getProperties());
@@ -95,12 +75,10 @@ class RelationshipTest extends TestCase
 
     public function testDirUni(): void
     {
-        $r = new Relationship($this->a, $this->b, Relationship::DIR_UNI);
+        $r = new Relationship(Relationship::DIR_UNI);
 
-        $this->assertSame("(a)-[]-(b)", $r->toQuery());
+        $this->assertSame("-[]-", $r->toQuery());
 
-        $this->assertEquals($this->a, $r->getLeft());
-        $this->assertEquals($this->b, $r->getRight());
         $this->assertEquals(Relationship::DIR_UNI, $r->getDirection());
         $this->assertEquals([], $r->getTypes());
         $this->assertNull($r->getProperties());
@@ -119,13 +97,11 @@ class RelationshipTest extends TestCase
      */
     public function testWithName(string $name, array $direction, string $expected): void
     {
-        $r = new Relationship($this->a, $this->b, $direction);
+        $r = new Relationship($direction);
         $r->named($name);
 
         $this->assertSame($expected, $r->toQuery());
 
-        $this->assertEquals($this->a, $r->getLeft());
-        $this->assertEquals($this->b, $r->getRight());
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([], $r->getTypes());
         $this->assertNull($r->getProperties());
@@ -145,13 +121,11 @@ class RelationshipTest extends TestCase
      */
     public function testWithType(string $type, array $direction, string $expected): void
     {
-        $r = new Relationship($this->a, $this->b, $direction);
+        $r = new Relationship($direction);
         $r->withType($type);
 
         $this->assertSame($expected, $r->toQuery());
 
-        $this->assertEquals($this->a, $r->getLeft());
-        $this->assertEquals($this->b, $r->getRight());
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([$type], $r->getTypes());
         $this->assertNull($r->getProperties());
@@ -170,13 +144,11 @@ class RelationshipTest extends TestCase
      */
     public function testWithProperties(array $properties, array $direction, string $expected): void
     {
-        $r = new Relationship($this->a, $this->b, $direction);
+        $r = new Relationship($direction);
         $r->withProperties($properties);
 
         $this->assertSame($expected, $r->toQuery());
 
-        $this->assertEquals($this->a, $r->getLeft());
-        $this->assertEquals($this->b, $r->getRight());
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([], $r->getTypes());
         $this->assertEquals(new PropertyMap($properties), $r->getProperties());
@@ -196,13 +168,11 @@ class RelationshipTest extends TestCase
      */
     public function testWithNameAndType(string $name, string $type, array $direction, string $expected): void
     {
-        $r = new Relationship($this->a, $this->b, $direction);
+        $r = new Relationship($direction);
         $r->named($name)->withType($type);
 
         $this->assertSame($expected, $r->toQuery());
 
-        $this->assertEquals($this->a, $r->getLeft());
-        $this->assertEquals($this->b, $r->getRight());
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([$type], $r->getTypes());
         $this->assertNull($r->getProperties());
@@ -223,13 +193,11 @@ class RelationshipTest extends TestCase
      */
     public function testWithNameAndProperties(string $name, array $properties, array $direction, string $expected): void
     {
-        $r = new Relationship($this->a, $this->b, $direction);
+        $r = new Relationship($direction);
         $r->named($name)->withProperties($properties);
 
         $this->assertSame($expected, $r->toQuery());
 
-        $this->assertEquals($this->a, $r->getLeft());
-        $this->assertEquals($this->b, $r->getRight());
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([], $r->getTypes());
         $this->assertEquals(new PropertyMap($properties), $r->getProperties());
@@ -250,13 +218,11 @@ class RelationshipTest extends TestCase
      */
     public function testWithTypeAndProperties(string $type, array $properties, array $direction, string $expected): void
     {
-        $r = new Relationship($this->a, $this->b, $direction);
+        $r = new Relationship($direction);
         $r->withType($type)->withProperties($properties);
 
         $this->assertSame($expected, $r->toQuery());
 
-        $this->assertEquals($this->a, $r->getLeft());
-        $this->assertEquals($this->b, $r->getRight());
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([$type], $r->getTypes());
         $this->assertEquals(new PropertyMap($properties), $r->getProperties());
@@ -277,13 +243,11 @@ class RelationshipTest extends TestCase
      */
     public function testWithNameAndTypeAndProperties(string $name, string $type, array $properties, array $direction, string $expected): void
     {
-        $r = new Relationship($this->a, $this->b, $direction);
+        $r = new Relationship($direction);
         $r->named($name)->withType($type)->withProperties($properties);
 
         $this->assertSame($expected, $r->toQuery());
 
-        $this->assertEquals($this->a, $r->getLeft());
-        $this->assertEquals($this->b, $r->getRight());
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([$type], $r->getTypes());
         $this->assertEquals(new PropertyMap($properties), $r->getProperties());
@@ -305,7 +269,7 @@ class RelationshipTest extends TestCase
      */
     public function testWithMultipleTypes(string $name, array $types, array $properties, array $direction, string $expected): void
     {
-        $r = new Relationship($this->a, $this->b, $direction);
+        $r = new Relationship($direction);
         $r->named($name)->withProperties($properties);
 
         foreach ($types as $type) {
@@ -315,8 +279,6 @@ class RelationshipTest extends TestCase
 
         $this->assertSame($expected, $r->toQuery());
 
-        $this->assertEquals($this->a, $r->getLeft());
-        $this->assertEquals($this->b, $r->getRight());
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals($types, $r->getTypes());
         $this->assertEquals(new PropertyMap($properties), $r->getProperties());
@@ -338,7 +300,7 @@ class RelationshipTest extends TestCase
      */
     public function testVariableLengthRelationshipsWithName(string $name, ?int $minHops, ?int $maxHops, array $direction, string $expected): void
     {
-        $r = new Relationship($this->a, $this->b, $direction);
+        $r = new Relationship($direction);
         $r->named($name);
 
         if (isset($minHops)) {
@@ -351,8 +313,6 @@ class RelationshipTest extends TestCase
 
         $this->assertSame($expected, $r->toQuery());
 
-        $this->assertEquals($this->a, $r->getLeft());
-        $this->assertEquals($this->b, $r->getRight());
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([], $r->getTypes());
         $this->assertNull($r->getProperties());
@@ -374,7 +334,7 @@ class RelationshipTest extends TestCase
      */
     public function testVariableLengthRelationshipsWithType(string $type, ?int $minHops, ?int $maxHops, array $direction, string $expected): void
     {
-        $r = new Relationship($this->a, $this->b, $direction);
+        $r = new Relationship($direction);
         $r->withType($type);
 
         if (isset($minHops)) {
@@ -387,8 +347,6 @@ class RelationshipTest extends TestCase
 
         $this->assertSame($expected, $r->toQuery());
 
-        $this->assertEquals($this->a, $r->getLeft());
-        $this->assertEquals($this->b, $r->getRight());
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([$type], $r->getTypes());
         $this->assertNull($r->getProperties());
@@ -409,7 +367,7 @@ class RelationshipTest extends TestCase
      */
     public function testVariableLengthRelationshipsWithProperties(array $properties, ?int $minHops, ?int $maxHops, array $direction, string $expected): void
     {
-        $r = new Relationship($this->a, $this->b, $direction);
+        $r = new Relationship($direction);
         $r->withProperties($properties);
 
         if (isset($minHops)) {
@@ -422,8 +380,6 @@ class RelationshipTest extends TestCase
 
         $this->assertSame($expected, $r->toQuery());
 
-        $this->assertEquals($this->a, $r->getLeft());
-        $this->assertEquals($this->b, $r->getRight());
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([], $r->getTypes());
         $this->assertEquals(new PropertyMap($properties), $r->getProperties());
@@ -446,7 +402,7 @@ class RelationshipTest extends TestCase
      */
     public function testVariableLengthRelationshipsWithNameAndTypeAndProperties(string $name, string $type, array $properties, ?int $minHops, ?int $maxHops, array $direction, string $expected): void
     {
-        $r = new Relationship($this->a, $this->b, $direction);
+        $r = new Relationship($direction);
         $r->named($name)->withType($type)->withProperties($properties);
 
         if (isset($minHops)) {
@@ -459,8 +415,6 @@ class RelationshipTest extends TestCase
 
         $this->assertSame($expected, $r->toQuery());
 
-        $this->assertEquals($this->a, $r->getLeft());
-        $this->assertEquals($this->b, $r->getRight());
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([$type], $r->getTypes());
         $this->assertEquals(new PropertyMap($properties), $r->getProperties());
@@ -474,17 +428,15 @@ class RelationshipTest extends TestCase
 
     public function testExactLengthRelationships(): void
     {
-        $r = new Relationship($this->a, $this->b, Relationship::DIR_RIGHT);
+        $r = new Relationship(Relationship::DIR_RIGHT);
         $r->named("tom")
             ->withType("Person")
             ->withProperties(['name' => Query::literal('Tom Hanks')]);
 
         $r->withExactHops(10);
 
-        $this->assertSame("(a)-[tom:Person*10 {name: 'Tom Hanks'}]->(b)", $r->toQuery());
+        $this->assertSame("-[tom:Person*10 {name: 'Tom Hanks'}]->", $r->toQuery());
 
-        $this->assertEquals($this->a, $r->getLeft());
-        $this->assertEquals($this->b, $r->getRight());
         $this->assertEquals(Relationship::DIR_RIGHT, $r->getDirection());
         $this->assertEquals(['Person'], $r->getTypes());
         $this->assertEquals(new PropertyMap(['name' => Query::literal('Tom Hanks')]), $r->getProperties());
@@ -498,7 +450,7 @@ class RelationshipTest extends TestCase
 
     public function testMinAndExactHops(): void
     {
-        $r = new Relationship($this->a, $this->b, Relationship::DIR_RIGHT);
+        $r = new Relationship(Relationship::DIR_RIGHT);
         $r->withMinHops(1);
 
         $this->expectException(LogicException::class);
@@ -508,7 +460,7 @@ class RelationshipTest extends TestCase
 
     public function testMaxAndExactHops(): void
     {
-        $r = new Relationship($this->a, $this->b, Relationship::DIR_RIGHT);
+        $r = new Relationship(Relationship::DIR_RIGHT);
         $r->withMaxHops(1);
 
         $this->expectException(LogicException::class);
@@ -518,7 +470,7 @@ class RelationshipTest extends TestCase
 
     public function testMinMaxAndExactHops(): void
     {
-        $r = new Relationship($this->a, $this->b, Relationship::DIR_RIGHT);
+        $r = new Relationship(Relationship::DIR_RIGHT);
         $r->withMinHops(1);
         $r->withMaxHops(1);
 
@@ -529,7 +481,7 @@ class RelationshipTest extends TestCase
 
     public function testExactAndMinHops(): void
     {
-        $r = new Relationship($this->a, $this->b, Relationship::DIR_RIGHT);
+        $r = new Relationship(Relationship::DIR_RIGHT);
         $r->withExactHops(1);
 
         $this->expectException(LogicException::class);
@@ -539,7 +491,7 @@ class RelationshipTest extends TestCase
 
     public function testExactAndMaxHops(): void
     {
-        $r = new Relationship($this->a, $this->b, Relationship::DIR_RIGHT);
+        $r = new Relationship(Relationship::DIR_RIGHT);
         $r->withExactHops(1);
 
         $this->expectException(LogicException::class);
@@ -549,7 +501,7 @@ class RelationshipTest extends TestCase
 
     public function testMaxHopsLessThanMinHops(): void
     {
-        $r = new Relationship($this->a, $this->b, Relationship::DIR_RIGHT);
+        $r = new Relationship(Relationship::DIR_RIGHT);
         $r->withMinHops(100);
 
         $this->expectException(DomainException::class);
@@ -559,7 +511,7 @@ class RelationshipTest extends TestCase
 
     public function testMinHopsGreaterThanMaxHops(): void
     {
-        $r = new Relationship($this->a, $this->b, Relationship::DIR_RIGHT);
+        $r = new Relationship(Relationship::DIR_RIGHT);
         $r->withMaxHops(1);
 
         $this->expectException(DomainException::class);
@@ -569,7 +521,7 @@ class RelationshipTest extends TestCase
 
     public function testMinHopsLessThanZero(): void
     {
-        $r = new Relationship($this->a, $this->b, Relationship::DIR_RIGHT);
+        $r = new Relationship(Relationship::DIR_RIGHT);
 
         $this->expectException(DomainException::class);
 
@@ -578,7 +530,7 @@ class RelationshipTest extends TestCase
 
     public function testMaxHopsLessThanOne(): void
     {
-        $r = new Relationship($this->a, $this->b, Relationship::DIR_RIGHT);
+        $r = new Relationship(Relationship::DIR_RIGHT);
 
         $this->expectException(DomainException::class);
 
@@ -587,7 +539,7 @@ class RelationshipTest extends TestCase
 
     public function testMaxHopsLessThanZero(): void
     {
-        $r = new Relationship($this->a, $this->b, Relationship::DIR_RIGHT);
+        $r = new Relationship(Relationship::DIR_RIGHT);
 
         $this->expectException(DomainException::class);
 
@@ -596,7 +548,7 @@ class RelationshipTest extends TestCase
 
     public function testExactHopsLessThanOne(): void
     {
-        $r = new Relationship($this->a, $this->b, Relationship::DIR_RIGHT);
+        $r = new Relationship(Relationship::DIR_RIGHT);
 
         $this->expectException(DomainException::class);
 
@@ -605,7 +557,7 @@ class RelationshipTest extends TestCase
 
     public function testExactHopsLessThanZero(): void
     {
-        $r = new Relationship($this->a, $this->b, Relationship::DIR_RIGHT);
+        $r = new Relationship(Relationship::DIR_RIGHT);
 
         $this->expectException(DomainException::class);
 
@@ -615,113 +567,113 @@ class RelationshipTest extends TestCase
     public function provideVariableLengthRelationshipsWithNameData(): array
     {
         return [
-            ['b', 1, 100, Relationship::DIR_UNI, '(a)-[b*1..100]-(b)'],
-            ['a', 10, null, Relationship::DIR_UNI, '(a)-[a*10..]-(b)'],
-            ['a', null, 10, Relationship::DIR_LEFT, '(a)<-[a*..10]-(b)'],
+            ['b', 1, 100, Relationship::DIR_UNI, '-[b*1..100]-'],
+            ['a', 10, null, Relationship::DIR_UNI, '-[a*10..]-'],
+            ['a', null, 10, Relationship::DIR_LEFT, '<-[a*..10]-'],
         ];
     }
 
     public function provideVariableLengthRelationshipsWithTypeData(): array
     {
         return [
-            ['', 1, 100, Relationship::DIR_LEFT, '(a)<-[*1..100]-(b)'],
-            ['a', 10, null, Relationship::DIR_LEFT, '(a)<-[:a*10..]-(b)'],
-            [':', null, 10, Relationship::DIR_LEFT, '(a)<-[:`:`*..10]-(b)']
+            ['', 1, 100, Relationship::DIR_LEFT, '<-[*1..100]-'],
+            ['a', 10, null, Relationship::DIR_LEFT, '<-[:a*10..]-'],
+            [':', null, 10, Relationship::DIR_LEFT, '<-[:`:`*..10]-']
         ];
     }
 
     public function provideVariableLengthRelationshipsWithPropertiesData(): array
     {
         return [
-            [[], 10, 100, Relationship::DIR_LEFT, "(a)<-[*10..100 {}]-(b)"],
-            [[new StringLiteral('a')], 10, null, Relationship::DIR_LEFT, "(a)<-[*10.. {`0`: 'a'}]-(b)"],
-            [['a' => new StringLiteral('b')], null, 10, Relationship::DIR_LEFT, "(a)<-[*..10 {a: 'b'}]-(b)"]
+            [[], 10, 100, Relationship::DIR_LEFT, "<-[*10..100 {}]-"],
+            [[new StringLiteral('a')], 10, null, Relationship::DIR_LEFT, "<-[*10.. {`0`: 'a'}]-"],
+            [['a' => new StringLiteral('b')], null, 10, Relationship::DIR_LEFT, "<-[*..10 {a: 'b'}]-"]
         ];
     }
 
     public function provideVariableLengthRelationshipsWithNameAndTypeAndPropertiesData(): array
     {
         return [
-            ['a', 'a', [], 10, 100, Relationship::DIR_LEFT, "(a)<-[a:a*10..100 {}]-(b)"],
-            ['b', 'a', [new StringLiteral('a')], null, 10, Relationship::DIR_LEFT, "(a)<-[b:a*..10 {`0`: 'a'}]-(b)"],
-            ['a', 'b', [new StringLiteral('a')], 10, 100, Relationship::DIR_LEFT, "(a)<-[a:b*10..100 {`0`: 'a'}]-(b)"],
-            ['a', '', ['a' => new StringLiteral('b')], null, 10, Relationship::DIR_LEFT, "(a)<-[a*..10 {a: 'b'}]-(b)"],
-            ['a', ':', ['a' => new StringLiteral('b'), new StringLiteral('c')], 10, null, Relationship::DIR_LEFT, "(a)<-[a:`:`*10.. {a: 'b', `0`: 'c'}]-(b)"]
+            ['a', 'a', [], 10, 100, Relationship::DIR_LEFT, "<-[a:a*10..100 {}]-"],
+            ['b', 'a', [new StringLiteral('a')], null, 10, Relationship::DIR_LEFT, "<-[b:a*..10 {`0`: 'a'}]-"],
+            ['a', 'b', [new StringLiteral('a')], 10, 100, Relationship::DIR_LEFT, "<-[a:b*10..100 {`0`: 'a'}]-"],
+            ['a', '', ['a' => new StringLiteral('b')], null, 10, Relationship::DIR_LEFT, "<-[a*..10 {a: 'b'}]-"],
+            ['a', ':', ['a' => new StringLiteral('b'), new StringLiteral('c')], 10, null, Relationship::DIR_LEFT, "<-[a:`:`*10.. {a: 'b', `0`: 'c'}]-"]
         ];
     }
 
     public function provideWithNameData(): array
     {
         return [
-            ['a', Relationship::DIR_UNI, '(a)-[a]-(b)'],
-            ['a', Relationship::DIR_LEFT, '(a)<-[a]-(b)']
+            ['a', Relationship::DIR_UNI, '-[a]-'],
+            ['a', Relationship::DIR_LEFT, '<-[a]-']
         ];
     }
 
     public function provideWithTypeData(): array
     {
         return [
-            ['', Relationship::DIR_LEFT, '(a)<-[]-(b)'],
-            ['a', Relationship::DIR_LEFT, '(a)<-[:a]-(b)'],
-            [':', Relationship::DIR_LEFT, '(a)<-[:`:`]-(b)']
+            ['', Relationship::DIR_LEFT, '<-[]-'],
+            ['a', Relationship::DIR_LEFT, '<-[:a]-'],
+            [':', Relationship::DIR_LEFT, '<-[:`:`]-']
         ];
     }
 
     public function provideWithPropertiesData(): array
     {
         return [
-            [[], Relationship::DIR_LEFT, "(a)<-[{}]-(b)"],
-            [[new StringLiteral('a')], Relationship::DIR_LEFT, "(a)<-[{`0`: 'a'}]-(b)"],
-            [['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "(a)<-[{a: 'b'}]-(b)"],
-            [['a' => new StringLiteral('b'), new StringLiteral('c')], Relationship::DIR_LEFT, "(a)<-[{a: 'b', `0`: 'c'}]-(b)"],
-            [[':' => new Decimal(12)], Relationship::DIR_LEFT, "(a)<-[{`:`: 12}]-(b)"]
+            [[], Relationship::DIR_LEFT, "<-[{}]-"],
+            [[new StringLiteral('a')], Relationship::DIR_LEFT, "<-[{`0`: 'a'}]-"],
+            [['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "<-[{a: 'b'}]-"],
+            [['a' => new StringLiteral('b'), new StringLiteral('c')], Relationship::DIR_LEFT, "<-[{a: 'b', `0`: 'c'}]-"],
+            [[':' => new Decimal(12)], Relationship::DIR_LEFT, "<-[{`:`: 12}]-"]
         ];
     }
 
     public function provideWithNameAndTypeData(): array
     {
         return [
-            ['a', '', Relationship::DIR_LEFT, '(a)<-[a]-(b)'],
-            ['a', 'b', Relationship::DIR_LEFT, '(a)<-[a:b]-(b)'],
+            ['a', '', Relationship::DIR_LEFT, '<-[a]-'],
+            ['a', 'b', Relationship::DIR_LEFT, '<-[a:b]-'],
         ];
     }
 
     public function provideWithNameAndPropertiesData(): array
     {
         return [
-            ['a', [], Relationship::DIR_LEFT, "(a)<-[a {}]-(b)"],
-            ['b', [new StringLiteral('a')], Relationship::DIR_LEFT, "(a)<-[b {`0`: 'a'}]-(b)"],
+            ['a', [], Relationship::DIR_LEFT, "<-[a {}]-"],
+            ['b', [new StringLiteral('a')], Relationship::DIR_LEFT, "<-[b {`0`: 'a'}]-"],
         ];
     }
 
     public function provideWithTypeAndPropertiesData(): array
     {
         return [
-            ['a', [], Relationship::DIR_LEFT, "(a)<-[:a {}]-(b)"],
-            ['b', [new StringLiteral('a')], Relationship::DIR_LEFT, "(a)<-[:b {`0`: 'a'}]-(b)"],
-            ['', ['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "(a)<-[{a: 'b'}]-(b)"],
-            [':', ['a' => new StringLiteral('b'), new StringLiteral('c')], Relationship::DIR_LEFT, "(a)<-[:`:` {a: 'b', `0`: 'c'}]-(b)"]
+            ['a', [], Relationship::DIR_LEFT, "<-[:a {}]-"],
+            ['b', [new StringLiteral('a')], Relationship::DIR_LEFT, "<-[:b {`0`: 'a'}]-"],
+            ['', ['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "<-[{a: 'b'}]-"],
+            [':', ['a' => new StringLiteral('b'), new StringLiteral('c')], Relationship::DIR_LEFT, "<-[:`:` {a: 'b', `0`: 'c'}]-"]
         ];
     }
 
     public function provideWithNameAndTypeAndPropertiesData(): array
     {
         return [
-            ['a', 'a', [], Relationship::DIR_LEFT, "(a)<-[a:a {}]-(b)"],
-            ['b', 'a', [new StringLiteral('a')], Relationship::DIR_LEFT, "(a)<-[b:a {`0`: 'a'}]-(b)"],
-            ['a', 'b', [new StringLiteral('a')], Relationship::DIR_LEFT, "(a)<-[a:b {`0`: 'a'}]-(b)"],
-            ['a', '', ['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "(a)<-[a {a: 'b'}]-(b)"],
-            ['a', ':', ['a' => new StringLiteral('b'), new StringLiteral('c')], Relationship::DIR_LEFT, "(a)<-[a:`:` {a: 'b', `0`: 'c'}]-(b)"]
+            ['a', 'a', [], Relationship::DIR_LEFT, "<-[a:a {}]-"],
+            ['b', 'a', [new StringLiteral('a')], Relationship::DIR_LEFT, "<-[b:a {`0`: 'a'}]-"],
+            ['a', 'b', [new StringLiteral('a')], Relationship::DIR_LEFT, "<-[a:b {`0`: 'a'}]-"],
+            ['a', '', ['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "<-[a {a: 'b'}]-"],
+            ['a', ':', ['a' => new StringLiteral('b'), new StringLiteral('c')], Relationship::DIR_LEFT, "<-[a:`:` {a: 'b', `0`: 'c'}]-"]
         ];
     }
 
     public function provideWithMultipleTypesData(): array
     {
         return [
-            ['a', [], [], Relationship::DIR_LEFT, "(a)<-[a {}]-(b)"],
-            ['b', ['a'], [new StringLiteral('a')], Relationship::DIR_LEFT, "(a)<-[b:a {`0`: 'a'}]-(b)"],
-            ['a', ['a', 'b', 'c'], [new StringLiteral('a')], Relationship::DIR_LEFT, "(a)<-[a:a|b|c {`0`: 'a'}]-(b)"],
-            ['a', ['a', 'b'], [], Relationship::DIR_LEFT, "(a)<-[a:a|b {}]-(b)"]
+            ['a', [], [], Relationship::DIR_LEFT, "<-[a {}]-"],
+            ['b', ['a'], [new StringLiteral('a')], Relationship::DIR_LEFT, "<-[b:a {`0`: 'a'}]-"],
+            ['a', ['a', 'b', 'c'], [new StringLiteral('a')], Relationship::DIR_LEFT, "<-[a:a|b|c {`0`: 'a'}]-"],
+            ['a', ['a', 'b'], [], Relationship::DIR_LEFT, "<-[a:a|b {}]-"]
         ];
     }
 }

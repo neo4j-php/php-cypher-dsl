@@ -153,18 +153,18 @@ class Variable implements
         return (new Path((new Node())->named($this)))->relationship($relationship, $node);
     }
 
-    public function relationshipTo(NodeType $node, $properties = null, $name = null): Path
+    public function relationshipTo(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
     {
-        return (new Path((new Node())->named($this)))->relationshipTo($node, $properties, $name);
+        return (new Path((new Node())->named($this)))->relationshipTo($node, $type, $properties, $name);
     }
 
-    public function relationshipFrom(NodeType $node, $properties = null, $name = null): Path
+    public function relationshipFrom(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
     {
-        return (new Path((new Node())->named($this)))->relationshipFrom($node, $properties, $name);
+        return (new Path((new Node())->named($this)))->relationshipFrom($node, $type, $properties, $name);
     }
 
-    public function relationshipUni(NodeType $node, $properties = null, $name = null): Path
+    public function relationshipUni(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
     {
-        return (new Path((new Node())->named($this)))->relationshipUni($node, $properties, $name);
+        return (new Path((new Node())->named($this)))->relationshipUni($node, $type, $properties, $name);
     }
 }

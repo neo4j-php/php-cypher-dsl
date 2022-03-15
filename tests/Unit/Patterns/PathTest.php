@@ -52,10 +52,10 @@ class PathTest extends TestCase
         $path = new Path(new Node());
         $path->relationshipUni(new Node('Label'))
             ->relationshipTo((new Node())->named('b'))
-            ->relationshipFrom(new Node(), ['x' => Query::literal('y')], 'c')
+            ->relationshipFrom(new Node(), 'TYPE', ['x' => Query::literal('y')], 'c')
             ->relationship(new Relationship(Relationship::DIR_UNI), (new Node())->named('d'))
             ->named('a');
 
-        self::assertEquals('a = ()-[]-(:Label)-[]->(b)<-[c {x: \'y\'}]-()-[]-(d)', $path->toQuery());
+        self::assertEquals('a = ()-[]-(:Label)-[]->(b)<-[c:TYPE {x: \'y\'}]-()-[]-(d)', $path->toQuery());
     }
 }

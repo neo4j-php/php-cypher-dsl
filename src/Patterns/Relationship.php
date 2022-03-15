@@ -88,6 +88,14 @@ class Relationship implements RelationshipType
     }
 
     /**
+     * @return string[]
+     */
+    public function getDirection(): array
+    {
+        return $this->direction;
+    }
+
+    /**
      * Set the minimum number of `relationship->node` hops away to search.
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels

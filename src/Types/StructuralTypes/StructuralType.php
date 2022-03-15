@@ -58,33 +58,36 @@ interface StructuralType extends AnyType
     /**
      * Adds a new relationship to the node pattern at the end of the structural type to form a path.
      *
-     * @param NodeType $node The node to attach to the end of the structural type.
+     * @param NodeType $node The node to attach to the end of the structural type
+     * @param string|null $type The type of the relationship
      * @param array|PropertyMap|null $properties The properties to attach to the relationship
      * @param string|Variable|null $name The name fo the relationship
      *
      * @return Path
      */
-    public function relationshipTo(NodeType $node, $properties = null, $name = null): Path;
+    public function relationshipTo(NodeType $node, ?string $type = null, $properties = null, $name = null): Path;
 
     /**
      * Adds a new relationship from the node pattern at the end of the structural type to form a path.
      *
      * @param NodeType $node The node to attach to the end of the structural type.
+     * @param string|null $type The type of the relationship
      * @param array|PropertyMap|null $properties The properties to attach to the relationship
      * @param string|Variable|null $name The name fo the relationship
      *
      * @return Path
      */
-    public function relationshipFrom(NodeType $node, $properties = null, $name = null): Path;
+    public function relationshipFrom(NodeType $node, ?string $type = null, $properties = null, $name = null): Path;
 
     /**
      * Adds a new unidirectional relationship to the node pattern at the end of the structural type to form a path.
      *
      * @param NodeType $node The node to attach to the end of the structural type.
+     * @param string|null $type The type of the relationship
      * @param array|PropertyMap|null $properties The properties to attach to the relationship
      * @param string|Variable|null $name The name fo the relationship
      *
      * @return Path
      */
-    public function relationshipUni(NodeType $node, $properties = null, $name = null): Path;
+    public function relationshipUni(NodeType $node, ?string $type = null, $properties = null, $name = null): Path;
 }

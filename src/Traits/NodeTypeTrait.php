@@ -21,6 +21,10 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
+use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
+
 /**
  * This trait should be used by any expression that returns a node.
  */
@@ -28,4 +32,24 @@ trait NodeTypeTrait
 {
     use HasPropertiesTrait;
     use HasVariableTrait;
+
+    public function relationship(RelationshipType $relationship, NodeType $node): Path
+    {
+        return (new Path($this))->relationship($relationship, $node);
+    }
+
+    public function relationshipTo(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return (new Path($this))->relationshipTo($node, $type, $properties, $name);
+    }
+
+    public function relationshipFrom(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return (new Path($this))->relationshipFrom($node, $type, $properties, $name);
+    }
+
+    public function relationshipUni(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return (new Path($this))->relationshipUni($node, $type, $properties, $name);
+    }
 }

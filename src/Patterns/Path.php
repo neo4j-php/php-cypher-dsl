@@ -5,6 +5,7 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\PathTrait;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
@@ -23,13 +24,13 @@ class Path implements PathType
     private array $nodes;
 
     /**
-     * @param Node|Node[]|null $nodes
+     * @param AnyType|AnyType[]|null $nodes
      * @param Relationship|Relationship[]|null $relationships
      */
     public function __construct($nodes = null, $relationships = null)
     {
         self::assertClass('relationships', [Relationship::class, 'array', 'null'], $relationships);
-        self::assertClass('nodes', [Node::class, 'array', 'null'], $nodes);
+        self::assertClass('nodes', [AnyType::class, 'array', 'null'], $nodes);
 
         $nodes ??= [];
         $relationships ??= [];
@@ -91,46 +92,54 @@ class Path implements PathType
         return $this;
     }
 
-    public function relationshipTo(NodeType $node, $properties = null, $name = null): Path
+    public function relationshipTo(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
     {
-        $relationship = $this->buildRelationship(Relationship::DIR_RIGHT, $properties, $name);
+        $relationship = $this->buildRelationship(Relationship::DIR_RIGHT, $type, $properties, $name);
 
         return $this->relationship($relationship, $node);
     }
 
-    public function relationshipFrom(NodeType $node, $properties = null, $name = null): Path
+    public function relationshipFrom(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
     {
-        $relationship = $this->buildRelationship(Relationship::DIR_LEFT, $properties, $name);
+        $relationship = $this->buildRelationship(Relationship::DIR_LEFT, $type, $properties, $name);
 
         return $this->relationship($relationship, $node);
     }
 
-    public function relationshipUni(NodeType $node, $properties = null, $name = null): Path
+    public function relationshipUni(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
     {
-        $relationship = $this->buildRelationship(Relationship::DIR_UNI, $properties, $name);
+        $relationship = $this->buildRelationship(Relationship::DIR_UNI, $type, $properties, $name);
 
         return $this->relationship($relationship, $node);
     }
 
     /**
      * @param array $direction
+     * @param string|null $type
      * @param mixed $properties
      * @param mixed $name
      *
      * @return Relationship
      */
-    private function buildRelationship(array $direction,  $properties, $name): Relationship
+    private function buildRelationship(array $direction, ?string $type,  $properties, $name): Relationship
     {
         self::assertClass('properties', ['array', PropertyMap::class, 'null'], $properties);
         self::assertClass('name', ['string', Variable::class, 'null'], $name);
 
         $relationship = new Relationship($direction);
+
+        if ($type !== null) {
+            $relationship->withType($type);
+        }
+
         if ($properties !== null) {
             $relationship->withProperties($properties);
         }
+
         if ($name !== null) {
             $relationship->named($name);
         }
+
         return $relationship;
     }
 }

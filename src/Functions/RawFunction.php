@@ -46,16 +46,13 @@ class RawFunction extends FunctionCall implements
     MapType,
     BooleanType,
     NumeralType,
-    StringType,
-    NodeType,
-    PathType
+    StringType
 {
     use BooleanTypeTrait;
     use ListTypeTrait;
     use MapTypeTrait;
     use NumeralTypeTrait;
     use StringTypeTrait;
-    use StructuralTypeTrait;
     use ErrorTrait;
 
     /**

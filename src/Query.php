@@ -102,8 +102,6 @@ class Query implements QueryConvertable
     /**
      * Creates a relationship.
      *
-     * @param StructuralType $a The node left of the relationship
-     * @param StructuralType $b The node right of the relationship
      * @param array $direction The direction of the relationship, should be either:
      *                           - Path::DIR_RIGHT (for a relation of (a)-->(b))
      *                           - Path::DIR_LEFT (for a relation of (a)<--(b))
@@ -111,11 +109,10 @@ class Query implements QueryConvertable
      *
      * @return Relationship
      * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
-     *
      */
-    public static function relationship(StructuralType $a, StructuralType $b, array $direction): Relationship
+    public static function relationship(array $direction): Relationship
     {
-        return new Relationship($a, $b, $direction);
+        return new Relationship($direction);
     }
 
     /**

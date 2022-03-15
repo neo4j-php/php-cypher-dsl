@@ -112,24 +112,4 @@ class Node implements NodeType
     {
         return new Property($this->getName(), $property);
     }
-
-    public function relationship(RelationshipType $relationship, NodeType $node): Path
-    {
-        return (new Path($this))->relationship($relationship, $node);
-    }
-
-    public function relationshipTo(NodeType $node, $properties = null, $name = null): Path
-    {
-        return (new Path($this))->relationshipTo($node, $properties, $name);
-    }
-
-    public function relationshipFrom(NodeType $node, $properties = null, $name = null): Path
-    {
-        return (new Path($this))->relationshipFrom($node, $properties, $name);
-    }
-
-    public function relationshipUni(NodeType $node, $properties = null, $name = null): Path
-    {
-        return (new Path($this))->relationshipUni($node, $properties, $name);
-    }
 }

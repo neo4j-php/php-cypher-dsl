@@ -90,7 +90,7 @@ class RawExpression implements
 
     /**
      * RawExpression constructor.
-     *
+     *\
      * @param string $expression The raw expression
      */
     public function __construct(string $expression)
