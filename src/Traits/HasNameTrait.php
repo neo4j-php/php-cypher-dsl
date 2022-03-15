@@ -2,6 +2,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
+use LogicException;
 use function bin2hex;
 use function ceil;
 use function openssl_random_pseudo_bytes;
@@ -9,6 +10,8 @@ use function substr;
 
 trait HasNameTrait
 {
+    use ErrorTrait;
+
     private string $name;
 
     /**
@@ -28,6 +31,10 @@ trait HasNameTrait
      */
     public function getName(): string
     {
+        if (!isset($this->name)) {
+            throw new LogicException('Name is not yet configured. Please call `configureName` to setup a name.');
+        }
+
         return $this->name;
     }
 
