@@ -28,7 +28,6 @@ use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\RelationshipTrait;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * This class represents an arbitrary relationship between two nodes, a node and a
@@ -44,16 +43,6 @@ class Relationship implements RelationshipType
     public const DIR_RIGHT = ["-", "->"];
     public const DIR_LEFT = ["<-", "-"];
     public const DIR_UNI = ["-", "-"];
-
-    /**
-     * @var StructuralType The pattern left of the relationship
-     */
-    private StructuralType $left;
-
-    /**
-     * @var StructuralType The pattern right of the relationship
-     */
-    private StructuralType $right;
 
     /**
      * @var string[] The direction of the relationship
@@ -83,19 +72,14 @@ class Relationship implements RelationshipType
     /**
      * Path constructor.
      *
-     * @param StructuralType $left The node left of the relationship
-     * @param StructuralType $right The node right of the relationship
      * @param array $direction The direction of the relationship, should be either:
      *                           - Path::DIR_RIGHT (for a relation of
      *                           (a)-->(b)) - Path::DIR_LEFT (for a relation
      *                           of (a)<--(b)) - Path::DIR_UNI (for a
      *                           relation of (a)--(b))
      */
-    public function __construct(StructuralType $left, StructuralType $right, array $direction)
+    public function __construct(array $direction)
     {
-        $this->left = $left;
-        $this->right = $right;
-
         if ($direction !== self::DIR_RIGHT && $direction !== self::DIR_LEFT && $direction !== self::DIR_UNI) {
             throw new InvalidArgumentException("The direction must be either 'DIR_LEFT', 'DIR_RIGHT' or 'RELATED_TO'");
         }
@@ -199,10 +183,7 @@ class Relationship implements RelationshipType
      */
     public function toQuery(): string
     {
-        $a = $this->left->toQuery();
-        $b = $this->right->toQuery();
-
-        return $a . $this->toRelationshipQuery() . $b;
+        return $this->direction[0] . $this->conditionToString() . $this->direction[1];
     }
 
     /**
@@ -255,36 +236,6 @@ class Relationship implements RelationshipType
     }
 
     /**
-     * Returns the left structure of the relationship.
-     *
-     * @return StructuralType
-     */
-    public function getLeft(): StructuralType
-    {
-        return $this->left;
-    }
-
-    /**
-     * Returns the right structure of the relationship.
-     *
-     * @return StructuralType
-     */
-    public function getRight(): StructuralType
-    {
-        return $this->right;
-    }
-
-    /**
-     * Returns the direction of the path.
-     *
-     * @return string[]
-     */
-    public function getDirection(): array
-    {
-        return $this->direction;
-    }
-
-    /**
      * Returns the exact amount of hops configured.
      *
      * @return int|null
@@ -327,15 +278,5 @@ class Relationship implements RelationshipType
     public function property(string $property): Property
     {
         return new Property($this->getName(), $property);
-    }
-
-    /**
-     * Returns the relationship part of the pattern without the nodes.
-     *
-     * @return string
-     */
-    public function toRelationshipQuery(): string
-    {
-        return $this->direction[0] . $this->conditionToString() . $this->direction[1];
     }
 }
