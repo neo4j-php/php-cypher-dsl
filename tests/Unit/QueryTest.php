@@ -229,11 +229,10 @@ class QueryTest extends TestCase
      */
     public function testMatchTypeAcceptance(): void
     {
-        $assignment = $this->getQueryConvertableMock(Assignment::class, 'p = (a)-->(b)');
         $path = $this->getQueryConvertableMock(PathType::class, '(a)-->(b)');
         $node = $this->getQueryConvertableMock(NodeType::class, '(a)');
 
-        (new Query())->match([$assignment, $path, $node]);
+        (new Query())->match([$path, $node]);
     }
 
     public function testMatchRejectsAnyType(): void
@@ -301,11 +300,10 @@ class QueryTest extends TestCase
      */
     public function testCreateTypeAcceptance(): void
     {
-        $assignment = $this->getQueryConvertableMock(Assignment::class, 'p = (a)-->(b)');
         $path = $this->getQueryConvertableMock(PathType::class, '(a)-->(b)');
         $node = $this->getQueryConvertableMock(NodeType::class, '(a)');
 
-        (new Query())->create([$assignment, $path, $node]);
+        (new Query())->create([$path, $node]);
     }
 
     public function testCreateRejectsAnyType(): void
@@ -391,11 +389,9 @@ class QueryTest extends TestCase
      */
     public function testMergeTypeAcceptance(): void
     {
-        $assignment = $this->getQueryConvertableMock(Assignment::class, 'p = (a)-->(b)');
         $path = $this->getQueryConvertableMock(PathType::class, '(a)-->(b)');
         $node = $this->getQueryConvertableMock(NodeType::class, '(a)');
 
-        (new Query())->merge($assignment);
         (new Query())->merge($path);
         (new Query())->merge($node);
     }
@@ -427,11 +423,10 @@ class QueryTest extends TestCase
      */
     public function testOptionalMatchTypeAcceptance(): void
     {
-        $assignment = $this->getQueryConvertableMock(Assignment::class, 'p = (a)-->(b)');
         $path = $this->getQueryConvertableMock(PathType::class, '(a)-->(b)');
         $node = $this->getQueryConvertableMock(NodeType::class, '(a)');
 
-        (new Query())->optionalMatch([$assignment, $path, $node]);
+        (new Query())->optionalMatch([$path, $node]);
     }
 
     public function testOptionalMatchRejectsAnyType(): void
@@ -794,7 +789,7 @@ class QueryTest extends TestCase
         $coActorsNode = Query::node()->named($coActors);
 
         $statement = Query::new()
-            ->match($tomNode->relationshipTo($movieNode,"ACTED_IN")->relationshipFrom($coActorsNode, "ACTED_IN"))
+            ->match($tomNode->relationshipTo($movieNode, "ACTED_IN")->relationshipFrom($coActorsNode, "ACTED_IN"))
             ->returning($coActors->property("name"))
             ->build();
 

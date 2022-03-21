@@ -12,7 +12,7 @@ class HasNameTraitTest extends TestCase
 
     public function setUp(): void
     {
-        $this->hasName = new class {
+        $this->hasName = new class () {
             use HasNameTrait {
                 configureName as public;
                 generateName as public;

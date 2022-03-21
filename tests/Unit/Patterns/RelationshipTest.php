@@ -43,7 +43,7 @@ class RelationshipTest extends TestCase
 
     public function testDirRight(): void
     {
-        $r = new Relationship( Relationship::DIR_RIGHT);
+        $r = new Relationship(Relationship::DIR_RIGHT);
 
         $this->assertSame("-[]->", $r->toQuery());
 

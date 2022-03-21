@@ -6,5 +6,4 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 interface RelationshipType extends AnyType
 {
-
 }

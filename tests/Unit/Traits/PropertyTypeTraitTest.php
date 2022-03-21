@@ -55,7 +55,7 @@ class PropertyTypeTraitTest extends TestCase
 
     public function setUp(): void
     {
-        $this->a = new class implements PropertyType {
+        $this->a = new class () implements PropertyType {
             use PropertyTypeTrait;
 
             public function toQuery(): string
