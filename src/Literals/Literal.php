@@ -891,14 +891,16 @@ abstract class Literal
         return Query::map($map);
     }
 
-    private static function convertToNumeral($var) : NumeralType {
+    private static function convertToNumeral($var): NumeralType
+    {
         if ($var instanceof NumeralType) {
             return $var;
         }
         return self::decimal($var);
     }
 
-    private static function convertToString($var) : StringLiteral {
+    private static function convertToString($var): StringLiteral
+    {
         if ($var instanceof StringLiteral) {
             return $var;
         }

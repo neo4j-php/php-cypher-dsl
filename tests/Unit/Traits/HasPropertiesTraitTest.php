@@ -13,7 +13,7 @@ class HasPropertiesTraitTest extends TestCase
 
     public function setUp(): void
     {
-        $this->propertyTrait = new class {
+        $this->propertyTrait = new class () {
             use HasPropertiesTrait {
                 initialiseProperties as public;
             }

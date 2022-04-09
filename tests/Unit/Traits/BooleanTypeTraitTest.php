@@ -50,7 +50,7 @@ class BooleanTypeTraitTest extends TestCase
 
     public function setUp(): void
     {
-        $this->a = new class implements BooleanType {
+        $this->a = new class () implements BooleanType {
             use BooleanTypeTrait;
 
             public function toQuery(): string

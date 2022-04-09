@@ -21,7 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Assignment;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
@@ -35,20 +34,18 @@ class CreateClause extends Clause
     use ErrorTrait;
 
     /**
-     * @var StructuralType[]|Assignment[] The patterns to create
+     * @var StructuralType[] The patterns to create
      */
     private array $patterns = [];
 
     /**
      * Add a pattern to create.
      *
-     * @param StructuralType|Assignment $pattern The pattern to create
+     * @param StructuralType $pattern The pattern to create
      * @return CreateClause
      */
-    public function addPattern($pattern): self
+    public function addPattern(StructuralType $pattern): self
     {
-        $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
-
         $this->patterns[] = $pattern;
 
         return $this;

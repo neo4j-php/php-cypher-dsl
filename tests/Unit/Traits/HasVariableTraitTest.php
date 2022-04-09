@@ -11,7 +11,7 @@ class HasVariableTraitTest extends TestCase
 
     public function setUp(): void
     {
-        $this->hasVariable = new class {
+        $this->hasVariable = new class () {
             use HasVariableTrait;
         };
     }

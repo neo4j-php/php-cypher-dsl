@@ -151,7 +151,7 @@ class Path implements PathType
      *
      * @return Relationship
      */
-    private function buildRelationship(array $direction, ?string $type,  $properties, $name): Relationship
+    private function buildRelationship(array $direction, ?string $type, $properties, $name): Relationship
     {
         self::assertClass('properties', ['array', PropertyMap::class, 'null'], $properties);
         self::assertClass('name', ['string', Variable::class, 'null'], $name);

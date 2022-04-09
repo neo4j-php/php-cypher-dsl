@@ -217,7 +217,7 @@ class Query implements QueryConvertable
     /**
      * Creates the MATCH clause.
      *
-     * @param StructuralType|StructuralType[]|Assignment|Assignment[] $patterns A single pattern or a list of patterns
+     * @param StructuralType|StructuralType[] $patterns A single pattern or a list of patterns
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/
@@ -232,7 +232,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-            $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
+            $this->assertClass('pattern', StructuralType::class, $pattern);
 
             $matchClause->addPattern($pattern);
         }
@@ -283,7 +283,7 @@ class Query implements QueryConvertable
     /**
      * Creates the CREATE clause.
      *
-     * @param StructuralType|StructuralType[]|Assignment|Assignment[] $patterns A single pattern or a list of patterns
+     * @param StructuralType|StructuralType[] $patterns A single pattern or a list of patterns
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/create/
@@ -298,7 +298,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-            $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
+            $this->assertClass('pattern', StructuralType::class, $pattern);
 
             $createClause->addPattern($pattern);
         }
@@ -405,7 +405,7 @@ class Query implements QueryConvertable
     /**
      * Creates the MERGE clause.
      *
-     * @param StructuralType|Assignment $pattern The pattern to merge
+     * @param StructuralType $pattern The pattern to merge
      * @param Clause|null $createClause The clause to execute when the pattern is created
      * @param Clause|null $matchClause The clause to execute when the pattern is matched
      *
@@ -413,10 +413,8 @@ class Query implements QueryConvertable
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/
      *
      */
-    public function merge($pattern, Clause $createClause = null, Clause $matchClause = null): self
+    public function merge(StructuralType $pattern, Clause $createClause = null, Clause $matchClause = null): self
     {
-        $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
-
         $mergeClause = new MergeClause();
         $mergeClause->setPattern($pattern);
 
@@ -436,7 +434,7 @@ class Query implements QueryConvertable
     /**
      * Creates the OPTIONAL MATCH clause.
      *
-     * @param StructuralType|StructuralType[]|Assignment|Assignment[] $patterns A single pattern or a list of patterns
+     * @param StructuralType|StructuralType[] $patterns A single pattern or a list of patterns
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/optional-match/
@@ -451,7 +449,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-            $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
+            $this->assertClass('pattern', StructuralType::class, $pattern);
 
             $optionalMatchClause->addPattern($pattern);
         }
