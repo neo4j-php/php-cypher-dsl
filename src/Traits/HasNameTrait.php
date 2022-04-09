@@ -2,7 +2,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
-use LogicException;
 use function bin2hex;
 use function ceil;
 use function openssl_random_pseudo_bytes;
@@ -14,15 +13,7 @@ trait HasNameTrait
 
     private string $name;
 
-    /**
-     * Returns the length in bytes of the auto-generated part of a name.
-     *
-     * @return int
-     */
-    public static function automaticVariableLength(): int
-    {
-        return 32;
-    }
+    private static int $automaticVariableLength = 32;
 
     /**
      * Returns the name.
@@ -32,7 +23,7 @@ trait HasNameTrait
     public function getName(): string
     {
         if (!isset($this->name)) {
-            throw new LogicException('Name is not yet configured. Please call `configureName` to setup a name.');
+            $this->configureName(null, 'var');
         }
 
         return $this->name;
@@ -52,7 +43,7 @@ trait HasNameTrait
      */
     private function generateName(string $prefix = 'var', int $length = null): string
     {
-        $length ??= self::automaticVariableLength();
+        $length ??= self::$automaticVariableLength;
 
         return $prefix . substr(bin2hex(openssl_random_pseudo_bytes(ceil($length / 2))), 0, $length);
     }

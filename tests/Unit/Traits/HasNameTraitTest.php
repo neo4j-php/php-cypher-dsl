@@ -22,9 +22,7 @@ class HasNameTraitTest extends TestCase
 
     public function testHasName(): void
     {
-        $this->expectException(LogicException::class);
-
-        $this->hasName->getName();
+        $this->assertMatchesRegularExpression('/var\w{32}/', $this->hasName->getName());
     }
 
     public function testGenerateName(): void

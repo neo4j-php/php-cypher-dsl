@@ -26,7 +26,7 @@ use InvalidArgumentException;
 use LogicException;
 use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\RelationshipTrait;
+use WikibaseSolutions\CypherDSL\Traits\RelationshipTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
@@ -38,7 +38,7 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 class Relationship implements RelationshipType
 {
     use EscapeTrait;
-    use RelationshipTrait;
+    use RelationshipTypeTrait;
 
     public const DIR_RIGHT = ["-", "->"];
     public const DIR_LEFT = ["<-", "-"];

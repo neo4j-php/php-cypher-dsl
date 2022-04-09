@@ -23,7 +23,6 @@ namespace WikibaseSolutions\CypherDSL;
 
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
-use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\DateTrait;
@@ -147,22 +146,33 @@ class Variable implements
         return self::escape($this->getName());
     }
 
-
+    /**
+     * @inheritDoc
+     */
     public function relationship(RelationshipType $relationship, NodeType $node): Path
     {
         return (new Path((new Node())->named($this)))->relationship($relationship, $node);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function relationshipTo(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
     {
         return (new Path((new Node())->named($this)))->relationshipTo($node, $type, $properties, $name);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function relationshipFrom(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
     {
         return (new Path((new Node())->named($this)))->relationshipFrom($node, $type, $properties, $name);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function relationshipUni(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
     {
         return (new Path((new Node())->named($this)))->relationshipUni($node, $type, $properties, $name);

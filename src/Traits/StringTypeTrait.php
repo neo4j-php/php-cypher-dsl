@@ -33,6 +33,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 trait StringTypeTrait
 {
     use PropertyTypeTrait;
+    use AliasableTrait;
 
     /**
      * Check whether this expression the given expression.

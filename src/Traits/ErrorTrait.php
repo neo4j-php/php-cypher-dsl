@@ -24,18 +24,6 @@ namespace WikibaseSolutions\CypherDSL\Traits;
 use __PHP_Incomplete_Class;
 use InvalidArgumentException;
 use TypeError;
-use function get_class;
-use function implode;
-use function is_array;
-use function is_bool;
-use function is_float;
-use function is_int;
-use function is_numeric;
-use function is_object;
-use function is_string;
-use function sprintf;
-use function strlen;
-use function trim;
 
 /**
  * Convenience trait including simple assertions and error reporting functions

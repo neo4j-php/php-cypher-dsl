@@ -67,6 +67,8 @@ class Node implements NodeType
     }
 
     /**
+     * Adds a label to the node.
+     *
      * @param string $label
      * @return Node
      */
@@ -108,6 +110,13 @@ class Node implements NodeType
         return "($nodeInner)";
     }
 
+    /**
+     * Returns a property on the node.
+     *
+     * @param string $property The name of the property.
+     *
+     * @return Property
+     */
     public function property(string $property): Property
     {
         return new Property($this->getName(), $property);

@@ -31,7 +31,7 @@ use WikibaseSolutions\CypherDSL\Traits\LocalTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\RelationshipTrait;
+use WikibaseSolutions\CypherDSL\Traits\RelationshipTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\PointTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TimeTrait;
@@ -78,7 +78,7 @@ class RawExpression implements
     use PointTrait;
     use NodeTypeTrait;
     use NumeralTypeTrait;
-    use RelationshipTrait;
+    use RelationshipTypeTrait;
     use StringTypeTrait;
     use TimeTrait;
     use AliasableTrait;
@@ -90,7 +90,7 @@ class RawExpression implements
 
     /**
      * RawExpression constructor.
-     *\
+     *
      * @param string $expression The raw expression
      */
     public function __construct(string $expression)
