@@ -39,18 +39,32 @@ class Path implements PathType
         $this->relationships = is_array($relationships) ? array_values($relationships) : [$relationships];
     }
 
+    /**
+     * @inheritDoc
+     */
     public function toQuery(): string
     {
+        // If there are no nodes in the path, it must be empty.
         if (count($this->nodes) === 0) {
             return '';
         }
 
         $cql = '';
+        // If a variable exists, we need to assign following the expression to it
         if ($this->getVariable() !== null) {
             $cql = $this->getName()->toQuery() . ' = ';
         }
 
+        // We use the relationships as a reference point to iterate over.
+        // The nodes position will be calculated using the index of the current relationship.
+        // If R is the position of the relationship, N is the position of te node, and x the amount of relationships
+        // in the path, then the positional structure is like this:
+        // N0 - R0 - N1 - R1 - N2 - ... - Nx - Rx - N(x + 1)
         foreach ($this->relationships as $i => $relationship) {
+            // To avoid a future crash, we already look for the node at the end of the relationship.
+            // If the following node does not exist, we must break the loop early.
+            // This case will be triggered if the amount of nodes is equal or less than the amount of relationships
+            // and is thus very unlikely.
             if (!array_key_exists($i + 1, $this->nodes)) {
                 --$i;
                 break;
@@ -59,6 +73,10 @@ class Path implements PathType
             $cql .= $relationship->toQuery();
         }
 
+        // Since the iteration leaves us at the final relationship, we still need to add the final node.
+        // If the path is simply a single node, $i won't be defined, hence the null coalescing operator with -1. By
+        // coalescing with -1 instead of 0, we remove the need of a separate if check, making both cases valid when they
+        // are incremented by 1.
         $cql .= $this->nodes[($i ?? -1) + 1]->toQuery();
 
         return $cql;
@@ -84,6 +102,9 @@ class Path implements PathType
         return $this->relationships;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function relationship(RelationshipType $relationship, NodeType $node): Path
     {
         $this->relationships[] = $relationship;
@@ -92,6 +113,9 @@ class Path implements PathType
         return $this;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function relationshipTo(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
     {
         $relationship = $this->buildRelationship(Relationship::DIR_RIGHT, $type, $properties, $name);
@@ -99,6 +123,9 @@ class Path implements PathType
         return $this->relationship($relationship, $node);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function relationshipFrom(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
     {
         $relationship = $this->buildRelationship(Relationship::DIR_LEFT, $type, $properties, $name);
@@ -106,6 +133,9 @@ class Path implements PathType
         return $this->relationship($relationship, $node);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function relationshipUni(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
     {
         $relationship = $this->buildRelationship(Relationship::DIR_UNI, $type, $properties, $name);

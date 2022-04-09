@@ -22,7 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 
 /**
- * Represents the type "node".
+ * Represents the type "path".
  */
 interface PathType extends StructuralType
 {

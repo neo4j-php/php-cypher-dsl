@@ -5,12 +5,18 @@ namespace WikibaseSolutions\CypherDSL;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use function sprintf;
 
+/**
+ * Represents aliasing an expression or variable.
+ *
+ * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
+ * @see https://neo4j.com/docs/cypher-manual/current/clauses/with/#with-introduce-variables
+ */
 class Alias implements AnyType
 {
     /**
-     * @var QueryConvertable The original item to be aliased
+     * @var AnyType The original item to be aliased
      */
-    private QueryConvertable $original;
+    private AnyType $original;
 
     /**
      * @var Variable The new variable aliasing the original
@@ -18,12 +24,12 @@ class Alias implements AnyType
     private Variable $variable;
 
     /**
-     * BinaryOperator constructor.
+     * Alias constructor.
      *
-     * @param QueryConvertable $original The original item to be aliased
+     * @param AnyType $original The original item to be aliased
      * @param Variable $variable The new variable aliasing the original
      */
-    public function __construct(QueryConvertable $original, Variable $variable)
+    public function __construct(AnyType $original, Variable $variable)
     {
         $this->original = $original;
         $this->variable = $variable;
@@ -40,9 +46,9 @@ class Alias implements AnyType
     /**
      * Gets the original item of the alias.
      *
-     * @return QueryConvertable
+     * @return AnyType
      */
-    public function getOriginal(): QueryConvertable
+    public function getOriginal(): AnyType
     {
         return $this->original;
     }

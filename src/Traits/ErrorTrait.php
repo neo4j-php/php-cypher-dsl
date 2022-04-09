@@ -24,18 +24,20 @@ namespace WikibaseSolutions\CypherDSL\Traits;
 use __PHP_Incomplete_Class;
 use InvalidArgumentException;
 use TypeError;
+use UnexpectedValueException;
+use function class_implements;
 use function get_class;
-use function implode;
+use function get_parent_class;
+use function get_resource_type;
 use function is_array;
 use function is_bool;
 use function is_float;
 use function is_int;
-use function is_numeric;
 use function is_object;
+use function is_resource;
 use function is_string;
-use function sprintf;
-use function strlen;
-use function trim;
+use function key;
+use function strpos;
 
 /**
  * Convenience trait including simple assertions and error reporting functions
@@ -63,40 +65,16 @@ trait ErrorTrait
     }
 
     /**
-     * Get debug type method stolen from the symfony polyfill
+     * Get debug type method stolen and refactored from the symfony polyfill
      *
      * @see https://github.com/symfony/polyfill/blob/main/src/Php80/Php80.php
      */
     public static function getDebugType($value): string
     {
-        switch (true) {
-            case null === $value: return 'null';
-            case is_bool($value): return 'bool';
-            case is_string($value): return 'string';
-            case is_array($value): return 'array';
-            case is_int($value): return 'int';
-            case is_float($value): return 'float';
-            case is_object($value): break;
-            case $value instanceof __PHP_Incomplete_Class: return '__PHP_Incomplete_Class';
-            default:
-                if (null === $type = @get_resource_type($value)) {
-                    return 'unknown';
-                }
-
-                if ('Unknown' === $type) {
-                    $type = 'closed';
-                }
-
-                return "resource ($type)";
-        }
-
-        $class = get_class($value);
-
-        if (false === strpos($class, '@')) {
-            return $class;
-        }
-
-        return (get_parent_class($class) ?: key(class_implements($class)) ?: 'class').'@anonymous';
+        return self::detectScalar($value)
+            ?? self::detectClass($value)
+            ?? self::detectResource($value)
+            ?? 'unknown';
     }
 
     /**
@@ -170,5 +148,91 @@ trait ErrorTrait
             implode(' or ', $classNames),
             self::getDebugType($userInput)
         );
+    }
+
+    /**
+     * Returns the name of the scalar type of the value if it is one.
+     *
+     * @param mixed $value
+     * @return string|null
+     */
+    private static function detectScalar($value): ?string
+    {
+        if ($value === null) {
+            return 'null';
+        }
+
+        if (is_bool($value)) {
+            return 'bool';
+        }
+
+        if (is_string($value)) {
+            return 'string';
+        }
+
+        if (is_array($value)) {
+            return 'array';
+        }
+
+        if (is_int($value)) {
+            return 'int';
+        }
+
+        if (is_float($value)) {
+            return 'float';
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the name of the class of the value if it is one.
+     *
+     * @param mixed $value
+     *
+     * @return string|null
+     */
+    private static function detectClass($value): ?string
+    {
+        if ($value instanceof __PHP_Incomplete_Class) {
+            return '__PHP_Incomplete_Class';
+        }
+
+        if (is_object($value)) {
+            $class = get_class($value);
+
+            if (false === strpos($class, '@')) {
+                return $class;
+            }
+
+            return (get_parent_class($class) ?: key(class_implements($class)) ?: 'class').'@anonymous';
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the name of the resource of the value if it is one.
+     *
+     * @param mixed $value
+     *
+     * @return string|null
+     */
+    private static function detectResource($value): ?string
+    {
+        if (is_resource($value)) {
+            $type = @get_resource_type($value);
+            if (null === $type) {
+                return 'unknown';
+            }
+
+            if ('Unknown' === $type) {
+                $type = 'closed';
+            }
+
+            return "resource ($type)";
+        }
+
+        return null;
     }
 }

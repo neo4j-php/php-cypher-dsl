@@ -34,7 +34,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 class StringLiteral implements StringType
 {
     use StringTypeTrait;
-    use AliasableTrait;
 
     /**
      * @var string

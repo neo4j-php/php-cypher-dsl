@@ -24,7 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Traits;
 /**
  * This trait should be used by any expression that returns a relationship.
  */
-trait RelationshipTrait
+trait RelationshipTypeTrait
 {
     use HasPropertiesTrait;
     use HasVariableTrait;

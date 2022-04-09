@@ -33,6 +33,7 @@ use WikibaseSolutions\CypherDSL\XorOperator;
 trait BooleanTypeTrait
 {
     use PropertyTypeTrait;
+    use AliasableTrait;
 
     /**
      * Create a conjunction between this expression and the given expression.

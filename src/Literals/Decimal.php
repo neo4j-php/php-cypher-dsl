@@ -31,7 +31,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 class Decimal implements NumeralType
 {
     use NumeralTypeTrait;
-    use AliasableTrait;
 
     /**
      * @var string The value
