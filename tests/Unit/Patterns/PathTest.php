@@ -47,6 +47,16 @@ class PathTest extends TestCase
         self::assertEquals('()', $path->toQuery());
     }
 
+    public function testPathMerge(): void
+    {
+        $pathX = new Path([new Node(), new Node()], [new Relationship(Relationship::DIR_UNI)]);
+        $pathY = new Path([new Node(), new Node()], [new Relationship(Relationship::DIR_UNI)]);
+
+        $pathX->named('x')->relationshipTo($pathY->named('y'));
+
+        self::assertEquals('x = ()-[]-()-[]->()-[]-()', $pathX->toQuery());
+    }
+
     public function testRelationshipLong(): void
     {
         $path = new Path(new Node());

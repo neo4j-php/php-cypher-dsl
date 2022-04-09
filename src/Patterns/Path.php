@@ -9,6 +9,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 use WikibaseSolutions\CypherDSL\Variable;
 use function array_key_exists;
 use function is_array;
@@ -105,10 +106,17 @@ class Path implements PathType
     /**
      * @inheritDoc
      */
-    public function relationship(RelationshipType $relationship, NodeType $node): Path
+    public function relationship(RelationshipType $relationship, StructuralType $nodeOrPath): Path
     {
+        self::assertClass('nodeOrPath', [__CLASS__, Node::class], $nodeOrPath);
+
         $this->relationships[] = $relationship;
-        $this->nodes[] = $node;
+        if ($nodeOrPath instanceof self) {
+            $this->relationships = array_merge($this->relationships, $nodeOrPath->getRelationships());
+            $this->nodes = array_merge($this->nodes, $nodeOrPath->getNodes());
+        } else {
+            $this->nodes []= $nodeOrPath;
+        }
 
         return $this;
     }
@@ -116,31 +124,31 @@ class Path implements PathType
     /**
      * @inheritDoc
      */
-    public function relationshipTo(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
+    public function relationshipTo(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
     {
         $relationship = $this->buildRelationship(Relationship::DIR_RIGHT, $type, $properties, $name);
 
-        return $this->relationship($relationship, $node);
+        return $this->relationship($relationship, $nodeOrPath);
     }
 
     /**
      * @inheritDoc
      */
-    public function relationshipFrom(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
+    public function relationshipFrom(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
     {
         $relationship = $this->buildRelationship(Relationship::DIR_LEFT, $type, $properties, $name);
 
-        return $this->relationship($relationship, $node);
+        return $this->relationship($relationship, $nodeOrPath);
     }
 
     /**
      * @inheritDoc
      */
-    public function relationshipUni(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
+    public function relationshipUni(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
     {
         $relationship = $this->buildRelationship(Relationship::DIR_UNI, $type, $properties, $name);
 
-        return $this->relationship($relationship, $node);
+        return $this->relationship($relationship, $nodeOrPath);
     }
 
     /**

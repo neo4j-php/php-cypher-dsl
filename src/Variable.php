@@ -53,6 +53,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * Represents a variable.
@@ -149,32 +150,32 @@ class Variable implements
     /**
      * @inheritDoc
      */
-    public function relationship(RelationshipType $relationship, NodeType $node): Path
+    public function relationship(RelationshipType $relationship, StructuralType $nodeOrPath): Path
     {
-        return (new Path((new Node())->named($this)))->relationship($relationship, $node);
+        return (new Path((new Node())->named($this)))->relationship($relationship, $nodeOrPath);
     }
 
     /**
      * @inheritDoc
      */
-    public function relationshipTo(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
+    public function relationshipTo(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
     {
-        return (new Path((new Node())->named($this)))->relationshipTo($node, $type, $properties, $name);
+        return (new Path((new Node())->named($this)))->relationshipTo($nodeOrPath, $type, $properties, $name);
     }
 
     /**
      * @inheritDoc
      */
-    public function relationshipFrom(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
+    public function relationshipFrom(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
     {
-        return (new Path((new Node())->named($this)))->relationshipFrom($node, $type, $properties, $name);
+        return (new Path((new Node())->named($this)))->relationshipFrom($nodeOrPath, $type, $properties, $name);
     }
 
     /**
      * @inheritDoc
      */
-    public function relationshipUni(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
+    public function relationshipUni(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
     {
-        return (new Path((new Node())->named($this)))->relationshipUni($node, $type, $properties, $name);
+        return (new Path((new Node())->named($this)))->relationshipUni($nodeOrPath, $type, $properties, $name);
     }
 }

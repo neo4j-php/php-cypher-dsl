@@ -24,6 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Traits;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * This trait should be used by any expression that returns a node.
@@ -33,23 +34,35 @@ trait NodeTypeTrait
     use HasPropertiesTrait;
     use HasVariableTrait;
 
-    public function relationship(RelationshipType $relationship, NodeType $node): Path
+    /**
+     * @inheritDoc
+     */
+    public function relationship(RelationshipType $relationship, StructuralType $nodeOrPath): Path
     {
-        return (new Path($this))->relationship($relationship, $node);
+        return (new Path($this))->relationship($relationship, $nodeOrPath);
     }
 
-    public function relationshipTo(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
+    /**
+     * @inheritDoc
+     */
+    public function relationshipTo(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
     {
-        return (new Path($this))->relationshipTo($node, $type, $properties, $name);
+        return (new Path($this))->relationshipTo($nodeOrPath, $type, $properties, $name);
     }
 
-    public function relationshipFrom(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
+    /**
+     * @inheritDoc
+     */
+    public function relationshipFrom(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
     {
-        return (new Path($this))->relationshipFrom($node, $type, $properties, $name);
+        return (new Path($this))->relationshipFrom($nodeOrPath, $type, $properties, $name);
     }
 
-    public function relationshipUni(NodeType $node, ?string $type = null, $properties = null, $name = null): Path
+    /**
+     * @inheritDoc
+     */
+    public function relationshipUni(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
     {
-        return (new Path($this))->relationshipUni($node, $type, $properties, $name);
+        return (new Path($this))->relationshipUni($nodeOrPath, $type, $properties, $name);
     }
 }
