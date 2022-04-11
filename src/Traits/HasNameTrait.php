@@ -5,6 +5,7 @@ namespace WikibaseSolutions\CypherDSL\Traits;
 use function bin2hex;
 use function ceil;
 use function openssl_random_pseudo_bytes;
+use function random_bytes;
 use function substr;
 
 trait HasNameTrait
@@ -45,7 +46,7 @@ trait HasNameTrait
     {
         $length ??= self::$automaticVariableLength;
 
-        return $prefix . substr(bin2hex(openssl_random_pseudo_bytes(ceil($length / 2))), 0, $length);
+        return $prefix . substr(bin2hex(random_bytes($length)), 0, $length);
     }
 
     private function configureName(?string $givenName, string $prefix, int $length = null): void
