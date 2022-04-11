@@ -37,6 +37,7 @@ use function is_object;
 use function is_resource;
 use function is_string;
 use function key;
+use function preg_match;
 use function strpos;
 
 /**
@@ -110,7 +111,7 @@ trait ErrorTrait
             throw new InvalidArgumentException("A name cannot be an empty string");
         }
 
-        if (!ctype_alnum(str_replace('_', '', $name))) {
+        if (!preg_match('/^\p{L}[\p{L}0-9_]*$/u', $name)) {
             throw new InvalidArgumentException('A name can only contain alphanumeric characters and underscores');
         }
 
