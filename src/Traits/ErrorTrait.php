@@ -111,12 +111,8 @@ trait ErrorTrait
             throw new InvalidArgumentException("A name cannot be an empty string");
         }
 
-        if (!preg_match('/^\p{L}[\p{L}0-9_]*$/u', $name)) {
-            throw new InvalidArgumentException('A name can only contain alphanumeric characters and underscores');
-        }
-
-        if (is_numeric($name[0])) {
-            throw new InvalidArgumentException('A name cannot begin with a numeric character');
+        if (!preg_match('/^\p{L}[\p{L}\d_]*$/u', $name)) {
+            throw new InvalidArgumentException('A name can only contain alphanumeric characters and underscores and must begin with an alphanumeric character');
         }
 
         if (strlen($name) >= 65535) {
