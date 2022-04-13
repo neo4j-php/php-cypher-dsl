@@ -112,7 +112,7 @@ trait ErrorTrait
         }
 
         if (!preg_match('/^\p{L}[\p{L}\d_]*$/u', $name)) {
-            throw new InvalidArgumentException('A name can only contain alphanumeric characters and underscores and must begin with an alphanumeric character');
+            throw new InvalidArgumentException('A name can only contain alphanumeric characters and underscores and must begin with an alphabetic character');
         }
 
         if (strlen($name) >= 65535) {
