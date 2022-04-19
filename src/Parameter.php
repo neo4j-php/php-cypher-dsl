@@ -21,10 +21,11 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use InvalidArgumentException;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\HasNameTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\LocalTimeTrait;
@@ -74,29 +75,18 @@ class Parameter implements
     use PointTrait;
     use StringTypeTrait;
     use TimeTrait;
-
-    /**
-     * @var string The parameter name
-     */
-    private string $parameter;
+    use HasNameTrait;
+    use ErrorTrait;
 
     /**
      * Parameter constructor.
      *
-     * @param string $parameter The parameter; this parameter may only consist of alphanumeric
+     * @param string|null $parameter The parameter; this parameter may only consist of alphanumeric
      *                          characters and underscores
      */
-    public function __construct(string $parameter)
+    public function __construct(?string $parameter = null)
     {
-        $strippedParameter = str_replace("_", "", $parameter);
-
-        if ($parameter === "" || (!ctype_alnum($strippedParameter) && $strippedParameter !== "")) {
-            throw new InvalidArgumentException(
-                "A parameter may only consist of alphanumeric characters and underscores."
-            );
-        }
-
-        $this->parameter = $parameter;
+        $this->configureName($parameter, 'param');
     }
 
     /**
@@ -106,7 +96,7 @@ class Parameter implements
      */
     public function getParameter(): string
     {
-        return $this->parameter;
+        return $this->getName();
     }
 
     /**
@@ -114,6 +104,6 @@ class Parameter implements
      */
     public function toQuery(): string
     {
-        return sprintf('$%s', $this->parameter);
+        return sprintf('$%s', $this->getName());
     }
 }

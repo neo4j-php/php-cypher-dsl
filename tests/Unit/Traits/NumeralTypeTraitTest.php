@@ -57,7 +57,7 @@ class NumeralTypeTraitTest extends TestCase
 
     public function setUp(): void
     {
-        $this->a = new class implements NumeralType {
+        $this->a = new class () implements NumeralType {
             use NumeralTypeTrait;
 
             public function toQuery(): string

@@ -50,7 +50,7 @@ class StringTypeTraitTest extends TestCase
 
     public function setUp(): void
     {
-        $this->a = new class implements StringType {
+        $this->a = new class () implements StringType {
             use StringTypeTrait;
 
             public function toQuery(): string

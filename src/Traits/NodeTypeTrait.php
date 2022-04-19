@@ -21,10 +21,48 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
+use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
+
 /**
  * This trait should be used by any expression that returns a node.
  */
 trait NodeTypeTrait
 {
-    use StructuralTypeTrait;
+    use HasPropertiesTrait;
+    use HasVariableTrait;
+
+    /**
+     * @inheritDoc
+     */
+    public function relationship(RelationshipType $relationship, StructuralType $nodeOrPath): Path
+    {
+        return (new Path($this))->relationship($relationship, $nodeOrPath);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationshipTo(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return (new Path($this))->relationshipTo($nodeOrPath, $type, $properties, $name);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationshipFrom(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return (new Path($this))->relationshipFrom($nodeOrPath, $type, $properties, $name);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationshipUni(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return (new Path($this))->relationshipUni($nodeOrPath, $type, $properties, $name);
+    }
 }

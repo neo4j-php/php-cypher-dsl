@@ -21,14 +21,12 @@
 
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
-use InvalidArgumentException;
 use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 use WikibaseSolutions\CypherDSL\Variable;
 
 /**
@@ -47,46 +45,6 @@ class Node implements NodeType
     private array $labels = [];
 
     /**
-     * @var Variable|null
-     */
-    private ?Variable $variable = null;
-
-    /**
-     * @var MapType|null
-     */
-    private ?MapType $properties = null;
-
-    /**
-     * Returns the labels of the node.
-     *
-     * @return string[]
-     */
-    public function getLabels(): array
-    {
-        return $this->labels;
-    }
-
-    /**
-     * Returns the properties added to the node.
-     *
-     * @return MapType|null
-     */
-    public function getProperties(): ?MapType
-    {
-        return $this->properties;
-    }
-
-    /**
-     * Returns the variable name of the node.
-     *
-     * @return Variable|null
-     */
-    public function getVariable(): ?Variable
-    {
-        return $this->variable;
-    }
-
-    /**
      * Node constructor.
      *
      * @param string|null $label
@@ -99,93 +57,18 @@ class Node implements NodeType
     }
 
     /**
-     * Add the given property to the properties of this node.
+     * Returns the labels of the node.
      *
-     * @param string $key The name of the property
-     * @param AnyType $value The value of the property
-     * @return NodeType
+     * @return string[]
      */
-    public function withProperty(string $key, AnyType $value): NodeType
+    public function getLabels(): array
     {
-        if (!isset($this->properties)) {
-            $this->properties = new PropertyMap();
-        }
-
-        $this->properties->addProperty($key, $value);
-
-        return $this;
+        return $this->labels;
     }
 
     /**
-     * Add the given properties to the properties of this node.
+     * Adds a label to the node.
      *
-     * @param PropertyMap|array $properties
-     * @return NodeType
-     */
-    public function withProperties($properties): NodeType
-    {
-        if (!isset($this->properties)) {
-            $this->properties = new PropertyMap();
-        }
-
-        if (is_array($properties)) {
-            $properties = new PropertyMap($properties);
-        } elseif (!($properties instanceof PropertyMap)) {
-            throw new InvalidArgumentException("\$properties must either be an array or a PropertyMap object");
-        }
-
-        $this->properties = $this->properties->mergeWith($properties);
-
-        return $this;
-    }
-
-    /**
-     * @param Variable|string $variable
-     * @return Node
-     */
-    public function named($variable): self
-    {
-        if (!($variable instanceof Variable)) {
-            if (!is_string($variable)) {
-                throw new InvalidArgumentException("\$variable must either be a string or a Variable object");
-            }
-
-            $variable = new Variable($variable);
-        }
-
-        $this->variable = $variable;
-
-        return $this;
-    }
-
-    /**
-     * Returns the name of this node. This function automatically generates a name if the node does not have a
-     * name yet.
-     *
-     * @return Variable|null The name of this node, or NULL if this node does not have a name
-     */
-    public function getName(): ?Variable
-    {
-        if (!isset($this->variable)) {
-            $this->named(new Variable());
-        }
-
-        return $this->variable;
-    }
-
-    /**
-     * Alias of Node::named().
-     *
-     * @param $variable
-     * @return $this
-     * @see Node::named()
-     */
-    public function setName($variable): self
-    {
-        return $this->named($variable);
-    }
-
-    /**
      * @param string $label
      * @return Node
      */
@@ -194,18 +77,6 @@ class Node implements NodeType
         $this->labels[] = $label;
 
         return $this;
-    }
-
-    /**
-     * Returns the property of the given name for this node. For instance, if this node is "(foo:PERSON)", a function call
-     * like $node->property("bar") would yield "foo.bar".
-     *
-     * @param string $property
-     * @return Property
-     */
-    public function property(string $property): Property
-    {
-        return new Property($this->getName(), $property);
     }
 
     /**
@@ -237,5 +108,17 @@ class Node implements NodeType
         }
 
         return "($nodeInner)";
+    }
+
+    /**
+     * Returns a property on the node.
+     *
+     * @param string $property The name of the property.
+     *
+     * @return Property
+     */
+    public function property(string $property): Property
+    {
+        return new Property($this->getName(), $property);
     }
 }

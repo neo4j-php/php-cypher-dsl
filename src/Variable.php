@@ -21,18 +21,22 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
+use WikibaseSolutions\CypherDSL\Patterns\Node;
+use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\DateTrait;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\HasNameTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\LocalTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\PathTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\PointTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\StructuralTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TimeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
@@ -48,6 +52,8 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * Represents a variable.
@@ -76,32 +82,22 @@ class Variable implements
     use ListTypeTrait;
     use LocalDateTimeTrait;
     use LocalTimeTrait;
-    use MapTypeTrait;
     use NumeralTypeTrait;
-    use PathTypeTrait;
     use PointTrait;
     use StringTypeTrait;
     use TimeTrait;
-
-    public const AUTOMATIC_VARIABLE_LENGTH = 32;
-
-    /**
-     * @var string The variable
-     */
-    private string $variable;
+    use HasNameTrait;
+    use MapTypeTrait;
+    use ErrorTrait;
 
     /**
      * Variable constructor.
      *
-     * @param string $variable The variable
+     * @param string|null $variable The variable
      */
     public function __construct(?string $variable = null)
     {
-        if ($variable === null) {
-            $variable = $this->generateUUID(self::AUTOMATIC_VARIABLE_LENGTH);
-        }
-
-        $this->variable = $variable;
+        $this->configureName($variable, 'var');
     }
 
     /**
@@ -128,16 +124,6 @@ class Variable implements
     }
 
     /**
-     * Returns the variable name.
-     *
-     * @return string
-     */
-    public function getVariable(): string
-    {
-        return $this->variable;
-    }
-
-    /**
      * Assign a value to this variable.
      *
      * @param AnyType $value The value to assign
@@ -148,25 +134,48 @@ class Variable implements
         return new Assignment($this, $value);
     }
 
+    public function getVariable(): string
+    {
+        return $this->getName();
+    }
+
     /**
      * @inheritDoc
      */
     public function toQuery(): string
     {
-        return $this->escape($this->variable);
+        return self::escape($this->getName());
     }
 
     /**
-     * Generates a unique random identifier.
-     *
-     * @note It is not entirely guaranteed that this function gives a truly unique identifier. However, because the
-     * number of possible IDs is so huge, it should not be a problem.
-     *
-     * @param int $length
-     * @return string
+     * @inheritDoc
      */
-    private static function generateUUID(int $length): string
+    public function relationship(RelationshipType $relationship, StructuralType $nodeOrPath): Path
     {
-        return 'var' . substr(bin2hex(openssl_random_pseudo_bytes(ceil($length / 2))), 0, $length);
+        return (new Path((new Node())->named($this)))->relationship($relationship, $nodeOrPath);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationshipTo(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return (new Path((new Node())->named($this)))->relationshipTo($nodeOrPath, $type, $properties, $name);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationshipFrom(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return (new Path((new Node())->named($this)))->relationshipFrom($nodeOrPath, $type, $properties, $name);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationshipUni(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return (new Path((new Node())->named($this)))->relationshipUni($nodeOrPath, $type, $properties, $name);
     }
 }

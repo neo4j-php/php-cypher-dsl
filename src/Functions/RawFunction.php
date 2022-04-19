@@ -26,10 +26,9 @@ use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\PathTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\StructuralTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -47,18 +46,14 @@ class RawFunction extends FunctionCall implements
     MapType,
     BooleanType,
     NumeralType,
-    StringType,
-    NodeType,
-    PathType
+    StringType
 {
     use BooleanTypeTrait;
-    use ErrorTrait;
     use ListTypeTrait;
     use MapTypeTrait;
-    use NodeTypeTrait;
     use NumeralTypeTrait;
-    use PathTypeTrait;
     use StringTypeTrait;
+    use ErrorTrait;
 
     /**
      * @var string $functionName The name of the function to call

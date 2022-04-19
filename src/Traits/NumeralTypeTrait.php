@@ -40,6 +40,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 trait NumeralTypeTrait
 {
     use PropertyTypeTrait;
+    use AliasableTrait;
 
     /**
      * Add this expression to the given expression.

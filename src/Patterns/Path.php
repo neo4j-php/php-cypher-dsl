@@ -1,413 +1,183 @@
 <?php
 
-/*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */
-
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
-use DomainException;
-use InvalidArgumentException;
-use LogicException;
 use WikibaseSolutions\CypherDSL\PropertyMap;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\PathTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\PathTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 use WikibaseSolutions\CypherDSL\Variable;
+use function array_key_exists;
+use function is_array;
 
-/**
- * This class represents an arbitrary relationship between two nodes, a node and a
- * relationship or between two relationships.
- *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
- */
 class Path implements PathType
 {
-    use EscapeTrait;
-    use PathTypeTrait;
+    use PathTrait;
+    use ErrorTrait;
 
-    public const DIR_RIGHT = ["-", "->"];
-    public const DIR_LEFT = ["<-", "-"];
-    public const DIR_UNI = ["-", "-"];
-
-    /**
-     * @var StructuralType The pattern left of the relationship
-     */
-    private StructuralType $left;
+    /** @var Relationship[] */
+    private array $relationships;
+    /** @var Node[] */
+    private array $nodes;
 
     /**
-     * @var StructuralType The pattern right of the relationship
+     * @param AnyType|AnyType[]|null $nodes
+     * @param Relationship|Relationship[]|null $relationships
      */
-    private StructuralType $right;
-
-    /**
-     * @var string[] The direction of the relationship
-     */
-    private array $direction;
-
-    /**
-     * @var string[]
-     */
-    private array $types = [];
-
-    /**
-     * @var Variable|null
-     */
-    private ?Variable $variable = null;
-
-    /**
-     * @var int|null The minimum number of `relationship->node` hops away to search
-     */
-    private ?int $minHops = null;
-
-    /**
-     * @var int|null The maximum number of `relationship->node` hops away to search
-     */
-    private ?int $maxHops = null;
-
-    /**
-     * @var int|null The exact number of `relationship->node` hops away to search
-     */
-    private ?int $exactHops = null;
-
-    /**
-     * @var MapType|null
-     */
-    private ?MapType $properties = null;
-
-    /**
-     * Path constructor.
-     *
-     * @param StructuralType $left The node left of the relationship
-     * @param StructuralType $right The node right of the relationship
-     * @param array $direction The direction of the relationship, should be either:
-     *                           - Path::DIR_RIGHT (for a relation of
-     *                           (a)-->(b)) - Path::DIR_LEFT (for a relation
-     *                           of (a)<--(b)) - Path::DIR_UNI (for a
-     *                           relation of (a)--(b))
-     */
-    public function __construct(StructuralType $left, StructuralType $right, array $direction)
+    public function __construct($nodes = null, $relationships = null)
     {
-        $this->left = $left;
-        $this->right = $right;
+        self::assertClass('relationships', [Relationship::class, 'array', 'null'], $relationships);
+        self::assertClass('nodes', [AnyType::class, 'array', 'null'], $nodes);
 
-        if ($direction !== self::DIR_RIGHT && $direction !== self::DIR_LEFT && $direction !== self::DIR_UNI) {
-            throw new InvalidArgumentException("The direction must be either 'DIR_LEFT', 'DIR_RIGHT' or 'RELATED_TO'");
-        }
+        $nodes ??= [];
+        $relationships ??= [];
 
-        $this->direction = $direction;
+        $this->nodes = is_array($nodes) ? array_values($nodes) : [$nodes];
+        $this->relationships = is_array($relationships) ? array_values($relationships) : [$relationships];
     }
 
     /**
-     * Add the given property to the properties of this path.
-     *
-     * @param string $key The name of the property
-     * @param AnyType $value The value of the property
-     * @return PathType
-     */
-    public function withProperty(string $key, AnyType $value): PathType
-    {
-        if (!isset($this->properties)) {
-            $this->properties = new PropertyMap();
-        }
-
-        $this->properties->addProperty($key, $value);
-
-        return $this;
-    }
-
-    /**
-     * Add the given properties to the properties of this path.
-     *
-     * @param PropertyMap|array $properties
-     * @return PathType
-     */
-    public function withProperties($properties): PathType
-    {
-        if (!isset($this->properties)) {
-            $this->properties = new PropertyMap();
-        }
-
-        if (is_array($properties)) {
-            $properties = new PropertyMap($properties);
-        } elseif (!($properties instanceof PropertyMap)) {
-            throw new InvalidArgumentException("\$properties must either be an array or a PropertyMap object");
-        }
-
-        $this->properties = $this->properties->mergeWith($properties);
-
-        return $this;
-    }
-
-    /**
-     * @param Variable|string $variable
-     * @return Path
-     */
-    public function named($variable): self
-    {
-        if (!($variable instanceof Variable)) {
-            $variable = new Variable($variable);
-        }
-
-        $this->variable = $variable;
-
-        return $this;
-    }
-
-    /**
-     * Set the minimum number of `relationship->node` hops away to search.
-     *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels
-     *
-     * @param int $minHops
-     * @return Path
-     */
-    public function withMinHops(int $minHops): self
-    {
-        if ($minHops < 0) {
-            throw new DomainException("minHops cannot be less than 0");
-        }
-
-        if (isset($this->maxHops) && $minHops > $this->maxHops) {
-            throw new DomainException("minHops cannot be greater than maxHops");
-        }
-
-        if (isset($this->exactHops)) {
-            throw new LogicException("Cannot use minHops in combination with exactHops");
-        }
-
-        $this->minHops = $minHops;
-
-        return $this;
-    }
-
-    /**
-     * Set the maximum number of `relationship->node` hops away to search.
-     *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels
-     *
-     * @param int $maxHops
-     * @return Path
-     */
-    public function withMaxHops(int $maxHops): self
-    {
-        if ($maxHops < 1) {
-            throw new DomainException("maxHops cannot be less than 1");
-        }
-
-        if (isset($this->minHops) && $maxHops < $this->minHops) {
-            throw new DomainException("maxHops cannot be less than minHops");
-        }
-
-        if (isset($this->exactHops)) {
-            throw new LogicException("Cannot use maxHops in combination with exactHops");
-        }
-
-        $this->maxHops = $maxHops;
-
-        return $this;
-    }
-
-    /**
-     * Set the exact number of `relationship->node` hops away to search.
-     *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels
-     *
-     * @param int $exactHops
-     * @return Path
-     */
-    public function withExactHops(int $exactHops): self
-    {
-        if ($exactHops < 1) {
-            throw new DomainException("exactHops cannot be less than 1");
-        }
-
-        if (isset($this->minHops) || isset($this->maxHops)) {
-            throw new LogicException("Cannot use exactHops in combination with minHops or maxHops");
-        }
-
-        $this->exactHops = $exactHops;
-
-        return $this;
-    }
-
-    /**
-     * @param string $type
-     * @return Path
-     */
-    public function withType(string $type): self
-    {
-        $this->types[] = $type;
-
-        return $this;
-    }
-
-    /**
-     * Returns the string representation of this relationship that can be used directly
-     * in a query.
-     *
-     * @return string
+     * @inheritDoc
      */
     public function toQuery(): string
     {
-        $a = $this->left->toQuery();
-        $b = $this->right->toQuery();
-
-        return $a . $this->direction[0] . $this->conditionToString() . $this->direction[1] . $b;
-    }
-
-    /**
-     * @return string
-     */
-    private function conditionToString(): string
-    {
-        $conditionInner = "";
-
-        // The condition always starts with the variable
-        if (isset($this->variable)) {
-            $conditionInner .= $this->variable->toQuery();
+        // If there are no nodes in the path, it must be empty.
+        if (count($this->nodes) === 0) {
+            return '';
         }
 
-        $types = array_filter($this->types);
-
-        if (count($types) !== 0) {
-            // If we have at least one condition type, escape them and insert them into the query
-            $escapedTypes = array_map(fn (string $type): string => $this->escape($type), $types);
-            $conditionInner .= sprintf(":%s", implode("|", $escapedTypes));
+        $cql = '';
+        // If a variable exists, we need to assign following the expression to it
+        if ($this->getVariable() !== null) {
+            $cql = $this->getName()->toQuery() . ' = ';
         }
 
-        if (isset($this->minHops) || isset($this->maxHops)) {
-            // We have either a minHop, maxHop or both
-            $conditionInner .= "*";
-
-            if (isset($this->minHops)) {
-                $conditionInner .= $this->minHops;
+        // We use the relationships as a reference point to iterate over.
+        // The nodes position will be calculated using the index of the current relationship.
+        // If R is the position of the relationship, N is the position of te node, and x the amount of relationships
+        // in the path, then the positional structure is like this:
+        // N0 - R0 - N1 - R1 - N2 - ... - Nx - Rx - N(x + 1)
+        foreach ($this->relationships as $i => $relationship) {
+            // To avoid a future crash, we already look for the node at the end of the relationship.
+            // If the following node does not exist, we must break the loop early.
+            // This case will be triggered if the amount of nodes is equal or less than the amount of relationships
+            // and is thus very unlikely.
+            if (!array_key_exists($i + 1, $this->nodes)) {
+                --$i;
+                break;
             }
-
-            $conditionInner .= '..';
-
-            if (isset($this->maxHops)) {
-                $conditionInner .= $this->maxHops;
-            }
-        } elseif (isset($this->exactHops)) {
-            $conditionInner .= '*' . $this->exactHops;
+            $cql .= $this->nodes[$i]->toQuery();
+            $cql .= $relationship->toQuery();
         }
 
-        if (isset($this->properties)) {
-            if ($conditionInner !== "") {
-                // Add some padding between the property list and the preceding structure
-                $conditionInner .= " ";
-            }
+        // Since the iteration leaves us at the final relationship, we still need to add the final node.
+        // If the path is simply a single node, $i won't be defined, hence the null coalescing operator with -1. By
+        // coalescing with -1 instead of 0, we remove the need of a separate if check, making both cases valid when they
+        // are incremented by 1.
+        $cql .= $this->nodes[($i ?? -1) + 1]->toQuery();
 
-            $conditionInner .= $this->properties->toQuery();
+        return $cql;
+    }
+
+    /**
+     * Returns the nodes in the path in sequential order.
+     *
+     * @return Node[]
+     */
+    public function getNodes(): array
+    {
+        return $this->nodes;
+    }
+
+    /**
+     * Returns the relationships in the path in sequential order.
+     *
+     * @return Relationship[]
+     */
+    public function getRelationships(): array
+    {
+        return $this->relationships;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationship(RelationshipType $relationship, StructuralType $nodeOrPath): Path
+    {
+        self::assertClass('nodeOrPath', [__CLASS__, Node::class], $nodeOrPath);
+
+        $this->relationships[] = $relationship;
+        if ($nodeOrPath instanceof self) {
+            $this->relationships = array_merge($this->relationships, $nodeOrPath->getRelationships());
+            $this->nodes = array_merge($this->nodes, $nodeOrPath->getNodes());
+        } else {
+            $this->nodes []= $nodeOrPath;
         }
 
-        return sprintf("[%s]", $conditionInner);
+        return $this;
     }
 
     /**
-     * @return MapType|null
+     * @inheritDoc
      */
-    public function getProperties(): ?MapType
+    public function relationshipTo(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
     {
-        return $this->properties;
+        $relationship = $this->buildRelationship(Relationship::DIR_RIGHT, $type, $properties, $name);
+
+        return $this->relationship($relationship, $nodeOrPath);
     }
 
     /**
-     * Returns the variable of the path.
+     * @inheritDoc
+     */
+    public function relationshipFrom(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
+    {
+        $relationship = $this->buildRelationship(Relationship::DIR_LEFT, $type, $properties, $name);
+
+        return $this->relationship($relationship, $nodeOrPath);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationshipUni(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
+    {
+        $relationship = $this->buildRelationship(Relationship::DIR_UNI, $type, $properties, $name);
+
+        return $this->relationship($relationship, $nodeOrPath);
+    }
+
+    /**
+     * @param array $direction
+     * @param string|null $type
+     * @param mixed $properties
+     * @param mixed $name
      *
-     * @return Variable|null
+     * @return Relationship
      */
-    public function getVariable(): ?Variable
+    private function buildRelationship(array $direction, ?string $type, $properties, $name): Relationship
     {
-        return $this->variable;
-    }
+        self::assertClass('properties', ['array', PropertyMap::class, 'null'], $properties);
+        self::assertClass('name', ['string', Variable::class, 'null'], $name);
 
-    /**
-     * Returns the left structure of the relationship.
-     *
-     * @return StructuralType
-     */
-    public function getLeft(): StructuralType
-    {
-        return $this->left;
-    }
+        $relationship = new Relationship($direction);
 
-    /**
-     * Returns the right structure of the relationship.
-     *
-     * @return StructuralType
-     */
-    public function getRight(): StructuralType
-    {
-        return $this->right;
-    }
+        if ($type !== null) {
+            $relationship->withType($type);
+        }
 
-    /**
-     * Returns the direction of the path.
-     *
-     * @return string[]
-     */
-    public function getDirection(): array
-    {
-        return $this->direction;
-    }
+        if ($properties !== null) {
+            $relationship->withProperties($properties);
+        }
 
-    /**
-     * Returns the exact amount of hops configured.
-     *
-     * @return int|null
-     */
-    public function getExactHops(): ?int
-    {
-        return $this->exactHops;
-    }
+        if ($name !== null) {
+            $relationship->named($name);
+        }
 
-    /**
-     * Returns the maximum amount of hops configured
-     *
-     * @return int|null
-     */
-    public function getMaxHops(): ?int
-    {
-        return $this->maxHops;
-    }
-
-    /**
-     * Returns the minimum amount of hops configured.
-     *
-     * @return int|null
-     */
-    public function getMinHops(): ?int
-    {
-        return $this->minHops;
-    }
-
-    /**
-     * Returns the types of the relationship.
-     *
-     * @return string[]
-     */
-    public function getTypes(): array
-    {
-        return $this->types;
+        return $relationship;
     }
 }

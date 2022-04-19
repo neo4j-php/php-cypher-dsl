@@ -19,12 +19,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits;
+namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
+
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
- * This trait should be used by any expression that returns a relationship.
+ * Represents the type "relationship".
  */
-trait PathTypeTrait
+interface RelationshipType extends AnyType
 {
-    use StructuralTypeTrait;
 }

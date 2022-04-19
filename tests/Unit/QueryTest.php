@@ -36,6 +36,7 @@ use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Parameter;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Query;
@@ -55,7 +56,7 @@ class QueryTest extends TestCase
 {
     use TestHelper;
 
-    public function testNodeWithoutLabel()
+    public function testNodeWithoutLabel(): void
     {
         $actual = Query::node();
         $expected = new Node();
@@ -63,7 +64,7 @@ class QueryTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testNodeWithLabel()
+    public function testNodeWithLabel(): void
     {
         $label = "m";
 
@@ -73,34 +74,31 @@ class QueryTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testRelationship()
+    public function testRelationship(): void
     {
-        $a = $this->getQueryConvertableMock(NodeType::class, "a");
-        $b = $this->getQueryConvertableMock(PathType::class, "b");
-
-        $directions = [Path::DIR_UNI, Path::DIR_LEFT, Path::DIR_RIGHT];
+        $directions = [Relationship::DIR_UNI, Relationship::DIR_LEFT, Relationship::DIR_RIGHT];
 
         foreach ($directions as $direction) {
-            $expected = new Path($a, $b, $direction);
-            $actual = Query::relationship($a, $b, $direction);
+            $expected = new Relationship($direction);
+            $actual = Query::relationship($direction);
 
             $this->assertEquals($expected, $actual);
         }
     }
 
-    public function testVariable()
+    public function testVariable(): void
     {
         $this->assertInstanceOf(Variable::class, Query::variable("foo"));
     }
 
-    public function testVariableEmpty()
+    public function testVariableEmpty(): void
     {
         $this->assertInstanceOf(Variable::class, Query::variable());
 
         $this->assertMatchesRegularExpression('/var[0-9a-f]+/', Query::variable()->toQuery());
     }
 
-    public function testParameter()
+    public function testParameter(): void
     {
         $this->assertInstanceOf(Parameter::class, Query::parameter("foo"));
     }
@@ -110,35 +108,35 @@ class QueryTest extends TestCase
      * @param        $literal
      * @param PropertyType $expected
      */
-    public function testLiteral($literal, PropertyType $expected)
+    public function testLiteral($literal, PropertyType $expected): void
     {
         $actual = Query::literal($literal);
 
         $this->assertEquals($expected, $actual);
     }
 
-    public function testList()
+    public function testList(): void
     {
         $list = Query::list([]);
 
         $this->assertInstanceOf(ExpressionList::class, $list);
     }
 
-    public function testListOfLiterals()
+    public function testListOfLiterals(): void
     {
         $list = Query::list(["hello", "world", 1.0, 1, 2, 3, true]);
 
         $this->assertInstanceOf(ExpressionList::class, $list);
     }
 
-    public function testListOfMixed()
+    public function testListOfMixed(): void
     {
         $list = Query::list([$this->getQueryConvertableMock(AnyType::class, "hello"), "world"]);
 
         $this->assertInstanceOf(ExpressionList::class, $list);
     }
 
-    public function testListOfAnyType()
+    public function testListOfAnyType(): void
     {
         $list = Query::list([
             $this->getQueryConvertableMock(AnyType::class, "hello"),
@@ -148,14 +146,14 @@ class QueryTest extends TestCase
         $this->assertInstanceOf(ExpressionList::class, $list);
     }
 
-    public function testNestedList()
+    public function testNestedList(): void
     {
         $list = Query::list([Query::list([])]);
 
         $this->assertInstanceOf(ExpressionList::class, $list);
     }
 
-    public function testIteratorList()
+    public function testIteratorList(): void
     {
         $iterator = new class () implements \Iterator {
             private int $count = 0;
@@ -192,13 +190,13 @@ class QueryTest extends TestCase
         $this->assertInstanceOf(ExpressionList::class, $list);
     }
 
-    public function testInvalidList()
+    public function testInvalidList(): void
     {
         $this->expectException(InvalidArgumentException::class);
         Query::list([new class () {}]);
     }
 
-    public function testMap()
+    public function testMap(): void
     {
         $map = Query::map([]);
 
@@ -208,12 +206,12 @@ class QueryTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testFunction()
+    public function testFunction(): void
     {
         Query::function()::raw("test", []);
     }
 
-    public function testMatch()
+    public function testMatch(): void
     {
         $m = $this->getQueryConvertableMock(NodeType::class, "(m:Movie)");
 
@@ -229,16 +227,15 @@ class QueryTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testMatchTypeAcceptance()
+    public function testMatchTypeAcceptance(): void
     {
-        $assignment = $this->getQueryConvertableMock(Assignment::class, 'p = (a)-->(b)');
         $path = $this->getQueryConvertableMock(PathType::class, '(a)-->(b)');
         $node = $this->getQueryConvertableMock(NodeType::class, '(a)');
 
-        (new Query())->match([$assignment, $path, $node]);
+        (new Query())->match([$path, $node]);
     }
 
-    public function testMatchRejectsAnyType()
+    public function testMatchRejectsAnyType(): void
     {
         $m = $this->getQueryConvertableMock(AnyType::class, 'foo');
 
@@ -247,7 +244,7 @@ class QueryTest extends TestCase
         (new Query())->match($m);
     }
 
-    public function testReturning()
+    public function testReturning(): void
     {
         $m = $this->getQueryConvertableMock(StructuralType::class, "(m:Movie)");
 
@@ -260,7 +257,7 @@ class QueryTest extends TestCase
         $this->assertSame("RETURN (m:Movie) AS n", $statement);
     }
 
-    public function testReturningRejectsNotAnyType()
+    public function testReturningRejectsNotAnyType(): void
     {
         $m = new class () {};
 
@@ -269,7 +266,7 @@ class QueryTest extends TestCase
         (new Query())->returning([$m]);
     }
 
-    public function testReturningWithNode()
+    public function testReturningWithNode(): void
     {
         $node = Query::node("m");
 
@@ -285,7 +282,7 @@ class QueryTest extends TestCase
         $this->assertSame('RETURN example', $statement);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $m = $this->getQueryConvertableMock(PathType::class, "(m:Movie)-[:RELATED]->(b)");
 
@@ -301,16 +298,15 @@ class QueryTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testCreateTypeAcceptance()
+    public function testCreateTypeAcceptance(): void
     {
-        $assignment = $this->getQueryConvertableMock(Assignment::class, 'p = (a)-->(b)');
         $path = $this->getQueryConvertableMock(PathType::class, '(a)-->(b)');
         $node = $this->getQueryConvertableMock(NodeType::class, '(a)');
 
-        (new Query())->create([$assignment, $path, $node]);
+        (new Query())->create([$path, $node]);
     }
 
-    public function testCreateRejectsAnyType()
+    public function testCreateRejectsAnyType(): void
     {
         $m = $this->getQueryConvertableMock(AnyType::class, 'foo');
 
@@ -319,7 +315,7 @@ class QueryTest extends TestCase
         (new Query())->create([$m, $m]);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $m = $this->getQueryConvertableMock(NodeType::class, "(m:Movie)");
 
@@ -332,7 +328,7 @@ class QueryTest extends TestCase
         $this->assertSame("DELETE (m:Movie), (m:Movie)", $statement);
     }
 
-    public function testDeleteRejectsAnyType()
+    public function testDeleteRejectsAnyType(): void
     {
         $m = $this->getQueryConvertableMock(AnyType::class, 'foo');
 
@@ -341,7 +337,7 @@ class QueryTest extends TestCase
         (new Query())->delete([$m, $m]);
     }
 
-    public function testDetachDelete()
+    public function testDetachDelete(): void
     {
         $m = $this->getQueryConvertableMock(NodeType::class, "(m:Movie)");
 
@@ -354,7 +350,7 @@ class QueryTest extends TestCase
         $this->assertSame("DETACH DELETE (m:Movie), (m:Movie)", $statement);
     }
 
-    public function testDetachDeleteRejectsAnyType()
+    public function testDetachDeleteRejectsAnyType(): void
     {
         $m = $this->getQueryConvertableMock(AnyType::class, 'foo');
 
@@ -363,7 +359,7 @@ class QueryTest extends TestCase
         (new Query())->detachDelete([$m, $m]);
     }
 
-    public function testLimit()
+    public function testLimit(): void
     {
         $expression = $this->getQueryConvertableMock(NumeralType::class, "12");
 
@@ -372,7 +368,7 @@ class QueryTest extends TestCase
         $this->assertSame("LIMIT 12", $statement);
     }
 
-    public function testMerge()
+    public function testMerge(): void
     {
         $pattern = $this->getQueryConvertableMock(PathType::class, "(m)->(b)");
 
@@ -391,18 +387,16 @@ class QueryTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testMergeTypeAcceptance()
+    public function testMergeTypeAcceptance(): void
     {
-        $assignment = $this->getQueryConvertableMock(Assignment::class, 'p = (a)-->(b)');
         $path = $this->getQueryConvertableMock(PathType::class, '(a)-->(b)');
         $node = $this->getQueryConvertableMock(NodeType::class, '(a)');
 
-        (new Query())->merge($assignment);
         (new Query())->merge($path);
         (new Query())->merge($node);
     }
 
-    public function testMergeRejectsAnyType()
+    public function testMergeRejectsAnyType(): void
     {
         $m = $this->getQueryConvertableMock(AnyType::class, 'foo');
 
@@ -411,7 +405,7 @@ class QueryTest extends TestCase
         (new Query())->optionalMatch([$m, $m]);
     }
 
-    public function testOptionalMatch()
+    public function testOptionalMatch(): void
     {
         $pattern = $this->getQueryConvertableMock(NodeType::class, "(m)");
 
@@ -427,16 +421,15 @@ class QueryTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testOptionalMatchTypeAcceptance()
+    public function testOptionalMatchTypeAcceptance(): void
     {
-        $assignment = $this->getQueryConvertableMock(Assignment::class, 'p = (a)-->(b)');
         $path = $this->getQueryConvertableMock(PathType::class, '(a)-->(b)');
         $node = $this->getQueryConvertableMock(NodeType::class, '(a)');
 
-        (new Query())->optionalMatch([$assignment, $path, $node]);
+        (new Query())->optionalMatch([$path, $node]);
     }
 
-    public function testOptionalMatchRejectsAnyType()
+    public function testOptionalMatchRejectsAnyType(): void
     {
         $m = $this->getQueryConvertableMock(AnyType::class, 'foo');
 
@@ -445,7 +438,7 @@ class QueryTest extends TestCase
         (new Query())->optionalMatch([$m, $m]);
     }
 
-    public function testOrderBy()
+    public function testOrderBy(): void
     {
         $property = $this->getQueryConvertableMock(Property::class, "a.foo");
 
@@ -466,7 +459,7 @@ class QueryTest extends TestCase
         $this->assertSame("ORDER BY a.foo, a.foo DESCENDING", $statement);
     }
 
-    public function testOrderByRejectsAnyType()
+    public function testOrderByRejectsAnyType(): void
     {
         $m = $this->getQueryConvertableMock(AnyType::class, 'foo');
 
@@ -475,7 +468,7 @@ class QueryTest extends TestCase
         (new Query())->orderBy([$m, $m]);
     }
 
-    public function testRemove()
+    public function testRemove(): void
     {
         $expression = $this->getQueryConvertableMock(Property::class, "a.age");
 
@@ -484,7 +477,7 @@ class QueryTest extends TestCase
         $this->assertSame("REMOVE a.age", $statement);
     }
 
-    public function testRemoveRejectsAnyType()
+    public function testRemoveRejectsAnyType(): void
     {
         $m = $this->getQueryConvertableMock(AnyType::class, 'foo');
 
@@ -493,7 +486,7 @@ class QueryTest extends TestCase
         (new Query())->remove($m);
     }
 
-    public function testSet()
+    public function testSet(): void
     {
         $expression = $this->getQueryConvertableMock(Assignment::class, "a.age");
 
@@ -506,7 +499,7 @@ class QueryTest extends TestCase
         $this->assertSame("SET a.age, a.age", $statement);
     }
 
-    public function testSetRejectsAnyType()
+    public function testSetRejectsAnyType(): void
     {
         $m = $this->getQueryConvertableMock(AnyType::class, 'foo');
 
@@ -515,7 +508,7 @@ class QueryTest extends TestCase
         (new Query())->set([$m, $m]);
     }
 
-    public function testSetWithLabel()
+    public function testSetWithLabel(): void
     {
         $label = Query::variable("n")->labeled(["LABEL1", "LABEL2", "LABEL3"]);
 
@@ -524,7 +517,7 @@ class QueryTest extends TestCase
         $this->assertSame("SET n:LABEL1:LABEL2:LABEL3", $statement);
     }
 
-    public function testWhere()
+    public function testWhere(): void
     {
         $expression = $this->getQueryConvertableMock(BooleanType::class, "a.age");
 
@@ -533,7 +526,7 @@ class QueryTest extends TestCase
         $this->assertSame("WHERE a.age", $statement);
     }
 
-    public function testWith()
+    public function testWith(): void
     {
         $expression = $this->getQueryConvertableMock(AnyType::class, "a < b");
 
@@ -546,7 +539,7 @@ class QueryTest extends TestCase
         $this->assertSame("WITH a < b AS foobar", $statement);
     }
 
-    public function testWithRejectsAnyType()
+    public function testWithRejectsAnyType(): void
     {
         $m = $this->getQueryConvertableMock(AnyType::class, 'foo');
 
@@ -555,7 +548,7 @@ class QueryTest extends TestCase
         (new Query())->delete([$m, $m]);
     }
 
-    public function testWithWithNode()
+    public function testWithWithNode(): void
     {
         $node = Query::node('m');
 
@@ -571,7 +564,7 @@ class QueryTest extends TestCase
         $this->assertSame('WITH example', $statement);
     }
 
-    public function testCallProcedure()
+    public function testCallProcedure(): void
     {
         $procedure = "apoc.json";
 
@@ -592,7 +585,7 @@ class QueryTest extends TestCase
         $this->assertSame("CALL apoc.json(a < b) YIELD a", $statement);
     }
 
-    public function testAddClause()
+    public function testAddClause(): void
     {
         $clauseMockText = "FOOBAR foobar";
         $clauseMock = $this->getQueryConvertableMock(Clause::class, $clauseMockText);
@@ -601,7 +594,7 @@ class QueryTest extends TestCase
         $this->assertSame($clauseMockText, $statement);
     }
 
-    public function testBuild()
+    public function testBuild(): void
     {
         $withClause = $this->getQueryConvertableMock(Clause::class, "WITH foobar");
         $whereClause = $this->getQueryConvertableMock(Clause::class, "WHERE foobar");
@@ -641,35 +634,35 @@ class QueryTest extends TestCase
         $this->assertSame("MATCH (a)->(b), (a) RETURN a AS `#` CREATE (a)->(b), (a) CREATE (a)->(b) DELETE (a), (a) DETACH DELETE (a), (a) LIMIT 12 MERGE (a) OPTIONAL MATCH (a), (a) ORDER BY a.b, a.b DESCENDING REMOVE a.b WHERE a > b WITH a AS `#`", $statement);
     }
 
-    public function testBuildEmpty()
+    public function testBuildEmpty(): void
     {
         $query = new Query();
 
         $this->assertSame("", $query->build());
     }
 
-    public function testInt()
+    public function testInt(): void
     {
         $literal = Query::literal(1);
         self::assertInstanceOf(Decimal::class, $literal);
         self::assertEquals('1', $literal->toQuery());
     }
 
-    public function testFloat()
+    public function testFloat(): void
     {
         $literal = Query::literal(1.2);
         self::assertInstanceOf(Decimal::class, $literal);
         self::assertEquals('1.2', $literal->toQuery());
     }
 
-    public function testString()
+    public function testString(): void
     {
         $literal = Query::literal('abc');
         self::assertInstanceOf(StringLiteral::class, $literal);
         self::assertEquals("'abc'", $literal->toQuery());
     }
 
-    public function testStringAble()
+    public function testStringAble(): void
     {
         $literal = Query::literal(new class () {
             public function __toString(): string
@@ -681,28 +674,28 @@ class QueryTest extends TestCase
         self::assertEquals("'stringable abc'", $literal->toQuery());
     }
 
-    public function testBool()
+    public function testBool(): void
     {
         $literal = Query::literal(true);
         self::assertInstanceOf(Boolean::class, $literal);
         self::assertEquals("true", $literal->toQuery());
     }
 
-    public function testInvalidLiteral()
+    public function testInvalidLiteral(): void
     {
         $literal = Query::literal(true);
         $this->expectException(InvalidArgumentException::class);
         Query::literal($literal);
     }
 
-    public function testLiteralReference()
+    public function testLiteralReference(): void
     {
         $value = Query::literal();
 
         $this->assertSame(Literal::class, $value);
     }
 
-    public function testWikiExamples()
+    public function testWikiExamples(): void
     {
         /*
          * @see https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/Examples
@@ -763,7 +756,7 @@ class QueryTest extends TestCase
         $tomHanksMoviesNode = Query::node()->named($tomHanksMovies);
 
         $statement = Query::new()
-            ->match($person->relationshipTo($tomHanksMoviesNode)->withType("ACTED_IN"))
+            ->match($person->relationshipTo($tomHanksMoviesNode, 'ACTED_IN'))
             ->returning([$tom, $tomHanksMovies])
             ->build();
 
@@ -778,7 +771,7 @@ class QueryTest extends TestCase
         $directorsNode = Query::node()->named($directors);
 
         $statement = Query::new()
-            ->match($cloudAtlasNode->relationshipFrom($directorsNode)->withType("DIRECTED"))
+            ->match($cloudAtlasNode->relationshipFrom($directorsNode, 'DIRECTED'))
             ->returning($directors->property("name"))
             ->build();
 
@@ -796,7 +789,7 @@ class QueryTest extends TestCase
         $coActorsNode = Query::node()->named($coActors);
 
         $statement = Query::new()
-            ->match($tomNode->relationshipTo($movieNode)->withType("ACTED_IN")->relationshipFrom($coActorsNode)->withType("ACTED_IN"))
+            ->match($tomNode->relationshipTo($movieNode, "ACTED_IN")->relationshipFrom($coActorsNode, "ACTED_IN"))
             ->returning($coActors->property("name"))
             ->build();
 
@@ -1035,7 +1028,7 @@ class QueryTest extends TestCase
         $this->assertSame("((nineties.released >= 1990) AND (nineties IS NOT NULL))", $expression->toQuery());
     }
 
-    public function testAutomaticIdentifierGeneration()
+    public function testAutomaticIdentifierGeneration(): void
     {
         $node = Query::node();
 

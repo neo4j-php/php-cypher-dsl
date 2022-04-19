@@ -49,6 +49,15 @@ class NodeTest extends TestCase
         $this->assertSame($name, $node->getVariable());
     }
 
+    public function testBacktickThrowsException(): void
+    {
+        $node = new Node();
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectDeprecationMessage('A name can only contain alphanumeric characters and underscores');
+        $node->named('abcdr`eer');
+    }
+
     /**
      * @dataProvider provideOnlyLabelData
      * @param string $label
@@ -206,16 +215,6 @@ class NodeTest extends TestCase
     }
 
     /**
-     * @dataProvider provideBacktickThrowsExceptionData
-     * @param Node $invalidNode
-     */
-    public function testBacktickThrowsException(Node $invalidNode): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $invalidNode->toQuery();
-    }
-
-    /**
      * @dataProvider provideMultipleLabelsData
      * @param array $labels
      * @param string $expected
@@ -297,17 +296,7 @@ class NodeTest extends TestCase
     {
         return [
             ['a', '(a)'],
-            ['A', '(A)'],
-            [':', '(`:`)']
-        ];
-    }
-
-    public function provideBacktickThrowsExceptionData(): array
-    {
-        return [
-            [new Node('__`__')],
-            [(new Node())->named('__`__')],
-            [(new Node())->withProperties(['__`__' => new StringLiteral('a')])]
+            ['A', '(A)']
         ];
     }
 
@@ -315,8 +304,7 @@ class NodeTest extends TestCase
     {
         return [
             ['a', 'a', '(a:a)'],
-            ['A', ':', '(A:`:`)'],
-            ['', 'b', '(:b)']
+            ['A', ':', '(A:`:`)']
         ];
     }
 

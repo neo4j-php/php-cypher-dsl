@@ -44,7 +44,7 @@ use WikibaseSolutions\CypherDSL\Literals\Decimal;
 use WikibaseSolutions\CypherDSL\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
-use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
@@ -102,20 +102,17 @@ class Query implements QueryConvertable
     /**
      * Creates a relationship.
      *
-     * @param StructuralType $a The node left of the relationship
-     * @param StructuralType $b The node right of the relationship
      * @param array $direction The direction of the relationship, should be either:
      *                           - Path::DIR_RIGHT (for a relation of (a)-->(b))
      *                           - Path::DIR_LEFT (for a relation of (a)<--(b))
      *                           - Path::DIR_UNI (for a relation of (a)--(b))
      *
-     * @return Path
+     * @return Relationship
      * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
-     *
      */
-    public static function relationship(StructuralType $a, StructuralType $b, array $direction): Path
+    public static function relationship(array $direction): Relationship
     {
-        return new Path($a, $b, $direction);
+        return new Relationship($direction);
     }
 
     /**
@@ -220,7 +217,7 @@ class Query implements QueryConvertable
     /**
      * Creates the MATCH clause.
      *
-     * @param StructuralType|StructuralType[]|Assignment|Assignment[] $patterns A single pattern or a list of patterns
+     * @param StructuralType|StructuralType[] $patterns A single pattern or a list of patterns
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/
@@ -235,7 +232,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-            $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
+            $this->assertClass('pattern', StructuralType::class, $pattern);
 
             $matchClause->addPattern($pattern);
         }
@@ -286,7 +283,7 @@ class Query implements QueryConvertable
     /**
      * Creates the CREATE clause.
      *
-     * @param StructuralType|StructuralType[]|Assignment|Assignment[] $patterns A single pattern or a list of patterns
+     * @param StructuralType|StructuralType[] $patterns A single pattern or a list of patterns
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/create/
@@ -301,7 +298,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-            $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
+            $this->assertClass('pattern', StructuralType::class, $pattern);
 
             $createClause->addPattern($pattern);
         }
@@ -408,7 +405,7 @@ class Query implements QueryConvertable
     /**
      * Creates the MERGE clause.
      *
-     * @param StructuralType|Assignment $pattern The pattern to merge
+     * @param StructuralType $pattern The pattern to merge
      * @param Clause|null $createClause The clause to execute when the pattern is created
      * @param Clause|null $matchClause The clause to execute when the pattern is matched
      *
@@ -416,10 +413,8 @@ class Query implements QueryConvertable
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/
      *
      */
-    public function merge($pattern, Clause $createClause = null, Clause $matchClause = null): self
+    public function merge(StructuralType $pattern, Clause $createClause = null, Clause $matchClause = null): self
     {
-        $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
-
         $mergeClause = new MergeClause();
         $mergeClause->setPattern($pattern);
 
@@ -439,7 +434,7 @@ class Query implements QueryConvertable
     /**
      * Creates the OPTIONAL MATCH clause.
      *
-     * @param StructuralType|StructuralType[]|Assignment|Assignment[] $patterns A single pattern or a list of patterns
+     * @param StructuralType|StructuralType[] $patterns A single pattern or a list of patterns
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/optional-match/
@@ -454,7 +449,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-            $this->assertClass('pattern', [StructuralType::class, Assignment::class], $pattern);
+            $this->assertClass('pattern', StructuralType::class, $pattern);
 
             $optionalMatchClause->addPattern($pattern);
         }

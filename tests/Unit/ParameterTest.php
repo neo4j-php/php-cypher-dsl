@@ -35,18 +35,19 @@ class ParameterTest extends TestCase
      * @param string $parameter
      * @param string $expected
      */
-    public function testToQuery(string $parameter, string $expected)
+    public function testToQuery(string $parameter, string $expected): void
     {
         $parameter = new Parameter($parameter);
 
         $this->assertSame($expected, $parameter->toQuery());
+        $this->assertSame(str_replace('$', '', $expected), $parameter->getParameter());
     }
 
     /**
      * @dataProvider provideThrowsExceptionOnInvalidData
      * @param string $parameter
      */
-    public function testThrowsExceptionOnInvalid(string $parameter)
+    public function testThrowsExceptionOnInvalid(string $parameter): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -58,8 +59,6 @@ class ParameterTest extends TestCase
         return [
             ["a", '$a'],
             ["b", '$b'],
-            ["0", '$0'],
-            ["_", '$_'],
             ["foo_bar", '$foo_bar'],
             ["A", '$A']
         ];
@@ -71,7 +70,8 @@ class ParameterTest extends TestCase
             [""],
             ["@"],
             ["!"],
-            ["-"]
+            ["-"],
+            ['']
         ];
     }
 }

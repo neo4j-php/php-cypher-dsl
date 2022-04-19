@@ -46,7 +46,7 @@ class Assignment extends BinaryOperator
      */
     public function __construct(AnyType $left, AnyType $right)
     {
-        $this->assertClass('left', [Property::class, Variable::class], $left);
+        self::assertClass('left', [Property::class, Variable::class], $left);
 
         parent::__construct($left, $right, false);
     }

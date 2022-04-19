@@ -54,7 +54,7 @@ class PropertyMap implements MapType
     public function __construct(array $properties = [])
     {
         foreach ($properties as $property) {
-            $this->assertClass('property', AnyType::class, $property);
+            self::assertClass('property', AnyType::class, $property);
         }
 
         $this->properties = $properties;

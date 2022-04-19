@@ -19,11 +19,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
+namespace WikibaseSolutions\CypherDSL\Traits;
 
 /**
- * Represents the type "path".
+ * This trait should be used by any expression that returns a relationship.
  */
-interface PathType extends StructuralType
+trait RelationshipTypeTrait
 {
+    use HasPropertiesTrait;
+    use HasVariableTrait;
 }

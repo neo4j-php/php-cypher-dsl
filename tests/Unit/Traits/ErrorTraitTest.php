@@ -28,10 +28,29 @@ use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 /**
  * Dummy classes
  */
-class ErrorHelperDummyA {};
-class ErrorHelperDummyB {};
-class ErrorHelperDummyExtendsA extends ErrorHelperDummyA {};
-class ErrorHelperDummyExtendsB extends ErrorHelperDummyB {};
+class ErrorHelperDummyA
+{
+}
+
+;
+
+class ErrorHelperDummyB
+{
+}
+
+;
+
+class ErrorHelperDummyExtendsA extends ErrorHelperDummyA
+{
+}
+
+;
+
+class ErrorHelperDummyExtendsB extends ErrorHelperDummyB
+{
+}
+
+;
 
 /**
  * Tester/Mock class
@@ -65,7 +84,7 @@ class ErrorTraitTest extends TestCase
      * @doesNotPerformAssertions
      * @dataProvider CorrectAssertionsProvider
      */
-    public function testAssertClass($classNames, $userInput)
+    public function testAssertClass($classNames, $userInput): void
     {
         $this->errorImpl->call('assertClass', ['foo', $classNames, $userInput]);
     }
@@ -73,13 +92,13 @@ class ErrorTraitTest extends TestCase
     /**
      * @dataProvider failingAssertionsProvider
      */
-    public function testAssertClassFailure($classNames, $userInput)
+    public function testAssertClassFailure($classNames, $userInput): void
     {
         $this->expectException(TypeError::class);
         $this->errorImpl->call('assertClass', ['foo', $classNames, $userInput]);
     }
 
-    public function correctAssertionsProvider()
+    public function correctAssertionsProvider(): array
     {
         return [
             [ErrorHelperDummyA::class, new ErrorHelperDummyA()],
@@ -89,7 +108,7 @@ class ErrorTraitTest extends TestCase
         ];
     }
 
-    public function failingAssertionsProvider()
+    public function failingAssertionsProvider(): array
     {
         return [
             [ErrorHelperDummyA::class, new ErrorHelperDummyB()],
@@ -98,16 +117,16 @@ class ErrorTraitTest extends TestCase
         ];
     }
 
-    public function testGetTypeErrorText()
+    public function testGetTypeErrorText(): void
     {
         $this->assertEquals(
-            '$foo should be a WikibaseSolutions\CypherDSL\Tests\Unit\Traits\ErrorHelperDummyA object, integer "5" given.',
+            '$foo should be a WikibaseSolutions\CypherDSL\Tests\Unit\Traits\ErrorHelperDummyA object, int given.',
             $this->errorImpl->call('getTypeErrorText', ['foo', [ErrorHelperDummyA::class], 5])
         );
         $this->assertEquals(
             '$foo should be a ' .
             'WikibaseSolutions\CypherDSL\Tests\Unit\Traits\ErrorHelperDummyA or ' .
-            'WikibaseSolutions\CypherDSL\Tests\Unit\Traits\ErrorHelperDummyB object, integer "5" given.',
+            'WikibaseSolutions\CypherDSL\Tests\Unit\Traits\ErrorHelperDummyB object, int given.',
             $this->errorImpl->call('getTypeErrorText', ['foo', [ErrorHelperDummyA::class, ErrorHelperDummyB::class], 5])
         );
     }
@@ -115,24 +134,25 @@ class ErrorTraitTest extends TestCase
     /**
      * @dataProvider getUserInputInfoProvider
      */
-    public function testGetUserInputInfo($expected, $input)
+    public function testGetUserInputInfo($expected, $input): void
     {
         $this->assertEquals(
             $expected,
-            $this->errorImpl->call('getUserInputInfo', [$input])
+            $this->errorImpl->call('getDebugType', [$input])
         );
     }
 
-    public function getUserInputInfoProvider()
+    public function getUserInputInfoProvider(): array
     {
         return [
-            [ 'string "foo"',             'foo'          ],
-            [ 'integer "5"',              5              ],
-            [ 'double "3.14"',            3.14           ],
-            [ 'boolean "1"',              true           ],
-            [ 'array',                    ['foo', 'bar'] ],
-            [ 'anonymous class instance', new class () {}  ],
-            [ 'WikibaseSolutions\CypherDSL\Tests\Unit\Traits\ErrorHelperDummyA', new ErrorHelperDummyA()]
+            ['string', 'foo'],
+            ['int', 5],
+            ['float', 3.14],
+            ['bool', true],
+            ['array', ['foo', 'bar']],
+            ['class@anonymous', new class () {
+            }],
+            [ErrorHelperDummyA::class, new ErrorHelperDummyA()]
         ];
     }
 }
