@@ -63,14 +63,18 @@ interface PropertyType extends AnyType
     /**
      * Checks whether the element is null.
      *
+     * @param bool $insertsParentheses whether to insert parentheses.
+     *
      * @return IsNull
      */
-    public function isNull(): IsNull;
+    public function isNull(bool $insertsParentheses = true): IsNull;
 
     /**
      * Checks whether the element is not null.
      *
+     * @param bool $insertsParentheses whether to insert parentheses.
+     *
      * @return IsNotNull
      */
-    public function isNotNull(): IsNotNull;
+    public function isNotNull(bool $insertsParentheses = true): IsNotNull;
 }

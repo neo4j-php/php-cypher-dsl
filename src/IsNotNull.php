@@ -20,15 +20,17 @@ class IsNotNull implements BooleanType
      * @var AnyType The type to test against null
      */
     private AnyType $expression;
+    private bool $insertParentheses;
 
     /**
      * IS NOT NULL constructor.
      *
      * @param AnyType $expression The type to test against null.
      */
-    public function __construct(AnyType $expression)
+    public function __construct(AnyType $expression, bool $insertParentheses = true)
     {
         $this->expression = $expression;
+        $this->insertParentheses = $insertParentheses;
     }
 
     /**
@@ -46,6 +48,16 @@ class IsNotNull implements BooleanType
      */
     public function toQuery(): string
     {
-        return sprintf("(%s IS NOT NULL)", $this->expression->toQuery());
+        return sprintf($this->insertParentheses ? "(%s IS NOT NULL)" : "%s IS NOT NULL", $this->expression->toQuery());
+    }
+
+    /**
+     * Returns whether or not the operator inserts parenthesis.
+     *
+     * @return bool
+     */
+    public function insertsParentheses(): bool
+    {
+        return $this->insertParentheses;
     }
 }

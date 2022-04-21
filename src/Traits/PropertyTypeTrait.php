@@ -76,16 +76,16 @@ trait PropertyTypeTrait
     /**
      * @inheritDoc
      */
-    public function isNull(): IsNull
+    public function isNull(bool $insertParentheses = true): IsNull
     {
-        return new IsNull($this);
+        return new IsNull($this, $insertParentheses);
     }
 
     /**
      * @inheritDoc
      */
-    public function isNotNull(): IsNotNull
+    public function isNotNull(bool $insertParentheses = true): IsNotNull
     {
-        return new IsNotNull($this);
+        return new IsNotNull($this, $insertParentheses);
     }
 }

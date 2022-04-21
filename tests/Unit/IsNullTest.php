@@ -34,12 +34,16 @@ class IsNullTest extends TestCase
 
     public function testToQuery(): void
     {
-        $not = new IsNull($this->getQueryConvertableMock(BooleanType::class, "true"));
+        $not = new IsNull($this->getQueryConvertableMock(BooleanType::class, "true"), false);
 
-        $this->assertSame("(true IS NULL)", $not->toQuery());
+        $this->assertFalse($not->insertsParentheses());
+
+        $this->assertSame("true IS NULL", $not->toQuery());
 
         $not = new IsNull($not);
 
-        $this->assertSame("((true IS NULL) IS NULL)", $not->toQuery());
+        $this->assertSame("(true IS NULL IS NULL)", $not->toQuery());
+
+        $this->assertTrue($not->insertsParentheses());
     }
 }
