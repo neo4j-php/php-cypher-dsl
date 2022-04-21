@@ -21,8 +21,10 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Order;
 use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use function array_map;
 
 /**
  * This class represents an ORDER BY clause. This clause should always be preceded by a RETURN
@@ -35,9 +37,9 @@ class OrderByClause extends Clause
     use EscapeTrait;
 
     /**
-     * @var Property[] The expressions to include in the clause
+     * @var Order[] The expressions to include in the clause
      */
-    private array $properties = [];
+    private array $orderings = [];
 
     /**
      * @var bool
@@ -47,12 +49,14 @@ class OrderByClause extends Clause
     /**
      * Add a property to sort on.
      *
-     * @param Property $property The additional property to sort on
+     * @param Property $property The additional property to sort on.
+     * @param string|null $order The order of the property to appear. Null is equal to the default in Neo4J.
+     *
      * @return OrderByClause
      */
-    public function addProperty(Property $property): self
+    public function addProperty(Property $property, ?string $order = null): self
     {
-        $this->properties[] = $property;
+        $this->orderings[] = new Order($property, $order);
 
         return $this;
     }
@@ -60,34 +64,21 @@ class OrderByClause extends Clause
     /**
      * Returns the properties to order.
      *
-     * @return Property[]
+     * @return Order[]
      */
     public function getProperties(): array
     {
-        return $this->properties;
+        return array_map(static fn (Order $o) => $o->getExpression(), $this->orderings);
     }
 
     /**
-     * Returns whether the ordering is in descending order.
+     * Returns the orderings.
      *
-     * @return bool
+     * @return Property[]
      */
-    public function isDescending(): bool
+    public function getOrderings(): array
     {
-        return $this->descending;
-    }
-
-    /**
-     * Set to sort in a DESCENDING order.
-     *
-     * @param bool $descending
-     * @return OrderByClause
-     */
-    public function setDescending(bool $descending = true): self
-    {
-        $this->descending = $descending;
-
-        return $this;
+        return $this->orderings;
     }
 
     /**
@@ -103,9 +94,8 @@ class OrderByClause extends Clause
      */
     protected function getSubject(): string
     {
-        $properties = array_map(fn (Property $property): string => $property->toQuery(), $this->properties);
-        $subject = implode(", ", $properties);
+        $properties = array_map(static fn ($x) => $x->toQuery(), $this->orderings);
 
-        return $this->descending ? sprintf("%s DESCENDING", $subject) : $subject;
+        return implode(", ", $properties);
     }
 }

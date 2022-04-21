@@ -24,6 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\OrderByClause;
+use WikibaseSolutions\CypherDSL\Order;
 use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
@@ -41,7 +42,6 @@ class OrderByClauseTest extends TestCase
 
         $this->assertSame("", $orderBy->toQuery());
         $this->assertEquals([], $orderBy->getProperties());
-        $this->assertFalse($orderBy->isDescending());
     }
 
     public function testSingleProperty(): void
@@ -52,7 +52,6 @@ class OrderByClauseTest extends TestCase
 
         $this->assertSame("ORDER BY a.a", $orderBy->toQuery());
         $this->assertEquals([$property], $orderBy->getProperties());
-        $this->assertFalse($orderBy->isDescending());
     }
 
     public function testMultipleProperties(): void
@@ -66,19 +65,16 @@ class OrderByClauseTest extends TestCase
 
         $this->assertSame("ORDER BY a.a, a.b", $orderBy->toQuery());
         $this->assertEquals([$propertyA, $propertyB], $orderBy->getProperties());
-        $this->assertFalse($orderBy->isDescending());
     }
 
     public function testSinglePropertyDesc(): void
     {
         $orderBy = new OrderByClause();
         $property = $this->getQueryConvertableMock(Property::class, "a.a");
-        $orderBy->addProperty($property);
-        $orderBy->setDescending();
+        $orderBy->addProperty($property, 'DESCENDING');
 
         $this->assertSame("ORDER BY a.a DESCENDING", $orderBy->toQuery());
         $this->assertEquals([$property], $orderBy->getProperties());
-        $this->assertTrue($orderBy->isDescending());
     }
 
     public function testMultiplePropertiesDesc(): void
@@ -88,12 +84,24 @@ class OrderByClauseTest extends TestCase
         $propertyB = $this->getQueryConvertableMock(Property::class, "a.b");
 
         $orderBy->addProperty($propertyA);
-        $orderBy->addProperty($propertyB);
-        $orderBy->setDescending();
+        $orderBy->addProperty($propertyB, 'DESCENDING');
 
         $this->assertSame("ORDER BY a.a, a.b DESCENDING", $orderBy->toQuery());
         $this->assertEquals([$propertyA, $propertyB], $orderBy->getProperties());
-        $this->assertTrue($orderBy->isDescending());
+    }
+
+    public function testMultiplePropertiesMixed(): void
+    {
+        $orderBy = new OrderByClause();
+        $propertyA = $this->getQueryConvertableMock(Property::class, "a.a");
+        $propertyB = $this->getQueryConvertableMock(Property::class, "a.b");
+
+        $orderBy->addProperty($propertyA, 'ASC');
+        $orderBy->addProperty($propertyB, 'DESCENDING');
+
+        $this->assertSame("ORDER BY a.a ASC, a.b DESCENDING", $orderBy->toQuery());
+        $this->assertEquals([$propertyA, $propertyB], $orderBy->getProperties());
+        $this->assertEquals([new Order($propertyA, 'asc'), new Order($propertyB, 'descending')], $orderBy->getOrderings());
     }
 
     /**
