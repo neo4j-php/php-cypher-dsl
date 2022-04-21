@@ -11,6 +11,10 @@ use function strtoupper;
  * Defines the order of an expression. Can only be used in an ORDER BY clause.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/order-by/
+ * @note While the documentation online does not mention this, ORDER BY supports multiple directions in the same clause:
+ *      - ORDER BY a ASC, b DESC
+ *      is considered valid.
+ *      This means it is impossible for the OrderBy clause to order all expressions individually, necessitating this class.
  */
 class Order implements QueryConvertable
 {
@@ -19,7 +23,7 @@ class Order implements QueryConvertable
     private ?string $ordering;
 
     /**
-     * The expression to order
+     * Order constructor.
      *
      * @param AnyType $expression The expression to order by.
      * @param string|null $ordering The order modifier. Must be null or a valid modifier ('ASC', 'ASCENDING', 'DESC', 'DESCENDING')
