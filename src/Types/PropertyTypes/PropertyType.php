@@ -5,6 +5,8 @@ namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 use WikibaseSolutions\CypherDSL\Equality;
 use WikibaseSolutions\CypherDSL\In;
 use WikibaseSolutions\CypherDSL\Inequality;
+use WikibaseSolutions\CypherDSL\IsNotNull;
+use WikibaseSolutions\CypherDSL\IsNull;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 
@@ -57,4 +59,22 @@ interface PropertyType extends AnyType
      * @return In
      */
     public function in(ListType $right): In;
+
+    /**
+     * Checks whether the element is null.
+     *
+     * @param bool $insertsParentheses whether to insert parentheses.
+     *
+     * @return IsNull
+     */
+    public function isNull(bool $insertsParentheses = true): IsNull;
+
+    /**
+     * Checks whether the element is not null.
+     *
+     * @param bool $insertsParentheses whether to insert parentheses.
+     *
+     * @return IsNotNull
+     */
+    public function isNotNull(bool $insertsParentheses = true): IsNotNull;
 }
