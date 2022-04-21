@@ -26,6 +26,8 @@ use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Equality;
 use WikibaseSolutions\CypherDSL\In;
 use WikibaseSolutions\CypherDSL\Inequality;
+use WikibaseSolutions\CypherDSL\IsNotNull;
+use WikibaseSolutions\CypherDSL\IsNull;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Traits\PropertyTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
@@ -131,5 +133,23 @@ class PropertyTypeTraitTest extends TestCase
         $this->assertFalse($in->insertsParentheses());
         $this->assertEquals($this->a, $in->getLeft());
         $this->assertEquals($this->list, $in->getRight());
+    }
+
+    public function testIsNull(): void
+    {
+        $test = $this->a->isNull();
+
+        $this->assertInstanceOf(IsNull::class, $test);
+
+        $this->assertEquals($this->a, $test->getExpression());
+    }
+
+    public function testIsNotNull(): void
+    {
+        $test = $this->a->isNotNull();
+
+        $this->assertInstanceOf(IsNotNull::class, $test);
+
+        $this->assertEquals($this->a, $test->getExpression());
     }
 }
