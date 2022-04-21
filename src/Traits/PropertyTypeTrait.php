@@ -24,6 +24,8 @@ namespace WikibaseSolutions\CypherDSL\Traits;
 use WikibaseSolutions\CypherDSL\Equality;
 use WikibaseSolutions\CypherDSL\In;
 use WikibaseSolutions\CypherDSL\Inequality;
+use WikibaseSolutions\CypherDSL\IsNotNull;
+use WikibaseSolutions\CypherDSL\IsNull;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
@@ -69,5 +71,21 @@ trait PropertyTypeTrait
     public function in(ListType $right, bool $insertParentheses = true): In
     {
         return new In($this, $right, $insertParentheses);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isNull(): IsNull
+    {
+        return new IsNull($this);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isNotNull(): IsNotNull
+    {
+        return new IsNotNull($this);
     }
 }
