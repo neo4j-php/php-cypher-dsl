@@ -1048,6 +1048,20 @@ class QueryTest extends TestCase
         $this->assertInstanceOf(Variable::class, $node->getName());
     }
 
+    public function testCall(): void
+    {
+        $node = Query::node('X')->named('y');
+        $query = Query::new()->match($node)
+            ->call(function (Query $subQuery) use ($node) {
+                $subQuery->with($node->getVariable())
+                    ->where($node->property('z')->equals(Query::literal('foo'), false))
+                    ->returning($node->property('z')->alias('foo'));
+            })
+            ->returning(Query::variable('foo'));
+
+        $this->assertEquals("MATCH (y:X) CALL { WITH y WHERE y.z = 'foo' RETURN y.z AS foo } RETURN foo", $query->toQuery());
+    }
+
     public function provideLiteralData(): array
     {
         return [

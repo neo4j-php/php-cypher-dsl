@@ -21,6 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
+use Closure;
+use WikibaseSolutions\CypherDSL\Clauses\CallClause;
 use WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\Clauses\CreateClause;
@@ -631,6 +633,26 @@ class Query implements QueryConvertable
         $callProcedureClause->yields($yields);
 
         $this->clauses[] = $callProcedureClause;
+
+        return $this;
+    }
+
+    /**
+     * Creates a CALL sub query clause.
+     *
+     * @param callable(Query) $decorator The callable decorating the pattern.
+     *
+     * @return Query
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/
+     */
+    public function call($decorator): self
+    {
+        $subQuery = self::new();
+
+        $decorator($subQuery);
+
+        $this->clauses[] = new CallClause($subQuery);
 
         return $this;
     }
