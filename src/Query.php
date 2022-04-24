@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
+use Closure;
 use WikibaseSolutions\CypherDSL\Clauses\CallClause;
 use WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
@@ -56,7 +57,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
-use function call_user_func;
 
 /**
  * Builder class for building complex Cypher queries.
@@ -648,8 +648,6 @@ class Query implements QueryConvertable
      */
     public function call($decorator): self
     {
-        self::assertClass('decorator', 'callable', $decorator);
-
         $subQuery = self::new();
 
         $decorator($subQuery);
