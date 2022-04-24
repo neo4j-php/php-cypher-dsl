@@ -23,7 +23,6 @@ namespace WikibaseSolutions\CypherDSL;
 
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
  * Represents the application of the greater than or equal to (>=) operator.
@@ -33,14 +32,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 class GreaterThanOrEqual extends BinaryOperator implements BooleanType
 {
     use BooleanTypeTrait;
-
-    /**
-     * @inheritDoc
-     */
-    public function __construct(NumeralType $left, NumeralType $right, bool $insertParentheses = true)
-    {
-        parent::__construct($left, $right, $insertParentheses);
-    }
 
     /**
      * @inheritDoc
