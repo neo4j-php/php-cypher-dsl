@@ -14,19 +14,14 @@ class CallClause extends Clause
     /**
      * @var Query The query to call.
      */
-    private Query $query;
+    private Query $subQuery;
 
     /**
-     * @param Query $query The query to call.
+     * @param Query $subQuery The query to call.
      */
-    public function __construct(Query $query)
+    public function __construct(Query $subQuery)
     {
-        $this->query = $query;
-    }
-
-    public function toQuery(): string
-    {
-        return sprintf('CALL { %s }', $this->getSubject());
+        $this->subQuery = $subQuery;
     }
 
     /**
@@ -34,9 +29,20 @@ class CallClause extends Clause
      *
      * @return Query
      */
-    public function getQuery(): Query
+    public function getSubQuery(): Query
     {
-        return $this->query;
+        return $this->subQuery;
+    }
+
+    public function toQuery(): string
+    {
+        $subQuery = trim($this->subQuery->toQuery());
+
+        if ($subQuery === '') {
+            return '';
+        }
+
+        return sprintf('CALL { %s }', $subQuery);
     }
 
     /**
@@ -44,7 +50,7 @@ class CallClause extends Clause
      */
     protected function getSubject(): string
     {
-        return $this->query->toQuery();
+        return '{ ' . $this->subQuery->toQuery() . ' }';
     }
 
     /**
