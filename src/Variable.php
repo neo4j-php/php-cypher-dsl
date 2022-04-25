@@ -21,7 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
@@ -36,7 +35,6 @@ use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\PointTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\StructuralTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TimeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
@@ -48,12 +46,13 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\HasPropertiesType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\HasRelationshipsType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * Represents a variable.
@@ -70,8 +69,8 @@ class Variable implements
     MapType,
     NodeType,
     NumeralType,
-    PathType,
     PointType,
+    RelationshipType,
     StringType,
     TimeType
 {
@@ -147,35 +146,56 @@ class Variable implements
         return self::escape($this->getName());
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function relationship(RelationshipType $relationship, StructuralType $nodeOrPath): Path
+    private function toNode(): NodeType
     {
-        return (new Path((new Node())->named($this)))->relationship($relationship, $nodeOrPath);
+        return Query::node()->named($this);
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function relationshipTo(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
+    public function relationship(RelationshipType $relationship, HasRelationshipsType $nodeOrPath): Path
     {
-        return (new Path((new Node())->named($this)))->relationshipTo($nodeOrPath, $type, $properties, $name);
+        return $this->toNode()->relationship($relationship, $nodeOrPath);
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function relationshipFrom(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
+    public function relationshipTo(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
     {
-        return (new Path((new Node())->named($this)))->relationshipFrom($nodeOrPath, $type, $properties, $name);
+        return $this->toNode()->relationshipTo($nodeOrPath, $type, $properties, $name);
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function relationshipUni(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
+    public function relationshipFrom(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
     {
-        return (new Path((new Node())->named($this)))->relationshipUni($nodeOrPath, $type, $properties, $name);
+        return $this->toNode()->relationshipFrom($nodeOrPath, $type, $properties, $name);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function relationshipUni(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return $this->toNode()->relationshipUni($nodeOrPath, $type, $properties, $name);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function withProperty(string $key, PropertyType $value): HasPropertiesType
+    {
+        return $this->toNode()->withProperty($key, $value);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function withProperties($properties): HasPropertiesType
+    {
+        return $this->toNode()->withProperties($properties);
     }
 }

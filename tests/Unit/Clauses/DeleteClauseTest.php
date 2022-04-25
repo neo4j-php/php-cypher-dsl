@@ -26,7 +26,7 @@ use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\DeleteClause;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Variable;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\DeleteClause
@@ -40,69 +40,69 @@ class DeleteClauseTest extends TestCase
         $delete = new DeleteClause();
 
         $this->assertSame("", $delete->toQuery());
-        $this->assertEquals([], $delete->getNodes());
+        $this->assertEquals([], $delete->getVariables());
         $this->assertFalse($delete->detachesDeletion());
     }
 
-    public function testSingleNode(): void
+    public function testSingleVariable(): void
     {
         $delete = new DeleteClause();
-        $node = $this->getQueryConvertableMock(NodeType::class, "(a)");
+        $variable = $this->getQueryConvertableMock(Variable::class, "a");
 
-        $delete->addNode($node);
+        $delete->addVariable($variable);
 
-        $this->assertSame("DELETE (a)", $delete->toQuery());
-        $this->assertEquals([$node], $delete->getNodes());
+        $this->assertSame("DELETE a", $delete->toQuery());
+        $this->assertEquals([$variable], $delete->getVariables());
         $this->assertFalse($delete->detachesDeletion());
     }
 
-    public function testMultipleNodes(): void
+    public function testMultipleVariables(): void
     {
         $delete = new DeleteClause();
 
-        $a = $this->getQueryConvertableMock(NodeType::class, "(a)");
-        $b = $this->getQueryConvertableMock(NodeType::class, "(b)");
+        $a = $this->getQueryConvertableMock(Variable::class, "a");
+        $b = $this->getQueryConvertableMock(Variable::class, "b");
 
-        $delete->addNode($a);
-        $delete->addNode($b);
+        $delete->addVariable($a);
+        $delete->addVariable($b);
 
-        $this->assertSame("DELETE (a), (b)", $delete->toQuery());
-        $this->assertEquals([$a, $b], $delete->getNodes());
+        $this->assertSame("DELETE a, b", $delete->toQuery());
+        $this->assertEquals([$a, $b], $delete->getVariables());
         $this->assertFalse($delete->detachesDeletion());
     }
 
     public function testDetachDelete(): void
     {
         $delete = new DeleteClause();
-        $pattern = $this->getQueryConvertableMock(NodeType::class, "(a)");
+        $variable = $this->getQueryConvertableMock(Variable::class, "a");
 
-        $delete->addNode($pattern);
+        $delete->addVariable($variable);
         $delete->setDetach(true);
 
-        $this->assertSame("DETACH DELETE (a)", $delete->toQuery());
-        $this->assertEquals([$pattern], $delete->getNodes());
+        $this->assertSame("DETACH DELETE a", $delete->toQuery());
+        $this->assertEquals([$variable], $delete->getVariables());
         $this->assertTrue($delete->detachesDeletion());
     }
 
-    public function testAcceptsNodeType(): void
+    public function testAcceptsVariable(): void
     {
         $delete = new DeleteClause();
-        $pattern = $this->getQueryConvertableMock(NodeType::class, "(a)");
+        $variable = $this->getQueryConvertableMock(Variable::class, "a");
 
-        $delete->addNode($pattern);
+        $delete->addVariable($variable);
         $delete->toQuery();
-        $this->assertEquals([$pattern], $delete->getNodes());
+        $this->assertEquals([$variable], $delete->getVariables());
         $this->assertFalse($delete->detachesDeletion());
     }
 
     public function testDoesNotAcceptAnyType(): void
     {
         $delete = new DeleteClause();
-        $pattern = $this->getQueryConvertableMock(AnyType::class, "(a)");
+        $variable = $this->getQueryConvertableMock(AnyType::class, "a");
 
         $this->expectException(TypeError::class);
 
-        $delete->addNode($pattern);
+        $delete->addVariable($variable);
         $delete->toQuery();
     }
 }

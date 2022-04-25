@@ -29,7 +29,6 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\MergeClause
@@ -51,7 +50,7 @@ class MergeClauseTest extends TestCase
     public function testPattern(): void
     {
         $merge = new MergeClause();
-        $pattern = $this->getQueryConvertableMock(StructuralType::class, "(a)");
+        $pattern = $this->getQueryConvertableMock(NodeType::class, "(a)");
 
         $merge->setPattern($pattern);
 
@@ -65,13 +64,13 @@ class MergeClauseTest extends TestCase
     {
         $merge = new MergeClause();
 
-        $pattern = $this->getQueryConvertableMock(StructuralType::class, "(a)");
+        $pattern = $this->getQueryConvertableMock(PathType::class, "(a)-->(b)");
         $clause = $this->getQueryConvertableMock(Clause::class, "SET a = 10");
 
         $merge->setPattern($pattern);
         $merge->setOnCreate($clause);
 
-        $this->assertSame("MERGE (a) ON CREATE SET a = 10", $merge->toQuery());
+        $this->assertSame("MERGE (a)-->(b) ON CREATE SET a = 10", $merge->toQuery());
         $this->assertEquals($clause, $merge->getOnCreateClause());
         $this->assertEquals($pattern, $merge->getPattern());
         $this->assertNull($merge->getOnMatchClause());
@@ -81,7 +80,7 @@ class MergeClauseTest extends TestCase
     {
         $merge = new MergeClause();
 
-        $pattern = $this->getQueryConvertableMock(StructuralType::class, "(a)");
+        $pattern = $this->getQueryConvertableMock(NodeType::class, "(a)");
         $clause = $this->getQueryConvertableMock(Clause::class, "SET a = 10");
 
         $merge->setPattern($pattern);
@@ -97,14 +96,14 @@ class MergeClauseTest extends TestCase
     {
         $merge = new MergeClause();
 
-        $pattern = $this->getQueryConvertableMock(StructuralType::class, "(a)");
+        $pattern = $this->getQueryConvertableMock(PathType::class, "(a)-->(b)");
         $clause = $this->getQueryConvertableMock(Clause::class, "SET a = 10");
 
         $merge->setPattern($pattern);
         $merge->setOnCreate($clause);
         $merge->setOnMatch($clause);
 
-        $this->assertSame("MERGE (a) ON CREATE SET a = 10 ON MATCH SET a = 10", $merge->toQuery());
+        $this->assertSame("MERGE (a)-->(b) ON CREATE SET a = 10 ON MATCH SET a = 10", $merge->toQuery());
         $this->assertEquals($clause, $merge->getOnCreateClause());
         $this->assertEquals($pattern, $merge->getPattern());
         $this->assertEquals($clause, $merge->getOnMatchClause());

@@ -22,8 +22,8 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use InvalidArgumentException;
-use TypeError;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Assignment;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\Clauses\MatchClause;
@@ -140,7 +140,7 @@ class QueryTest extends TestCase
     {
         $list = Query::list([
             $this->getQueryConvertableMock(AnyType::class, "hello"),
-            $this->getQueryConvertableMock(AnyType::class, "world")
+            $this->getQueryConvertableMock(AnyType::class, "world"),
         ]);
 
         $this->assertInstanceOf(ExpressionList::class, $list);
@@ -166,6 +166,7 @@ class QueryTest extends TestCase
             public function next()
             {
                 $this->count++;
+
                 return 1;
             }
 
@@ -317,15 +318,15 @@ class QueryTest extends TestCase
 
     public function testDelete(): void
     {
-        $m = $this->getQueryConvertableMock(NodeType::class, "(m:Movie)");
+        $m = $this->getQueryConvertableMock(Variable::class, "m");
 
         $statement = (new Query())->delete($m)->build();
 
-        $this->assertSame("DELETE (m:Movie)", $statement);
+        $this->assertSame("DELETE m", $statement);
 
         $statement = (new Query())->delete([$m, $m])->build();
 
-        $this->assertSame("DELETE (m:Movie), (m:Movie)", $statement);
+        $this->assertSame("DELETE m, m", $statement);
     }
 
     public function testDeleteRejectsAnyType(): void
@@ -339,15 +340,15 @@ class QueryTest extends TestCase
 
     public function testDetachDelete(): void
     {
-        $m = $this->getQueryConvertableMock(NodeType::class, "(m:Movie)");
+        $m = $this->getQueryConvertableMock(Variable::class, "m");
 
         $statement = (new Query())->detachDelete($m)->build();
 
-        $this->assertSame("DETACH DELETE (m:Movie)", $statement);
+        $this->assertSame("DETACH DELETE m", $statement);
 
         $statement = (new Query())->detachDelete([$m, $m])->build();
 
-        $this->assertSame("DETACH DELETE (m:Movie), (m:Movie)", $statement);
+        $this->assertSame("DETACH DELETE m, m", $statement);
     }
 
     public function testDetachDeleteRejectsAnyType(): void
@@ -609,6 +610,7 @@ class QueryTest extends TestCase
         $nodeMock = $this->getQueryConvertableMock(Node::class, "(a)");
         $nodeMock->method('getName')->willReturn($this->getQueryConvertableMock(Variable::class, 'a'));
 
+        $variableMock = $this->getQueryConvertableMock(Variable::class, "a");
         $pathMock = $this->getQueryConvertableMock(Path::class, "(a)->(b)");
         $numeralMock = $this->getQueryConvertableMock(NumeralType::class, "12");
         $booleanMock = $this->getQueryConvertableMock(BooleanType::class, "a > b");
@@ -619,8 +621,8 @@ class QueryTest extends TestCase
             ->returning(["#" => $nodeMock])
             ->create([$pathMock, $nodeMock])
             ->create($pathMock)
-            ->delete([$nodeMock, $nodeMock])
-            ->detachDelete([$nodeMock, $nodeMock])
+            ->delete([$variableMock, $variableMock])
+            ->detachDelete([$variableMock, $variableMock])
             ->limit($numeralMock)
             ->merge($nodeMock)
             ->optionalMatch([$nodeMock, $nodeMock])
@@ -631,7 +633,7 @@ class QueryTest extends TestCase
             ->with(["#" => $nodeMock])
             ->build();
 
-        $this->assertSame("MATCH (a)->(b), (a) RETURN a AS `#` CREATE (a)->(b), (a) CREATE (a)->(b) DELETE (a), (a) DETACH DELETE (a), (a) LIMIT 12 MERGE (a) OPTIONAL MATCH (a), (a) ORDER BY a.b, a.b DESCENDING REMOVE a.b WHERE a > b WITH a AS `#`", $statement);
+        $this->assertSame("MATCH (a)->(b), (a) RETURN a AS `#` CREATE (a)->(b), (a) CREATE (a)->(b) DELETE a, a DETACH DELETE a, a LIMIT 12 MERGE (a) OPTIONAL MATCH (a), (a) ORDER BY a.b, a.b DESCENDING REMOVE a.b WHERE a > b WITH a AS `#`", $statement);
     }
 
     public function testBuildEmpty(): void
@@ -713,7 +715,7 @@ class QueryTest extends TestCase
 
         $tom = Query::variable("tom");
         $tomHanks = Query::node()->named($tom)->withProperties([
-            "name" => Query::literal("Tom Hanks")
+            "name" => Query::literal("Tom Hanks"),
         ]);
 
         $query = new Query();
@@ -749,7 +751,7 @@ class QueryTest extends TestCase
 
         $tom = Query::variable("tom");
         $person = Query::node("Person")->withProperties([
-            "name" => Query::literal("Tom Hanks")
+            "name" => Query::literal("Tom Hanks"),
         ])->named($tom);
 
         $tomHanksMovies = Query::variable("tomHanksMovies");
@@ -779,7 +781,7 @@ class QueryTest extends TestCase
 
         $tom = Query::variable("tom");
         $tomNode = Query::node("Person")->withProperties([
-            "name" => Query::literal("Tom Hanks")
+            "name" => Query::literal("Tom Hanks"),
         ])->named($tom);
 
         $movie = Query::variable("m");
@@ -839,21 +841,24 @@ class QueryTest extends TestCase
          * @see https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/Usage/Clauses/DELETE-clause
          */
 
-        $tom = Query::node("Person")->named("tom");
+        $tomVar = Query::variable('tom');
+        $tomNode = Query::node("Person")->named($tomVar)->withProperty('name', Query::literal('tom'));
 
-        $statement = Query::new()
-            ->delete($tom)
+
+        $statement = Query::new()->match($tomNode)
+            ->delete($tomVar)
             ->build();
 
-        $this->assertSame("DELETE (tom:Person)", $statement);
+        $this->assertSame("MATCH (tom:Person {name: 'tom'}) DELETE tom", $statement);
 
-        $tom = Query::node("Person")->named("tom");
+        $tomVar = Query::variable('tom');
+        $tomNode = Query::node("Person")->named($tomVar)->withProperty('name', Query::literal('tom'));
 
-        $statement = Query::new()
-            ->detachDelete($tom)
+        $statement = Query::new()->match($tomNode)
+            ->detachDelete($tomVar)
             ->build();
 
-        $this->assertSame("DETACH DELETE (tom:Person)", $statement);
+        $this->assertSame("MATCH (tom:Person {name: 'tom'}) DETACH DELETE tom", $statement);
 
         /*
          * @see https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/Usage/Clauses/LIMIT-clause
@@ -1090,7 +1095,7 @@ class QueryTest extends TestCase
             [69420, new Decimal(69420)],
             [10.0000000000000000000000000000001, new Decimal(10.0000000000000000000000000000001)],
             [false, new Boolean(false)],
-            [true, new Boolean(true)]
+            [true, new Boolean(true)],
         ];
     }
 }

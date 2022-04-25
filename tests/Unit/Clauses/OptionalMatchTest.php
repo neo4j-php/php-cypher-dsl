@@ -24,12 +24,10 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\OptionalMatchClause;
-use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\OptionalMatchClause
@@ -49,7 +47,7 @@ class OptionalMatchTest extends TestCase
     public function testSinglePattern(): void
     {
         $match = new OptionalMatchClause();
-        $pattern = $this->getQueryConvertableMock(StructuralType::class, "(a)");
+        $pattern = $this->getQueryConvertableMock(NodeType::class, "(a)");
         $match->addPattern($pattern);
 
         $this->assertSame("OPTIONAL MATCH (a)", $match->toQuery());
@@ -59,13 +57,13 @@ class OptionalMatchTest extends TestCase
     public function testMultiplePatterns(): void
     {
         $match = new OptionalMatchClause();
-        $patternA = $this->getQueryConvertableMock(StructuralType::class, "(a)");
-        $patternB = $this->getQueryConvertableMock(StructuralType::class, "(b)");
+        $patternA = $this->getQueryConvertableMock(NodeType::class, "(a)");
+        $patternB = $this->getQueryConvertableMock(PathType::class, "(b)-->(c)");
 
         $match->addPattern($patternA);
         $match->addPattern($patternB);
 
-        $this->assertSame("OPTIONAL MATCH (a), (b)", $match->toQuery());
+        $this->assertSame("OPTIONAL MATCH (a), (b)-->(c)", $match->toQuery());
         $this->assertEquals([$patternA, $patternB], $match->getPatterns());
     }
 

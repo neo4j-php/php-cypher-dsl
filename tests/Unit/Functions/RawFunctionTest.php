@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Functions;
 
-use TypeError;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Functions\RawFunction;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;

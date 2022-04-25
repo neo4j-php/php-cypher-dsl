@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
-use TypeError;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 
 /**
@@ -152,7 +152,7 @@ class ErrorTraitTest extends TestCase
             ['array', ['foo', 'bar']],
             ['class@anonymous', new class () {
             }],
-            [ErrorHelperDummyA::class, new ErrorHelperDummyA()]
+            [ErrorHelperDummyA::class, new ErrorHelperDummyA()],
         ];
     }
 }

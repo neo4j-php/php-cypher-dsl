@@ -22,7 +22,8 @@
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 
 /**
  * This class represents a CREATE clause.
@@ -34,18 +35,19 @@ class CreateClause extends Clause
     use ErrorTrait;
 
     /**
-     * @var StructuralType[] The patterns to create
+     * @var (PathType|NodeType)[] The patterns to create
      */
     private array $patterns = [];
 
     /**
      * Add a pattern to create.
      *
-     * @param StructuralType $pattern The pattern to create
+     * @param PathType|NodeType $pattern The pattern to create
      * @return CreateClause
      */
-    public function addPattern(StructuralType $pattern): self
+    public function addPattern($pattern): self
     {
+        $this->assertClass('pattern', [PathType::class, NodeType::class], $pattern);
         $this->patterns[] = $pattern;
 
         return $this;
@@ -54,7 +56,7 @@ class CreateClause extends Clause
     /**
      * Returns the patterns of the create clause.
      *
-     * @return StructuralType[]
+     * @return (PathType|NodeType)[]
      */
     public function getPatterns(): array
     {

@@ -22,13 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Traits;
 
 use __PHP_Incomplete_Class;
-use InvalidArgumentException;
-use TypeError;
-use UnexpectedValueException;
 use function class_implements;
 use function get_class;
 use function get_parent_class;
 use function get_resource_type;
+use InvalidArgumentException;
 use function is_array;
 use function is_bool;
 use function is_float;
@@ -39,6 +37,7 @@ use function is_string;
 use function key;
 use function preg_match;
 use function strpos;
+use TypeError;
 
 /**
  * Convenience trait including simple assertions and error reporting functions

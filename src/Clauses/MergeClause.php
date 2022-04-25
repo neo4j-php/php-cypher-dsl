@@ -22,6 +22,8 @@
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
@@ -34,7 +36,7 @@ class MergeClause extends Clause
     use ErrorTrait;
 
     /**
-     * @var StructuralType|null $pattern The pattern to merge
+     * @var PathType|NodeType|null $pattern The pattern to merge
      */
     private ?StructuralType $pattern = null;
 
@@ -71,7 +73,7 @@ class MergeClause extends Clause
     /**
      * Returns the pattern to MERGE.
      *
-     * @return StructuralType|null
+     * @return PathType|NodeType|null
      */
     public function getPattern(): ?StructuralType
     {
@@ -81,11 +83,12 @@ class MergeClause extends Clause
     /**
      * Sets the pattern to merge.
      *
-     * @param StructuralType $pattern The pattern to merge
+     * @param PathType|NodeType $pattern The pattern to merge
      * @return MergeClause
      */
-    public function setPattern(StructuralType $pattern): self
+    public function setPattern($pattern): self
     {
+        $this->assertClass('pattern', [PathType::class, NodeType::class], $pattern);
         $this->pattern = $pattern;
 
         return $this;

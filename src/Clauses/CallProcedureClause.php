@@ -174,8 +174,8 @@ class CallProcedureClause extends Clause
             );
 
             return sprintf("%s(%s) YIELD %s", $this->procedure, $arguments, $yieldParameters);
-        } else {
-            return sprintf("%s(%s)", $this->procedure, $arguments);
         }
+
+        return sprintf("%s(%s)", $this->procedure, $arguments);
     }
 }
