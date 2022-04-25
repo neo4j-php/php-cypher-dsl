@@ -472,16 +472,19 @@ class Query implements QueryConvertable
     public function orderBy($properties, bool $descending = false): self
     {
         $orderByClause = new OrderByClause();
-        $orderByClause->setDescending($descending);
 
         if (!is_array($properties)) {
             $properties = [$properties];
         }
 
-        foreach ($properties as $property) {
+        foreach ($properties as $i => $property) {
             $this->assertClass('property', Property::class, $property);
 
-            $orderByClause->addProperty($property);
+            if ($descending && $i === count($properties) - 1) {
+                $orderByClause->addProperty($property, 'DESCENDING');
+            } else {
+                $orderByClause->addProperty($property);
+            }
         }
 
         $this->clauses[] = $orderByClause;
