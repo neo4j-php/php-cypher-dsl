@@ -57,5 +57,10 @@
     "infect": "XDEBUG_MODE=coverage infection --show-mutations"
   },
   "minimum-stability": "stable",
-  "prefer-stable": true
+  "prefer-stable": true,
+  "config": {
+    "allow-plugins": {
+      "infection/extension-installer": false
+    }
+  }
 }
