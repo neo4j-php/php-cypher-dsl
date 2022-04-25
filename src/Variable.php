@@ -50,10 +50,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * Represents a variable.
@@ -68,9 +64,7 @@ class Variable implements
     LocalDateTimeType,
     LocalTimeType,
     MapType,
-    NodeType,
     NumeralType,
-    PathType,
     PointType,
     StringType,
     TimeType
@@ -145,37 +139,5 @@ class Variable implements
     public function toQuery(): string
     {
         return self::escape($this->getName());
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function relationship(RelationshipType $relationship, StructuralType $nodeOrPath): Path
-    {
-        return (new Path((new Node())->named($this)))->relationship($relationship, $nodeOrPath);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function relationshipTo(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
-    {
-        return (new Path((new Node())->named($this)))->relationshipTo($nodeOrPath, $type, $properties, $name);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function relationshipFrom(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
-    {
-        return (new Path((new Node())->named($this)))->relationshipFrom($nodeOrPath, $type, $properties, $name);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function relationshipUni(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
-    {
-        return (new Path((new Node())->named($this)))->relationshipUni($nodeOrPath, $type, $properties, $name);
     }
 }

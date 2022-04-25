@@ -21,9 +21,28 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 
-/**
- * Represents the type "node".
- */
-interface NodeType extends HasRelationshipsType, HasPropertiesType
+use WikibaseSolutions\CypherDSL\PropertyMap;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use function is_array;
+
+interface HasPropertiesType extends StructuralType
 {
+    /**
+     * Add the given property to the properties of this object.
+     *
+     * @param string $key The name of the property
+     * @param AnyType $value The value of the property
+     *
+     * @return static
+     */
+    public function withProperty(string $key, AnyType $value): self;
+
+    /**
+     * Add the given properties to the properties of this object.
+     *
+     * @param PropertyMap|array $properties
+     *
+     * @return static
+     */
+    public function withProperties($properties): self;
 }
