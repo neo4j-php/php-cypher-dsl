@@ -311,24 +311,24 @@ class Query implements QueryConvertable
     /**
      * Creates the DELETE clause.
      *
-     * @param NodeType|NodeType[] $nodes The nodes to delete
+     * @param Variable|Variable[] $nodes The nodes to delete
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
      *
      */
-    public function delete($nodes): self
+    public function delete($variables): self
     {
         $deleteClause = new DeleteClause();
 
-        if (!is_array($nodes)) {
-            $nodes = [$nodes];
+        if (!is_array($variables)) {
+            $variables = [$variables];
         }
 
-        foreach ($nodes as $node) {
-            $this->assertClass('node', NodeType::class, $node);
+        foreach ($variables as $variable) {
+            $this->assertClass('variable', Variable::class, $variable);
 
-            $deleteClause->addNode($node);
+            $deleteClause->addVariable($variable);
         }
 
         $this->clauses[] = $deleteClause;
@@ -339,25 +339,25 @@ class Query implements QueryConvertable
     /**
      * Creates the DETACH DELETE clause.
      *
-     * @param NodeType|NodeType[] $nodes The nodes to delete
+     * @param Variable|Variable[] $variables The variables to delete, including relationships
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
      *
      */
-    public function detachDelete($nodes): self
+    public function detachDelete($variables): self
     {
         $deleteClause = new DeleteClause();
         $deleteClause->setDetach(true);
 
-        if (!is_array($nodes)) {
-            $nodes = [$nodes];
+        if (!is_array($variables)) {
+            $variables = [$variables];
         }
 
-        foreach ($nodes as $node) {
-            $this->assertClass('node', NodeType::class, $node);
+        foreach ($variables as $variable) {
+            $this->assertClass('variable', Variable::class, $variable);
 
-            $deleteClause->addNode($node);
+            $deleteClause->addVariable($variable);
         }
 
         $this->clauses[] = $deleteClause;
