@@ -45,7 +45,7 @@ interface HasRelationshipsType extends StructuralType
      * @param Node|Path $nodeOrPath
      * @return Path
      */
-    public function relationship(RelationshipType $relationship, StructuralType $nodeOrPath): Path;
+    public function relationship(RelationshipType $relationship, HasRelationshipsType $nodeOrPath): Path;
 
     /**
      * Adds a new relationship to the node pattern at the end of the structural type to form a path.
@@ -57,7 +57,7 @@ interface HasRelationshipsType extends StructuralType
      *
      * @return Path
      */
-    public function relationshipTo(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path;
+    public function relationshipTo(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path;
 
     /**
      * Adds a new relationship from the node pattern at the end of the structural type to form a path.
@@ -69,7 +69,7 @@ interface HasRelationshipsType extends StructuralType
      *
      * @return Path
      */
-    public function relationshipFrom(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path;
+    public function relationshipFrom(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path;
 
     /**
      * Adds a new unidirectional relationship to the node pattern at the end of the structural type to form a path.
@@ -81,5 +81,5 @@ interface HasRelationshipsType extends StructuralType
      *
      * @return Path
      */
-    public function relationshipUni(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path;
+    public function relationshipUni(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path;
 }

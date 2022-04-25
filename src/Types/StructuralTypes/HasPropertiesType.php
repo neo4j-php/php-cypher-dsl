@@ -23,6 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 interface HasPropertiesType extends StructuralType
 {
@@ -32,16 +33,16 @@ interface HasPropertiesType extends StructuralType
      * @param string $key The name of the property
      * @param AnyType $value The value of the property
      *
-     * @return static
+     * @return HasPropertiesType
      */
-    public function withProperty(string $key, AnyType $value): self;
+    public function withProperty(string $key, PropertyType $value): HasPropertiesType;
 
     /**
      * Add the given properties to the properties of this object.
      *
      * @param PropertyMap|array $properties
      *
-     * @return static
+     * @return HasPropertiesType
      */
-    public function withProperties($properties): self;
+    public function withProperties($properties): HasPropertiesType;
 }
