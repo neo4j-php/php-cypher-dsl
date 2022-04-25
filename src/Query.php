@@ -35,6 +35,7 @@ use WikibaseSolutions\CypherDSL\Clauses\RemoveClause;
 use WikibaseSolutions\CypherDSL\Clauses\ReturnClause;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 use WikibaseSolutions\CypherDSL\Clauses\SkipClause;
+use WikibaseSolutions\CypherDSL\Clauses\UnionClause;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
@@ -55,6 +56,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
+use function is_callable;
 
 /**
  * Builder class for building complex Cypher queries.
@@ -631,6 +633,35 @@ class Query implements QueryConvertable
         $callProcedureClause->yields($yields);
 
         $this->clauses[] = $callProcedureClause;
+
+        return $this;
+    }
+
+
+    /**
+     * Combines the result of this query with another one via a UNION clause.
+     *
+     * @param callable(Query):void|Query $queryOrCallable The callable decorating a fresh query instance or the query instance to be attached after the union clause.
+     * @param bool $all Whether the union should include all results or remove the duplicates instead.
+     *
+     * @return Query
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/union/
+     */
+    public function union($queryOrCallable, bool $all = false): self
+    {
+        $this->clauses[] = new UnionClause($all);
+
+        if (is_callable($queryOrCallable)) {
+            $query = Query::new();
+            $queryOrCallable($query);
+        } else {
+            $query = $queryOrCallable;
+        }
+
+        foreach ($query->getClauses() as $clause) {
+            $this->clauses[] = $clause;
+        }
 
         return $this;
     }
