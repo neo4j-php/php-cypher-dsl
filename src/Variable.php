@@ -188,7 +188,7 @@ class Variable implements
      */
     public function withProperty(string $key, PropertyType $value): HasPropertiesType
     {
-        return $this->toNode()->withProperties($key, $value);
+        return $this->toNode()->withProperty($key, $value);
     }
 
     /**
