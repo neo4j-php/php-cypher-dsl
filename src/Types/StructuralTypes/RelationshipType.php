@@ -21,8 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 
-use WikibaseSolutions\CypherDSL\Types\AnyType;
-
 /**
  * Represents the type "relationship".
  */

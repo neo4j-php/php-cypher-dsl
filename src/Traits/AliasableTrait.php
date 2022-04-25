@@ -2,9 +2,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
+use function is_string;
 use WikibaseSolutions\CypherDSL\Alias;
 use WikibaseSolutions\CypherDSL\Variable;
-use function is_string;
 
 trait AliasableTrait
 {

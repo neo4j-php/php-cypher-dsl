@@ -2,17 +2,16 @@
 
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
+use function array_key_exists;
+use function is_array;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\PathTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 use WikibaseSolutions\CypherDSL\Variable;
-use function array_key_exists;
-use function is_array;
 
 class Path implements PathType
 {
@@ -68,6 +67,7 @@ class Path implements PathType
             // and is thus very unlikely.
             if (!array_key_exists($i + 1, $this->nodes)) {
                 --$i;
+
                 break;
             }
             $cql .= $this->nodes[$i]->toQuery();

@@ -23,7 +23,6 @@ namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use function is_array;
 
 interface HasPropertiesType extends StructuralType
 {

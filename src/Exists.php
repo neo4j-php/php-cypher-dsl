@@ -84,8 +84,8 @@ class Exists implements BooleanType
     {
         if (isset($this->where)) {
             return sprintf("EXISTS { %s %s }", $this->match->toQuery(), $this->where->toQuery());
-        } else {
-            return sprintf("EXISTS { %s }", $this->match->toQuery());
         }
+
+        return sprintf("EXISTS { %s }", $this->match->toQuery());
     }
 }

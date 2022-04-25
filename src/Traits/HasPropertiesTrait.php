@@ -2,9 +2,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
+use function is_array;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use function is_array;
 
 trait HasPropertiesTrait
 {
