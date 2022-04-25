@@ -2,6 +2,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Query;
+
 /**
  * This class represents the union clause.
  *
@@ -18,6 +20,30 @@ class UnionClause extends Clause
     public function __construct(bool $all = false)
     {
         $this->all = $all;
+    }
+
+    /**
+     * Combines two queries with a union.
+     *
+     * @param Query $left The query preceding the union clause.
+     * @param Query $right The query after the union clause.
+     * @param bool $all Whether the union should include all results or remove the duplicates instead.
+     */
+    public static function union(Query $left, Query $right, bool $all = false): Query
+    {
+        $tbr = Query::new();
+
+        foreach ($left->getClauses() as $clause) {
+            $tbr->addClause($clause);
+        }
+
+        $tbr->addClause(new self($all));
+
+        foreach ($right->getClauses() as $clause) {
+            $tbr->addClause($clause);
+        }
+
+        return $tbr;
     }
 
     /**
