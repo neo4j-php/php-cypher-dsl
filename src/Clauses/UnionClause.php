@@ -69,7 +69,7 @@ class UnionClause extends Clause
      */
     protected function getSubject(): string
     {
-        return 'UNION';
+        return $this->all ? 'ALL' : '';
     }
 
     /**
@@ -77,6 +77,6 @@ class UnionClause extends Clause
      */
     protected function getClause(): string
     {
-        return $this->all ? 'ALL' : '';
+        return 'UNION';
     }
 }
