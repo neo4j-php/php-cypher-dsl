@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
+use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
 use WikibaseSolutions\CypherDSL\Traits\DateTrait;
@@ -35,11 +36,9 @@ use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\PointTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TimeTrait;
-use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
@@ -47,14 +46,13 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\HasPropertiesType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\HasRelationshipsType;
-
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
  * Represents a variable.

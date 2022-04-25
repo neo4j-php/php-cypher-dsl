@@ -21,7 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Variable;
 
 /**

@@ -22,8 +22,8 @@
 namespace WikibaseSolutions\CypherDSL\Traits;
 
 use WikibaseSolutions\CypherDSL\Patterns\Path;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\HasRelationshipsType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
  * This trait should be used by any expression that returns a node.
