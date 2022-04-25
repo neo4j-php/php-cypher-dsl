@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
-use TypeError;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\ExpressionList;
 use WikibaseSolutions\CypherDSL\Query;
 
@@ -69,7 +69,7 @@ class ExpressionListTest extends TestCase
         return [
             [[Query::literal(12)], "[12]"],
             [[Query::literal('12')], "['12']"],
-            [[Query::literal('12'), Query::literal('13')], "['12', '13']"]
+            [[Query::literal('12'), Query::literal('13')], "['12', '13']"],
         ];
     }
 
@@ -78,7 +78,7 @@ class ExpressionListTest extends TestCase
         return [
             [[new ExpressionList([Query::literal(12)])], "[[12]]"],
             [[new ExpressionList([Query::literal('12')])], "[['12']]"],
-            [[new ExpressionList([Query::literal('12'), Query::literal('14')]), new ExpressionList([Query::literal('13')])], "[['12', '14'], ['13']]"]
+            [[new ExpressionList([Query::literal('12'), Query::literal('14')]), new ExpressionList([Query::literal('13')])], "[['12', '14'], ['13']]"],
         ];
     }
 

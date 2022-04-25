@@ -22,8 +22,8 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use InvalidArgumentException;
-use TypeError;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Assignment;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\Clauses\MatchClause;
@@ -140,7 +140,7 @@ class QueryTest extends TestCase
     {
         $list = Query::list([
             $this->getQueryConvertableMock(AnyType::class, "hello"),
-            $this->getQueryConvertableMock(AnyType::class, "world")
+            $this->getQueryConvertableMock(AnyType::class, "world"),
         ]);
 
         $this->assertInstanceOf(ExpressionList::class, $list);
@@ -166,6 +166,7 @@ class QueryTest extends TestCase
             public function next()
             {
                 $this->count++;
+
                 return 1;
             }
 
@@ -714,7 +715,7 @@ class QueryTest extends TestCase
 
         $tom = Query::variable("tom");
         $tomHanks = Query::node()->named($tom)->withProperties([
-            "name" => Query::literal("Tom Hanks")
+            "name" => Query::literal("Tom Hanks"),
         ]);
 
         $query = new Query();
@@ -750,7 +751,7 @@ class QueryTest extends TestCase
 
         $tom = Query::variable("tom");
         $person = Query::node("Person")->withProperties([
-            "name" => Query::literal("Tom Hanks")
+            "name" => Query::literal("Tom Hanks"),
         ])->named($tom);
 
         $tomHanksMovies = Query::variable("tomHanksMovies");
@@ -780,7 +781,7 @@ class QueryTest extends TestCase
 
         $tom = Query::variable("tom");
         $tomNode = Query::node("Person")->withProperties([
-            "name" => Query::literal("Tom Hanks")
+            "name" => Query::literal("Tom Hanks"),
         ])->named($tom);
 
         $movie = Query::variable("m");
@@ -1064,7 +1065,7 @@ class QueryTest extends TestCase
             [69420, new Decimal(69420)],
             [10.0000000000000000000000000000001, new Decimal(10.0000000000000000000000000000001)],
             [false, new Boolean(false)],
-            [true, new Boolean(true)]
+            [true, new Boolean(true)],
         ];
     }
 }
