@@ -643,7 +643,7 @@ class Query implements QueryConvertable
     /**
      * Combines the result of this query with another one via a UNION clause.
      *
-     * @param callable(Query):void|Query $queryOrCallable The callable decorating a fresh query instance or the query instance to be attached after the union clause.
+     * @param Query|callable(Query):void $queryOrCallable The callable decorating a fresh query instance or the query instance to be attached after the union clause.
      * @param bool $all Whether the union should include all results or remove the duplicates instead.
      *
      * @return Query
