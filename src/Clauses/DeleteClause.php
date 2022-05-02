@@ -21,8 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Variable;
 
 /**
  * This class represents a DELETE clause.
@@ -39,11 +38,11 @@ class DeleteClause extends Clause
     private bool $detach = false;
 
     /**
-     * The nodes that needs to be deleted.
+     * The variables that needs to be deleted.
      *
-     * @var AnyType[] $nodes
+     * @var Variable[] $variables
      */
-    private array $nodes = [];
+    private array $variables = [];
 
     /**
      * Sets the clause to DETACH DELETE. Without DETACH DELETE, all relationships need to be explicitly
@@ -60,14 +59,14 @@ class DeleteClause extends Clause
     }
 
     /**
-     * Add the node to be deleted. The expression must return a node when evaluated.
+     * Add the variable to be deleted. The expression must return a node when evaluated.
      *
-     * @param NodeType $node Expression that returns the node to be deleted
+     * @param Variable $variable The name of the object that should be deleted
      * @return DeleteClause
      */
-    public function addNode(NodeType $node): self
+    public function addVariable(Variable $variable): self
     {
-        $this->nodes[] = $node;
+        $this->variables[] = $variable;
 
         return $this;
     }
@@ -83,13 +82,13 @@ class DeleteClause extends Clause
     }
 
     /**
-     * Returns the nodes to delete.
+     * Returns the variables to delete.
      *
-     * @return AnyType[]
+     * @return Variable[]
      */
-    public function getNodes(): array
+    public function getVariables(): array
     {
-        return $this->nodes;
+        return $this->variables;
     }
 
     /**
@@ -111,7 +110,7 @@ class DeleteClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (NodeType $node) => $node->toQuery(), $this->nodes)
+            array_map(fn (Variable $variable) => $variable->toQuery(), $this->variables)
         );
     }
 }

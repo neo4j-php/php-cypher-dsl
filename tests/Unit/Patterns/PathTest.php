@@ -73,7 +73,7 @@ class PathTest extends TestCase
             new Node('Label'),
             (new Node())->named('b'),
             new Node(),
-            (new Node())->named('d')
+            (new Node())->named('d'),
         ], $path->getNodes());
 
         self::assertEquals([
@@ -83,7 +83,7 @@ class PathTest extends TestCase
                 ->withType('TYPE')
                 ->withProperties(['x' => Query::literal('y')])
                 ->named('c'),
-            new Relationship(Relationship::DIR_UNI)
+            new Relationship(Relationship::DIR_UNI),
         ], $path->getRelationships());
     }
 }

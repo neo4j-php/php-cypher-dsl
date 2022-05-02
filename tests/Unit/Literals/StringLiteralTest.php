@@ -104,7 +104,7 @@ class StringLiteralTest extends TestCase
             ["\uffff", "'\\uffff'"],
             ["\U00000000", "'\\U00000000'"],
             ["\Uffffffff", "'\\Uffffffff'"],
-            ["\\\\b", "'\\\\b'"]
+            ["\\\\b", "'\\\\b'"],
         ];
     }
 
@@ -127,7 +127,7 @@ class StringLiteralTest extends TestCase
             ["\uffff", "\"\\uffff\""],
             ["\U00000000", "\"\\U00000000\""],
             ["\Uffffffff", "\"\\Uffffffff\""],
-            ["\\\\b", "\"\\\\b\""]
+            ["\\\\b", "\"\\\\b\""],
         ];
     }
 }

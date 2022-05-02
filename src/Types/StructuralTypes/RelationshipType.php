@@ -21,11 +21,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 
-use WikibaseSolutions\CypherDSL\Types\AnyType;
-
 /**
  * Represents the type "relationship".
  */
-interface RelationshipType extends AnyType
+interface RelationshipType extends HasPropertiesType
 {
 }

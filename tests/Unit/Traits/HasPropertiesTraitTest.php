@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Traits\HasPropertiesTrait;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\HasPropertiesType;
 
 class HasPropertiesTraitTest extends TestCase
 {
@@ -13,9 +14,14 @@ class HasPropertiesTraitTest extends TestCase
 
     public function setUp(): void
     {
-        $this->propertyTrait = new class () {
+        $this->propertyTrait = new class () implements HasPropertiesType {
             use HasPropertiesTrait {
                 initialiseProperties as public;
+            }
+
+            public function toQuery(): string
+            {
+                return '';
             }
         };
     }
