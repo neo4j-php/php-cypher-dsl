@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL;
 
 use function is_callable;
+use WikibaseSolutions\CypherDSL\Clauses\CallClause;
 use WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\Clauses\CreateClause;
@@ -662,6 +663,29 @@ class Query implements QueryConvertable
         foreach ($query->getClauses() as $clause) {
             $this->clauses[] = $clause;
         }
+
+        return $this;
+    }
+
+    /**
+     * Creates a CALL sub query clause.
+     *
+     * @param callable(Query)|Query $decoratorOrClause The callable decorating the pattern, or the actual CALL clause.
+     *
+     * @return Query
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/
+     */
+    public function call($decoratorOrClause): self
+    {
+        if (is_callable($decoratorOrClause)) {
+            $subQuery = self::new();
+            $decoratorOrClause($subQuery);
+        } else {
+            $subQuery = $decoratorOrClause;
+        }
+
+        $this->clauses[] = new CallClause($subQuery);
 
         return $this;
     }
