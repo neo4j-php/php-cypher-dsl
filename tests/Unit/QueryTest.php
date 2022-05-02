@@ -27,7 +27,6 @@ use TypeError;
 use WikibaseSolutions\CypherDSL\Assignment;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\Clauses\MatchClause;
-use WikibaseSolutions\CypherDSL\Clauses\UnionClause;
 use WikibaseSolutions\CypherDSL\Exists;
 use WikibaseSolutions\CypherDSL\ExpressionList;
 use WikibaseSolutions\CypherDSL\Literals\Boolean;
