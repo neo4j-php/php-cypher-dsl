@@ -56,11 +56,8 @@ jobs:
       - name: Install dependencies
         run: composer update --working-dir ${{ env.INSTALL_PATH }}
 
-      - name: Run php-cs-fixer on src
-        run: composer exec -d ${{ env.INSTALL_PATH }} -- php-cs-fixer fix --dry-run --verbose --rules=${{ env.FIXER_RULES }} ./src
-
-      - name: Run php-cs-fixer on tests
-        run: composer exec -d ${{ env.INSTALL_PATH }} -- php-cs-fixer fix --dry-run --verbose --rules=${{ env.FIXER_RULES }} ./tests
+      - name: Run php-cs-fixer
+        run: composer php-cs-fixer --working-dir ${{ env.INSTALL_PATH }}
 
       - name: Run unit tests
         run: composer test --working-dir ${{ env.INSTALL_PATH }}
