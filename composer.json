@@ -40,7 +40,8 @@
   },
   "require-dev": {
     "phpunit/phpunit": "~9.0",
-    "infection/infection": "^0.25.5"
+    "infection/infection": "^0.25.5",
+    "friendsofphp/php-cs-fixer": "^3.0"
   },
   "autoload": {
     "psr-4": {
@@ -54,7 +55,9 @@
   },
   "scripts": {
     "test": "phpunit tests/",
-    "infect": "XDEBUG_MODE=coverage infection --show-mutations"
+    "infect": "XDEBUG_MODE=coverage infection --show-mutations",
+    "php-cs-fixer":
+       "php-cs-fixer fix --verbose --rules=@PSR12,align_multiline_comment,array_indentation,blank_line_before_statement,no_unused_imports,no_useless_else,no_useless_return,ordered_imports,phpdoc_scalar,return_assignment,simplified_if_return,trailing_comma_in_multiline"
   },
   "minimum-stability": "stable",
   "prefer-stable": true

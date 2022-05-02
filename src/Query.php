@@ -21,8 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use Closure;
-use Prophecy\Call\Call;
+use function is_callable;
 use WikibaseSolutions\CypherDSL\Clauses\CallClause;
 use WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
@@ -58,7 +57,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
-use function is_callable;
 
 /**
  * Builder class for building complex Cypher queries.

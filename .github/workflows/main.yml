@@ -55,6 +55,11 @@ jobs:
       - name: Install dependencies
         run: composer update --working-dir ${{ env.INSTALL_PATH }}
 
+      - name: Run php-cs-fixer
+        run: |
+            composer php-cs-fixer --working-dir ${{ env.INSTALL_PATH }} -- --dry-run ./src
+            composer php-cs-fixer --working-dir ${{ env.INSTALL_PATH }} -- --dry-run ./tests
+
       - name: Run unit tests
         run: composer test --working-dir ${{ env.INSTALL_PATH }}
 

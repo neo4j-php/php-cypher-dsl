@@ -27,7 +27,6 @@ use TypeError;
 use WikibaseSolutions\CypherDSL\Assignment;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\Clauses\MatchClause;
-use WikibaseSolutions\CypherDSL\Clauses\UnionClause;
 use WikibaseSolutions\CypherDSL\Exists;
 use WikibaseSolutions\CypherDSL\ExpressionList;
 use WikibaseSolutions\CypherDSL\Literals\Boolean;
@@ -1122,8 +1121,8 @@ class QueryTest extends TestCase
         $this->assertEquals("MATCH (y:X) CALL { WITH y WHERE y.z = 'foo' RETURN y.z AS foo } RETURN foo", $query->toQuery());
     }
 
-    public function testCallClause(): void {
-
+    public function testCallClause(): void
+    {
         $node = Query::node('X')->named('y');
 
         $sub = Query::new()->with($node->getVariable())
