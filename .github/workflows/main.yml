@@ -27,7 +27,6 @@ jobs:
       COMPOSER_VERSION: 2
       INSTALL_PATH: php-cypher-dsl
       REPOSITORY_NAME: php-cypher-dsl
-      FIXER_RULES: "@PSR12,align_multiline_comment,array_indentation,blank_line_before_statement,no_unused_imports,no_useless_else,no_useless_return,ordered_imports,phpdoc_scalar,return_assignment,simplified_if_return,trailing_comma_in_multiline"
 
     steps:
       # https://getcomposer.org/download/
@@ -55,12 +54,6 @@ jobs:
 
       - name: Install dependencies
         run: composer update --working-dir ${{ env.INSTALL_PATH }}
-
-      - name: Run php-cs-fixer on src
-        run: composer exec -d ${{ env.INSTALL_PATH }} -- php-cs-fixer fix --dry-run --verbose --rules=${{ env.FIXER_RULES }} ./src
-
-      - name: Run php-cs-fixer on tests
-        run: composer exec -d ${{ env.INSTALL_PATH }} -- php-cs-fixer fix --dry-run --verbose --rules=${{ env.FIXER_RULES }} ./tests
 
       - name: Run unit tests
         run: composer test --working-dir ${{ env.INSTALL_PATH }}
