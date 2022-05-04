@@ -24,10 +24,6 @@ namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 use WikibaseSolutions\CypherDSL\Addition;
 use WikibaseSolutions\CypherDSL\Division;
 use WikibaseSolutions\CypherDSL\Exponentiation;
-use WikibaseSolutions\CypherDSL\GreaterThan;
-use WikibaseSolutions\CypherDSL\GreaterThanOrEqual;
-use WikibaseSolutions\CypherDSL\LessThan;
-use WikibaseSolutions\CypherDSL\LessThanOrEqual;
 use WikibaseSolutions\CypherDSL\Minus;
 use WikibaseSolutions\CypherDSL\Modulo;
 use WikibaseSolutions\CypherDSL\Multiplication;
@@ -36,7 +32,7 @@ use WikibaseSolutions\CypherDSL\Subtraction;
 /**
  * Represents any numeral (integer, float, double).
  */
-interface NumeralType extends PropertyType
+interface NumeralType extends ComparableType
 {
     /**
      * Add this expression to the given expression.
@@ -64,42 +60,6 @@ interface NumeralType extends PropertyType
      * @return Exponentiation
      */
     public function exponentiate(NumeralType $right, bool $insertParentheses = true): Exponentiation;
-
-    /**
-     * Perform a greater than comparison against the given expression.
-     *
-     * @param NumeralType $right
-     * @param bool $insertParentheses
-     * @return GreaterThan
-     */
-    public function gt(NumeralType $right, bool $insertParentheses = true): GreaterThan;
-
-    /**
-     * Perform a greater than or equal comparison against the given expression.
-     *
-     * @param NumeralType $right
-     * @param bool $insertParentheses
-     * @return GreaterThanOrEqual
-     */
-    public function gte(NumeralType $right, bool $insertParentheses = true): GreaterThanOrEqual;
-
-    /**
-     * Perform a less than comparison against the given expression.
-     *
-     * @param NumeralType $right
-     * @param bool $insertParentheses
-     * @return LessThan
-     */
-    public function lt(NumeralType $right, bool $insertParentheses = true): LessThan;
-
-    /**
-     * Perform a less than or equal comparison against the given expression.
-     *
-     * @param NumeralType $right
-     * @param bool $insertParentheses
-     * @return LessThanOrEqual
-     */
-    public function lte(NumeralType $right, bool $insertParentheses = true): LessThanOrEqual;
 
     /**
      * Perform the modulo operation with the given expression.

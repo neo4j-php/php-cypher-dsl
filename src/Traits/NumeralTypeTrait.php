@@ -24,10 +24,6 @@ namespace WikibaseSolutions\CypherDSL\Traits;
 use WikibaseSolutions\CypherDSL\Addition;
 use WikibaseSolutions\CypherDSL\Division;
 use WikibaseSolutions\CypherDSL\Exponentiation;
-use WikibaseSolutions\CypherDSL\GreaterThan;
-use WikibaseSolutions\CypherDSL\GreaterThanOrEqual;
-use WikibaseSolutions\CypherDSL\LessThan;
-use WikibaseSolutions\CypherDSL\LessThanOrEqual;
 use WikibaseSolutions\CypherDSL\Minus;
 use WikibaseSolutions\CypherDSL\Modulo;
 use WikibaseSolutions\CypherDSL\Multiplication;
@@ -39,8 +35,9 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 trait NumeralTypeTrait
 {
-    use PropertyTypeTrait;
     use AliasableTrait;
+    use ComparableTypeTrait;
+    use PropertyTypeTrait;
 
     /**
      * Add this expression to the given expression.
@@ -76,54 +73,6 @@ trait NumeralTypeTrait
     public function exponentiate(NumeralType $right, bool $insertParentheses = true): Exponentiation
     {
         return new Exponentiation($this, $right, $insertParentheses);
-    }
-
-    /**
-     * Perform a greater than comparison against the given expression.
-     *
-     * @param NumeralType $right
-     * @param bool $insertParentheses
-     * @return GreaterThan
-     */
-    public function gt(NumeralType $right, bool $insertParentheses = true): GreaterThan
-    {
-        return new GreaterThan($this, $right, $insertParentheses);
-    }
-
-    /**
-     * Perform a greater than or equal comparison against the given expression.
-     *
-     * @param NumeralType $right
-     * @param bool $insertParentheses
-     * @return GreaterThanOrEqual
-     */
-    public function gte(NumeralType $right, bool $insertParentheses = true): GreaterThanOrEqual
-    {
-        return new GreaterThanOrEqual($this, $right, $insertParentheses);
-    }
-
-    /**
-     * Perform a less than comparison against the given expression.
-     *
-     * @param NumeralType $right
-     * @param bool $insertParentheses
-     * @return LessThan
-     */
-    public function lt(NumeralType $right, bool $insertParentheses = true): LessThan
-    {
-        return new LessThan($this, $right, $insertParentheses);
-    }
-
-    /**
-     * Perform a less than or equal comparison against the given expression.
-     *
-     * @param NumeralType $right
-     * @param bool $insertParentheses
-     * @return LessThanOrEqual
-     */
-    public function lte(NumeralType $right, bool $insertParentheses = true): LessThanOrEqual
-    {
-        return new LessThanOrEqual($this, $right, $insertParentheses);
     }
 
     /**
