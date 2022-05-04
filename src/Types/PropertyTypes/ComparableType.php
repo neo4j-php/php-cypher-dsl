@@ -21,7 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
-use WikibaseSolutions\CypherDSL\Addition;
 use WikibaseSolutions\CypherDSL\GreaterThan;
 use WikibaseSolutions\CypherDSL\GreaterThanOrEqual;
 use WikibaseSolutions\CypherDSL\LessThan;
