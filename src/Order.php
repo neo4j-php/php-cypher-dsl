@@ -21,11 +21,11 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
+use function in_array;
 use InvalidArgumentException;
+use function strtoupper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
-use function in_array;
-use function strtoupper;
 
 /**
  * Defines the order of an expression. Can only be used in an ORDER BY clause.
@@ -76,7 +76,7 @@ class Order implements QueryConvertable
     {
         if ($ordering !== null) {
             $ordering = strtoupper($ordering);
-            if (!in_array($ordering, ['ASC', 'DESC', 'ASCENDING', 'DESCENDING']))  {
+            if (!in_array($ordering, ['ASC', 'DESC', 'ASCENDING', 'DESCENDING'])) {
                 throw new InvalidArgumentException('Ordering must be null, "ASC", "DESC", "ASCENDING" or "DESCENDING"');
             }
 
