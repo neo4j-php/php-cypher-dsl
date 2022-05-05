@@ -21,7 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Literals;
 
-use WikibaseSolutions\CypherDSL\Traits\AliasableTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
@@ -95,8 +94,8 @@ class StringLiteral implements StringType
 
         if ($this->useDoubleQuotes) {
             return sprintf('"%s"', str_replace('"', '\"', $value));
-        } else {
-            return sprintf("'%s'", str_replace("'", "\'", $value));
         }
+
+        return sprintf("'%s'", str_replace("'", "\'", $value));
     }
 }

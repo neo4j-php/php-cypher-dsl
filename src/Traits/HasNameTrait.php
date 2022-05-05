@@ -2,12 +2,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
-use function bin2hex;
-use function ceil;
 use function mt_rand;
-use function openssl_random_pseudo_bytes;
-use function random_bytes;
-use function substr;
 
 trait HasNameTrait
 {
@@ -51,6 +46,7 @@ trait HasNameTrait
         for ($i = 0; $i < $length; ++$i) {
             $random .= dechex(mt_rand(0, 15));
         }
+
         return $prefix . $random;
     }
 

@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use Closure;
+use function is_callable;
 use WikibaseSolutions\CypherDSL\Clauses\CallClause;
 use WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
@@ -40,7 +40,6 @@ use WikibaseSolutions\CypherDSL\Clauses\SkipClause;
 use WikibaseSolutions\CypherDSL\Clauses\UnionClause;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Functions\FunctionCall;
 use WikibaseSolutions\CypherDSL\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Literals\Decimal;
@@ -48,6 +47,7 @@ use WikibaseSolutions\CypherDSL\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
@@ -57,8 +57,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
-use function is_callable;
 
 /**
  * Builder class for building complex Cypher queries.
@@ -221,7 +219,7 @@ class Query implements QueryConvertable
     /**
      * Creates the MATCH clause.
      *
-     * @param StructuralType|StructuralType[] $patterns A single pattern or a list of patterns
+     * @param PathType|NodeType|(PathType|NodeType)[] $patterns A single pattern or a list of patterns
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/
@@ -236,7 +234,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-            $this->assertClass('pattern', StructuralType::class, $pattern);
+            $this->assertClass('pattern', [PathType::class, NodeType::class], $pattern);
 
             $matchClause->addPattern($pattern);
         }
@@ -287,7 +285,7 @@ class Query implements QueryConvertable
     /**
      * Creates the CREATE clause.
      *
-     * @param StructuralType|StructuralType[] $patterns A single pattern or a list of patterns
+     * @param PathType|NodeType|(PathType|NodeType)[] $patterns A single pattern or a list of patterns
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/create/
@@ -302,7 +300,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-            $this->assertClass('pattern', StructuralType::class, $pattern);
+            $this->assertClass('pattern', [PathType::class, NodeType::class], $pattern);
 
             $createClause->addPattern($pattern);
         }
@@ -315,24 +313,24 @@ class Query implements QueryConvertable
     /**
      * Creates the DELETE clause.
      *
-     * @param NodeType|NodeType[] $nodes The nodes to delete
+     * @param Variable|Variable[] $nodes The nodes to delete
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
      *
      */
-    public function delete($nodes): self
+    public function delete($variables): self
     {
         $deleteClause = new DeleteClause();
 
-        if (!is_array($nodes)) {
-            $nodes = [$nodes];
+        if (!is_array($variables)) {
+            $variables = [$variables];
         }
 
-        foreach ($nodes as $node) {
-            $this->assertClass('node', NodeType::class, $node);
+        foreach ($variables as $variable) {
+            $this->assertClass('variable', Variable::class, $variable);
 
-            $deleteClause->addNode($node);
+            $deleteClause->addVariable($variable);
         }
 
         $this->clauses[] = $deleteClause;
@@ -343,25 +341,25 @@ class Query implements QueryConvertable
     /**
      * Creates the DETACH DELETE clause.
      *
-     * @param NodeType|NodeType[] $nodes The nodes to delete
+     * @param Variable|Variable[] $variables The variables to delete, including relationships
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
      *
      */
-    public function detachDelete($nodes): self
+    public function detachDelete($variables): self
     {
         $deleteClause = new DeleteClause();
         $deleteClause->setDetach(true);
 
-        if (!is_array($nodes)) {
-            $nodes = [$nodes];
+        if (!is_array($variables)) {
+            $variables = [$variables];
         }
 
-        foreach ($nodes as $node) {
-            $this->assertClass('node', NodeType::class, $node);
+        foreach ($variables as $variable) {
+            $this->assertClass('variable', Variable::class, $variable);
 
-            $deleteClause->addNode($node);
+            $deleteClause->addVariable($variable);
         }
 
         $this->clauses[] = $deleteClause;
@@ -409,7 +407,7 @@ class Query implements QueryConvertable
     /**
      * Creates the MERGE clause.
      *
-     * @param StructuralType $pattern The pattern to merge
+     * @param PathType|NodeType $pattern The pattern to merge
      * @param Clause|null $createClause The clause to execute when the pattern is created
      * @param Clause|null $matchClause The clause to execute when the pattern is matched
      *
@@ -417,8 +415,9 @@ class Query implements QueryConvertable
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/
      *
      */
-    public function merge(StructuralType $pattern, Clause $createClause = null, Clause $matchClause = null): self
+    public function merge($pattern, Clause $createClause = null, Clause $matchClause = null): self
     {
+        $this->assertClass('pattern', [PathType::class, NodeType::class], $pattern);
         $mergeClause = new MergeClause();
         $mergeClause->setPattern($pattern);
 
@@ -438,7 +437,7 @@ class Query implements QueryConvertable
     /**
      * Creates the OPTIONAL MATCH clause.
      *
-     * @param StructuralType|StructuralType[] $patterns A single pattern or a list of patterns
+     * @param PathType|NodeType|(PathType|NodeType)[] $patterns A single pattern or a list of patterns
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/optional-match/
@@ -453,7 +452,7 @@ class Query implements QueryConvertable
         }
 
         foreach ($patterns as $pattern) {
-            $this->assertClass('pattern', StructuralType::class, $pattern);
+            $this->assertClass('pattern', [PathType::class, NodeType::class], $pattern);
 
             $optionalMatchClause->addPattern($pattern);
         }
@@ -671,17 +670,20 @@ class Query implements QueryConvertable
     /**
      * Creates a CALL sub query clause.
      *
-     * @param callable(Query) $decorator The callable decorating the pattern.
+     * @param callable(Query)|Query $decoratorOrClause The callable decorating the pattern, or the actual CALL clause.
      *
      * @return Query
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/
      */
-    public function call($decorator): self
+    public function call($decoratorOrClause): self
     {
-        $subQuery = self::new();
-
-        $decorator($subQuery);
+        if (is_callable($decoratorOrClause)) {
+            $subQuery = self::new();
+            $decoratorOrClause($subQuery);
+        } else {
+            $subQuery = $decoratorOrClause;
+        }
 
         $this->clauses[] = new CallClause($subQuery);
 
