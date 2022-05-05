@@ -21,10 +21,10 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
+use function sprintf;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use function sprintf;
 
 /**
  * Represents the IS NULL comparison operator.
