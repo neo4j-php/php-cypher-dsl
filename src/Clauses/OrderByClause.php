@@ -22,8 +22,8 @@
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Order;
-use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use function array_map;
 
 /**
@@ -49,12 +49,12 @@ class OrderByClause extends Clause
     /**
      * Add a property to sort on.
      *
-     * @param Property $property The additional property to sort on.
+     * @param PropertyType $property The additional property to sort on.
      * @param string|null $order The order of the property to appear. Null is equal to the default in Neo4J.
      *
      * @return OrderByClause
      */
-    public function addProperty(Property $property, ?string $order = null): self
+    public function addProperty(PropertyType $property, ?string $order = null): self
     {
         $this->orderings[] = new Order($property, $order);
 
@@ -74,7 +74,7 @@ class OrderByClause extends Clause
     /**
      * Returns the orderings.
      *
-     * @return Property[]
+     * @return Order[]
      */
     public function getOrderings(): array
     {
