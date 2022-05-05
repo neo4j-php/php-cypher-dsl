@@ -4,6 +4,7 @@ namespace WikibaseSolutions\CypherDSL;
 
 use InvalidArgumentException;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use function in_array;
 use function strtoupper;
 
@@ -18,17 +19,17 @@ use function strtoupper;
  */
 class Order implements QueryConvertable
 {
-    private AnyType $expression;
+    private PropertyType $expression;
     /** @var string|null */
     private ?string $ordering;
 
     /**
      * Order constructor.
      *
-     * @param AnyType $expression The expression to order by.
+     * @param PropertyType $expression The expression to order by.
      * @param string|null $ordering The order modifier. Must be null or a valid modifier ('ASC', 'ASCENDING', 'DESC', 'DESCENDING')
      */
-    public function __construct(AnyType $expression, ?string $ordering = null)
+    public function __construct(PropertyType $expression, ?string $ordering = null)
     {
         $this->expression = $expression;
         $this->setOrdering($ordering);
