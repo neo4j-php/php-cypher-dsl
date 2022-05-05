@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 use function array_map;
 use WikibaseSolutions\CypherDSL\Order;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
@@ -64,7 +65,7 @@ class OrderByClause extends Clause
     /**
      * Returns the properties to order.
      *
-     * @return Order[]
+     * @return AnyType[]
      */
     public function getProperties(): array
     {
