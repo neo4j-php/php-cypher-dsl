@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 use function sprintf;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * Represents aliasing an expression or variable.

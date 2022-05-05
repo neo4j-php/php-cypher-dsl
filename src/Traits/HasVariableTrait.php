@@ -21,10 +21,10 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
-use WikibaseSolutions\CypherDSL\Patterns\Node;
-use WikibaseSolutions\CypherDSL\Variable;
 use function is_string;
 use function trim;
+use WikibaseSolutions\CypherDSL\Patterns\Node;
+use WikibaseSolutions\CypherDSL\Variable;
 
 trait HasVariableTrait
 {

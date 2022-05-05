@@ -65,6 +65,7 @@ trait HasNameTrait
         for ($i = 0; $i < $length; ++$i) {
             $random .= dechex(mt_rand(0, 15));
         }
+
         return $prefix . $random;
     }
 

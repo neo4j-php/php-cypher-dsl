@@ -52,7 +52,7 @@ class PropertyTest extends TestCase
             [$this->getQueryConvertableMock(Variable::class, "a"), "b", "a.b"],
             [$this->getQueryConvertableMock(Variable::class, "b"), "a", "b.a"],
             [$this->getQueryConvertableMock(Variable::class, "a"), ":", "a.`:`"],
-            [$this->getQueryConvertableMock(Variable::class, "b"), ":", "b.`:`"]
+            [$this->getQueryConvertableMock(Variable::class, "b"), ":", "b.`:`"],
         ];
     }
 }
