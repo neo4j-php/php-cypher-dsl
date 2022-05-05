@@ -25,7 +25,6 @@ use WikibaseSolutions\CypherDSL\Order;
 use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
-use function array_map;
 
 /**
  * This class represents an ORDER BY clause. This clause should always be preceded by a RETURN
