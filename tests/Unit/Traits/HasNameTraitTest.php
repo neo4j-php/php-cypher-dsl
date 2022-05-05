@@ -2,7 +2,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
-use LogicException;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Traits\HasNameTrait;
 

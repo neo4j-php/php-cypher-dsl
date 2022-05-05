@@ -288,7 +288,7 @@ class NodeTest extends TestCase
         return [
             ['a', '(:a)'],
             ['A', '(:A)'],
-            [':', '(:`:`)']
+            [':', '(:`:`)'],
         ];
     }
 
@@ -296,7 +296,7 @@ class NodeTest extends TestCase
     {
         return [
             ['a', '(a)'],
-            ['A', '(A)']
+            ['A', '(A)'],
         ];
     }
 
@@ -304,7 +304,7 @@ class NodeTest extends TestCase
     {
         return [
             ['a', 'a', '(a:a)'],
-            ['A', ':', '(A:`:`)']
+            ['A', ':', '(A:`:`)'],
         ];
     }
 
@@ -313,7 +313,7 @@ class NodeTest extends TestCase
         return [
             ['a', ['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "(a {a: 'b', b: 'c'})"],
             ['b', ['a' => new Decimal(0), 'b' => new Decimal(1)], "(b {a: 0, b: 1})"],
-            ['c', [':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "(c {`:`: [1, 'a']})"]
+            ['c', [':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "(c {`:`: [1, 'a']})"],
         ];
     }
 
@@ -322,7 +322,7 @@ class NodeTest extends TestCase
         return [
             ['a', ['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "(:a {a: 'b', b: 'c'})"],
             ['b', ['a' => new Decimal(0), 'b' => new Decimal(1)], "(:b {a: 0, b: 1})"],
-            ['c', [':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "(:c {`:`: [1, 'a']})"]
+            ['c', [':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "(:c {`:`: [1, 'a']})"],
         ];
     }
 
@@ -331,7 +331,7 @@ class NodeTest extends TestCase
         return [
             [['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "({a: 'b', b: 'c'})"],
             [['a' => new Decimal(0), 'b' => new Decimal(1)], "({a: 0, b: 1})"],
-            [[':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "({`:`: [1, 'a']})"]
+            [[':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "({`:`: [1, 'a']})"],
         ];
     }
 
@@ -340,7 +340,7 @@ class NodeTest extends TestCase
         return [
             ['a', 'd', ['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "(a:d {a: 'b', b: 'c'})"],
             ['b', 'e', ['a' => new Decimal(0), 'b' => new Decimal(1)], "(b:e {a: 0, b: 1})"],
-            ['c', 'f', [':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "(c:f {`:`: [1, 'a']})"]
+            ['c', 'f', [':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "(c:f {`:`: [1, 'a']})"],
         ];
     }
 

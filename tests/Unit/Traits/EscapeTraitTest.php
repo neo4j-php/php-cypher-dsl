@@ -109,7 +109,7 @@ class EscapeTraitTest extends TestCase
             ['aaa100'],
             ['a0'],
             ['z10'],
-            ['z99']
+            ['z99'],
         ];
     }
 
@@ -126,7 +126,7 @@ class EscapeTraitTest extends TestCase
             ['10'],
             ['100'],
             ['1'],
-            ['2']
+            ['2'],
         ];
     }
 }

@@ -19,11 +19,31 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit;
+
+use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\IsNull;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
- * Represents the type "node".
+ * @covers \WikibaseSolutions\CypherDSL\Not
  */
-interface NodeType extends HasRelationshipsType, HasPropertiesType
+class IsNullTest extends TestCase
 {
+    use TestHelper;
+
+    public function testToQuery(): void
+    {
+        $not = new IsNull($this->getQueryConvertableMock(BooleanType::class, "true"), false);
+
+        $this->assertFalse($not->insertsParentheses());
+
+        $this->assertSame("true IS NULL", $not->toQuery());
+
+        $not = new IsNull($not);
+
+        $this->assertSame("(true IS NULL IS NULL)", $not->toQuery());
+
+        $this->assertTrue($not->insertsParentheses());
+    }
 }

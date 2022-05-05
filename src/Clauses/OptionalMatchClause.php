@@ -22,7 +22,8 @@
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 
 /**
  * This class represents an OPTIONAL MATCH clause.
@@ -34,14 +35,14 @@ class OptionalMatchClause extends Clause
     use ErrorTrait;
 
     /**
-     * @var StructuralType[] List of patterns
+     * @var (PathType|NodeType)[] List of patterns
      */
     private array $patterns = [];
 
     /**
      * Returns the patterns to optionally match.
      *
-     * @return StructuralType[]
+     * @return (PathType|NodeType)[]
      */
     public function getPatterns(): array
     {
@@ -51,11 +52,12 @@ class OptionalMatchClause extends Clause
     /**
      * Add a pattern to the optional match clause.
      *
-     * @param StructuralType $pattern
+     * @param PathType|NodeType $pattern
      * @return OptionalMatchClause
      */
-    public function addPattern(StructuralType $pattern): self
+    public function addPattern($pattern): self
     {
+        $this->assertClass('pattern', [NodeType::class, PathType::class], $pattern);
         $this->patterns[] = $pattern;
 
         return $this;

@@ -28,7 +28,6 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\MatchClause
@@ -48,7 +47,7 @@ class MatchClauseTest extends TestCase
     public function testSinglePattern(): void
     {
         $match = new MatchClause();
-        $pattern = $this->getQueryConvertableMock(StructuralType::class, "(a)");
+        $pattern = $this->getQueryConvertableMock(NodeType::class, "(a)");
         $match->addPattern($pattern);
 
         $this->assertSame("MATCH (a)", $match->toQuery());
@@ -58,13 +57,13 @@ class MatchClauseTest extends TestCase
     public function testMultiplePatterns(): void
     {
         $match = new MatchClause();
-        $patternA = $this->getQueryConvertableMock(StructuralType::class, "(a)");
-        $patternB = $this->getQueryConvertableMock(StructuralType::class, "(b)");
+        $patternA = $this->getQueryConvertableMock(NodeType::class, "(a)");
+        $patternB = $this->getQueryConvertableMock(PathType::class, "(b)-->(c)");
 
         $match->addPattern($patternA);
         $match->addPattern($patternB);
 
-        $this->assertSame("MATCH (a), (b)", $match->toQuery());
+        $this->assertSame("MATCH (a), (b)-->(c)", $match->toQuery());
         $this->assertEquals([$patternA, $patternB], $match->getPatterns());
     }
 

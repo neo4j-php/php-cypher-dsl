@@ -28,7 +28,6 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\CreateClause
@@ -48,7 +47,7 @@ class CreateClauseTest extends TestCase
     public function testSinglePattern(): void
     {
         $createClause = new CreateClause();
-        $pattern = $this->getQueryConvertableMock(StructuralType::class, "(a)");
+        $pattern = $this->getQueryConvertableMock(NodeType::class, "(a)");
 
         $createClause->addPattern($pattern);
 
@@ -60,13 +59,13 @@ class CreateClauseTest extends TestCase
     {
         $createClause = new CreateClause();
 
-        $patternA = $this->getQueryConvertableMock(StructuralType::class, "(a)");
-        $patternB = $this->getQueryConvertableMock(StructuralType::class, "(b)");
+        $patternA = $this->getQueryConvertableMock(NodeType::class, "(a)");
+        $patternB = $this->getQueryConvertableMock(PathType::class, "(b)-->(c)");
 
         $createClause->addPattern($patternA);
         $createClause->addPattern($patternB);
 
-        $this->assertSame("CREATE (a), (b)", $createClause->toQuery());
+        $this->assertSame("CREATE (a), (b)-->(c)", $createClause->toQuery());
         $this->assertEquals([$patternA, $patternB], $createClause->getPatterns());
     }
 

@@ -23,8 +23,8 @@ namespace WikibaseSolutions\CypherDSL\Literals;
 
 use InvalidArgumentException;
 use WikibaseSolutions\CypherDSL\Functions\FunctionCall;
-use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\PropertyMap;
+use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
@@ -240,7 +240,7 @@ abstract class Literal
             "millisecond" => $millisecond,
             "microsecond" => $microsecond,
             "nanosecond" => $nanosecond,
-            "timezone" => $timezone
+            "timezone" => $timezone,
         ]));
     }
 
@@ -381,6 +381,7 @@ abstract class Literal
         if (!($dateString instanceof StringType)) {
             $dateString = self::string($dateString);
         }
+
         return FunctionCall::datetime($dateString);
     }
 
@@ -401,6 +402,7 @@ abstract class Literal
         if (!($timezone instanceof StringType)) {
             $timezone = self::string($timezone);
         }
+
         return FunctionCall::localdatetime(Query::map(["timezone" => $timezone]));
     }
 
@@ -440,7 +442,7 @@ abstract class Literal
             "second" => $second,
             "millisecond" => $millisecond,
             "microsecond" => $microsecond,
-            "nanosecond" => $nanosecond
+            "nanosecond" => $nanosecond,
         ]));
     }
 
@@ -481,7 +483,7 @@ abstract class Literal
             "second" => $second,
             "millisecond" => $millisecond,
             "microsecond" => $microsecond,
-            "nanosecond" => $nanosecond
+            "nanosecond" => $nanosecond,
         ]));
     }
 
@@ -521,7 +523,7 @@ abstract class Literal
             "second" => $second,
             "millisecond" => $millisecond,
             "microsecond" => $microsecond,
-            "nanosecond" => $nanosecond
+            "nanosecond" => $nanosecond,
         ]));
     }
 
@@ -558,7 +560,7 @@ abstract class Literal
             "second" => $second,
             "millisecond" => $millisecond,
             "microsecond" => $microsecond,
-            "nanosecond" => $nanosecond
+            "nanosecond" => $nanosecond,
         ]));
     }
 
@@ -596,6 +598,7 @@ abstract class Literal
         if (!($timezone instanceof StringType)) {
             $timezone = self::string($timezone);
         }
+
         return FunctionCall::localtime(Query::map(["timezone" => $timezone]));
     }
 
@@ -626,7 +629,7 @@ abstract class Literal
             "second" => $second,
             "millisecond" => $millisecond,
             "microsecond" => $microsecond,
-            "nanosecond" => $nanosecond
+            "nanosecond" => $nanosecond,
         ]));
     }
 
@@ -696,7 +699,7 @@ abstract class Literal
             "millisecond" => $millisecond,
             "microsecond" => $microsecond,
             "nanosecond" => $nanosecond,
-            "timezone" => $timezone
+            "timezone" => $timezone,
         ]));
     }
 
@@ -738,7 +741,7 @@ abstract class Literal
 
         $map = [
             "x" => $x,
-            "y" => $y
+            "y" => $y,
         ];
 
         $map["crs"] = self::string("cartesian");
@@ -773,7 +776,7 @@ abstract class Literal
         $map = [
             "x" => $x,
             "y" => $y,
-            "z" => $z
+            "z" => $z,
         ];
 
         $map["crs"] = self::string("cartesian-3D");
@@ -802,7 +805,7 @@ abstract class Literal
 
         $map = [
             "longitude" => $longitude,
-            "latitude" => $latitude
+            "latitude" => $latitude,
         ];
 
         $map["crs"] = self::string("WGS-84");
@@ -837,7 +840,7 @@ abstract class Literal
         $map = [
             "longitude" => $longitude,
             "latitude" => $latitude,
-            "height" => $height
+            "height" => $height,
         ];
 
         $map["crs"] = self::string("WGS-84-3D");
@@ -867,6 +870,7 @@ abstract class Literal
         foreach ($variables as $key => $variable) {
             if ($variable === null) {
                 $nullEncountered = true;
+
                 continue;
             }
 
@@ -896,6 +900,7 @@ abstract class Literal
         if ($var instanceof NumeralType) {
             return $var;
         }
+
         return self::decimal($var);
     }
 
@@ -904,6 +909,7 @@ abstract class Literal
         if ($var instanceof StringLiteral) {
             return $var;
         }
+
         return self::string($var);
     }
 }

@@ -1,18 +1,36 @@
 <?php
 
+/*
+ * Cypher DSL
+ * Copyright (C) 2021  Wikibase Solutions
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
+use function array_key_exists;
+use function is_array;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\PathTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\HasRelationshipsType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 use WikibaseSolutions\CypherDSL\Variable;
-use function array_key_exists;
-use function is_array;
 
 class Path implements PathType
 {
@@ -68,6 +86,7 @@ class Path implements PathType
             // and is thus very unlikely.
             if (!array_key_exists($i + 1, $this->nodes)) {
                 --$i;
+
                 break;
             }
             $cql .= $this->nodes[$i]->toQuery();
@@ -106,7 +125,7 @@ class Path implements PathType
     /**
      * @inheritDoc
      */
-    public function relationship(RelationshipType $relationship, StructuralType $nodeOrPath): Path
+    public function relationship(RelationshipType $relationship, HasRelationshipsType $nodeOrPath): Path
     {
         self::assertClass('nodeOrPath', [__CLASS__, Node::class], $nodeOrPath);
 
@@ -124,7 +143,7 @@ class Path implements PathType
     /**
      * @inheritDoc
      */
-    public function relationshipTo(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
+    public function relationshipTo(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
     {
         $relationship = $this->buildRelationship(Relationship::DIR_RIGHT, $type, $properties, $name);
 
@@ -134,7 +153,7 @@ class Path implements PathType
     /**
      * @inheritDoc
      */
-    public function relationshipFrom(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
+    public function relationshipFrom(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
     {
         $relationship = $this->buildRelationship(Relationship::DIR_LEFT, $type, $properties, $name);
 
@@ -144,7 +163,7 @@ class Path implements PathType
     /**
      * @inheritDoc
      */
-    public function relationshipUni(StructuralType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
+    public function relationshipUni(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
     {
         $relationship = $this->buildRelationship(Relationship::DIR_UNI, $type, $properties, $name);
 
