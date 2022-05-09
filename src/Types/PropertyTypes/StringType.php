@@ -25,11 +25,12 @@ use WikibaseSolutions\CypherDSL\Contains;
 use WikibaseSolutions\CypherDSL\EndsWith;
 use WikibaseSolutions\CypherDSL\Regex;
 use WikibaseSolutions\CypherDSL\StartsWith;
+use WikibaseSolutions\CypherDSL\Traits\ComparableTypeTrait;
 
 /**
  * Represents the type "string".
  */
-interface StringType extends PropertyType
+interface StringType extends ComparableType
 {
     /**
      * Check whether this expression the given expression.
