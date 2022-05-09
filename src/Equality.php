@@ -22,8 +22,11 @@
 namespace WikibaseSolutions\CypherDSL;
 
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\CompositeType;
 
 /**
  * Represents the application of the equality (=) operator.
@@ -34,12 +37,16 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 class Equality extends BinaryOperator implements BooleanType
 {
     use BooleanTypeTrait;
+    use ErrorTrait;
 
     /**
      * @inheritDoc
      */
-    public function __construct(PropertyType $left, PropertyType $right, bool $insertParentheses = true)
+    public function __construct(Anytype $left, AnyType $right, bool $insertParentheses = true)
     {
+        self::assertClass('left', [PropertyType::class, CompositeType::class], $left);
+        self::assertClass('right', [PropertyType::class, CompositeType::class], $right);
+
         parent::__construct($left, $right, $insertParentheses);
     }
 
