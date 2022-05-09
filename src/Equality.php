@@ -24,9 +24,9 @@ namespace WikibaseSolutions\CypherDSL;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\CompositeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\CompositeType;
 
 /**
  * Represents the application of the equality (=) operator.

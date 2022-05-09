@@ -32,6 +32,8 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparableType;
  */
 trait ComparableTypeTrait
 {
+    use PropertyTypeTrait;
+
     /**
      * Perform a greater than comparison against the given expression.
      *
