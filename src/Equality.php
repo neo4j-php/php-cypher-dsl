@@ -40,7 +40,11 @@ class Equality extends BinaryOperator implements BooleanType
     use ErrorTrait;
 
     /**
-     * @inheritDoc
+     * Equality constructor
+     *
+     * @param PropertyType|CompositeType $left              The left-hand of the expression
+     * @param PropertyType|CompositeType $right             The right-hand of the expression
+     * @param bool                       $insertParentheses Whether to insert parentheses around the expression
      */
     public function __construct(Anytype $left, AnyType $right, bool $insertParentheses = true)
     {
