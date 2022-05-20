@@ -32,7 +32,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 trait StringTypeTrait
 {
-    use PropertyTypeTrait;
+    use ComparableTypeTrait;
     use AliasableTrait;
 
     /**

@@ -26,10 +26,6 @@ use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Addition;
 use WikibaseSolutions\CypherDSL\Division;
 use WikibaseSolutions\CypherDSL\Exponentiation;
-use WikibaseSolutions\CypherDSL\GreaterThan;
-use WikibaseSolutions\CypherDSL\GreaterThanOrEqual;
-use WikibaseSolutions\CypherDSL\LessThan;
-use WikibaseSolutions\CypherDSL\LessThanOrEqual;
 use WikibaseSolutions\CypherDSL\Minus;
 use WikibaseSolutions\CypherDSL\Modulo;
 use WikibaseSolutions\CypherDSL\Multiplication;
@@ -132,94 +128,6 @@ class NumeralTypeTraitTest extends TestCase
         $this->assertFalse($exponentiate->insertsParentheses());
         $this->assertEquals($this->a, $exponentiate->getLeft());
         $this->assertEquals($this->b, $exponentiate->getRight());
-    }
-
-    public function testGt(): void
-    {
-        $gt = $this->a->gt($this->b);
-
-        $this->assertInstanceOf(GreaterThan::class, $gt);
-
-        $this->assertTrue($gt->insertsParentheses());
-        $this->assertEquals($this->a, $gt->getLeft());
-        $this->assertEquals($this->b, $gt->getRight());
-    }
-
-    public function testGtNoParentheses(): void
-    {
-        $gt = $this->a->gt($this->b, false);
-
-        $this->assertInstanceOf(GreaterThan::class, $gt);
-
-        $this->assertFalse($gt->insertsParentheses());
-        $this->assertEquals($this->a, $gt->getLeft());
-        $this->assertEquals($this->b, $gt->getRight());
-    }
-
-    public function testGte(): void
-    {
-        $gte = $this->a->gte($this->b);
-
-        $this->assertInstanceOf(GreaterThanOrEqual::class, $gte);
-
-        $this->assertTrue($gte->insertsParentheses());
-        $this->assertEquals($this->a, $gte->getLeft());
-        $this->assertEquals($this->b, $gte->getRight());
-    }
-
-    public function testGteNoParentheses(): void
-    {
-        $gte = $this->a->gte($this->b, false);
-
-        $this->assertInstanceOf(GreaterThanOrEqual::class, $gte);
-
-        $this->assertFalse($gte->insertsParentheses());
-        $this->assertEquals($this->a, $gte->getLeft());
-        $this->assertEquals($this->b, $gte->getRight());
-    }
-
-    public function testLt(): void
-    {
-        $lt = $this->a->lt($this->b);
-
-        $this->assertInstanceOf(LessThan::class, $lt);
-
-        $this->assertTrue($lt->insertsParentheses());
-        $this->assertEquals($this->a, $lt->getLeft());
-        $this->assertEquals($this->b, $lt->getRight());
-    }
-
-    public function testLtNoParentheses(): void
-    {
-        $lt = $this->a->lt($this->b, false);
-
-        $this->assertInstanceOf(LessThan::class, $lt);
-
-        $this->assertFalse($lt->insertsParentheses());
-        $this->assertEquals($this->a, $lt->getLeft());
-        $this->assertEquals($this->b, $lt->getRight());
-    }
-
-    public function testLte(): void
-    {
-        $lte = $this->a->lte($this->b);
-
-        $this->assertInstanceOf(LessThanOrEqual::class, $lte);
-
-        $this->assertTrue($lte->insertsParentheses());
-        $this->assertEquals($this->a, $lte->getLeft());
-        $this->assertEquals($this->b, $lte->getRight());
-    }
-
-    public function testLteNoParentheses(): void
-    {
-        $lte = $this->a->lte($this->b, false);
-
-        $this->assertInstanceOf(LessThanOrEqual::class, $lte);
-
-        $this->assertFalse($lte->insertsParentheses());
-        $this->assertEquals($this->a, $lte->getLeft());
-        $this->assertEquals($this->b, $lte->getRight());
     }
 
     public function testMod(): void

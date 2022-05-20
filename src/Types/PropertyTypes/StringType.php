@@ -29,7 +29,7 @@ use WikibaseSolutions\CypherDSL\StartsWith;
 /**
  * Represents the type "string".
  */
-interface StringType extends PropertyType
+interface StringType extends ComparableType
 {
     /**
      * Check whether this expression the given expression.

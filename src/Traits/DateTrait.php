@@ -27,4 +27,5 @@ namespace WikibaseSolutions\CypherDSL\Traits;
 trait DateTrait
 {
     use PropertyTypeTrait;
+    use ComparableTypeTrait;
 }

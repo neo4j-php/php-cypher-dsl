@@ -25,7 +25,7 @@ use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
- * Represents the application of the exponentiation (+) operator.
+ * Represents the application of the exponentiation (^) operator.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#syntax-using-the-exponentiation-operator
  */
