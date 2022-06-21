@@ -1,12 +1,14 @@
 <?php
 
-namespace WikibaseSolutions\CypherDSL\Tests;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Alias;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Variable;
 
+/**
+ * @covers \WikibaseSolutions\CypherDSL\Alias
+ */
 class AliasTest extends TestCase
 {
     use TestHelper;
