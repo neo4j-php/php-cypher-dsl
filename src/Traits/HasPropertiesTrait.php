@@ -24,7 +24,6 @@ namespace WikibaseSolutions\CypherDSL\Traits;
 use function is_array;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\HasPropertiesType;
 
 trait HasPropertiesTrait
 {
@@ -38,9 +37,9 @@ trait HasPropertiesTrait
      * @param string $key The name of the property
      * @param AnyType $value The value of the property
      *
-     * @return HasPropertiesType
+     * @return static
      */
-    public function withProperty(string $key, AnyType $value): HasPropertiesType
+    public function withProperty(string $key, AnyType $value): self
     {
         $this->initialiseProperties();
 
@@ -54,9 +53,9 @@ trait HasPropertiesTrait
      *
      * @param PropertyMap|array $properties
      *
-     * @return HasPropertiesType
+     * @return static
      */
-    public function withProperties($properties): HasPropertiesType
+    public function withProperties($properties): self
     {
         self::assertClass('properties', [PropertyMap::class, 'array'], $properties);
 
