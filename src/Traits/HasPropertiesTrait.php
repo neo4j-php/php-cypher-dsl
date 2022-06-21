@@ -24,7 +24,6 @@ namespace WikibaseSolutions\CypherDSL\Traits;
 use function is_array;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\HasPropertiesType;
 
 trait HasPropertiesTrait
 {
