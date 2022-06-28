@@ -22,9 +22,12 @@
 namespace WikibaseSolutions\CypherDSL\Traits;
 
 use WikibaseSolutions\CypherDSL\Property;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
- * This trait should be used by any expression that returns a map.
+ * This trait provides a default implementation to satisfy the "MapType" interface.
+ *
+ * @see MapType
  */
 trait MapTypeTrait
 {

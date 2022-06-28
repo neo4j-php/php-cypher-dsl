@@ -21,11 +21,14 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
+
 /**
- * This trait should be used by any expression that returns a time.
+ * This trait provides a default implementation to satisfy the "TimeType" interface.
+ *
+ * @see TimeType
  */
-trait TimeTrait
+trait TimeTypeTrait
 {
-    use PropertyTypeTrait;
-    use ComparableTypeTrait;
+    use ComparablePropertyTypeTrait;
 }

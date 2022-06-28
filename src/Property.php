@@ -22,17 +22,17 @@
 namespace WikibaseSolutions\CypherDSL;
 
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
-use WikibaseSolutions\CypherDSL\Traits\DateTrait;
+use WikibaseSolutions\CypherDSL\Traits\DateTimeTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\DateTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTrait;
-use WikibaseSolutions\CypherDSL\Traits\LocalTimeTrait;
+use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\LocalTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\PointTrait;
+use WikibaseSolutions\CypherDSL\Traits\PointTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TimeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -63,17 +63,17 @@ class Property implements
     TimeType
 {
     use EscapeTrait;
-    use DateTrait;
-    use DateTimeTrait;
+    use DateTypeTrait;
+    use DateTimeTypeTrait;
     use BooleanTypeTrait;
     use ListTypeTrait;
     use NumeralTypeTrait;
     use StringTypeTrait;
-    use PointTrait;
+    use PointTypeTrait;
     use MapTypeTrait;
-    use LocalDateTimeTrait;
-    use LocalTimeTrait;
-    use TimeTrait;
+    use LocalDateTimeTypeTrait;
+    use LocalTimeTypeTrait;
+    use TimeTypeTrait;
 
     /**
      * @var MapType The expression to which this property belongs

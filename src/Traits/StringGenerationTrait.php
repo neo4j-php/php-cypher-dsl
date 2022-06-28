@@ -21,7 +21,28 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
-trait PathTrait
+use function mt_rand;
+
+trait StringGenerationTrait
 {
-    use HasVariableTrait;
+    /**
+     * Generates a unique random string.
+     *
+     * @note It is not entirely guaranteed that this function gives a truly unique string. However, because the
+     * number of possible strings is so huge, it should not be a problem.
+     *
+     * @param string $prefix The prefix to put before the name. Must start with a letter to adhere to cypher namings.
+     * @param int|null $length The length of the generated name in bytes.
+     *
+     * @return string
+     */
+    private function generateString(string $prefix = '', int $length = 32): string
+    {
+        $random = '';
+        for ($i = 0; $i < $length; ++$i) {
+            $random .= dechex(mt_rand(0, 15));
+        }
+
+        return $prefix . $random;
+    }
 }

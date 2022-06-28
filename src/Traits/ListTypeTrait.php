@@ -22,10 +22,13 @@
 namespace WikibaseSolutions\CypherDSL\Traits;
 
 use WikibaseSolutions\CypherDSL\In;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
- * This trait should be used by any expression that returns a list.
+ * This trait provides a default implementation to satisfy the "ListType" interface.
+ *
+ * @see ListType
  */
 trait ListTypeTrait
 {

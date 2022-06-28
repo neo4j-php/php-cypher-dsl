@@ -37,8 +37,9 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
  */
 class Relationship implements RelationshipType
 {
-    use EscapeTrait;
     use RelationshipTypeTrait;
+
+    use EscapeTrait;
 
     public const DIR_RIGHT = ["-", "->"];
     public const DIR_LEFT = ["<-", "-"];
@@ -285,6 +286,6 @@ class Relationship implements RelationshipType
 
     public function property(string $property): Property
     {
-        return new Property($this->getName(), $property);
+        return new Property($this->getVariable(), $property);
     }
 }

@@ -24,6 +24,6 @@ namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 /**
  * Represents the type "time".
  */
-interface TimeType extends ComparableType
+interface TimeType extends ComparablePropertyType
 {
 }

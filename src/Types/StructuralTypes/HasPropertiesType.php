@@ -25,24 +25,43 @@ use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
-interface HasPropertiesType extends StructuralType
+/**
+ * Represents a structural type in Cypher that can have properties.
+ *
+ * Those are:
+ *
+ * - node
+ * - relationship
+ *
+ * This is a partial type and provides a way to match parameters based on whether they have properties.
+ *
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#structural-types
+ */
+interface HasPropertiesType
 {
     /**
      * Add the given property to the properties of this object.
      *
      * @param string $key The name of the property
-     * @param AnyType $value The value of the property
+     * @param PropertyType|string|bool|float|int $value The value of the property
      *
-     * @return HasPropertiesType
+     * @return static
      */
-    public function withProperty(string $key, PropertyType $value): HasPropertiesType;
+    public function withProperty(string $key, $value): self;
 
     /**
      * Add the given properties to the properties of this object.
      *
-     * @param PropertyMap|array $properties
+     * @param PropertyMap|(PropertyType|string|bool|float|int)[] $properties
      *
-     * @return HasPropertiesType
+     * @return static
      */
-    public function withProperties($properties): HasPropertiesType;
+    public function withProperties($properties): self;
+
+    /**
+     * Returns the properties of this object, or NULL if it has no properties.
+     *
+     * @return PropertyMap|null
+     */
+    public function getProperties(): ?PropertyMap;
 }

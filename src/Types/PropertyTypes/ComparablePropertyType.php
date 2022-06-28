@@ -19,66 +19,51 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits;
+namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
 use WikibaseSolutions\CypherDSL\GreaterThan;
 use WikibaseSolutions\CypherDSL\GreaterThanOrEqual;
 use WikibaseSolutions\CypherDSL\LessThan;
 use WikibaseSolutions\CypherDSL\LessThanOrEqual;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparableType;
 
 /**
- * This trait should be used by any expression that returns a numeral.
+ * Represents any type that can be compared with operators such as <=, >=, < and >.
  */
-trait ComparableTypeTrait
+interface ComparablePropertyType extends PropertyType
 {
-    use PropertyTypeTrait;
-
     /**
      * Perform a greater than comparison against the given expression.
      *
-     * @param ComparableType $right
+     * @param NumeralType $right
      * @param bool $insertParentheses
      * @return GreaterThan
      */
-    public function gt(ComparableType $right, bool $insertParentheses = true): GreaterThan
-    {
-        return new GreaterThan($this, $right, $insertParentheses);
-    }
+    public function gt(ComparablePropertyType $right, bool $insertParentheses = true): GreaterThan;
 
     /**
      * Perform a greater than or equal comparison against the given expression.
      *
-     * @param ComparableType $right
+     * @param NumeralType $right
      * @param bool $insertParentheses
      * @return GreaterThanOrEqual
      */
-    public function gte(ComparableType $right, bool $insertParentheses = true): GreaterThanOrEqual
-    {
-        return new GreaterThanOrEqual($this, $right, $insertParentheses);
-    }
+    public function gte(ComparablePropertyType $right, bool $insertParentheses = true): GreaterThanOrEqual;
 
     /**
      * Perform a less than comparison against the given expression.
      *
-     * @param ComparableType $right
+     * @param NumeralType $right
      * @param bool $insertParentheses
      * @return LessThan
      */
-    public function lt(ComparableType $right, bool $insertParentheses = true): LessThan
-    {
-        return new LessThan($this, $right, $insertParentheses);
-    }
+    public function lt(ComparablePropertyType $right, bool $insertParentheses = true): LessThan;
 
     /**
      * Perform a less than or equal comparison against the given expression.
      *
-     * @param ComparableType $right
+     * @param NumeralType $right
      * @param bool $insertParentheses
      * @return LessThanOrEqual
      */
-    public function lte(ComparableType $right, bool $insertParentheses = true): LessThanOrEqual
-    {
-        return new LessThanOrEqual($this, $right, $insertParentheses);
-    }
+    public function lte(ComparablePropertyType $right, bool $insertParentheses = true): LessThanOrEqual;
 }

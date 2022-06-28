@@ -77,6 +77,13 @@ class PropertyMapTest extends TestCase
         $this->assertSame($expected, $propertyMap->toQuery());
     }
 
+    public function testLiteralPropertyMap()
+    {
+        $propertyMap = new PropertyMap(["foo" => "bar", "baz" => 1, "quz" => 1.1, "bex" => false]);
+
+        $this->assertSame( "{foo: 'bar', baz: 1, quz: 1.1, bex: false}", $propertyMap->toQuery());
+    }
+
     public function testMergeWith()
     {
         $propertyMap = new PropertyMap(["foo" => new StringLiteral("bar")]);
@@ -99,6 +106,10 @@ class PropertyMapTest extends TestCase
         $propertyMap->addProperty('boo', new StringLiteral("far"));
 
         $this->assertSame("{foo: 'baz', boo: 'far'}", $propertyMap->toQuery());
+
+        $propertyMap->addProperty('boo', false);
+
+        $this->assertSame("{foo: 'baz', boo: false}", $propertyMap->toQuery());
     }
 
     public function provideNumericalKeysData(): array
@@ -126,14 +137,5 @@ class PropertyMapTest extends TestCase
             [['a' => new PropertyMap(['a' => new PropertyMap(['a' => $this->getQueryConvertableMock(AnyType::class, "'b'")])])], "{a: {a: {a: 'b'}}}"],
             [['a' => new PropertyMap(['b' => $this->getQueryConvertableMock(AnyType::class, "'c'")]), 'b' => $this->getQueryConvertableMock(AnyType::class, "'d'")], "{a: {b: 'c'}, b: 'd'}"],
         ];
-    }
-
-    public function testRequiresAnyTypeProperties()
-    {
-        $a = new class () {};
-
-        $this->expectException(TypeError::class);
-
-        new PropertyMap([$a]);
     }
 }

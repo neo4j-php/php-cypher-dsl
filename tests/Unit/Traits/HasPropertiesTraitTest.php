@@ -5,7 +5,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Traits\HasPropertiesTrait;
+use WikibaseSolutions\CypherDSL\Traits\HasPropertiesTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\HasPropertiesType;
 
 class HasPropertiesTraitTest extends TestCase
@@ -15,9 +15,7 @@ class HasPropertiesTraitTest extends TestCase
     public function setUp(): void
     {
         $this->propertyTrait = new class () implements HasPropertiesType {
-            use HasPropertiesTrait {
-                initialiseProperties as public;
-            }
+            use HasPropertiesTypeTrait;
 
             public function toQuery(): string
             {

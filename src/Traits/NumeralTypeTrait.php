@@ -31,13 +31,14 @@ use WikibaseSolutions\CypherDSL\Subtraction;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
- * This trait should be used by any expression that returns a numeral.
+ * This trait provides a default implementation to satisfy the "NumeralType" interface.
+ *
+ * @see NumeralType
  */
 trait NumeralTypeTrait
 {
     use AliasableTrait;
-    use ComparableTypeTrait;
-    use PropertyTypeTrait;
+    use ComparablePropertyTypeTrait;
 
     /**
      * Add this expression to the given expression.

@@ -21,21 +21,24 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
+use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
-use WikibaseSolutions\CypherDSL\Traits\DateTrait;
+use WikibaseSolutions\CypherDSL\Traits\DateTimeTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\DateTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\HasNameTrait;
+use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\RelationshipTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\StringGenerationTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTrait;
-use WikibaseSolutions\CypherDSL\Traits\LocalTimeTrait;
+use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\LocalTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\PointTrait;
+use WikibaseSolutions\CypherDSL\Traits\PointTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TimeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -46,10 +49,8 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\HasPropertiesType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\HasRelationshipsType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
@@ -74,20 +75,28 @@ class Variable implements
     StringType,
     TimeType
 {
-    use EscapeTrait;
-    use DateTrait;
-    use DateTimeTrait;
     use BooleanTypeTrait;
+    use DateTypeTrait;
+    use DateTimeTypeTrait;
     use ListTypeTrait;
-    use LocalDateTimeTrait;
-    use LocalTimeTrait;
-    use NumeralTypeTrait;
-    use PointTrait;
-    use StringTypeTrait;
-    use TimeTrait;
-    use HasNameTrait;
+    use LocalDateTimeTypeTrait;
+    use LocalTimeTypeTrait;
     use MapTypeTrait;
+    use NodeTypeTrait;
+    use NumeralTypeTrait;
+    use PointTypeTrait;
+    use RelationshipTypeTrait;
+    use StringTypeTrait;
+    use TimeTypeTrait;
+
+    use EscapeTrait;
+    use StringGenerationTrait;
     use ErrorTrait;
+
+    /**
+     * @var string The name of this variable
+     */
+    private string $name;
 
     /**
      * Variable constructor.
@@ -96,29 +105,27 @@ class Variable implements
      */
     public function __construct(?string $variable = null)
     {
-        $this->configureName($variable, 'var');
+        if (!isset($variable)) {
+            $variable = $this->generateString('var');
+        }
+
+        self::assertValidName($variable);
+
+        $this->name = $variable;
     }
 
     /**
      * Adds the given labels to this variable.
      *
-     * @param string[] $labels
+     * @param string[]|string $labels
      * @return Label
-     * @deprecated Use Variable::labeled() instead
      */
-    public function withLabels(array $labels): Label
+    public function labeled($labels): Label
     {
-        return $this->labeled($labels);
-    }
+        if (is_string($labels)) {
+            $labels = [$labels];
+        }
 
-    /**
-     * Adds the given labels to this variable.
-     *
-     * @param array $labels
-     * @return Label
-     */
-    public function labeled(array $labels): Label
-    {
         return new Label($this, $labels);
     }
 
@@ -133,26 +140,20 @@ class Variable implements
         return new Assignment($this, $value);
     }
 
-    public function getVariable(): string
-    {
-        return $this->getName();
-    }
-
     /**
-     * @inheritDoc
+     * Returns the name of this variable.
+     *
+     * @return string
      */
-    public function toQuery(): string
+    public function getName(): string
     {
-        return self::escape($this->getName());
-    }
-
-    private function toNode(): NodeType
-    {
-        return Query::node()->named($this);
+        return $this->name;
     }
 
     /**
      * @inheritdoc
+     *
+     * This function allows users to treat a variable as if it were a node.
      */
     public function relationship(RelationshipType $relationship, HasRelationshipsType $nodeOrPath): Path
     {
@@ -161,6 +162,8 @@ class Variable implements
 
     /**
      * @inheritdoc
+     *
+     * This function allows users to treat a variable as if it were a node.
      */
     public function relationshipTo(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
     {
@@ -169,6 +172,8 @@ class Variable implements
 
     /**
      * @inheritdoc
+     *
+     * This function allows users to treat a variable as if it were a node.
      */
     public function relationshipFrom(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
     {
@@ -177,6 +182,8 @@ class Variable implements
 
     /**
      * @inheritdoc
+     *
+     * This function allows users to treat a variable as if it were a node.
      */
     public function relationshipUni(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
     {
@@ -185,17 +192,47 @@ class Variable implements
 
     /**
      * @inheritdoc
+     *
+     * This function allows users to treat a variable as if it were a node.
      */
-    public function withProperty(string $key, PropertyType $value): HasPropertiesType
+    public function withProperty(string $key, $value): Node
     {
         return $this->toNode()->withProperty($key, $value);
     }
 
     /**
      * @inheritdoc
+     *
+     * This function allows users to treat a variable as if it were a node.
      */
-    public function withProperties($properties): HasPropertiesType
+    public function withProperties($properties): Node
     {
         return $this->toNode()->withProperties($properties);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getVariable(): Variable
+    {
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toQuery(): string
+    {
+        return self::escape($this->name);
+    }
+
+    /**
+     * Returns a node with the name of this variable.
+     *
+     * @return Node
+     */
+    private function toNode(): Node
+    {
+        return Query::node()->named($this);
     }
 }

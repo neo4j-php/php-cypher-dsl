@@ -23,18 +23,18 @@ namespace WikibaseSolutions\CypherDSL;
 
 use WikibaseSolutions\CypherDSL\Traits\AliasableTrait;
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
-use WikibaseSolutions\CypherDSL\Traits\DateTrait;
+use WikibaseSolutions\CypherDSL\Traits\DateTimeTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\DateTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTrait;
-use WikibaseSolutions\CypherDSL\Traits\LocalTimeTrait;
+use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\LocalTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\PointTrait;
+use WikibaseSolutions\CypherDSL\Traits\PointTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\RelationshipTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TimeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
@@ -69,18 +69,18 @@ class RawExpression implements
     TimeType
 {
     use BooleanTypeTrait;
-    use DateTrait;
-    use DateTimeTrait;
+    use DateTypeTrait;
+    use DateTimeTypeTrait;
     use ListTypeTrait;
-    use LocalDateTimeTrait;
-    use LocalTimeTrait;
+    use LocalDateTimeTypeTrait;
+    use LocalTimeTypeTrait;
     use MapTypeTrait;
-    use PointTrait;
+    use PointTypeTrait;
     use NodeTypeTrait;
     use NumeralTypeTrait;
     use RelationshipTypeTrait;
     use StringTypeTrait;
-    use TimeTrait;
+    use TimeTypeTrait;
     use AliasableTrait;
 
     /**

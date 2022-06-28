@@ -28,11 +28,13 @@ use WikibaseSolutions\CypherDSL\StartsWith;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
- * This trait should be used by any expression that returns a string.
+ * This trait provides a default implementation to satisfy the "StringType" interface.
+ *
+ * @see StringType
  */
 trait StringTypeTrait
 {
-    use ComparableTypeTrait;
+    use ComparablePropertyTypeTrait;
     use AliasableTrait;
 
     /**

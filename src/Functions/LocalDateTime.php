@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Functions;
 
-use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTrait;
+use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 
@@ -35,7 +35,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
  */
 class LocalDateTime extends FunctionCall implements LocalDateTimeType
 {
-    use LocalDateTimeTrait;
+    use LocalDateTimeTypeTrait;
 
     /**
      * @var AnyType|null The input to the localdatetime function, from which to construct the localdatetime

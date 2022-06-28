@@ -21,11 +21,14 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
+
 /**
- * This trait should be used by any expression that returns a date.
+ * This trait provides a default implementation to satisfy the "DateType" interface.
+ *
+ * @see DateType
  */
-trait DateTrait
+trait DateTypeTrait
 {
-    use PropertyTypeTrait;
-    use ComparableTypeTrait;
+    use ComparablePropertyTypeTrait;
 }

@@ -21,11 +21,13 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
+use WikibaseSolutions\CypherDSL\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
  * This class represents a map of properties. For example, this class can represent the following
@@ -49,13 +51,17 @@ class PropertyMap implements MapType
     /**
      * PropertyMap constructor.
      *
-     * @param AnyType[] $properties The map of properties as a number of key-expression pairs
+     * @param (AnyType|string|int|bool|float)[] $properties The map of properties as a number of key-expression pairs
      */
     public function __construct(array $properties = [])
     {
-        foreach ($properties as $property) {
-            self::assertClass('property', AnyType::class, $property);
-        }
+        $properties = array_map(function ($value): AnyType {
+            if ($value instanceof AnyType) {
+                return $value;
+            }
+
+            return Literal::literal($value);
+        }, $properties);
 
         $this->properties = $properties;
     }
@@ -64,11 +70,15 @@ class PropertyMap implements MapType
      * Adds a property for the given name with the given value. Overrides the property if it already exists.
      *
      * @param string $key The name of the property
-     * @param AnyType $value The value of the property
+     * @param PropertyType|string|int|bool|float $value The value of the property
      * @return PropertyMap
      */
-    public function addProperty(string $key, AnyType $value): self
+    public function addProperty(string $key, $value): self
     {
+        if (!$value instanceof PropertyType) {
+            $value = Literal::literal($value);
+        }
+
         $this->properties[$key] = $value;
 
         return $this;

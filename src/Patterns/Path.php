@@ -25,7 +25,7 @@ use function array_key_exists;
 use function is_array;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Traits\PathTrait;
+use WikibaseSolutions\CypherDSL\Traits\PathTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\HasRelationshipsType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
@@ -34,7 +34,8 @@ use WikibaseSolutions\CypherDSL\Variable;
 
 class Path implements PathType
 {
-    use PathTrait;
+    use PathTypeTrait;
+
     use ErrorTrait;
 
     /** @var Relationship[] */
@@ -59,6 +60,26 @@ class Path implements PathType
     }
 
     /**
+     * Returns the nodes in the path in sequential order.
+     *
+     * @return Node[]
+     */
+    public function getNodes(): array
+    {
+        return $this->nodes;
+    }
+
+    /**
+     * Returns the relationships in the path in sequential order.
+     *
+     * @return Relationship[]
+     */
+    public function getRelationships(): array
+    {
+        return $this->relationships;
+    }
+
+    /**
      * @inheritDoc
      */
     public function toQuery(): string
@@ -71,7 +92,7 @@ class Path implements PathType
         $cql = '';
         // If a variable exists, we need to assign following the expression to it
         if ($this->getVariable() !== null) {
-            $cql = $this->getName()->toQuery() . ' = ';
+            $cql = $this->getVariable()->toQuery() . ' = ';
         }
 
         // We use the relationships as a reference point to iterate over.
@@ -100,74 +121,6 @@ class Path implements PathType
         $cql .= $this->nodes[($i ?? -1) + 1]->toQuery();
 
         return $cql;
-    }
-
-    /**
-     * Returns the nodes in the path in sequential order.
-     *
-     * @return Node[]
-     */
-    public function getNodes(): array
-    {
-        return $this->nodes;
-    }
-
-    /**
-     * Returns the relationships in the path in sequential order.
-     *
-     * @return Relationship[]
-     */
-    public function getRelationships(): array
-    {
-        return $this->relationships;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function relationship(RelationshipType $relationship, HasRelationshipsType $nodeOrPath): Path
-    {
-        self::assertClass('nodeOrPath', [__CLASS__, Node::class], $nodeOrPath);
-
-        $this->relationships[] = $relationship;
-        if ($nodeOrPath instanceof self) {
-            $this->relationships = array_merge($this->relationships, $nodeOrPath->getRelationships());
-            $this->nodes = array_merge($this->nodes, $nodeOrPath->getNodes());
-        } else {
-            $this->nodes []= $nodeOrPath;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function relationshipTo(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
-    {
-        $relationship = $this->buildRelationship(Relationship::DIR_RIGHT, $type, $properties, $name);
-
-        return $this->relationship($relationship, $nodeOrPath);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function relationshipFrom(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
-    {
-        $relationship = $this->buildRelationship(Relationship::DIR_LEFT, $type, $properties, $name);
-
-        return $this->relationship($relationship, $nodeOrPath);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function relationshipUni(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
-    {
-        $relationship = $this->buildRelationship(Relationship::DIR_UNI, $type, $properties, $name);
-
-        return $this->relationship($relationship, $nodeOrPath);
     }
 
     /**

@@ -24,6 +24,6 @@ namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 /**
  * Represents the type "relationship".
  */
-interface RelationshipType extends HasPropertiesType
+interface RelationshipType extends StructuralType, HasPropertiesType, HasVariableType
 {
 }

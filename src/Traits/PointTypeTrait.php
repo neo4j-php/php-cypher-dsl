@@ -21,10 +21,14 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
+
 /**
- * This trait should be used by any expression that returns a localdatetime.
+ * This trait provides a default implementation to satisfy the "PointType" interface.
+ *
+ * @see PointType
  */
-trait LocalDateTimeTrait
+trait PointTypeTrait
 {
     use PropertyTypeTrait;
 }

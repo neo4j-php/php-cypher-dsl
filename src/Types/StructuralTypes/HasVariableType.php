@@ -21,29 +21,47 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 
-use WikibaseSolutions\CypherDSL\Patterns\Node;
-use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\PropertyMap;
+use WikibaseSolutions\CypherDSL\Traits\HasVariableTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Variable;
 
 /**
- * Represents any structural type in Cypher.
+ * Represents a structural type in Cypher that can have a variable as name.
  *
- * Structural types are types that:
- *
- * - can be returned from Cypher queries
- * - cannot be used as parameters
- * - cannot be stored as properties
- * - cannot be constructed with Cypher literals
- *
- * The structural types are:
+ * Those are:
  *
  * - node
  * - relationship
  * - path
  *
+ * This is a partial type and provides a way to match parameters based on whether they have a variable.
+ *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#structural-types
  */
-interface StructuralType extends AnyType
+interface HasVariableType
 {
+    /**
+     * Names the structural type.
+     *
+     * @param Variable|string $nameOrVariable The name to give this structural type
+     *
+     * @return static
+     */
+    public function named($nameOrVariable): self;
+
+    /**
+     * Returns the name of this object, or generates a new name if this object does not yet have a name.
+     *
+     * @return Variable
+     */
+    public function getVariable(): Variable;
+
+    /**
+     * Returns true if this object has a variable assigned.
+     *
+     * @return bool
+     */
+    public function hasVariable(): bool;
 }

@@ -32,7 +32,7 @@ use WikibaseSolutions\CypherDSL\Subtraction;
 /**
  * Represents any numeral (integer, float, double).
  */
-interface NumeralType extends ComparableType
+interface NumeralType extends ComparablePropertyType
 {
     /**
      * Add this expression to the given expression.

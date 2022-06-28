@@ -21,27 +21,31 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
-use function is_array;
 use WikibaseSolutions\CypherDSL\PropertyMap;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\HasPropertiesType;
 
-trait HasPropertiesTrait
+/**
+ * This trait provides a default implementation to satisfy the "HasPropertiesType" interface.
+ *
+ * @see HasPropertiesType
+ */
+trait HasPropertiesTypeTrait
 {
     use ErrorTrait;
 
+    /**
+     * @var PropertyMap|null The properties this object has
+     */
     private ?PropertyMap $properties = null;
 
     /**
-     * Add the given property to the properties of this node.
-     *
-     * @param string $key The name of the property
-     * @param AnyType $value The value of the property
-     *
-     * @return static
+     * @inheritDoc
      */
-    public function withProperty(string $key, AnyType $value): self
+    public function withProperty(string $key, $value): self
     {
-        $this->initialiseProperties();
+        if ($this->properties === null) {
+            $this->properties = new PropertyMap();
+        }
 
         $this->properties->addProperty($key, $value);
 
@@ -49,37 +53,28 @@ trait HasPropertiesTrait
     }
 
     /**
-     * Add the given properties to the properties of this node.
-     *
-     * @param PropertyMap|array $properties
-     *
-     * @return static
+     * @inheritDoc
      */
     public function withProperties($properties): self
     {
         self::assertClass('properties', [PropertyMap::class, 'array'], $properties);
 
-        $this->initialiseProperties();
-
         $properties = is_array($properties) ? new PropertyMap($properties) : $properties;
 
-        $this->properties->mergeWith($properties);
+        if ($this->properties === null) {
+            $this->properties = $properties;
+        } else {
+            $this->properties->mergeWith($properties);
+        }
 
         return $this;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getProperties(): ?PropertyMap
     {
         return $this->properties;
-    }
-
-    /**
-     * @return void
-     */
-    private function initialiseProperties(): void
-    {
-        if ($this->properties === null) {
-            $this->properties = new PropertyMap();
-        }
     }
 }

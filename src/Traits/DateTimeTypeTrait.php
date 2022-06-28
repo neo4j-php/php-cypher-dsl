@@ -21,10 +21,14 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
+
 /**
- * This trait should be used by any expression that returns a localtime.
+ * This trait provides a default implementation to satisfy the "DateTimeType" interface.
+ *
+ * @see DateTimeType
  */
-trait LocalTimeTrait
+trait DateTimeTypeTrait
 {
-    use PropertyTypeTrait;
+    use ComparablePropertyTypeTrait;
 }

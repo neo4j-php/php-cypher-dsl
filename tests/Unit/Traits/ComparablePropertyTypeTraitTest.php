@@ -28,8 +28,8 @@ use WikibaseSolutions\CypherDSL\GreaterThanOrEqual;
 use WikibaseSolutions\CypherDSL\LessThan;
 use WikibaseSolutions\CypherDSL\LessThanOrEqual;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
-use WikibaseSolutions\CypherDSL\Traits\ComparableTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparableType;
+use WikibaseSolutions\CypherDSL\Traits\ComparablePropertyTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparablePropertyType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait
@@ -39,26 +39,26 @@ class ComparableTypeTraitTest extends TestCase
     use TestHelper;
 
     /**
-     * @var MockObject|ComparableType
+     * @var MockObject|ComparablePropertyType
      */
     private $a;
 
     /**
-     * @var MockObject|ComparableType
+     * @var MockObject|ComparablePropertyType
      */
     private $b;
 
     public function setUp(): void
     {
-        $this->a = new class () implements ComparableType {
-            use ComparableTypeTrait;
+        $this->a = new class () implements ComparablePropertyType {
+            use ComparablePropertyTypeTrait;
 
             public function toQuery(): string
             {
                 return '10';
             }
         };
-        $this->b = $this->getQueryConvertableMock(ComparableType::class, "date({year: 2020, month: 12, day: 5})");
+        $this->b = $this->getQueryConvertableMock(ComparablePropertyType::class, "date({year: 2020, month: 12, day: 5})");
     }
 
     public function testGt(): void

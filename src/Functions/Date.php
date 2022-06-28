@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Functions;
 
-use WikibaseSolutions\CypherDSL\Traits\DateTrait;
+use WikibaseSolutions\CypherDSL\Traits\DateTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
 
@@ -35,7 +35,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
  */
 class Date extends FunctionCall implements DateType
 {
-    use DateTrait;
+    use DateTypeTrait;
 
     /**
      * @var AnyType|null The input to the date function, from which to construct the date

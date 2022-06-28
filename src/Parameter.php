@@ -22,18 +22,18 @@
 namespace WikibaseSolutions\CypherDSL;
 
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
+use WikibaseSolutions\CypherDSL\Traits\DateTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\HasNameTrait;
+use WikibaseSolutions\CypherDSL\Traits\StringGenerationTrait;
 use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTrait;
-use WikibaseSolutions\CypherDSL\Traits\LocalTimeTrait;
+use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\LocalTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\PointTrait;
+use WikibaseSolutions\CypherDSL\Traits\PointTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TimeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
@@ -64,19 +64,25 @@ class Parameter implements
     StringType,
     TimeType
 {
-    use EscapeTrait;
-    use DateTimeTrait;
+    use DateTimeTypeTrait;
     use ListTypeTrait;
-    use LocalDateTimeTrait;
-    use LocalTimeTrait;
+    use LocalDateTimeTypeTrait;
+    use LocalTimeTypeTrait;
     use BooleanTypeTrait;
     use MapTypeTrait;
     use NumeralTypeTrait;
-    use PointTrait;
+    use PointTypeTrait;
     use StringTypeTrait;
-    use TimeTrait;
-    use HasNameTrait;
+    use TimeTypeTrait;
+
+    use EscapeTrait;
+    use StringGenerationTrait;
     use ErrorTrait;
+
+    /**
+     * @var string
+     */
+    private string $parameter;
 
     /**
      * Parameter constructor.
@@ -86,7 +92,13 @@ class Parameter implements
      */
     public function __construct(?string $parameter = null)
     {
-        $this->configureName($parameter, 'param');
+        if (!isset($parameter)) {
+            $parameter = $this->generateString('param');
+        }
+
+        self::assertValidName($parameter);
+
+        $this->parameter = $parameter;
     }
 
     /**
@@ -96,7 +108,7 @@ class Parameter implements
      */
     public function getParameter(): string
     {
-        return $this->getName();
+        return $this->parameter;
     }
 
     /**
@@ -104,6 +116,6 @@ class Parameter implements
      */
     public function toQuery(): string
     {
-        return sprintf('$%s', $this->getName());
+        return sprintf('$%s', $this->parameter);
     }
 }

@@ -101,7 +101,7 @@ abstract class BinaryOperator implements QueryConvertable
     }
 
     /**
-     * Returns whether or not the operator inserts parenthesis.
+     * Returns whether the operator inserts parenthesis.
      *
      * @return bool
      */

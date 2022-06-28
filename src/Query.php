@@ -173,7 +173,7 @@ class Query implements QueryConvertable
     /**
      * Creates a property map.
      *
-     * @param AnyType[] $properties The map of properties as a number of key-expression pairs
+     * @param (PropertyType|bool|string|int|float)[] $properties The map of properties as a number of key-expression pairs
      * @return PropertyMap
      */
     public static function map(array $properties): PropertyMap
@@ -268,7 +268,7 @@ class Query implements QueryConvertable
             $this->assertClass('expression', AnyType::class, $expression);
 
             if ($expression instanceof Node) {
-                $expression = $expression->getName();
+                $expression = $expression->getVariable();
             }
 
             $alias = is_int($maybeAlias) ? "" : $maybeAlias;
@@ -589,7 +589,7 @@ class Query implements QueryConvertable
             $this->assertClass('expression', AnyType::class, $expression);
 
             if ($expression instanceof Node) {
-                $expression = $expression->getName();
+                $expression = $expression->getVariable();
             }
 
             $alias = is_int($maybeAlias) ? "" : $maybeAlias;

@@ -21,11 +21,15 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
+
 /**
- * This trait should be used by any expression that returns a relationship.
+ * This trait provides a default implementation to satisfy the "RelationshipType" interface.
+ *
+ * @see RelationshipType
  */
 trait RelationshipTypeTrait
 {
-    use HasPropertiesTrait;
-    use HasVariableTrait;
+    use HasPropertiesTypeTrait;
+    use HasVariableTypeTrait;
 }

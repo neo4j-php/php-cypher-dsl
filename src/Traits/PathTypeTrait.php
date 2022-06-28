@@ -21,19 +21,20 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
+use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\HasRelationshipsType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
- * This trait provides a default implementation to satisfy the "NodeType" interface.
+ * This trait provides a default implementation to satisfy the "PathType" interface.
  *
- * @see NodeType
+ * @see PathType
  */
-trait NodeTypeTrait
+trait PathTypeTrait
 {
-    use HasPropertiesTypeTrait;
     use HasVariableTypeTrait;
 
     /**
@@ -41,7 +42,17 @@ trait NodeTypeTrait
      */
     public function relationship(RelationshipType $relationship, HasRelationshipsType $nodeOrPath): Path
     {
-        return (new Path($this))->relationship($relationship, $nodeOrPath);
+        self::assertClass('nodeOrPath', [__CLASS__, Node::class], $nodeOrPath);
+
+        $this->relationships[] = $relationship;
+        if ($nodeOrPath instanceof self) {
+            $this->relationships = array_merge($this->relationships, $nodeOrPath->getRelationships());
+            $this->nodes = array_merge($this->nodes, $nodeOrPath->getNodes());
+        } else {
+            $this->nodes []= $nodeOrPath;
+        }
+
+        return $this;
     }
 
     /**
@@ -49,7 +60,9 @@ trait NodeTypeTrait
      */
     public function relationshipTo(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
     {
-        return (new Path($this))->relationshipTo($nodeOrPath, $type, $properties, $name);
+        $relationship = $this->buildRelationship(Relationship::DIR_RIGHT, $type, $properties, $name);
+
+        return $this->relationship($relationship, $nodeOrPath);
     }
 
     /**
@@ -57,7 +70,9 @@ trait NodeTypeTrait
      */
     public function relationshipFrom(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
     {
-        return (new Path($this))->relationshipFrom($nodeOrPath, $type, $properties, $name);
+        $relationship = $this->buildRelationship(Relationship::DIR_LEFT, $type, $properties, $name);
+
+        return $this->relationship($relationship, $nodeOrPath);
     }
 
     /**
@@ -65,6 +80,8 @@ trait NodeTypeTrait
      */
     public function relationshipUni(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
     {
-        return (new Path($this))->relationshipUni($nodeOrPath, $type, $properties, $name);
+        $relationship = $this->buildRelationship(Relationship::DIR_UNI, $type, $properties, $name);
+
+        return $this->relationship($relationship, $nodeOrPath);
     }
 }

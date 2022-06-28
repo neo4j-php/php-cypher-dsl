@@ -30,10 +30,9 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
- * This trait should be used by any expression that returns a property type.
+ * This trait provides a default implementation to satisfy the "PropertyType" interface.
  *
- * @note This trait should not be used by any class directly.
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#property-types
+ * @see PropertyType
  */
 trait PropertyTypeTrait
 {

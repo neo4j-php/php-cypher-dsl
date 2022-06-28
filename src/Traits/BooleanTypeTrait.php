@@ -28,7 +28,9 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\XorOperator;
 
 /**
- * This trait should be used by any expression that returns a boolean.
+ * This trait provides a default implementation to satisfy the "BooleanType" interface.
+ *
+ * @see BooleanType
  */
 trait BooleanTypeTrait
 {

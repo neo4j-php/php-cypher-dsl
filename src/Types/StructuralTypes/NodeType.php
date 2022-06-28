@@ -24,6 +24,10 @@ namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 /**
  * Represents the type "node".
  */
-interface NodeType extends HasRelationshipsType, HasPropertiesType
+interface NodeType extends
+    StructuralType,
+    HasRelationshipsType,
+    HasPropertiesType,
+    HasVariableType
 {
 }

@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Functions;
 
-use WikibaseSolutions\CypherDSL\Traits\DateTimeTrait;
+use WikibaseSolutions\CypherDSL\Traits\DateTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
 
@@ -35,7 +35,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
  */
 class DateTime extends FunctionCall implements DateTimeType
 {
-    use DateTimeTrait;
+    use DateTimeTypeTrait;
 
     /**
      * @var AnyType|null The input to the datetime function, from which to construct the datetime

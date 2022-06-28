@@ -24,7 +24,9 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\HasRelationshipsType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
  * This class represents a node.
@@ -33,8 +35,9 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
  */
 class Node implements NodeType
 {
-    use EscapeTrait;
     use NodeTypeTrait;
+
+    use EscapeTrait;
 
     /**
      * @var string[]
@@ -77,6 +80,50 @@ class Node implements NodeType
     }
 
     /**
+     * Returns a property on the node.
+     *
+     * @param string $property The name of the property.
+     *
+     * @return Property
+     */
+    public function property(string $property): Property
+    {
+        return new Property($this->getVariable(), $property);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationship(RelationshipType $relationship, HasRelationshipsType $nodeOrPath): Path
+    {
+        return (new Path($this))->relationship($relationship, $nodeOrPath);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationshipTo(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return (new Path($this))->relationshipTo($nodeOrPath, $type, $properties, $name);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationshipFrom(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return (new Path($this))->relationshipFrom($nodeOrPath, $type, $properties, $name);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationshipUni(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return (new Path($this))->relationshipUni($nodeOrPath, $type, $properties, $name);
+    }
+
+    /**
      * Returns the string representation of this relationship that can be used directly
      * in a query.
      *
@@ -105,17 +152,5 @@ class Node implements NodeType
         }
 
         return "($nodeInner)";
-    }
-
-    /**
-     * Returns a property on the node.
-     *
-     * @param string $property The name of the property.
-     *
-     * @return Property
-     */
-    public function property(string $property): Property
-    {
-        return new Property($this->getName(), $property);
     }
 }

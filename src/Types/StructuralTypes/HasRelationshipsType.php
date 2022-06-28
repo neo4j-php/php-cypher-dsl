@@ -34,15 +34,18 @@ use WikibaseSolutions\CypherDSL\Variable;
  * - node
  * - path
  *
+ * This is a partial type and provides a way to match parameters based on whether they allow for relationships.
+ *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#structural-types
  */
-interface HasRelationshipsType extends StructuralType
+interface HasRelationshipsType
 {
     /**
      * Adds a new relationship from the end of the structural type to the node pattern.
      *
      * @param RelationshipType $relationship
      * @param Node|Path $nodeOrPath
+     *
      * @return Path
      */
     public function relationship(RelationshipType $relationship, HasRelationshipsType $nodeOrPath): Path;

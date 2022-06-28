@@ -23,7 +23,7 @@ namespace WikibaseSolutions\CypherDSL;
 
 use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparableType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparablePropertyType;
 
 /**
  * Represents the application of the less than or equal to (<=) operator.
@@ -37,7 +37,7 @@ class LessThanOrEqual extends BinaryOperator implements BooleanType
     /**
      * @inheritDoc
      */
-    public function __construct(ComparableType $left, ComparableType $right, bool $insertParentheses = true)
+    public function __construct(ComparablePropertyType $left, ComparablePropertyType $right, bool $insertParentheses = true)
     {
         parent::__construct($left, $right, $insertParentheses);
     }

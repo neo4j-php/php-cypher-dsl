@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Functions;
 
-use WikibaseSolutions\CypherDSL\Traits\PointTrait;
+use WikibaseSolutions\CypherDSL\Traits\PointTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 
@@ -35,7 +35,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
  */
 class Point extends FunctionCall implements PointType
 {
-    use PointTrait;
+    use PointTypeTrait;
 
     /**
      * @var MapType The map to use for constructing the point
