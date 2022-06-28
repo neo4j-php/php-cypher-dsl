@@ -28,7 +28,7 @@ use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Traits\MapTypeTrait
+ * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\MapTypeTrait
  */
 class MapTypeTraitTest extends TestCase
 {

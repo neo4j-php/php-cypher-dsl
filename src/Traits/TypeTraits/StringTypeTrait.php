@@ -19,12 +19,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
 
 use WikibaseSolutions\CypherDSL\Contains;
 use WikibaseSolutions\CypherDSL\EndsWith;
 use WikibaseSolutions\CypherDSL\Regex;
 use WikibaseSolutions\CypherDSL\StartsWith;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\AliasableTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**

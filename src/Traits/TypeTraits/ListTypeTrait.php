@@ -19,30 +19,28 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
 
-use function mt_rand;
+use WikibaseSolutions\CypherDSL\In;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
-trait StringGenerationTrait
+/**
+ * This trait provides a default implementation to satisfy the "ListType" interface.
+ *
+ * @see ListType
+ */
+trait ListTypeTrait
 {
     /**
-     * Generates a unique random string.
+     * Checks whether the given element exists in this list.
      *
-     * @note It is not entirely guaranteed that this function gives a truly unique string. However, because the
-     * number of possible strings is so huge, it should not be a problem.
-     *
-     * @param string $prefix The prefix to put before the name. Must start with a letter to adhere to cypher namings.
-     * @param int|null $length The length of the generated name in bytes.
-     *
-     * @return string
+     * @param PropertyType $left
+     * @param bool $insertParentheses
+     * @return In
      */
-    private function generateString(string $prefix = '', int $length = 32): string
+    public function has(PropertyType $left, bool $insertParentheses = true): In
     {
-        $random = '';
-        for ($i = 0; $i < $length; ++$i) {
-            $random .= dechex(mt_rand(0, 15));
-        }
-
-        return $prefix . $random;
+        return new In($left, $this, $insertParentheses);
     }
 }

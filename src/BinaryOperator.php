@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use WikibaseSolutions\CypherDSL\Traits\AliasableTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\AliasableTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**

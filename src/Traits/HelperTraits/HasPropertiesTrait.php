@@ -19,17 +19,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits;
+namespace WikibaseSolutions\CypherDSL\Traits\HelperTraits;
 
 use WikibaseSolutions\CypherDSL\PropertyMap;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\HasPropertiesType;
 
 /**
- * This trait provides a default implementation to satisfy the "HasPropertiesType" interface.
+ * This trait provides a default implementation to satisfy the "HasProperties" interface.
  *
- * @see HasPropertiesType
+ * @see HasPropertiesPartialType
  */
-trait HasPropertiesTypeTrait
+trait HasPropertiesTrait
 {
     use ErrorTrait;
 

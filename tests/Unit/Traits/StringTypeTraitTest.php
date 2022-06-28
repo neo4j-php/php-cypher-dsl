@@ -28,11 +28,11 @@ use WikibaseSolutions\CypherDSL\EndsWith;
 use WikibaseSolutions\CypherDSL\Regex;
 use WikibaseSolutions\CypherDSL\StartsWith;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
-use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StringTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Traits\StringTypeTrait
+ * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\StringTypeTrait
  */
 class StringTypeTraitTest extends TestCase
 {

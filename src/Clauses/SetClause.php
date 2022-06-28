@@ -24,7 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 use WikibaseSolutions\CypherDSL\Assignment;
 use WikibaseSolutions\CypherDSL\Label;
 use WikibaseSolutions\CypherDSL\QueryConvertable;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\ErrorTrait;
 
 /**
  * This class represents a SET clause.

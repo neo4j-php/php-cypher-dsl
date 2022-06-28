@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\CompositeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;

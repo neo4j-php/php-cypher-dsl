@@ -29,12 +29,12 @@ use WikibaseSolutions\CypherDSL\Inequality;
 use WikibaseSolutions\CypherDSL\IsNotNull;
 use WikibaseSolutions\CypherDSL\IsNull;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
-use WikibaseSolutions\CypherDSL\Traits\PropertyTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Traits\PropertyTypeTrait
+ * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTrait
  */
 class PropertyTypeTraitTest extends TestCase
 {

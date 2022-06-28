@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
 
 use WikibaseSolutions\CypherDSL\Addition;
 use WikibaseSolutions\CypherDSL\Division;
@@ -28,6 +28,7 @@ use WikibaseSolutions\CypherDSL\Minus;
 use WikibaseSolutions\CypherDSL\Modulo;
 use WikibaseSolutions\CypherDSL\Multiplication;
 use WikibaseSolutions\CypherDSL\Subtraction;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\AliasableTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**

@@ -22,7 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Property;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\EscapeTrait;
 
 /**
  * This class represents an ORDER BY clause. This clause should always be preceded by a RETURN

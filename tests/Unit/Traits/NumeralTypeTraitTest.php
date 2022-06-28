@@ -31,11 +31,11 @@ use WikibaseSolutions\CypherDSL\Modulo;
 use WikibaseSolutions\CypherDSL\Multiplication;
 use WikibaseSolutions\CypherDSL\Subtraction;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
-use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait
+ * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait
  */
 class NumeralTypeTraitTest extends TestCase
 {

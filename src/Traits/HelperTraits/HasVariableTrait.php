@@ -19,17 +19,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits;
+namespace WikibaseSolutions\CypherDSL\Traits\HelperTraits;
 
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\HasVariableType;
+use WikibaseSolutions\CypherDSL\HasVariable;
 use WikibaseSolutions\CypherDSL\Variable;
 
 /**
- * This trait provides a default implementation to satisfy the "HasVariableType" interface.
+ * This trait provides a default implementation to satisfy the "HasVariable" interface.
  *
- * @see HasVariableType
+ * @see HasVariable
  */
-trait HasVariableTypeTrait
+trait HasVariableTrait
 {
     use ErrorTrait;
 

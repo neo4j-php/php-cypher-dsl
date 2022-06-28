@@ -3,7 +3,7 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Traits\HasVariableTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\HasVariableTrait;
 
 class HasVariableTraitTest extends TestCase
 {
@@ -12,7 +12,7 @@ class HasVariableTraitTest extends TestCase
     public function setUp(): void
     {
         $this->hasVariable = new class () {
-            use HasVariableTypeTrait;
+            use HasVariableTrait;
         };
     }
 

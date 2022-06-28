@@ -19,16 +19,33 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits;
-
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
+namespace WikibaseSolutions\CypherDSL;
 
 /**
- * This trait provides a default implementation to satisfy the "DateTimeType" interface.
- *
- * @see DateTimeType
+ * Represents an object that can have a name (variable).
  */
-trait DateTimeTypeTrait
+interface HasVariable
 {
-    use ComparablePropertyTypeTrait;
+	/**
+	 * Names the structural type.
+	 *
+	 * @param Variable|string $nameOrVariable The name to give this structural type
+	 *
+	 * @return static
+	 */
+	public function named($nameOrVariable): self;
+
+	/**
+	 * Returns the name of this object, or generates a new name if this object does not yet have a name.
+	 *
+	 * @return Variable
+	 */
+	public function getVariable(): Variable;
+
+	/**
+	 * Returns true if this object has a variable assigned.
+	 *
+	 * @return bool
+	 */
+	public function hasVariable(): bool;
 }

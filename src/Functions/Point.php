@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Functions;
 
-use WikibaseSolutions\CypherDSL\Traits\PointTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PointTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 

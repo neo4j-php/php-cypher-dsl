@@ -24,6 +24,6 @@ namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 /**
  * Represents the type "path".
  */
-interface PathType extends StructuralType, HasRelationshipsType, HasVariableType
+interface PathType extends RelatableStructuralType
 {
 }

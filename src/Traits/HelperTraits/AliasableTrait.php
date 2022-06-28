@@ -19,28 +19,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits;
+namespace WikibaseSolutions\CypherDSL\Traits\HelperTraits;
 
-use WikibaseSolutions\CypherDSL\In;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
+use WikibaseSolutions\CypherDSL\Alias;
+use WikibaseSolutions\CypherDSL\Variable;
 
-/**
- * This trait provides a default implementation to satisfy the "ListType" interface.
- *
- * @see ListType
- */
-trait ListTypeTrait
+trait AliasableTrait
 {
+    use ErrorTrait;
+
     /**
-     * Checks whether the given element exists in this list.
+     * Creates an alias of the current expression.
      *
-     * @param PropertyType $left
-     * @param bool $insertParentheses
-     * @return In
+     * @param string|Variable $variable
+     * @return Alias
      */
-    public function has(PropertyType $left, bool $insertParentheses = true): In
+    public function alias($variable): Alias
     {
-        return new In($left, $this, $insertParentheses);
+        self::assertClass($variable, [Variable::class, 'string'], 'variable');
+
+        $variable = is_string($variable) ? new Variable($variable) : $variable;
+
+        return new Alias($this, $variable);
     }
 }

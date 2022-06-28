@@ -21,22 +21,24 @@
 
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
+use WikibaseSolutions\CypherDSL\HasVariable;
 use WikibaseSolutions\CypherDSL\Property;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\HasRelationshipsType;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\HasPropertiesTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\HasVariableTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
  * This class represents a node.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
  */
-class Node implements NodeType
+class Node implements NodeType, HasVariable
 {
     use NodeTypeTrait;
-
+	use HasPropertiesTrait;
+	use HasVariableTrait;
     use EscapeTrait;
 
     /**
@@ -89,38 +91,6 @@ class Node implements NodeType
     public function property(string $property): Property
     {
         return new Property($this->getVariable(), $property);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function relationship(RelationshipType $relationship, HasRelationshipsType $nodeOrPath): Path
-    {
-        return (new Path($this))->relationship($relationship, $nodeOrPath);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function relationshipTo(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
-    {
-        return (new Path($this))->relationshipTo($nodeOrPath, $type, $properties, $name);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function relationshipFrom(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
-    {
-        return (new Path($this))->relationshipFrom($nodeOrPath, $type, $properties, $name);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function relationshipUni(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
-    {
-        return (new Path($this))->relationshipUni($nodeOrPath, $type, $properties, $name);
     }
 
     /**

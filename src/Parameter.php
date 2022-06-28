@@ -21,19 +21,19 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\DateTimeTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\StringGenerationTrait;
-use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\LocalDateTimeTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\LocalTimeTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\PointTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TimeTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\DateTimeTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\StringGenerationTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\ListTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\LocalDateTimeTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\LocalTimeTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\MapTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PointTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StringTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\TimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;

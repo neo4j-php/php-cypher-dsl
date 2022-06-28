@@ -19,11 +19,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
+
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 
 /**
- * Represents the type "relationship".
+ * This trait provides a default implementation to satisfy the "NodeType" interface.
+ *
+ * @see NodeType
  */
-interface RelationshipType extends StructuralType
+trait NodeTypeTrait
 {
+	use RelatableStructuralTypeTrait;
 }

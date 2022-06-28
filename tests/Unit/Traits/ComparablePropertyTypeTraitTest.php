@@ -28,11 +28,11 @@ use WikibaseSolutions\CypherDSL\GreaterThanOrEqual;
 use WikibaseSolutions\CypherDSL\LessThan;
 use WikibaseSolutions\CypherDSL\LessThanOrEqual;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
-use WikibaseSolutions\CypherDSL\Traits\ComparablePropertyTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\ComparablePropertyTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparablePropertyType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait
+ * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait
  */
 class ComparableTypeTraitTest extends TestCase
 {

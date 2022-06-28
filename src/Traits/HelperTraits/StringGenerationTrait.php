@@ -19,27 +19,28 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits;
 
-use WikibaseSolutions\CypherDSL\Property;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
-
-/**
- * This trait provides a default implementation to satisfy the "MapType" interface.
- *
- * @see MapType
- */
-trait MapTypeTrait
+trait StringGenerationTrait
 {
     /**
-     * Returns the property of the given name for this expression. For instance, if this expression is the
-     * variable "foo", a function call like $expression->property("bar") would yield "foo.bar".
+     * Generates a unique random string.
      *
-     * @param string $property
-     * @return Property
+     * @note It is not entirely guaranteed that this function gives a truly unique string. However, because the
+     * number of possible strings is so huge, it should not be a problem.
+     *
+     * @param string $prefix The prefix to put before the name. Must start with a letter to adhere to cypher namings.
+     * @param int|null $length The length of the generated name in bytes.
+     *
+     * @return string
      */
-    public function property(string $property): Property
+    private function generateString(string $prefix = '', int $length = 32): string
     {
-        return new Property($this, $property);
+        $random = '';
+        for ($i = 0; $i < $length; ++$i) {
+            $random .= dechex(mt_rand(0, 15));
+        }
+
+        return $prefix . $random;
     }
 }

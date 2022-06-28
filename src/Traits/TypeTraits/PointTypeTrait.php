@@ -19,11 +19,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
+
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 
 /**
- * Represents the type "relationship".
+ * This trait provides a default implementation to satisfy the "PointType" interface.
+ *
+ * @see PointType
  */
-interface RelationshipType extends StructuralType
+trait PointTypeTrait
 {
+    use PropertyTypeTrait;
 }

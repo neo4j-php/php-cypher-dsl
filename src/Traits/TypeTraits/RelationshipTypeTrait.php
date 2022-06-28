@@ -19,8 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
 
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\HasPropertiesTrait;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
@@ -30,6 +31,5 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
  */
 trait RelationshipTypeTrait
 {
-    use HasPropertiesTypeTrait;
-    use HasVariableTypeTrait;
+	use HasPropertiesTrait;
 }

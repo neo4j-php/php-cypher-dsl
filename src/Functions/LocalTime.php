@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Functions;
 
-use WikibaseSolutions\CypherDSL\Traits\LocalTimeTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\LocalTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalTimeType;
 

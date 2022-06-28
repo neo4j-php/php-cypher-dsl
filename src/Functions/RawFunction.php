@@ -22,12 +22,12 @@
 namespace WikibaseSolutions\CypherDSL\Functions;
 
 use InvalidArgumentException;
-use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Traits\ListTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\ListTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\MapTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StringTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;

@@ -23,7 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\ErrorTrait;
 
 /**
  * Dummy classes
@@ -69,7 +69,7 @@ class ErrorImpl
 }
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Traits\ErrorTrait
+ * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\ErrorTrait
  */
 class ErrorTraitTest extends TestCase
 {

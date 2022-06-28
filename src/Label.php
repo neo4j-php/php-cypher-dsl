@@ -22,8 +22,8 @@
 namespace WikibaseSolutions\CypherDSL;
 
 use InvalidArgumentException;
-use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**

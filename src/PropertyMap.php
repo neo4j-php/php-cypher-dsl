@@ -22,9 +22,9 @@
 namespace WikibaseSolutions\CypherDSL;
 
 use WikibaseSolutions\CypherDSL\Literals\Literal;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\MapTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;

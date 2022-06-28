@@ -24,9 +24,13 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 use DomainException;
 use InvalidArgumentException;
 use LogicException;
+use WikibaseSolutions\CypherDSL\HasProperties;
+use WikibaseSolutions\CypherDSL\HasVariable;
 use WikibaseSolutions\CypherDSL\Property;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\RelationshipTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\HasPropertiesTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\HasVariableTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\RelationshipTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
@@ -35,10 +39,11 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
  */
-class Relationship implements RelationshipType
+class Relationship implements RelationshipType, HasVariable, HasProperties
 {
     use RelationshipTypeTrait;
-
+	use HasPropertiesTrait;
+	use HasVariableTrait;
     use EscapeTrait;
 
     public const DIR_RIGHT = ["-", "->"];
@@ -74,10 +79,9 @@ class Relationship implements RelationshipType
      * Path constructor.
      *
      * @param array $direction The direction of the relationship, should be either:
-     *                           - Path::DIR_RIGHT (for a relation of
-     *                           (a)-->(b)) - Path::DIR_LEFT (for a relation
-     *                           of (a)<--(b)) - Path::DIR_UNI (for a
-     *                           relation of (a)--(b))
+     * - Path::DIR_RIGHT (for a relation of (a)-->(b))
+	 * - Path::DIR_LEFT (for a relation of (a)<--(b))
+	 * - Path::DIR_UNI (for a relation of (a)--(b))
      */
     public function __construct(array $direction)
     {

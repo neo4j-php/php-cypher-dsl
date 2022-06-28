@@ -19,16 +19,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
 
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalTimeType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 
 /**
- * This trait provides a default implementation to satisfy the "LocalTimeType" interface.
+ * This trait provides a default implementation to satisfy the "TimeType" interface.
  *
- * @see LocalTimeType
+ * @see TimeType
  */
-trait LocalTimeTypeTrait
+trait TimeTypeTrait
 {
-    use PropertyTypeTrait;
+    use ComparablePropertyTypeTrait;
 }

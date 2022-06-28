@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Literals;
 
-use WikibaseSolutions\CypherDSL\Traits\NumeralTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**

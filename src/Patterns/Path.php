@@ -21,26 +21,31 @@
 
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
-use function array_key_exists;
-use function is_array;
+use WikibaseSolutions\CypherDSL\HasVariable;
 use WikibaseSolutions\CypherDSL\PropertyMap;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Traits\PathTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\HasVariableTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PathTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\HasRelationshipsType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelatableStructuralType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 use WikibaseSolutions\CypherDSL\Variable;
 
-class Path implements PathType
+class Path implements PathType, HasVariable
 {
     use PathTypeTrait;
-
+	use HasVariableTrait;
     use ErrorTrait;
 
-    /** @var Relationship[] */
+    /**
+	 * @var Relationship[]
+	 */
     private array $relationships;
-    /** @var Node[] */
+
+    /**
+	 * @var Node[]
+	 */
     private array $nodes;
 
     /**
@@ -122,6 +127,54 @@ class Path implements PathType
 
         return $cql;
     }
+
+	/**
+	 * @inheritDoc
+	 */
+	public function relationship(RelationshipType $relationship, RelatableStructuralType $relatable): Path
+	{
+		self::assertClass('nodeOrPath', [__CLASS__, Node::class], $relatable);
+
+		$this->relationships[] = $relationship;
+		if ($relatable instanceof self) {
+			$this->relationships = array_merge($this->relationships, $relatable->getRelationships());
+			$this->nodes = array_merge($this->nodes, $relatable->getNodes());
+		} else {
+			$this->nodes []= $relatable;
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function relationshipTo(RelatableStructuralType $relatable, ?string $type = null, $properties = null, $name = null): Path
+	{
+		$relationship = $this->buildRelationship(Relationship::DIR_RIGHT, $type, $properties, $name);
+
+		return $this->relationship($relationship, $relatable);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function relationshipFrom(RelatableStructuralType $relatable, ?string $type = null, $properties = null, $name = null): Path
+	{
+		$relationship = $this->buildRelationship(Relationship::DIR_LEFT, $type, $properties, $name);
+
+		return $this->relationship($relationship, $relatable);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function relationshipUni(RelatableStructuralType $relatable, ?string $type = null, $properties = null, $name = null): Path
+	{
+		$relationship = $this->buildRelationship(Relationship::DIR_UNI, $type, $properties, $name);
+
+		return $this->relationship($relationship, $relatable);
+	}
 
     /**
      * @param array $direction

@@ -19,24 +19,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits;
+namespace WikibaseSolutions\CypherDSL\Traits\HelperTraits;
 
 use __PHP_Incomplete_Class;
-use function class_implements;
-use function get_class;
-use function get_parent_class;
-use function get_resource_type;
 use InvalidArgumentException;
-use function is_array;
-use function is_bool;
-use function is_float;
-use function is_int;
-use function is_object;
-use function is_resource;
-use function is_string;
-use function key;
-use function preg_match;
-use function strpos;
 use TypeError;
 
 /**

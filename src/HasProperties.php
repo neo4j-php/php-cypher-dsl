@@ -21,32 +21,36 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparablePropertyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
- * Represents the application of the greater than (>) operator.
- *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
+ * Represents an object that can have properties.
  */
-class GreaterThan extends BinaryOperator implements BooleanType
+interface HasProperties
 {
-    use BooleanTypeTrait;
+	/**
+	 * Add the given property to the properties of this object.
+	 *
+	 * @param string $key The name of the property
+	 * @param PropertyType|string|bool|float|int $value The value of the property
+	 *
+	 * @return static
+	 */
+	public function withProperty(string $key, $value): self;
 
-    /**
-     * @inheritDoc
-     */
-    public function __construct(ComparablePropertyType $left, ComparablePropertyType $right, bool $insertParentheses = true)
-    {
-        parent::__construct($left, $right, $insertParentheses);
-    }
+	/**
+	 * Add the given properties to the properties of this object.
+	 *
+	 * @param PropertyMap|(PropertyType|string|bool|float|int)[] $properties
+	 *
+	 * @return static
+	 */
+	public function withProperties($properties): self;
 
-    /**
-     * @inheritDoc
-     */
-    protected function getOperator(): string
-    {
-        return ">";
-    }
+	/**
+	 * Returns the properties of this object, or NULL if it has no properties.
+	 *
+	 * @return PropertyMap|null
+	 */
+	public function getProperties(): ?PropertyMap;
 }

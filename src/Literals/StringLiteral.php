@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Literals;
 
-use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StringTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**

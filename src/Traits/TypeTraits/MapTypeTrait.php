@@ -19,11 +19,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
+
+use WikibaseSolutions\CypherDSL\Property;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
- * Represents the type "relationship".
+ * This trait provides a default implementation to satisfy the "MapType" interface.
+ *
+ * @see MapType
  */
-interface RelationshipType extends StructuralType
+trait MapTypeTrait
 {
+    /**
+     * Returns the property of the given name for this expression. For instance, if this expression is the
+     * variable "foo", a function call like $expression->property("bar") would yield "foo.bar".
+     *
+     * @param string $property
+     * @return Property
+     */
+    public function property(string $property): Property
+    {
+        return new Property($this, $property);
+    }
 }

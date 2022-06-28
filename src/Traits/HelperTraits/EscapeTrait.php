@@ -19,28 +19,37 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits;
+namespace WikibaseSolutions\CypherDSL\Traits\HelperTraits;
 
-use function is_string;
-use WikibaseSolutions\CypherDSL\Alias;
-use WikibaseSolutions\CypherDSL\Variable;
+use InvalidArgumentException;
 
-trait AliasableTrait
+/**
+ * Trait for encoding certain structures that are used in multiple clauses in a
+ * Cypher query.
+ */
+trait EscapeTrait
 {
-    use ErrorTrait;
-
     /**
-     * Creates an alias of the current expression.
+     * Escapes the given 'name'. A name is an unquoted literal in a Cypher query, such as variables,
+     * types or property names.
      *
-     * @param string|Variable $variable
-     * @return Alias
+     * @param string $name
+     * @return string
      */
-    public function alias($variable): Alias
+    public static function escape(string $name): string
     {
-        self::assertClass($variable, [Variable::class, 'string'], 'variable');
+        if ($name === "") {
+            return "";
+        }
 
-        $variable = is_string($variable) ? new Variable($variable) : $variable;
+        if (ctype_alnum($name) && !ctype_digit($name)) {
+            return $name;
+        }
 
-        return new Alias($this, $variable);
+        if (strpos($name, '`') !== false) {
+            throw new InvalidArgumentException("A name must not contain a backtick (`)");
+        }
+
+        return sprintf("`%s`", $name);
     }
 }
