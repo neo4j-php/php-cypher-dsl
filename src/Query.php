@@ -313,7 +313,7 @@ class Query implements QueryConvertable
     /**
      * Creates the DELETE clause.
      *
-     * @param Variable|Variable[] $nodes The nodes to delete
+     * @param Variable|Variable[] $variables The nodes to delete
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
@@ -608,7 +608,7 @@ class Query implements QueryConvertable
      * @param string $subject The subject/body of the clause
      * @return Query
      */
-    public function raw(string $clause, string $subject)
+    public function raw(string $clause, string $subject): self
     {
         $this->clauses[] = new RawClause($clause, $subject);
 

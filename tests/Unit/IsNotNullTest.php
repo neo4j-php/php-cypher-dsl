@@ -19,28 +19,31 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
-use function is_string;
-use WikibaseSolutions\CypherDSL\Alias;
-use WikibaseSolutions\CypherDSL\Variable;
+use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\IsNotNull;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
-trait AliasableTrait
+/**
+ * @covers \WikibaseSolutions\CypherDSL\Not
+ */
+class IsNotNullTest extends TestCase
 {
-    use ErrorTrait;
+    use TestHelper;
 
-    /**
-     * Creates an alias of the current expression.
-     *
-     * @param string|Variable $variable
-     * @return Alias
-     */
-    public function alias($variable): Alias
+    public function testToQuery(): void
     {
-        self::assertClass($variable, [Variable::class, 'string'], 'variable');
+        $not = new IsNotNull($this->getQueryConvertableMock(BooleanType::class, "true"), false);
 
-        $variable = is_string($variable) ? new Variable($variable) : $variable;
+        $this->assertFalse($not->insertsParentheses());
 
-        return new Alias($this, $variable);
+        $this->assertSame("true IS NOT NULL", $not->toQuery());
+
+        $not = new IsNotNull($not);
+
+        $this->assertSame("(true IS NOT NULL IS NOT NULL)", $not->toQuery());
+
+        $this->assertTrue($not->insertsParentheses());
     }
 }
