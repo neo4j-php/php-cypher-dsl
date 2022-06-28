@@ -110,11 +110,8 @@ trait ErrorTrait
             throw new InvalidArgumentException("A name cannot be an empty string");
         }
 
-        if (!preg_match('/^\p{L}[\p{L}\d_]*$/u', $name)) {
-            throw new InvalidArgumentException('A name can only contain alphanumeric characters and underscores and must begin with an alphabetic character');
-        }
-
         if (strlen($name) >= 65535) {
+            // Remark: Actual limit depends on Neo4j version, but we just take the lower bound.
             throw new InvalidArgumentException('A name cannot be longer than 65534 characters');
         }
     }

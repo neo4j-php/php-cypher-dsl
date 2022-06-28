@@ -49,13 +49,12 @@ class NodeTest extends TestCase
         $this->assertSame($name, $node->getVariable());
     }
 
-    public function testBacktickThrowsException(): void
+    public function testBacktickIsEscaped(): void
     {
         $node = new Node();
 
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectDeprecationMessage('A name can only contain alphanumeric characters and underscores');
         $node->named('abcdr`eer');
+        $this->assertEquals('(`abcdr``eer`)', $node->toQuery());
     }
 
     /**

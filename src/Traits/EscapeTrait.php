@@ -30,25 +30,33 @@ use InvalidArgumentException;
 trait EscapeTrait
 {
     /**
-     * Escapes the given 'name'. A name is an unquoted literal in a Cypher query, such as variables,
-     * types or property names.
+     * Escapes a 'name' if it needs to be escaped.
+     * A 'name' in cypher is any string that should be included directly in a cypher query,
+     * such as variable names, labels, property names and relation types
+     *
+     * Note that empty strings are usually not allowed as names, so these should not be passed to this function.
+     * However, some neo4j versions do not crash on empty string as variable name, so let's just escape them anyways.
      *
      * @param string $name
      * @return string
      */
     public static function escape(string $name): string
     {
-        if ($name === "") {
-            return "";
-        }
-
-        if (ctype_alnum($name) && !ctype_digit($name)) {
+        if ($name !== '' && preg_match('/^\p{L}[\p{L}\d_]*$/u', $name)) {
             return $name;
         }
 
-        if (strpos($name, '`') !== false) {
-            throw new InvalidArgumentException("A name must not contain a backtick (`)");
-        }
+        return self::escapeRaw($name);
+    }
+
+    /**
+     * Escapes the given $name to be used directly in a CYPHER query.
+     * Note: according to https://github.com/neo4j/neo4j/issues/12901 backslashes might give problems in some Neo4j versions.
+     */
+    public static function escapeRaw($name) {
+
+        // Escape backticks that are included in $name by doubling them.
+        $name = str_replace('`','``',$name);
 
         return sprintf("`%s`", $name);
     }

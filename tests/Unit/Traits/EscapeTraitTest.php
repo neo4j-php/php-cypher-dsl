@@ -66,11 +66,9 @@ class EscapeTraitTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function testValueWithBacktickThrowsException()
+    public function testValueWithBacktickIsProperlyEscaped()
     {
-        $this->expectException(InvalidArgumentException::class);
-
-        $this->trait->escape("foo`bar");
+        $this->assertSame('`foo``bar`', $this->trait->escape("foo`bar"));
     }
 
     public function provideSafeValueIsNotEscapedData(): array
@@ -79,45 +77,23 @@ class EscapeTraitTest extends TestCase
             ['foobar'],
             ['fooBar'],
             ['FOOBAR'],
+            ['foo_bar'],
+            ['FOO_BAR'],
             ['aaa'],
-            ['bbb'],
-            ['ccc'],
-            ['ddd'],
-            ['eee'],
-            ['fff'],
-            ['ggg'],
-            ['hhh'],
-            ['iii'],
-            ['jjj'],
-            ['kkk'],
-            ['lll'],
-            ['mmm'],
-            ['nnn'],
-            ['ooo'],
-            ['ppp'],
-            ['qqq'],
-            ['rrr'],
-            ['sss'],
-            ['ttt'],
-            ['uuu'],
-            ['vvv'],
-            ['www'],
-            ['xxx'],
-            ['yyy'],
-            ['zzz'],
-            [''],
             ['aaa100'],
             ['a0'],
             ['z10'],
             ['z99'],
+            ['ça'],
+            ['日'],
         ];
     }
 
     public function provideUnsafeValueIsEscapedData(): array
     {
         return [
-            ['foo_bar'],
-            ['FOO_BAR'],
+            [''],
+            ['__FooBar__'],
             ['_'],
             ['__'],
             ['\''],
