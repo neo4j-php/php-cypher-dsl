@@ -21,7 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\ExpressionList;
 use WikibaseSolutions\CypherDSL\Literals\Decimal;

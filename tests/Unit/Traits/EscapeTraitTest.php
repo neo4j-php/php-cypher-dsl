@@ -21,7 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;

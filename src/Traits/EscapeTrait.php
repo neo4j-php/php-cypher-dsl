@@ -21,7 +21,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
-use InvalidArgumentException;
+use function preg_match;
+use function sprintf;
+use function str_replace;
 
 /**
  * Trait for encoding certain structures that are used in multiple clauses in a
@@ -53,10 +55,11 @@ trait EscapeTrait
      * Escapes the given $name to be used directly in a CYPHER query.
      * Note: according to https://github.com/neo4j/neo4j/issues/12901 backslashes might give problems in some Neo4j versions.
      */
-    public static function escapeRaw($name) {
+    public static function escapeRaw($name)
+    {
 
         // Escape backticks that are included in $name by doubling them.
-        $name = str_replace('`','``',$name);
+        $name = str_replace('`', '``', $name);
 
         return sprintf("`%s`", $name);
     }

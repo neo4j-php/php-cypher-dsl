@@ -35,7 +35,6 @@ use function is_object;
 use function is_resource;
 use function is_string;
 use function key;
-use function preg_match;
 use function strpos;
 use TypeError;
 
