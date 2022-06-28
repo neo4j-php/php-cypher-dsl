@@ -27,30 +27,13 @@ composer require "wikibase-solutions/php-cypher-dsl"
 To construct a query to find all of Tom Hanks' co-actors, you can use the following code:
 
 ```php
-$tom = Query::variable("tom");
-$tomNode = Query::node("Person")->withProperties([
-	"name" => Query::literal("Tom Hanks")
-])->named($tom);
-
-$movie = Query::variable("m");
-$movieNode = Query::node()->named($movie);
-
-$coActors = Query::variable("coActors");
-$coActorsNode = Query::node()->named($coActors);
+$tom = Query::node("Person")->withProperties(["name" => Query::literal("Tom Hanks")]);
+$coActors = Query::node();
 
 $statement = Query::new()
-	->match($tomNode->relationshipTo($movieNode)->withType("ACTED_IN")->relationshipFrom($coActorsNode)->withType("ACTED_IN"))
-	->returning($coActors->property("name"))
-	->build();
+    ->match($tom->relationshipTo(Query::node(), "ACTED_IN")->relationshipFrom($coActors, "ACTED_IN"))
+    ->returning($coActors->property("name"))
+    ->build();
 
-$this->assertSame("MATCH (tom:Person {name: 'Tom Hanks'})-[:`ACTED_IN`]->(m)<-[:`ACTED_IN`]-(coActors) RETURN coActors.name", $statement);
+$this->assertStringMatchesFormat("MATCH (:Person {name: 'Tom Hanks'})-[:`ACTED_IN`]->()<-[:`ACTED_IN`]-(%s) RETURN %s.name", $statement);
 ```
-
-## Roadmap
-
-Below are some things that still need to be implemented.
-
-- Add missing clauses
-- Add missing function definitions
-- Add missing expressions
-- Improve documentation
