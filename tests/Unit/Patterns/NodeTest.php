@@ -48,6 +48,7 @@ class NodeTest extends TestCase
         $this->assertSame($name, $node->getVariable());
     }
 
+    // Further tests can be found in Traits/EscapeTraitTest
     public function testBacktickIsEscaped(): void
     {
         $node = new Node();

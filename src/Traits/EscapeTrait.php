@@ -33,18 +33,16 @@ trait EscapeTrait
 {
     /**
      * Escapes a 'name' if it needs to be escaped.
+     * @see https://neo4j.com/docs/cypher-manual/4.4/syntax/naming
      * A 'name' in cypher is any string that should be included directly in a cypher query,
      * such as variable names, labels, property names and relation types
-     *
-     * Note that empty strings are usually not allowed as names, so these should not be passed to this function.
-     * However, some neo4j versions do not crash on empty string as variable name, so let's just escape them anyways.
      *
      * @param string $name
      * @return string
      */
     public static function escape(string $name): string
     {
-        if ($name !== '' && preg_match('/^\p{L}[\p{L}\d_]*$/u', $name)) {
+        if (preg_match('/^\p{L}[\p{L}\d_]*$/u', $name)) {
             return $name;
         }
 
@@ -57,7 +55,6 @@ trait EscapeTrait
      */
     public static function escapeRaw($name)
     {
-
         // Escape backticks that are included in $name by doubling them.
         $name = str_replace('`', '``', $name);
 

@@ -65,11 +65,6 @@ class EscapeTraitTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function testValueWithBacktickIsProperlyEscaped()
-    {
-        $this->assertSame('`foo``bar`', $this->trait->escape("foo`bar"));
-    }
-
     public function provideSafeValueIsNotEscapedData(): array
     {
         return [
@@ -102,6 +97,25 @@ class EscapeTraitTest extends TestCase
             ['100'],
             ['1'],
             ['2'],
+        ];
+    }
+
+    /**
+     * @dataProvider provideValueWithBacktickIsProperlyEscapedData
+     */
+    public function testValueWithBacktickIsProperlyEscaped($input, $expected)
+    {
+        $this->assertSame('`foo``bar`', $this->trait->escape("foo`bar"));
+    }
+
+    public function provideValueWithBacktickIsProperlyEscapedData(): array
+    {
+        return [
+            ['foo`bar','`foo``bar`'],
+            ['`foo','```foo`'],
+            ['foo`','`foo```'],
+            ['foo``bar','`foo````bar`'],
+            ['`foo`','```foo```'],
         ];
     }
 }
