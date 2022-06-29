@@ -39,7 +39,7 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
  */
-class Relationship implements RelationshipType, HasVariable, HasProperties
+class Relationship implements HasProperties, HasVariable, RelationshipType
 {
     use RelationshipTypeTrait;
 	use HasPropertiesTrait;

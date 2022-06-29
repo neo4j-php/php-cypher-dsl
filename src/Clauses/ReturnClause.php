@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -84,7 +84,8 @@ class ReturnClause extends Clause
      * @param string $alias The alias of this column
      *
      * @return ReturnClause
-     * @see    https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
+	 *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
      */
     public function addColumn(AnyType $column, string $alias = ""): self
     {

@@ -38,7 +38,7 @@ class DeleteClause extends Clause
     private bool $detach = false;
 
     /**
-     * The variables that needs to be deleted.
+     * The variables that need to be deleted.
      *
      * @var Variable[] $variables
      */

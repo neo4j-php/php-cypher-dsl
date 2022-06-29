@@ -24,7 +24,7 @@ namespace WikibaseSolutions\CypherDSL;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\DateTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\DateTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\LocalDateTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\LocalTimeTypeTrait;

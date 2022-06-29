@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 
@@ -50,7 +50,7 @@ class MatchClause extends Clause
     }
 
     /**
-     * Add a pattern to the match clause.
+     * Add a pattern to the MATCH clause.
      *
      * @param PathType|NodeType $pattern
      * @return MatchClause

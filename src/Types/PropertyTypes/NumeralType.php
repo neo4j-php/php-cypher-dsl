@@ -32,7 +32,7 @@ use WikibaseSolutions\CypherDSL\Subtraction;
 /**
  * Represents any numeral (integer, float, double).
  */
-interface NumeralType extends ComparablePropertyType
+interface NumeralType extends AliasablePropertyType, ComparablePropertyType
 {
     /**
      * Add this expression to the given expression.
@@ -41,7 +41,7 @@ interface NumeralType extends ComparablePropertyType
      * @param bool $insertParentheses
      * @return Addition
      */
-    public function plus(NumeralType $right, bool $insertParentheses = true): Addition;
+    public function plus(self $right, bool $insertParentheses = true): Addition;
 
     /**
      * Divide this expression by the given expression.
@@ -50,7 +50,7 @@ interface NumeralType extends ComparablePropertyType
      * @param bool $insertParentheses
      * @return Division
      */
-    public function divide(NumeralType $right, bool $insertParentheses = true): Division;
+    public function divide(self $right, bool $insertParentheses = true): Division;
 
     /**
      * Perform an exponentiation with the given expression.
@@ -59,7 +59,7 @@ interface NumeralType extends ComparablePropertyType
      * @param bool $insertParentheses
      * @return Exponentiation
      */
-    public function exponentiate(NumeralType $right, bool $insertParentheses = true): Exponentiation;
+    public function exponentiate(self $right, bool $insertParentheses = true): Exponentiation;
 
     /**
      * Perform the modulo operation with the given expression.
@@ -68,7 +68,7 @@ interface NumeralType extends ComparablePropertyType
      * @param bool $insertParentheses
      * @return Modulo
      */
-    public function mod(NumeralType $right, bool $insertParentheses = true): Modulo;
+    public function mod(self $right, bool $insertParentheses = true): Modulo;
 
     /**
      * Perform a multiplication with the given expression.
@@ -77,7 +77,7 @@ interface NumeralType extends ComparablePropertyType
      * @param bool $insertParentheses
      * @return Multiplication
      */
-    public function times(NumeralType $right, bool $insertParentheses = true): Multiplication;
+    public function times(self $right, bool $insertParentheses = true): Multiplication;
 
     /**
      * Subtract the given expression from this expression.
@@ -86,7 +86,7 @@ interface NumeralType extends ComparablePropertyType
      * @param bool $insertParentheses
      * @return Subtraction
      */
-    public function minus(NumeralType $right, bool $insertParentheses = true): Subtraction;
+    public function minus(self $right, bool $insertParentheses = true): Subtraction;
 
     /**
      * Negate this expression (negate the numeral using "0").

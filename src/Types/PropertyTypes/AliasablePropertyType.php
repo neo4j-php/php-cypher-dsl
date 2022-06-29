@@ -19,16 +19,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Types;
+namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
-use WikibaseSolutions\CypherDSL\QueryConvertible;
+use WikibaseSolutions\CypherDSL\Alias;
+use WikibaseSolutions\CypherDSL\Variable;
 
 /**
- * Represents any type in Cypher.
- *
- * @note This interface should not be implemented by any class directly.
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/
+ * Represents any property type that can be aliased.
  */
-interface AnyType extends QueryConvertible
+interface AliasablePropertyType extends PropertyType
 {
+	/**
+	 * Creates an alias of the current expression.
+	 *
+	 * @param Variable $variable
+	 * @return Alias
+	 */
+	public function alias(Variable $variable): Alias;
 }

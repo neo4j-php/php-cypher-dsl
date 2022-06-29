@@ -23,7 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Functions;
 
 use InvalidArgumentException;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait;
@@ -39,9 +39,9 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  * This class represents any function call.
  */
 class RawFunction extends FunctionCall implements
-    ListType,
+	BooleanType,
+	ListType,
     MapType,
-    BooleanType,
     NumeralType,
     StringType
 {
@@ -50,6 +50,7 @@ class RawFunction extends FunctionCall implements
     use MapTypeTrait;
     use NumeralTypeTrait;
     use StringTypeTrait;
+
     use ErrorTrait;
 
     /**

@@ -38,7 +38,7 @@ class LimitClause extends Clause
     private ?NumeralType $limit = null;
 
     /**
-     * Returns the actual limit of the clause.
+     * Returns the limit of the clause.
      *
      * @return NumeralType|null
      */

@@ -25,8 +25,9 @@ use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StringTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
- * Represents a string literal. The name of this class diverges from the naming scheme, because a class
- * in PHP cannot be named "String".
+ * Represents a string literal.
+ *
+ * @note The name of this class diverges from the naming scheme, because a class in PHP cannot be named "String".
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/expressions/#cypher-expressions-string-literals
  */
@@ -89,8 +90,8 @@ class StringLiteral implements StringType
      */
     public function toQuery(): string
     {
-        // Encode tabs, newlines, carriage returns and form feeds
-        $value = str_replace(["\t", "\n", "\r", "\f"], ["\\t", "\\n", "\\r", "\\f"], $this->value);
+        // Encode backslashes, tabs, newlines, carriage returns and form feeds
+        $value = str_replace(["\\", "\t", "\n", "\r", "\f"], ["\\\\", "\\t", "\\n", "\\r", "\\f"], $this->value);
 
         if ($this->useDoubleQuotes) {
             return sprintf('"%s"', str_replace('"', '\"', $value));

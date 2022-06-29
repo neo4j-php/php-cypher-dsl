@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
+use WikibaseSolutions\CypherDSL\HasProperties;
 use WikibaseSolutions\CypherDSL\HasVariable;
 use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
@@ -34,7 +35,7 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
  */
-class Node implements NodeType, HasVariable
+class Node implements HasProperties, HasVariable, NodeType
 {
     use NodeTypeTrait;
 	use HasPropertiesTrait;

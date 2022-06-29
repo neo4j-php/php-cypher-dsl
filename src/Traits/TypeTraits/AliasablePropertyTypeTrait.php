@@ -19,19 +19,30 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
+
+use WikibaseSolutions\CypherDSL\Alias;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\AliasablePropertyType;
+use WikibaseSolutions\CypherDSL\Variable;
 
 /**
- * This interface represents any class that can be converted into a (partial) Cypher query.
+ * This trait provides a default implementation to satisfy the "AliasablePropertyType" interface.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/
+ * @see AliasablePropertyType
  */
-interface QueryConvertable
+trait AliasablePropertyTypeTrait
 {
+	use PropertyTypeTrait;
+
     /**
-     * Converts the object into a (partial) query.
+     * Creates an alias of the current expression.
      *
-     * @return string
+     * @param Variable $variable
+     * @return Alias
      */
-    public function toQuery(): string;
+    public function alias(Variable $variable): Alias
+    {
+        return new Alias($this, $variable);
+    }
 }

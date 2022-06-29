@@ -19,27 +19,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits\HelperTraits;
+namespace WikibaseSolutions\CypherDSL;
 
-use WikibaseSolutions\CypherDSL\Alias;
-use WikibaseSolutions\CypherDSL\Variable;
-
-trait AliasableTrait
+/**
+ * This interface represents any class that can be converted into a (partial) Cypher query.
+ *
+ * @see https://neo4j.com/docs/cypher-manual/current/
+ */
+interface QueryConvertible
 {
-    use ErrorTrait;
-
     /**
-     * Creates an alias of the current expression.
+     * Converts the object into a (partial) query.
      *
-     * @param string|Variable $variable
-     * @return Alias
+     * @return string
      */
-    public function alias($variable): Alias
-    {
-        self::assertClass($variable, [Variable::class, 'string'], 'variable');
-
-        $variable = is_string($variable) ? new Variable($variable) : $variable;
-
-        return new Alias($this, $variable);
-    }
+    public function toQuery(): string;
 }

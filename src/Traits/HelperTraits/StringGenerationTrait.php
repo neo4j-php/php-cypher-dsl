@@ -19,8 +19,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits;
+namespace WikibaseSolutions\CypherDSL\Traits\HelperTraits;
 
+/**
+ * Used for automatically generating names.
+ */
 trait StringGenerationTrait
 {
     /**

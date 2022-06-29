@@ -28,7 +28,6 @@ use WikibaseSolutions\CypherDSL\Minus;
 use WikibaseSolutions\CypherDSL\Modulo;
 use WikibaseSolutions\CypherDSL\Multiplication;
 use WikibaseSolutions\CypherDSL\Subtraction;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\AliasableTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
@@ -38,7 +37,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 trait NumeralTypeTrait
 {
-    use AliasableTrait;
+    use AliasablePropertyTypeTrait;
     use ComparablePropertyTypeTrait;
 
     /**

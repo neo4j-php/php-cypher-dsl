@@ -45,7 +45,7 @@ interface RelatableStructuralType extends StructuralType
 	 *
 	 * @return Path
 	 */
-	public function relationship(RelationshipType $relationship, RelatableStructuralType $relatable): Path;
+	public function relationship(RelationshipType $relationship, self $relatable): Path;
 
 	/**
 	 * Adds a new relationship to the node pattern at the end of the structural type to form a path.
@@ -57,7 +57,7 @@ interface RelatableStructuralType extends StructuralType
 	 *
 	 * @return Path
 	 */
-	public function relationshipTo(RelatableStructuralType $relatable, ?string $type = null, $properties = null, $name = null): Path;
+	public function relationshipTo(self $relatable, ?string $type = null, $properties = null, $name = null): Path;
 
 	/**
 	 * Adds a new relationship from the node pattern at the end of the structural type to form a path.
@@ -69,7 +69,7 @@ interface RelatableStructuralType extends StructuralType
 	 *
 	 * @return Path
 	 */
-	public function relationshipFrom(RelatableStructuralType $relatable, ?string $type = null, $properties = null, $name = null): Path;
+	public function relationshipFrom(self $relatable, ?string $type = null, $properties = null, $name = null): Path;
 
 	/**
 	 * Adds a new unidirectional relationship to the node pattern at the end of the structural type to form a path.
@@ -81,5 +81,5 @@ interface RelatableStructuralType extends StructuralType
 	 *
 	 * @return Path
 	 */
-	public function relationshipUni(RelatableStructuralType $relatable, ?string $type = null, $properties = null, $name = null): Path;
+	public function relationshipUni(self $relatable, ?string $type = null, $properties = null, $name = null): Path;
 }

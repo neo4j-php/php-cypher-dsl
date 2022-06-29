@@ -21,12 +21,13 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits\HelperTraits;
 
+use WikibaseSolutions\CypherDSL\HasProperties;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 
 /**
  * This trait provides a default implementation to satisfy the "HasProperties" interface.
  *
- * @see HasPropertiesPartialType
+ * @see HasProperties
  */
 trait HasPropertiesTrait
 {

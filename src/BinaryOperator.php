@@ -21,17 +21,14 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\AliasableTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * This class represents the application of a binary operator, such as "+", "/" and "*".
  */
-abstract class BinaryOperator implements QueryConvertable
+abstract class BinaryOperator implements QueryConvertible
 {
-    use AliasableTrait;
-
-    /**
+	/**
      * @var bool Whether to insert parentheses around the expression
      */
     private bool $insertParentheses;
@@ -60,6 +57,36 @@ abstract class BinaryOperator implements QueryConvertable
         $this->insertParentheses = $insertParentheses;
     }
 
+	/**
+	 * Gets the left-hand of the expression.
+	 *
+	 * @return AnyType
+	 */
+	public function getLeft(): AnyType
+	{
+		return $this->left;
+	}
+
+	/**
+	 * Gets the right-hand of the expression.
+	 *
+	 * @return AnyType
+	 */
+	public function getRight(): AnyType
+	{
+		return $this->right;
+	}
+
+	/**
+	 * Returns whether the operator inserts parenthesis.
+	 *
+	 * @return bool
+	 */
+	public function insertsParentheses(): bool
+	{
+		return $this->insertParentheses;
+	}
+
     /**
      * @inheritDoc
      */
@@ -79,34 +106,4 @@ abstract class BinaryOperator implements QueryConvertable
      * @return string
      */
     abstract protected function getOperator(): string;
-
-    /**
-     * Gets the left-hand of the expression.
-     *
-     * @return AnyType
-     */
-    public function getLeft(): AnyType
-    {
-        return $this->left;
-    }
-
-    /**
-     * Gets the right-hand of the expression.
-     *
-     * @return AnyType
-     */
-    public function getRight(): AnyType
-    {
-        return $this->right;
-    }
-
-    /**
-     * Returns whether the operator inserts parenthesis.
-     *
-     * @return bool
-     */
-    public function insertsParentheses(): bool
-    {
-        return $this->insertParentheses;
-    }
 }

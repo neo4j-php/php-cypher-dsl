@@ -25,7 +25,6 @@ use WikibaseSolutions\CypherDSL\Contains;
 use WikibaseSolutions\CypherDSL\EndsWith;
 use WikibaseSolutions\CypherDSL\Regex;
 use WikibaseSolutions\CypherDSL\StartsWith;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\AliasableTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
@@ -35,8 +34,8 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 trait StringTypeTrait
 {
+	use AliasablePropertyTypeTrait;
     use ComparablePropertyTypeTrait;
-    use AliasableTrait;
 
     /**
      * Check whether this expression the given expression.

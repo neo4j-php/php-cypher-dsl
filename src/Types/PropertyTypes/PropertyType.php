@@ -61,7 +61,7 @@ interface PropertyType extends AnyType
      * @param PropertyType $right
      * @return Equality
      */
-    public function equals(PropertyType $right): Equality;
+    public function equals(self $right): Equality;
 
     /**
      * Perform an inequality comparison against the given expression.
@@ -69,7 +69,7 @@ interface PropertyType extends AnyType
      * @param PropertyType $right
      * @return Inequality
      */
-    public function notEquals(PropertyType $right): Inequality;
+    public function notEquals(self $right): Inequality;
 
     /**
      * Checks whether the element exists in the given list.

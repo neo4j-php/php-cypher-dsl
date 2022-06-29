@@ -33,7 +33,7 @@ trait ErrorTrait
     /**
      * Asserts that $userInput is an instance of one of the provided $classNames (polyfill for php 8.0 Union types)
      *
-     * @param string $varName The name of the userinput variable, to be used in the error message.
+     * @param string $varName The name of the user input variable, to be used in the error message.
      * @param string|string[] $classNames The classnames that should be tested against
      * @param mixed $userInput The input that should be tested
      *

@@ -23,8 +23,8 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Label;
 use WikibaseSolutions\CypherDSL\Property;
-use WikibaseSolutions\CypherDSL\QueryConvertable;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\QueryConvertible;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 
 /**
  * This class represents a REMOVE clause.
@@ -59,7 +59,6 @@ class RemoveClause extends Clause
     public function addExpression($expression): self
     {
         $this->assertClass('expression', [Property::class, Label::class], $expression);
-
         $this->expressions[] = $expression;
 
         return $this;
@@ -80,7 +79,7 @@ class RemoveClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (QueryConvertable $expression) => $expression->toQuery(), $this->expressions)
+            array_map(fn (QueryConvertible $expression) => $expression->toQuery(), $this->expressions)
         );
     }
 }

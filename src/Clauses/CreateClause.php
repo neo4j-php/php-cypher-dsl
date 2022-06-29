@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 
@@ -54,7 +54,7 @@ class CreateClause extends Clause
     }
 
     /**
-     * Returns the patterns of the create clause.
+     * Returns the patterns of the CREATE clause.
      *
      * @return (PathType|NodeType)[]
      */

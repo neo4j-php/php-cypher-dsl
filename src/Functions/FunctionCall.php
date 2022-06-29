@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Functions;
 
-use WikibaseSolutions\CypherDSL\QueryConvertable;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\AliasableTrait;
+use WikibaseSolutions\CypherDSL\QueryConvertible;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\AliasablePropertyTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -34,9 +34,9 @@ use WikibaseSolutions\CypherDSL\Variable;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/
  */
-abstract class FunctionCall implements QueryConvertable
+abstract class FunctionCall implements QueryConvertible
 {
-    use AliasableTrait;
+    use AliasablePropertyTypeTrait;
 
     /**
      * Produces a raw function call. This enables the usage of unimplemented functions in your
@@ -243,7 +243,7 @@ abstract class FunctionCall implements QueryConvertable
     {
         $signature = $this->getSignature();
         $parameters = array_map(
-            fn (QueryConvertable $convertable): string => $convertable->toQuery(),
+            fn (QueryConvertible $convertable): string => $convertable->toQuery(),
             $this->getParameters()
         );
 

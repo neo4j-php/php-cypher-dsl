@@ -21,7 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\AliasableTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\DateTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\DateTypeTrait;
@@ -81,7 +80,6 @@ class RawExpression implements
     use RelationshipTypeTrait;
     use StringTypeTrait;
     use TimeTypeTrait;
-    use AliasableTrait;
 
     /**
      * @var string The raw expression

@@ -23,9 +23,9 @@ namespace WikibaseSolutions\CypherDSL;
 
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\DateTimeTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\StringGenerationTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\StringGenerationTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\LocalDateTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\LocalTimeTypeTrait;
@@ -88,15 +88,16 @@ class Parameter implements
      * Parameter constructor.
      *
      * @param string|null $parameter The parameter; this parameter may only consist of alphanumeric
-     *                          characters and underscores
+     *  characters and underscores
      */
     public function __construct(?string $parameter = null)
     {
         if (!isset($parameter)) {
             $parameter = $this->generateString('param');
-        }
-
-        self::assertValidName($parameter);
+        } else {
+			// Validation is only needed when the user supplied their own parameter
+			self::assertValidName($parameter);
+		}
 
         $this->parameter = $parameter;
     }

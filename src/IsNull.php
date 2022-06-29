@@ -39,12 +39,17 @@ class IsNull implements BooleanType
      * @var AnyType The type to test against null
      */
     private AnyType $expression;
+
+	/**
+	 * @var bool Whether to insert parentheses around the expression
+	 */
     private bool $insertParentheses;
 
     /**
      * IS NULL constructor.
      *
      * @param AnyType $expression The type to test against null.
+	 * @param bool $insertParentheses Whether to insert parentheses around the expression
      */
     public function __construct(AnyType $expression, bool $insertParentheses = true)
     {
@@ -62,21 +67,21 @@ class IsNull implements BooleanType
         return $this->expression;
     }
 
+	/**
+	 * Returns whether the operator inserts parenthesis.
+	 *
+	 * @return bool
+	 */
+	public function insertsParentheses(): bool
+	{
+		return $this->insertParentheses;
+	}
+
     /**
      * @inheritDoc
      */
     public function toQuery(): string
     {
         return sprintf($this->insertParentheses ? "(%s IS NULL)" : "%s IS NULL", $this->expression->toQuery());
-    }
-
-    /**
-     * Returns whether or not the operator inserts parenthesis.
-     *
-     * @return bool
-     */
-    public function insertsParentheses(): bool
-    {
-        return $this->insertParentheses;
     }
 }

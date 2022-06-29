@@ -34,36 +34,36 @@ interface ComparablePropertyType extends PropertyType
     /**
      * Perform a greater than comparison against the given expression.
      *
-     * @param NumeralType $right
+     * @param ComparablePropertyType $right
      * @param bool $insertParentheses
      * @return GreaterThan
      */
-    public function gt(ComparablePropertyType $right, bool $insertParentheses = true): GreaterThan;
+    public function gt(self $right, bool $insertParentheses = true): GreaterThan;
 
     /**
      * Perform a greater than or equal comparison against the given expression.
      *
-     * @param NumeralType $right
+     * @param ComparablePropertyType $right
      * @param bool $insertParentheses
      * @return GreaterThanOrEqual
      */
-    public function gte(ComparablePropertyType $right, bool $insertParentheses = true): GreaterThanOrEqual;
+    public function gte(self $right, bool $insertParentheses = true): GreaterThanOrEqual;
 
     /**
      * Perform a less than comparison against the given expression.
      *
-     * @param NumeralType $right
+     * @param ComparablePropertyType $right
      * @param bool $insertParentheses
      * @return LessThan
      */
-    public function lt(ComparablePropertyType $right, bool $insertParentheses = true): LessThan;
+    public function lt(self $right, bool $insertParentheses = true): LessThan;
 
     /**
      * Perform a less than or equal comparison against the given expression.
      *
-     * @param NumeralType $right
+     * @param ComparablePropertyType $right
      * @param bool $insertParentheses
      * @return LessThanOrEqual
      */
-    public function lte(ComparablePropertyType $right, bool $insertParentheses = true): LessThanOrEqual;
+    public function lte(self $right, bool $insertParentheses = true): LessThanOrEqual;
 }

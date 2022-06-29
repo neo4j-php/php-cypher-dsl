@@ -24,7 +24,6 @@ namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
 use WikibaseSolutions\CypherDSL\AndOperator;
 use WikibaseSolutions\CypherDSL\Not;
 use WikibaseSolutions\CypherDSL\OrOperator;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\AliasableTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\XorOperator;
 
@@ -35,8 +34,7 @@ use WikibaseSolutions\CypherDSL\XorOperator;
  */
 trait BooleanTypeTrait
 {
-    use PropertyTypeTrait;
-    use AliasableTrait;
+    use AliasablePropertyTypeTrait;
 
     /**
      * Create a conjunction between this expression and the given expression.

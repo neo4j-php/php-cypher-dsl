@@ -22,7 +22,7 @@
 namespace WikibaseSolutions\CypherDSL;
 
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\CompositeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
@@ -42,9 +42,9 @@ class Equality extends BinaryOperator implements BooleanType
     /**
      * Equality constructor
      *
-     * @param PropertyType|CompositeType $left              The left-hand of the expression
-     * @param PropertyType|CompositeType $right             The right-hand of the expression
-     * @param bool                       $insertParentheses Whether to insert parentheses around the expression
+     * @param PropertyType|CompositeType $left The left-hand of the expression
+     * @param PropertyType|CompositeType $right The right-hand of the expression
+     * @param bool $insertParentheses Whether to insert parentheses around the expression
      */
     public function __construct(Anytype $left, AnyType $right, bool $insertParentheses = true)
     {

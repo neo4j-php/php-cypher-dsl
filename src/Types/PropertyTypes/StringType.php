@@ -29,7 +29,7 @@ use WikibaseSolutions\CypherDSL\StartsWith;
 /**
  * Represents the type "string".
  */
-interface StringType extends ComparablePropertyType
+interface StringType extends AliasablePropertyType, ComparablePropertyType
 {
     /**
      * Check whether this expression the given expression.
@@ -38,7 +38,7 @@ interface StringType extends ComparablePropertyType
      * @param bool $insertParentheses
      * @return Contains
      */
-    public function contains(StringType $right, bool $insertParentheses = true): Contains;
+    public function contains(self $right, bool $insertParentheses = true): Contains;
 
     /**
      * Perform a suffix string search with the given expression.
@@ -47,7 +47,7 @@ interface StringType extends ComparablePropertyType
      * @param bool $insertParentheses
      * @return EndsWith
      */
-    public function endsWith(StringType $right, bool $insertParentheses = true): EndsWith;
+    public function endsWith(self $right, bool $insertParentheses = true): EndsWith;
 
     /**
      * Perform a prefix string search with the given expression.
@@ -56,7 +56,7 @@ interface StringType extends ComparablePropertyType
      * @param bool $insertParentheses
      * @return StartsWith
      */
-    public function startsWith(StringType $right, bool $insertParentheses = true): StartsWith;
+    public function startsWith(self $right, bool $insertParentheses = true): StartsWith;
 
     /**
      * Perform a regex comparison with the given expression.
@@ -65,5 +65,5 @@ interface StringType extends ComparablePropertyType
      * @param bool $insertParentheses
      * @return Regex
      */
-    public function regex(StringType $right, bool $insertParentheses = true): Regex;
+    public function regex(self $right, bool $insertParentheses = true): Regex;
 }

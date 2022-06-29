@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Variable;
 
@@ -45,7 +45,7 @@ class CallProcedureClause extends Clause
     private array $arguments = [];
 
     /**
-     * @var Variable[] The results field that will be returned
+     * @var Variable[] The result fields that will be returned
      */
     private array $yieldVariables = [];
 
