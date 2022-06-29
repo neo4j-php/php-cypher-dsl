@@ -36,8 +36,8 @@ class AdditionTest extends TestCase
 
     public function testToQuery(): void
     {
-        $left = $this->getQueryConvertableMock(NumeralType::class, "10");
-        $right = $this->getQueryConvertableMock(NumeralType::class, "15");
+        $left = $this->getQueryConvertibleMock(NumeralType::class, "10");
+        $right = $this->getQueryConvertibleMock(NumeralType::class, "15");
         $addition = new Addition($left, $right);
 
         $this->assertSame("(10 + 15)", $addition->toQuery());
@@ -66,7 +66,7 @@ class AdditionTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $addition = new Addition($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
+        $addition = new Addition($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
 
         $addition->toQuery();
     }

@@ -36,7 +36,7 @@ class XorOperatorTest extends TestCase
 
     public function testToQuery(): void
     {
-        $xor = new XorOperator($this->getQueryConvertableMock(BooleanType::class, "true"), $this->getQueryConvertableMock(BooleanType::class, "false"));
+        $xor = new XorOperator($this->getQueryConvertibleMock(BooleanType::class, "true"), $this->getQueryConvertibleMock(BooleanType::class, "false"));
 
         $this->assertSame("(true XOR false)", $xor->toQuery());
 
@@ -47,7 +47,7 @@ class XorOperatorTest extends TestCase
 
     public function testToQueryNoParentheses(): void
     {
-        $xor = new XorOperator($this->getQueryConvertableMock(BooleanType::class, "true"), $this->getQueryConvertableMock(BooleanType::class, "false"), false);
+        $xor = new XorOperator($this->getQueryConvertibleMock(BooleanType::class, "true"), $this->getQueryConvertibleMock(BooleanType::class, "false"), false);
 
         $this->assertSame("true XOR false", $xor->toQuery());
 
@@ -60,7 +60,7 @@ class XorOperatorTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $and = new XorOperator($this->getQueryConvertableMock(AnyType::class, "true"), $this->getQueryConvertableMock(AnyType::class, "false"));
+        $and = new XorOperator($this->getQueryConvertibleMock(AnyType::class, "true"), $this->getQueryConvertibleMock(AnyType::class, "false"));
 
         $and->toQuery();
     }

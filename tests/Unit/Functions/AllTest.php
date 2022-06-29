@@ -38,9 +38,9 @@ class AllTest extends TestCase
 
     public function testToQuery()
     {
-        $variable = $this->getQueryConvertableMock(Variable::class, "variable");
-        $list = $this->getQueryConvertableMock(ListType::class, "list");
-        $predicate = $this->getQueryConvertableMock(AnyType::class, "predicate");
+        $variable = $this->getQueryConvertibleMock(Variable::class, "variable");
+        $list = $this->getQueryConvertibleMock(ListType::class, "list");
+        $predicate = $this->getQueryConvertibleMock(AnyType::class, "predicate");
 
         $all = new All($variable, $list, $predicate);
 
@@ -49,9 +49,9 @@ class AllTest extends TestCase
 
     public function testDoesNotAcceptAnyTypeAsVariable()
     {
-        $variable = $this->getQueryConvertableMock(AnyType::class, "variable");
-        $list = $this->getQueryConvertableMock(ListType::class, "list");
-        $predicate = $this->getQueryConvertableMock(AnyType::class, "predicate");
+        $variable = $this->getQueryConvertibleMock(AnyType::class, "variable");
+        $list = $this->getQueryConvertibleMock(ListType::class, "list");
+        $predicate = $this->getQueryConvertibleMock(AnyType::class, "predicate");
 
         $this->expectException(TypeError::class);
 
@@ -62,9 +62,9 @@ class AllTest extends TestCase
 
     public function testDoesNotAcceptAnyTypeAsList()
     {
-        $variable = $this->getQueryConvertableMock(Variable::class, "variable");
-        $list = $this->getQueryConvertableMock(AnyType::class, "list");
-        $predicate = $this->getQueryConvertableMock(AnyType::class, "predicate");
+        $variable = $this->getQueryConvertibleMock(Variable::class, "variable");
+        $list = $this->getQueryConvertibleMock(AnyType::class, "list");
+        $predicate = $this->getQueryConvertibleMock(AnyType::class, "predicate");
 
         $this->expectException(TypeError::class);
 

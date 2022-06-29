@@ -58,9 +58,9 @@ class FunctionCallTest extends TestCase
 
     public function testAll()
     {
-        $variable = $this->getQueryConvertableMock(Variable::class, "a");
-        $list = $this->getQueryConvertableMock(ListType::class, "[]");
-        $predicate = $this->getQueryConvertableMock(AnyType::class, "b");
+        $variable = $this->getQueryConvertibleMock(Variable::class, "a");
+        $list = $this->getQueryConvertibleMock(ListType::class, "[]");
+        $predicate = $this->getQueryConvertibleMock(AnyType::class, "b");
 
         $all = FunctionCall::all($variable, $list, $predicate);
 
@@ -69,9 +69,9 @@ class FunctionCallTest extends TestCase
 
     public function testAny()
     {
-        $variable = $this->getQueryConvertableMock(Variable::class, "a");
-        $list = $this->getQueryConvertableMock(ListType::class, "[]");
-        $predicate = $this->getQueryConvertableMock(AnyType::class, "b");
+        $variable = $this->getQueryConvertibleMock(Variable::class, "a");
+        $list = $this->getQueryConvertibleMock(ListType::class, "[]");
+        $predicate = $this->getQueryConvertibleMock(AnyType::class, "b");
 
         $any = FunctionCall::any($variable, $list, $predicate);
 
@@ -80,7 +80,7 @@ class FunctionCallTest extends TestCase
 
     public function testExists()
     {
-        $expression = $this->getQueryConvertableMock(AnyType::class, "a");
+        $expression = $this->getQueryConvertibleMock(AnyType::class, "a");
 
         $exists = FunctionCall::exists($expression);
 
@@ -89,7 +89,7 @@ class FunctionCallTest extends TestCase
 
     public function testIsEmpty()
     {
-        $list = $this->getQueryConvertableMock(ListType::class, "[]");
+        $list = $this->getQueryConvertibleMock(ListType::class, "[]");
 
         $isEmpty = FunctionCall::isEmpty($list);
 
@@ -98,9 +98,9 @@ class FunctionCallTest extends TestCase
 
     public function testNone()
     {
-        $variable = $this->getQueryConvertableMock(Variable::class, "a");
-        $list = $this->getQueryConvertableMock(ListType::class, "[]");
-        $predicate = $this->getQueryConvertableMock(AnyType::class, "b");
+        $variable = $this->getQueryConvertibleMock(Variable::class, "a");
+        $list = $this->getQueryConvertibleMock(ListType::class, "[]");
+        $predicate = $this->getQueryConvertibleMock(AnyType::class, "b");
 
         $none = FunctionCall::none($variable, $list, $predicate);
 
@@ -109,9 +109,9 @@ class FunctionCallTest extends TestCase
 
     public function testSingle()
     {
-        $variable = $this->getQueryConvertableMock(Variable::class, "a");
-        $list = $this->getQueryConvertableMock(ListType::class, "[]");
-        $predicate = $this->getQueryConvertableMock(AnyType::class, "b");
+        $variable = $this->getQueryConvertibleMock(Variable::class, "a");
+        $list = $this->getQueryConvertibleMock(ListType::class, "[]");
+        $predicate = $this->getQueryConvertibleMock(AnyType::class, "b");
 
         $single = FunctionCall::single($variable, $list, $predicate);
 
@@ -120,7 +120,7 @@ class FunctionCallTest extends TestCase
 
     public function testPoint()
     {
-        $map = $this->getQueryConvertableMock(MapType::class, "map");
+        $map = $this->getQueryConvertibleMock(MapType::class, "map");
 
         $point = FunctionCall::point($map);
 
@@ -129,7 +129,7 @@ class FunctionCallTest extends TestCase
 
     public function testDate()
     {
-        $value = $this->getQueryConvertableMock(AnyType::class, "value");
+        $value = $this->getQueryConvertibleMock(AnyType::class, "value");
 
         $date = FunctionCall::date($value);
 
@@ -142,7 +142,7 @@ class FunctionCallTest extends TestCase
 
     public function testDateTime()
     {
-        $value = $this->getQueryConvertableMock(AnyType::class, "value");
+        $value = $this->getQueryConvertibleMock(AnyType::class, "value");
 
         $date = FunctionCall::datetime($value);
 
@@ -155,7 +155,7 @@ class FunctionCallTest extends TestCase
 
     public function testLocalDateTime()
     {
-        $value = $this->getQueryConvertableMock(AnyType::class, "value");
+        $value = $this->getQueryConvertibleMock(AnyType::class, "value");
 
         $date = FunctionCall::localdatetime($value);
 
@@ -168,7 +168,7 @@ class FunctionCallTest extends TestCase
 
     public function testLocalTime()
     {
-        $value = $this->getQueryConvertableMock(AnyType::class, "value");
+        $value = $this->getQueryConvertibleMock(AnyType::class, "value");
 
         $date = FunctionCall::localtime($value);
 
@@ -181,7 +181,7 @@ class FunctionCallTest extends TestCase
 
     public function testTime()
     {
-        $value = $this->getQueryConvertableMock(AnyType::class, "value");
+        $value = $this->getQueryConvertibleMock(AnyType::class, "value");
 
         $date = FunctionCall::time($value);
 

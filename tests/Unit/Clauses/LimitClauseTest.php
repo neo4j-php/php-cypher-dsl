@@ -46,7 +46,7 @@ class LimitClauseTest extends TestCase
     public function testPattern(): void
     {
         $limit = new LimitClause();
-        $expression = $this->getQueryConvertableMock(NumeralType::class, "10");
+        $expression = $this->getQueryConvertibleMock(NumeralType::class, "10");
 
         $limit->setLimit($expression);
 
@@ -57,7 +57,7 @@ class LimitClauseTest extends TestCase
     public function testAcceptsNumeralType(): void
     {
         $limit = new LimitClause();
-        $expression = $this->getQueryConvertableMock(NumeralType::class, "10");
+        $expression = $this->getQueryConvertibleMock(NumeralType::class, "10");
 
         $limit->setLimit($expression);
 
@@ -68,7 +68,7 @@ class LimitClauseTest extends TestCase
     public function testDoesNotAcceptAnyType(): void
     {
         $limit = new LimitClause();
-        $expression = $this->getQueryConvertableMock(AnyType::class, "10");
+        $expression = $this->getQueryConvertibleMock(AnyType::class, "10");
 
         $this->expectException(TypeError::class);
 

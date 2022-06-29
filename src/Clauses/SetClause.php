@@ -23,7 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Assignment;
 use WikibaseSolutions\CypherDSL\Label;
-use WikibaseSolutions\CypherDSL\QueryConvertable;
+use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 
 /**
@@ -80,7 +80,7 @@ class SetClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (QueryConvertable $expression): string => $expression->toQuery(), $this->expressions)
+            array_map(fn (QueryConvertible $expression): string => $expression->toQuery(), $this->expressions)
         );
     }
 }

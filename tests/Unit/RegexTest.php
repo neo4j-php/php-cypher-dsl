@@ -36,21 +36,21 @@ class RegexTest extends TestCase
 
     public function testToQuery(): void
     {
-        $regex = new Regex($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
+        $regex = new Regex($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
 
         $this->assertSame("(a =~ b)", $regex->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $regex = new Regex($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"), false);
+        $regex = new Regex($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"), false);
 
         $this->assertSame("a =~ b", $regex->toQuery());
     }
 
     public function testCannotBeNested(): void
     {
-        $regex = new Regex($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
+        $regex = new Regex($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
 
         $this->expectException(TypeError::class);
 
@@ -63,7 +63,7 @@ class RegexTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $regex = new Regex($this->getQueryConvertableMock(AnyType::class, "a"), $this->getQueryConvertableMock(AnyType::class, "b"));
+        $regex = new Regex($this->getQueryConvertibleMock(AnyType::class, "a"), $this->getQueryConvertibleMock(AnyType::class, "b"));
 
         $regex->toQuery();
     }

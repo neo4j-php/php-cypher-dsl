@@ -21,14 +21,14 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\QueryConvertable;
+use WikibaseSolutions\CypherDSL\QueryConvertible;
 
 /**
  * This class represents all the clauses in the Cypher query language.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/
  */
-abstract class Clause implements QueryConvertable
+abstract class Clause implements QueryConvertible
 {
     /**
      * @inheritDoc

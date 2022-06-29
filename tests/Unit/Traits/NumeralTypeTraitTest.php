@@ -61,7 +61,7 @@ class NumeralTypeTraitTest extends TestCase
                 return '10';
             }
         };
-        $this->b = $this->getQueryConvertableMock(NumeralType::class, "15");
+        $this->b = $this->getQueryConvertibleMock(NumeralType::class, "15");
     }
 
     public function testPlus(): void

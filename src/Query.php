@@ -61,7 +61,7 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 /**
  * Builder class for building complex Cypher queries.
  */
-class Query implements QueryConvertable
+class Query implements QueryConvertible
 {
     use EscapeTrait;
     use ErrorTrait;

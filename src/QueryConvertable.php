@@ -26,7 +26,7 @@ namespace WikibaseSolutions\CypherDSL;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/
  */
-interface QueryConvertable
+interface QueryConvertible
 {
     /**
      * Converts the object into a (partial) query.

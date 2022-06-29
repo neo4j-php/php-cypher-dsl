@@ -47,7 +47,7 @@ class DeleteClauseTest extends TestCase
     public function testSingleVariable(): void
     {
         $delete = new DeleteClause();
-        $variable = $this->getQueryConvertableMock(Variable::class, "a");
+        $variable = $this->getQueryConvertibleMock(Variable::class, "a");
 
         $delete->addVariable($variable);
 
@@ -60,8 +60,8 @@ class DeleteClauseTest extends TestCase
     {
         $delete = new DeleteClause();
 
-        $a = $this->getQueryConvertableMock(Variable::class, "a");
-        $b = $this->getQueryConvertableMock(Variable::class, "b");
+        $a = $this->getQueryConvertibleMock(Variable::class, "a");
+        $b = $this->getQueryConvertibleMock(Variable::class, "b");
 
         $delete->addVariable($a);
         $delete->addVariable($b);
@@ -74,7 +74,7 @@ class DeleteClauseTest extends TestCase
     public function testDetachDelete(): void
     {
         $delete = new DeleteClause();
-        $variable = $this->getQueryConvertableMock(Variable::class, "a");
+        $variable = $this->getQueryConvertibleMock(Variable::class, "a");
 
         $delete->addVariable($variable);
         $delete->setDetach(true);
@@ -87,7 +87,7 @@ class DeleteClauseTest extends TestCase
     public function testAcceptsVariable(): void
     {
         $delete = new DeleteClause();
-        $variable = $this->getQueryConvertableMock(Variable::class, "a");
+        $variable = $this->getQueryConvertibleMock(Variable::class, "a");
 
         $delete->addVariable($variable);
         $delete->toQuery();
@@ -98,7 +98,7 @@ class DeleteClauseTest extends TestCase
     public function testDoesNotAcceptAnyType(): void
     {
         $delete = new DeleteClause();
-        $variable = $this->getQueryConvertableMock(AnyType::class, "a");
+        $variable = $this->getQueryConvertibleMock(AnyType::class, "a");
 
         $this->expectException(TypeError::class);
 

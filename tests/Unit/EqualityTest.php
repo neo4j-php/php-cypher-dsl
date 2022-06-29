@@ -36,7 +36,7 @@ class EqualityTest extends TestCase
 
     public function testToQuery(): void
     {
-        $equality = new Equality($this->getQueryConvertableMock(PropertyType::class, "10"), $this->getQueryConvertableMock(PropertyType::class, "15"));
+        $equality = new Equality($this->getQueryConvertibleMock(PropertyType::class, "10"), $this->getQueryConvertibleMock(PropertyType::class, "15"));
 
         $this->assertSame("(10 = 15)", $equality->toQuery());
 
@@ -47,7 +47,7 @@ class EqualityTest extends TestCase
 
     public function testToQueryNoParentheses(): void
     {
-        $equality = new Equality($this->getQueryConvertableMock(PropertyType::class, "10"), $this->getQueryConvertableMock(PropertyType::class, "15"), false);
+        $equality = new Equality($this->getQueryConvertibleMock(PropertyType::class, "10"), $this->getQueryConvertibleMock(PropertyType::class, "15"), false);
 
         $this->assertSame("10 = 15", $equality->toQuery());
 
@@ -60,7 +60,7 @@ class EqualityTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $equality = new Equality($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
+        $equality = new Equality($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
 
         $equality->toQuery();
     }

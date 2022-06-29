@@ -27,7 +27,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 /**
  * This class represents the application of a binary operator, such as "+", "/" and "*".
  */
-abstract class BinaryOperator implements QueryConvertable
+abstract class BinaryOperator implements QueryConvertible
 {
     use AliasableTrait;
 

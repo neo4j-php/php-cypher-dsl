@@ -36,21 +36,21 @@ class StartsWithTest extends TestCase
 
     public function testToQuery(): void
     {
-        $startsWith = new StartsWith($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
+        $startsWith = new StartsWith($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
 
         $this->assertSame("(a STARTS WITH b)", $startsWith->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $startsWith = new StartsWith($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"), false);
+        $startsWith = new StartsWith($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"), false);
 
         $this->assertSame("a STARTS WITH b", $startsWith->toQuery());
     }
 
     public function testCannotBeNested(): void
     {
-        $startsWith = new StartsWith($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
+        $startsWith = new StartsWith($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
 
         $this->expectException(TypeError::class);
 
@@ -63,7 +63,7 @@ class StartsWithTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $startsWith = new StartsWith($this->getQueryConvertableMock(AnyType::class, "a"), $this->getQueryConvertableMock(AnyType::class, "b"));
+        $startsWith = new StartsWith($this->getQueryConvertibleMock(AnyType::class, "a"), $this->getQueryConvertibleMock(AnyType::class, "b"));
 
         $startsWith->toQuery();
     }

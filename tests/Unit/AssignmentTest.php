@@ -37,7 +37,7 @@ class AssignmentTest extends TestCase
 
     public function testToQuery()
     {
-        $assignment = new Assignment($this->getQueryConvertableMock(Property::class, "foo.bar"), $this->getQueryConvertableMock(AnyType::class, "true"));
+        $assignment = new Assignment($this->getQueryConvertibleMock(Property::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
 
         $this->assertSame("foo.bar = true", $assignment->toQuery());
 
@@ -50,21 +50,21 @@ class AssignmentTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $assignment = new Assignment($this->getQueryConvertableMock(AnyType::class, "foo.bar"), $this->getQueryConvertableMock(AnyType::class, "true"));
+        $assignment = new Assignment($this->getQueryConvertibleMock(AnyType::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
 
         $assignment->toQuery();
     }
 
     public function testLeftAcceptsProperty()
     {
-        $assignment = new Assignment($this->getQueryConvertableMock(Property::class, "foo.bar"), $this->getQueryConvertableMock(AnyType::class, "true"));
+        $assignment = new Assignment($this->getQueryConvertibleMock(Property::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
 
         $this->assertSame("foo.bar = true", $assignment->toQuery());
     }
 
     public function testLeftAcceptsVariable()
     {
-        $assignment = new Assignment($this->getQueryConvertableMock(Variable::class, "foo.bar"), $this->getQueryConvertableMock(AnyType::class, "true"));
+        $assignment = new Assignment($this->getQueryConvertibleMock(Variable::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
 
         $this->assertSame("foo.bar = true", $assignment->toQuery());
     }

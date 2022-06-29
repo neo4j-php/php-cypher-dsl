@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Types;
 
-use WikibaseSolutions\CypherDSL\QueryConvertable;
+use WikibaseSolutions\CypherDSL\QueryConvertible;
 
 /**
  * Represents any type in Cypher.
@@ -29,6 +29,6 @@ use WikibaseSolutions\CypherDSL\QueryConvertable;
  * @note This interface should not be implemented by any class directly.
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/
  */
-interface AnyType extends QueryConvertable
+interface AnyType extends QueryConvertible
 {
 }

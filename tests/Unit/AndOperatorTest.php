@@ -36,7 +36,7 @@ class AndOperatorTest extends TestCase
 
     public function testToQuery(): void
     {
-        $and = new AndOperator($this->getQueryConvertableMock(BooleanType::class, "true"), $this->getQueryConvertableMock(BooleanType::class, "false"));
+        $and = new AndOperator($this->getQueryConvertibleMock(BooleanType::class, "true"), $this->getQueryConvertibleMock(BooleanType::class, "false"));
 
         $this->assertSame("(true AND false)", $and->toQuery());
 
@@ -47,7 +47,7 @@ class AndOperatorTest extends TestCase
 
     public function testToQueryNoParentheses(): void
     {
-        $and = new AndOperator($this->getQueryConvertableMock(BooleanType::class, "true"), $this->getQueryConvertableMock(BooleanType::class, "false"), false);
+        $and = new AndOperator($this->getQueryConvertibleMock(BooleanType::class, "true"), $this->getQueryConvertibleMock(BooleanType::class, "false"), false);
 
         $this->assertSame("true AND false", $and->toQuery());
 
@@ -60,7 +60,7 @@ class AndOperatorTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $and = new AndOperator($this->getQueryConvertableMock(AnyType::class, "true"), $this->getQueryConvertableMock(AnyType::class, "false"));
+        $and = new AndOperator($this->getQueryConvertibleMock(AnyType::class, "true"), $this->getQueryConvertibleMock(AnyType::class, "false"));
 
         $and->toQuery();
     }

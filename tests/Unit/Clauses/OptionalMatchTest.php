@@ -47,7 +47,7 @@ class OptionalMatchTest extends TestCase
     public function testSinglePattern(): void
     {
         $match = new OptionalMatchClause();
-        $pattern = $this->getQueryConvertableMock(NodeType::class, "(a)");
+        $pattern = $this->getQueryConvertibleMock(NodeType::class, "(a)");
         $match->addPattern($pattern);
 
         $this->assertSame("OPTIONAL MATCH (a)", $match->toQuery());
@@ -57,8 +57,8 @@ class OptionalMatchTest extends TestCase
     public function testMultiplePatterns(): void
     {
         $match = new OptionalMatchClause();
-        $patternA = $this->getQueryConvertableMock(NodeType::class, "(a)");
-        $patternB = $this->getQueryConvertableMock(PathType::class, "(b)-->(c)");
+        $patternA = $this->getQueryConvertibleMock(NodeType::class, "(a)");
+        $patternB = $this->getQueryConvertibleMock(PathType::class, "(b)-->(c)");
 
         $match->addPattern($patternA);
         $match->addPattern($patternB);
@@ -73,7 +73,7 @@ class OptionalMatchTest extends TestCase
     public function testAcceptsNodeType(): void
     {
         $match = new OptionalMatchClause();
-        $match->addPattern($this->getQueryConvertableMock(NodeType::class, "(a)"));
+        $match->addPattern($this->getQueryConvertibleMock(NodeType::class, "(a)"));
 
         $match->toQuery();
     }
@@ -84,7 +84,7 @@ class OptionalMatchTest extends TestCase
     public function testAcceptsPathType(): void
     {
         $match = new OptionalMatchClause();
-        $match->addPattern($this->getQueryConvertableMock(PathType::class, "(a)"));
+        $match->addPattern($this->getQueryConvertibleMock(PathType::class, "(a)"));
 
         $match->toQuery();
     }
@@ -95,7 +95,7 @@ class OptionalMatchTest extends TestCase
 
         $this->expectException(TypeError::class);
 
-        $match->addPattern($this->getQueryConvertableMock(AnyType::class, "(a)"));
+        $match->addPattern($this->getQueryConvertibleMock(AnyType::class, "(a)"));
 
         $match->toQuery();
     }

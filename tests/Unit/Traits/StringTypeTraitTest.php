@@ -58,7 +58,7 @@ class StringTypeTraitTest extends TestCase
                 return '10';
             }
         };
-        $this->b = $this->getQueryConvertableMock(StringType::class, "15");
+        $this->b = $this->getQueryConvertibleMock(StringType::class, "15");
     }
 
     public function testContains(): void

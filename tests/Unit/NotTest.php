@@ -36,7 +36,7 @@ class NotTest extends TestCase
 
     public function testToQuery()
     {
-        $not = new Not($this->getQueryConvertableMock(BooleanType::class, "true"));
+        $not = new Not($this->getQueryConvertibleMock(BooleanType::class, "true"));
 
         $this->assertSame("(NOT true)", $not->toQuery());
 
@@ -49,7 +49,7 @@ class NotTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $and = new Not($this->getQueryConvertableMock(AnyType::class, "true"));
+        $and = new Not($this->getQueryConvertibleMock(AnyType::class, "true"));
 
         $and->toQuery();
     }

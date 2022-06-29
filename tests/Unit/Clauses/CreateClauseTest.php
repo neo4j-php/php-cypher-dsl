@@ -47,7 +47,7 @@ class CreateClauseTest extends TestCase
     public function testSinglePattern(): void
     {
         $createClause = new CreateClause();
-        $pattern = $this->getQueryConvertableMock(NodeType::class, "(a)");
+        $pattern = $this->getQueryConvertibleMock(NodeType::class, "(a)");
 
         $createClause->addPattern($pattern);
 
@@ -59,8 +59,8 @@ class CreateClauseTest extends TestCase
     {
         $createClause = new CreateClause();
 
-        $patternA = $this->getQueryConvertableMock(NodeType::class, "(a)");
-        $patternB = $this->getQueryConvertableMock(PathType::class, "(b)-->(c)");
+        $patternA = $this->getQueryConvertibleMock(NodeType::class, "(a)");
+        $patternB = $this->getQueryConvertibleMock(PathType::class, "(b)-->(c)");
 
         $createClause->addPattern($patternA);
         $createClause->addPattern($patternB);
@@ -73,7 +73,7 @@ class CreateClauseTest extends TestCase
     {
         $createClause = new CreateClause();
 
-        $patternA = $this->getQueryConvertableMock(NodeType::class, "(a)");
+        $patternA = $this->getQueryConvertibleMock(NodeType::class, "(a)");
 
         $createClause->addPattern($patternA);
         $createClause->toQuery();
@@ -85,7 +85,7 @@ class CreateClauseTest extends TestCase
     {
         $createClause = new CreateClause();
 
-        $patternA = $this->getQueryConvertableMock(PathType::class, "(a)");
+        $patternA = $this->getQueryConvertibleMock(PathType::class, "(a)");
 
         $createClause->addPattern($patternA);
         $createClause->toQuery();
@@ -96,7 +96,7 @@ class CreateClauseTest extends TestCase
     {
         $createClause = new CreateClause();
 
-        $patternA = $this->getQueryConvertableMock(AnyType::class, "(a)");
+        $patternA = $this->getQueryConvertibleMock(AnyType::class, "(a)");
 
         $this->expectException(TypeError::class);
 

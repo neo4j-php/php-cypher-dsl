@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Functions;
 
-use WikibaseSolutions\CypherDSL\QueryConvertable;
+use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Traits\AliasableTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
@@ -34,7 +34,7 @@ use WikibaseSolutions\CypherDSL\Variable;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/
  */
-abstract class FunctionCall implements QueryConvertable
+abstract class FunctionCall implements QueryConvertible
 {
     use AliasableTrait;
 
@@ -243,7 +243,7 @@ abstract class FunctionCall implements QueryConvertable
     {
         $signature = $this->getSignature();
         $parameters = array_map(
-            fn (QueryConvertable $convertable): string => $convertable->toQuery(),
+            fn (QueryConvertible $convertible): string => $convertible->toQuery(),
             $this->getParameters()
         );
 
@@ -261,7 +261,7 @@ abstract class FunctionCall implements QueryConvertable
     abstract protected function getSignature(): string;
 
     /**
-     * The parameters for this function as QueryConvertable objects. These parameters are inserted, in order, into
+     * The parameters for this function as QueryConvertible objects. These parameters are inserted, in order, into
      * the signature string retrieved from ::getSignature().
      *
      * @return AnyType[]

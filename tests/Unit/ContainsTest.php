@@ -36,21 +36,21 @@ class ContainsTest extends TestCase
 
     public function testToQuery(): void
     {
-        $contains = new Contains($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
+        $contains = new Contains($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
 
         $this->assertSame("(a CONTAINS b)", $contains->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $contains = new Contains($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"), false);
+        $contains = new Contains($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"), false);
 
         $this->assertSame("a CONTAINS b", $contains->toQuery());
     }
 
     public function testCannotBeNested(): void
     {
-        $contains = new Contains($this->getQueryConvertableMock(StringType::class, "a"), $this->getQueryConvertableMock(StringType::class, "b"));
+        $contains = new Contains($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
 
         $this->expectException(TypeError::class);
 
@@ -63,7 +63,7 @@ class ContainsTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $contains = new Contains($this->getQueryConvertableMock(AnyType::class, "a"), $this->getQueryConvertableMock(AnyType::class, "b"));
+        $contains = new Contains($this->getQueryConvertibleMock(AnyType::class, "a"), $this->getQueryConvertibleMock(AnyType::class, "b"));
 
         $contains->toQuery();
     }

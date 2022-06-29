@@ -36,9 +36,9 @@ class RawFunctionTest extends TestCase
 
     public function testToQuery()
     {
-        $a = $this->getQueryConvertableMock(AnyType::class, "a");
-        $b = $this->getQueryConvertableMock(AnyType::class, "b");
-        $c = $this->getQueryConvertableMock(AnyType::class, "c");
+        $a = $this->getQueryConvertibleMock(AnyType::class, "a");
+        $b = $this->getQueryConvertibleMock(AnyType::class, "b");
+        $c = $this->getQueryConvertibleMock(AnyType::class, "c");
 
         $raw = new RawFunction("foobar", [$a, $b, $c]);
 

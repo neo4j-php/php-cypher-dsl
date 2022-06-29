@@ -61,7 +61,7 @@ class CallProcedureClauseTest extends TestCase
         $callProcedureClause = new CallProcedureClause();
         $callProcedureClause->setProcedure("apoc.json");
 
-        $param = $this->getQueryConvertableMock(AnyType::class, "'text'");
+        $param = $this->getQueryConvertibleMock(AnyType::class, "'text'");
         $callProcedureClause->addArgument($param);
 
         $this->assertSame("CALL apoc.json('text')", $callProcedureClause->toQuery());
@@ -75,7 +75,7 @@ class CallProcedureClauseTest extends TestCase
         $callProcedureClause = new CallProcedureClause();
         $callProcedureClause->setProcedure("apoc.json");
 
-        $expression = $this->getQueryConvertableMock(AnyType::class, "'text'");
+        $expression = $this->getQueryConvertibleMock(AnyType::class, "'text'");
 
         $callProcedureClause->addArgument($expression);
         $callProcedureClause->addArgument($expression);
@@ -92,7 +92,7 @@ class CallProcedureClauseTest extends TestCase
         $callProcedureClause = new CallProcedureClause();
         $callProcedureClause->setProcedure("apoc.json");
 
-        $expression = $this->getQueryConvertableMock(AnyType::class, "'text'");
+        $expression = $this->getQueryConvertibleMock(AnyType::class, "'text'");
 
         $callProcedureClause->addArgument($expression);
         $callProcedureClause->addArgument($expression);
@@ -113,9 +113,9 @@ class CallProcedureClauseTest extends TestCase
 
         $callProcedureClause->setProcedure("apoc.json");
 
-        $a = $this->getQueryConvertableMock(Variable::class, "a");
-        $b = $this->getQueryConvertableMock(Variable::class, "b");
-        $c = $this->getQueryConvertableMock(Variable::class, "c");
+        $a = $this->getQueryConvertibleMock(Variable::class, "a");
+        $b = $this->getQueryConvertibleMock(Variable::class, "b");
+        $c = $this->getQueryConvertibleMock(Variable::class, "c");
 
         // This should overwrite the previous calls to addArgument
         $callProcedureClause->yields([$a, $b, $c]);
@@ -130,7 +130,7 @@ class CallProcedureClauseTest extends TestCase
     {
         $callProcedureClause = new CallProcedureClause();
 
-        $a = $this->getQueryConvertableMock(AnyType::class, "a");
+        $a = $this->getQueryConvertibleMock(AnyType::class, "a");
 
         $this->expectException(TypeError::class);
 
