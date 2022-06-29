@@ -762,7 +762,7 @@ class QueryTest extends TestCase
             ->returning([$tom, $tomHanksMovies])
             ->build();
 
-        $this->assertSame("MATCH (tom:Person {name: 'Tom Hanks'})-[:`ACTED_IN`]->(tomHanksMovies) RETURN tom, tomHanksMovies", $statement);
+        $this->assertSame("MATCH (tom:Person {name: 'Tom Hanks'})-[:ACTED_IN]->(tomHanksMovies) RETURN tom, tomHanksMovies", $statement);
 
         $cloudAtlas = Query::variable("cloudAtlas");
         $cloudAtlasNode = Query::node()
@@ -795,7 +795,7 @@ class QueryTest extends TestCase
             ->returning($coActors->property("name"))
             ->build();
 
-        $this->assertSame("MATCH (tom:Person {name: 'Tom Hanks'})-[:`ACTED_IN`]->(m)<-[:`ACTED_IN`]-(coActors) RETURN coActors.name", $statement);
+        $this->assertSame("MATCH (tom:Person {name: 'Tom Hanks'})-[:ACTED_IN]->(m)<-[:ACTED_IN]-(coActors) RETURN coActors.name", $statement);
 
         /*
          * @see https://gitlab.wikibase.nl/community/libraries/php-cypher-dsl/-/wikis/Usage/Clauses/CALL-procedure-clause
