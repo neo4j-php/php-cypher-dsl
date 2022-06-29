@@ -3,10 +3,10 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\HasProperties;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\HasPropertiesTrait;
-use WikibaseSolutions\CypherDSL\Types\PartialTypes\HasPropertiesPartialType;
 
 class HasPropertiesTraitTest extends TestCase
 {
@@ -14,7 +14,7 @@ class HasPropertiesTraitTest extends TestCase
 
     public function setUp(): void
     {
-        $this->propertyTrait = new class () implements HasPropertiesPartialType {
+        $this->propertyTrait = new class () implements HasProperties {
             use HasPropertiesTrait;
 
             public function toQuery(): string
@@ -58,12 +58,5 @@ class HasPropertiesTraitTest extends TestCase
             new PropertyMap(['x' => Query::literal('y'), 'z' => Query::literal('z')]),
             $this->propertyTrait->getProperties()
         );
-    }
-
-    public function testInitialise(): void
-    {
-        $this->propertyTrait->initialiseProperties();
-
-        self::assertEquals(new PropertyMap(), $this->propertyTrait->getProperties());
     }
 }

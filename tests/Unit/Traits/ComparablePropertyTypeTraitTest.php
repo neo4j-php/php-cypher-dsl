@@ -32,9 +32,9 @@ use WikibaseSolutions\CypherDSL\Traits\TypeTraits\ComparablePropertyTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparablePropertyType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait
+ * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\ComparablePropertyTypeTrait
  */
-class ComparableTypeTraitTest extends TestCase
+class ComparablePropertyTypeTraitTest extends TestCase
 {
     use TestHelper;
 

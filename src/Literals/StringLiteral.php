@@ -90,7 +90,7 @@ class StringLiteral implements StringType
      */
     public function toQuery(): string
     {
-        // Encode backslashes, tabs, newlines, carriage returns and form feeds
+		// Encode backslashes, tabs, newlines, carriage returns and form feeds (in that order)
         $value = str_replace(["\\", "\t", "\n", "\r", "\f"], ["\\\\", "\\t", "\\n", "\\r", "\\f"], $this->value);
 
         if ($this->useDoubleQuotes) {

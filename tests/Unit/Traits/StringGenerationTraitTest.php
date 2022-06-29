@@ -3,7 +3,7 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\StringGenerationTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\StringGenerationTrait;
 
 class StringGenerationTraitTest extends TestCase
 {

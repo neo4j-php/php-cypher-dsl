@@ -36,7 +36,7 @@ interface HasProperties
 	 *
 	 * @return static
 	 */
-	public function withProperty(string $key, $value): self;
+	public function withProperty(string $key, $value);
 
 	/**
 	 * Add the given properties to the properties of this object.
@@ -45,7 +45,7 @@ interface HasProperties
 	 *
 	 * @return static
 	 */
-	public function withProperties($properties): self;
+	public function withProperties($properties);
 
 	/**
 	 * Returns the properties of this object, or NULL if it has no properties.

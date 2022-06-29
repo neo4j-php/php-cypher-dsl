@@ -41,7 +41,7 @@ trait HasPropertiesTrait
     /**
      * @inheritDoc
      */
-    public function withProperty(string $key, $value): self
+    public function withProperty(string $key, $value)
     {
         if ($this->properties === null) {
             $this->properties = new PropertyMap();
@@ -55,7 +55,7 @@ trait HasPropertiesTrait
     /**
      * @inheritDoc
      */
-    public function withProperties($properties): self
+    public function withProperties($properties)
     {
         self::assertClass('properties', [PropertyMap::class, 'array'], $properties);
 

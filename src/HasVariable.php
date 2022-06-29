@@ -33,7 +33,7 @@ interface HasVariable
 	 *
 	 * @return static
 	 */
-	public function named($nameOrVariable): self;
+	public function named($nameOrVariable);
 
 	/**
 	 * Returns the name of this object, or generates a new name if this object does not yet have a name.

@@ -24,10 +24,10 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 use InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\EscapeTrait
+ * @covers \WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait
  */
 class EscapeTraitTest extends TestCase
 {

@@ -41,7 +41,7 @@ trait HasVariableTrait
     /**
      * @inheritDoc
      */
-    public function named($nameOrVariable): self
+    public function named($nameOrVariable)
     {
         self::assertClass('variable', ['string', Variable::class], $nameOrVariable);
 

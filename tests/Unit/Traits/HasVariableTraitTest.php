@@ -3,7 +3,8 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\HelperTraits\HasVariableTrait;
+use WikibaseSolutions\CypherDSL\HasVariable;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\HasVariableTrait;
 
 class HasVariableTraitTest extends TestCase
 {
@@ -11,7 +12,7 @@ class HasVariableTraitTest extends TestCase
 
     public function setUp(): void
     {
-        $this->hasVariable = new class () {
+        $this->hasVariable = new class () implements HasVariable {
             use HasVariableTrait;
         };
     }
@@ -27,14 +28,6 @@ class HasVariableTraitTest extends TestCase
     public function testNamed(): void
     {
         $this->hasVariable->named('x');
-
-        self::assertSame($this->hasVariable->getVariable(), $this->hasVariable->getVariable());
-        self::assertEquals('x', $this->hasVariable->getVariable()->getName());
-    }
-
-    public function testSetName(): void
-    {
-        $this->hasVariable->setName('x');
 
         self::assertSame($this->hasVariable->getVariable(), $this->hasVariable->getVariable());
         self::assertEquals('x', $this->hasVariable->getVariable()->getName());

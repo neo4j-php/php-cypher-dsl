@@ -31,5 +31,4 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
  */
 trait RelationshipTypeTrait
 {
-	use HasPropertiesTrait;
 }
