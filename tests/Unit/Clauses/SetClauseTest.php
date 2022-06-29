@@ -47,7 +47,7 @@ class SetClauseTest extends TestCase
     public function testSinglePattern(): void
     {
         $set = new SetClause();
-        $expression = $this->getQueryConvertableMock(Assignment::class, "(a)");
+        $expression = $this->getQueryConvertibleMock(Assignment::class, "(a)");
 
         $set->addAssignment($expression);
 
@@ -58,8 +58,8 @@ class SetClauseTest extends TestCase
     public function testMultiplePattern(): void
     {
         $set = new SetClause();
-        $expressionA = $this->getQueryConvertableMock(Assignment::class, "(a)");
-        $expressionB = $this->getQueryConvertableMock(Assignment::class, "(b)");
+        $expressionA = $this->getQueryConvertibleMock(Assignment::class, "(a)");
+        $expressionB = $this->getQueryConvertibleMock(Assignment::class, "(b)");
 
         $set->addAssignment($expressionA);
         $set->addAssignment($expressionB);
@@ -74,7 +74,7 @@ class SetClauseTest extends TestCase
     public function testAcceptsAssignment(): void
     {
         $set = new SetClause();
-        $expression = $this->getQueryConvertableMock(Assignment::class, "(a)");
+        $expression = $this->getQueryConvertibleMock(Assignment::class, "(a)");
 
         $set->addAssignment($expression);
 
@@ -87,7 +87,7 @@ class SetClauseTest extends TestCase
     public function testAcceptsLabel(): void
     {
         $set = new SetClause();
-        $expression = $this->getQueryConvertableMock(Label::class, "(a)");
+        $expression = $this->getQueryConvertibleMock(Label::class, "(a)");
 
         $set->addAssignment($expression);
 
@@ -97,7 +97,7 @@ class SetClauseTest extends TestCase
     public function testDoesNotAcceptAnyType(): void
     {
         $set = new SetClause();
-        $expression = $this->getQueryConvertableMock(AnyType::class, "(a)");
+        $expression = $this->getQueryConvertibleMock(AnyType::class, "(a)");
 
         $this->expectException(TypeError::class);
 

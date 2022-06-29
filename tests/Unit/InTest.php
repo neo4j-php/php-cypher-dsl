@@ -39,33 +39,33 @@ class InTest extends TestCase
 
     public function testToQuery(): void
     {
-        $inequality = new In($this->getQueryConvertableMock(PropertyType::class, "a"), $this->getQueryConvertableMock(ListType::class, "b"));
+        $inequality = new In($this->getQueryConvertibleMock(PropertyType::class, "a"), $this->getQueryConvertibleMock(ListType::class, "b"));
 
         $this->assertSame("(a IN b)", $inequality->toQuery());
 
-        $inequality = new In($inequality, $this->getQueryConvertableMock(ListType::class, "c"));
+        $inequality = new In($inequality, $this->getQueryConvertibleMock(ListType::class, "c"));
 
         $this->assertSame("((a IN b) IN c)", $inequality->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $inequality = new In($this->getQueryConvertableMock(PropertyType::class, "a"), $this->getQueryConvertableMock(ListType::class, "b"), false);
+        $inequality = new In($this->getQueryConvertibleMock(PropertyType::class, "a"), $this->getQueryConvertibleMock(ListType::class, "b"), false);
 
         $this->assertSame("a IN b", $inequality->toQuery());
 
-        $inequality = new In($inequality, $this->getQueryConvertableMock(ListType::class, "c"));
+        $inequality = new In($inequality, $this->getQueryConvertibleMock(ListType::class, "c"));
 
         $this->assertSame("(a IN b IN c)", $inequality->toQuery());
     }
 
     public function testInExpressionList(): void
     {
-        $inequality = new In($this->getQueryConvertableMock(PropertyType::class, "a"), new ExpressionList([new StringLiteral('a'), new StringLiteral('b')]));
+        $inequality = new In($this->getQueryConvertibleMock(PropertyType::class, "a"), new ExpressionList([new StringLiteral('a'), new StringLiteral('b')]));
 
         $this->assertSame("(a IN ['a', 'b'])", $inequality->toQuery());
 
-        $inequality = new In($inequality, $this->getQueryConvertableMock(ListType::class, "c"));
+        $inequality = new In($inequality, $this->getQueryConvertibleMock(ListType::class, "c"));
 
         $this->assertSame("((a IN ['a', 'b']) IN c)", $inequality->toQuery());
     }
@@ -74,7 +74,7 @@ class InTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $inequality = new In($this->getQueryConvertableMock(AnyType::class, "a"), $this->getQueryConvertableMock(AnyType::class, "b"));
+        $inequality = new In($this->getQueryConvertibleMock(AnyType::class, "a"), $this->getQueryConvertibleMock(AnyType::class, "b"));
 
         $inequality->toQuery();
     }

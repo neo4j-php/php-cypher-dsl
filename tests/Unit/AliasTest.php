@@ -20,8 +20,8 @@ class AliasTest extends TestCase
         parent::setUp();
 
         $this->alias = new Alias(
-            $this->getQueryConvertableMock(Variable::class, "a"),
-            $this->getQueryConvertableMock(Variable::class, "b")
+            $this->getQueryConvertibleMock(Variable::class, "a"),
+            $this->getQueryConvertibleMock(Variable::class, "b")
         );
     }
 
@@ -32,11 +32,11 @@ class AliasTest extends TestCase
 
     public function testGetOriginal(): void
     {
-        $this->assertEquals($this->getQueryConvertableMock(Variable::class, "a"), $this->alias->getOriginal());
+        $this->assertEquals($this->getQueryConvertibleMock(Variable::class, "a"), $this->alias->getOriginal());
     }
 
     public function testGetVariable(): void
     {
-        $this->assertEquals($this->getQueryConvertableMock(Variable::class, "b"), $this->alias->getVariable());
+        $this->assertEquals($this->getQueryConvertibleMock(Variable::class, "b"), $this->alias->getVariable());
     }
 }

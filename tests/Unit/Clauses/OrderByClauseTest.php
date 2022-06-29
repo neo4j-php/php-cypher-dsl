@@ -47,7 +47,7 @@ class OrderByClauseTest extends TestCase
     public function testSingleProperty(): void
     {
         $orderBy = new OrderByClause();
-        $property = $this->getQueryConvertableMock(Property::class, "a.a");
+        $property = $this->getQueryConvertibleMock(Property::class, "a.a");
         $orderBy->addProperty($property);
 
         $this->assertSame("ORDER BY a.a", $orderBy->toQuery());
@@ -58,8 +58,8 @@ class OrderByClauseTest extends TestCase
     public function testMultipleProperties(): void
     {
         $orderBy = new OrderByClause();
-        $propertyA = $this->getQueryConvertableMock(Property::class, "a.a");
-        $propertyB = $this->getQueryConvertableMock(Property::class, "a.b");
+        $propertyA = $this->getQueryConvertibleMock(Property::class, "a.a");
+        $propertyB = $this->getQueryConvertibleMock(Property::class, "a.b");
 
         $orderBy->addProperty($propertyA);
         $orderBy->addProperty($propertyB);
@@ -72,7 +72,7 @@ class OrderByClauseTest extends TestCase
     public function testSinglePropertyDesc(): void
     {
         $orderBy = new OrderByClause();
-        $property = $this->getQueryConvertableMock(Property::class, "a.a");
+        $property = $this->getQueryConvertibleMock(Property::class, "a.a");
         $orderBy->addProperty($property);
         $orderBy->setDescending();
 
@@ -84,8 +84,8 @@ class OrderByClauseTest extends TestCase
     public function testMultiplePropertiesDesc(): void
     {
         $orderBy = new OrderByClause();
-        $propertyA = $this->getQueryConvertableMock(Property::class, "a.a");
-        $propertyB = $this->getQueryConvertableMock(Property::class, "a.b");
+        $propertyA = $this->getQueryConvertibleMock(Property::class, "a.a");
+        $propertyB = $this->getQueryConvertibleMock(Property::class, "a.b");
 
         $orderBy->addProperty($propertyA);
         $orderBy->addProperty($propertyB);
@@ -102,7 +102,7 @@ class OrderByClauseTest extends TestCase
     public function testAcceptsProperty(): void
     {
         $orderBy = new OrderByClause();
-        $orderBy->addProperty($this->getQueryConvertableMock(Property::class, "a.a"));
+        $orderBy->addProperty($this->getQueryConvertibleMock(Property::class, "a.a"));
 
         $orderBy->toQuery();
     }
@@ -113,7 +113,7 @@ class OrderByClauseTest extends TestCase
 
         $this->expectException(TypeError::class);
 
-        $orderBy->addProperty($this->getQueryConvertableMock(AnyType::class, "a.a"));
+        $orderBy->addProperty($this->getQueryConvertibleMock(AnyType::class, "a.a"));
 
         $orderBy->toQuery();
     }

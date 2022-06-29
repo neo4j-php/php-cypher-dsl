@@ -36,7 +36,7 @@ class DivisionTest extends TestCase
 
     public function testToQuery(): void
     {
-        $division = new Division($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
+        $division = new Division($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
 
         $this->assertSame("(10 / 15)", $division->toQuery());
 
@@ -47,7 +47,7 @@ class DivisionTest extends TestCase
 
     public function testToQueryNoParentheses(): void
     {
-        $division = new Division($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"), false);
+        $division = new Division($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"), false);
 
         $this->assertSame("10 / 15", $division->toQuery());
 
@@ -60,7 +60,7 @@ class DivisionTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $division = new Division($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
+        $division = new Division($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
 
         $division->toQuery();
     }

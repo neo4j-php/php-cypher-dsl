@@ -65,8 +65,8 @@ class PropertyTypeTraitTest extends TestCase
                 return '10';
             }
         };
-        $this->b = $this->getQueryConvertableMock(PropertyType::class, "15");
-        $this->list = $this->getQueryConvertableMock(ListType::class, "['foobar']");
+        $this->b = $this->getQueryConvertibleMock(PropertyType::class, "15");
+        $this->list = $this->getQueryConvertibleMock(ListType::class, "['foobar']");
     }
 
     public function testEquals(): void

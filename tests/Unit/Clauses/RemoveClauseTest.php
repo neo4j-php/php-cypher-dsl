@@ -47,7 +47,7 @@ class RemoveClauseTest extends TestCase
     public function testSingleExpression(): void
     {
         $remove = new RemoveClause();
-        $expression = $this->getQueryConvertableMock(Property::class, "(a)");
+        $expression = $this->getQueryConvertibleMock(Property::class, "(a)");
 
         $remove->addExpression($expression);
 
@@ -59,8 +59,8 @@ class RemoveClauseTest extends TestCase
     {
         $remove = new RemoveClause();
 
-        $a = $this->getQueryConvertableMock(Property::class, "(a)");
-        $b = $this->getQueryConvertableMock(Property::class, "(b)");
+        $a = $this->getQueryConvertibleMock(Property::class, "(a)");
+        $b = $this->getQueryConvertibleMock(Property::class, "(b)");
 
         $remove->addExpression($a);
         $remove->addExpression($b);
@@ -75,7 +75,7 @@ class RemoveClauseTest extends TestCase
     public function testAcceptsProperty(): void
     {
         $remove = new RemoveClause();
-        $expression = $this->getQueryConvertableMock(Property::class, "(a)");
+        $expression = $this->getQueryConvertibleMock(Property::class, "(a)");
 
         $remove->addExpression($expression);
 
@@ -88,7 +88,7 @@ class RemoveClauseTest extends TestCase
     public function testAcceptsLabel(): void
     {
         $remove = new RemoveClause();
-        $expression = $this->getQueryConvertableMock(Label::class, "(a)");
+        $expression = $this->getQueryConvertibleMock(Label::class, "(a)");
 
         $remove->addExpression($expression);
 
@@ -98,7 +98,7 @@ class RemoveClauseTest extends TestCase
     public function testDoesNotAcceptAnyType(): void
     {
         $remove = new RemoveClause();
-        $expression = $this->getQueryConvertableMock(AnyType::class, "(a)");
+        $expression = $this->getQueryConvertibleMock(AnyType::class, "(a)");
 
         $this->expectException(TypeError::class);
 

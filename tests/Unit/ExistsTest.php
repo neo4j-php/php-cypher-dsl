@@ -35,11 +35,11 @@ class ExistsTest extends TestCase
 
     public function testToQuery()
     {
-        $exists = new Exists($this->getQueryConvertableMock(MatchClause::class, "MATCH (person)-[:HAS_DOG]->(dog:Dog)"));
+        $exists = new Exists($this->getQueryConvertibleMock(MatchClause::class, "MATCH (person)-[:HAS_DOG]->(dog:Dog)"));
 
         $this->assertSame("EXISTS { MATCH (person)-[:HAS_DOG]->(dog:Dog) }", $exists->toQuery());
 
-        $exists = new Exists($this->getQueryConvertableMock(MatchClause::class, "MATCH (person)-[:HAS_DOG]->(dog:Dog)"), $this->getQueryConvertableMock(WhereClause::class, "WHERE toy.name = 'Banana'"));
+        $exists = new Exists($this->getQueryConvertibleMock(MatchClause::class, "MATCH (person)-[:HAS_DOG]->(dog:Dog)"), $this->getQueryConvertibleMock(WhereClause::class, "WHERE toy.name = 'Banana'"));
 
         $this->assertSame("EXISTS { MATCH (person)-[:HAS_DOG]->(dog:Dog) WHERE toy.name = 'Banana' }", $exists->toQuery());
     }

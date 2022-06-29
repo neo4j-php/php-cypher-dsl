@@ -36,7 +36,7 @@ class MultiplicationTest extends TestCase
 
     public function testToQuery(): void
     {
-        $multiplication = new Multiplication($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
+        $multiplication = new Multiplication($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
 
         $this->assertSame("(10 * 15)", $multiplication->toQuery());
 
@@ -47,7 +47,7 @@ class MultiplicationTest extends TestCase
 
     public function testToQueryNoParentheses(): void
     {
-        $multiplication = new Multiplication($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"), false);
+        $multiplication = new Multiplication($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"), false);
 
         $this->assertSame("10 * 15", $multiplication->toQuery());
 
@@ -60,7 +60,7 @@ class MultiplicationTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $multiplication = new Multiplication($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
+        $multiplication = new Multiplication($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
 
         $multiplication->toQuery();
     }

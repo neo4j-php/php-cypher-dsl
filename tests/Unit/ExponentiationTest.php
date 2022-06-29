@@ -36,7 +36,7 @@ class ExponentiationTest extends TestCase
 
     public function testToQuery(): void
     {
-        $exponentiation = new Exponentiation($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
+        $exponentiation = new Exponentiation($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
 
         $this->assertSame("(10 ^ 15)", $exponentiation->toQuery());
 
@@ -47,7 +47,7 @@ class ExponentiationTest extends TestCase
 
     public function testToQueryNoParentheses(): void
     {
-        $exponentiation = new Exponentiation($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"), false);
+        $exponentiation = new Exponentiation($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"), false);
 
         $this->assertSame("10 ^ 15", $exponentiation->toQuery());
 
@@ -60,7 +60,7 @@ class ExponentiationTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $exponentiation = new Exponentiation($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
+        $exponentiation = new Exponentiation($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
 
         $exponentiation->toQuery();
     }

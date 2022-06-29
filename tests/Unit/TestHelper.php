@@ -26,7 +26,7 @@ use WikibaseSolutions\CypherDSL\QueryConvertible;
 
 trait TestHelper
 {
-    public function getQueryConvertableMock(string $class, string $value)
+    public function getQueryConvertibleMock(string $class, string $value)
     {
         if (!is_subclass_of($class, QueryConvertible::class)) {
             throw new InvalidArgumentException("\$class must be a subclass of " . QueryConvertible::class);

@@ -34,7 +34,7 @@ class LabelTest extends TestCase
 
     public function testSingle()
     {
-        $expression = $this->getQueryConvertableMock(Variable::class, "foo");
+        $expression = $this->getQueryConvertibleMock(Variable::class, "foo");
         $label = ["Bar"];
 
         $label = new Label($expression, $label);
@@ -44,7 +44,7 @@ class LabelTest extends TestCase
 
     public function testMultiple()
     {
-        $expression = $this->getQueryConvertableMock(Variable::class, "foo");
+        $expression = $this->getQueryConvertibleMock(Variable::class, "foo");
         $label = ["Bar", "Baz"];
 
         $label = new Label($expression, $label);
@@ -54,7 +54,7 @@ class LabelTest extends TestCase
 
     public function testLabelIsEscaped()
     {
-        $expression = $this->getQueryConvertableMock(Variable::class, "foo");
+        $expression = $this->getQueryConvertibleMock(Variable::class, "foo");
         $label = ["{}"];
 
         $label = new Label($expression, $label);

@@ -36,7 +36,7 @@ class DateTimeTest extends TestCase
 
     public function testToQuery()
     {
-        $map = $this->getQueryConvertableMock(MapType::class, "map");
+        $map = $this->getQueryConvertibleMock(MapType::class, "map");
 
         $date = new DateTime($map);
 
@@ -55,7 +55,7 @@ class DateTimeTest extends TestCase
      */
     public function testAcceptsAnyType()
     {
-        $map = $this->getQueryConvertableMock(AnyType::class, "map");
+        $map = $this->getQueryConvertibleMock(AnyType::class, "map");
 
         $date = new DateTime($map);
 

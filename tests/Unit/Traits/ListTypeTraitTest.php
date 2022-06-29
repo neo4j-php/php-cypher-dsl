@@ -47,8 +47,8 @@ class ListTypeTraitTest extends TestCase
 
     public function setUp(): void
     {
-        $this->a = $this->getQueryConvertableMock(PropertyType::class, "a");
-        $this->b = $this->getQueryConvertableMock(ListType::class, "[]");
+        $this->a = $this->getQueryConvertibleMock(PropertyType::class, "a");
+        $this->b = $this->getQueryConvertibleMock(ListType::class, "[]");
     }
 
     public function testHas()

@@ -115,18 +115,18 @@ class PropertyMapTest extends TestCase
     public function provideNumericalKeysData(): array
     {
         return [
-            [[$this->getQueryConvertableMock(AnyType::class, "'a'")], "{`0`: 'a'}"],
-            [[$this->getQueryConvertableMock(AnyType::class, "'a'"), $this->getQueryConvertableMock(AnyType::class, "'b'")], "{`0`: 'a', `1`: 'b'}"],
+            [[$this->getQueryConvertibleMock(AnyType::class, "'a'")], "{`0`: 'a'}"],
+            [[$this->getQueryConvertibleMock(AnyType::class, "'a'"), $this->getQueryConvertibleMock(AnyType::class, "'b'")], "{`0`: 'a', `1`: 'b'}"],
         ];
     }
 
     public function provideStringKeysData(): array
     {
         return [
-            [['a' => $this->getQueryConvertableMock(AnyType::class, "'a'")], "{a: 'a'}"],
-            [['a' => $this->getQueryConvertableMock(AnyType::class, "'a'"), 'b' => $this->getQueryConvertableMock(AnyType::class, "'b'")], "{a: 'a', b: 'b'}"],
-            [['a' => $this->getQueryConvertableMock(AnyType::class, "'b'")], "{a: 'b'}"],
-            [[':' => $this->getQueryConvertableMock(AnyType::class, "'a'")], "{`:`: 'a'}"],
+            [['a' => $this->getQueryConvertibleMock(AnyType::class, "'a'")], "{a: 'a'}"],
+            [['a' => $this->getQueryConvertibleMock(AnyType::class, "'a'"), 'b' => $this->getQueryConvertibleMock(AnyType::class, "'b'")], "{a: 'a', b: 'b'}"],
+            [['a' => $this->getQueryConvertibleMock(AnyType::class, "'b'")], "{a: 'b'}"],
+            [[':' => $this->getQueryConvertibleMock(AnyType::class, "'a'")], "{`:`: 'a'}"],
         ];
     }
 
@@ -134,8 +134,8 @@ class PropertyMapTest extends TestCase
     {
         return [
             [['a' => new PropertyMap([])], "{a: {}}"],
-            [['a' => new PropertyMap(['a' => new PropertyMap(['a' => $this->getQueryConvertableMock(AnyType::class, "'b'")])])], "{a: {a: {a: 'b'}}}"],
-            [['a' => new PropertyMap(['b' => $this->getQueryConvertableMock(AnyType::class, "'c'")]), 'b' => $this->getQueryConvertableMock(AnyType::class, "'d'")], "{a: {b: 'c'}, b: 'd'}"],
+            [['a' => new PropertyMap(['a' => new PropertyMap(['a' => $this->getQueryConvertibleMock(AnyType::class, "'b'")])])], "{a: {a: {a: 'b'}}}"],
+            [['a' => new PropertyMap(['b' => $this->getQueryConvertibleMock(AnyType::class, "'c'")]), 'b' => $this->getQueryConvertibleMock(AnyType::class, "'d'")], "{a: {b: 'c'}, b: 'd'}"],
         ];
     }
 }

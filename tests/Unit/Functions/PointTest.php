@@ -37,7 +37,7 @@ class PointTest extends TestCase
 
     public function testToQuery()
     {
-        $map = $this->getQueryConvertableMock(MapType::class, "{latitude: toInteger('1'), longitude: toInteger('1')}");
+        $map = $this->getQueryConvertibleMock(MapType::class, "{latitude: toInteger('1'), longitude: toInteger('1')}");
 
         $point = new Point($map);
 
@@ -46,7 +46,7 @@ class PointTest extends TestCase
 
     public function testDoesNotAcceptAnyTypeAsVariable()
     {
-        $map = $this->getQueryConvertableMock(AnyType::class, "map");
+        $map = $this->getQueryConvertibleMock(AnyType::class, "map");
 
         $this->expectException(TypeError::class);
 

@@ -58,7 +58,7 @@ class ComparableTypeTraitTest extends TestCase
                 return '10';
             }
         };
-        $this->b = $this->getQueryConvertableMock(ComparablePropertyType::class, "date({year: 2020, month: 12, day: 5})");
+        $this->b = $this->getQueryConvertibleMock(ComparablePropertyType::class, "date({year: 2020, month: 12, day: 5})");
     }
 
     public function testGt(): void

@@ -36,21 +36,21 @@ class GreaterThanTest extends TestCase
 
     public function testToQuery(): void
     {
-        $greaterThan = new GreaterThan($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
+        $greaterThan = new GreaterThan($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
 
         $this->assertSame("(10 > 15)", $greaterThan->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $greaterThan = new GreaterThan($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"), false);
+        $greaterThan = new GreaterThan($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"), false);
 
         $this->assertSame("10 > 15", $greaterThan->toQuery());
     }
 
     public function testCannotBeNested(): void
     {
-        $greaterThan = new GreaterThan($this->getQueryConvertableMock(NumeralType::class, "10"), $this->getQueryConvertableMock(NumeralType::class, "15"));
+        $greaterThan = new GreaterThan($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
 
         $this->expectException(TypeError::class);
 
@@ -63,7 +63,7 @@ class GreaterThanTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $greaterThan = new GreaterThan($this->getQueryConvertableMock(AnyType::class, "10"), $this->getQueryConvertableMock(AnyType::class, "15"));
+        $greaterThan = new GreaterThan($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
 
         $greaterThan->toQuery();
     }

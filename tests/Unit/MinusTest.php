@@ -36,7 +36,7 @@ class MinusTest extends TestCase
 
     public function testToQuery()
     {
-        $minus = new Minus($this->getQueryConvertableMock(NumeralType::class, "10"));
+        $minus = new Minus($this->getQueryConvertibleMock(NumeralType::class, "10"));
 
         $this->assertSame("-10", $minus->toQuery());
 
@@ -49,7 +49,7 @@ class MinusTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $minus = new Minus($this->getQueryConvertableMock(AnyType::class, "10"));
+        $minus = new Minus($this->getQueryConvertibleMock(AnyType::class, "10"));
 
         $minus->toQuery();
     }

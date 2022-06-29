@@ -46,7 +46,7 @@ class SkipClauseTest extends TestCase
     public function testPattern(): void
     {
         $skip = new SkipClause();
-        $expression = $this->getQueryConvertableMock(NumeralType::class, "10");
+        $expression = $this->getQueryConvertibleMock(NumeralType::class, "10");
 
         $skip->setSkip($expression);
 
@@ -60,7 +60,7 @@ class SkipClauseTest extends TestCase
     public function testAcceptsNumeralType(): void
     {
         $skip = new SkipClause();
-        $expression = $this->getQueryConvertableMock(NumeralType::class, "10");
+        $expression = $this->getQueryConvertibleMock(NumeralType::class, "10");
 
         $skip->setSkip($expression);
 
@@ -70,7 +70,7 @@ class SkipClauseTest extends TestCase
     public function testDoesNotAcceptAnyType(): void
     {
         $skip = new SkipClause();
-        $expression = $this->getQueryConvertableMock(AnyType::class, "10");
+        $expression = $this->getQueryConvertibleMock(AnyType::class, "10");
 
         $this->expectException(TypeError::class);
 

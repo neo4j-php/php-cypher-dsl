@@ -35,7 +35,7 @@ class ExistsTest extends TestCase
 
     public function testToQuery()
     {
-        $expression = $this->getQueryConvertableMock(AnyType::class, "expression");
+        $expression = $this->getQueryConvertibleMock(AnyType::class, "expression");
 
         $exists = new Exists($expression);
 
@@ -47,7 +47,7 @@ class ExistsTest extends TestCase
      */
     public function testAcceptsAnyType()
     {
-        $expression = $this->getQueryConvertableMock(AnyType::class, "expression");
+        $expression = $this->getQueryConvertibleMock(AnyType::class, "expression");
 
         $exists = new Exists($expression);
 

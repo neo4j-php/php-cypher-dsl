@@ -39,7 +39,7 @@ class IsEmptyTest extends TestCase
 
     public function testToQuery()
     {
-        $list = $this->getQueryConvertableMock(ListType::class, "list");
+        $list = $this->getQueryConvertibleMock(ListType::class, "list");
 
         $isEmpty = new IsEmpty($list);
 
@@ -51,7 +51,7 @@ class IsEmptyTest extends TestCase
      */
     public function testAcceptsListType()
     {
-        $list = $this->getQueryConvertableMock(ListType::class, "list");
+        $list = $this->getQueryConvertibleMock(ListType::class, "list");
 
         $isEmpty = new IsEmpty($list);
 
@@ -63,7 +63,7 @@ class IsEmptyTest extends TestCase
      */
     public function testAcceptsMapType()
     {
-        $list = $this->getQueryConvertableMock(MapType::class, "list");
+        $list = $this->getQueryConvertibleMock(MapType::class, "list");
 
         $isEmpty = new IsEmpty($list);
 
@@ -75,7 +75,7 @@ class IsEmptyTest extends TestCase
      */
     public function testAcceptsStringType()
     {
-        $list = $this->getQueryConvertableMock(StringType::class, "list");
+        $list = $this->getQueryConvertibleMock(StringType::class, "list");
 
         $isEmpty = new IsEmpty($list);
 
@@ -84,7 +84,7 @@ class IsEmptyTest extends TestCase
 
     public function testDoestNotAcceptAnyType()
     {
-        $list = $this->getQueryConvertableMock(AnyType::class, "list");
+        $list = $this->getQueryConvertibleMock(AnyType::class, "list");
 
         $this->expectException(TypeError::class);
 

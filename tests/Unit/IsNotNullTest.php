@@ -34,7 +34,7 @@ class IsNotNullTest extends TestCase
 
     public function testToQuery(): void
     {
-        $not = new IsNotNull($this->getQueryConvertableMock(BooleanType::class, "true"), false);
+        $not = new IsNotNull($this->getQueryConvertibleMock(BooleanType::class, "true"), false);
 
         $this->assertFalse($not->insertsParentheses());
 
