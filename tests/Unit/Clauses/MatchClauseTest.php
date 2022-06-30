@@ -98,4 +98,43 @@ class MatchClauseTest extends TestCase
 
         $match->toQuery();
     }
+
+    public function testSetPatterns(): void
+    {
+        $match = new MatchClause();
+        $match->addPattern($this->getQueryConvertibleMock(AnyType::class, "(c)"));
+
+        $patterns = [$this->getQueryConvertibleMock(AnyType::class, "(a)"), $this->getQueryConvertibleMock(AnyType::class, "(b)")];
+
+        $match->setPatterns($patterns);
+
+        $this->assertSame($patterns, $match->getPatterns());
+        $this->assertSame('MATCH (a), (b)', $match->getPatterns());
+    }
+
+    public function testSetPatternsDoesNotAcceptAnyType(): void
+    {
+        $match = new MatchClause();
+
+        $this->expectException(TypeError::class);
+
+        $match->setPatterns([$this->getQueryConvertibleMock(AnyType::class, "(a)")]);
+        $match->toQuery();
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testSetPatternsAcceptsPathType(): void
+    {
+        $match = new MatchClause();
+        $match->setPatterns([$this->getQueryConvertibleMock(PathType::class, "(a)")]);
+
+        $match->toQuery();
+    }
+
+    public function testGetPatterns(): void
+    {
+
+    }
 }

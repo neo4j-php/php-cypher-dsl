@@ -8,6 +8,13 @@ use WikibaseSolutions\CypherDSL\Query;
 
 class CallClauseTest extends TestCase
 {
+    public function testCallClauseWithoutSubqueryIsEmpty(): void
+    {
+        $clause = new CallClause();
+
+        $this->assertEquals('', $clause->toQuery());
+    }
+
     public function testCallClauseEmpty(): void
     {
         $query = Query::new();

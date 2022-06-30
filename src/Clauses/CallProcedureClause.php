@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Variable;
 
@@ -32,6 +33,7 @@ use WikibaseSolutions\CypherDSL\Variable;
  */
 class CallProcedureClause extends Clause
 {
+    use EscapeTrait;
     use ErrorTrait;
 
     /**
@@ -47,36 +49,37 @@ class CallProcedureClause extends Clause
     /**
      * @var Variable[] The result fields that will be returned
      */
-    private array $yieldVariables = [];
+    private array $yields = [];
 
     /**
-     * Sets the procedure to call. This can be for instance "apoc.load.json". This
-     * procedure name is passed unescaped to the query.
+     * Sets the procedure to call. This can be for instance "apoc.load.json".
      *
-     * @note The given procedure name is not escaped before being inserted into the
-     * query.
-     *
-     * @param string $procedure
+     * @param string $procedure The procedure to call
      * @return $this
      */
     public function setProcedure(string $procedure): self
     {
-        $this->procedure = $procedure;
+        $procedureParts = explode('.', $procedure);
+        $escapedProcedure = implode('.', array_map(function (string $part): string {
+            return $this->escape($part);
+        }, $procedureParts));
+
+        $this->procedure = $escapedProcedure;
 
         return $this;
     }
 
     /**
-     * Sets the arguments to pass to this procedure call. This overwrites any previously passed
+     * Sets the literal arguments to pass to this procedure call. This overwrites any previously passed
      * arguments.
      *
-     * @param AnyType[] $arguments
+     * @param AnyType[] $arguments The arguments to pass to the procedure
      * @return $this
      */
     public function withArguments(array $arguments): self
     {
         foreach ($arguments as $argument) {
-            $this->assertClass('argument', AnyType::class, $argument);
+            $this->assertClass('arguments', AnyType::class, $argument);
         }
 
         $this->arguments = $arguments;
@@ -85,9 +88,9 @@ class CallProcedureClause extends Clause
     }
 
     /**
-     * Add an argument to pass to this procedure call.
+     * Add a literal argument to pass to this procedure call.
      *
-     * @param AnyType $argument
+     * @param AnyType $argument The argument to pass to the procedure
      * @return $this
      */
     public function addArgument(AnyType $argument): self
@@ -110,19 +113,9 @@ class CallProcedureClause extends Clause
             $this->assertClass('variable', Variable::class, $variable);
         }
 
-        $this->yieldVariables = $variables;
+        $this->yields = $variables;
 
         return $this;
-    }
-
-    /**
-     * Returns the variables to yield.
-     *
-     * @return Variable[]
-     */
-    public function getYieldVariables(): array
-    {
-        return $this->yieldVariables;
     }
 
     /**
@@ -143,6 +136,16 @@ class CallProcedureClause extends Clause
     public function getArguments(): array
     {
         return $this->arguments;
+    }
+
+    /**
+     * Returns the variables to yield.
+     *
+     * @return Variable[]
+     */
+    public function getYields(): array
+    {
+        return $this->yields;
     }
 
     /**
@@ -167,10 +170,10 @@ class CallProcedureClause extends Clause
             array_map(fn (AnyType $pattern): string => $pattern->toQuery(), $this->arguments)
         );
 
-        if (count($this->yieldVariables) > 0) {
+        if (count($this->yields) > 0) {
             $yieldParameters = implode(
                 ", ",
-                array_map(fn (Variable $variable): string => $variable->toQuery(), $this->yieldVariables)
+                array_map(fn (Variable $variable): string => $variable->toQuery(), $this->yields)
             );
 
             return sprintf("%s(%s) YIELD %s", $this->procedure, $arguments, $yieldParameters);

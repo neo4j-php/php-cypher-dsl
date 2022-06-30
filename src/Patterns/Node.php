@@ -73,13 +73,27 @@ class Node implements HasProperties, HasVariable, NodeType
      * Adds a label to the node.
      *
      * @param string $label
-     * @return Node
+     * @return $this
      */
-    public function labeled(string $label): self
+    public function addLabel(string $label): self
     {
         $this->labels[] = $label;
 
         return $this;
+    }
+
+    /**
+     * Adds a label to the node.
+     *
+     * @param string $label
+     *
+     * @return $this
+     *
+     * @deprecated Use Node::addLabel() instead
+     */
+    public function labeled(string $label): self
+    {
+        return $this->addLabel($label);
     }
 
     /**

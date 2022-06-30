@@ -24,7 +24,9 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 use WikibaseSolutions\CypherDSL\Query;
 
 /**
- * This class represents a CALL clause.
+ * This class represents a CALL {} (subquery) clause.
+ *
+ * @note This clause is not part of the openCypher standard.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/
  */

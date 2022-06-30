@@ -35,14 +35,14 @@ class CreateClause extends Clause
     use ErrorTrait;
 
     /**
-     * @var (PathType|NodeType)[] The patterns to create
+     * @var PathType[]|NodeType[] The patterns to create
      */
     private array $patterns = [];
 
     /**
      * Sets the pattern to create. This overwrites any previously added patterns.
      *
-     * @param (PathType|NodeType)[] $patterns The patterns to create
+     * @param PathType[]|NodeType[] $patterns The patterns to create
      * @return $this
      */
     public function setPatterns(array $patterns): self
@@ -73,7 +73,7 @@ class CreateClause extends Clause
     /**
      * Returns the patterns of the CREATE clause.
      *
-     * @return (PathType|NodeType)[]
+     * @return PathType[]|NodeType[]
      */
     public function getPatterns(): array
     {

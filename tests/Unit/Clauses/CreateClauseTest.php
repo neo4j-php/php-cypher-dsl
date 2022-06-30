@@ -103,4 +103,52 @@ class CreateClauseTest extends TestCase
         $createClause->addPattern($patternA);
         $createClause->toQuery();
     }
+
+    public function testSetPatterns(): void
+    {
+        $createClause = new CreateClause();
+
+        $createClause->addPattern($this->getQueryConvertibleMock(PathType::class, "c"));
+
+        $patternA = $this->getQueryConvertibleMock(PathType::class, "a");
+        $patternB = $this->getQueryConvertibleMock(NodeType::class, "b");
+
+        $createClause->setPatterns([$patternA, $patternB]);
+
+        $this->assertSame("CREATE a, b", $createClause->toQuery());
+    }
+
+    public function testSetPatternsDoesNotAcceptAnyType(): void
+    {
+        $createClause = new CreateClause();
+
+        $patternA = $this->getQueryConvertibleMock(PathType::class, "a");
+        $patternB = $this->getQueryConvertibleMock(AnyType::class, "b");
+
+        $this->expectException(TypeError::class);
+
+        $createClause->setPatterns([$patternA, $patternB]);
+        $createClause->toQuery();
+    }
+
+    public function testGetPatterns(): void
+    {
+        $createClause = new CreateClause();
+
+        $patterns = [
+            $this->getQueryConvertibleMock(PathType::class, "a"),
+            $this->getQueryConvertibleMock(PathType::class, "b")
+        ];
+
+        $createClause->setPatterns($patterns);
+
+        $this->assertSame($patterns, $createClause->getPatterns());
+
+        $patternC = $this->getQueryConvertibleMock(PathType::class, "c");
+        $patterns[] = $patternC;
+
+        $createClause->addPattern($patternC);
+
+        $this->assertSame($patterns, $createClause->getPatterns());
+    }
 }

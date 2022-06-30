@@ -105,4 +105,57 @@ class DeleteClauseTest extends TestCase
         $delete->addVariable($variable);
         $delete->toQuery();
     }
+
+    public function testSetVariables(): void
+    {
+        $delete = new DeleteClause();
+
+        $variableA = $this->getQueryConvertibleMock(Variable::class, "a");
+        $variableB = $this->getQueryConvertibleMock(Variable::class, "b");
+
+        $variables = [$variableA, $variableB];
+
+        $delete->setVariables($variables);
+
+        $this->assertSame("DELETE a, b", $delete->toQuery());
+        $this->assertSame($variables, $delete->getVariables());
+    }
+
+    public function testSetVariablesDoesNotAcceptAnyType(): void
+    {
+        $delete = new DeleteClause();
+
+        $variableA = $this->getQueryConvertibleMock(Variable::class, "a");
+        $variableB = $this->getQueryConvertibleMock(AnyType::class, "b");
+
+        $variables = [$variableA, $variableB];
+
+        $this->expectException(TypeError::class);
+
+        $delete->setVariables($variables);
+        $delete->toQuery();
+    }
+
+    public function testGetVariables(): void
+    {
+        $delete = new DeleteClause();
+
+        $this->assertSame([], $delete->getVariables());
+
+        $variables = [$this->getQueryConvertibleMock(Variable::class, "a")];
+        $delete->setVariables($variables);
+
+        $this->assertSame($variables, $delete->getVariables());
+    }
+
+    public function testDetachesDeletion(): void
+    {
+        $delete = new DeleteClause();
+
+        $this->assertFalse($delete->detachesDeletion());
+
+        $delete->setDetach();
+
+        $this->assertTrue($delete->detachesDeletion());
+    }
 }

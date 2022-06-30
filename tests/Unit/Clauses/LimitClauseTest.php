@@ -76,4 +76,16 @@ class LimitClauseTest extends TestCase
 
         $limit->toQuery();
     }
+
+    public function testGetLimit(): void
+    {
+        $limit = new LimitClause();
+
+        $this->assertNull($limit->getLimit());
+
+        $limitNumber = $this->getQueryConvertibleMock(NumeralType::class, "10");
+        $limit->setLimit($limitNumber);
+
+        $this->assertSame($limitNumber, $limit->getLimit());
+    }
 }

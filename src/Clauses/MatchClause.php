@@ -35,14 +35,14 @@ class MatchClause extends Clause
     use ErrorTrait;
 
     /**
-     * @var (PathType|NodeType)[] List of patterns
+     * @var PathType[]|NodeType[] List of patterns
      */
     private array $patterns = [];
 
     /**
      * Sets the pattern of the MATCH clause. This overwrites any previously added patterns.
      *
-     * @param (PathType|NodeType)[] $patterns
+     * @param PathType[]|NodeType[] $patterns
      * @return $this
      */
     public function setPatterns(array $patterns): self
@@ -73,7 +73,7 @@ class MatchClause extends Clause
     /**
      * Returns the patterns to match.
      *
-     * @return (PathType|NodeType)[]
+     * @return PathType[]|NodeType[]
      */
     public function getPatterns(): array
     {
