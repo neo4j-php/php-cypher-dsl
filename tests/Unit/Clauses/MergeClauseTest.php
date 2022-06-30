@@ -146,4 +146,34 @@ class MergeClauseTest extends TestCase
 
         $merge->toQuery();
     }
+
+    public function testGetPattern(): void
+    {
+        $merge = new MergeClause();
+        $pattern = $this->getQueryConvertibleMock(NodeType::class, "(a)");
+
+        $merge->setPattern($pattern);
+
+        $this->assertSame($pattern, $merge->getPattern());
+    }
+
+    public function testGetOnCreateClause(): void
+    {
+        $merge = new MergeClause();
+        $onCreateClause = $this->getQueryConvertibleMock(Clause::class, "MATCH a");
+
+        $merge->setOnCreate($onCreateClause);
+
+        $this->assertSame($onCreateClause, $merge->getOnCreateClause());
+    }
+
+    public function testGetOnMatch(): void
+    {
+        $merge = new MergeClause();
+        $onMatchClause = $this->getQueryConvertibleMock(Clause::class, "MATCH a");
+
+        $merge->setOnMatch($onMatchClause);
+
+        $this->assertSame($onMatchClause, $merge->getOnMatchClause());
+    }
 }
