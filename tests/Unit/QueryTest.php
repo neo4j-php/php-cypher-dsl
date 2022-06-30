@@ -608,7 +608,7 @@ class QueryTest extends TestCase
         $this->assertSame("WITH foobar WHERE foobar", $statement);
 
         $nodeMock = $this->getQueryConvertibleMock(Node::class, "(a)");
-        $nodeMock->method('getName')->willReturn($this->getQueryConvertibleMock(Variable::class, 'a'));
+        $nodeMock->method('getVariable')->willReturn($this->getQueryConvertibleMock(Variable::class, 'a'));
 
         $variableMock = $this->getQueryConvertibleMock(Variable::class, "a");
         $pathMock = $this->getQueryConvertibleMock(Path::class, "(a)->(b)");
@@ -778,7 +778,7 @@ class QueryTest extends TestCase
             ->call(function (Query $subQuery) use ($node) {
                 $subQuery->with($node->getVariable())
                     ->where($node->property('z')->equals(Query::literal('foo'), false))
-                    ->returning($node->property('z')->alias('foo'));
+                    ->returning($node->property('z')->alias(Query::variable('foo')));
             })
             ->returning(Query::variable('foo'));
 
@@ -791,7 +791,7 @@ class QueryTest extends TestCase
 
         $sub = Query::new()->with($node->getVariable())
             ->where($node->property('z')->equals(Query::literal('foo'), false))
-            ->returning($node->property('z')->alias('foo'));
+            ->returning($node->property('z')->alias(Query::variable('foo')));
 
         $query = Query::new()
             ->match($node)
@@ -876,14 +876,6 @@ class QueryTest extends TestCase
             ->build();
 
         $this->assertSame("CREATE (tom:Person)", $statement);
-
-        // DELETE clause
-        $tom = Query::node()->withProperty('name', Query::literal('tom'))->labeled("Person");
-
-        $statement = Query::new()
-            ->match($tom)
-            ->delete($tom)
-            ->build();
     }
 
     public function provideLiteralData(): array

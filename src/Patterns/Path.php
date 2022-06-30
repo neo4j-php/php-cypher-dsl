@@ -96,7 +96,7 @@ class Path implements PathType, HasVariable
 
         $cql = '';
         // If a variable exists, we need to assign following the expression to it
-        if ($this->getVariable() !== null) {
+        if ($this->hasVariable()) {
             $cql = $this->getVariable()->toQuery() . ' = ';
         }
 

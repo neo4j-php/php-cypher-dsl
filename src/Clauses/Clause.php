@@ -45,7 +45,7 @@ abstract class Clause implements QueryConvertible
      */
     public function toQuery(): string
     {
-		if ($this->getClause()) {
+		if ($this->getClause() === "") {
 			// If we have an empty clause (for example, for RAW queries), return nothing at all
 			return "";
 		}

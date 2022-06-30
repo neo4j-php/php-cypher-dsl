@@ -651,7 +651,10 @@ class Query implements QueryConvertible
      */
     public function union($queryOrCallable, bool $all = false): self
     {
-        $this->clauses[] = new UnionClause($all);
+        $unionClause = new UnionClause();
+        $unionClause->setAll($all);
+
+        $this->clauses[] = $unionClause;
 
         if (is_callable($queryOrCallable)) {
             $query = Query::new();

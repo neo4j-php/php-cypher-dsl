@@ -90,13 +90,29 @@ class StringLiteral implements StringType
      */
     public function toQuery(): string
     {
-		// Encode backslashes, tabs, newlines, carriage returns and form feeds (in that order)
-        $value = str_replace(["\\", "\t", "\n", "\r", "\f"], ["\\\\", "\\t", "\\n", "\\r", "\\f"], $this->value);
+        // Encodes both "'" and '"', so returning in either context is safe
+        $value = $this->encodeSpecials($this->value);
 
         if ($this->useDoubleQuotes) {
-            return sprintf('"%s"', str_replace('"', '\"', $value));
+            return sprintf('"%s"', $value);
         }
 
-        return sprintf("'%s'", str_replace("'", "\'", $value));
+        return sprintf("'%s'", $value);
+    }
+
+    /**
+     * Encodes special string characters in Cypher.
+     *
+     * @param string $value The string to encode
+     * @return string The encoded string
+     */
+    private static function encodeSpecials(string $value): string
+    {
+        // See https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (Note on string literals)
+        return str_replace(
+            ["\\", "\t", "\u{0008}", "\n", "\r", "\f", "'", "\""],
+            ["\\\\", "\\t", "\\b", "\\n", "\\r", "\\f", "\\'", "\\\""],
+            $value
+        );
     }
 }

@@ -54,7 +54,7 @@ class PathTest extends TestCase
 
         $pathX->named('x')->relationshipTo($pathY->named('y'));
 
-        self::assertEquals('x = ()-[]-()-[]->()-[]-()', $pathX->toQuery());
+        $this->assertEquals('x = ()-[]-()-[]->()-[]-()', $pathX->toQuery());
     }
 
     public function testRelationshipLong(): void
@@ -66,9 +66,9 @@ class PathTest extends TestCase
             ->relationship(new Relationship(Relationship::DIR_UNI), (new Node())->named('d'))
             ->named('a');
 
-        self::assertEquals('a = ()-[]-(:Label)-[]->(b)<-[c:TYPE {x: \'y\'}]-()-[]-(d)', $path->toQuery());
+        $this->assertEquals('a = ()-[]-(:Label)-[]->(b)<-[c:TYPE {x: \'y\'}]-()-[]-(d)', $path->toQuery());
 
-        self::assertEquals([
+        $this->assertEquals([
             new Node(),
             new Node('Label'),
             (new Node())->named('b'),
@@ -76,7 +76,7 @@ class PathTest extends TestCase
             (new Node())->named('d'),
         ], $path->getNodes());
 
-        self::assertEquals([
+        $this->assertEquals([
             new Relationship(Relationship::DIR_UNI),
             new Relationship(Relationship::DIR_RIGHT),
             (new Relationship(Relationship::DIR_LEFT))

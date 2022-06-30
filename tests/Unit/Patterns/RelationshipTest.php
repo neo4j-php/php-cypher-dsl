@@ -47,7 +47,7 @@ class RelationshipTest extends TestCase
         $this->assertEquals(Relationship::DIR_RIGHT, $r->getDirection());
         $this->assertEquals([], $r->getTypes());
         $this->assertNull($r->getProperties());
-        $this->assertNull($r->getVariable());
+        $this->assertFalse($r->hasVariable());
 
         $this->assertNull($r->getExactHops());
         $this->assertNull($r->getMaxHops());
@@ -63,7 +63,7 @@ class RelationshipTest extends TestCase
         $this->assertEquals(Relationship::DIR_LEFT, $r->getDirection());
         $this->assertEquals([], $r->getTypes());
         $this->assertNull($r->getProperties());
-        $this->assertNull($r->getVariable());
+        $this->assertFalse($r->hasVariable());
 
         $this->assertNull($r->getExactHops());
         $this->assertNull($r->getMaxHops());
@@ -79,7 +79,7 @@ class RelationshipTest extends TestCase
         $this->assertEquals(Relationship::DIR_UNI, $r->getDirection());
         $this->assertEquals([], $r->getTypes());
         $this->assertNull($r->getProperties());
-        $this->assertNull($r->getVariable());
+        $this->assertFalse($r->hasVariable());
 
         $this->assertNull($r->getExactHops());
         $this->assertNull($r->getMaxHops());
@@ -102,8 +102,8 @@ class RelationshipTest extends TestCase
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([], $r->getTypes());
         $this->assertNull($r->getProperties());
-        $this->assertNotNull($r->getVariable());
-        $this->assertEquals($name, $r->getVariable()->getVariable());
+        $this->assertTrue($r->hasVariable());
+        $this->assertEquals($name, $r->getVariable()->getName());
 
         $this->assertNull($r->getExactHops());
         $this->assertNull($r->getMaxHops());
@@ -126,7 +126,7 @@ class RelationshipTest extends TestCase
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([$type], $r->getTypes());
         $this->assertNull($r->getProperties());
-        $this->assertNull($r->getVariable());
+        $this->assertFalse($r->hasVariable());
 
         $this->assertNull($r->getExactHops());
         $this->assertNull($r->getMaxHops());
@@ -149,7 +149,7 @@ class RelationshipTest extends TestCase
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([], $r->getTypes());
         $this->assertEquals(new PropertyMap($properties), $r->getProperties());
-        $this->assertNull($r->getVariable());
+        $this->assertFalse($r->hasVariable());
 
         $this->assertNull($r->getExactHops());
         $this->assertNull($r->getMaxHops());
@@ -173,8 +173,8 @@ class RelationshipTest extends TestCase
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([$type], $r->getTypes());
         $this->assertNull($r->getProperties());
-        $this->assertNotNull($r->getVariable());
-        $this->assertEquals($name, $r->getVariable()->getVariable());
+        $this->assertTrue($r->hasVariable());
+        $this->assertEquals($name, $r->getVariable()->getName());
 
         $this->assertNull($r->getExactHops());
         $this->assertNull($r->getMaxHops());
@@ -198,8 +198,8 @@ class RelationshipTest extends TestCase
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([], $r->getTypes());
         $this->assertEquals(new PropertyMap($properties), $r->getProperties());
-        $this->assertNotNull($r->getVariable());
-        $this->assertEquals($name, $r->getVariable()->getVariable());
+        $this->assertTrue($r->hasVariable());
+        $this->assertEquals($name, $r->getVariable()->getName());
 
         $this->assertNull($r->getExactHops());
         $this->assertNull($r->getMaxHops());
@@ -223,7 +223,7 @@ class RelationshipTest extends TestCase
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([$type], $r->getTypes());
         $this->assertEquals(new PropertyMap($properties), $r->getProperties());
-        $this->assertNull($r->getVariable());
+        $this->assertFalse($r->hasVariable());
 
         $this->assertNull($r->getExactHops());
         $this->assertNull($r->getMaxHops());
@@ -248,8 +248,8 @@ class RelationshipTest extends TestCase
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([$type], $r->getTypes());
         $this->assertEquals(new PropertyMap($properties), $r->getProperties());
-        $this->assertNotNull($r->getVariable());
-        $this->assertEquals($name, $r->getVariable()->getVariable());
+        $this->assertTrue($r->hasVariable());
+        $this->assertEquals($name, $r->getVariable()->getName());
 
         $this->assertNull($r->getExactHops());
         $this->assertNull($r->getMaxHops());
@@ -279,8 +279,8 @@ class RelationshipTest extends TestCase
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals($types, $r->getTypes());
         $this->assertEquals(new PropertyMap($properties), $r->getProperties());
-        $this->assertNotNull($r->getVariable());
-        $this->assertEquals($name, $r->getVariable()->getVariable());
+        $this->assertTrue($r->hasVariable());
+        $this->assertEquals($name, $r->getVariable()->getName());
 
         $this->assertNull($r->getExactHops());
         $this->assertNull($r->getMaxHops());
@@ -313,8 +313,8 @@ class RelationshipTest extends TestCase
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([], $r->getTypes());
         $this->assertNull($r->getProperties());
-        $this->assertNotNull($r->getVariable());
-        $this->assertEquals($name, $r->getVariable()->getVariable());
+        $this->assertTrue($r->hasVariable());
+        $this->assertEquals($name, $r->getVariable()->getName());
 
         $this->assertNull($r->getExactHops());
         $this->assertEquals($maxHops, $r->getMaxHops());
@@ -347,7 +347,7 @@ class RelationshipTest extends TestCase
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([$type], $r->getTypes());
         $this->assertNull($r->getProperties());
-        $this->assertNull($r->getVariable());
+        $this->assertFalse($r->hasVariable());
 
         $this->assertNull($r->getExactHops());
         $this->assertEquals($maxHops, $r->getMaxHops());
@@ -380,7 +380,7 @@ class RelationshipTest extends TestCase
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([], $r->getTypes());
         $this->assertEquals(new PropertyMap($properties), $r->getProperties());
-        $this->assertNull($r->getVariable());
+        $this->assertFalse($r->hasVariable());
 
         $this->assertNull($r->getExactHops());
         $this->assertEquals($maxHops, $r->getMaxHops());
@@ -415,8 +415,8 @@ class RelationshipTest extends TestCase
         $this->assertEquals($direction, $r->getDirection());
         $this->assertEquals([$type], $r->getTypes());
         $this->assertEquals(new PropertyMap($properties), $r->getProperties());
-        $this->assertNotNull($r->getVariable());
-        $this->assertEquals($name, $r->getVariable()->getVariable());
+        $this->assertTrue($r->hasVariable());
+        $this->assertEquals($name, $r->getVariable()->getName());
 
         $this->assertNull($r->getExactHops());
         $this->assertEquals($maxHops, $r->getMaxHops());
@@ -437,8 +437,8 @@ class RelationshipTest extends TestCase
         $this->assertEquals(Relationship::DIR_RIGHT, $r->getDirection());
         $this->assertEquals(['Person'], $r->getTypes());
         $this->assertEquals(new PropertyMap(['name' => Query::literal('Tom Hanks')]), $r->getProperties());
-        $this->assertNotNull($r->getVariable());
-        $this->assertEquals('tom', $r->getVariable()->getVariable());
+        $this->assertTrue($r->hasVariable());
+        $this->assertEquals('tom', $r->getVariable()->getName());
 
         $this->assertEquals(10, $r->getExactHops());
         $this->assertNull($r->getMaxHops());

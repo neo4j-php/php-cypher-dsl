@@ -44,6 +44,10 @@ interface HasVariable
 
 	/**
 	 * Returns true if this object has a variable assigned.
+     *
+     * @note Calling $this->getVariable() will always return a variable, even if no variable has explicitly been
+     *  assigned to this instance. That is because getVariable() automatically generates a variable if it does not
+     *  have one explicitly.
 	 *
 	 * @return bool
 	 */

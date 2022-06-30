@@ -42,11 +42,7 @@ class NodeTest extends TestCase
 
         $this->assertNull($node->getProperties());
         $this->assertEquals([], $node->getLabels());
-        $this->assertNull($node->getVariable());
-
-        $name = $node->getVariable();
-        $this->assertNotNull($name);
-        $this->assertSame($name, $node->getVariable());
+        $this->assertFalse($node->hasVariable());
     }
 
     public function testBacktickThrowsException(): void
@@ -72,11 +68,7 @@ class NodeTest extends TestCase
 
         $this->assertNull($node->getProperties());
         $this->assertEquals([$label], $node->getLabels());
-        $this->assertNull($node->getVariable());
-
-        $name = $node->getVariable();
-        $this->assertNotNull($name);
-        $this->assertSame($name, $node->getVariable());
+        $this->assertFalse($node->hasVariable());
     }
 
     /**
@@ -93,12 +85,9 @@ class NodeTest extends TestCase
 
         $this->assertNull($node->getProperties());
         $this->assertEquals([], $node->getLabels());
-        $this->assertNotNull($node->getVariable());
+        $this->assertTrue($node->hasVariable());
 
-        $variable = $node->getVariable();
-        $this->assertNotNull($variable);
-        $this->assertEquals($name, $variable->getVariable());
-        $this->assertSame($variable, $node->getVariable());
+        $this->assertEquals($name, $node->getVariable()->getName());
     }
 
     /**
@@ -115,11 +104,7 @@ class NodeTest extends TestCase
 
         $this->assertEquals(new PropertyMap($properties), $node->getProperties());
         $this->assertEquals([], $node->getLabels());
-        $this->assertNull($node->getVariable());
-
-        $name = $node->getVariable();
-        $this->assertNotNull($name);
-        $this->assertSame($name, $node->getVariable());
+        $this->assertFalse($node->hasVariable());
     }
 
     /**
@@ -137,12 +122,9 @@ class NodeTest extends TestCase
 
         $this->assertNull($node->getProperties());
         $this->assertEquals([$label], $node->getLabels());
-        $this->assertNotNull($node->getVariable());
+        $this->assertTrue($node->hasVariable());
 
-        $variable = $node->getVariable();
-        $this->assertNotNull($variable);
-        $this->assertEquals($name, $variable->getVariable());
-        $this->assertSame($variable, $node->getVariable());
+        $this->assertEquals($name, $node->getVariable()->getName());
     }
 
     /**
@@ -160,12 +142,9 @@ class NodeTest extends TestCase
 
         $this->assertEquals(new PropertyMap($properties), $node->getProperties());
         $this->assertEquals([], $node->getLabels());
-        $this->assertNotNull($node->getVariable());
+        $this->assertTrue($node->hasVariable());
 
-        $variable = $node->getVariable();
-        $this->assertNotNull($variable);
-        $this->assertEquals($name, $variable->getVariable());
-        $this->assertSame($variable, $node->getVariable());
+        $this->assertEquals($name, $node->getVariable()->getName());
     }
 
     /**
@@ -183,11 +162,7 @@ class NodeTest extends TestCase
 
         $this->assertEquals(new PropertyMap($properties), $node->getProperties());
         $this->assertEquals([$label], $node->getLabels());
-        $this->assertNull($node->getVariable());
-
-        $name = $node->getVariable();
-        $this->assertNotNull($name);
-        $this->assertSame($name, $node->getVariable());
+        $this->assertFalse($node->hasVariable());
     }
 
     /**
@@ -206,12 +181,9 @@ class NodeTest extends TestCase
 
         $this->assertEquals(new PropertyMap($properties), $node->getProperties());
         $this->assertEquals([$label], $node->getLabels());
-        $this->assertNotNull($node->getVariable());
+        $this->assertTrue($node->hasVariable());
 
-        $variable = $node->getVariable();
-        $this->assertNotNull($variable);
-        $this->assertEquals($name, $variable->getVariable());
-        $this->assertSame($variable, $node->getVariable());
+        $this->assertEquals($name, $node->getVariable()->getName());
     }
 
     /**
@@ -231,11 +203,7 @@ class NodeTest extends TestCase
 
         $this->assertNull($node->getProperties());
         $this->assertEquals($labels, $node->getLabels());
-        $this->assertNull($node->getVariable());
-
-        $name = $node->getVariable();
-        $this->assertNotNull($name);
-        $this->assertSame($name, $node->getVariable());
+        $this->assertFalse($node->hasVariable());
     }
 
     public function testSetterSameAsConstructor(): void

@@ -19,7 +19,8 @@ class UnionClauseTest extends TestCase
 
     public function testAll(): void
     {
-        $union = new UnionClause(true);
+        $union = new UnionClause();
+        $union->setAll();
 
         $this->assertTrue($union->includesAll());
 

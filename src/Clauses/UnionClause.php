@@ -46,7 +46,10 @@ class UnionClause extends Clause
             $tbr->addClause($clause);
         }
 
-        $tbr->addClause(new self($all));
+        $unionClause = new self();
+        $unionClause->setAll($all);
+
+        $tbr->addClause($unionClause);
 
         foreach ($right->getClauses() as $clause) {
             $tbr->addClause($clause);

@@ -19,17 +19,18 @@ class HasVariableTraitTest extends TestCase
 
     public function testDefaultGeneration(): void
     {
-        self::assertNull($this->hasVariable->getVariable());
-        self::assertNotNull($this->hasVariable->getVariable());
+        $this->assertFalse($this->hasVariable->hasVariable());
+        $this->assertNotNull($this->hasVariable->getVariable());
+        $this->assertTrue($this->hasVariable->hasVariable());
 
-        self::assertMatchesRegularExpression('/var\w{32}/', $this->hasVariable->getVariable()->getName());
+        $this->assertMatchesRegularExpression('/var\w{32}/', $this->hasVariable->getVariable()->getName());
     }
 
     public function testNamed(): void
     {
         $this->hasVariable->named('x');
 
-        self::assertSame($this->hasVariable->getVariable(), $this->hasVariable->getVariable());
-        self::assertEquals('x', $this->hasVariable->getVariable()->getName());
+        $this->assertTrue($this->hasVariable->hasVariable());
+        $this->assertEquals('x', $this->hasVariable->getVariable()->getName());
     }
 }
