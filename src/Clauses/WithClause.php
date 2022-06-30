@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
@@ -32,6 +33,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 class WithClause extends Clause
 {
     use EscapeTrait;
+    use ErrorTrait;
 
     /**
      * @var array The expressions to include in the clause
@@ -39,12 +41,30 @@ class WithClause extends Clause
     private array $expressions = [];
 
     /**
+     * Sets the entries of this WITH clause. This overwrites any previously added entries.
+     *
+     * @param AnyType[] $expressions The entries to set; if the key of the array is non-numerical, it is used as an alias
+     *
+     * @return $this
+     */
+    public function setEntries(array $expressions): self
+    {
+        foreach ($expressions as $expression) {
+            $this->assertClass('expressions', AnyType::class, $expression);
+        }
+
+        $this->expressions = $expressions;
+
+        return $this;
+    }
+
+    /**
      * Add a new entry to the WITH clause.
      *
      * @param AnyType $expression The entry to add
      * @param string $alias An optional entry alias
      *
-     * @return WithClause
+     * @return $this
      */
     public function addEntry(AnyType $expression, string $alias = ""): self
     {

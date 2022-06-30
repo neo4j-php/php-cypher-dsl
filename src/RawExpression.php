@@ -30,6 +30,7 @@ use WikibaseSolutions\CypherDSL\Traits\TypeTraits\LocalTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PathTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PointTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\RelationshipTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StringTypeTrait;
@@ -47,24 +48,26 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
  * Represents a raw expression. This can contain any expression (even invalid ones) and is used for
  * unimplemented features.
  */
 class RawExpression implements
+    BooleanType,
     DateType,
     DateTimeType,
     ListType,
     LocalDateTimeType,
     LocalTimeType,
     MapType,
-    BooleanType,
-    NumeralType,
-    StringType,
-    PointType,
     NodeType,
+    NumeralType,
     PathType,
+    PointType,
+    RelationshipType,
+    StringType,
     TimeType
 {
     use BooleanTypeTrait;
@@ -74,9 +77,10 @@ class RawExpression implements
     use LocalDateTimeTypeTrait;
     use LocalTimeTypeTrait;
     use MapTypeTrait;
-    use PointTypeTrait;
     use NodeTypeTrait;
     use NumeralTypeTrait;
+    use PathTypeTrait;
+    use PointTypeTrait;
     use RelationshipTypeTrait;
     use StringTypeTrait;
     use TimeTypeTrait;

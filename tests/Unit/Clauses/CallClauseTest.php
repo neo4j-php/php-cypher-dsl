@@ -12,7 +12,8 @@ class CallClauseTest extends TestCase
     {
         $query = Query::new();
 
-        $clause = new CallClause($query);
+        $clause = new CallClause();
+        $clause->setSubQuery($query);
 
         $this->assertEquals('', $clause->toQuery());
         $this->assertEquals(Query::new(), $clause->getSubQuery());
@@ -22,7 +23,8 @@ class CallClauseTest extends TestCase
     {
         $query = Query::new()->match(Query::node('X')->named('x'))->returning(Query::rawExpression('*'));
 
-        $clause = new CallClause($query);
+        $clause = new CallClause();
+        $clause->setSubQuery($query);
 
         $this->assertEquals('CALL { MATCH (x:X) RETURN * }', $clause->toQuery());
         $this->assertEquals($query, $clause->getSubQuery());

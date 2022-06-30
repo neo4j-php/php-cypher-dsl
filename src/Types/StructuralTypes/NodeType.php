@@ -22,7 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 
 /**
- * Represents the type "node".
+ * Represents the leaf type "node".
  */
 interface NodeType extends RelatableStructuralType
 {

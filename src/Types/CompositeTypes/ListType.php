@@ -25,7 +25,7 @@ use WikibaseSolutions\CypherDSL\In;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
- * Represent the type "list".
+ * Represent the leaf type "list".
  */
 interface ListType extends CompositeType
 {

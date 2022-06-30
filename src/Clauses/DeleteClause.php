@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Variable;
 
 /**
@@ -30,6 +31,8 @@ use WikibaseSolutions\CypherDSL\Variable;
  */
 class DeleteClause extends Clause
 {
+    use ErrorTrait;
+
     /**
      * Whether the DETACH modifier is needed.
      *
@@ -48,8 +51,8 @@ class DeleteClause extends Clause
      * Sets the clause to DETACH DELETE. Without DETACH DELETE, all relationships need to be explicitly
      * deleted.
      *
-     * @param bool $detach Whether to use DETACH DELETE.
-     * @return DeleteClause
+     * @param bool $detach Whether to use DETACH DELETE
+     * @return $this
      */
     public function setDetach(bool $detach = true): self
     {
@@ -59,10 +62,28 @@ class DeleteClause extends Clause
     }
 
     /**
-     * Add the variable to be deleted. The expression must return a node when evaluated.
+     * Sets the variables to be deleted. This overwrites previous variables if they exist.
+     *
+     * @param Variable[] $variables The variables to delete
+     * @return $this
+     */
+    public function setVariables(array $variables): self
+    {
+        foreach ($variables as $variable) {
+            $this->assertClass('variables', Variable::class, $variable);
+        }
+
+        $this->variables = $variables;
+
+        return $this;
+    }
+
+    /**
+     * Add the variable to be deleted. Unlike DeleteClause::setVariables(), this function adds the variable and does not
+     * override previous variables.
      *
      * @param Variable $variable The name of the object that should be deleted
-     * @return DeleteClause
+     * @return $this
      */
     public function addVariable(Variable $variable): self
     {

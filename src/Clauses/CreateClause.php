@@ -40,10 +40,27 @@ class CreateClause extends Clause
     private array $patterns = [];
 
     /**
+     * Sets the pattern to create. This overwrites any previously added patterns.
+     *
+     * @param (PathType|NodeType)[] $patterns The patterns to create
+     * @return $this
+     */
+    public function setPatterns(array $patterns): self
+    {
+        foreach ($patterns as $pattern) {
+            $this->assertClass('patterns', [PathType::class, NodeType::class], $pattern);
+        }
+
+        $this->patterns = $patterns;
+
+        return $this;
+    }
+
+    /**
      * Add a pattern to create.
      *
      * @param PathType|NodeType $pattern The pattern to create
-     * @return CreateClause
+     * @return $this
      */
     public function addPattern($pattern): self
     {

@@ -27,7 +27,7 @@ use WikibaseSolutions\CypherDSL\Regex;
 use WikibaseSolutions\CypherDSL\StartsWith;
 
 /**
- * Represents the type "string".
+ * Represents the leaf type "string".
  */
 interface StringType extends AliasablePropertyType, ComparablePropertyType
 {

@@ -27,7 +27,7 @@ use WikibaseSolutions\CypherDSL\OrOperator;
 use WikibaseSolutions\CypherDSL\XorOperator;
 
 /**
- * Represents the type "boolean".
+ * Represents the leaf type "boolean".
  */
 interface BooleanType extends AliasablePropertyType
 {

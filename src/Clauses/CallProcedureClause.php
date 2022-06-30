@@ -26,7 +26,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Variable;
 
 /**
- * This class represents a CALL (CALL procedure) clause.
+ * This class represents a CALL procedure clause.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/call/
  */
@@ -57,11 +57,60 @@ class CallProcedureClause extends Clause
      * query.
      *
      * @param string $procedure
-     * @return CallProcedureClause
+     * @return $this
      */
     public function setProcedure(string $procedure): self
     {
         $this->procedure = $procedure;
+
+        return $this;
+    }
+
+    /**
+     * Sets the arguments to pass to this procedure call. This overwrites any previously passed
+     * arguments.
+     *
+     * @param AnyType[] $arguments
+     * @return $this
+     */
+    public function withArguments(array $arguments): self
+    {
+        foreach ($arguments as $argument) {
+            $this->assertClass('argument', AnyType::class, $argument);
+        }
+
+        $this->arguments = $arguments;
+
+        return $this;
+    }
+
+    /**
+     * Add an argument to pass to this procedure call.
+     *
+     * @param AnyType $argument
+     * @return $this
+     */
+    public function addArgument(AnyType $argument): self
+    {
+        $this->arguments[] = $argument;
+
+        return $this;
+    }
+
+    /**
+     * Used to explicitly select which available result fields are returned as newly-bound
+     * variables.
+     *
+     * @param Variable[] $variables
+     * @return $this
+     */
+    public function yields(array $variables): self
+    {
+        foreach ($variables as $variable) {
+            $this->assertClass('variable', Variable::class, $variable);
+        }
+
+        $this->yieldVariables = $variables;
 
         return $this;
     }
@@ -94,55 +143,6 @@ class CallProcedureClause extends Clause
     public function getArguments(): array
     {
         return $this->arguments;
-    }
-
-    /**
-     * Sets the arguments to pass to this procedure call. This overwrites any previously passed
-     * arguments.
-     *
-     * @param AnyType[] $arguments
-     * @return CallProcedureClause
-     */
-    public function withArguments(array $arguments): self
-    {
-        foreach ($arguments as $argument) {
-            $this->assertClass('argument', AnyType::class, $argument);
-        }
-
-        $this->arguments = $arguments;
-
-        return $this;
-    }
-
-    /**
-     * Add an argument to pass to this procedure call.
-     *
-     * @param AnyType $argument
-     * @return CallProcedureClause
-     */
-    public function addArgument(AnyType $argument): self
-    {
-        $this->arguments[] = $argument;
-
-        return $this;
-    }
-
-    /**
-     * Used to explicitly select which available result fields are returned as newly-bound
-     * variables.
-     *
-     * @param Variable[] $variables
-     * @return CallProcedureClause
-     */
-    public function yields(array $variables): self
-    {
-        foreach ($variables as $variable) {
-            $this->assertClass('variable', Variable::class, $variable);
-        }
-
-        $this->yieldVariables = $variables;
-
-        return $this;
     }
 
     /**

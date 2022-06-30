@@ -41,13 +41,20 @@ class RemoveClause extends Clause
     private array $expressions = [];
 
     /**
-     * Returns the expressions in the REMOVE clause.
+     * Sets the expressions of the REMOVE clause. This overwrites any previously set expressions.
      *
-     * @return Label[]|Property[]
+     * @param (Property|Label)[] $expressions The expressions to remove
+     * @return RemoveClause
      */
-    public function getExpressions(): array
+    public function setExpressions(array $expressions): self
     {
-        return $this->expressions;
+        foreach ($expressions as $expression) {
+            $this->assertClass('expression', [Property::class, Label::class], $expression);
+        }
+
+        $this->expressions = $expressions;
+
+        return $this;
     }
 
     /**
@@ -62,6 +69,16 @@ class RemoveClause extends Clause
         $this->expressions[] = $expression;
 
         return $this;
+    }
+
+    /**
+     * Returns the expressions in the REMOVE clause.
+     *
+     * @return Label[]|Property[]
+     */
+    public function getExpressions(): array
+    {
+        return $this->expressions;
     }
 
     /**

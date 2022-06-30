@@ -31,40 +31,31 @@ use WikibaseSolutions\CypherDSL\Query;
 class CallClause extends Clause
 {
     /**
-     * @var Query The query to call
+     * @var Query|null The query to call
      */
-    private Query $subQuery;
+    private ?Query $subQuery = null;
 
     /**
-     * @param Query $subQuery The query to call
+     * Sets the query to call
+     *
+     * @param Query $subQuery
+     * @return $this
      */
-    public function __construct(Query $subQuery)
+    public function setSubQuery(Query $subQuery): self
     {
         $this->subQuery = $subQuery;
+
+        return $this;
     }
 
     /**
      * Returns the query that is being called.
      *
-     * @return Query
+     * @return Query|null
      */
-    public function getSubQuery(): Query
+    public function getSubQuery(): ?Query
     {
         return $this->subQuery;
-    }
-
-	/**
-	 * @inheritDoc
-	 */
-    public function toQuery(): string
-    {
-        $subQuery = trim($this->subQuery->toQuery());
-
-        if ($subQuery === '') {
-            return '';
-        }
-
-        return sprintf('CALL { %s }', $subQuery);
     }
 
     /**
@@ -72,7 +63,17 @@ class CallClause extends Clause
      */
     protected function getSubject(): string
     {
-        return '{ ' . $this->subQuery->toQuery() . ' }';
+        if (!isset($this->subQuery)) {
+            return "";
+        }
+
+        $subQuery = $this->subQuery->build();
+
+        if ($subQuery === "") {
+            return "";
+        }
+
+        return sprintf("{ %s }", trim($this->subQuery->build()));
     }
 
     /**

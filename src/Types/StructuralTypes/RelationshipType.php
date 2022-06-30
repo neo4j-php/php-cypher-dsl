@@ -22,7 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 
 /**
- * Represents the type "relationship".
+ * Represents the leaf type "relationship".
  */
 interface RelationshipType extends StructuralType
 {

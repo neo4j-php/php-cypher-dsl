@@ -38,16 +38,6 @@ class LimitClause extends Clause
     private ?NumeralType $limit = null;
 
     /**
-     * Returns the limit of the clause.
-     *
-     * @return NumeralType|null
-     */
-    public function getLimit(): ?NumeralType
-    {
-        return $this->limit;
-    }
-
-    /**
      * Sets the expression that returns the limit.
      *
      * @param NumeralType $limit The limit
@@ -58,6 +48,16 @@ class LimitClause extends Clause
         $this->limit = $limit;
 
         return $this;
+    }
+
+    /**
+     * Returns the limit of the clause.
+     *
+     * @return NumeralType|null
+     */
+    public function getLimit(): ?NumeralType
+    {
+        return $this->limit;
     }
 
     /**

@@ -50,7 +50,24 @@ class OptionalMatchClause extends Clause
     }
 
     /**
-     * Add a pattern to the optional match clause.
+     * Sets the pattern of the OPTIONAL MATCH clause. This overwrites any previously added patterns.
+     *
+     * @param (PathType|NodeType)[] $patterns
+     * @return $this
+     */
+    public function setPatterns(array $patterns): self
+    {
+        foreach ($patterns as $pattern) {
+            $this->assertClass('pattern', [PathType::class, NodeType::class], $pattern);
+        }
+
+        $this->patterns = $patterns;
+
+        return $this;
+    }
+
+    /**
+     * Add a pattern to the OPTIONAL MATCH clause.
      *
      * @param PathType|NodeType $pattern
      * @return OptionalMatchClause

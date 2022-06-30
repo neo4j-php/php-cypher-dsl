@@ -22,7 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
 /**
- * Represents the type "datetime".
+ * Represents the leaf type "datetime".
  */
 interface DateTimeType extends ComparablePropertyType
 {

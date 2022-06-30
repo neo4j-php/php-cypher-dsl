@@ -22,7 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
 /**
- * Represents the type "point".
+ * Represents the leaf type "point".
  */
 interface PointType extends PropertyType
 {

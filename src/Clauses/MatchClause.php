@@ -40,13 +40,20 @@ class MatchClause extends Clause
     private array $patterns = [];
 
     /**
-     * Returns the patterns to match.
+     * Sets the pattern of the MATCH clause. This overwrites any previously added patterns.
      *
-     * @return (PathType|NodeType)[]
+     * @param (PathType|NodeType)[] $patterns
+     * @return $this
      */
-    public function getPatterns(): array
+    public function setPatterns(array $patterns): self
     {
-        return $this->patterns;
+        foreach ($patterns as $pattern) {
+            $this->assertClass('pattern', [PathType::class, NodeType::class], $pattern);
+        }
+
+        $this->patterns = $patterns;
+
+        return $this;
     }
 
     /**
@@ -61,6 +68,16 @@ class MatchClause extends Clause
         $this->patterns[] = $pattern;
 
         return $this;
+    }
+
+    /**
+     * Returns the patterns to match.
+     *
+     * @return (PathType|NodeType)[]
+     */
+    public function getPatterns(): array
+    {
+        return $this->patterns;
     }
 
     /**

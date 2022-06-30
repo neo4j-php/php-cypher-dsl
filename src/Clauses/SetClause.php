@@ -41,13 +41,20 @@ class SetClause extends Clause
     private array $expressions = [];
 
     /**
-     * Returns the expressions to SET.
+     * Sets the assignments of this SET clause. This will overwrite any previously added assignments.
      *
-     * @return Assignment[]|Label[]
+     * @param (Assignment|Label)[] $expressions The assignments to execute
+     * @return SetClause
      */
-    public function getExpressions(): array
+    public function setAssignments(array $expressions): self
     {
-        return $this->expressions;
+        foreach ($expressions as $expression) {
+            $this->assertClass('expressions', [Assignment::class, Label::class], $expression);
+        }
+
+        $this->expressions = $expressions;
+
+        return $this;
     }
 
     /**
@@ -62,6 +69,16 @@ class SetClause extends Clause
         $this->expressions[] = $expression;
 
         return $this;
+    }
+
+    /**
+     * Returns the expressions to SET.
+     *
+     * @return Assignment[]|Label[]
+     */
+    public function getExpressions(): array
+    {
+        return $this->expressions;
     }
 
     /**

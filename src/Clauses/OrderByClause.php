@@ -58,6 +58,19 @@ class OrderByClause extends Clause
     }
 
     /**
+     * Set to sort in a DESCENDING order.
+     *
+     * @param bool $descending
+     * @return OrderByClause
+     */
+    public function setDescending(bool $descending = true): self
+    {
+        $this->descending = $descending;
+
+        return $this;
+    }
+
+    /**
      * Returns the properties to order.
      *
      * @return Property[]
@@ -75,19 +88,6 @@ class OrderByClause extends Clause
     public function isDescending(): bool
     {
         return $this->descending;
-    }
-
-    /**
-     * Set to sort in a DESCENDING order.
-     *
-     * @param bool $descending
-     * @return OrderByClause
-     */
-    public function setDescending(bool $descending = true): self
-    {
-        $this->descending = $descending;
-
-        return $this;
     }
 
     /**

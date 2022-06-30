@@ -21,7 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
-use function is_callable;
 use WikibaseSolutions\CypherDSL\Clauses\CallClause;
 use WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
@@ -53,10 +52,16 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
  * Builder class for building complex Cypher queries.
@@ -132,9 +137,8 @@ class Query implements QueryConvertible
      * Creates a new literal from the given value. This function automatically constructs the appropriate
      * class based on the type of the value given.
      *
-     * This function cannot be used directly to construct Point or Date types.
-     *
-     * You can create a Point literal by using any of the following functions:
+     * This function cannot be used directly to construct Point or Date types. Instead, you can create a Point literal
+     * by using any of the following functions:
      *
      *  Query::literal()::point2d(...) - For a 2D cartesian point
      *  Query::literal()::point3d(...) - For a 3D cartesian point
@@ -198,7 +202,7 @@ class Query implements QueryConvertible
      *
      * Query::function()::raw(...)
      *
-     * @return FunctionCall
+     * @return FunctionCall|string
      */
     public static function function(): string
     {
@@ -209,7 +213,7 @@ class Query implements QueryConvertible
      * Creates a raw expression.
      *
      * @param string $expression The raw expression
-     * @return ListType|MapType|BooleanType|NumeralType|StringType|NodeType|PathType
+     * @return ListType|MapType|BooleanType|DateTimeType|DateType|LocalDateTimeType|PointType|NumeralType|StringType|TimeType|NodeType|PathType|RelationshipType
      */
     public static function rawExpression(string $expression): AnyType
     {
@@ -222,8 +226,8 @@ class Query implements QueryConvertible
      * @param PathType|NodeType|(PathType|NodeType)[] $patterns A single pattern or a list of patterns
      *
      * @return $this
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/
      *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/
      */
     public function match($patterns): self
     {
@@ -235,7 +239,6 @@ class Query implements QueryConvertible
 
         foreach ($patterns as $pattern) {
             $this->assertClass('pattern', [PathType::class, NodeType::class], $pattern);
-
             $matchClause->addPattern($pattern);
         }
 
@@ -252,8 +255,8 @@ class Query implements QueryConvertible
      * @param bool $distinct
      *
      * @return $this
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
      *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/
      */
     public function returning($expressions, bool $distinct = false): self
@@ -267,7 +270,9 @@ class Query implements QueryConvertible
         foreach ($expressions as $maybeAlias => $expression) {
             $this->assertClass('expression', AnyType::class, $expression);
 
-            if ($expression instanceof Node) {
+            if ($expression instanceof HasVariable) {
+                // If it has a variable, we want to put the variable in the RETURN clause instead of the
+                // object itself
                 $expression = $expression->getVariable();
             }
 
@@ -288,8 +293,8 @@ class Query implements QueryConvertible
      * @param PathType|NodeType|(PathType|NodeType)[] $patterns A single pattern or a list of patterns
      *
      * @return $this
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/create/
      *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/create/
      */
     public function create($patterns): self
     {
@@ -313,22 +318,30 @@ class Query implements QueryConvertible
     /**
      * Creates the DELETE clause.
      *
-     * @param Variable|Variable[] $variables The nodes to delete
+     * @param string|Variable|HasVariable|(string|Variable|HasVariable)[] $variables The nodes to delete
+     * @param bool $detach Whether to DETACH DELETE
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
      *
      */
-    public function delete($variables): self
+    public function delete($variables, bool $detach = false): self
     {
         $deleteClause = new DeleteClause();
+        $deleteClause->setDetach($detach);
 
         if (!is_array($variables)) {
             $variables = [$variables];
         }
 
         foreach ($variables as $variable) {
-            $this->assertClass('variable', Variable::class, $variable);
+            $this->assertClass('variable', ['string', Variable::class, HasVariable::class], $variable);
+
+            if (is_string($variable)) {
+                $variable = Query::variable($variable);
+            } elseif ($variable instanceof HasVariable) {
+                $variable = $variable->getVariable();
+            }
 
             $deleteClause->addVariable($variable);
         }
@@ -341,44 +354,34 @@ class Query implements QueryConvertible
     /**
      * Creates the DETACH DELETE clause.
      *
-     * @param Variable|Variable[] $variables The variables to delete, including relationships
+     * @param string|Variable|HasVariable|(string|Variable|HasVariable)[] $variables The variables to delete, including relationships
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
-     *
+     * @deprecated Use Query::delete(..., true) instead
      */
     public function detachDelete($variables): self
     {
-        $deleteClause = new DeleteClause();
-        $deleteClause->setDetach(true);
-
-        if (!is_array($variables)) {
-            $variables = [$variables];
-        }
-
-        foreach ($variables as $variable) {
-            $this->assertClass('variable', Variable::class, $variable);
-
-            $deleteClause->addVariable($variable);
-        }
-
-        $this->clauses[] = $deleteClause;
-
-        return $this;
+        return $this->delete($variables, true);
     }
 
     /**
      * Creates the LIMIT clause.
      *
-     * @param NumeralType $limit The amount to use as the limit
+     * @param NumeralType|int|float $limit The amount to use as the limit
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/limit/
      *
      */
-    public function limit(NumeralType $limit): self
+    public function limit($limit): self
     {
         $limitClause = new LimitClause();
+
+        if (is_float($limit) || is_int($limit)) {
+            $limit = Literal::decimal($limit);
+        }
+
         $limitClause->setLimit($limit);
 
         $this->clauses[] = $limitClause;
@@ -389,15 +392,20 @@ class Query implements QueryConvertible
     /**
      * Creates the SKIP clause.
      *
-     * @param NumeralType $limit The amount to use as the limit
+     * @param NumeralType|int|float $amount The amount to skip
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/skip/
      */
-    public function skip(NumeralType $limit): self
+    public function skip($amount): self
     {
         $skipClause = new SkipClause();
-        $skipClause->setSkip($limit);
+
+        if (is_float($amount) || is_int($amount)) {
+            $amount = Literal::decimal($amount);
+        }
+
+        $skipClause->setSkip($amount);
 
         $this->clauses[] = $skipClause;
 
@@ -466,7 +474,7 @@ class Query implements QueryConvertible
      * Creates the ORDER BY clause.
      *
      * @param Property|Property[] $properties A single property or a list of properties
-     * @param bool $descending Whether or not to order in a descending order
+     * @param bool $descending Whether to order in descending order
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/order-by/
@@ -572,10 +580,8 @@ class Query implements QueryConvertible
      *
      * @param AnyType[]|AnyType $expressions The entries to add; if the array-key is non-numerical, it is used as the alias
      *
-     *
      * @return Query
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/with/
-     *
      */
     public function with($expressions): self
     {
@@ -619,8 +625,8 @@ class Query implements QueryConvertible
      * Creates the CALL procedure clause.
      *
      * @param string $procedure The procedure to call
-     * @param AnyType[] $arguments The arguments passed to the procedure
-     * @param Variable[] $yields The results field that will be returned
+     * @param (AnyType|string|bool|float|int)[] $arguments The arguments passed to the procedure
+     * @param (Variable|string)[] $yields The result field that will be returned
      *
      * @return Query
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/call/
@@ -629,6 +635,23 @@ class Query implements QueryConvertible
     public function callProcedure(string $procedure, array $arguments = [], array $yields = []): self
     {
         $callProcedureClause = new CallProcedureClause();
+
+        $arguments = array_map(function ($value): AnyType {
+            if ($value instanceof AnyType) {
+                return $value;
+            }
+
+            return Literal::literal($value);
+        }, $arguments);
+
+        $yields = array_map(function ($value): Variable {
+            if ($value instanceof Variable) {
+                return $value;
+            }
+
+            return Query::variable($value);
+        }, $yields);
+
         $callProcedureClause->setProcedure($procedure);
         $callProcedureClause->withArguments($arguments);
         $callProcedureClause->yields($yields);
@@ -642,7 +665,7 @@ class Query implements QueryConvertible
     /**
      * Combines the result of this query with another one via a UNION clause.
      *
-     * @param callable(Query):void|Query $queryOrCallable The callable decorating a fresh query instance or the query instance to be attached after the union clause.
+     * @param Query|callable(Query):void $queryOrCallable The callable decorating a fresh query instance or the query instance to be attached after the union clause.
      * @param bool $all Whether the union should include all results or remove the duplicates instead.
      *
      * @return Query
@@ -673,7 +696,7 @@ class Query implements QueryConvertible
     /**
      * Creates a CALL sub query clause.
      *
-     * @param callable(Query)|Query $decoratorOrClause The callable decorating the pattern, or the actual CALL clause.
+     * @param Query|callable(Query):void $decoratorOrClause The callable decorating the pattern, or the actual CALL clause.
      *
      * @return Query
      *
@@ -688,7 +711,10 @@ class Query implements QueryConvertible
             $subQuery = $decoratorOrClause;
         }
 
-        $this->clauses[] = new CallClause($subQuery);
+        $callClause = new CallClause();
+        $callClause->setSubQuery($subQuery);
+
+        $this->clauses[] = $callClause;
 
         return $this;
     }
@@ -722,6 +748,16 @@ class Query implements QueryConvertible
      * @return string
      */
     public function toQuery(): string
+    {
+        return $this->build();
+    }
+
+    /**
+     * Automatically build the query if this object is used as a string somewhere.
+     *
+     * @return string
+     */
+    public function __toString(): string
     {
         return $this->build();
     }

@@ -24,7 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Types\CompositeTypes;
 use WikibaseSolutions\CypherDSL\Property;
 
 /**
- * Represents the type "map".
+ * Represents the leaf type "map".
  */
 interface MapType extends CompositeType
 {
