@@ -51,17 +51,13 @@ class PropertyMap implements MapType
     /**
      * PropertyMap constructor.
      *
-     * @param (AnyType|string|int|bool|float)[] $properties The map of properties as a number of key-expression pairs
+     * @param AnyType[] $properties The map of properties as a number of key-expression pairs
      */
     public function __construct(array $properties = [])
     {
-        $properties = array_map(function ($value): AnyType {
-            if ($value instanceof AnyType) {
-                return $value;
-            }
-
-            return Literal::literal($value);
-        }, $properties);
+		foreach ($properties as $property) {
+			$this->assertClass('properties', AnyType::class, $property);
+		}
 
         $this->properties = $properties;
     }

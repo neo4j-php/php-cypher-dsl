@@ -276,7 +276,7 @@ class QueryTest extends TestCase
         $this->assertMatchesRegularExpression("/(RETURN var[0-9a-f]+)/", $statement);
 
         $node = Query::node("m");
-        $node->named('example');
+        $node->setVariable('example');
 
         $statement = (new Query())->returning($node)->build();
 
@@ -558,7 +558,7 @@ class QueryTest extends TestCase
         $this->assertMatchesRegularExpression("/(WITH var[0-9a-f]+)/", $statement);
 
         $node = Query::node("m");
-        $node->named('example');
+        $node->setVariable('example');
 
         $statement = (new Query())->with($node)->build();
 
@@ -699,8 +699,8 @@ class QueryTest extends TestCase
 
     public function testUnionQueryAll(): void
     {
-        $nodeX = Query::node('X')->named('x');
-        $nodeY = Query::node('Y')->named('y');
+        $nodeX = Query::node('X')->setVariable('x');
+        $nodeY = Query::node('Y')->setVariable('y');
 
         $query = Query::new()->match($nodeX)->returning($nodeX->getVariable());
         $right = Query::new()->match($nodeY)->returning($nodeY->getVariable());
@@ -712,8 +712,8 @@ class QueryTest extends TestCase
 
     public function testUnionQuery(): void
     {
-        $nodeX = Query::node('X')->named('x');
-        $nodeY = Query::node('Y')->named('y');
+        $nodeX = Query::node('X')->setVariable('x');
+        $nodeY = Query::node('Y')->setVariable('y');
 
         $query = Query::new()->match($nodeX)->returning($nodeX->getVariable());
         $right = Query::new()->match($nodeY)->returning($nodeY->getVariable());
@@ -725,12 +725,12 @@ class QueryTest extends TestCase
 
     public function testUnionDecorator(): void
     {
-        $nodeX = Query::node('X')->named('x');
+        $nodeX = Query::node('X')->setVariable('x');
 
         $query = Query::new()->match($nodeX)->returning($nodeX->getVariable());
 
         $query = $query->union(function (Query $query) {
-            $nodeY = Query::node('Y')->named('y');
+            $nodeY = Query::node('Y')->setVariable('y');
             $query->match($nodeY)->returning($nodeY->getVariable());
         });
 
@@ -739,12 +739,12 @@ class QueryTest extends TestCase
 
     public function testUnionDecoratorAll(): void
     {
-        $nodeX = Query::node('X')->named('x');
+        $nodeX = Query::node('X')->setVariable('x');
 
         $query = Query::new()->match($nodeX)->returning($nodeX->getVariable());
 
         $query = $query->union(function (Query $query) {
-            $nodeY = Query::node('Y')->named('y');
+            $nodeY = Query::node('Y')->setVariable('y');
             $query->match($nodeY)->returning($nodeY->getVariable());
         }, true);
 
@@ -757,7 +757,7 @@ class QueryTest extends TestCase
 
         $this->assertMatchesRegularExpression('/var[0-9a-f]+\.foo/', $node->property('foo')->toQuery());
 
-        $node->named('foo');
+        $node->setVariable('foo');
 
         $this->assertSame('foo.bar', $node->property('bar')->toQuery());
 
@@ -773,7 +773,7 @@ class QueryTest extends TestCase
 
     public function testCallCallable(): void
     {
-        $node = Query::node('X')->named('y');
+        $node = Query::node('X')->setVariable('y');
         $query = Query::new()->match($node)
             ->call(function (Query $subQuery) use ($node) {
                 $subQuery->with($node->getVariable())
@@ -787,7 +787,7 @@ class QueryTest extends TestCase
 
     public function testCallClause(): void
     {
-        $node = Query::node('X')->named('y');
+        $node = Query::node('X')->setVariable('y');
 
         $sub = Query::new()->with($node->getVariable())
             ->where($node->property('z')->equals(Query::literal('foo'), false))
@@ -869,7 +869,7 @@ class QueryTest extends TestCase
         $this->assertSame("CALL dbms.security.createUser('example_username', 'example_password', false)", $statement);
 
         // CREATE clause
-        $tom = Query::node("Person")->named("tom");
+        $tom = Query::node("Person")->setVariable("tom");
 
         $statement = Query::new()
             ->create($tom)

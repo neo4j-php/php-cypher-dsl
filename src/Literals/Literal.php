@@ -261,7 +261,7 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime-week
      */
-    public static function datetimeYWD(
+    public static function dateTimeYWD(
         $year,
         $week = null,
         $dayOfWeek = null,
@@ -304,7 +304,7 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime-quarter
      */
-    public static function datetimeYQD(
+    public static function dateTimeYQD(
         $year,
         $quarter = null,
         $dayOfQuarter = null,
@@ -346,7 +346,7 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime-ordinal
      */
-    public static function datetimeYD(
+    public static function dateTimeYD(
         $year,
         $ordinalDay = null,
         $hour = null,
@@ -376,7 +376,7 @@ abstract class Literal
      * @param string|StringType $dateString
      * @return DateTimeType
      */
-    public static function datetimeString($dateString): DateTimeType
+    public static function dateTimeString($dateString): DateTimeType
     {
         if (!($dateString instanceof StringType)) {
             $dateString = self::string($dateString);
@@ -393,7 +393,7 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-current
      */
-    public static function localDatetime($timezone = null): LocalDateTimeType
+    public static function localDateTime($timezone = null): LocalDateTimeType
     {
         if ($timezone === null) {
             return FunctionCall::localdatetime();
@@ -422,7 +422,7 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-calendar
      */
-    public static function localDatetimeYMD(
+    public static function localDateTimeYMD(
         $year,
         $month = null,
         $day = null,
@@ -463,7 +463,7 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-week
      */
-    public static function localDatetimeYWD(
+    public static function localDateTimeYWD(
         $year,
         $week = null,
         $dayOfWeek = null,
@@ -503,7 +503,7 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-quarter
      */
-    public static function localDatetimeYQD(
+    public static function localDateTimeYQD(
         $year,
         $quarter = null,
         $dayOfQuarter = null,
@@ -542,7 +542,7 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-ordinal
      */
-    public static function localDatetimeYD(
+    public static function localDateTimeYD(
         $year,
         $ordinalDay = null,
         $hour = null,
@@ -572,7 +572,7 @@ abstract class Literal
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-create-string
      */
-    public static function localDatetimeString($localDateTimeString): LocalDateTimeType
+    public static function localDateTimeString($localDateTimeString): LocalDateTimeType
     {
         if (!($localDateTimeString instanceof StringType)) {
             $localDateTimeString = self::string($localDateTimeString);
@@ -858,7 +858,7 @@ abstract class Literal
      * - 'timezone' is made into StringLiteral.
      *
      * @param array $variables
-     * @return Map
+     * @return PropertyMap
      */
     private static function makeTemporalMap(array $variables): PropertyMap
     {
@@ -880,7 +880,7 @@ abstract class Literal
             } else {
                 if (!$secondsFound && $nullEncountered) {
                     // Check if none of the previous, i.e. more important components, are null.
-                    // sub-second values are not interdependend, but seconds must then be provided.
+                    // sub-second values are not interdependent, but seconds must then be provided.
                     throw new \LogicException("The key $key can only be provided when all more significant components are provided as well.");
                 }
 
@@ -895,6 +895,12 @@ abstract class Literal
         return Query::map($map);
     }
 
+	/**
+	 * Convert the given value to a numeral.
+	 *
+	 * @param NumeralType|float|int $var
+	 * @return Decimal
+	 */
     private static function convertToNumeral($var): NumeralType
     {
         if ($var instanceof NumeralType) {
@@ -904,9 +910,15 @@ abstract class Literal
         return self::decimal($var);
     }
 
-    private static function convertToString($var): StringLiteral
+	/**
+	 * Convert the given value to a string.
+	 *
+	 * @param $var
+	 * @return StringType
+	 */
+    private static function convertToString($var): StringType
     {
-        if ($var instanceof StringLiteral) {
+        if ($var instanceof StringType) {
             return $var;
         }
 

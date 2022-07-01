@@ -28,7 +28,7 @@ class HasVariableTraitTest extends TestCase
 
     public function testNamed(): void
     {
-        $this->hasVariable->named('x');
+        $this->hasVariable->setVariable('x');
 
         $this->assertTrue($this->hasVariable->hasVariable());
         $this->assertEquals('x', $this->hasVariable->getVariable()->getName());

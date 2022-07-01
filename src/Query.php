@@ -57,6 +57,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
@@ -95,11 +96,10 @@ class Query implements QueryConvertible
     /**
      * Creates a node.
      *
-     * @param string|null $label
+     * @param string|null $label The label to give to the node
      *
      * @return Node
      * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
-     *
      */
     public static function node(string $label = null): Node
     {
@@ -109,10 +109,9 @@ class Query implements QueryConvertible
     /**
      * Creates a relationship.
      *
-     * @param array $direction The direction of the relationship, should be either:
-     *                           - Path::DIR_RIGHT (for a relation of (a)-->(b))
-     *                           - Path::DIR_LEFT (for a relation of (a)<--(b))
-     *                           - Path::DIR_UNI (for a relation of (a)--(b))
+     * @param array $direction The direction of the relationship, should be either Path::DIR_RIGHT
+	 *  (for a relation of (a)-->(b)), Path::DIR_LEFT (for a relation of (a)<--(b)) or Path::DIR_UNI
+	 *  (for a relation of (a)--(b))
      *
      * @return Relationship
      * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
@@ -123,7 +122,7 @@ class Query implements QueryConvertible
     }
 
     /**
-     * Creates a variable.
+     * Creates a new variable with the given name, or generates a new variable with a random unique name.
      *
      * @param string|null $variable The name of the variable; leave empty to automatically generate a variable name.
      * @return Variable
@@ -144,13 +143,40 @@ class Query implements QueryConvertible
      *  Query::literal()::point3d(...) - For a 3D cartesian point
      *  Query::literal()::point2dWGS84(...) - For a 2D WGS 84 point
      *  Query::literal()::point3dWGS84(...) - For a 3D WGS 84 point
-     *
-     * @param mixed $literal The literal to construct
-     * @return StringLiteral|Boolean|Decimal|Literal|string
+	 *
+	 * And a Date literal by using one of the following functions:
+	 *
+	 *  Query::literal()::date(...) - For the current date
+	 *  Query::literal()::dateYMD(...) - For a date from the given year, month and day
+	 *  Query::literal()::dateYWD(...) - For a date from the given year, week and day
+	 *  Query::literal()::dateString(...) - For a date from the given date string
+	 *  Query::literal()::dateTime(...) - For the current datetime
+	 *  Query::literal()::dateTimeYMD(...) - For a datetime from the given parameters (see function definition)
+	 *  Query::literal()::dateTimeYWD(...) - For a datetime from the given parameters (see function definition)
+	 *  Query::literal()::dateTimeYQD(...) - For a datetime from the given parameters (see function definition)
+	 *  Query::literal()::dateTimeYD(...) - For a datetime from the given parameters (see function definition)
+	 *  Query::literal()::dateTimeString(...) - For a datetime from the given datetime string
+	 *  Query::literal()::localDateTime(...) - For the current local datetime
+	 *  Query::literal()::localDateTimeYMD(...) - For a local datetime from the given parameters (see function definition)
+	 *  Query::literal()::localDateTimeYWD(...) - For a local datetime from the given parameters (see function definition)
+	 *  Query::literal()::localDateTimeYQD(...) - For a local datetime from the given parameters (see function definition)
+	 *  Query::literal()::localDateTimeYD(...) - For a local datetime from the given parameters (see function definition)
+	 *  Query::literal()::localDateTimeString(...) - For a local datetime from the given datetime string
+	 *  Query::literal()::localTimeCurrent(...) - For the current LocalTime
+	 *  Query::literal()::localTime(...) - For a local time from the given parameters (see function definition)
+	 *  Query::literal()::localTimeString(...) - For a local time from the given time string
+	 *  Query::literal()::time(...) - For the curren time
+	 *  Query::literal()::timeHMS(...) - For a time from the given hour, minute and second
+	 *  Query::literal()::timeString(...) - For a time from the given time string
+	 *
+     * @param string|int|float|bool|null $literal The literal to construct
+     * @return StringLiteral|Boolean|Decimal|Literal|string The string literal that was created (or a reference to
+	 *  the Literal class)
      */
     public static function literal($literal = null)
     {
         if ($literal === null) {
+			// Syntactic sugar for WikibaseSolutions\CypherDSL\Literals\Literal::class
             return self::literal;
         }
 
@@ -160,36 +186,43 @@ class Query implements QueryConvertible
     /**
      * Creates a list of expressions.
      *
-     * @param iterable $values
+     * @param AnyType[]|bool[]|string[]|int[]|float[] $values An iterable of values from which to construct the list
      * @return ExpressionList
      */
     public static function list(iterable $values): ExpressionList
     {
-        $expressions = [];
-        foreach ($values as $value) {
-            $expressions[] = $value instanceof AnyType ?
-                $value : self::literal($value);
-        }
+		$ret = [];
+		foreach ($values as $value) {
+			$ret[] = $value instanceof AnyType ? $value : Literal::literal($value);
+		}
 
-        return new ExpressionList($expressions);
+        return new ExpressionList($ret);
     }
 
     /**
      * Creates a property map.
      *
-     * @param (PropertyType|bool|string|int|float)[] $properties The map of properties as a number of key-expression pairs
+     * @param AnyType[]|bool[]|string[]|int[]|float[] $values The map of properties as a number of
+	 *  key-expression pairs
      * @return PropertyMap
      */
-    public static function map(array $properties): PropertyMap
+    public static function map(array $values): PropertyMap
     {
-        return new PropertyMap($properties);
+		$ret = array_map(function ($value): AnyType {
+			if ($value instanceof AnyType) {
+				return $value;
+			}
+
+			return Literal::literal($value);
+		}, $values);
+
+        return new PropertyMap($ret);
     }
 
     /**
      * Creates a parameter.
      *
-     * @param string $parameter The name of the parameter; may only consist of alphanumeric characters and
-     *                           underscores
+     * @param string $parameter The name of the parameter; may only consist of alphanumeric characters and underscores
      * @return Parameter
      */
     public static function parameter(string $parameter): Parameter
@@ -223,7 +256,7 @@ class Query implements QueryConvertible
     /**
      * Creates the MATCH clause.
      *
-     * @param PathType|NodeType|(PathType|NodeType)[] $patterns A single pattern or a list of patterns
+     * @param PathType|NodeType|PathType[]|NodeType[] $patterns A single pattern or a list of patterns
      *
      * @return $this
      *
@@ -231,16 +264,13 @@ class Query implements QueryConvertible
      */
     public function match($patterns): self
     {
-        $matchClause = new MatchClause();
+		$matchClause = new MatchClause();
 
-        if (!is_array($patterns)) {
-            $patterns = [$patterns];
-        }
+		if (!is_array($patterns)) {
+			$patterns = [$patterns];
+		}
 
-        foreach ($patterns as $pattern) {
-            $this->assertClass('pattern', [PathType::class, NodeType::class], $pattern);
-            $matchClause->addPattern($pattern);
-        }
+		$matchClause->setPatterns($patterns);
 
         $this->clauses[] = $matchClause;
 
@@ -250,7 +280,7 @@ class Query implements QueryConvertible
     /**
      * Creates the RETURN clause.
      *
-     * @param AnyType[]|AnyType $expressions The expressions to return; if the array-key is
+     * @param AnyType|AnyType[] $expressions The expressions to return; if the array-key is
      *                                             non-numerical, it is used as the alias
      * @param bool $distinct
      *
@@ -261,25 +291,20 @@ class Query implements QueryConvertible
      */
     public function returning($expressions, bool $distinct = false): self
     {
-        $returnClause = new ReturnClause();
+		$returnClause = new ReturnClause();
 
-        if (!is_array($expressions)) {
-            $expressions = [$expressions];
-        }
+		if (!is_array($expressions)) {
+			$expressions = [$expressions];
+		}
 
-        foreach ($expressions as $maybeAlias => $expression) {
-            $this->assertClass('expression', AnyType::class, $expression);
+		$expressions = array_map(function ($expression): AnyType {
+			// If it has a variable, we want to put the variable in the RETURN clause instead of the
+			// object itself. Theoretically, a node could be returned directly, but this is extremely
+			// rare. If a user wants to do this, they can use the ReturnClause class directly.
+			return $expression instanceof HasVariable ? $expression->getVariable() : $expression;
+		}, $expressions);
 
-            if ($expression instanceof HasVariable) {
-                // If it has a variable, we want to put the variable in the RETURN clause instead of the
-                // object itself
-                $expression = $expression->getVariable();
-            }
-
-            $alias = is_int($maybeAlias) ? "" : $maybeAlias;
-            $returnClause->addColumn($expression, $alias);
-        }
-
+		$returnClause->setColumns($expressions);
         $returnClause->setDistinct($distinct);
 
         $this->clauses[] = $returnClause;
@@ -290,7 +315,7 @@ class Query implements QueryConvertible
     /**
      * Creates the CREATE clause.
      *
-     * @param PathType|NodeType|(PathType|NodeType)[] $patterns A single pattern or a list of patterns
+     * @param PathType|NodeType|PathType[]|NodeType[] $patterns A single pattern or a list of patterns
      *
      * @return $this
      *
@@ -696,13 +721,15 @@ class Query implements QueryConvertible
     /**
      * Creates a CALL sub query clause.
      *
-     * @param Query|callable(Query):void $decoratorOrClause The callable decorating the pattern, or the actual CALL clause.
+     * @param Query|callable(Query):void $decoratorOrClause The callable decorating the pattern, or the actual
+	 *  CALL clause.
+	 * @param Variable|Variable[] $withVariables The variables to include in the WITH clause for correlation
      *
      * @return Query
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/
      */
-    public function call($decoratorOrClause): self
+    public function call($decoratorOrClause = null, $withVariables = []): self
     {
         if (is_callable($decoratorOrClause)) {
             $subQuery = self::new();
@@ -711,8 +738,13 @@ class Query implements QueryConvertible
             $subQuery = $decoratorOrClause;
         }
 
+		if (!is_array($withVariables)) {
+			$withVariables = [$withVariables];
+		}
+
         $callClause = new CallClause();
         $callClause->setSubQuery($subQuery);
+		$callClause->setWithVariables($withVariables);
 
         $this->clauses[] = $callClause;
 

@@ -200,7 +200,7 @@ class Path implements PathType, HasVariable
         }
 
         if ($name !== null) {
-            $relationship->named($name);
+            $relationship->setVariable($name);
         }
 
         return $relationship;

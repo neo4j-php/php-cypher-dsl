@@ -38,10 +38,18 @@ trait HasVariableTrait
      */
     private ?Variable $variable = null;
 
-    /**
+	/**
+	 * @inheritDoc
+	 */
+	public function named($nameOrVariable)
+	{
+		return $this->setVariable($nameOrVariable);
+	}
+
+	/**
      * @inheritDoc
      */
-    public function named($nameOrVariable)
+    public function setVariable($nameOrVariable)
     {
         self::assertClass('variable', ['string', Variable::class], $nameOrVariable);
 

@@ -97,18 +97,6 @@ class Node implements HasProperties, HasVariable, NodeType
     }
 
     /**
-     * Returns a property on the node.
-     *
-     * @param string $property The name of the property.
-     *
-     * @return Property
-     */
-    public function property(string $property): Property
-    {
-        return new Property($this->getVariable(), $property);
-    }
-
-    /**
      * Returns the string representation of this relationship that can be used directly
      * in a query.
      *

@@ -54,7 +54,7 @@ class ExpressionList implements ListType
     public function __construct(array $expressions)
     {
         foreach ($expressions as $expression) {
-            $this->assertClass('expression', AnyType::class, $expression);
+            $this->assertClass('expressions', AnyType::class, $expression);
         }
 
         $this->expressions = $expressions;

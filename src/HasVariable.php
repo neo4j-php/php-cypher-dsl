@@ -31,9 +31,20 @@ interface HasVariable
 	 *
 	 * @param Variable|string $nameOrVariable The name to give this structural type
 	 *
-	 * @return static
+	 * @return $this
+	 *
+	 * @deprecated Use setName() instead
 	 */
 	public function named($nameOrVariable);
+
+	/**
+	 * Names the structural type.
+	 *
+	 * @param Variable|string $nameOrVariable The name to give this structural type
+	 *
+	 * @return $this
+	 */
+	public function setVariable($nameOrVariable);
 
 	/**
 	 * Returns the name of this object, or generates a new name if this object does not yet have a name.

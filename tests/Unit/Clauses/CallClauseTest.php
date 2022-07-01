@@ -5,9 +5,13 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\CallClause;
 use WikibaseSolutions\CypherDSL\Query;
+use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Variable;
 
 class CallClauseTest extends TestCase
 {
+	use TestHelper;
+
     public function testCallClauseWithoutSubqueryIsEmpty(): void
     {
         $clause = new CallClause();
@@ -15,25 +19,48 @@ class CallClauseTest extends TestCase
         $this->assertEquals('', $clause->toQuery());
     }
 
-    public function testCallClauseEmpty(): void
+    public function testCallClauseWithEmptySubqueryIsEmpty(): void
     {
         $query = Query::new();
 
         $clause = new CallClause();
         $clause->setSubQuery($query);
 
-        $this->assertEquals('', $clause->toQuery());
-        $this->assertEquals(Query::new(), $clause->getSubQuery());
+        $this->assertSame('', $clause->toQuery());
+
+		$clause->setWithVariables(Query::variable('x'));
+
+		$this->assertSame('', $clause->toQuery());
     }
+
+	public function testCallClauseWithoutWithDoesNotHaveWithStatement(): void
+	{
+		$query = Query::new()->match(Query::node('testing'));
+
+		$clause = new CallClause();
+		$clause->setSubQuery($query);
+
+		$this->assertSame('CALL { ' . $query->toQuery() . ' }', $clause->toQuery());
+	}
 
     public function testCallClauseFilled(): void
     {
-        $query = Query::new()->match(Query::node('X')->named('x'))->returning(Query::rawExpression('*'));
+        $query = Query::new()->match(Query::node('X')->setVariable('x'))->returning(Query::rawExpression('*'));
 
         $clause = new CallClause();
         $clause->setSubQuery($query);
 
-        $this->assertEquals('CALL { MATCH (x:X) RETURN * }', $clause->toQuery());
-        $this->assertEquals($query, $clause->getSubQuery());
+        $this->assertSame('CALL { MATCH (x:X) RETURN * }', $clause->toQuery());
     }
+
+	public function testCallClauseWithVariables(): void
+	{
+		$query = Query::new()->match(Query::node('X')->setVariable('x'))->returning(Query::rawExpression('*'));
+
+		$clause = new CallClause();
+		$clause->setSubQuery($query);
+		$clause->setWithVariables(Query::variable('x'));
+
+		$this->assertSame('CALL { WITH x MATCH (x:X) RETURN * }', $clause->toQuery());
+	}
 }

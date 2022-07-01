@@ -77,13 +77,6 @@ class PropertyMapTest extends TestCase
         $this->assertSame($expected, $propertyMap->toQuery());
     }
 
-    public function testLiteralPropertyMap()
-    {
-        $propertyMap = new PropertyMap(["foo" => "bar", "baz" => 1, "quz" => 1.1, "bex" => false]);
-
-        $this->assertSame( "{foo: 'bar', baz: 1, quz: 1.1, bex: false}", $propertyMap->toQuery());
-    }
-
     public function testMergeWith()
     {
         $propertyMap = new PropertyMap(["foo" => new StringLiteral("bar")]);

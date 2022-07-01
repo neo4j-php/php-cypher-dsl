@@ -101,17 +101,17 @@ class Variable implements
     /**
      * Variable constructor.
      *
-     * @param string|null $variable The variable
+     * @param string|null $name The name of the variable
      */
-    public function __construct(?string $variable = null)
+    public function __construct(?string $name = null)
     {
-        if (!isset($variable)) {
-            $variable = $this->generateString('var');
-        }
+        if ($name === null) {
+            $name = $this->generateString('var');
+        } else {
+			self::assertValidName($name);
+		}
 
-        self::assertValidName($variable);
-
-        $this->name = $variable;
+        $this->name = $name;
     }
 
     /**
@@ -225,6 +225,6 @@ class Variable implements
      */
     private function toNode(): Node
     {
-        return Query::node()->named($this);
+        return Query::node()->setVariable($this);
     }
 }

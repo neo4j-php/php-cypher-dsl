@@ -29,8 +29,8 @@ class UnionClauseTest extends TestCase
 
     public function testUnionFactory(): void
     {
-        $nodeX = Query::node('X')->named('x');
-        $nodeY = Query::node('Y')->named('y');
+        $nodeX = Query::node('X')->setVariable('x');
+        $nodeY = Query::node('Y')->setVariable('y');
 
         $left = Query::new()->match($nodeX)->returning($nodeX->getVariable());
         $right = Query::new()->match($nodeY)->returning($nodeY->getVariable());
@@ -42,8 +42,8 @@ class UnionClauseTest extends TestCase
 
     public function testUnionFactoryAll(): void
     {
-        $nodeX = Query::node('X')->named('x');
-        $nodeY = Query::node('Y')->named('y');
+        $nodeX = Query::node('X')->setVariable('x');
+        $nodeY = Query::node('Y')->setVariable('y');
 
         $left = Query::new()->match($nodeX)->returning($nodeX->getVariable());
         $right = Query::new()->match($nodeY)->returning($nodeY->getVariable());

@@ -95,7 +95,7 @@ class RelationshipTest extends TestCase
     public function testWithName(string $name, array $direction, string $expected): void
     {
         $r = new Relationship($direction);
-        $r->named($name);
+        $r->setVariable($name);
 
         $this->assertSame($expected, $r->toQuery());
 
@@ -166,7 +166,7 @@ class RelationshipTest extends TestCase
     public function testWithNameAndType(string $name, string $type, array $direction, string $expected): void
     {
         $r = new Relationship($direction);
-        $r->named($name)->withType($type);
+        $r->setVariable($name)->withType($type);
 
         $this->assertSame($expected, $r->toQuery());
 
@@ -191,7 +191,7 @@ class RelationshipTest extends TestCase
     public function testWithNameAndProperties(string $name, array $properties, array $direction, string $expected): void
     {
         $r = new Relationship($direction);
-        $r->named($name)->withProperties($properties);
+        $r->setVariable($name)->withProperties($properties);
 
         $this->assertSame($expected, $r->toQuery());
 
@@ -241,7 +241,7 @@ class RelationshipTest extends TestCase
     public function testWithNameAndTypeAndProperties(string $name, string $type, array $properties, array $direction, string $expected): void
     {
         $r = new Relationship($direction);
-        $r->named($name)->withType($type)->withProperties($properties);
+        $r->setVariable($name)->withType($type)->withProperties($properties);
 
         $this->assertSame($expected, $r->toQuery());
 
@@ -267,7 +267,7 @@ class RelationshipTest extends TestCase
     public function testWithMultipleTypes(string $name, array $types, array $properties, array $direction, string $expected): void
     {
         $r = new Relationship($direction);
-        $r->named($name)->withProperties($properties);
+        $r->setVariable($name)->withProperties($properties);
 
         foreach ($types as $type) {
             $r->withType($type);
@@ -298,7 +298,7 @@ class RelationshipTest extends TestCase
     public function testVariableLengthRelationshipsWithName(string $name, ?int $minHops, ?int $maxHops, array $direction, string $expected): void
     {
         $r = new Relationship($direction);
-        $r->named($name);
+        $r->setVariable($name);
 
         if (isset($minHops)) {
             $r->withMinHops($minHops);
@@ -400,7 +400,7 @@ class RelationshipTest extends TestCase
     public function testVariableLengthRelationshipsWithNameAndTypeAndProperties(string $name, string $type, array $properties, ?int $minHops, ?int $maxHops, array $direction, string $expected): void
     {
         $r = new Relationship($direction);
-        $r->named($name)->withType($type)->withProperties($properties);
+        $r->setVariable($name)->withType($type)->withProperties($properties);
 
         if (isset($minHops)) {
             $r->withMinHops($minHops);
@@ -426,7 +426,7 @@ class RelationshipTest extends TestCase
     public function testExactLengthRelationships(): void
     {
         $r = new Relationship(Relationship::DIR_RIGHT);
-        $r->named("tom")
+        $r->setVariable("tom")
             ->withType("Person")
             ->withProperties(['name' => Query::literal('Tom Hanks')]);
 

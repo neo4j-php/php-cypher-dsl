@@ -51,7 +51,7 @@ class NodeTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectDeprecationMessage('A name can only contain alphanumeric characters and underscores');
-        $node->named('abcdr`eer');
+        $node->setVariable('abcdr`eer');
     }
 
     /**
@@ -79,7 +79,7 @@ class NodeTest extends TestCase
     public function testOnlyName(string $name, string $expected): void
     {
         $node = new Node();
-        $node->named($name);
+        $node->setVariable($name);
 
         $this->assertSame($expected, $node->toQuery());
 
@@ -116,7 +116,7 @@ class NodeTest extends TestCase
     public function testWithNameAndLabel(string $name, string $label, string $expected): void
     {
         $node = new Node();
-        $node->labeled($label)->named($name);
+        $node->labeled($label)->setVariable($name);
 
         $this->assertSame($expected, $node->toQuery());
 
@@ -136,7 +136,7 @@ class NodeTest extends TestCase
     public function testWithNameAndProperties(string $name, array $properties, string $expected): void
     {
         $node = new Node();
-        $node->named($name)->withProperties($properties);
+        $node->setVariable($name)->withProperties($properties);
 
         $this->assertSame($expected, $node->toQuery());
 
@@ -175,7 +175,7 @@ class NodeTest extends TestCase
     public function testWithNameAndLabelAndProperties(string $name, string $label, array $properties, string $expected): void
     {
         $node = new Node();
-        $node->named($name)->labeled($label)->withProperties($properties);
+        $node->setVariable($name)->labeled($label)->withProperties($properties);
 
         $this->assertSame($expected, $node->toQuery());
 
@@ -239,7 +239,7 @@ class NodeTest extends TestCase
     public function testPropertyWithName(): void
     {
         $node = new Node();
-        $node->named('example');
+        $node->setVariable('example');
 
         $this->assertSame('example.foo', $node->property('foo')->toQuery());
     }

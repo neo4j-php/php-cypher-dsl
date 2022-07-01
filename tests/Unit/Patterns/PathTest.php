@@ -28,7 +28,7 @@ class PathTest extends TestCase
     public function testSingleNodeNamed(): void
     {
         $path = new Path(new Node());
-        $path->named('a');
+        $path->setVariable('a');
 
         self::assertEquals('a = ()', $path->toQuery());
     }
@@ -52,7 +52,7 @@ class PathTest extends TestCase
         $pathX = new Path([new Node(), new Node()], [new Relationship(Relationship::DIR_UNI)]);
         $pathY = new Path([new Node(), new Node()], [new Relationship(Relationship::DIR_UNI)]);
 
-        $pathX->named('x')->relationshipTo($pathY->named('y'));
+        $pathX->setVariable('x')->relationshipTo($pathY->setVariable('y'));
 
         $this->assertEquals('x = ()-[]-()-[]->()-[]-()', $pathX->toQuery());
     }
@@ -61,19 +61,19 @@ class PathTest extends TestCase
     {
         $path = new Path(new Node());
         $path->relationshipUni(new Node('Label'))
-            ->relationshipTo((new Node())->named('b'))
+            ->relationshipTo((new Node())->setVariable('b'))
             ->relationshipFrom(new Node(), 'TYPE', ['x' => Query::literal('y')], 'c')
-            ->relationship(new Relationship(Relationship::DIR_UNI), (new Node())->named('d'))
-            ->named('a');
+            ->relationship(new Relationship(Relationship::DIR_UNI), (new Node())->setVariable('d'))
+            ->setVariable('a');
 
         $this->assertEquals('a = ()-[]-(:Label)-[]->(b)<-[c:TYPE {x: \'y\'}]-()-[]-(d)', $path->toQuery());
 
         $this->assertEquals([
             new Node(),
             new Node('Label'),
-            (new Node())->named('b'),
+            (new Node())->setVariable('b'),
             new Node(),
-            (new Node())->named('d'),
+            (new Node())->setVariable('d'),
         ], $path->getNodes());
 
         $this->assertEquals([
@@ -82,7 +82,7 @@ class PathTest extends TestCase
             (new Relationship(Relationship::DIR_LEFT))
                 ->withType('TYPE')
                 ->withProperties(['x' => Query::literal('y')])
-                ->named('c'),
+                ->setVariable('c'),
             new Relationship(Relationship::DIR_UNI),
         ], $path->getRelationships());
     }

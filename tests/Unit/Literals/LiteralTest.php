@@ -301,7 +301,7 @@ class LiteralTest extends TestCase
      */
     public function testDatetimeYWD($year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected): void
     {
-        $datetime = Literal::datetimeYWD($year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone);
+        $datetime = Literal::dateTimeYWD($year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone);
 
         $this->assertEquals($expected, $datetime);
     }
@@ -331,7 +331,7 @@ class LiteralTest extends TestCase
      */
     public function testDatetimeYQD($year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected): void
     {
-        $datetime = Literal::datetimeYQD($year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone);
+        $datetime = Literal::dateTimeYQD($year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone);
 
         $this->assertEquals($expected, $datetime);
     }
@@ -360,7 +360,7 @@ class LiteralTest extends TestCase
      */
     public function testDatetimeYD($year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected): void
     {
-        $datetime = Literal::datetimeYD($year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone);
+        $datetime = Literal::dateTimeYD($year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone);
 
         $this->assertEquals($expected, $datetime);
     }
@@ -376,21 +376,21 @@ class LiteralTest extends TestCase
 
     public function testDatetimeString(): void
     {
-        $datetime = Literal::datetimeString("2015-07-21T21:40:32.142+01:00");
+        $datetime = Literal::dateTimeString("2015-07-21T21:40:32.142+01:00");
 
         $this->assertEquals(new DateTime(new StringLiteral("2015-07-21T21:40:32.142+01:00")), $datetime);
     }
 
     public function testLocalDateTimeWithoutTimezone(): void
     {
-        $localDateTime = Literal::localDatetime();
+        $localDateTime = Literal::localDateTime();
 
         $this->assertEquals(new LocalDateTime(), $localDateTime);
     }
 
     public function testLocalDateTimeWithTimezone(): void
     {
-        $localDateTime = Literal::localDatetime("America/Los Angeles");
+        $localDateTime = Literal::localDateTime("America/Los Angeles");
 
         $this->assertEquals(new LocalDateTime(new PropertyMap(["timezone" => new StringLiteral("America/Los Angeles")])), $localDateTime);
     }
@@ -410,7 +410,7 @@ class LiteralTest extends TestCase
      */
     public function testLocalDateTimeYMD($year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected): void
     {
-        $localDatetime = Literal::localDatetimeYMD($year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
+        $localDatetime = Literal::localDateTimeYMD($year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
 
         $this->assertEquals($expected, $localDatetime);
     }
@@ -419,7 +419,7 @@ class LiteralTest extends TestCase
     {
         $this->expectException(LogicException::class);
 
-        $datetime = Literal::localDatetimeYMD(2000, null, 17);
+        $datetime = Literal::localDateTimeYMD(2000, null, 17);
 
         $datetime->toQuery();
     }
@@ -439,7 +439,7 @@ class LiteralTest extends TestCase
      */
     public function testLocalDateTimeYWD($year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected): void
     {
-        $localDatetime = Literal::localDatetimeYWD($year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
+        $localDatetime = Literal::localDateTimeYWD($year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
 
         $this->assertEquals($expected, $localDatetime);
     }
@@ -448,7 +448,7 @@ class LiteralTest extends TestCase
     {
         $this->expectException(LogicException::class);
 
-        $datetime = Literal::localDatetimeYWD(2000, null, 17);
+        $datetime = Literal::localDateTimeYWD(2000, null, 17);
 
         $datetime->toQuery();
     }
@@ -468,7 +468,7 @@ class LiteralTest extends TestCase
      */
     public function testLocalDatetimeYQD($year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected): void
     {
-        $localDatetime = Literal::localDatetimeYQD($year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
+        $localDatetime = Literal::localDateTimeYQD($year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
 
         $this->assertEquals($expected, $localDatetime);
     }
@@ -477,7 +477,7 @@ class LiteralTest extends TestCase
     {
         $this->expectException(LogicException::class);
 
-        $datetime = Literal::localDatetimeYQD(2000, null, 17);
+        $datetime = Literal::localDateTimeYQD(2000, null, 17);
 
         $datetime->toQuery();
     }
@@ -496,7 +496,7 @@ class LiteralTest extends TestCase
      */
     public function testLocalDatetimeYD($year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected): void
     {
-        $localDatetime = Literal::localDatetimeYD($year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
+        $localDatetime = Literal::localDateTimeYD($year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
 
         $this->assertEquals($expected, $localDatetime);
     }
@@ -505,14 +505,14 @@ class LiteralTest extends TestCase
     {
         $this->expectException(LogicException::class);
 
-        $datetime = Literal::localDatetimeYD(2000, null, 17);
+        $datetime = Literal::localDateTimeYD(2000, null, 17);
 
         $datetime->toQuery();
     }
 
     public function testLocalDatetimeString(): void
     {
-        $localDatetime = Literal::localDatetimeString("2015-W30-2T214032.142");
+        $localDatetime = Literal::localDateTimeString("2015-W30-2T214032.142");
 
         $this->assertEquals(new LocalDateTime(new StringLiteral("2015-W30-2T214032.142")), $localDatetime);
     }

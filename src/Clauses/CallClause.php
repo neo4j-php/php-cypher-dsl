@@ -22,23 +22,36 @@
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Query;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Variable;
 
 /**
- * This class represents a CALL {} (subquery) clause.
+ * This class represents a CALL {} (subquery) clause. The CALL {} clause evaluates a subquery that returns
+ * some values.
  *
  * @note This clause is not part of the openCypher standard.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/
+ *
+ * @internal This class is not covered by the backward compatibility promise for php-cypher-dsl
+ * @see Query::call()
  */
 class CallClause extends Clause
 {
+	use ErrorTrait;
+
     /**
-     * @var Query|null The query to call
+     * @var Query|null The subquery to call
      */
     private ?Query $subQuery = null;
 
+	/**
+	 * @var Variable[] The variables to include in the WITH clause
+	 */
+	private array $withVariables = [];
+
     /**
-     * Sets the query to call
+     * Sets the query to call.
      *
      * @param Query $subQuery
      * @return $this
@@ -50,8 +63,43 @@ class CallClause extends Clause
         return $this;
     }
 
+	/**
+	 * Sets the variables to include in the WITH clause. This overwrites any previously set variables.
+	 *
+	 * @param Variable[] $variables
+	 * @return $this
+	 *
+	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/#subquery-correlated-importing
+	 */
+	public function setWithVariables(array $variables): self
+	{
+		foreach ($variables as $variable) {
+			$this->assertClass('variables', Variable::class, $variable);
+		}
+
+		$this->withVariables = $variables;
+
+		return $this;
+	}
+
+	/**
+	 * Adds a variable to include in the WITH clause.
+	 *
+	 * @param Variable $variable
+	 * @return $this
+	 *
+	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/#subquery-correlated-importing
+	 */
+	public function addWithVariable(Variable $variable): self
+	{
+		$this->withVariables[] = $variable;
+
+		return $this;
+	}
+
     /**
-     * Returns the query that is being called.
+     * Returns the query that is being called. This query does not include the WITH clause that is inserted
+	 * if there are any correlated variables.
      *
      * @return Query|null
      */
@@ -59,6 +107,16 @@ class CallClause extends Clause
     {
         return $this->subQuery;
     }
+
+	/**
+	 * Returns the variables that will be included in the WITH clause.
+	 *
+	 * @return Variable[]
+	 */
+	public function getWithVariables(): array
+	{
+		return $this->withVariables;
+	}
 
     /**
      * @inheritDoc
@@ -69,13 +127,20 @@ class CallClause extends Clause
             return "";
         }
 
-        $subQuery = $this->subQuery->build();
+		$subQuery = $this->subQuery->build();
 
-        if ($subQuery === "") {
-            return "";
-        }
+		if ($subQuery === "") {
+			return "";
+		}
 
-        return sprintf("{ %s }", trim($this->subQuery->build()));
+		if ($this->withVariables !== []) {
+			$withClause = new WithClause();
+			$withClause->setEntries($this->withVariables);
+
+			return sprintf("{ %s %s }", $withClause->toQuery(), trim($this->subQuery->build()));
+		} else {
+			return sprintf("{ %s }", trim($this->subQuery->build()));
+		}
     }
 
     /**

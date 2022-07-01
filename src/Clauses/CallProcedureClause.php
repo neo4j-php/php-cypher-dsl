@@ -30,6 +30,9 @@ use WikibaseSolutions\CypherDSL\Variable;
  * This class represents a CALL procedure clause.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/call/
+ *
+ * @internal This class is not covered by the backward compatibility promise for php-cypher-dsl
+ * @see Query::callProcedure()
  */
 class CallProcedureClause extends Clause
 {
@@ -60,32 +63,32 @@ class CallProcedureClause extends Clause
     public function setProcedure(string $procedure): self
     {
         $procedureParts = explode('.', $procedure);
-        $escapedProcedure = implode('.', array_map(function (string $part): string {
-            return $this->escape($part);
-        }, $procedureParts));
+		$escapedParts = array_map(function (string $part): string {
+			return $this->escape($part);
+		}, $procedureParts);
 
-        $this->procedure = $escapedProcedure;
-
-        return $this;
-    }
-
-    /**
-     * Sets the literal arguments to pass to this procedure call. This overwrites any previously passed
-     * arguments.
-     *
-     * @param AnyType[] $arguments The arguments to pass to the procedure
-     * @return $this
-     */
-    public function withArguments(array $arguments): self
-    {
-        foreach ($arguments as $argument) {
-            $this->assertClass('arguments', AnyType::class, $argument);
-        }
-
-        $this->arguments = $arguments;
+        $this->procedure = implode('.', $escapedParts);
 
         return $this;
     }
+
+	/**
+	 * Sets the literal arguments to pass to this procedure call. This overwrites any previously passed
+	 * arguments.
+	 *
+	 * @param AnyType[] $arguments The arguments to pass to the procedure
+	 * @return $this
+	 */
+	public function setArguments(array $arguments): self
+	{
+		foreach ($arguments as $argument) {
+			$this->assertClass('arguments', AnyType::class, $argument);
+		}
+
+		$this->arguments = $arguments;
+
+		return $this;
+	}
 
     /**
      * Add a literal argument to pass to this procedure call.
@@ -100,23 +103,64 @@ class CallProcedureClause extends Clause
         return $this;
     }
 
+	/**
+	 * Used to explicitly select which available result fields are returned as newly-bound
+	 * variables.
+	 *
+	 * @param Variable[] $variables
+	 * @return $this
+	 */
+	public function setYields(array $variables): self
+	{
+		foreach ($variables as $variable) {
+			$this->assertClass('variables', Variable::class, $variable);
+		}
+
+		$this->yields = $variables;
+
+		return $this;
+	}
+
+	/**
+	 * Add a variable to yield.
+	 *
+	 * @param Variable $variable
+	 * @return $this
+	 */
+	public function addYield(Variable $variable): self
+	{
+		$this->yields[] = $variable;
+
+		return $this;
+	}
+
     /**
      * Used to explicitly select which available result fields are returned as newly-bound
      * variables.
      *
      * @param Variable[] $variables
      * @return $this
+	 * @deprecated Use CallProcedureClause::setYields(...) instead. This function was deprecated because it does
+	 *  not conform to the naming scheme (see #23).
      */
     public function yields(array $variables): self
     {
-        foreach ($variables as $variable) {
-            $this->assertClass('variable', Variable::class, $variable);
-        }
-
-        $this->yields = $variables;
-
-        return $this;
+        return $this->setYields($variables);
     }
+
+	/**
+	 * Sets the literal arguments to pass to this procedure call. This overwrites any previously passed
+	 * arguments.
+	 *
+	 * @param AnyType[] $arguments The arguments to pass to the procedure
+	 * @return $this
+	 * @deprecated Use CallProcedureClause::setArguments(...) instead. This function was deprecated because it does
+	 *  not conform to the naming scheme (see #23).
+	 */
+	public function withArguments(array $arguments): self
+	{
+		return $this->setArguments($arguments);
+	}
 
     /**
      * Returns the procedure to call.

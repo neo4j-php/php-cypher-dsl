@@ -67,7 +67,6 @@ class Any extends FunctionCall implements BooleanType
         $this->predicate = $predicate;
     }
 
-
     /**
      * @inheritDoc
      */
