@@ -75,10 +75,6 @@ class CallClauseTest extends TestCase
 		$clause->addVariable(Query::variable('b'));
 
 		$this->assertSame('CALL { WITH a, b MATCH (:x) }', $clause->toQuery());
-
-		$clause->addVariable([Query::variable('c'), Query::variable('d')]);
-
-		$this->assertSame('CALL { WITH a, b, c, d MATCH (:x) }', $clause->toQuery());
 	}
 
 	public function testGetSubQuery(): void
@@ -100,7 +96,8 @@ class CallClauseTest extends TestCase
 		$c = Query::variable('c');
 
 		$clause->setVariables([$a]);
-		$clause->addVariable([$b, $c]);
+		$clause->addVariable($b);
+		$clause->addVariable($c);
 
 		$this->assertSame([$a, $b, $c], $clause->getWithVariables());
 	}

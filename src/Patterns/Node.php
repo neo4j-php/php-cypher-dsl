@@ -21,10 +21,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
-use WikibaseSolutions\CypherDSL\HasVariable;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\HasVariableTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\VariableTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
@@ -32,13 +31,15 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 /**
  * This class represents a node.
  *
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 8)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
  */
-class Node implements HasVariable, NodeType
+class Node implements NodeType
 {
     use NodeTypeTrait;
-	use HasVariableTrait;
+
     use EscapeTrait;
+	use VariableTrait;
 
 	/**
 	 * @var PropertyMap|null The properties this Node has

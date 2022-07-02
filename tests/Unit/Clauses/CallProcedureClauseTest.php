@@ -24,7 +24,9 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause;
+use WikibaseSolutions\CypherDSL\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Query;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Literals\StringLiteralTest;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Variable;
@@ -162,4 +164,23 @@ class CallProcedureClauseTest extends TestCase
 
         $this->assertSame('CALL `apoc\\json`.more.`even\\more`()', $callProcedureClause->toQuery());
     }
+
+	public function testAlias(): void
+	{
+		$callProcedureClause = new CallProcedureClause();
+		$callProcedureClause->setProcedure('db.labels');
+		$callProcedureClause->setYields([
+			'alias' => new Variable('a')
+		]);
+
+		$this->assertSame('CALL db.labels() YIELD a AS alias', $callProcedureClause->toQuery());
+
+		$callProcedureClause->addYield(new Variable('b'), 'alias2');
+
+		$this->assertSame('CALL db.labels() YIELD a AS alias, b AS alias2', $callProcedureClause->toQuery());
+
+		$callProcedureClause->addYield(new Variable('c'));
+
+		$this->assertSame('CALL db.labels() YIELD a AS alias, b AS alias2, c', $callProcedureClause->toQuery());
+	}
 }

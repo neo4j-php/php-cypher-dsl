@@ -24,13 +24,10 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 use DomainException;
 use InvalidArgumentException;
 use LogicException;
-use WikibaseSolutions\CypherDSL\HasProperties;
-use WikibaseSolutions\CypherDSL\HasVariable;
 use WikibaseSolutions\CypherDSL\Property;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\HasPropertiesTrait;
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\HasVariableTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\VariableTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\RelationshipTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
@@ -39,13 +36,15 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
  * This class represents an arbitrary relationship between two nodes, a node and a
  * relationship or between two relationships.
  *
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 10)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
  */
-class Relationship implements HasVariable, RelationshipType
+class Relationship implements RelationshipType
 {
     use RelationshipTypeTrait;
-	use HasVariableTrait;
+
     use EscapeTrait;
+	use VariableTrait;
 
     public const DIR_RIGHT = ["-", "->"];
     public const DIR_LEFT = ["<-", "-"];

@@ -224,7 +224,7 @@ class CallProcedureClause extends Clause
 			$yieldParameters = [];
 			foreach ($this->yields as $alias => $yieldVariable) {
 				$yieldParameters[] = is_int($alias) ?
-					$yieldVariable :
+					$yieldVariable->toQuery() :
 					sprintf("%s AS %s", $yieldVariable->toQuery(), $this->escape($alias));
 			}
 

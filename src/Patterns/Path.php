@@ -21,10 +21,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
-use WikibaseSolutions\CypherDSL\HasVariable;
 use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\HasVariableTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\VariableTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PathTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
@@ -32,11 +31,18 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelatableStructuralType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 use WikibaseSolutions\CypherDSL\Variable;
 
-class Path implements PathType, HasVariable
+/**
+ * This class represents a path which is an alternating sequence of nodes and relationships.
+ *
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 5)
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#structural-types
+ */
+class Path implements PathType
 {
     use PathTypeTrait;
-	use HasVariableTrait;
+
     use ErrorTrait;
+	use VariableTrait;
 
     /**
 	 * @var Relationship[]
