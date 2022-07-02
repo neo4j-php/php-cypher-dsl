@@ -24,15 +24,15 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Variable;
 
 /**
- * This class represents a CALL procedure clause.
+ * This class represents a CALL procedure clause. The CALL clause is used to call a procedure deployed in the database.
  *
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 122)
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/call/
- *
- * @internal This class is not covered by the backward compatibility promise for php-cypher-dsl
- * @see Query::callProcedure()
+ * @see Query::callProcedure() for a more convenient method to construct this class
  */
 class CallProcedureClause extends Clause
 {
@@ -45,7 +45,7 @@ class CallProcedureClause extends Clause
     private ?string $procedure = null;
 
     /**
-     * @var AnyType[] The arguments passed to the procedure
+     * @var PropertyType[] The arguments passed to the procedure
      */
     private array $arguments = [];
 
@@ -55,19 +55,15 @@ class CallProcedureClause extends Clause
     private array $yields = [];
 
     /**
-     * Sets the procedure to call. This can be for instance "apoc.load.json".
+     * Sets the procedure to call. This can be for instance "apoc.load.json". This procedure name is automatically
+	 * escaped.
      *
      * @param string $procedure The procedure to call
      * @return $this
      */
     public function setProcedure(string $procedure): self
     {
-        $procedureParts = explode('.', $procedure);
-		$escapedParts = array_map(function (string $part): string {
-			return $this->escape($part);
-		}, $procedureParts);
-
-        $this->procedure = implode('.', $escapedParts);
+        $this->procedure = $procedure;
 
         return $this;
     }
@@ -98,14 +94,14 @@ class CallProcedureClause extends Clause
      */
     public function addArgument(AnyType $argument): self
     {
-        $this->arguments[] = $argument;
+		$this->arguments[] = $argument;
 
-        return $this;
+		return $this;
     }
 
 	/**
 	 * Used to explicitly select which available result fields are returned as newly-bound
-	 * variables.
+	 * variables. If a key is non-numerical, it will be used as an alias.
 	 *
 	 * @param Variable[] $variables
 	 * @return $this
@@ -122,14 +118,19 @@ class CallProcedureClause extends Clause
 	}
 
 	/**
-	 * Add a variable to yield.
+	 * Adds a variable to yield.
 	 *
-	 * @param Variable $variable
+	 * @param Variable $variable The variable to yield
+	 * @param string|null $alias Optionally the alias to use for the variable
 	 * @return $this
 	 */
-	public function addYield(Variable $variable): self
+	public function addYield(Variable $variable, ?string $alias = null): self
 	{
-		$this->yields[] = $variable;
+		if ($alias !== null) {
+			$this->yields[$alias] = $variable;
+		} else {
+			$this->yields[] = $variable;
+		}
 
 		return $this;
 	}
@@ -209,20 +210,27 @@ class CallProcedureClause extends Clause
             return "";
         }
 
+		$procedure = implode(
+			'.',
+			array_map(fn (string $part): string => $this->escape($part), explode('.', $this->procedure))
+		);
+
         $arguments = implode(
             ", ",
             array_map(fn (AnyType $pattern): string => $pattern->toQuery(), $this->arguments)
         );
 
         if (count($this->yields) > 0) {
-            $yieldParameters = implode(
-                ", ",
-                array_map(fn (Variable $variable): string => $variable->toQuery(), $this->yields)
-            );
+			$yieldParameters = [];
+			foreach ($this->yields as $alias => $yieldVariable) {
+				$yieldParameters[] = is_int($alias) ?
+					$yieldVariable :
+					sprintf("%s AS %s", $yieldVariable->toQuery(), $this->escape($alias));
+			}
 
-            return sprintf("%s(%s) YIELD %s", $this->procedure, $arguments, $yieldParameters);
+            return sprintf("%s(%s) YIELD %s", $procedure, $arguments, implode(", ", $yieldParameters));
         }
 
-        return sprintf("%s(%s)", $this->procedure, $arguments);
+        return sprintf("%s(%s)", $procedure, $arguments);
     }
 }

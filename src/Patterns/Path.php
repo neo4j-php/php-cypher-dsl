@@ -196,7 +196,7 @@ class Path implements PathType, HasVariable
         }
 
         if ($properties !== null) {
-            $relationship->withProperties($properties);
+            $relationship->addProperties($properties);
         }
 
         if ($name !== null) {

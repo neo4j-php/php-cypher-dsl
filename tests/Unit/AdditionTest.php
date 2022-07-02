@@ -24,6 +24,8 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Addition;
+use WikibaseSolutions\CypherDSL\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
@@ -32,18 +34,16 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 class AdditionTest extends TestCase
 {
-    use TestHelper;
-
     public function testToQuery(): void
     {
-        $left = $this->getQueryConvertibleMock(NumeralType::class, "10");
-        $right = $this->getQueryConvertibleMock(NumeralType::class, "15");
+		$left = new Decimal(10);
+		$right = new Decimal(15);
         $addition = new Addition($left, $right);
 
         $this->assertSame("(10 + 15)", $addition->toQuery());
 
-        $this->assertEquals($left, $addition->getLeft());
-        $this->assertEquals($right, $addition->getRight());
+        $this->assertSame($left, $addition->getLeft());
+        $this->assertSame($right, $addition->getRight());
 
         $newAddition = new Addition($addition, $addition);
 
@@ -64,9 +64,12 @@ class AdditionTest extends TestCase
 
     public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
+		$left = new PropertyMap([]);
+		$right = new PropertyMap([]);
+
         $this->expectException(TypeError::class);
 
-        $addition = new Addition($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
+        $addition = new Addition($left, $right);
 
         $addition->toQuery();
     }

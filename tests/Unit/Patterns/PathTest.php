@@ -81,7 +81,7 @@ class PathTest extends TestCase
             new Relationship(Relationship::DIR_RIGHT),
             (new Relationship(Relationship::DIR_LEFT))
                 ->withType('TYPE')
-                ->withProperties(['x' => Query::literal('y')])
+                ->addProperties(['x' => Query::literal('y')])
                 ->setVariable('c'),
             new Relationship(Relationship::DIR_UNI),
         ], $path->getRelationships());

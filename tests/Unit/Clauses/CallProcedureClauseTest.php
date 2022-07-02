@@ -24,6 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause;
+use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Variable;
@@ -33,8 +34,6 @@ use WikibaseSolutions\CypherDSL\Variable;
  */
 class CallProcedureClauseTest extends TestCase
 {
-    use TestHelper;
-
     public function testEmptyClause(): void
     {
         $callProcedureClause = new CallProcedureClause();
@@ -61,7 +60,7 @@ class CallProcedureClauseTest extends TestCase
         $callProcedureClause = new CallProcedureClause();
         $callProcedureClause->setProcedure("apoc.json");
 
-        $param = $this->getQueryConvertibleMock(AnyType::class, "'text'");
+        $param = Query::literal('text');
         $callProcedureClause->addArgument($param);
 
         $this->assertSame("CALL apoc.json('text')", $callProcedureClause->toQuery());
@@ -75,7 +74,7 @@ class CallProcedureClauseTest extends TestCase
         $callProcedureClause = new CallProcedureClause();
         $callProcedureClause->setProcedure("apoc.json");
 
-        $expression = $this->getQueryConvertibleMock(AnyType::class, "'text'");
+        $expression = Query::literal('text');
 
         $callProcedureClause->addArgument($expression);
         $callProcedureClause->addArgument($expression);
@@ -92,14 +91,14 @@ class CallProcedureClauseTest extends TestCase
         $callProcedureClause = new CallProcedureClause();
         $callProcedureClause->setProcedure("apoc.json");
 
-        $expression = $this->getQueryConvertibleMock(AnyType::class, "'text'");
+        $expression = Query::literal('text');
 
         $callProcedureClause->addArgument($expression);
         $callProcedureClause->addArgument($expression);
         $callProcedureClause->addArgument($expression);
 
         // This should overwrite the previous calls to addArgument
-        $callProcedureClause->withArguments([$expression]);
+        $callProcedureClause->setArguments([$expression]);
 
         $this->assertSame("CALL apoc.json('text')", $callProcedureClause->toQuery());
         $this->assertEquals([$expression], $callProcedureClause->getArguments());
@@ -113,12 +112,12 @@ class CallProcedureClauseTest extends TestCase
 
         $callProcedureClause->setProcedure("apoc.json");
 
-        $a = $this->getQueryConvertibleMock(Variable::class, "a");
-        $b = $this->getQueryConvertibleMock(Variable::class, "b");
-        $c = $this->getQueryConvertibleMock(Variable::class, "c");
+        $a = Query::variable('a');
+        $b = Query::variable('b');
+        $c = Query::variable('c');
 
         // This should overwrite the previous calls to addArgument
-        $callProcedureClause->yields([$a, $b, $c]);
+        $callProcedureClause->setYields([$a, $b, $c]);
 
         $this->assertSame("CALL apoc.json() YIELD a, b, c", $callProcedureClause->toQuery());
         $this->assertEquals([], $callProcedureClause->getArguments());
@@ -130,12 +129,11 @@ class CallProcedureClauseTest extends TestCase
     {
         $callProcedureClause = new CallProcedureClause();
 
-        $a = $this->getQueryConvertibleMock(AnyType::class, "a");
+        $a = Query::literal('a');
 
         $this->expectException(TypeError::class);
 
-        // callProcedureClause->yields requires a Variable
-        $callProcedureClause->yields([$a]);
+        $callProcedureClause->setYields([$a]);
     }
 
     public function testArgumentsOnlyAcceptsAnyType(): void
@@ -146,8 +144,7 @@ class CallProcedureClauseTest extends TestCase
 
         $this->expectException(TypeError::class);
 
-        // $callProcedureClause->withArguments() requires Anytype
-        $callProcedureClause->withArguments([$a]);
+        $callProcedureClause->setArguments([$a]);
     }
 
     public function testProcedureNameIsEscaped(): void
@@ -155,14 +152,14 @@ class CallProcedureClauseTest extends TestCase
         $callProcedureClause = new CallProcedureClause();
         $callProcedureClause->setProcedure('apoc\\json');
 
-        $this->assertSame('`apoc\\json`', $callProcedureClause->getProcedure());
+        $this->assertSame('CALL `apoc\\json`()', $callProcedureClause->toQuery());
 
         $callProcedureClause->setProcedure('apoc\\json.more');
 
-        $this->assertSame('`apoc\\json`.more', $callProcedureClause->getProcedure());
+        $this->assertSame('CALL `apoc\\json`.more()', $callProcedureClause->toQuery());
 
         $callProcedureClause->setProcedure('apoc\\json.more.even\\more');
 
-        $this->assertSame('`apoc\\json`.more.`even\\more`', $callProcedureClause->getProcedure());
+        $this->assertSame('CALL `apoc\\json`.more.`even\\more`()', $callProcedureClause->toQuery());
     }
 }

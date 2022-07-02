@@ -25,7 +25,6 @@ use WikibaseSolutions\CypherDSL\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\MapTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
@@ -39,27 +38,28 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
  */
 class PropertyMap implements MapType
 {
+	use MapTypeTrait;
+
     use EscapeTrait;
     use ErrorTrait;
-    use MapTypeTrait;
 
     /**
      * @var array The map of properties
      */
-    public array $properties = [];
+    private array $properties;
 
     /**
      * PropertyMap constructor.
      *
-     * @param AnyType[] $properties The map of properties as a number of key-expression pairs
+     * @param PropertyType[]|string[]|int[]|bool[]|float[] $properties The map of properties as a number of
+	 *  key-expression pairs
      */
     public function __construct(array $properties = [])
     {
-		foreach ($properties as $property) {
-			$this->assertClass('properties', AnyType::class, $property);
-		}
-
-        $this->properties = $properties;
+        $this->properties = array_map(
+			fn ($value): PropertyType => $value instanceof PropertyType ? $value : Literal::literal($value),
+			$properties
+		);
     }
 
     /**
@@ -96,7 +96,7 @@ class PropertyMap implements MapType
     /**
      * Returns the map of properties as a number of key-expression pairs.
      *
-     * @return AnyType[]
+     * @return PropertyType[]
      */
     public function getProperties(): array
     {

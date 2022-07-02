@@ -21,13 +21,12 @@
 
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
-use WikibaseSolutions\CypherDSL\HasProperties;
 use WikibaseSolutions\CypherDSL\HasVariable;
-use WikibaseSolutions\CypherDSL\Property;
+use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\HasPropertiesTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\HasVariableTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NodeTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 
 /**
@@ -35,12 +34,16 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
  */
-class Node implements HasProperties, HasVariable, NodeType
+class Node implements HasVariable, NodeType
 {
     use NodeTypeTrait;
-	use HasPropertiesTrait;
 	use HasVariableTrait;
     use EscapeTrait;
+
+	/**
+	 * @var PropertyMap|null The properties this Node has
+	 */
+	private ?PropertyMap $properties = null;
 
     /**
      * @var string[]
@@ -59,15 +62,46 @@ class Node implements HasProperties, HasVariable, NodeType
         }
     }
 
-    /**
-     * Returns the labels of the node.
-     *
-     * @return string[]
-     */
-    public function getLabels(): array
-    {
-        return $this->labels;
-    }
+	/**
+	 * Add the given property to the properties of this object.
+	 *
+	 * @param string $key The name of the property
+	 * @param PropertyType|string|bool|float|int $value The value of the property
+	 *
+	 * @return static
+	 */
+	public function addProperty(string $key, $value): self
+	{
+		if ($this->properties === null) {
+			$this->properties = new PropertyMap();
+		}
+
+		$this->properties->addProperty($key, $value);
+
+		return $this;
+	}
+
+	/**
+	 * Add the given properties to the properties of this object.
+	 *
+	 * @param PropertyMap|PropertyType[]|string[]|bool[]|float[]|int[] $properties
+	 *
+	 * @return $this
+	 */
+	public function addProperties($properties): self
+	{
+		self::assertClass('properties', [PropertyMap::class, 'array'], $properties);
+
+		if ($properties instanceof PropertyMap) {
+			$this->properties->mergeWith($properties);
+		} else {
+			foreach ($properties as $key => $value) {
+				$this->addProperty($key, $value);
+			}
+		}
+
+		return $this;
+	}
 
     /**
      * Adds a label to the node.
@@ -82,19 +116,29 @@ class Node implements HasProperties, HasVariable, NodeType
         return $this;
     }
 
-    /**
-     * Adds a label to the node.
-     *
-     * @param string $label
-     *
-     * @return $this
-     *
-     * @deprecated Use Node::addLabel() instead
-     */
-    public function labeled(string $label): self
-    {
-        return $this->addLabel($label);
-    }
+	/**
+	 * Adds a label to the node.
+	 *
+	 * @param string $label
+	 *
+	 * @return $this
+	 *
+	 * @deprecated Use Node::addLabel() instead
+	 */
+	public function labeled(string $label): self
+	{
+		return $this->addLabel($label);
+	}
+
+	/**
+	 * Returns the labels of the node.
+	 *
+	 * @return string[]
+	 */
+	public function getLabels(): array
+	{
+		return $this->labels;
+	}
 
     /**
      * Returns the string representation of this relationship that can be used directly

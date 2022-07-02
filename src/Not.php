@@ -38,14 +38,21 @@ class Not implements BooleanType
      */
     private BooleanType $expression;
 
-    /**
+	/**
+	 * @var bool Whether to insert parentheses around the expression
+	 */
+	private bool $insertParentheses;
+
+	/**
      * Not constructor.
      *
      * @param BooleanType $expression The expression to negate
+	 * @param bool $insertParentheses Whether to insert parentheses around the expression
      */
-    public function __construct(BooleanType $expression)
+    public function __construct(BooleanType $expression, bool $insertParentheses = true)
     {
         $this->expression = $expression;
+		$this->insertParentheses = $insertParentheses;
     }
 
     /**
@@ -58,11 +65,21 @@ class Not implements BooleanType
         return $this->expression;
     }
 
+	/**
+	 * Returns whether the operator inserts parenthesis.
+	 *
+	 * @return bool
+	 */
+	public function insertsParentheses(): bool
+	{
+		return $this->insertParentheses;
+	}
+
     /**
      * @inheritDoc
      */
     public function toQuery(): string
     {
-        return sprintf("(NOT %s)", $this->expression->toQuery());
+        return sprintf($this->insertParentheses ? "(NOT %s)" : "NOT %s", $this->expression->toQuery());
     }
 }

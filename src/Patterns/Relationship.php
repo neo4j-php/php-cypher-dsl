@@ -27,10 +27,12 @@ use LogicException;
 use WikibaseSolutions\CypherDSL\HasProperties;
 use WikibaseSolutions\CypherDSL\HasVariable;
 use WikibaseSolutions\CypherDSL\Property;
+use WikibaseSolutions\CypherDSL\PropertyMap;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\HasPropertiesTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\HasVariableTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\RelationshipTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
@@ -39,16 +41,20 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
  */
-class Relationship implements HasProperties, HasVariable, RelationshipType
+class Relationship implements HasVariable, RelationshipType
 {
     use RelationshipTypeTrait;
-	use HasPropertiesTrait;
 	use HasVariableTrait;
     use EscapeTrait;
 
     public const DIR_RIGHT = ["-", "->"];
     public const DIR_LEFT = ["<-", "-"];
     public const DIR_UNI = ["-", "-"];
+
+	/**
+	 * @var PropertyMap|null The properties this object has
+	 */
+	private ?PropertyMap $properties = null;
 
     /**
      * @var string[] The direction of the relationship
@@ -91,6 +97,53 @@ class Relationship implements HasProperties, HasVariable, RelationshipType
 
         $this->direction = $direction;
     }
+
+	public function property(string $property): Property
+	{
+		return new Property($this->getVariable(), $property);
+	}
+
+	/**
+	 * Add the given property to the properties of this object.
+	 *
+	 * @param string $key The name of the property
+	 * @param PropertyType|string|bool|float|int $value The value of the property
+	 *
+	 * @return $this
+	 */
+	public function addProperty(string $key, $value): self
+	{
+		if ($this->properties === null) {
+			$this->properties = new PropertyMap();
+		}
+
+		$this->properties->addProperty($key, $value);
+
+		return $this;
+	}
+
+	/**
+	 * Add the given properties to the properties of this object. This function automatically converts any native type
+	 * into a Cypher literal.
+	 *
+	 * @param PropertyMap|PropertyType[]|string[]|bool[]|float[]|int[] $properties
+	 *
+	 * @return $this
+	 */
+	public function addProperties($properties): self
+	{
+		self::assertClass('properties', [PropertyMap::class, 'array'], $properties);
+
+		if ($properties instanceof PropertyMap) {
+			$this->properties->mergeWith($properties);
+		} else {
+			foreach ($properties as $key => $value) {
+				$this->addProperty($key, $value);
+			}
+		}
+
+		return $this;
+	}
 
     /**
      * @return string[]
@@ -188,6 +241,46 @@ class Relationship implements HasProperties, HasVariable, RelationshipType
         return $this;
     }
 
+	/**
+	 * Returns the exact amount of hops configured.
+	 *
+	 * @return int|null
+	 */
+	public function getExactHops(): ?int
+	{
+		return $this->exactHops;
+	}
+
+	/**
+	 * Returns the maximum amount of hops configured
+	 *
+	 * @return int|null
+	 */
+	public function getMaxHops(): ?int
+	{
+		return $this->maxHops;
+	}
+
+	/**
+	 * Returns the minimum amount of hops configured.
+	 *
+	 * @return int|null
+	 */
+	public function getMinHops(): ?int
+	{
+		return $this->minHops;
+	}
+
+	/**
+	 * Returns the types of the relationship.
+	 *
+	 * @return string[]
+	 */
+	public function getTypes(): array
+	{
+		return $this->types;
+	}
+
     /**
      * Returns the string representation of this relationship that can be used directly
      * in a query.
@@ -246,50 +339,5 @@ class Relationship implements HasProperties, HasVariable, RelationshipType
         }
 
         return sprintf("[%s]", $conditionInner);
-    }
-
-    /**
-     * Returns the exact amount of hops configured.
-     *
-     * @return int|null
-     */
-    public function getExactHops(): ?int
-    {
-        return $this->exactHops;
-    }
-
-    /**
-     * Returns the maximum amount of hops configured
-     *
-     * @return int|null
-     */
-    public function getMaxHops(): ?int
-    {
-        return $this->maxHops;
-    }
-
-    /**
-     * Returns the minimum amount of hops configured.
-     *
-     * @return int|null
-     */
-    public function getMinHops(): ?int
-    {
-        return $this->minHops;
-    }
-
-    /**
-     * Returns the types of the relationship.
-     *
-     * @return string[]
-     */
-    public function getTypes(): array
-    {
-        return $this->types;
-    }
-
-    public function property(string $property): Property
-    {
-        return new Property($this->getVariable(), $property);
     }
 }

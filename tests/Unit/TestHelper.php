@@ -24,6 +24,9 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 use InvalidArgumentException;
 use WikibaseSolutions\CypherDSL\QueryConvertible;
 
+/**
+ * @deprecated Use actual instances instead.
+ */
 trait TestHelper
 {
     public function getQueryConvertibleMock(string $class, string $value)

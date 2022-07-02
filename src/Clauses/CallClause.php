@@ -32,16 +32,14 @@ use WikibaseSolutions\CypherDSL\Variable;
  * @note This clause is not part of the openCypher standard.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/
- *
- * @internal This class is not covered by the backward compatibility promise for php-cypher-dsl
- * @see Query::call()
+ * @see Query::call() for a more convenient method to construct this class
  */
 class CallClause extends Clause
 {
 	use ErrorTrait;
 
     /**
-     * @var Query|null The subquery to call
+     * @var Query|null The subquery to call, or NULL if no subquery has been set yet
      */
     private ?Query $subQuery = null;
 
@@ -51,9 +49,9 @@ class CallClause extends Clause
 	private array $withVariables = [];
 
     /**
-     * Sets the query to call.
+     * Sets the query to call. This overwrites any previously set subquery.
      *
-     * @param Query $subQuery
+     * @param Query $subQuery The subquery to call
      * @return $this
      */
     public function setSubQuery(Query $subQuery): self
@@ -71,7 +69,7 @@ class CallClause extends Clause
 	 *
 	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/#subquery-correlated-importing
 	 */
-	public function setWithVariables(array $variables): self
+	public function setVariables(array $variables): self
 	{
 		foreach ($variables as $variable) {
 			$this->assertClass('variables', Variable::class, $variable);
@@ -83,14 +81,14 @@ class CallClause extends Clause
 	}
 
 	/**
-	 * Adds a variable to include in the WITH clause.
+	 * Add a variable to include in the WITH clause.
 	 *
 	 * @param Variable $variable
 	 * @return $this
 	 *
 	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/#subquery-correlated-importing
 	 */
-	public function addWithVariable(Variable $variable): self
+	public function addVariable(Variable $variable): self
 	{
 		$this->withVariables[] = $variable;
 

@@ -11,8 +11,6 @@ use WikibaseSolutions\CypherDSL\Variable;
  */
 class AliasTest extends TestCase
 {
-    use TestHelper;
-
     private Alias $alias;
 
     protected function setUp(): void
@@ -20,8 +18,8 @@ class AliasTest extends TestCase
         parent::setUp();
 
         $this->alias = new Alias(
-            $this->getQueryConvertibleMock(Variable::class, "a"),
-            $this->getQueryConvertibleMock(Variable::class, "b")
+            new Variable("a"),
+            new Variable("b")
         );
     }
 
@@ -32,11 +30,11 @@ class AliasTest extends TestCase
 
     public function testGetOriginal(): void
     {
-        $this->assertEquals($this->getQueryConvertibleMock(Variable::class, "a"), $this->alias->getOriginal());
+        $this->assertEquals(new Variable("a"), $this->alias->getOriginal());
     }
 
     public function testGetVariable(): void
     {
-        $this->assertEquals($this->getQueryConvertibleMock(Variable::class, "b"), $this->alias->getVariable());
+        $this->assertEquals(new Variable("b"), $this->alias->getVariable());
     }
 }

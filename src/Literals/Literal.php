@@ -39,6 +39,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 /**
  * Helper class to construct literals.
  *
+ * @note This class should only contain static methods
  * @package WikibaseSolutions\CypherDSL\Literals
  */
 abstract class Literal

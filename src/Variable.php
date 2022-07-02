@@ -114,6 +114,16 @@ class Variable implements
         $this->name = $name;
     }
 
+	/**
+	 * Returns the name of this variable.
+	 *
+	 * @return string
+	 */
+	public function getName(): string
+	{
+		return $this->name;
+	}
+
     /**
      * Adds the given labels to this variable.
      *
@@ -141,23 +151,13 @@ class Variable implements
     }
 
     /**
-     * Returns the name of this variable.
-     *
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
      * @inheritdoc
      *
      * This function allows users to treat a variable as if it were a node.
      */
     public function relationship(RelationshipType $relationship, RelatableStructuralType $relatable): Path
     {
-        return $this->toNode()->relationship($relationship, $relatable);
+        return Query::node()->setVariable($this)->relationship($relationship, $relatable);
     }
 
     /**
@@ -167,7 +167,7 @@ class Variable implements
      */
     public function relationshipTo(RelatableStructuralType $relatable, ?string $type = null, $properties = null, $name = null): Path
     {
-        return $this->toNode()->relationshipTo($relatable, $type, $properties, $name);
+        return Query::node()->setVariable($this)->relationshipTo($relatable, $type, $properties, $name);
     }
 
     /**
@@ -177,7 +177,7 @@ class Variable implements
      */
     public function relationshipFrom(RelatableStructuralType $relatable, ?string $type = null, $properties = null, $name = null): Path
     {
-        return $this->toNode()->relationshipFrom($relatable, $type, $properties, $name);
+        return Query::node()->setVariable($this)->relationshipFrom($relatable, $type, $properties, $name);
     }
 
     /**
@@ -187,27 +187,7 @@ class Variable implements
      */
     public function relationshipUni(RelatableStructuralType $relatable, ?string $type = null, $properties = null, $name = null): Path
     {
-        return $this->toNode()->relationshipUni($relatable, $type, $properties, $name);
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * This function allows users to treat a variable as if it were a node.
-     */
-    public function withProperty(string $key, $value): Node
-    {
-        return $this->toNode()->withProperty($key, $value);
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * This function allows users to treat a variable as if it were a node.
-     */
-    public function withProperties($properties): Node
-    {
-        return $this->toNode()->withProperties($properties);
+        return Query::node()->setVariable($this)->relationshipUni($relatable, $type, $properties, $name);
     }
 
     /**
@@ -216,15 +196,5 @@ class Variable implements
     public function toQuery(): string
     {
         return self::escape($this->name);
-    }
-
-    /**
-     * Returns a node with the name of this variable.
-     *
-     * @return Node
-     */
-    private function toNode(): Node
-    {
-        return Query::node()->setVariable($this);
     }
 }

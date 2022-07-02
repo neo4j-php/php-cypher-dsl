@@ -1,0 +1,57 @@
+* Write tests for CallProcedureClause and Query::callProcedure
+* Add necessary getters/setters to CreateClause
+* Check syntax of CreateClause against openCypher
+* Add additional tests for CreateClause and Query::create
+* Add necessary getters/setters to DeleteClause
+* Check syntax of DeleteClause against openCypher
+* Add additional tests for DeleteClause and Query::delete
+* Add necessary getters/setters to LimitClause
+* Check syntax of LimitClause against openCypher
+* Add additional tests for LimitClause and Query::limit
+* Add necessary getters/setters to MatchClause
+* Check syntax of MatchClause against openCypher
+* Add additional tests for MatchClause and Query::match
+* Add necessary getters/setters to MergeClause
+* Check syntax of MergeClause against openCypher
+* Add additional tests for MergeClause and Query::merge
+* Add necessary getters/setters to OptionalMatchClause
+* Check syntax of OptionalMatchClause against openCypher
+* Add additional tests for OptionalMatchClause and Query::optionalMatch
+* Add necessary getters/setters to OrderByClause
+* Check syntax of OrderByClause against openCypher
+* Add additional tests for OrderByClause and Query::orderBy
+* Add necessary getters/setters to RawClause
+* Check syntax of RawClause against openCypher
+* Add additional tests for RawClause and Query::raw
+* Add necessary getters/setters to RemoveClause
+* Check syntax of RemoveClause against openCypher
+* Add additional tests for RemoveClause and Query::remove
+* Add necessary getters/setters to ReturnClause
+* Check syntax of ReturnClause against openCypher
+* Add additional tests for ReturnClause and Query::return
+* Add necessary getters/setters to SetClause
+* Check syntax of SetClause against openCypher
+* Add additional tests for SetClause and Query::set
+* Add necessary getters/setters to SkipClause
+* Check syntax of SkipClause against openCypher
+* Add additional tests for SkipClause and Query::skip
+* Add necessary getters/setters to UnionClause
+* Check syntax of UnionClause against openCypher
+* Add additional tests for UnionClause and Query::union
+* Add necessary getters/setters to WhereClause
+* Check syntax of WhereClause against openCypher
+* Add additional tests for WhereClause Query::where
+* Add necessary getters/setters to WithClause
+* Check syntax of WithClause against openCypher
+* Add additional tests for WithClause and Query::with
+* Add Assignment as allowed type on some locations (such as CreateClause)
+* Add convenience/helper methods to Node, Relationship and Path (such as "property"), so the user doesn't have to call "getVariable" all the time
+* Move all expressions to new namespace WikibaseSolutions\CypherDSL\Expressions
+* Write tests for new traits
+* See where types can be loosened to accept more native types (discuss with Wout)
+* Add missing clauses
+* Add missing CASE expression
+* Create classless functions to create variables/literals/nodes etc.
+* Remove any reference to deprecated functions
+* Make sure naming scheme is consistent (set/add for things that change the object)
+* Remove references to TestHelper and use objects directly in tests

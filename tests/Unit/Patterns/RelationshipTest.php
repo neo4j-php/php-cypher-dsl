@@ -142,7 +142,7 @@ class RelationshipTest extends TestCase
     public function testWithProperties(array $properties, array $direction, string $expected): void
     {
         $r = new Relationship($direction);
-        $r->withProperties($properties);
+        $r->addProperties($properties);
 
         $this->assertSame($expected, $r->toQuery());
 
@@ -191,7 +191,7 @@ class RelationshipTest extends TestCase
     public function testWithNameAndProperties(string $name, array $properties, array $direction, string $expected): void
     {
         $r = new Relationship($direction);
-        $r->setVariable($name)->withProperties($properties);
+        $r->setVariable($name)->addProperties($properties);
 
         $this->assertSame($expected, $r->toQuery());
 
@@ -216,7 +216,7 @@ class RelationshipTest extends TestCase
     public function testWithTypeAndProperties(string $type, array $properties, array $direction, string $expected): void
     {
         $r = new Relationship($direction);
-        $r->withType($type)->withProperties($properties);
+        $r->withType($type)->addProperties($properties);
 
         $this->assertSame($expected, $r->toQuery());
 
@@ -241,7 +241,7 @@ class RelationshipTest extends TestCase
     public function testWithNameAndTypeAndProperties(string $name, string $type, array $properties, array $direction, string $expected): void
     {
         $r = new Relationship($direction);
-        $r->setVariable($name)->withType($type)->withProperties($properties);
+        $r->setVariable($name)->withType($type)->addProperties($properties);
 
         $this->assertSame($expected, $r->toQuery());
 
@@ -267,7 +267,7 @@ class RelationshipTest extends TestCase
     public function testWithMultipleTypes(string $name, array $types, array $properties, array $direction, string $expected): void
     {
         $r = new Relationship($direction);
-        $r->setVariable($name)->withProperties($properties);
+        $r->setVariable($name)->addProperties($properties);
 
         foreach ($types as $type) {
             $r->withType($type);
@@ -365,7 +365,7 @@ class RelationshipTest extends TestCase
     public function testVariableLengthRelationshipsWithProperties(array $properties, ?int $minHops, ?int $maxHops, array $direction, string $expected): void
     {
         $r = new Relationship($direction);
-        $r->withProperties($properties);
+        $r->addProperties($properties);
 
         if (isset($minHops)) {
             $r->withMinHops($minHops);
@@ -400,7 +400,7 @@ class RelationshipTest extends TestCase
     public function testVariableLengthRelationshipsWithNameAndTypeAndProperties(string $name, string $type, array $properties, ?int $minHops, ?int $maxHops, array $direction, string $expected): void
     {
         $r = new Relationship($direction);
-        $r->setVariable($name)->withType($type)->withProperties($properties);
+        $r->setVariable($name)->withType($type)->addProperties($properties);
 
         if (isset($minHops)) {
             $r->withMinHops($minHops);
@@ -428,7 +428,7 @@ class RelationshipTest extends TestCase
         $r = new Relationship(Relationship::DIR_RIGHT);
         $r->setVariable("tom")
             ->withType("Person")
-            ->withProperties(['name' => Query::literal('Tom Hanks')]);
+            ->addProperties(['name' => Query::literal('Tom Hanks')]);
 
         $r->withExactHops(10);
 
@@ -582,7 +582,7 @@ class RelationshipTest extends TestCase
     public function provideVariableLengthRelationshipsWithPropertiesData(): array
     {
         return [
-            [[], 10, 100, Relationship::DIR_LEFT, "<-[*10..100 {}]-"],
+            [[], 10, 100, Relationship::DIR_LEFT, "<-[*10..100]-"],
             [[new StringLiteral('a')], 10, null, Relationship::DIR_LEFT, "<-[*10.. {`0`: 'a'}]-"],
             [['a' => new StringLiteral('b')], null, 10, Relationship::DIR_LEFT, "<-[*..10 {a: 'b'}]-"],
         ];
@@ -591,7 +591,7 @@ class RelationshipTest extends TestCase
     public function provideVariableLengthRelationshipsWithNameAndTypeAndPropertiesData(): array
     {
         return [
-            ['a', 'a', [], 10, 100, Relationship::DIR_LEFT, "<-[a:a*10..100 {}]-"],
+            ['a', 'a', [], 10, 100, Relationship::DIR_LEFT, "<-[a:a*10..100]-"],
             ['b', 'a', [new StringLiteral('a')], null, 10, Relationship::DIR_LEFT, "<-[b:a*..10 {`0`: 'a'}]-"],
             ['a', 'b', [new StringLiteral('a')], 10, 100, Relationship::DIR_LEFT, "<-[a:b*10..100 {`0`: 'a'}]-"],
             ['a', '', ['a' => new StringLiteral('b')], null, 10, Relationship::DIR_LEFT, "<-[a*..10 {a: 'b'}]-"],
@@ -619,7 +619,7 @@ class RelationshipTest extends TestCase
     public function provideWithPropertiesData(): array
     {
         return [
-            [[], Relationship::DIR_LEFT, "<-[{}]-"],
+            [[], Relationship::DIR_LEFT, "<-[]-"],
             [[new StringLiteral('a')], Relationship::DIR_LEFT, "<-[{`0`: 'a'}]-"],
             [['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "<-[{a: 'b'}]-"],
             [['a' => new StringLiteral('b'), new StringLiteral('c')], Relationship::DIR_LEFT, "<-[{a: 'b', `0`: 'c'}]-"],
@@ -638,7 +638,7 @@ class RelationshipTest extends TestCase
     public function provideWithNameAndPropertiesData(): array
     {
         return [
-            ['a', [], Relationship::DIR_LEFT, "<-[a {}]-"],
+            ['a', [], Relationship::DIR_LEFT, "<-[a]-"],
             ['b', [new StringLiteral('a')], Relationship::DIR_LEFT, "<-[b {`0`: 'a'}]-"],
         ];
     }
@@ -646,7 +646,7 @@ class RelationshipTest extends TestCase
     public function provideWithTypeAndPropertiesData(): array
     {
         return [
-            ['a', [], Relationship::DIR_LEFT, "<-[:a {}]-"],
+            ['a', [], Relationship::DIR_LEFT, "<-[:a]-"],
             ['b', [new StringLiteral('a')], Relationship::DIR_LEFT, "<-[:b {`0`: 'a'}]-"],
             ['', ['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "<-[{a: 'b'}]-"],
             [':', ['a' => new StringLiteral('b'), new StringLiteral('c')], Relationship::DIR_LEFT, "<-[:`:` {a: 'b', `0`: 'c'}]-"],
@@ -656,7 +656,7 @@ class RelationshipTest extends TestCase
     public function provideWithNameAndTypeAndPropertiesData(): array
     {
         return [
-            ['a', 'a', [], Relationship::DIR_LEFT, "<-[a:a {}]-"],
+            ['a', 'a', [], Relationship::DIR_LEFT, "<-[a:a]-"],
             ['b', 'a', [new StringLiteral('a')], Relationship::DIR_LEFT, "<-[b:a {`0`: 'a'}]-"],
             ['a', 'b', [new StringLiteral('a')], Relationship::DIR_LEFT, "<-[a:b {`0`: 'a'}]-"],
             ['a', '', ['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "<-[a {a: 'b'}]-"],
@@ -667,10 +667,10 @@ class RelationshipTest extends TestCase
     public function provideWithMultipleTypesData(): array
     {
         return [
-            ['a', [], [], Relationship::DIR_LEFT, "<-[a {}]-"],
+            ['a', [], [], Relationship::DIR_LEFT, "<-[a]-"],
             ['b', ['a'], [new StringLiteral('a')], Relationship::DIR_LEFT, "<-[b:a {`0`: 'a'}]-"],
             ['a', ['a', 'b', 'c'], [new StringLiteral('a')], Relationship::DIR_LEFT, "<-[a:a|b|c {`0`: 'a'}]-"],
-            ['a', ['a', 'b'], [], Relationship::DIR_LEFT, "<-[a:a|b {}]-"],
+            ['a', ['a', 'b'], [], Relationship::DIR_LEFT, "<-[a:a|b]-"],
         ];
     }
 }

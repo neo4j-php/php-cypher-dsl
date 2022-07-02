@@ -32,7 +32,7 @@ interface AliasablePropertyType extends PropertyType
 	/**
 	 * Creates an alias of the current expression.
 	 *
-	 * @param Variable $variable
+	 * @param Variable $variable The alias to use
 	 * @return Alias
 	 */
 	public function alias(Variable $variable): Alias;

@@ -98,7 +98,7 @@ class NodeTest extends TestCase
     public function testOnlyProperties(array $properties, string $expected): void
     {
         $node = new Node();
-        $node->withProperties($properties);
+        $node->addProperties($properties);
 
         $this->assertSame($expected, $node->toQuery());
 
@@ -136,7 +136,7 @@ class NodeTest extends TestCase
     public function testWithNameAndProperties(string $name, array $properties, string $expected): void
     {
         $node = new Node();
-        $node->setVariable($name)->withProperties($properties);
+        $node->setVariable($name)->addProperties($properties);
 
         $this->assertSame($expected, $node->toQuery());
 
@@ -156,7 +156,7 @@ class NodeTest extends TestCase
     public function testWithLabelAndProperties(string $label, array $properties, string $expected): void
     {
         $node = new Node();
-        $node->labeled($label)->withProperties($properties);
+        $node->labeled($label)->addProperties($properties);
 
         $this->assertSame($expected, $node->toQuery());
 
@@ -175,7 +175,7 @@ class NodeTest extends TestCase
     public function testWithNameAndLabelAndProperties(string $name, string $label, array $properties, string $expected): void
     {
         $node = new Node();
-        $node->setVariable($name)->labeled($label)->withProperties($properties);
+        $node->setVariable($name)->labeled($label)->addProperties($properties);
 
         $this->assertSame($expected, $node->toQuery());
 
@@ -219,19 +219,19 @@ class NodeTest extends TestCase
     {
         $node = new Node();
 
-        $node->withProperty("foo", new StringLiteral("bar"));
+        $node->addProperty("foo", new StringLiteral("bar"));
 
         $this->assertSame("({foo: 'bar'})", $node->toQuery());
 
-        $node->withProperty("foo", new StringLiteral("bar"));
+        $node->addProperty("foo", new StringLiteral("bar"));
 
         $this->assertSame("({foo: 'bar'})", $node->toQuery());
 
-        $node->withProperty("baz", new StringLiteral("bar"));
+        $node->addProperty("baz", new StringLiteral("bar"));
 
         $this->assertSame("({foo: 'bar', baz: 'bar'})", $node->toQuery());
 
-        $node->withProperties(["foo" => new StringLiteral("baz"), "qux" => new StringLiteral("baz")]);
+        $node->addProperties(["foo" => new StringLiteral("baz"), "qux" => new StringLiteral("baz")]);
 
         $this->assertSame("({foo: 'baz', baz: 'bar', qux: 'baz'})", $node->toQuery());
     }

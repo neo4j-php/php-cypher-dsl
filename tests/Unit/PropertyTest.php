@@ -23,6 +23,9 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Property;
+use WikibaseSolutions\CypherDSL\PropertyMap;
+use WikibaseSolutions\CypherDSL\Query;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Variable;
 
 /**
@@ -34,13 +37,13 @@ class PropertyTest extends TestCase
 
     /**
      * @dataProvider provideToQueryData
-     * @param Variable $variable
+     * @param MapType $map
      * @param string $property
      * @param string $expected
      */
-    public function testToQuery(Variable $variable, string $property, string $expected)
+    public function testToQuery(MapType $map, string $property, string $expected)
     {
-        $property = new Property($variable, $property);
+        $property = new Property($map, $property);
 
         $this->assertSame($expected, $property->toQuery());
     }
@@ -48,11 +51,10 @@ class PropertyTest extends TestCase
     public function provideToQueryData(): array
     {
         return [
-            [$this->getQueryConvertibleMock(Variable::class, "a"), "a", "a.a"],
-            [$this->getQueryConvertibleMock(Variable::class, "a"), "b", "a.b"],
-            [$this->getQueryConvertibleMock(Variable::class, "b"), "a", "b.a"],
-            [$this->getQueryConvertibleMock(Variable::class, "a"), ":", "a.`:`"],
-            [$this->getQueryConvertibleMock(Variable::class, "b"), ":", "b.`:`"],
+            [new Variable("a"), "a", "a.a"],
+            [new PropertyMap(["b" => "c"]), "b", "{b: 'c'}.b"],
+            [new Variable("b"), "a", "b.a"],
+            [new PropertyMap([":" => "c"]), ":", "{`:`: 'c'}.`:`"]
         ];
     }
 }

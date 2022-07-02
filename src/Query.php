@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL;
 
+use Closure;
 use WikibaseSolutions\CypherDSL\Clauses\CallClause;
 use WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
@@ -252,6 +253,104 @@ class Query implements QueryConvertible
     {
         return new RawExpression($expression);
     }
+
+	/**
+	 * Creates a CALL sub query clause and adds it to the query.
+	 *
+	 * @param Query|callable(Query):void $query A callable decorating a query, or the actual CALL subquery
+	 * @param Variable|Variable[]|HasVariable|HasVariable[]|string $variables The variables to include in the WITH clause for correlation
+	 *
+	 * @return Query
+	 *
+	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/
+	 * @see CallClause
+	 */
+	public function call($query = null, $variables = []): self
+	{
+		$this->assertClass('query', [Query::class, Closure::class], $query);
+
+		if (is_callable($query)) {
+			$subQuery = self::new();
+			$query($subQuery);
+		} else {
+			$subQuery = $query;
+		}
+
+		if (!is_array($variables)) {
+			$variables = [$variables];
+		}
+
+		$variables = array_map(function ($variable): Variable {
+			$this->assertClass('variables', [Variable::class, HasVariable::class, 'string'], $variable);
+
+			if (is_string($variable)) {
+				return self::variable($variable);
+			}
+
+			if ($variable instanceof HasVariable) {
+				return $variable->getVariable();
+			}
+
+			return $variable;
+		}, $variables);
+
+		$callClause = new CallClause();
+		$callClause->setSubQuery($subQuery);
+		$callClause->setVariables($variables);
+
+		$this->clauses[] = $callClause;
+
+		return $this;
+	}
+
+	/**
+	 * Creates the CALL procedure clause.
+	 *
+	 * @param string $procedure The procedure to call
+	 * @param AnyType[]|AnyType|string[]|string|bool[]|bool|float[]|float|int[]|int $arguments The arguments to pass to the procedure (ignored if $procedure is of type FunctionCall)
+	 * @param Variable[]|Variable|HasVariable[]|HasVariable|string[]|string $yields The result field that will be returned
+	 *
+	 * @return Query
+	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/call/
+	 */
+	public function callProcedure(string $procedure, $arguments = [], $yields = []): self
+	{
+		$callProcedureClause = new CallProcedureClause();
+		$callProcedureClause->setProcedure($procedure);
+
+		if (!is_array($arguments)) {
+			$arguments = [$arguments];
+		}
+
+		$arguments = array_map(function ($argument): AnyType {
+			return $argument instanceof AnyType ? $argument : self::literal($argument);
+		}, $arguments);
+
+		if (!is_array($yields)) {
+			$yields = [$yields];
+		}
+
+		$yields = array_map(function ($yield): Variable {
+			$this->assertClass('yields', [Variable::class, HasVariable::class, 'string'], $yield);
+
+			if (is_string($yield)) {
+				return self::variable($yield);
+			}
+
+			if ($yield instanceof HasVariable) {
+				return $yield->getVariable();
+			}
+
+			return $yield;
+		}, $yields);
+
+		$callProcedureClause->setArguments($arguments);
+		$callProcedureClause->setYields($yields);
+
+		$this->clauses[] = $callProcedureClause;
+
+		return $this;
+	}
 
     /**
      * Creates the MATCH clause.
@@ -647,47 +746,6 @@ class Query implements QueryConvertible
     }
 
     /**
-     * Creates the CALL procedure clause.
-     *
-     * @param string $procedure The procedure to call
-     * @param (AnyType|string|bool|float|int)[] $arguments The arguments passed to the procedure
-     * @param (Variable|string)[] $yields The result field that will be returned
-     *
-     * @return Query
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/call/
-     *
-     */
-    public function callProcedure(string $procedure, array $arguments = [], array $yields = []): self
-    {
-        $callProcedureClause = new CallProcedureClause();
-
-        $arguments = array_map(function ($value): AnyType {
-            if ($value instanceof AnyType) {
-                return $value;
-            }
-
-            return Literal::literal($value);
-        }, $arguments);
-
-        $yields = array_map(function ($value): Variable {
-            if ($value instanceof Variable) {
-                return $value;
-            }
-
-            return Query::variable($value);
-        }, $yields);
-
-        $callProcedureClause->setProcedure($procedure);
-        $callProcedureClause->withArguments($arguments);
-        $callProcedureClause->yields($yields);
-
-        $this->clauses[] = $callProcedureClause;
-
-        return $this;
-    }
-
-
-    /**
      * Combines the result of this query with another one via a UNION clause.
      *
      * @param Query|callable(Query):void $queryOrCallable The callable decorating a fresh query instance or the query instance to be attached after the union clause.
@@ -719,42 +777,9 @@ class Query implements QueryConvertible
     }
 
     /**
-     * Creates a CALL sub query clause.
-     *
-     * @param Query|callable(Query):void $decoratorOrClause The callable decorating the pattern, or the actual
-	 *  CALL clause.
-	 * @param Variable|Variable[] $withVariables The variables to include in the WITH clause for correlation
-     *
-     * @return Query
-     *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/
-     */
-    public function call($decoratorOrClause = null, $withVariables = []): self
-    {
-        if (is_callable($decoratorOrClause)) {
-            $subQuery = self::new();
-            $decoratorOrClause($subQuery);
-        } else {
-            $subQuery = $decoratorOrClause;
-        }
-
-		if (!is_array($withVariables)) {
-			$withVariables = [$withVariables];
-		}
-
-        $callClause = new CallClause();
-        $callClause->setSubQuery($subQuery);
-		$callClause->setWithVariables($withVariables);
-
-        $this->clauses[] = $callClause;
-
-        return $this;
-    }
-
-    /**
      * Add a clause to the query.
      *
-     * @param Clause $clause
+     * @param Clause $clause The clause to add to the query
      * @return Query
      */
     public function addClause(Clause $clause): self
@@ -775,26 +800,6 @@ class Query implements QueryConvertible
     }
 
     /**
-     * Converts the object into a (partial) query.
-     *
-     * @return string
-     */
-    public function toQuery(): string
-    {
-        return $this->build();
-    }
-
-    /**
-     * Automatically build the query if this object is used as a string somewhere.
-     *
-     * @return string
-     */
-    public function __toString(): string
-    {
-        return $this->build();
-    }
-
-    /**
      * Builds the query.
      *
      * @return string The fully constructed query
@@ -811,4 +816,22 @@ class Query implements QueryConvertible
             array_filter($builtClauses, fn ($clause) => !empty($clause))
         );
     }
+
+	/**
+	 * @inheritDoc
+	 */
+	public function toQuery(): string
+	{
+		return $this->build();
+	}
+
+	/**
+	 * Automatically build the query if this object is used as a string somewhere.
+	 *
+	 * @return string
+	 */
+	public function __toString(): string
+	{
+		return $this->build();
+	}
 }

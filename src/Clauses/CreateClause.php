@@ -21,14 +21,17 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 
 /**
- * This class represents a CREATE clause.
+ * This class represents a CREATE clause. The CREATE clause is used to create graph elements.
  *
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 99)
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/create/
+ * @see Query::create() for a more convenient method to construct this class
  */
 class CreateClause extends Clause
 {

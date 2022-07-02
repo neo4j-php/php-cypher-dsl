@@ -3,6 +3,7 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Call\Call;
 use WikibaseSolutions\CypherDSL\Clauses\CallClause;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
@@ -10,8 +11,6 @@ use WikibaseSolutions\CypherDSL\Variable;
 
 class CallClauseTest extends TestCase
 {
-	use TestHelper;
-
     public function testCallClauseWithoutSubqueryIsEmpty(): void
     {
         $clause = new CallClause();
@@ -28,7 +27,7 @@ class CallClauseTest extends TestCase
 
         $this->assertSame('', $clause->toQuery());
 
-		$clause->setWithVariables(Query::variable('x'));
+		$clause->setVariables([Query::variable('x')]);
 
 		$this->assertSame('', $clause->toQuery());
     }
@@ -59,8 +58,50 @@ class CallClauseTest extends TestCase
 
 		$clause = new CallClause();
 		$clause->setSubQuery($query);
-		$clause->setWithVariables(Query::variable('x'));
+		$clause->setVariables([Query::variable('x')]);
 
 		$this->assertSame('CALL { WITH x MATCH (x:X) RETURN * }', $clause->toQuery());
+	}
+
+	public function testAddWithVariable(): void
+	{
+		$clause = new CallClause();
+		$clause->setSubQuery(Query::new()->match(Query::node('x')));
+
+		$clause->addVariable(Query::variable('a'));
+
+		$this->assertSame('CALL { WITH a MATCH (:x) }', $clause->toQuery());
+
+		$clause->addVariable(Query::variable('b'));
+
+		$this->assertSame('CALL { WITH a, b MATCH (:x) }', $clause->toQuery());
+
+		$clause->addVariable([Query::variable('c'), Query::variable('d')]);
+
+		$this->assertSame('CALL { WITH a, b, c, d MATCH (:x) }', $clause->toQuery());
+	}
+
+	public function testGetSubQuery(): void
+	{
+		$clause = new CallClause();
+		$subQuery = Query::new()->match(Query::node('x'));
+
+		$clause->setSubQuery($subQuery);
+
+		$this->assertSame($subQuery, $clause->getSubQuery());
+	}
+
+	public function testGetWithVariables(): void
+	{
+		$clause = new CallClause();
+
+		$a = Query::variable('a');
+		$b = Query::variable('b');
+		$c = Query::variable('c');
+
+		$clause->setVariables([$a]);
+		$clause->addVariable([$b, $c]);
+
+		$this->assertSame([$a, $b, $c], $clause->getWithVariables());
 	}
 }

@@ -38,14 +38,21 @@ class Minus implements NumeralType
      */
     private NumeralType $expression;
 
+	/**
+	 * @var bool Whether to insert parentheses around the expression
+	 */
+	private bool $insertParentheses;
+
     /**
      * Minus constructor.
      *
      * @param NumeralType $expression The expression to negate
+	 * @param bool $insertParentheses Whether to insert parentheses around the expression
      */
-    public function __construct(NumeralType $expression)
+    public function __construct(NumeralType $expression, bool $insertParentheses = false)
     {
         $this->expression = $expression;
+		$this->insertParentheses = $insertParentheses;
     }
 
     /**
@@ -58,11 +65,21 @@ class Minus implements NumeralType
         return $this->expression;
     }
 
+	/**
+	 * Returns whether the operator inserts parenthesis.
+	 *
+	 * @return bool
+	 */
+	public function insertsParentheses(): bool
+	{
+		return $this->insertParentheses;
+	}
+
     /**
      * @inheritDoc
      */
     public function toQuery(): string
     {
-        return sprintf("-%s", $this->expression->toQuery());
+        return sprintf($this->insertParentheses ? "(-%s)" : "-%s", $this->expression->toQuery());
     }
 }

@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Literals;
 
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
@@ -30,21 +31,12 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 class Decimal implements NumeralType
 {
     use NumeralTypeTrait;
+	use ErrorTrait;
 
     /**
      * @var string The value
      */
     private string $value;
-
-    /**
-     * Returns the numeric string value.
-     *
-     * @return string
-     */
-    public function getValue(): string
-    {
-        return $this->value;
-    }
 
     /**
      * Decimal constructor.
@@ -53,10 +45,21 @@ class Decimal implements NumeralType
      */
     public function __construct($value)
     {
+		$this->assertClass('value', ['int', 'float'], $value);
         $this->value = $value;
     }
 
-    /**
+	/**
+	 * Returns the numeric string value.
+	 *
+	 * @return string
+	 */
+	public function getValue(): string
+	{
+		return $this->value;
+	}
+
+	/**
      * @inheritDoc
      */
     public function toQuery(): string
