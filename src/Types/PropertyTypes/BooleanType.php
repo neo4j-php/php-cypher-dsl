@@ -21,10 +21,10 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
-use WikibaseSolutions\CypherDSL\AndOperator;
-use WikibaseSolutions\CypherDSL\Not;
-use WikibaseSolutions\CypherDSL\OrOperator;
-use WikibaseSolutions\CypherDSL\XorOperator;
+use WikibaseSolutions\CypherDSL\Expressions\AndOperator;
+use WikibaseSolutions\CypherDSL\Expressions\Not;
+use WikibaseSolutions\CypherDSL\Expressions\OrOperator;
+use WikibaseSolutions\CypherDSL\Expressions\XorOperator;
 
 /**
  * Represents the leaf type "boolean".

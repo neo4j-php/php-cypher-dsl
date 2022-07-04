@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
 
-use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\Expressions\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelatableStructuralType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 

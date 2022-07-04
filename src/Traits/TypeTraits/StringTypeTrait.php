@@ -21,10 +21,10 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
 
-use WikibaseSolutions\CypherDSL\Contains;
-use WikibaseSolutions\CypherDSL\EndsWith;
-use WikibaseSolutions\CypherDSL\Regex;
-use WikibaseSolutions\CypherDSL\StartsWith;
+use WikibaseSolutions\CypherDSL\Expressions\Contains;
+use WikibaseSolutions\CypherDSL\Expressions\EndsWith;
+use WikibaseSolutions\CypherDSL\Expressions\Regex;
+use WikibaseSolutions\CypherDSL\Expressions\StartsWith;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**

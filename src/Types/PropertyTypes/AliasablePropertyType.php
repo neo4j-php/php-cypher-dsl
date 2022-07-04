@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
-use WikibaseSolutions\CypherDSL\Alias;
-use WikibaseSolutions\CypherDSL\Variable;
+use WikibaseSolutions\CypherDSL\Expressions\Alias;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 
 /**
  * Represents any property type that can be aliased.

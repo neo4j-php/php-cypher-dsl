@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits\HelperTraits;
 
-use WikibaseSolutions\CypherDSL\Variable;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 
 /**
  * Used for getting and setting variables in patterns (nodes, paths and relationships).
@@ -36,19 +36,29 @@ trait VariableTrait
 	private ?Variable $variable = null;
 
 	/**
-	 * @inheritDoc
+	 * Sets the variable to the one given. If the variable is null, it will be unset.
+	 *
+	 * @param Variable|string|null $variable
+	 *
+	 * @return static
 	 */
 	public function setVariable($variable): self
 	{
-		self::assertClass('variable', ['string', Variable::class], $variable);
+		self::assertClass('variable', ['string', Variable::class, 'null'], $variable);
 
-		$this->variable = is_string($variable) ? new Variable($variable) : $variable;
+		if ($variable === null) {
+			unset($this->variable);
+		} else {
+			$this->variable = is_string($variable) ? new Variable($variable) : $variable;
+		}
 
 		return $this;
 	}
 
 	/**
-	 * @inheritDoc
+	 * Returns the variable of the object. This function generates a variable if none has been set.
+	 *
+	 * @return Variable|null
 	 */
 	public function getVariable(): Variable
 	{
@@ -60,18 +70,26 @@ trait VariableTrait
 	}
 
 	/**
-	 * @inheritDoc
+	 * Returns true if and only if this object has a variable explicitly or implicitly set. Note that
+	 * "getVariable" will always return a variable, since it generates a variable if none has been set.
+	 *
+	 * @return bool
 	 */
 	public function hasVariable(): bool {
 		return isset( $this->variable );
 	}
 
 	/**
-	 * @inheritDoc
+	 * Sets the variable to the one given. If the variable is null, it will be unset.
+	 *
+	 * @param Variable|string|null $variable
+	 *
+	 * @return static
+	 * @deprecated Use self::setVariable() instead
 	 */
-	public function named($nameOrVariable): self
+	public function named($variable): self
 	{
-		return $this->setVariable($nameOrVariable);
+		return $this->setVariable($variable);
 	}
 
 }

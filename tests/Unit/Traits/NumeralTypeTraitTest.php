@@ -23,14 +23,14 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Addition;
-use WikibaseSolutions\CypherDSL\Division;
-use WikibaseSolutions\CypherDSL\Exponentiation;
-use WikibaseSolutions\CypherDSL\Minus;
-use WikibaseSolutions\CypherDSL\Modulo;
-use WikibaseSolutions\CypherDSL\Multiplication;
-use WikibaseSolutions\CypherDSL\Subtraction;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Addition;
+use WikibaseSolutions\CypherDSL\Expressions\Division;
+use WikibaseSolutions\CypherDSL\Expressions\Exponentiation;
+use WikibaseSolutions\CypherDSL\Expressions\Minus;
+use WikibaseSolutions\CypherDSL\Expressions\Modulo;
+use WikibaseSolutions\CypherDSL\Expressions\Multiplication;
+use WikibaseSolutions\CypherDSL\Expressions\Subtraction;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 

@@ -21,9 +21,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Variable;
 
 /**
  * This class represents a CALL {} (subquery) clause. The CALL {} clause evaluates a subquery that returns

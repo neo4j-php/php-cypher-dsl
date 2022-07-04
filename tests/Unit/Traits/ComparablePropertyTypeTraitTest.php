@@ -23,11 +23,11 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\GreaterThan;
-use WikibaseSolutions\CypherDSL\GreaterThanOrEqual;
-use WikibaseSolutions\CypherDSL\LessThan;
-use WikibaseSolutions\CypherDSL\LessThanOrEqual;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\GreaterThan;
+use WikibaseSolutions\CypherDSL\Expressions\GreaterThanOrEqual;
+use WikibaseSolutions\CypherDSL\Expressions\LessThan;
+use WikibaseSolutions\CypherDSL\Expressions\LessThanOrEqual;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\ComparablePropertyTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparablePropertyType;
 

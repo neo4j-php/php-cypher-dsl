@@ -21,10 +21,10 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
-use WikibaseSolutions\CypherDSL\GreaterThan;
-use WikibaseSolutions\CypherDSL\GreaterThanOrEqual;
-use WikibaseSolutions\CypherDSL\LessThan;
-use WikibaseSolutions\CypherDSL\LessThanOrEqual;
+use WikibaseSolutions\CypherDSL\Expressions\GreaterThan;
+use WikibaseSolutions\CypherDSL\Expressions\GreaterThanOrEqual;
+use WikibaseSolutions\CypherDSL\Expressions\LessThan;
+use WikibaseSolutions\CypherDSL\Expressions\LessThanOrEqual;
 
 /**
  * Represents any type that can be compared with operators such as <=, >=, < and >.

@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Assignment;
-use WikibaseSolutions\CypherDSL\Label;
+use WikibaseSolutions\CypherDSL\Expressions\Assignment;
+use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 

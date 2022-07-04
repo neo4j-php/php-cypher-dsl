@@ -21,11 +21,11 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
 
-use WikibaseSolutions\CypherDSL\AndOperator;
-use WikibaseSolutions\CypherDSL\Not;
-use WikibaseSolutions\CypherDSL\OrOperator;
+use WikibaseSolutions\CypherDSL\Expressions\AndOperator;
+use WikibaseSolutions\CypherDSL\Expressions\Not;
+use WikibaseSolutions\CypherDSL\Expressions\OrOperator;
+use WikibaseSolutions\CypherDSL\Expressions\XorOperator;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use WikibaseSolutions\CypherDSL\XorOperator;
 
 /**
  * This trait provides a default implementation to satisfy the "BooleanType" interface.

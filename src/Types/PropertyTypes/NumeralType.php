@@ -21,13 +21,13 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
-use WikibaseSolutions\CypherDSL\Addition;
-use WikibaseSolutions\CypherDSL\Division;
-use WikibaseSolutions\CypherDSL\Exponentiation;
-use WikibaseSolutions\CypherDSL\Minus;
-use WikibaseSolutions\CypherDSL\Modulo;
-use WikibaseSolutions\CypherDSL\Multiplication;
-use WikibaseSolutions\CypherDSL\Subtraction;
+use WikibaseSolutions\CypherDSL\Expressions\Addition;
+use WikibaseSolutions\CypherDSL\Expressions\Division;
+use WikibaseSolutions\CypherDSL\Expressions\Exponentiation;
+use WikibaseSolutions\CypherDSL\Expressions\Minus;
+use WikibaseSolutions\CypherDSL\Expressions\Modulo;
+use WikibaseSolutions\CypherDSL\Expressions\Multiplication;
+use WikibaseSolutions\CypherDSL\Expressions\Subtraction;
 
 /**
  * Represents any numeral (integer, float, double).

@@ -21,11 +21,11 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
 
-use WikibaseSolutions\CypherDSL\Equality;
-use WikibaseSolutions\CypherDSL\In;
-use WikibaseSolutions\CypherDSL\Inequality;
-use WikibaseSolutions\CypherDSL\IsNotNull;
-use WikibaseSolutions\CypherDSL\IsNull;
+use WikibaseSolutions\CypherDSL\Expressions\Equality;
+use WikibaseSolutions\CypherDSL\Expressions\In;
+use WikibaseSolutions\CypherDSL\Expressions\Inequality;
+use WikibaseSolutions\CypherDSL\Expressions\IsNotNull;
+use WikibaseSolutions\CypherDSL\Expressions\IsNull;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 

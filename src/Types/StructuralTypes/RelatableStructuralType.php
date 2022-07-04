@@ -21,9 +21,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 
-use WikibaseSolutions\CypherDSL\Patterns\Path;
-use WikibaseSolutions\CypherDSL\PropertyMap;
-use WikibaseSolutions\CypherDSL\Variable;
+use WikibaseSolutions\CypherDSL\Expressions\Patterns\Path;
+use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 
 /**
  * Represents any type in Cypher that can have relationships.

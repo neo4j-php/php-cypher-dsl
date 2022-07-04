@@ -21,10 +21,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
 
-use WikibaseSolutions\CypherDSL\Alias;
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Expressions\Alias;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\AliasablePropertyType;
-use WikibaseSolutions\CypherDSL\Variable;
 
 /**
  * This trait provides a default implementation to satisfy the "AliasablePropertyType" interface.

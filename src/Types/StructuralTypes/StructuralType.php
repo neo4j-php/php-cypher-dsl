@@ -21,10 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 
-use WikibaseSolutions\CypherDSL\Patterns\Node;
-use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Variable;
 
 /**
  * Represents any structural type in Cypher.

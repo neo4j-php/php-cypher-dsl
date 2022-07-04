@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\CompositeTypes;
 
-use WikibaseSolutions\CypherDSL\Property;
+use WikibaseSolutions\CypherDSL\Expressions\Property;
 
 /**
  * Represents the leaf type "map".

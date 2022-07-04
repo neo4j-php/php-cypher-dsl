@@ -43,9 +43,7 @@
 * Add necessary getters/setters to WithClause
 * Check syntax of WithClause against openCypher
 * Add additional tests for WithClause and Query::with
-* Add Assignment as allowed type on some locations (such as CreateClause)
 * Add convenience/helper methods to Node, Relationship and Path (such as "property"), so the user doesn't have to call "getVariable" all the time
-* Move all expressions to new namespace WikibaseSolutions\CypherDSL\Expressions
 * Write tests for new traits
 * See where types can be loosened to accept more native types (discuss with Wout)
 * See where types can be loosened to accept nodes/paths/relationships in place of Variables (to reduce the number of calls to "getVariable()")
