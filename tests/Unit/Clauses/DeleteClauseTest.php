@@ -115,7 +115,7 @@ class DeleteClauseTest extends TestCase
 
         $variables = [$variableA, $variableB];
 
-        $delete->setVariables($variables);
+        $delete->setNodes($variables);
 
         $this->assertSame("DELETE a, b", $delete->toQuery());
         $this->assertSame($variables, $delete->getVariables());
@@ -132,7 +132,7 @@ class DeleteClauseTest extends TestCase
 
         $this->expectException(TypeError::class);
 
-        $delete->setVariables($variables);
+        $delete->setNodes($variables);
         $delete->toQuery();
     }
 
@@ -143,7 +143,7 @@ class DeleteClauseTest extends TestCase
         $this->assertSame([], $delete->getVariables());
 
         $variables = [$this->getQueryConvertibleMock(Variable::class, "a")];
-        $delete->setVariables($variables);
+        $delete->setNodes($variables);
 
         $this->assertSame($variables, $delete->getVariables());
     }

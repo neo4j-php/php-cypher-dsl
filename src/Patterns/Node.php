@@ -19,14 +19,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions\Patterns;
+namespace WikibaseSolutions\CypherDSL\Patterns;
 
+use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\PropertiesTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\VariableTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
  * This class represents a node.
@@ -34,10 +36,8 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 8)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
  */
-class Node implements NodeType
+class Node implements QueryConvertible
 {
-    use NodeTypeTrait;
-
     use EscapeTrait;
 	use VariableTrait;
 
@@ -101,6 +101,72 @@ class Node implements NodeType
 
         return $this;
     }
+
+	/**
+	 * Adds a new relationship from the end of the structural type to the node pattern.
+	 *
+	 * @param Relationship $relationship
+	 * @param Node|Path $relatable
+	 *
+	 * @return Path
+	 */
+	public function relationship(Relationship $relationship, $relatable): Path
+	{
+		$this->assertClass('relatable', [Node::class, Path::class], $relatable);
+
+		return (new Path($this))->relationship($relationship, $relatable);
+	}
+
+	/**
+	 * Adds a new relationship to the node pattern at the end of the structural type to form a path.
+	 *
+	 * @param Node|Path $relatable The node to attach to the end of the structural type
+	 * @param string|null $type The type of the relationship
+	 * @param array|PropertyMap|null $properties The properties to attach to the relationship
+	 * @param string|Variable|null $name The name fo the relationship
+	 *
+	 * @return Path
+	 */
+	public function relationshipTo($relatable, ?string $type = null, $properties = null, $name = null): Path
+	{
+		$this->assertClass('relatable', [Node::class, Path::class], $relatable);
+
+		return (new Path($this))->relationshipTo($relatable, $type, $properties, $name);
+	}
+
+	/**
+	 * Adds a new relationship from the node pattern at the end of the structural type to form a path.
+	 *
+	 * @param Node|Path $relatable The node to attach to the end of the structural type.
+	 * @param string|null $type The type of the relationship
+	 * @param array|PropertyMap|null $properties The properties to attach to the relationship
+	 * @param string|Variable|null $name The name fo the relationship
+	 *
+	 * @return Path
+	 */
+	public function relationshipFrom($relatable, ?string $type = null, $properties = null, $name = null): Path
+	{
+		$this->assertClass('relatable', [Node::class, Path::class], $relatable);
+
+		return (new Path($this))->relationshipFrom($relatable, $type, $properties, $name);
+	}
+
+	/**
+	 * Adds a new unidirectional relationship to the node pattern at the end of the structural type to form a path.
+	 *
+	 * @param Node|Path $relatable The node to attach to the end of the structural type.
+	 * @param string|null $type The type of the relationship
+	 * @param array|PropertyMap|null $properties The properties to attach to the relationship
+	 * @param string|Variable|null $name The name fo the relationship
+	 *
+	 * @return Path
+	 */
+	public function relationshipUni($relatable, ?string $type = null, $properties = null, $name = null): Path
+	{
+		$this->assertClass('relatable', [Node::class, Path::class], $relatable);
+
+		return (new Path($this))->relationshipUni($relatable, $type, $properties, $name);
+	}
 
 	/**
 	 * Returns the labels of the node.

@@ -24,6 +24,6 @@ namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 /**
  * Represents the leaf type "path".
  */
-interface PathType extends RelatableStructuralType
+interface PathType extends StructuralType
 {
 }

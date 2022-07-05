@@ -23,6 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 
 /**
  * This class represents a DELETE clause.
@@ -40,14 +41,12 @@ class DeleteClause extends Clause
      */
     private bool $detach = false;
 
-    /**
-     * The variables that need to be deleted.
-     *
-     * @var Variable[] $variables
-     */
-    private array $variables = [];
+	/**
+	 * @var NodeType[] The nodes to delete
+	 */
+	private array $nodes = [];
 
-    /**
+	/**
      * Sets the clause to DETACH DELETE. Without DETACH DELETE, all relationships need to be explicitly
      * deleted.
      *
@@ -64,30 +63,29 @@ class DeleteClause extends Clause
     /**
      * Sets the variables to be deleted. This overwrites previous variables if they exist.
      *
-     * @param Variable[] $variables The variables to delete
+     * @param NodeType[] $nodes The nodes to delete
      * @return $this
      */
-    public function setVariables(array $variables): self
+    public function setNodes(array $nodes): self
     {
-        foreach ($variables as $variable) {
-            $this->assertClass('variables', Variable::class, $variable);
+        foreach ($nodes as $node) {
+            $this->assertClass('nodes', NodeType::class, $node);
         }
 
-        $this->variables = $variables;
+        $this->nodes = $nodes;
 
         return $this;
     }
 
     /**
-     * Add the variable to be deleted. Unlike DeleteClause::setVariables(), this function adds the variable and does not
-     * override previous variables.
+     * Add a node to be deleted.
      *
-     * @param Variable $variable The name of the object that should be deleted
+     * @param NodeType $node The node that should be deleted
      * @return $this
      */
-    public function addVariable(Variable $variable): self
+    public function addNode(NodeType $node): self
     {
-        $this->variables[] = $variable;
+        $this->nodes[] = $node;
 
         return $this;
     }
@@ -103,13 +101,13 @@ class DeleteClause extends Clause
     }
 
     /**
-     * Returns the variables to delete.
+     * Returns the nodes to delete.
      *
-     * @return Variable[]
+     * @return NodeType[]
      */
-    public function getVariables(): array
+    public function getNodes(): array
     {
-        return $this->variables;
+        return $this->nodes;
     }
 
     /**
@@ -131,7 +129,7 @@ class DeleteClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (Variable $variable) => $variable->toQuery(), $this->variables)
+            array_map(fn (Variable $variable) => $variable->toQuery(), $this->nodes)
         );
     }
 }

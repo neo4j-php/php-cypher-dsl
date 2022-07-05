@@ -19,14 +19,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions\Patterns;
+namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use DomainException;
 use InvalidArgumentException;
 use LogicException;
-use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\PropertiesTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\VariableTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\RelationshipTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -39,10 +38,8 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 10)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
  */
-class Relationship implements RelationshipType
+class Relationship implements QueryConvertible
 {
-    use RelationshipTypeTrait;
-
     use EscapeTrait;
 	use VariableTrait;
 

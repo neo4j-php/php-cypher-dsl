@@ -3,9 +3,9 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Patterns;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Patterns\Node;
-use WikibaseSolutions\CypherDSL\Expressions\Patterns\Path;
-use WikibaseSolutions\CypherDSL\Expressions\Patterns\Relationship;
+use WikibaseSolutions\CypherDSL\Patterns\Node;
+use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Query;
 
 class PathTest extends TestCase

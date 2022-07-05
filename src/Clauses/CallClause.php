@@ -44,7 +44,7 @@ class CallClause extends Clause
     private ?Query $subQuery = null;
 
 	/**
-	 * @var Variable[] The variables to include in the WITH clause
+	 * @var Variable[] The variables to include in the WITH clause (for correlated queries)
 	 */
 	private array $withVariables = [];
 

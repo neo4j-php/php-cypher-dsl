@@ -30,5 +30,5 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
  */
 trait PathTypeTrait
 {
-	use RelatableStructuralTypeTrait;
+	use StructuralTypeTrait;
 }

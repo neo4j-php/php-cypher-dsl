@@ -136,34 +136,6 @@ class CallProcedureClause extends Clause
 	}
 
     /**
-     * Used to explicitly select which available result fields are returned as newly-bound
-     * variables.
-     *
-     * @param Variable[] $variables
-     * @return $this
-	 * @deprecated Use CallProcedureClause::setYields(...) instead. This function was deprecated because it does
-	 *  not conform to the naming scheme (see #23).
-     */
-    public function yields(array $variables): self
-    {
-        return $this->setYields($variables);
-    }
-
-	/**
-	 * Sets the literal arguments to pass to this procedure call. This overwrites any previously passed
-	 * arguments.
-	 *
-	 * @param AnyType[] $arguments The arguments to pass to the procedure
-	 * @return $this
-	 * @deprecated Use CallProcedureClause::setArguments(...) instead. This function was deprecated because it does
-	 *  not conform to the naming scheme (see #23).
-	 */
-	public function withArguments(array $arguments): self
-	{
-		return $this->setArguments($arguments);
-	}
-
-    /**
      * Returns the procedure to call.
      *
      * @return string|null

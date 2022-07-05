@@ -19,16 +19,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions\Patterns;
+namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\VariableTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PathTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelatableStructuralType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
@@ -37,10 +35,8 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 5)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#structural-types
  */
-class Path implements PathType
+class Path implements QueryConvertible
 {
-    use PathTypeTrait;
-
     use ErrorTrait;
 	use VariableTrait;
 
@@ -137,9 +133,14 @@ class Path implements PathType
     }
 
 	/**
-	 * @inheritDoc
+	 * Adds a new relationship from the end of the structural type to the node pattern.
+	 *
+	 * @param Relationship $relationship
+	 * @param Node|Path $relatable
+	 *
+	 * @return Path
 	 */
-	public function relationship(RelationshipType $relationship, RelatableStructuralType $relatable): Path
+	public function relationship(Relationship $relationship, $relatable): Path
 	{
 		self::assertClass('nodeOrPath', [__CLASS__, Node::class], $relatable);
 
@@ -155,9 +156,16 @@ class Path implements PathType
 	}
 
 	/**
-	 * @inheritDoc
+	 * Adds a new relationship to the node pattern at the end of the structural type to form a path.
+	 *
+	 * @param Node|Path $relatable The node to attach to the end of the structural type
+	 * @param string|null $type The type of the relationship
+	 * @param array|PropertyMap|null $properties The properties to attach to the relationship
+	 * @param string|Variable|null $name The name fo the relationship
+	 *
+	 * @return Path
 	 */
-	public function relationshipTo(RelatableStructuralType $relatable, ?string $type = null, $properties = null, $name = null): Path
+	public function relationshipTo($relatable, ?string $type = null, $properties = null, $name = null): Path
 	{
 		$relationship = $this->buildRelationship(Relationship::DIR_RIGHT, $type, $properties, $name);
 
@@ -165,9 +173,16 @@ class Path implements PathType
 	}
 
 	/**
-	 * @inheritDoc
+	 * Adds a new relationship from the node pattern at the end of the structural type to form a path.
+	 *
+	 * @param Node|Path $relatable The node to attach to the end of the structural type.
+	 * @param string|null $type The type of the relationship
+	 * @param array|PropertyMap|null $properties The properties to attach to the relationship
+	 * @param string|Variable|null $name The name fo the relationship
+	 *
+	 * @return Path
 	 */
-	public function relationshipFrom(RelatableStructuralType $relatable, ?string $type = null, $properties = null, $name = null): Path
+	public function relationshipFrom($relatable, ?string $type = null, $properties = null, $name = null): Path
 	{
 		$relationship = $this->buildRelationship(Relationship::DIR_LEFT, $type, $properties, $name);
 
@@ -175,9 +190,16 @@ class Path implements PathType
 	}
 
 	/**
-	 * @inheritDoc
+	 * Adds a new unidirectional relationship to the node pattern at the end of the structural type to form a path.
+	 *
+	 * @param Node|Path $relatable The node to attach to the end of the structural type.
+	 * @param string|null $type The type of the relationship
+	 * @param array|PropertyMap|null $properties The properties to attach to the relationship
+	 * @param string|Variable|null $name The name fo the relationship
+	 *
+	 * @return Path
 	 */
-	public function relationshipUni(RelatableStructuralType $relatable, ?string $type = null, $properties = null, $name = null): Path
+	public function relationshipUni($relatable, ?string $type = null, $properties = null, $name = null): Path
 	{
 		$relationship = $this->buildRelationship(Relationship::DIR_UNI, $type, $properties, $name);
 
@@ -204,7 +226,7 @@ class Path implements PathType
         }
 
         if ($properties !== null) {
-            $relationship->addProperties($properties);
+            $relationship->withProperties($properties);
         }
 
         if ($name !== null) {
