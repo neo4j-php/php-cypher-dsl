@@ -25,6 +25,7 @@ use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\PropertiesTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\VariableTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NodeTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 
 /**
@@ -38,13 +39,17 @@ class Node implements NodeType
     use NodeTypeTrait;
 
     use EscapeTrait;
-	use PropertiesTrait;
 	use VariableTrait;
 
     /**
-     * @var string[]
+     * @var string[] The labels of this node
      */
     private array $labels = [];
+
+    /**
+     * @var MapType|null The properties of this relationship
+     */
+    private ?MapType $properties = null;
 
     /**
      * Node constructor.
@@ -56,6 +61,19 @@ class Node implements NodeType
         if ($label !== null) {
             $this->labels[] = $label;
         }
+    }
+
+    /**
+     * Sets the labels of this node. This overwrites any previously set labels.
+     *
+     * @param string[] $labels
+     * @return $this
+     */
+    public function withLabels(array $labels): self
+    {
+        $this->labels = $labels;
+
+        return $this;
     }
 
     /**
@@ -71,19 +89,18 @@ class Node implements NodeType
         return $this;
     }
 
-	/**
-	 * Adds a label to the node.
-	 *
-	 * @param string $label
-	 *
-	 * @return $this
-	 *
-	 * @deprecated Use Node::addLabel() instead
-	 */
-	public function labeled(string $label): self
-	{
-		return $this->addLabel($label);
-	}
+    /**
+     * Set the properties of this node.
+     *
+     * @param MapType $properties
+     * @return $this
+     */
+    public function withProperties(MapType $properties): self
+    {
+        $this->properties = $properties;
+
+        return $this;
+    }
 
 	/**
 	 * Returns the labels of the node.
@@ -94,6 +111,16 @@ class Node implements NodeType
 	{
 		return $this->labels;
 	}
+
+    /**
+     * Returns the properties of this node.
+     *
+     * @return MapType
+     */
+    public function getProperties(): ?MapType
+    {
+        return $this->properties;
+    }
 
     /**
      * Returns the string representation of this relationship that can be used directly

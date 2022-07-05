@@ -42,7 +42,7 @@ class RelationshipTest extends TestCase
     {
         $r = new Relationship(Relationship::DIR_RIGHT);
 
-        $this->assertSame("-[]->", $r->toQuery());
+        $this->assertSame("-->", $r->toQuery());
 
         $this->assertEquals(Relationship::DIR_RIGHT, $r->getDirection());
         $this->assertEquals([], $r->getTypes());
@@ -58,7 +58,7 @@ class RelationshipTest extends TestCase
     {
         $r = new Relationship(Relationship::DIR_LEFT);
 
-        $this->assertSame("<-[]-", $r->toQuery());
+        $this->assertSame("<--", $r->toQuery());
 
         $this->assertEquals(Relationship::DIR_LEFT, $r->getDirection());
         $this->assertEquals([], $r->getTypes());
@@ -74,7 +74,7 @@ class RelationshipTest extends TestCase
     {
         $r = new Relationship(Relationship::DIR_UNI);
 
-        $this->assertSame("-[]-", $r->toQuery());
+        $this->assertSame("--", $r->toQuery());
 
         $this->assertEquals(Relationship::DIR_UNI, $r->getDirection());
         $this->assertEquals([], $r->getTypes());
@@ -610,7 +610,7 @@ class RelationshipTest extends TestCase
     public function provideWithTypeData(): array
     {
         return [
-            ['', Relationship::DIR_LEFT, '<-[]-'],
+            ['', Relationship::DIR_LEFT, '<--'],
             ['a', Relationship::DIR_LEFT, '<-[:a]-'],
             [':', Relationship::DIR_LEFT, '<-[:`:`]-'],
         ];
@@ -619,7 +619,7 @@ class RelationshipTest extends TestCase
     public function provideWithPropertiesData(): array
     {
         return [
-            [[], Relationship::DIR_LEFT, "<-[]-"],
+            [[], Relationship::DIR_LEFT, "<--"],
             [[new StringLiteral('a')], Relationship::DIR_LEFT, "<-[{`0`: 'a'}]-"],
             [['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "<-[{a: 'b'}]-"],
             [['a' => new StringLiteral('b'), new StringLiteral('c')], Relationship::DIR_LEFT, "<-[{a: 'b', `0`: 'c'}]-"],

@@ -1,6 +1,3 @@
-* Add necessary getters/setters to CreateClause
-* Check syntax of CreateClause against openCypher
-* Add additional tests for CreateClause and Query::create
 * Add necessary getters/setters to DeleteClause
 * Check syntax of DeleteClause against openCypher
 * Add additional tests for DeleteClause and Query::delete

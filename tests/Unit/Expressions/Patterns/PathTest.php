@@ -54,7 +54,7 @@ class PathTest extends TestCase
 
         $pathX->setVariable('x')->relationshipTo($pathY->setVariable('y'));
 
-        $this->assertEquals('x = ()-[]-()-[]->()-[]-()', $pathX->toQuery());
+        $this->assertEquals('x = ()--()-->()--()', $pathX->toQuery());
     }
 
     public function testRelationshipLong(): void
@@ -66,7 +66,7 @@ class PathTest extends TestCase
             ->relationship(new Relationship(Relationship::DIR_UNI), (new Node())->setVariable('d'))
             ->setVariable('a');
 
-        $this->assertEquals('a = ()-[]-(:Label)-[]->(b)<-[c:TYPE {x: \'y\'}]-()-[]-(d)', $path->toQuery());
+        $this->assertEquals('a = ()--(:Label)-->(b)<-[c:TYPE {x: \'y\'}]-()--(d)', $path->toQuery());
 
         $this->assertEquals([
             new Node(),

@@ -29,6 +29,7 @@ use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\PropertiesTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\VariableTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\RelationshipTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
@@ -43,7 +44,6 @@ class Relationship implements RelationshipType
     use RelationshipTypeTrait;
 
     use EscapeTrait;
-	use PropertiesTrait;
 	use VariableTrait;
 
     public const DIR_RIGHT = ["-", "->"];
@@ -76,6 +76,11 @@ class Relationship implements RelationshipType
     private ?int $exactHops = null;
 
     /**
+     * @var MapType|null The properties of this relationship
+     */
+    private ?MapType $properties = null;
+
+    /**
      * Path constructor.
      *
      * @param array $direction The direction of the relationship, should be either:
@@ -92,17 +97,17 @@ class Relationship implements RelationshipType
         $this->direction = $direction;
     }
 
-	public function property(string $property): Property
-	{
-		return new Property($this->getVariable(), $property);
-	}
-
     /**
-     * @return string[]
+     * Set the properties of this node.
+     *
+     * @param MapType $properties
+     * @return $this
      */
-    public function getDirection(): array
+    public function withProperties(MapType $properties): self
     {
-        return $this->direction;
+        $this->properties = $properties;
+
+        return $this;
     }
 
     /**
@@ -191,6 +196,26 @@ class Relationship implements RelationshipType
         $this->types[] = $type;
 
         return $this;
+    }
+
+    /**
+     * Returns the direction of this relationship (one of the Relationship::DIR_* constants).
+     *
+     * @return string[]
+     */
+    public function getDirection(): array
+    {
+        return $this->direction;
+    }
+
+    /**
+     * Returns the properties of this node.
+     *
+     * @return MapType
+     */
+    public function getProperties(): ?MapType
+    {
+        return $this->properties;
     }
 
 	/**
@@ -288,6 +313,11 @@ class Relationship implements RelationshipType
             }
 
             $conditionInner .= $this->properties->toQuery();
+        }
+
+        if ($conditionInner === '') {
+            // If there is no condition, we can also omit the square brackets
+            return '';
         }
 
         return sprintf("[%s]", $conditionInner);

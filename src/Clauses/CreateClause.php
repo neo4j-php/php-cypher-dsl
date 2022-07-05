@@ -21,7 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Expressions\Assignment;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
@@ -39,21 +38,20 @@ class CreateClause extends Clause
     use ErrorTrait;
 
     /**
-     * @var PathType[]|NodeType[]|Assignment[] The patterns to create
+     * @var PathType[]|NodeType[] The patterns to create
      */
     private array $patterns = [];
 
     /**
      * Sets the pattern to create. This overwrites any previously added patterns.
      *
-     * @param PathType[]|NodeType[]|Assignment $patterns The patterns to create; in case of Assignment, the RHS of the
-	 *  assignment should be either a PathType or a NodeType
+     * @param PathType[]|NodeType[] $patterns The patterns to put in the CREATE clause
      * @return $this
      */
     public function setPatterns(array $patterns): self
     {
         foreach ($patterns as $pattern) {
-            $this->assertClass('patterns', [PathType::class, NodeType::class, Assignment::class], $pattern);
+            $this->assertClass('patterns', [PathType::class, NodeType::class], $pattern);
         }
 
         $this->patterns = $patterns;
@@ -64,13 +62,12 @@ class CreateClause extends Clause
     /**
      * Add a pattern to create.
      *
-     * @param PathType|NodeType|Assignment $pattern The pattern to create; in case of Assignment, the RHS of the
-	 *  assignment should be either a PathType or a NodeType
+     * @param PathType|NodeType $pattern The pattern to add to the CREATE clause
      * @return $this
      */
     public function addPattern($pattern): self
     {
-        $this->assertClass('pattern', [PathType::class, NodeType::class, Assignment::class], $pattern);
+        $this->assertClass('pattern', [PathType::class, NodeType::class], $pattern);
         $this->patterns[] = $pattern;
 
         return $this;
@@ -79,7 +76,7 @@ class CreateClause extends Clause
     /**
      * Returns the patterns of the CREATE clause.
      *
-     * @return PathType[]|NodeType[]|Assignment[]
+     * @return PathType[]|NodeType[]
      */
     public function getPatterns(): array
     {
@@ -99,9 +96,6 @@ class CreateClause extends Clause
      */
     protected function getSubject(): string
     {
-        return implode(
-            ", ",
-            array_map(fn ($pattern): string => $pattern->toQuery(), $this->patterns)
-        );
+        return implode(", ", array_map(fn ($pattern): string => $pattern->toQuery(), $this->patterns));
     }
 }

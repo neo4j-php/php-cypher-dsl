@@ -24,6 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\CreateClause;
+use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
@@ -34,8 +35,6 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
  */
 class CreateClauseTest extends TestCase
 {
-    use TestHelper;
-
     public function testEmptyClause(): void
     {
         $createClause = new CreateClause();
@@ -47,7 +46,7 @@ class CreateClauseTest extends TestCase
     public function testSinglePattern(): void
     {
         $createClause = new CreateClause();
-        $pattern = $this->getQueryConvertibleMock(NodeType::class, "(a)");
+        $pattern = Query::node()->setVariable('a');
 
         $createClause->addPattern($pattern);
 
@@ -59,8 +58,8 @@ class CreateClauseTest extends TestCase
     {
         $createClause = new CreateClause();
 
-        $patternA = $this->getQueryConvertibleMock(NodeType::class, "(a)");
-        $patternB = $this->getQueryConvertibleMock(PathType::class, "(b)-->(c)");
+        $patternA = Query::node()->setVariable('a');
+        $patternB = Query::node()->setVariable('b')->relationshipTo(Query::node()->setVariable('c'));
 
         $createClause->addPattern($patternA);
         $createClause->addPattern($patternB);
@@ -73,7 +72,7 @@ class CreateClauseTest extends TestCase
     {
         $createClause = new CreateClause();
 
-        $patternA = $this->getQueryConvertibleMock(NodeType::class, "(a)");
+        $patternA = Query::node();
 
         $createClause->addPattern($patternA);
         $createClause->toQuery();
@@ -85,7 +84,7 @@ class CreateClauseTest extends TestCase
     {
         $createClause = new CreateClause();
 
-        $patternA = $this->getQueryConvertibleMock(PathType::class, "(a)");
+        $patternA = Query::node()->relationshipTo(Query::node());
 
         $createClause->addPattern($patternA);
         $createClause->toQuery();
@@ -96,7 +95,7 @@ class CreateClauseTest extends TestCase
     {
         $createClause = new CreateClause();
 
-        $patternA = $this->getQueryConvertibleMock(AnyType::class, "(a)");
+        $patternA = Query::function()::date();
 
         $this->expectException(TypeError::class);
 
@@ -108,26 +107,31 @@ class CreateClauseTest extends TestCase
     {
         $createClause = new CreateClause();
 
-        $createClause->addPattern($this->getQueryConvertibleMock(PathType::class, "c"));
+        $pathExpression = Query::node()->relationshipTo(Query::node());
+        $createClause->addPattern($pathExpression);
 
-        $patternA = $this->getQueryConvertibleMock(PathType::class, "a");
-        $patternB = $this->getQueryConvertibleMock(NodeType::class, "b");
+        $createClause->setPatterns([Query::node()->setVariable('a'), Query::node()->setVariable('b')]);
 
-        $createClause->setPatterns([$patternA, $patternB]);
+        $this->assertSame("CREATE (a), (b)", $createClause->toQuery());
+    }
 
-        $this->assertSame("CREATE a, b", $createClause->toQuery());
+    public function testAddPattern(): void
+    {
+        $createClause = new CreateClause();
+
+        $createClause->addPattern(Query::node()->setVariable('a'));
+        $createClause->addPattern(Query::node()->setVariable('b'));
+
+        $this->assertSame("CREATE (a), (b)", $createClause->toQuery());
     }
 
     public function testSetPatternsDoesNotAcceptAnyType(): void
     {
         $createClause = new CreateClause();
 
-        $patternA = $this->getQueryConvertibleMock(PathType::class, "a");
-        $patternB = $this->getQueryConvertibleMock(AnyType::class, "b");
-
         $this->expectException(TypeError::class);
 
-        $createClause->setPatterns([$patternA, $patternB]);
+        $createClause->setPatterns([Query::function()::date()]);
         $createClause->toQuery();
     }
 
@@ -136,15 +140,15 @@ class CreateClauseTest extends TestCase
         $createClause = new CreateClause();
 
         $patterns = [
-            $this->getQueryConvertibleMock(PathType::class, "a"),
-            $this->getQueryConvertibleMock(PathType::class, "b")
+            Query::node('a'),
+            Query::node('b')
         ];
 
         $createClause->setPatterns($patterns);
 
         $this->assertSame($patterns, $createClause->getPatterns());
 
-        $patternC = $this->getQueryConvertibleMock(PathType::class, "c");
+        $patternC = Query::node('c');
         $patterns[] = $patternC;
 
         $createClause->addPattern($patternC);
