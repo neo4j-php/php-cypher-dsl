@@ -26,6 +26,8 @@ use WikibaseSolutions\CypherDSL\Expressions\Variable;
 
 /**
  * Represents any property type that can be aliased.
+ *
+ * @note This interface should not be implemented by any class directly.
  */
 interface AliasablePropertyType extends PropertyType
 {

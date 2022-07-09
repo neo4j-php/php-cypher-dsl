@@ -39,6 +39,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  * - relationship
  * - path
  *
+ * @note This interface should not be implemented by any class directly.
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#structural-types
  */
 interface StructuralType extends AnyType

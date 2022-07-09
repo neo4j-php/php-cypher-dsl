@@ -1,6 +1,6 @@
 <?php
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Patterns;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
@@ -80,7 +80,7 @@ class PathTest extends TestCase
             new Relationship(Relationship::DIR_UNI),
             new Relationship(Relationship::DIR_RIGHT),
             (new Relationship(Relationship::DIR_LEFT))
-                ->withType('TYPE')
+                ->addType('TYPE')
                 ->addProperties(['x' => Query::literal('y')])
                 ->setVariable('c'),
             new Relationship(Relationship::DIR_UNI),

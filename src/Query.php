@@ -66,6 +66,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
@@ -199,41 +200,32 @@ class Query implements QueryConvertible
      */
     public static function list(iterable $values): ExpressionList
     {
-		$ret = [];
-		foreach ($values as $value) {
-			$ret[] = $value instanceof AnyType ? $value : Literal::literal($value);
-		}
-
-        return new ExpressionList($ret);
+		return new ExpressionList(
+			array_map(fn ($value): AnyType => $value instanceof AnyType ? $value : Literal::literal($value), $values)
+		);
     }
 
     /**
      * Creates a property map.
      *
-     * @param AnyType[]|bool[]|string[]|int[]|float[] $values The map of properties as a number of
+     * @param PropertyType[]|bool[]|string[]|int[]|float[] $values The map of properties as a number of
 	 *  key-expression pairs
      * @return PropertyMap
      */
     public static function map(array $values): PropertyMap
     {
-		$ret = array_map(function ($value): AnyType {
-			if ($value instanceof AnyType) {
-				return $value;
-			}
-
-			return Literal::literal($value);
-		}, $values);
-
-        return new PropertyMap($ret);
+        return new PropertyMap(
+			array_map(fn ($value): PropertyType => $value instanceof PropertyType ? $value : Literal::literal($value), $values)
+		);
     }
 
     /**
      * Creates a parameter.
      *
-     * @param string $parameter The name of the parameter; may only consist of alphanumeric characters and underscores
+     * @param string|null $parameter The name of the parameter; may only consist of alphanumeric characters and underscores
      * @return Parameter
      */
-    public static function parameter(string $parameter): Parameter
+    public static function parameter(?string $parameter = null): Parameter
     {
         return new Parameter($parameter);
     }

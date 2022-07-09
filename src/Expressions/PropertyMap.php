@@ -44,22 +44,22 @@ class PropertyMap implements MapType
     use ErrorTrait;
 
     /**
-     * @var array The map of properties
+     * @var PropertyType[] The map of properties
      */
     private array $properties;
 
     /**
      * PropertyMap constructor.
      *
-     * @param PropertyType[]|string[]|int[]|bool[]|float[] $properties The map of properties as a number of
-	 *  key-expression pairs
+     * @param PropertyType[] $properties The map of properties as a number of key-expression pairs
      */
     public function __construct(array $properties = [])
     {
-        $this->properties = array_map(
-			fn ($value): PropertyType => $value instanceof PropertyType ? $value : Literal::literal($value),
-			$properties
-		);
+		foreach ($properties as $property) {
+			$this->assertClass('properties', PropertyType::class, $property);
+		}
+
+		$this->properties = $properties;
     }
 
     /**

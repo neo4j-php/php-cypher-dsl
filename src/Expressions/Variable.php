@@ -52,7 +52,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelatableStructuralType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
@@ -125,7 +124,7 @@ class Variable implements
 	}
 
     /**
-     * Adds the given labels to this variable.
+     * Returns a label with this variable.
      *
      * @param string[]|string $labels
      * @return Label
@@ -140,7 +139,7 @@ class Variable implements
     }
 
     /**
-     * Assign a value to this variable.
+     * Returns an assignment with this variable.
      *
      * @param AnyType $value The value to assign
      * @return Assignment
@@ -148,46 +147,6 @@ class Variable implements
     public function assign(AnyType $value): Assignment
     {
         return new Assignment($this, $value);
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * This function allows users to treat a variable as if it were a node.
-     */
-    public function relationship(RelationshipType $relationship, RelatableStructuralType $relatable): Path
-    {
-        return Query::node()->setVariable($this)->relationship($relationship, $relatable);
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * This function allows users to treat a variable as if it were a node.
-     */
-    public function relationshipTo(RelatableStructuralType $relatable, ?string $type = null, $properties = null, $name = null): Path
-    {
-        return Query::node()->setVariable($this)->relationshipTo($relatable, $type, $properties, $name);
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * This function allows users to treat a variable as if it were a node.
-     */
-    public function relationshipFrom(RelatableStructuralType $relatable, ?string $type = null, $properties = null, $name = null): Path
-    {
-        return Query::node()->setVariable($this)->relationshipFrom($relatable, $type, $properties, $name);
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * This function allows users to treat a variable as if it were a node.
-     */
-    public function relationshipUni(RelatableStructuralType $relatable, ?string $type = null, $properties = null, $name = null): Path
-    {
-        return Query::node()->setVariable($this)->relationshipUni($relatable, $type, $properties, $name);
     }
 
     /**

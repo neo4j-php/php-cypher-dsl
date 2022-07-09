@@ -28,6 +28,8 @@ use WikibaseSolutions\CypherDSL\Expressions\LessThanOrEqual;
 
 /**
  * Represents any type that can be compared with operators such as <=, >=, < and >.
+ *
+ * @note This interface should not be implemented by any class directly.
  */
 interface ComparablePropertyType extends PropertyType
 {

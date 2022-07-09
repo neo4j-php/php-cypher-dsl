@@ -24,36 +24,40 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 use DomainException;
 use InvalidArgumentException;
 use LogicException;
+use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\QueryConvertible;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\VariableTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\RelationshipTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
- * This class represents an arbitrary relationship between two nodes, a node and a
- * relationship or between two relationships.
+ * This class represents an arbitrary relationship between two nodes.
+ *
+ * @note This class does NOT implement RelationshipType, since it is not an expression. A relationship is a syntactic
+ *  construct used for pattern matching, and does not represent the actual relationship itself. The variable in the
+ *  relationship contains the actual value(s) of the matched relationship(s). However, because of the way the
+ *  php-cypher-dsl is implemented, it often allows you treat a Relationship object as if it were a RelationshipType
+ *  object, automatically coalescing it to the variable that is contained within it.
  *
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 10)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
  */
-class Relationship implements QueryConvertible
+class Relationship extends Pattern
 {
+	use ErrorTrait;
     use EscapeTrait;
-	use VariableTrait;
 
     public const DIR_RIGHT = ["-", "->"];
     public const DIR_LEFT = ["<-", "-"];
     public const DIR_UNI = ["-", "-"];
 
     /**
-     * @var string[] The direction of the relationship
+     * @var string[] The direction of the relationship (one of the DIR_* constants)
      */
     private array $direction;
 
     /**
-     * @var string[]
+     * @var string[] A list of relationship condition types
      */
     private array $types = [];
 
@@ -72,18 +76,21 @@ class Relationship implements QueryConvertible
      */
     private ?int $exactHops = null;
 
+	/**
+	 * @var bool Whether to allow arbitrary hops between nodes
+	 */
+	private bool $arbitraryHops = false;
+
     /**
      * @var MapType|null The properties of this relationship
      */
     private ?MapType $properties = null;
 
-    /**
-     * Path constructor.
-     *
+	/**
      * @param array $direction The direction of the relationship, should be either:
-     * - Path::DIR_RIGHT (for a relation of (a)-->(b))
-	 * - Path::DIR_LEFT (for a relation of (a)<--(b))
-	 * - Path::DIR_UNI (for a relation of (a)--(b))
+     *  - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
+	 *  - Relationship::DIR_LEFT (for a relation of (a)<--(b))
+	 *  - Relationship::DIR_UNI (for a relation of (a)--(b))
      */
     public function __construct(array $direction)
     {
@@ -97,12 +104,13 @@ class Relationship implements QueryConvertible
     /**
      * Set the properties of this node.
      *
-     * @param MapType $properties
+     * @param MapType|array $properties
      * @return $this
      */
-    public function withProperties(MapType $properties): self
+    public function withProperties($properties): self
     {
-        $this->properties = $properties;
+		$this->assertClass('properties', [MapType::class, 'array'], $properties);
+		$this->properties = is_array($properties) ? Query::map($properties) : $properties;
 
         return $this;
     }
@@ -113,7 +121,7 @@ class Relationship implements QueryConvertible
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels
      *
      * @param int $minHops
-     * @return Relationship
+     * @return $this
      */
     public function withMinHops(int $minHops): self
     {
@@ -125,8 +133,8 @@ class Relationship implements QueryConvertible
             throw new DomainException("minHops cannot be greater than maxHops");
         }
 
-        if (isset($this->exactHops)) {
-            throw new LogicException("Cannot use minHops in combination with exactHops");
+        if (isset($this->exactHops) || $this->arbitraryHops) {
+            throw new LogicException("minHops cannot be used in combination with exactHops or arbitraryHops");
         }
 
         $this->minHops = $minHops;
@@ -140,7 +148,7 @@ class Relationship implements QueryConvertible
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels
      *
      * @param int $maxHops
-     * @return Relationship
+     * @return $this
      */
     public function withMaxHops(int $maxHops): self
     {
@@ -152,8 +160,8 @@ class Relationship implements QueryConvertible
             throw new DomainException("maxHops cannot be less than minHops");
         }
 
-        if (isset($this->exactHops)) {
-            throw new LogicException("Cannot use maxHops in combination with exactHops");
+        if (isset($this->exactHops) || $this->arbitraryHops) {
+            throw new LogicException("maxHops cannot be used in combination with exactHops or arbitraryHops");
         }
 
         $this->maxHops = $maxHops;
@@ -167,7 +175,7 @@ class Relationship implements QueryConvertible
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels
      *
      * @param int $exactHops
-     * @return Relationship
+     * @return $this
      */
     public function withExactHops(int $exactHops): self
     {
@@ -175,8 +183,8 @@ class Relationship implements QueryConvertible
             throw new DomainException("exactHops cannot be less than 1");
         }
 
-        if (isset($this->minHops) || isset($this->maxHops)) {
-            throw new LogicException("Cannot use exactHops in combination with minHops or maxHops");
+        if (isset($this->minHops) || isset($this->maxHops) || $this->arbitraryHops) {
+            throw new LogicException("exactHops cannot be used in combination with minHops, maxHops or arbitraryHops");
         }
 
         $this->exactHops = $exactHops;
@@ -184,11 +192,43 @@ class Relationship implements QueryConvertible
         return $this;
     }
 
+	/**
+	 * Set the number of hops to be an arbitrary number (wildcard).
+	 *
+	 * @param bool $arbitraryHops
+	 * @return $this
+	 */
+	public function setArbitraryHops(bool $arbitraryHops = true): self
+	{
+		if (isset($this->minHops) || isset($this->maxHops) || isset($this->exactHops)) {
+			throw new LogicException("arbitraryHops cannot be used in combination with minHops, maxHops or exactHops");
+		}
+
+		$this->arbitraryHops = $arbitraryHops;
+
+		return $this;
+	}
+
+	/**
+	 * The types to require for this relationship. Will overwrite any previously set types.
+	 *
+	 * @param string[] $types
+	 * @return $this
+	 */
+	public function withTypes(array $types): self
+	{
+		$this->types = $types;
+
+		return $this;
+	}
+
     /**
+	 * Add a type to require for this relationship.
+	 *
      * @param string $type
-     * @return Relationship
+     * @return $this
      */
-    public function withType(string $type): self
+    public function addType(string $type): self
     {
         $this->types[] = $type;
 
@@ -301,15 +341,22 @@ class Relationship implements QueryConvertible
             }
         } elseif (isset($this->exactHops)) {
             $conditionInner .= '*' . $this->exactHops;
-        }
+        } elseif ($this->arbitraryHops) {
+			$conditionInner .= '*';
+		}
 
         if (isset($this->properties)) {
-            if ($conditionInner !== "") {
-                // Add some padding between the property list and the preceding structure
-                $conditionInner .= " ";
-            }
+			$propertyMap = $this->properties->toQuery();
 
-            $conditionInner .= $this->properties->toQuery();
+			if ($propertyMap !== '{}') {
+				if ($conditionInner !== "") {
+					// Add some padding between the property map and the preceding structure
+					$conditionInner .= " ";
+				}
+
+				// Do not add the property map if its empty
+				$conditionInner .= $propertyMap;
+			}
         }
 
         if ($conditionInner === '') {

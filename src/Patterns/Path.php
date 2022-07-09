@@ -23,11 +23,8 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\VariableTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
  * This class represents a path which is an alternating sequence of nodes and relationships.
@@ -35,10 +32,9 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 5)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#structural-types
  */
-class Path implements QueryConvertible
+class Path extends Pattern
 {
     use ErrorTrait;
-	use VariableTrait;
 
     /**
 	 * @var Relationship[]
@@ -97,11 +93,12 @@ class Path implements QueryConvertible
         }
 
         $cql = '';
+
         // If a variable exists, we need to assign following the expression to it; this results in a named
 		// path as described in page 66 of the openCypher reference (version 9). This is semantically
 		// different from an assignment.
-        if ($this->hasVariable()) {
-            $cql = $this->getVariable()->toQuery() . ' = ';
+        if (isset($this->variable)) {
+            $cql = $this->variable->toQuery() . ' = ';
         }
 
         // We use the relationships as a reference point to iterate over.
@@ -222,7 +219,7 @@ class Path implements QueryConvertible
         $relationship = new Relationship($direction);
 
         if ($type !== null) {
-            $relationship->withType($type);
+            $relationship->addType($type);
         }
 
         if ($properties !== null) {

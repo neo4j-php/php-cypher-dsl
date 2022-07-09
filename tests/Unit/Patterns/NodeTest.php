@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Patterns;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;

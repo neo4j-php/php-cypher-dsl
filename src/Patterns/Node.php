@@ -23,23 +23,26 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\QueryConvertible;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\VariableTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
  * This class represents a node.
  *
+ * @note This class does NOT implement NodeType, since it is not an expression. A node is a syntactic construct used for
+ *  pattern matching, and does not represent the actual node itself. The variable in the node contains the actual
+ *  value(s) of the matched node(s). However, because of the way the php-cypher-dsl is implemented, it often allows you
+ *  to treat a Node object as if it were a NodeType object, automatically coalescing it to the variable that is
+ *  contained within it.
+ *
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 8)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
  */
-class Node implements QueryConvertible
+class Node extends Pattern
 {
+	use ErrorTrait;
     use EscapeTrait;
-	use VariableTrait;
 
     /**
      * @var string[] The labels of this node

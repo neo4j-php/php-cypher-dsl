@@ -50,6 +50,11 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
  * Homogeneous lists of simple types can also be stored as properties, although lists in
  * general cannot.
  *
+ * This type is further divided up into:
+ *
+ * - AliasablePropertyType, for any expression that can be aliased,
+ * - ComparablePropertyType, for any expression that can be compared (<, <=, >, >=).
+ *
  * @note This interface should not be implemented by any class directly.
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#property-types
  */
