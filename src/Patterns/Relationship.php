@@ -33,12 +33,6 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 /**
  * This class represents an arbitrary relationship between two nodes.
  *
- * @note This class does NOT implement RelationshipType, since it is not an expression. A relationship is a syntactic
- *  construct used for pattern matching, and does not represent the actual relationship itself. The variable in the
- *  relationship contains the actual value(s) of the matched relationship(s). However, because of the way the
- *  php-cypher-dsl is implemented, it often allows you treat a Relationship object as if it were a RelationshipType
- *  object, automatically coalescing it to the variable that is contained within it.
- *
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 10)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
  */
