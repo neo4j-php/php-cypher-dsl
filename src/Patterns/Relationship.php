@@ -24,10 +24,13 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 use DomainException;
 use InvalidArgumentException;
 use LogicException;
+use TypeError;
+use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\PatternPropertiesTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
@@ -40,6 +43,7 @@ class Relationship extends Pattern
 {
 	use ErrorTrait;
     use EscapeTrait;
+    use PatternPropertiesTrait;
 
     public const DIR_RIGHT = ["-", "->"];
     public const DIR_LEFT = ["<-", "-"];
@@ -75,11 +79,6 @@ class Relationship extends Pattern
 	 */
 	private bool $arbitraryHops = false;
 
-    /**
-     * @var MapType|null The properties of this relationship
-     */
-    private ?MapType $properties = null;
-
 	/**
      * @param array $direction The direction of the relationship, should be either:
      *  - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
@@ -93,20 +92,6 @@ class Relationship extends Pattern
         }
 
         $this->direction = $direction;
-    }
-
-    /**
-     * Set the properties of this node.
-     *
-     * @param MapType|array $properties
-     * @return $this
-     */
-    public function withProperties($properties): self
-    {
-		$this->assertClass('properties', [MapType::class, 'array'], $properties);
-		$this->properties = is_array($properties) ? Query::map($properties) : $properties;
-
-        return $this;
     }
 
     /**

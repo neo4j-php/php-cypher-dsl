@@ -45,11 +45,10 @@ abstract class Pattern implements QueryConvertible
 	 *
 	 * @param Variable|string $variable
 	 * @return $this
-	 * @see Pattern::setVariable()
 	 */
 	public function withVariable($variable): self
 	{
-		$this->assertClass('variable', ['string', Variable::class, 'null'], $variable);
+		$this->assertClass('variable', [Variable::class, 'string'], $variable);
 		$this->variable = is_string($variable) ? new Variable($variable) : $variable;
 
 		return $this;
@@ -58,7 +57,7 @@ abstract class Pattern implements QueryConvertible
 	/**
 	 * Returns the variable of the object. This function generates a variable if none has been set.
 	 *
-	 * @return Variable|null
+	 * @return Variable
 	 */
 	public function getVariable(): Variable
 	{

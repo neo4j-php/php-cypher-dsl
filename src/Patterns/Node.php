@@ -21,10 +21,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
-use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
-use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\PatternPropertiesTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
@@ -37,6 +36,7 @@ class Node extends Pattern implements RelatablePattern
 {
 	use ErrorTrait;
     use EscapeTrait;
+    use PatternPropertiesTrait;
 
     /**
      * @var string[] The labels of this node
@@ -82,19 +82,6 @@ class Node extends Pattern implements RelatablePattern
     public function addLabel(string $label): self
     {
         $this->labels[] = $label;
-
-        return $this;
-    }
-
-    /**
-     * Set the properties of this node.
-     *
-     * @param MapType $properties
-     * @return $this
-     */
-    public function withProperties(MapType $properties): self
-    {
-        $this->properties = $properties;
 
         return $this;
     }

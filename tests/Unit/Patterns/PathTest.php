@@ -74,7 +74,7 @@ class PathTest extends TestCase
             (new Node())->setVariable('b'),
             new Node(),
             (new Node())->setVariable('d'),
-        ], $path->getNodes());
+        ], $path->getRelatables());
 
         $this->assertEquals([
             new Relationship(Relationship::DIR_UNI),

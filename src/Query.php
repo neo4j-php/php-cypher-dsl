@@ -208,15 +208,12 @@ class Query implements QueryConvertible
     /**
      * Creates a property map.
      *
-     * @param PropertyType[]|bool[]|string[]|int[]|float[] $values The map of properties as a number of
-	 *  key-expression pairs
+     * @param array $values The map of properties as a number of key-expression pairs
      * @return PropertyMap
      */
     public static function map(array $values): PropertyMap
     {
-        return new PropertyMap(
-			array_map(fn ($value): PropertyType => $value instanceof PropertyType ? $value : Literal::literal($value), $values)
-		);
+        return new PropertyMap($values);
     }
 
     /**

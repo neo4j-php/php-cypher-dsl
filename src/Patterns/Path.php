@@ -26,6 +26,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
@@ -47,22 +48,19 @@ class Path extends Pattern implements BooleanType, RelatablePattern
     /**
 	 * @var Node[]
 	 */
-    private array $nodes;
+    private array $relatables;
 
     /**
-     * @param AnyType|AnyType[]|null $nodes
-     * @param Relationship|Relationship[]|null $relationships
+     * @param Node|Node[] $nodes
+     * @param Relationship|Relationship[] $relationships
      */
-    public function __construct($nodes = null, $relationships = null)
+    public function __construct($nodes = [], $relationships = [])
     {
-        self::assertClass('relationships', [Relationship::class, 'array', 'null'], $relationships);
-        self::assertClass('nodes', [AnyType::class, 'array', 'null'], $nodes);
+        self::assertClass('nodes', [Node::class, 'array'], $nodes);
+        self::assertClass('relationships', [Relationship::class, 'array'], $relationships);
 
-        $nodes ??= [];
-        $relationships ??= [];
-
-        $this->nodes = is_array($nodes) ? array_values($nodes) : [$nodes];
-        $this->relationships = is_array($relationships) ? array_values($relationships) : [$relationships];
+        $this->relatables = is_array($nodes) ? $nodes : [$nodes];
+        $this->relationships = is_array($relationships) ? $relationships : [$relationships];
     }
 
     /**
@@ -70,9 +68,9 @@ class Path extends Pattern implements BooleanType, RelatablePattern
      *
      * @return Node[]
      */
-    public function getNodes(): array
+    public function getRelatables(): array
     {
-        return $this->nodes;
+        return $this->relatables;
     }
 
     /**
@@ -91,7 +89,7 @@ class Path extends Pattern implements BooleanType, RelatablePattern
     public function toQuery(): string
     {
         // If there are no nodes in the path, it must be empty.
-        if (count($this->nodes) === 0) {
+        if (count($this->relatables) === 0) {
             return '';
         }
 
@@ -114,12 +112,12 @@ class Path extends Pattern implements BooleanType, RelatablePattern
             // If the following node does not exist, we must break the loop early.
             // This case will be triggered if the amount of nodes is equal or less than the amount of relationships
             // and is thus very unlikely.
-            if (!array_key_exists($i + 1, $this->nodes)) {
+            if (!array_key_exists($i + 1, $this->relatables)) {
                 --$i;
 
                 break;
             }
-            $cql .= $this->nodes[$i]->toQuery();
+            $cql .= $this->relatables[$i]->toQuery();
             $cql .= $relationship->toQuery();
         }
 
@@ -127,7 +125,7 @@ class Path extends Pattern implements BooleanType, RelatablePattern
         // If the path is simply a single node, $i won't be defined, hence the null coalescing operator with -1. By
         // coalescing with -1 instead of 0, we remove the need of a separate if check, making both cases valid when they
         // are incremented by 1.
-        $cql .= $this->nodes[($i ?? -1) + 1]->toQuery();
+        $cql .= $this->relatables[($i ?? -1) + 1]->toQuery();
 
         return $cql;
     }
@@ -139,11 +137,13 @@ class Path extends Pattern implements BooleanType, RelatablePattern
 	{
 		$this->relationships[] = $relationship;
 
-		if ($relatable instanceof self) {
+		if ($relatable instanceof Path) {
+            // If the given relatable is also a path, we can merge their relatables and relationships
 			$this->relationships = array_merge($this->relationships, $relatable->getRelationships());
-			$this->nodes = array_merge($this->nodes, $relatable->getNodes());
+			$this->relatables = array_merge($this->relatables, $relatable->getRelatables());
 		} else {
-			$this->nodes []= $relatable;
+            // Otherwise, add the relatable to the list of relatables
+			$this->relatables[] = $relatable;
 		}
 
 		return $this;
@@ -192,8 +192,8 @@ class Path extends Pattern implements BooleanType, RelatablePattern
      */
     private function buildRelationship(array $direction, ?string $type, $properties, $name): Relationship
     {
-        self::assertClass('properties', ['array', PropertyMap::class, 'null'], $properties);
-        self::assertClass('name', ['string', Variable::class, 'null'], $name);
+        self::assertClass('properties', [MapType::class, 'array', 'null'], $properties);
+        self::assertClass('name', [Variable::class, 'string', 'null'], $name);
 
         $relationship = new Relationship($direction);
 
@@ -206,7 +206,7 @@ class Path extends Pattern implements BooleanType, RelatablePattern
         }
 
         if ($name !== null) {
-            $relationship->setVariable($name);
+            $relationship->withVariable($name);
         }
 
         return $relationship;

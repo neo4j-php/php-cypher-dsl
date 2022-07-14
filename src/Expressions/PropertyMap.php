@@ -25,6 +25,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\MapTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
@@ -44,34 +45,34 @@ class PropertyMap implements MapType
     use ErrorTrait;
 
     /**
-     * @var PropertyType[] The map of properties
+     * @var AnyType[] The map of properties
      */
     private array $properties;
 
     /**
      * PropertyMap constructor.
      *
-     * @param PropertyType[] $properties The map of properties as a number of key-expression pairs
+     * @param array $properties The map of properties as a number of key-expression pairs
      */
     public function __construct(array $properties = [])
     {
-		foreach ($properties as $property) {
-			$this->assertClass('properties', PropertyType::class, $property);
-		}
-
-		$this->properties = $properties;
+		$this->properties = array_map(
+            fn ($value): AnyType => $value instanceof AnyType ? $value : Literal::literal($value),
+            $properties
+        );
     }
 
     /**
      * Adds a property for the given name with the given value. Overrides the property if it already exists.
      *
      * @param string $key The name of the property
-     * @param PropertyType|string|int|bool|float $value The value of the property
+     * @param mixed $value The value of the property
+     *
      * @return PropertyMap
      */
     public function addProperty(string $key, $value): self
     {
-        if (!$value instanceof PropertyType) {
+        if (!$value instanceof AnyType) {
             $value = Literal::literal($value);
         }
 
@@ -96,7 +97,7 @@ class PropertyMap implements MapType
     /**
      * Returns the map of properties as a number of key-expression pairs.
      *
-     * @return PropertyType[]
+     * @return AnyType[]
      */
     public function getProperties(): array
     {

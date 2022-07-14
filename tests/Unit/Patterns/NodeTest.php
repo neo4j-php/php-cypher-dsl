@@ -23,10 +23,12 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 
 /**
@@ -39,10 +41,6 @@ class NodeTest extends TestCase
         $node = new Node();
 
         $this->assertSame("()", $node->toQuery());
-
-        $this->assertNull($node->getProperties());
-        $this->assertEquals([], $node->getLabels());
-        $this->assertFalse($node->hasVariable());
     }
 
     public function testBacktickThrowsException(): void
@@ -51,7 +49,7 @@ class NodeTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectDeprecationMessage('A name can only contain alphanumeric characters and underscores');
-        $node->setVariable('abcdr`eer');
+        $node->withVariable('abcdr`eer');
     }
 
     /**
@@ -62,13 +60,9 @@ class NodeTest extends TestCase
     public function testOnlyLabel(string $label, string $expected): void
     {
         $node = new Node();
-        $node->labeled($label);
+        $node->addLabel($label);
 
         $this->assertSame($expected, $node->toQuery());
-
-        $this->assertNull($node->getProperties());
-        $this->assertEquals([$label], $node->getLabels());
-        $this->assertFalse($node->hasVariable());
     }
 
     /**
@@ -79,15 +73,9 @@ class NodeTest extends TestCase
     public function testOnlyName(string $name, string $expected): void
     {
         $node = new Node();
-        $node->setVariable($name);
+        $node->withVariable($name);
 
         $this->assertSame($expected, $node->toQuery());
-
-        $this->assertNull($node->getProperties());
-        $this->assertEquals([], $node->getLabels());
-        $this->assertTrue($node->hasVariable());
-
-        $this->assertEquals($name, $node->getVariable()->getName());
     }
 
     /**
@@ -98,13 +86,9 @@ class NodeTest extends TestCase
     public function testOnlyProperties(array $properties, string $expected): void
     {
         $node = new Node();
-        $node->addProperties($properties);
+        $node->withProperties($properties);
 
         $this->assertSame($expected, $node->toQuery());
-
-        $this->assertEquals(new PropertyMap($properties), $node->getProperties());
-        $this->assertEquals([], $node->getLabels());
-        $this->assertFalse($node->hasVariable());
     }
 
     /**
@@ -116,15 +100,9 @@ class NodeTest extends TestCase
     public function testWithNameAndLabel(string $name, string $label, string $expected): void
     {
         $node = new Node();
-        $node->labeled($label)->setVariable($name);
+        $node->addLabel($label)->withVariable($name);
 
         $this->assertSame($expected, $node->toQuery());
-
-        $this->assertNull($node->getProperties());
-        $this->assertEquals([$label], $node->getLabels());
-        $this->assertTrue($node->hasVariable());
-
-        $this->assertEquals($name, $node->getVariable()->getName());
     }
 
     /**
@@ -136,15 +114,9 @@ class NodeTest extends TestCase
     public function testWithNameAndProperties(string $name, array $properties, string $expected): void
     {
         $node = new Node();
-        $node->setVariable($name)->addProperties($properties);
+        $node->withVariable($name)->withProperties($properties);
 
         $this->assertSame($expected, $node->toQuery());
-
-        $this->assertEquals(new PropertyMap($properties), $node->getProperties());
-        $this->assertEquals([], $node->getLabels());
-        $this->assertTrue($node->hasVariable());
-
-        $this->assertEquals($name, $node->getVariable()->getName());
     }
 
     /**
@@ -156,13 +128,9 @@ class NodeTest extends TestCase
     public function testWithLabelAndProperties(string $label, array $properties, string $expected): void
     {
         $node = new Node();
-        $node->labeled($label)->addProperties($properties);
+        $node->addLabel($label)->withProperties($properties);
 
         $this->assertSame($expected, $node->toQuery());
-
-        $this->assertEquals(new PropertyMap($properties), $node->getProperties());
-        $this->assertEquals([$label], $node->getLabels());
-        $this->assertFalse($node->hasVariable());
     }
 
     /**
@@ -175,15 +143,9 @@ class NodeTest extends TestCase
     public function testWithNameAndLabelAndProperties(string $name, string $label, array $properties, string $expected): void
     {
         $node = new Node();
-        $node->setVariable($name)->labeled($label)->addProperties($properties);
+        $node->withVariable($name)->addLabel($label)->withProperties($properties);
 
         $this->assertSame($expected, $node->toQuery());
-
-        $this->assertEquals(new PropertyMap($properties), $node->getProperties());
-        $this->assertEquals([$label], $node->getLabels());
-        $this->assertTrue($node->hasVariable());
-
-        $this->assertEquals($name, $node->getVariable()->getName());
     }
 
     /**
@@ -194,23 +156,16 @@ class NodeTest extends TestCase
     public function testMultipleLabels(array $labels, string $expected): void
     {
         $node = new Node();
-
-        foreach ($labels as $label) {
-            $node->labeled($label);
-        }
+        $node->withLabels($labels);
 
         $this->assertSame($expected, $node->toQuery());
-
-        $this->assertNull($node->getProperties());
-        $this->assertEquals($labels, $node->getLabels());
-        $this->assertFalse($node->hasVariable());
     }
 
     public function testSetterSameAsConstructor(): void
     {
         $label = "__test__";
         $viaConstructor = new Node($label);
-        $viaSetter = (new Node())->labeled($label);
+        $viaSetter = (new Node())->addLabel($label);
 
         $this->assertSame($viaConstructor->toQuery(), $viaSetter->toQuery(), "Setting label via setter has different effect than using constructor");
     }
@@ -220,35 +175,51 @@ class NodeTest extends TestCase
         $node = new Node();
 
         $node->addProperty("foo", new StringLiteral("bar"));
-
         $this->assertSame("({foo: 'bar'})", $node->toQuery());
 
         $node->addProperty("foo", new StringLiteral("bar"));
-
         $this->assertSame("({foo: 'bar'})", $node->toQuery());
 
         $node->addProperty("baz", new StringLiteral("bar"));
-
         $this->assertSame("({foo: 'bar', baz: 'bar'})", $node->toQuery());
 
+        $node->addProperty("baz", "test");
+        $this->assertSame("({foo: 'bar', baz: 'test'})", $node->toQuery());
+
         $node->addProperties(["foo" => new StringLiteral("baz"), "qux" => new StringLiteral("baz")]);
+        $this->assertSame("({foo: 'baz', baz: 'test', qux: 'baz'})", $node->toQuery());
 
-        $this->assertSame("({foo: 'baz', baz: 'bar', qux: 'baz'})", $node->toQuery());
+        $node->addProperties(new PropertyMap(["foo" => new StringLiteral("test")]));
+        $this->assertSame("({foo: 'test', baz: 'test', qux: 'baz'})", $node->toQuery());
     }
 
-    public function testPropertyWithName(): void
-    {
-        $node = new Node();
-        $node->setVariable('example');
-
-        $this->assertSame('example.foo', $node->property('foo')->toQuery());
-    }
-
-    public function testPropertyWithoutName(): void
+    public function testAddingPropertiesToVariableFails(): void
     {
         $node = new Node();
 
-        $this->assertMatchesRegularExpression("/^var[0-9a-f]+\.foo$/", $node->property('foo')->toQuery());
+        $node->withProperties(new Variable());
+        $this->expectException(TypeError::class);
+        $node->addProperty('foo', 'bar');
+    }
+
+    public function testGetLabels(): void
+    {
+        $labels = ["hello", "world"];
+
+        $node = new Node();
+        $node->withLabels($labels);
+
+        $this->assertSame($labels, $node->getLabels());
+    }
+
+    public function testGetProperties(): void
+    {
+        $properties = new PropertyMap(['foo' => 'bar']);
+
+        $node = new Node();
+        $node->withProperties($properties);
+
+        $this->assertSame($properties, $node->getProperties());
     }
 
     public function provideOnlyLabelData(): array
