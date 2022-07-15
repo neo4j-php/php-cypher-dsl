@@ -29,7 +29,7 @@ use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
  * This class represents a CALL {} (subquery) clause. The CALL {} clause evaluates a subquery that returns
  * some values.
  *
- * @note This clause is not part of the openCypher standard.
+ * @note This clause is not officially part of the openCypher standard.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/
  * @see Query::call() for a more convenient method to construct this class
@@ -54,7 +54,7 @@ class CallClause extends Clause
      * @param Query $subQuery The subquery to call
      * @return $this
      */
-    public function setSubQuery(Query $subQuery): self
+    public function withSubQuery(Query $subQuery): self
     {
         $this->subQuery = $subQuery;
 
@@ -64,18 +64,21 @@ class CallClause extends Clause
 	/**
 	 * Sets the variables to include in the WITH clause. This overwrites any previously set variables.
 	 *
-	 * @param Variable[] $variables
+	 * @param Variable[]|string[] $variables A list of variable objects, or strings to cast to variables
 	 * @return $this
 	 *
 	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/#subquery-correlated-importing
 	 */
-	public function setVariables(array $variables): self
+	public function withVariables(array $variables): self
 	{
+		$res = [];
+
 		foreach ($variables as $variable) {
-			$this->assertClass('variables', Variable::class, $variable);
+			$this->assertClass('variables', [Variable::class, 'string'], $variable);
+			$res[] = is_string($variable) ? new Variable($variable) : $variable;
 		}
 
-		$this->withVariables = $variables;
+		$this->withVariables = $res;
 
 		return $this;
 	}
@@ -83,14 +86,15 @@ class CallClause extends Clause
 	/**
 	 * Add a variable to include in the WITH clause.
 	 *
-	 * @param Variable $variable
+	 * @param Variable|string $variable A variable or a string to cast to a variable
 	 * @return $this
 	 *
 	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/#subquery-correlated-importing
 	 */
-	public function addVariable(Variable $variable): self
+	public function addVariable($variable): self
 	{
-		$this->withVariables[] = $variable;
+		$this->assertClass('variable', [Variable::class, 'string'], $variable);
+		$this->withVariables[] = is_string($variable) ? new Variable($variable) : $variable;
 
 		return $this;
 	}
@@ -122,23 +126,26 @@ class CallClause extends Clause
     protected function getSubject(): string
     {
         if (!isset($this->subQuery)) {
-            return "";
+            return '';
         }
 
-		$subQuery = $this->subQuery->build();
-
-		if ($subQuery === "") {
-			return "";
-		}
+		$subQuery = '';
 
 		if ($this->withVariables !== []) {
 			$withClause = new WithClause();
 			$withClause->setEntries($this->withVariables);
 
-			return sprintf("{ %s %s }", $withClause->toQuery(), trim($this->subQuery->build()));
-		} else {
-			return sprintf("{ %s }", trim($this->subQuery->build()));
+			$subQuery .= $withClause->toQuery();
 		}
+
+		if ($subQuery !== '') {
+			// Add some padding for the next structure
+			$subQuery .= ' ';
+		}
+
+		$subQuery .= $this->subQuery->build();
+
+		return sprintf('{ %s }', $subQuery);
     }
 
     /**

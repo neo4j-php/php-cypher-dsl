@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
 
+use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
@@ -56,14 +57,14 @@ class All extends FunctionCall implements BooleanType
      *
      * all(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
      *
-     * @param Variable $variable A variable that can be used from within the predicate
-     * @param ListType $list A list
+     * @param Variable|string $variable A variable that can be used from within the predicate
+     * @param ListType|array $list A list
      * @param AnyType $predicate A predicate that is tested against all items in the list
      */
-    public function __construct(Variable $variable, ListType $list, AnyType $predicate)
+    public function __construct($variable, $list, AnyType $predicate)
     {
-        $this->variable = $variable;
-        $this->list = $list;
+        $this->variable = is_string($variable) ? new Variable($variable) : $variable;
+        $this->list = is_array($list) ? new ExpressionList($list) : $list;
         $this->predicate = $predicate;
     }
 

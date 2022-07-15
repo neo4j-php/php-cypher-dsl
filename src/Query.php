@@ -291,8 +291,8 @@ class Query implements QueryConvertible
 		}, $variables);
 
 		$callClause = new CallClause();
-		$callClause->setSubQuery($subQuery);
-		$callClause->setVariables($variables);
+		$callClause->withSubQuery($subQuery);
+		$callClause->withVariables($variables);
 
 		$this->clauses[] = $callClause;
 

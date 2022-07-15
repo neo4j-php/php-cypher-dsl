@@ -24,6 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 use DomainException;
 use LogicException;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
@@ -59,4 +60,13 @@ class PatternTest extends TestCase
         $this->assertInstanceOf(Variable::class, $variable);
         $this->assertStringMatchesFormat("var%s", $variable->getName());
     }
+
+	public function testDoesNotAcceptAnyType(): void
+	{
+		$stub = $this->getMockForAbstractClass(Pattern::class);
+
+		$this->expectException(TypeError::class);
+
+		$stub->withVariable(new \stdClass());
+	}
 }
