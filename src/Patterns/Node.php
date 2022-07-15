@@ -146,6 +146,16 @@ class Node extends Pattern implements RelatablePattern
      */
     public function toQuery(): string
     {
+        return sprintf("(%s)", $this->nodeInnerToString());
+    }
+
+    /**
+     * Returns the string representation of the inner part of a node.
+     *
+     * @return string
+     */
+    private function nodeInnerToString(): string
+    {
         $nodeInner = "";
 
         if (isset($this->variable)) {
@@ -166,6 +176,6 @@ class Node extends Pattern implements RelatablePattern
             $nodeInner .= $this->properties->toQuery();
         }
 
-        return "($nodeInner)";
+        return $nodeInner;
     }
 }

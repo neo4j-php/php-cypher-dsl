@@ -30,6 +30,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
+use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Patterns\Node
@@ -220,6 +221,51 @@ class NodeTest extends TestCase
         $node->withProperties($properties);
 
         $this->assertSame($properties, $node->getProperties());
+    }
+
+    public function testRelationship(): void
+    {
+        $node = new Node("City");
+        $relationship = new Relationship(Relationship::DIR_RIGHT);
+        $relationship->addType("LIVES_IN");
+
+        $amsterdam = new Node("City");
+        $amsterdam->withProperties(["city" => "Amsterdam"]);
+
+        $this->assertSame("(:City)-[:`LIVES_IN`]->(:City {city: 'Amsterdam'})", $node->relationship($relationship, $amsterdam)->toQuery());
+    }
+
+    public function testRelationshipTo(): void
+    {
+        $node = new Node("City");
+        $amsterdam = new Node("City");
+        $amsterdam->withProperties(["city" => "Amsterdam"]);
+
+        $relationship = $node->relationshipTo($amsterdam, "LIVES_IN");
+
+        $this->assertSame("(:City)-[:`LIVES_IN`]->(:City {city: 'Amsterdam'})", $relationship->toQuery());
+    }
+
+    public function testRelationshipFrom(): void
+    {
+        $node = new Node("City");
+        $amsterdam = new Node("City");
+        $amsterdam->withProperties(["city" => "Amsterdam"]);
+
+        $relationship = $node->relationshipFrom($amsterdam, "LIVES_IN");
+
+        $this->assertSame("(:City)<-[:`LIVES_IN`]-(:City {city: 'Amsterdam'})", $relationship->toQuery());
+    }
+
+    public function testRelationshipUni(): void
+    {
+        $node = new Node("City");
+        $amsterdam = new Node("City");
+        $amsterdam->withProperties(["city" => "Amsterdam"]);
+
+        $relationship = $node->relationshipUni($amsterdam, "LIVES_IN");
+
+        $this->assertSame("(:City)-[:`LIVES_IN`]-(:City {city: 'Amsterdam'})", $relationship->toQuery());
     }
 
     public function provideOnlyLabelData(): array

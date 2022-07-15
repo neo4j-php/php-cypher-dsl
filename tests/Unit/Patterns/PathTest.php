@@ -12,39 +12,39 @@ class PathTest extends TestCase
 {
     public function testEmpty(): void
     {
-        self::assertEquals('', (new Path())->toQuery());
-        self::assertEquals('', (new Path(null, []))->toQuery());
-        self::assertEquals('', (new Path([], []))->toQuery());
-        self::assertEquals('', (new Path([], [new Relationship(Relationship::DIR_UNI)]))->toQuery());
+        $this->assertEquals('', (new Path())->toQuery());
+        $this->assertEquals('', (new Path([], []))->toQuery());
+        $this->assertEquals('', (new Path([], []))->toQuery());
+        $this->assertEquals('', (new Path([], [new Relationship(Relationship::DIR_UNI)]))->toQuery());
     }
 
     public function testSingleNode(): void
     {
         $path = new Path(new Node());
 
-        self::assertEquals('()', $path->toQuery());
+        $this->assertEquals('()', $path->toQuery());
     }
 
     public function testSingleNodeNamed(): void
     {
         $path = new Path(new Node());
-        $path->setVariable('a');
+        $path->withVariable('a');
 
-        self::assertEquals('a = ()', $path->toQuery());
+        $this->assertEquals('a = ()', $path->toQuery());
     }
 
     public function testSingle(): void
     {
         $path = new Path(new Node(), new Relationship(Relationship::DIR_UNI));
 
-        self::assertEquals('()', $path->toQuery());
+        $this->assertEquals('()', $path->toQuery());
     }
 
     public function testSingleNoRel(): void
     {
         $path = new Path([new Node(), new Node()]);
 
-        self::assertEquals('()', $path->toQuery());
+        $this->assertEquals('()', $path->toQuery());
     }
 
     public function testPathMerge(): void
@@ -52,7 +52,7 @@ class PathTest extends TestCase
         $pathX = new Path([new Node(), new Node()], [new Relationship(Relationship::DIR_UNI)]);
         $pathY = new Path([new Node(), new Node()], [new Relationship(Relationship::DIR_UNI)]);
 
-        $pathX->setVariable('x')->relationshipTo($pathY->setVariable('y'));
+        $pathX->withVariable('x')->relationshipTo($pathY->withVariable('y'));
 
         $this->assertEquals('x = ()--()-->()--()', $pathX->toQuery());
     }
@@ -61,19 +61,19 @@ class PathTest extends TestCase
     {
         $path = new Path(new Node());
         $path->relationshipUni(new Node('Label'))
-            ->relationshipTo((new Node())->setVariable('b'))
+            ->relationshipTo((new Node())->withVariable('b'))
             ->relationshipFrom(new Node(), 'TYPE', ['x' => Query::literal('y')], 'c')
-            ->relationship(new Relationship(Relationship::DIR_UNI), (new Node())->setVariable('d'))
-            ->setVariable('a');
+            ->relationship(new Relationship(Relationship::DIR_UNI), (new Node())->withVariable('d'))
+            ->withVariable('a');
 
         $this->assertEquals('a = ()--(:Label)-->(b)<-[c:TYPE {x: \'y\'}]-()--(d)', $path->toQuery());
 
         $this->assertEquals([
             new Node(),
             new Node('Label'),
-            (new Node())->setVariable('b'),
+            (new Node())->withVariable('b'),
             new Node(),
-            (new Node())->setVariable('d'),
+            (new Node())->withVariable('d'),
         ], $path->getRelatables());
 
         $this->assertEquals([
@@ -82,8 +82,16 @@ class PathTest extends TestCase
             (new Relationship(Relationship::DIR_LEFT))
                 ->addType('TYPE')
                 ->addProperties(['x' => Query::literal('y')])
-                ->setVariable('c'),
+                ->withVariable('c'),
             new Relationship(Relationship::DIR_UNI),
         ], $path->getRelationships());
+    }
+
+    public function testPathCanBeTreatedAsBoolean(): void
+    {
+        $pathA = new Path([new Node(), new Node()], [new Relationship(Relationship::DIR_UNI)]);
+        $pathB = new Path([new Node(), new Node()], [new Relationship(Relationship::DIR_RIGHT)]);
+
+        $this->assertSame("()--() AND ()-->()", $pathA->and($pathB, false)->toQuery());
     }
 }

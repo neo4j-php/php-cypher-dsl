@@ -282,17 +282,16 @@ class Relationship extends Pattern
      */
     public function toQuery(): string
     {
-        return $this->direction[0] . $this->conditionToString() . $this->direction[1];
+        return $this->direction[0] . $this->relationshipDetailToString() . $this->direction[1];
     }
 
     /**
      * @return string
      */
-    private function conditionToString(): string
+    private function relationshipDetailToString(): string
     {
         $conditionInner = "";
 
-        // The condition always starts with the variable
         if (isset($this->variable)) {
             $conditionInner .= $this->variable->toQuery();
         }
@@ -319,23 +318,25 @@ class Relationship extends Pattern
                 $conditionInner .= $this->maxHops;
             }
         } elseif (isset($this->exactHops)) {
+            // We have an exact number of hops
             $conditionInner .= '*' . $this->exactHops;
         } elseif ($this->arbitraryHops) {
+            // We have an arbitrary number of hops
 			$conditionInner .= '*';
 		}
 
         if (isset($this->properties)) {
-			$propertyMap = $this->properties->toQuery();
+            // Only add the properties if they're not empty
+            if (!$this->properties instanceof PropertyMap || $this->properties->getProperties() !== []) {
+                $map = $this->properties->toQuery();
 
-			if ($propertyMap !== '{}') {
-				if ($conditionInner !== "") {
-					// Add some padding between the property map and the preceding structure
-					$conditionInner .= " ";
-				}
+                if ($conditionInner !== "") {
+                    // Add some padding between the property map and the preceding structure
+                    $conditionInner .= " ";
+                }
 
-				// Do not add the property map if its empty
-				$conditionInner .= $propertyMap;
-			}
+                $conditionInner .= $map;
+            }
         }
 
         if ($conditionInner === '') {

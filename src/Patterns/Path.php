@@ -21,8 +21,13 @@
 
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
+use TypeError;
+use WikibaseSolutions\CypherDSL\Expressions\AndOperator;
+use WikibaseSolutions\CypherDSL\Expressions\Not;
+use WikibaseSolutions\CypherDSL\Expressions\OrOperator;
 use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Expressions\XorOperator;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
@@ -37,7 +42,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  */
 class Path extends Pattern implements BooleanType, RelatablePattern
 {
-    use BooleanTypeTrait;
     use ErrorTrait;
 
     /**
@@ -81,6 +85,72 @@ class Path extends Pattern implements BooleanType, RelatablePattern
     public function getRelationships(): array
     {
         return $this->relationships;
+    }
+
+    /**
+     * Create a conjunction between this path and the given expression.
+     *
+     * @param BooleanType $right
+     * @param bool $insertParentheses
+     * @return AndOperator
+     */
+    public function and(BooleanType $right, bool $insertParentheses = true): AndOperator
+    {
+        if (count($this->relatables) < 2) {
+            // TODO
+            throw new TypeError();
+        }
+
+        return new AndOperator($this, $right, $insertParentheses);
+    }
+
+    /**
+     * Create a disjunction between this path and the given expression.
+     *
+     * @param BooleanType $right
+     * @param bool $insertParentheses
+     * @return OrOperator
+     */
+    public function or(BooleanType $right, bool $insertParentheses = true): OrOperator
+    {
+        if (count($this->relatables) < 2) {
+            // TODO
+            throw new TypeError();
+        }
+
+        return new OrOperator($this, $right, $insertParentheses);
+    }
+
+    /**
+     * Perform an XOR with the given path.
+     *
+     * @param BooleanType $right
+     * @param bool $insertParentheses
+     * @return XorOperator
+     */
+    public function xor(BooleanType $right, bool $insertParentheses = true): XorOperator
+    {
+        if (count($this->relatables) < 2) {
+            // TODO
+            throw new TypeError();
+        }
+
+        return new XorOperator($this, $right, $insertParentheses);
+    }
+
+    /**
+     * Negate this path (using the NOT operator).
+     *
+     * @return Not
+     */
+    public function not(): Not
+    {
+        if (count($this->relatables) < 2) {
+            // TODO
+            throw new TypeError();
+        }
+
+        return new Not($this);
     }
 
     /**
