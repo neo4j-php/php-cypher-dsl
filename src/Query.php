@@ -66,7 +66,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
@@ -88,7 +87,7 @@ class Query implements QueryConvertible
     public const function = FunctionCall::class;
 
     /**
-     * @var Clause[] $clauses
+     * @var Clause[] $clauses Ordered list of clauses for this query
      */
     public array $clauses = [];
 
@@ -178,6 +177,9 @@ class Query implements QueryConvertible
 	 *  Query::literal()::timeHMS(...) - For a time from the given hour, minute and second
 	 *  Query::literal()::timeString(...) - For a time from the given time string
 	 *
+	 * When no arguments are given to this function (or NULL is passed as its only argument), the function will return
+	 * a reference to the Literal class.
+	 *
      * @param string|int|float|bool|null $literal The literal to construct
      * @return StringLiteral|Boolean|Decimal|Literal|string The string literal that was created (or a reference to
 	 *  the Literal class)
@@ -185,7 +187,6 @@ class Query implements QueryConvertible
     public static function literal($literal = null)
     {
         if ($literal === null) {
-			// Syntactic sugar for WikibaseSolutions\CypherDSL\Literals\Literal::class
             return self::literal;
         }
 
@@ -200,9 +201,7 @@ class Query implements QueryConvertible
      */
     public static function list(iterable $values): ExpressionList
     {
-		return new ExpressionList(
-			array_map(fn ($value): AnyType => $value instanceof AnyType ? $value : Literal::literal($value), $values)
-		);
+		return new ExpressionList($values);
     }
 
     /**
@@ -254,7 +253,7 @@ class Query implements QueryConvertible
 	 * Creates a CALL sub query clause and adds it to the query.
 	 *
 	 * @param Query|callable(Query):void $query A callable decorating a query, or the actual CALL subquery
-	 * @param Variable|Variable[]|HasVariable|HasVariable[]|string $variables The variables to include in the WITH clause for correlation
+	 * @param Variable|Variable[]|string $variables The variables to include in the WITH clause for correlation
 	 *
 	 * @return Query
 	 *
@@ -277,7 +276,7 @@ class Query implements QueryConvertible
 		}
 
 		$variables = array_map(function ($variable): Variable {
-			$this->assertClass('variables', [Variable::class, HasVariable::class, 'string'], $variable);
+			$this->assertClass('variables', [Variable::class, 'string'], $variable);
 
 			if (is_string($variable)) {
 				return self::variable($variable);
@@ -728,7 +727,7 @@ class Query implements QueryConvertible
     }
 
     /**
-     * Creates a "RAW" query.
+     * Creates a raw clause. This should only be used for features that are not implemented by the DSL.
      *
      * @param string $clause The name of the clause; for instance "MATCH"
      * @param string $subject The subject/body of the clause
@@ -795,24 +794,6 @@ class Query implements QueryConvertible
         return $this->clauses;
     }
 
-    /**
-     * Builds the query.
-     *
-     * @return string The fully constructed query
-     */
-    public function build(): string
-    {
-        $builtClauses = array_map(
-            fn (Clause $clause): string => $clause->toQuery(),
-            $this->clauses
-        );
-
-        return implode(
-            " ",
-            array_filter($builtClauses, fn ($clause) => !empty($clause))
-        );
-    }
-
 	/**
 	 * @inheritDoc
 	 */
@@ -829,5 +810,23 @@ class Query implements QueryConvertible
 	public function __toString(): string
 	{
 		return $this->build();
+	}
+
+	/**
+	 * Builds the query.
+	 *
+	 * @return string The fully constructed query
+	 */
+	public function build(): string
+	{
+		$builtClauses = array_map(
+			fn (Clause $clause): string => $clause->toQuery(),
+			$this->clauses
+		);
+
+		return implode(
+			" ",
+			array_filter($builtClauses, fn ($clause) => !empty($clause))
+		);
 	}
 }

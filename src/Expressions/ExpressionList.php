@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\ListTypeTrait;
@@ -49,15 +50,14 @@ class ExpressionList implements ListType
     /**
      * ExpressionList constructor.
      *
-     * @param AnyType[] $expressions The list of expressions, should be homogeneous
+     * @param AnyType|string|bool|float|int[] $expressions The list of expressions, should be homogeneous
      */
-    public function __construct(array $expressions)
+    public function __construct(iterable $expressions)
     {
-        foreach ($expressions as $expression) {
-            $this->assertClass('expressions', AnyType::class, $expression);
-        }
-
-        $this->expressions = $expressions;
+        $this->expressions = array_map(
+			fn ($value): AnyType => $value instanceof AnyType ? $value : Literal::literal($value),
+			$expressions
+		);
     }
 
     /**
