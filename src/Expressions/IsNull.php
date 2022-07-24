@@ -31,57 +31,23 @@ use function sprintf;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
  */
-class IsNull implements BooleanType
+class IsNull extends UnaryOperator implements BooleanType
 {
     use BooleanTypeTrait;
 
-    /**
-     * @var AnyType The type to test against null
-     */
-    private AnyType $expression;
-
 	/**
-	 * @var bool Whether to insert parentheses around the expression
+	 * @inheritDoc
 	 */
-    private bool $insertParentheses;
-
-    /**
-     * IS NULL constructor.
-     *
-     * @param AnyType $expression The type to test against null.
-	 * @param bool $insertParentheses Whether to insert parentheses around the expression
-     */
-    public function __construct(AnyType $expression, bool $insertParentheses = true)
-    {
-        $this->expression = $expression;
-        $this->insertParentheses = $insertParentheses;
-    }
-
-    /**
-     * Returns the expression to test against null.
-     *
-     * @return AnyType
-     */
-    public function getExpression(): AnyType
-    {
-        return $this->expression;
-    }
-
-	/**
-	 * Returns whether the operator inserts parenthesis.
-	 *
-	 * @return bool
-	 */
-	public function insertsParentheses(): bool
+	public function isPostfix(): bool
 	{
-		return $this->insertParentheses;
+		return true;
 	}
 
-    /**
-     * @inheritDoc
-     */
-    public function toQuery(): string
-    {
-        return sprintf($this->insertParentheses ? "(%s IS NULL)" : "%s IS NULL", $this->expression->toQuery());
-    }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getOperator(): string
+	{
+		return "IS NULL";
+	}
 }

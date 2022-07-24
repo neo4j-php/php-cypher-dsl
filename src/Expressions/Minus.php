@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
@@ -29,57 +30,25 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#syntax-using-the-unary-minus-operator
  */
-class Minus implements NumeralType
+class Minus extends UnaryOperator implements NumeralType
 {
+	use CastTrait;
     use NumeralTypeTrait;
 
     /**
-     * @var NumeralType The expression to negate
+     * @param NumeralType|int|float $expression
+	 * @param bool $insertParentheses
      */
-    private NumeralType $expression;
-
-	/**
-	 * @var bool Whether to insert parentheses around the expression
-	 */
-	private bool $insertParentheses;
-
-    /**
-     * Minus constructor.
-     *
-     * @param NumeralType $expression The expression to negate
-	 * @param bool $insertParentheses Whether to insert parentheses around the expression
-     */
-    public function __construct(NumeralType $expression, bool $insertParentheses = false)
+    public function __construct($expression, bool $insertParentheses = false)
     {
-        $this->expression = $expression;
-		$this->insertParentheses = $insertParentheses;
-    }
-
-    /**
-     * Returns the expression to negate.
-     *
-     * @return NumeralType
-     */
-    public function getExpression(): NumeralType
-    {
-        return $this->expression;
+        parent::__construct(self::toNumeralType($expression), $insertParentheses);
     }
 
 	/**
-	 * Returns whether the operator inserts parenthesis.
-	 *
-	 * @return bool
+	 * @inheritDoc
 	 */
-	public function insertsParentheses(): bool
+	protected function getOperator(): string
 	{
-		return $this->insertParentheses;
+		return "-";
 	}
-
-    /**
-     * @inheritDoc
-     */
-    public function toQuery(): string
-    {
-        return sprintf($this->insertParentheses ? "(-%s)" : "-%s", $this->expression->toQuery());
-    }
 }

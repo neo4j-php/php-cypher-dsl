@@ -30,18 +30,8 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparablePropertyType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
  */
-class GreaterThanOrEqual extends BinaryOperator implements BooleanType
+class GreaterThanOrEqual extends ComparisonBinaryOperator
 {
-    use BooleanTypeTrait;
-
-    /**
-     * @inheritDoc
-     */
-    public function __construct(ComparablePropertyType $left, ComparablePropertyType $right, bool $insertParentheses = true)
-    {
-        parent::__construct($left, $right, $insertParentheses);
-    }
-
     /**
      * @inheritDoc
      */

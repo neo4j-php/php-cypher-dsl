@@ -32,7 +32,7 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 8)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
  */
-class Node extends Pattern implements RelatablePattern
+class Node extends Pattern implements Relatable
 {
 	use ErrorTrait;
     use EscapeTrait;
@@ -89,7 +89,7 @@ class Node extends Pattern implements RelatablePattern
     /**
      * @inheritDoc
      */
-	public function relationship(Relationship $relationship, RelatablePattern $relatable): Path
+	public function relationship(Relationship $relationship, Relatable $relatable): Path
 	{
 		return (new Path($this))->relationship($relationship, $relatable);
 	}
@@ -97,7 +97,7 @@ class Node extends Pattern implements RelatablePattern
     /**
      * @inheritDoc
      */
-	public function relationshipTo(RelatablePattern $relatable, ?string $type = null, $properties = null, $name = null): Path
+	public function relationshipTo(Relatable $relatable, ?string $type = null, $properties = null, $name = null): Path
 	{
 		return (new Path($this))->relationshipTo($relatable, $type, $properties, $name);
 	}
@@ -105,7 +105,7 @@ class Node extends Pattern implements RelatablePattern
     /**
      * @inheritDoc
      */
-	public function relationshipFrom(RelatablePattern $relatable, ?string $type = null, $properties = null, $name = null): Path
+	public function relationshipFrom(Relatable $relatable, ?string $type = null, $properties = null, $name = null): Path
 	{
 		return (new Path($this))->relationshipFrom($relatable, $type, $properties, $name);
 	}
@@ -113,7 +113,7 @@ class Node extends Pattern implements RelatablePattern
 	/**
 	 * @inheritDoc
 	 */
-	public function relationshipUni(RelatablePattern $relatable, ?string $type = null, $properties = null, $name = null): Path
+	public function relationshipUni(Relatable $relatable, ?string $type = null, $properties = null, $name = null): Path
 	{
 		return (new Path($this))->relationshipUni($relatable, $type, $properties, $name);
 	}
@@ -131,7 +131,7 @@ class Node extends Pattern implements RelatablePattern
     /**
      * Returns the properties of this node.
      *
-     * @return MapType
+     * @return MapType|null
      */
     public function getProperties(): ?MapType
     {

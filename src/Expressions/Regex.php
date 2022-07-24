@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
@@ -28,19 +29,24 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 /**
  * Represents the application of the regex operator.
  *
+ * @note This expression is not part of the openCypher standard.
+ *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-string
  */
 class Regex extends BinaryOperator implements BooleanType
 {
     use BooleanTypeTrait;
+	use CastTrait;
 
-    /**
-     * @inheritDoc
-     */
-    public function __construct(StringType $left, StringType $right, bool $insertParentheses = true)
-    {
-        parent::__construct($left, $right, $insertParentheses);
-    }
+	/**
+	 * @param StringType|string $left
+	 * @param StringType|string $right
+	 * @param bool $insertParentheses
+	 */
+	public function __construct($left, $right, bool $insertParentheses = true)
+	{
+		parent::__construct(self::toStringType($left), self::toStringType($right), $insertParentheses);
+	}
 
     /**
      * @inheritDoc

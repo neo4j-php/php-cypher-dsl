@@ -21,27 +21,13 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
-
 /**
  * Represents the application of the inequality (<>) operator.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
  */
-class Inequality extends BinaryOperator implements BooleanType
+class Inequality extends ComparisonBinaryOperator
 {
-    use BooleanTypeTrait;
-
-    /**
-     * @inheritDoc
-     */
-    public function __construct(PropertyType $left, PropertyType $right, bool $insertParentheses = true)
-    {
-        parent::__construct($left, $right, $insertParentheses);
-    }
-
     /**
      * @inheritDoc
      */

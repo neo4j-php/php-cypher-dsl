@@ -16,6 +16,7 @@ use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparablePropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
@@ -101,6 +102,12 @@ trait CastTrait
 	{
 		self::assertClass('property', [PropertyType::class, 'bool', 'int', 'float', 'string'], $property);
 		return $property instanceof PropertyType ? $property : Literal::literal($property);
+	}
+
+	private static function toComparablePropertyType($comparable): ComparablePropertyType
+	{
+		self::assertClass('comparable', [ComparablePropertyType::class, 'int', 'float', 'string'], $comparable);
+		return $comparable instanceof ComparablePropertyType ? $comparable : Literal::literal($comparable);
 	}
 
 	/**

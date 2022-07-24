@@ -40,7 +40,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 5)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#structural-types
  */
-class Path extends Pattern implements BooleanType, RelatablePattern
+class Path extends Pattern implements BooleanType, Relatable
 {
 	use BooleanTypeTrait;
 
@@ -52,7 +52,7 @@ class Path extends Pattern implements BooleanType, RelatablePattern
     private array $relationships;
 
     /**
-	 * @var Node[]
+	 * @var Relatable[]
 	 */
     private array $relatables;
 
@@ -139,7 +139,7 @@ class Path extends Pattern implements BooleanType, RelatablePattern
     /**
      * @inheritDoc
      */
-	public function relationship(Relationship $relationship, RelatablePattern $relatable): Path
+	public function relationship(Relationship $relationship, Relatable $relatable): Path
 	{
 		$this->relationships[] = $relationship;
 
@@ -158,10 +158,10 @@ class Path extends Pattern implements BooleanType, RelatablePattern
     /**
      * @inheritDoc
      */
-	public function relationshipTo(RelatablePattern $relatable, ?string $type = null, $properties = null, $name = null): Path
+	public function relationshipTo(Relatable $relatable, ?string $type = null, $properties = null, $name = null): Path
 	{
 		return $this->relationship(
-            $this->buildRelationship(Relationship::DIR_RIGHT, $type, $properties, $name),
+			self::buildRelationship(Relationship::DIR_RIGHT, $type, $properties, $name),
             $relatable
         );
 	}
@@ -169,10 +169,10 @@ class Path extends Pattern implements BooleanType, RelatablePattern
 	/**
 	 * @inheritDoc
 	 */
-	public function relationshipFrom(RelatablePattern $relatable, ?string $type = null, $properties = null, $name = null): Path
+	public function relationshipFrom(Relatable $relatable, ?string $type = null, $properties = null, $name = null): Path
 	{
 		return $this->relationship(
-            $this->buildRelationship(Relationship::DIR_LEFT, $type, $properties, $name),
+			self::buildRelationship(Relationship::DIR_LEFT, $type, $properties, $name),
             $relatable
         );
 	}
@@ -180,10 +180,10 @@ class Path extends Pattern implements BooleanType, RelatablePattern
     /**
      * @inheritDoc
      */
-	public function relationshipUni(RelatablePattern $relatable, ?string $type = null, $properties = null, $name = null): Path
+	public function relationshipUni(Relatable $relatable, ?string $type = null, $properties = null, $name = null): Path
 	{
 		return $this->relationship(
-            $this->buildRelationship(Relationship::DIR_UNI, $type, $properties, $name),
+            self::buildRelationship(Relationship::DIR_UNI, $type, $properties, $name),
             $relatable
         );
 	}
@@ -196,7 +196,7 @@ class Path extends Pattern implements BooleanType, RelatablePattern
      *
      * @return Relationship
      */
-    private function buildRelationship(array $direction, ?string $type, $properties, $name): Relationship
+    private static function buildRelationship(array $direction, ?string $type, $properties, $name): Relationship
     {
         self::assertClass('properties', [MapType::class, 'array', 'null'], $properties);
         self::assertClass('name', [Variable::class, 'string', 'null'], $name);

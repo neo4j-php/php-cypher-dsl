@@ -54,6 +54,7 @@ use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
 use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
+use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
@@ -196,7 +197,7 @@ class Query implements QueryConvertible
     /**
      * Creates a list of expressions.
      *
-     * @param AnyType[]|bool[]|string[]|int[]|float[] $values An iterable of values from which to construct the list
+     * @param array $values An iterable of values from which to construct the list
      * @return ExpressionList
      */
     public static function list(iterable $values): ExpressionList
@@ -262,7 +263,7 @@ class Query implements QueryConvertible
 	 */
 	public function call($query = null, $variables = []): self
 	{
-		$this->assertClass('query', [Query::class, Closure::class], $query);
+		$this->assertClass('query', [Query::class, Closure::class, 'callable'], $query);
 
 		if (is_callable($query)) {
 			$subQuery = self::new();
@@ -276,17 +277,13 @@ class Query implements QueryConvertible
 		}
 
 		$variables = array_map(function ($variable): Variable {
-			$this->assertClass('variables', [Variable::class, 'string'], $variable);
+			self::assertClass();
 
 			if (is_string($variable)) {
 				return self::variable($variable);
 			}
 
-			if ($variable instanceof HasVariable) {
-				return $variable->getVariable();
-			}
-
-			return $variable;
+			return $variable->getVariable();
 		}, $variables);
 
 		$callClause = new CallClause();

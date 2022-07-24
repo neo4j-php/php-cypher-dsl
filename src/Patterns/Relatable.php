@@ -30,55 +30,55 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  * - node
  * - path
  */
-interface RelatablePattern
+interface Relatable
 {
     /**
      * Forms a new path by adding the given relatable pattern to the end of this pattern using the given relationship
      * pattern.
      *
      * @param Relationship $relationship The relationship to use
-     * @param RelatablePattern $relatable The relatable pattern to attach to this pattern
+     * @param Relatable $relatable The relatable pattern to attach to this pattern
      *
      * @return Path
      */
-    public function relationship(Relationship $relationship, RelatablePattern $relatable): Path;
+    public function relationship(Relationship $relationship, Relatable $relatable): Path;
 
     /**
      * Forms a new path by adding the given relatable pattern to the end of this pattern using a right (-->)
      * relationship.
      *
-     * @param RelatablePattern $relatable The relatable pattern to attach to the end of this pattern
+     * @param Relatable $relatable The relatable pattern to attach to the end of this pattern
      * @param string|null $type The type of the relationship
      * @param MapType|array|null $properties The properties to attach to the relationship
      * @param Variable|string|null $name The name fo the relationship
      *
      * @return Path
      */
-    public function relationshipTo(RelatablePattern $relatable, ?string $type = null, $properties = null, $name = null): Path;
+    public function relationshipTo(Relatable $relatable, ?string $type = null, $properties = null, $name = null): Path;
 
     /**
      * Forms a new path by adding the given relatable pattern to the end of this pattern using a left (<--)
      * relationship.
      *
-     * @param RelatablePattern $relatable The relatable pattern to attach to the end of this pattern
+     * @param Relatable $relatable The relatable pattern to attach to the end of this pattern
      * @param string|null $type The type of the relationship
      * @param MapType|array|null $properties The properties to attach to the relationship
      * @param Variable|string|null $name The name fo the relationship
      *
      * @return Path
      */
-    public function relationshipFrom(RelatablePattern $relatable, ?string $type = null, $properties = null, $name = null): Path;
+    public function relationshipFrom(Relatable $relatable, ?string $type = null, $properties = null, $name = null): Path;
 
     /**
      * Forms a new path by adding the given relatable pattern to the end of this pattern using a unidirectional
      * (--/<-->) relationship.
      *
-     * @param RelatablePattern $relatable The relatable pattern to attach to the end of this pattern
+     * @param Relatable $relatable The relatable pattern to attach to the end of this pattern
      * @param string|null $type The type of the relationship
      * @param MapType|array|null $properties The properties to attach to the relationship
      * @param Variable|string|null $name The name fo the relationship
      *
      * @return Path
      */
-    public function relationshipUni(RelatablePattern $relatable, ?string $type = null, $properties = null, $name = null): Path;
+    public function relationshipUni(Relatable $relatable, ?string $type = null, $properties = null, $name = null): Path;
 }

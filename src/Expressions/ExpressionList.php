@@ -50,7 +50,7 @@ class ExpressionList implements ListType
     /**
      * ExpressionList constructor.
      *
-     * @param AnyType|string|bool|float|int[] $expressions The list of expressions, should be homogeneous
+     * @param array $expressions The list of expressions
      */
     public function __construct(iterable $expressions)
     {

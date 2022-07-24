@@ -27,20 +27,11 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 /**
  * Represents the application of the division (/) operator.
  *
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 48)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-mathematical
  */
-class Division extends BinaryOperator implements NumeralType
+class Division extends MathematicalBinaryOperator
 {
-    use NumeralTypeTrait;
-
-    /**
-     * @inheritDoc
-     */
-    public function __construct(NumeralType $left, NumeralType $right, bool $insertParentheses = true)
-    {
-        parent::__construct($left, $right, $insertParentheses);
-    }
-
     /**
      * @inheritDoc
      */

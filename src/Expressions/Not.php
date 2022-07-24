@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
@@ -29,57 +30,27 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-boolean
  */
-class Not implements BooleanType
+class Not extends UnaryOperator implements BooleanType
 {
     use BooleanTypeTrait;
-
-    /**
-     * @var BooleanType The expression to negate
-     */
-    private BooleanType $expression;
-
-	/**
-	 * @var bool Whether to insert parentheses around the expression
-	 */
-	private bool $insertParentheses;
+	use CastTrait;
 
 	/**
      * Not constructor.
      *
-     * @param BooleanType $expression The expression to negate
+     * @param BooleanType|bool $expression The expression to negate
 	 * @param bool $insertParentheses Whether to insert parentheses around the expression
      */
-    public function __construct(BooleanType $expression, bool $insertParentheses = true)
+    public function __construct($expression, bool $insertParentheses = true)
     {
-        $this->expression = $expression;
-		$this->insertParentheses = $insertParentheses;
-    }
-
-    /**
-     * Returns the expression to negate.
-     *
-     * @return BooleanType
-     */
-    public function getExpression(): BooleanType
-    {
-        return $this->expression;
+        parent::__construct(self::toBooleanType($expression), $insertParentheses);
     }
 
 	/**
-	 * Returns whether the operator inserts parenthesis.
-	 *
-	 * @return bool
+	 * @inheritDoc
 	 */
-	public function insertsParentheses(): bool
+	protected function getOperator(): string
 	{
-		return $this->insertParentheses;
+		return "NOT";
 	}
-
-    /**
-     * @inheritDoc
-     */
-    public function toQuery(): string
-    {
-        return sprintf($this->insertParentheses ? "(NOT %s)" : "NOT %s", $this->expression->toQuery());
-    }
 }

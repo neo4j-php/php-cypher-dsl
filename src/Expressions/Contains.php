@@ -21,27 +21,13 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
-
 /**
  * Represents the application of the case-sensitive inclusion search (CONTAINS) operator.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operator-comparison-string-specific
  */
-class Contains extends BinaryOperator implements BooleanType
+class Contains extends StringSpecificComparisonBinaryOperator
 {
-    use BooleanTypeTrait;
-
-    /**
-     * @inheritDoc
-     */
-    public function __construct(StringType $left, StringType $right, bool $insertParentheses = true)
-    {
-        parent::__construct($left, $right, $insertParentheses);
-    }
-
     /**
      * @inheritDoc
      */

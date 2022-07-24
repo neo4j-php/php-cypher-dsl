@@ -21,27 +21,13 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparablePropertyType;
-
 /**
  * Represents the application of the less than (<) operator.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
  */
-class LessThan extends BinaryOperator implements BooleanType
+class LessThan extends ComparisonBinaryOperator
 {
-    use BooleanTypeTrait;
-
-    /**
-     * @inheritDoc
-     */
-    public function __construct(ComparablePropertyType $left, ComparablePropertyType $right, bool $insertParentheses = true)
-    {
-        parent::__construct($left, $right, $insertParentheses);
-    }
-
     /**
      * @inheritDoc
      */

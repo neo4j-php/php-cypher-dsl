@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
@@ -32,13 +33,16 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 class OrOperator extends BinaryOperator implements BooleanType
 {
     use BooleanTypeTrait;
+	use CastTrait;
 
-    /**
-     * @inheritDoc
-     */
-    public function __construct(BooleanType $left, BooleanType $right, bool $insertParentheses = true)
+	/**
+	 * @param BooleanType|bool $left
+	 * @param BooleanType|bool $right
+	 * @param bool $insertParentheses
+	 */
+    public function __construct($left, $right, bool $insertParentheses = true)
     {
-        parent::__construct($left, $right, $insertParentheses);
+        parent::__construct(self::toBooleanType($left), self::toBooleanType($right), $insertParentheses);
     }
 
     /**

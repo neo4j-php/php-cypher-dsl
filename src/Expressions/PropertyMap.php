@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\MapTypeTrait;
@@ -39,10 +40,9 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
  */
 class PropertyMap implements MapType
 {
+	use EscapeTrait;
+	use ErrorTrait;
 	use MapTypeTrait;
-
-    use EscapeTrait;
-    use ErrorTrait;
 
     /**
      * @var AnyType[] The map of properties
