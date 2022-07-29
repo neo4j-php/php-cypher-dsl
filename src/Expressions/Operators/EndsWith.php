@@ -19,20 +19,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
 /**
- * Represents the application of the case-sensitive inclusion search (CONTAINS) operator.
+ * Represents the application of the case-sensitive suffix search (ENDS WITH) operator.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operator-comparison-string-specific
  */
-class Contains extends StringSpecificComparisonBinaryOperator
+class EndsWith extends StringSpecificComparisonBinaryOperator
 {
     /**
      * @inheritDoc
      */
     protected function getOperator(): string
     {
-        return "CONTAINS";
+        return "ENDS WITH";
     }
 }

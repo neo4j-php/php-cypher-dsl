@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
@@ -33,21 +33,8 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-string
  */
-class Regex extends BinaryOperator implements BooleanType
+class Regex extends StringSpecificComparisonBinaryOperator
 {
-    use BooleanTypeTrait;
-	use CastTrait;
-
-	/**
-	 * @param StringType|string $left
-	 * @param StringType|string $right
-	 * @param bool $insertParentheses
-	 */
-	public function __construct($left, $right, bool $insertParentheses = true)
-	{
-		parent::__construct(self::toStringType($left), self::toStringType($right), $insertParentheses);
-	}
-
     /**
      * @inheritDoc
      */

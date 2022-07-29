@@ -19,37 +19,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparablePropertyType;
 
 /**
- * Represents the application of the disjunction (OR) operator.
+ * Represents the application of the less than or equal to (<=) operator.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-boolean
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
  */
-class OrOperator extends BinaryOperator implements BooleanType
+class LessThanOrEqual extends ComparisonOperator
 {
-    use BooleanTypeTrait;
-	use CastTrait;
-
-	/**
-	 * @param BooleanType|bool $left
-	 * @param BooleanType|bool $right
-	 * @param bool $insertParentheses
-	 */
-    public function __construct($left, $right, bool $insertParentheses = true)
-    {
-        parent::__construct(self::toBooleanType($left), self::toBooleanType($right), $insertParentheses);
-    }
-
     /**
      * @inheritDoc
      */
     protected function getOperator(): string
     {
-        return "OR";
+        return "<=";
     }
 }

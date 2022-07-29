@@ -1,6 +1,6 @@
 <?php
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait;
@@ -19,7 +19,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 48)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-mathematical
  */
-abstract class MathematicalBinaryOperator extends BinaryOperator implements NumeralType
+abstract class MathematicalOperator extends Operator implements NumeralType
 {
 	use CastTrait;
 	use NumeralTypeTrait;

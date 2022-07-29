@@ -19,35 +19,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
-
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use function sprintf;
+namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
 /**
- * Represents the IS NULL comparison operator.
+ * Represents the application of the case-sensitive inclusion search (CONTAINS) operator.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operator-comparison-string-specific
  */
-class IsNull extends UnaryOperator implements BooleanType
+class Contains extends StringSpecificComparisonBinaryOperator
 {
-    use BooleanTypeTrait;
-
-	/**
-	 * @inheritDoc
-	 */
-	public function isPostfix(): bool
-	{
-		return true;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	protected function getOperator(): string
-	{
-		return "IS NULL";
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getOperator(): string
+    {
+        return "CONTAINS";
+    }
 }

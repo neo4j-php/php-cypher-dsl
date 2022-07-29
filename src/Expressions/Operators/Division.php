@@ -19,35 +19,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
- * Represents the application of the "IN" operator.
+ * Represents the application of the division (/) operator.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/#where-in-operator
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 48)
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-mathematical
  */
-class In extends BinaryOperator implements BooleanType
+class Division extends MathematicalOperator
 {
-    use BooleanTypeTrait;
-
-    /**
-     * @inheritDoc
-     */
-    public function __construct(PropertyType $left, ListType $right, bool $insertParentheses = true)
-    {
-        parent::__construct($left, $right, $insertParentheses);
-    }
-
     /**
      * @inheritDoc
      */
     protected function getOperator(): string
     {
-        return "IN";
+        return "/";
     }
 }

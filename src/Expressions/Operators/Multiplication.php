@@ -19,33 +19,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
-
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
 /**
- * Represents the application of the conjunction (AND) operator.
+ * Represents the application of the multiplication (*) operator.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-boolean
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 48)
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-mathematical
  */
-class AndOperator extends BinaryOperator implements BooleanType
+class Multiplication extends MathematicalOperator
 {
-    use BooleanTypeTrait;
-
-    /**
-     * @inheritDoc
-     */
-    public function __construct(BooleanType $left, BooleanType $right, bool $insertParentheses = true)
-    {
-        parent::__construct($left, $right, $insertParentheses);
-    }
-
     /**
      * @inheritDoc
      */
     protected function getOperator(): string
     {
-        return "AND";
+        return "*";
     }
 }

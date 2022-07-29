@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
 /**
  * Represents the application of the subtraction (-) operator.
@@ -27,7 +27,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 48)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-mathematical
  */
-class Subtraction extends MathematicalBinaryOperator
+class Subtraction extends MathematicalOperator
 {
     /**
      * @inheritDoc

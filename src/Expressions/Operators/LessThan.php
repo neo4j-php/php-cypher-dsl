@@ -19,20 +19,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
 /**
- * Represents the application of the inequality (<>) operator.
+ * Represents the application of the less than (<) operator.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
  */
-class Inequality extends ComparisonBinaryOperator
+class LessThan extends ComparisonOperator
 {
     /**
      * @inheritDoc
      */
     protected function getOperator(): string
     {
-        return "<>";
+        return "<";
     }
 }

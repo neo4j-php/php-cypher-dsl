@@ -19,37 +19,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
-
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
 /**
- * Represents the application of the exclusive or (XOR) operator.
+ * Represents the application of the inequality (<>) operator.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-boolean
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
  */
-class XorOperator extends BinaryOperator implements BooleanType
+class Inequality extends ComparisonOperator
 {
-    use BooleanTypeTrait;
-	use CastTrait;
-
-	/**
-	 * @param BooleanType|boolean $left
-	 * @param BooleanType|boolean $right
-	 * @param bool $insertParentheses
-	 */
-    public function __construct($left, $right, bool $insertParentheses = true)
-    {
-        parent::__construct(self::toBooleanType($left), self::toBooleanType($right), $insertParentheses);
-    }
-
     /**
      * @inheritDoc
      */
     protected function getOperator(): string
     {
-        return "XOR";
+        return "<>";
     }
 }

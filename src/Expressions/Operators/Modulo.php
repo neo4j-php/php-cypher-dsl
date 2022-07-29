@@ -19,20 +19,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
 /**
- * Represents the application of the less than (<) operator.
+ * Represents the application of the modulo (%) operator.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 48)
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-mathematical
  */
-class LessThan extends ComparisonBinaryOperator
+class Modulo extends MathematicalOperator
 {
     /**
      * @inheritDoc
      */
     protected function getOperator(): string
     {
-        return "<";
+        return "%";
     }
 }

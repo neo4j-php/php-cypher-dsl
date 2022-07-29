@@ -13,6 +13,7 @@ use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
@@ -104,6 +105,12 @@ trait CastTrait
 		return $property instanceof PropertyType ? $property : Literal::literal($property);
 	}
 
+	/**
+	 * Casts the given value to a ComparablePropertyType.
+	 *
+	 * @param ComparablePropertyType|int|float|string $comparable
+	 * @return ComparablePropertyType
+	 */
 	private static function toComparablePropertyType($comparable): ComparablePropertyType
 	{
 		self::assertClass('comparable', [ComparablePropertyType::class, 'int', 'float', 'string'], $comparable);
@@ -168,5 +175,59 @@ trait CastTrait
 	{
 		self::assertClass('variable', [Variable::class, 'string'], $variable);
 		return $variable instanceof Variable ? $variable : new Variable($variable);
+	}
+
+	/**
+	 * Casts the given value to an AnyType.
+	 *
+	 * @param AnyType|int|float|string|bool|array $value
+	 * @return AnyType
+	 */
+	private static function toAnyType($value): AnyType
+	{
+		self::assertClass('value', [AnyType::class, 'int', 'float', 'string', 'bool', 'array'], $value);
+
+		if ($value instanceof AnyType) {
+			return $value;
+		}
+
+		if (is_array($value)) {
+			return self::array_is_list($value) ?
+				new ExpressionList($value) :
+				new PropertyMap($value);
+		}
+
+		return Literal::literal($value);
+	}
+
+	/**
+	 * Polyfill for PHP8.1 "array_is_list" function.
+	 *
+	 * @author Nicolas Grekas <p@tchwork.com>
+	 * @see https://github.com/symfony/polyfill-php81/blob/main/Php81.php
+	 *
+	 * @param array $array
+	 * @return bool
+	 */
+	private static function array_is_list(array $array): bool
+	{
+		if (version_compare(PHP_VERSION, "8.1") >= 0) {
+			// If the version is at least PHP 8.1, use the native implementation
+			return array_is_list($array);
+		}
+
+		if ([] === $array || $array === array_values($array)) {
+			return true;
+		}
+
+		$nextKey = -1;
+
+		foreach ($array as $k => $v) {
+			if ($k !== ++$nextKey) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

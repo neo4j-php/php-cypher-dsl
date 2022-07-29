@@ -19,20 +19,35 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
+
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use function sprintf;
 
 /**
- * Represents the application of the case-sensitive prefix search (STARTS WITH) operator.
+ * Represents the IS NULL comparison operator.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operator-comparison-string-specific
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
  */
-class StartsWith extends StringSpecificComparisonBinaryOperator
+class IsNull extends UnaryOperator implements BooleanType
 {
-    /**
-     * @inheritDoc
-     */
-    protected function getOperator(): string
-    {
-        return "STARTS WITH";
-    }
+    use BooleanTypeTrait;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function isPostfix(): bool
+	{
+		return true;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function getOperator(): string
+	{
+		return "IS NULL";
+	}
 }

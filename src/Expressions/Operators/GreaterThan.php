@@ -19,24 +19,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
-
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparablePropertyType;
+namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
 /**
- * Represents the application of the less than or equal to (<=) operator.
+ * Represents the application of the greater than (>) operator.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
  */
-class LessThanOrEqual extends ComparisonBinaryOperator
+class GreaterThan extends ComparisonOperator
 {
     /**
      * @inheritDoc
      */
     protected function getOperator(): string
     {
-        return "<=";
+        return ">";
     }
 }

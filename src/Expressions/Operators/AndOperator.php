@@ -19,21 +19,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
+
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
- * Represents the application of the exponentiation (^) operator.
+ * Represents the application of the conjunction (AND) operator.
  *
- * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 48)
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#syntax-using-the-exponentiation-operator
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-boolean
  */
-class Exponentiation extends MathematicalBinaryOperator
+class AndOperator extends BooleanOperator
 {
     /**
      * @inheritDoc
      */
     protected function getOperator(): string
     {
-        return "^";
+        return "AND";
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
@@ -11,11 +11,12 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  * - case-sensitive prefix search on strings: "STARTS WITH"
  * - case-sensitive suffix search on strings: "ENDS WITH"
  * - case-sensitive inclusion search in strings: "CONTAINS"
+ * - regular expression: "~=" (not part of openCypher)
  *
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 48)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-mathematical
  */
-abstract class StringSpecificComparisonBinaryOperator extends ComparisonBinaryOperator
+abstract class StringSpecificComparisonBinaryOperator extends ComparisonOperator
 {
 	use CastTrait;
 

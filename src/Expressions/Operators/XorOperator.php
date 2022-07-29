@@ -19,20 +19,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
+
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
- * Represents the application of the greater than (>) operator.
+ * Represents the application of the exclusive or (XOR) operator.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-boolean
  */
-class GreaterThan extends ComparisonBinaryOperator
+class XorOperator extends BooleanOperator
 {
     /**
      * @inheritDoc
      */
     protected function getOperator(): string
     {
-        return ">";
+        return "XOR";
     }
 }

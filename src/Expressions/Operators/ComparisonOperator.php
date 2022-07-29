@@ -1,10 +1,11 @@
 <?php
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparablePropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
@@ -18,8 +19,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  * - greater than: ">"
  * - less than or equal to: "<="
  * - greater than or equal to: ">="
- * - "IS NULL"
- * - "IS NOT NULL"
  *
  * In additional, there are some string-specific comparison operators:
  *
@@ -30,7 +29,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 48)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-mathematical
  */
-abstract class ComparisonBinaryOperator extends BinaryOperator implements BooleanType
+abstract class ComparisonOperator extends Operator implements BooleanType
 {
 	use CastTrait;
 	use BooleanTypeTrait;
@@ -38,12 +37,12 @@ abstract class ComparisonBinaryOperator extends BinaryOperator implements Boolea
 	/**
 	 * ComparisonBinaryOperator constructor.
 	 *
-	 * @param ComparablePropertyType|string|int|float $left The left-hand of the comparison operator
-	 * @param ComparablePropertyType|string|int|float $right The right-hand of the comparison operator
+	 * @param AnyType|string|int|float|bool|array $left The left-hand of the comparison operator
+	 * @param AnyType|string|int|float|bool|array $right The right-hand of the comparison operator
 	 * @param bool $insertParentheses Whether to insert parentheses around the expression
 	 */
 	public function __construct($left, $right, bool $insertParentheses = true)
 	{
-		parent::__construct(self::toComparablePropertyType($left), self::toComparablePropertyType($right), $insertParentheses);
+		parent::__construct(self::toAnyType($left), self::toAnyType($right), $insertParentheses);
 	}
 }

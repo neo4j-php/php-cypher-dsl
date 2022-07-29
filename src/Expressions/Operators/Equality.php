@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
@@ -34,27 +34,9 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
  * @see Assignment For a semantically different, but syntactically identical operator
  */
-class Equality extends BinaryOperator implements BooleanType
+class Equality extends ComparisonOperator
 {
-    use BooleanTypeTrait;
-    use ErrorTrait;
-
-    /**
-     * Equality constructor
-     *
-     * @param PropertyType|CompositeType $left The left-hand of the expression
-     * @param PropertyType|CompositeType $right The right-hand of the expression
-     * @param bool $insertParentheses Whether to insert parentheses around the expression
-     */
-    public function __construct(Anytype $left, AnyType $right, bool $insertParentheses = true)
-    {
-        self::assertClass('left', [PropertyType::class, CompositeType::class], $left);
-        self::assertClass('right', [PropertyType::class, CompositeType::class], $right);
-
-        parent::__construct($left, $right, $insertParentheses);
-    }
-
-    /**
+	/**
      * @inheritDoc
      */
     protected function getOperator(): string
