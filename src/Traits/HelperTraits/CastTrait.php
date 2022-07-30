@@ -46,18 +46,6 @@ trait CastTrait
 	}
 
 	/**
-	 * Casts the given value to a MapType.
-	 *
-	 * @param MapType|array $map
-	 * @return MapType
-	 */
-	private static function toMapType($map): MapType
-	{
-		self::assertClass('map', [MapType::class, 'array'], $map);
-		return $map instanceof MapType ? $map : new PropertyMap($map);
-	}
-
-	/**
 	 * Casts the given value to a StringType.
 	 *
 	 * @param StringType|string $string
@@ -106,93 +94,25 @@ trait CastTrait
 	}
 
 	/**
-	 * Casts the given value to a ComparablePropertyType.
-	 *
-	 * @param ComparablePropertyType|int|float|string $comparable
-	 * @return ComparablePropertyType
-	 */
-	private static function toComparablePropertyType($comparable): ComparablePropertyType
-	{
-		self::assertClass('comparable', [ComparablePropertyType::class, 'int', 'float', 'string'], $comparable);
-		return $comparable instanceof ComparablePropertyType ? $comparable : Literal::literal($comparable);
-	}
-
-	/**
-	 * Casts the given value to a NodeType.
-	 *
-	 * @param NodeType|Node $node
-	 * @return NodeType
-	 */
-	private static function toNodeType($node): NodeType
-	{
-		self::assertClass('node', [NodeType::class, Node::class], $node);
-		return $node instanceof NodeType ? $node : $node->getVariable();
-	}
-
-	/**
-	 * Casts the given value to a PathType.
-	 *
-	 * @param PathType|Path $path
-	 * @return PathType
-	 */
-	private static function toPathType($path): PathType
-	{
-		self::assertClass('path', [PathType::class, Path::class], $path);
-		return $path instanceof PathType ? $path : $path->getVariable();
-	}
-
-	/**
-	 * Casts the given value to a RelationshipType.
-	 *
-	 * @param RelationshipType|Relationship $relationship
-	 * @return RelationshipType
-	 */
-	private static function toRelationshipType($relationship): RelationshipType
-	{
-		self::assertClass('relationship', [RelationshipType::class, Relationship::class], $relationship);
-		return $relationship instanceof RelationshipType ? $relationship : $relationship->getVariable();
-	}
-
-	/**
-	 * Casts the given value to a StructuralType.
-	 *
-	 * @param StructuralType|Pattern $pattern
-	 * @return StructuralType
-	 */
-	private static function toStructuralType($pattern): StructuralType
-	{
-		self::assertClass('pattern', [StructuralType::class, Pattern::class], $pattern);
-		return $pattern instanceof StructuralType ? $pattern : $pattern->getVariable();
-	}
-
-	/**
-	 * Casts the given value to a Variable.
-	 *
-	 * @param Variable|string $variable
-	 * @return Variable
-	 */
-	private static function toVariable($variable): Variable
-	{
-		self::assertClass('variable', [Variable::class, 'string'], $variable);
-		return $variable instanceof Variable ? $variable : new Variable($variable);
-	}
-
-	/**
 	 * Casts the given value to an AnyType.
 	 *
-	 * @param AnyType|int|float|string|bool|array $value
+	 * @param AnyType|Pattern|int|float|string|bool|array $value
 	 * @return AnyType
 	 */
 	private static function toAnyType($value): AnyType
 	{
-		self::assertClass('value', [AnyType::class, 'int', 'float', 'string', 'bool', 'array'], $value);
+		self::assertClass('value', [AnyType::class, Pattern::class, 'int', 'float', 'string', 'bool', 'array'], $value);
 
 		if ($value instanceof AnyType) {
 			return $value;
 		}
 
+		if ($value instanceof Pattern) {
+			return $value->getVariable();
+		}
+
 		if (is_array($value)) {
-			return self::array_is_list($value) ?
+			return self::arrayIsList($value) ?
 				new ExpressionList($value) :
 				new PropertyMap($value);
 		}
@@ -209,7 +129,7 @@ trait CastTrait
 	 * @param array $array
 	 * @return bool
 	 */
-	private static function array_is_list(array $array): bool
+	private static function arrayIsList(array $array): bool
 	{
 		if (version_compare(PHP_VERSION, "8.1") >= 0) {
 			// If the version is at least PHP 8.1, use the native implementation

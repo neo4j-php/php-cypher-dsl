@@ -30,7 +30,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparablePropertyType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
  */
-class GreaterThanOrEqual extends ComparisonOperator
+final class GreaterThanOrEqual extends ComparisonBinaryOperator
 {
     /**
      * @inheritDoc

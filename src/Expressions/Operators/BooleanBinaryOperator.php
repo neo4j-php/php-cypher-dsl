@@ -19,7 +19,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 50)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-boolean
  */
-abstract class BooleanOperator extends Operator implements BooleanType
+abstract class BooleanBinaryOperator extends BinaryOperator implements BooleanType
 {
 	use CastTrait;
 	use BooleanTypeTrait;

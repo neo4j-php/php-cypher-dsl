@@ -30,7 +30,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-boolean
  */
-class OrOperator extends BooleanOperator
+final class Disjunction extends BooleanBinaryOperator
 {
     /**
      * @inheritDoc

@@ -21,67 +21,26 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use function sprintf;
-
 /**
  * Represents the IS NOT NULL comparison operator.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
  */
-class IsNotNull implements BooleanType
+final class IsNotNull extends ComparisonUnaryOperator
 {
-    use BooleanTypeTrait;
-
-    /**
-     * @var AnyType The type to test against null
-     */
-    private AnyType $expression;
-
 	/**
-	 * @var bool Whether to insert parentheses around the expression
+	 * @inheritDoc
 	 */
-    private bool $insertParentheses;
-
-    /**
-     * IS NOT NULL constructor.
-     *
-     * @param AnyType $expression The type to test against null
-	 * @param bool $insertParentheses Whether to insert parentheses around the expression
-     */
-    public function __construct(AnyType $expression, bool $insertParentheses = true)
-    {
-        $this->expression = $expression;
-        $this->insertParentheses = $insertParentheses;
-    }
-
-    /**
-     * Returns the expression to test against null.
-     *
-     * @return AnyType
-     */
-    public function getExpression(): AnyType
-    {
-        return $this->expression;
-    }
-
-    /**
-     * Returns whether the operator inserts parenthesis.
-     *
-     * @return bool
-     */
-    public function insertsParentheses(): bool
-    {
-        return $this->insertParentheses;
-    }
+	public function isPostfix(): bool
+	{
+		return true;
+	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function toQuery(): string
+	protected function getOperator(): string
 	{
-		return sprintf($this->insertParentheses ? "(%s IS NOT NULL)" : "%s IS NOT NULL", $this->expression->toQuery());
+		return "IS NOT NULL";
 	}
 }

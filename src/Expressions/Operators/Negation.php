@@ -21,31 +21,13 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-
 /**
  * Represents the application of the negation (NOT) operator.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-boolean
  */
-class Not extends UnaryOperator implements BooleanType
+final class Negation extends BooleanUnaryOperator
 {
-    use BooleanTypeTrait;
-	use CastTrait;
-
-	/**
-     * Not constructor.
-     *
-     * @param BooleanType|bool $expression The expression to negate
-	 * @param bool $insertParentheses Whether to insert parentheses around the expression
-     */
-    public function __construct($expression, bool $insertParentheses = true)
-    {
-        parent::__construct(self::toBooleanType($expression), $insertParentheses);
-    }
-
 	/**
 	 * @inheritDoc
 	 */

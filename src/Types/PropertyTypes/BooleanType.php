@@ -21,10 +21,10 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
-use WikibaseSolutions\CypherDSL\Expressions\AndOperator;
-use WikibaseSolutions\CypherDSL\Expressions\Not;
-use WikibaseSolutions\CypherDSL\Expressions\OrOperator;
-use WikibaseSolutions\CypherDSL\Expressions\XorOperator;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Conjunction;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Disjunction;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\ExclusiveOr;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Negation;
 
 /**
  * Represents the leaf type "boolean".
@@ -36,32 +36,32 @@ interface BooleanType extends AliasablePropertyType
      *
      * @param BooleanType $right
      * @param bool $insertParentheses
-     * @return AndOperator
+     * @return Conjunction
      */
-    public function and(self $right, bool $insertParentheses = true): AndOperator;
+    public function and(self $right, bool $insertParentheses = true): Conjunction;
 
     /**
      * Create a disjunction between this expression and the given expression.
      *
      * @param BooleanType $right
      * @param bool $insertParentheses
-     * @return OrOperator
+     * @return Disjunction
      */
-    public function or(self $right, bool $insertParentheses = true): OrOperator;
+    public function or(self $right, bool $insertParentheses = true): Disjunction;
 
     /**
      * Perform an XOR with the given expression.
      *
      * @param BooleanType $right
      * @param bool $insertParentheses
-     * @return XorOperator
+     * @return ExclusiveOr
      */
-    public function xor(self $right, bool $insertParentheses = true): XorOperator;
+    public function xor(self $right, bool $insertParentheses = true): ExclusiveOr;
 
     /**
      * Negate this expression (using the NOT operator).
      *
-     * @return Not
+     * @return Negation
      */
-    public function not(): Not;
+    public function not(): Negation;
 }

@@ -26,7 +26,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operator-comparison-string-specific
  */
-class StartsWith extends StringSpecificComparisonBinaryOperator
+final class StartsWith extends StringSpecificComparisonBinaryOperator
 {
     /**
      * @inheritDoc

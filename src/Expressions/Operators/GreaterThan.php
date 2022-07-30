@@ -26,7 +26,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
  */
-class GreaterThan extends ComparisonOperator
+final class GreaterThan extends ComparisonBinaryOperator
 {
     /**
      * @inheritDoc

@@ -29,12 +29,11 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
- * Represents the application of the equality (=) operator.
+ * Represents the application of the equality (=) comparison operator.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
- * @see Assignment For a semantically different, but syntactically identical operator
  */
-class Equality extends ComparisonOperator
+final class Equality extends ComparisonBinaryOperator
 {
 	/**
      * @inheritDoc

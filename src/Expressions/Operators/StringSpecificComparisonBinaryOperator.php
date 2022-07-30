@@ -16,7 +16,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 48)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-mathematical
  */
-abstract class StringSpecificComparisonBinaryOperator extends ComparisonOperator
+abstract class StringSpecificComparisonBinaryOperator extends ComparisonBinaryOperator
 {
 	use CastTrait;
 

@@ -25,45 +25,52 @@ use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
- * This class represents the application of a unary operator, such as "-" and "NOT".
+ * This class represents the application of a binary operator, such as "+", "/" and "*".
  */
-abstract class UnaryOperator extends Operator
+abstract class BinaryOperator extends Operator
 {
     /**
-     * @var AnyType The expression
+     * @var AnyType The left-hand of the expression
      */
-    private AnyType $expression;
+    private AnyType $left;
 
     /**
-     * UnaryOperator constructor.
+     * @var AnyType The right-hand of the expression
+     */
+    private AnyType $right;
+
+    /**
+     * BinaryOperator constructor.
      *
-     * @param AnyType $expression The expression
+     * @param AnyType $left The left-hand of the expression
+     * @param AnyType $right The right-hand of the expression
      * @param bool $insertParentheses Whether to insert parentheses around the expression
      */
-    public function __construct(AnyType $expression, bool $insertParentheses = true)
+    public function __construct(AnyType $left, AnyType $right, bool $insertParentheses = true)
     {
 		parent::__construct($insertParentheses);
-        $this->expression = $expression;
+        $this->left = $left;
+        $this->right = $right;
     }
 
 	/**
-	 * Returns whether this is a postfix operator or not.
-	 *
-	 * @return bool
-	 */
-	public function isPostfix(): bool
-	{
-		return false;
-	}
-
-	/**
-	 * Returns the expression to negate.
+	 * Gets the left-hand of the expression.
 	 *
 	 * @return AnyType
 	 */
-	public function getExpression(): AnyType
+	public function getLeft(): AnyType
 	{
-		return $this->expression;
+		return $this->left;
+	}
+
+	/**
+	 * Gets the right-hand of the expression.
+	 *
+	 * @return AnyType
+	 */
+	public function getRight(): AnyType
+	{
+		return $this->right;
 	}
 
     /**
@@ -71,11 +78,6 @@ abstract class UnaryOperator extends Operator
      */
     public function toInner(): string
     {
-		$expression = $this->expression->toQuery();
-		$operator = $this->getOperator();
-
-        return $this->isPostfix() ?
-			sprintf( "%s %s", $expression, $operator ) :
-			sprintf( "%s %s", $operator, $expression );
-    }
+		return sprintf("%s %s %s", $this->left->toQuery(), $this->getOperator(), $this->right->toQuery());
+	}
 }

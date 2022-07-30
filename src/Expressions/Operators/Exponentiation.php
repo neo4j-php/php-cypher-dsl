@@ -27,7 +27,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 48)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#syntax-using-the-exponentiation-operator
  */
-class Exponentiation extends MathematicalOperator
+final class Exponentiation extends MathematicalBinaryOperator
 {
     /**
      * @inheritDoc

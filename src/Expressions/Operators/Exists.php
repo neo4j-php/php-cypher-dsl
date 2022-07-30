@@ -31,7 +31,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/#filter-on-relationship-type
  */
-class Exists implements BooleanType
+final class Exists implements BooleanType
 {
     use BooleanTypeTrait;
 

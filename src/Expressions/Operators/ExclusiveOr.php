@@ -22,33 +22,21 @@
 namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
 use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
- * This class represents an application of the unary minus operator.
+ * Represents the application of the exclusive or (XOR) operator.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#syntax-using-the-unary-minus-operator
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-boolean
  */
-class Minus extends UnaryOperator implements NumeralType
+final class ExclusiveOr extends BooleanBinaryOperator
 {
-	use CastTrait;
-    use NumeralTypeTrait;
-
     /**
-     * @param NumeralType|int|float $expression
-	 * @param bool $insertParentheses
+     * @inheritDoc
      */
-    public function __construct($expression, bool $insertParentheses = false)
+    protected function getOperator(): string
     {
-        parent::__construct(self::toNumeralType($expression), $insertParentheses);
+        return "XOR";
     }
-
-	/**
-	 * @inheritDoc
-	 */
-	protected function getOperator(): string
-	{
-		return "-";
-	}
 }

@@ -21,10 +21,10 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
-use WikibaseSolutions\CypherDSL\Expressions\Contains;
-use WikibaseSolutions\CypherDSL\Expressions\EndsWith;
-use WikibaseSolutions\CypherDSL\Expressions\Regex;
-use WikibaseSolutions\CypherDSL\Expressions\StartsWith;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Contains;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\EndsWith;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Regex;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\StartsWith;
 
 /**
  * Represents the leaf type "string".

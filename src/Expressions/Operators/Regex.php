@@ -33,7 +33,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-string
  */
-class Regex extends StringSpecificComparisonBinaryOperator
+final class Regex extends StringSpecificComparisonBinaryOperator
 {
     /**
      * @inheritDoc

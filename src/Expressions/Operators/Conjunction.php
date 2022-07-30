@@ -29,7 +29,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-boolean
  */
-class AndOperator extends BooleanOperator
+final class Conjunction extends BooleanBinaryOperator
 {
     /**
      * @inheritDoc

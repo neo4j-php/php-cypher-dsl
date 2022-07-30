@@ -26,7 +26,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
  */
-class Inequality extends ComparisonOperator
+final class Inequality extends ComparisonBinaryOperator
 {
     /**
      * @inheritDoc

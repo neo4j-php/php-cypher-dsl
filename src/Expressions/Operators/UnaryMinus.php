@@ -21,22 +21,18 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-
 /**
- * Represents the application of the exclusive or (XOR) operator.
+ * This class represents an application of the unary minus operator.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-boolean
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#syntax-using-the-unary-minus-operator
  */
-class XorOperator extends BooleanOperator
+final class UnaryMinus extends MathematicalUnaryOperator
 {
-    /**
-     * @inheritDoc
-     */
-    protected function getOperator(): string
-    {
-        return "XOR";
-    }
+	/**
+	 * @inheritDoc
+	 */
+	protected function getOperator(): string
+	{
+		return "-";
+	}
 }

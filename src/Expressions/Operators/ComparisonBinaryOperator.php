@@ -27,9 +27,9 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  * - case-sensitive inclusion search in strings: "CONTAINS"
  *
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 48)
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-mathematical
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
  */
-abstract class ComparisonOperator extends Operator implements BooleanType
+abstract class ComparisonBinaryOperator extends BinaryOperator implements BooleanType
 {
 	use CastTrait;
 	use BooleanTypeTrait;

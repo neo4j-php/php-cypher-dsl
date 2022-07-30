@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
@@ -32,16 +33,21 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 90)
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/#where-in-operator
  */
-class In extends Operator implements BooleanType
+final class In extends BinaryOperator implements BooleanType
 {
     use BooleanTypeTrait;
+	use CastTrait;
 
-    /**
-     * @inheritDoc
-     */
-    public function __construct(PropertyType $left, ListType $right, bool $insertParentheses = true)
+	/**
+	 * BinaryOperator constructor.
+	 *
+	 * @param PropertyType|float|int|string|bool $left The left-hand of the expression
+	 * @param ListType|array $right The right-hand of the expression
+	 * @param bool $insertParentheses Whether to insert parentheses around the expression
+	 */
+    public function __construct($left, $right, bool $insertParentheses = true)
     {
-        parent::__construct($left, $right, $insertParentheses);
+        parent::__construct(self::toPropertyType($left), self::toListType($right), $insertParentheses);
     }
 
     /**

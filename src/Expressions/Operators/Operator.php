@@ -22,60 +22,25 @@
 namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
 use WikibaseSolutions\CypherDSL\QueryConvertible;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
- * This class represents the application of a binary operator, such as "+", "/" and "*".
+ * This class represents the application of an operator, such as "NOT" or "*".
  */
 abstract class Operator implements QueryConvertible
 {
 	/**
-     * @var bool Whether to insert parentheses around the expression
-     */
-    private bool $insertParentheses;
-
-    /**
-     * @var AnyType|null The left-hand of the expression
-     */
-    private ?AnyType $left;
-
-    /**
-     * @var AnyType|null The right-hand of the expression
-     */
-    private ?AnyType $right;
-
-    /**
-     * BinaryOperator constructor.
-     *
-     * @param AnyType|null $left The left-hand of the expression
-     * @param AnyType|null $right The right-hand of the expression
-     * @param bool $insertParentheses Whether to insert parentheses around the expression
-     */
-    public function __construct(?AnyType $left, ?AnyType $right, bool $insertParentheses = true)
-    {
-        $this->left = $left;
-        $this->right = $right;
-        $this->insertParentheses = $insertParentheses;
-    }
+	 * @var bool Whether to insert parentheses around the expression
+	 */
+	private bool $insertParentheses;
 
 	/**
-	 * Gets the left-hand of the expression, or NULL if this is a prefix unary operator.
+	 * UnaryOperator constructor.
 	 *
-	 * @return AnyType|null
+	 * @param bool $insertParentheses Whether to insert parentheses around the application of the operator
 	 */
-	public function getLeft(): ?AnyType
+	public function __construct(bool $insertParentheses = true)
 	{
-		return $this->left;
-	}
-
-	/**
-	 * Gets the right-hand of the expression, or NULL if this is a postfix unary operator.
-	 *
-	 * @return AnyType|null
-	 */
-	public function getRight(): ?AnyType
-	{
-		return $this->right;
+		$this->insertParentheses = $insertParentheses;
 	}
 
 	/**
@@ -88,35 +53,28 @@ abstract class Operator implements QueryConvertible
 		return $this->insertParentheses;
 	}
 
-    /**
-     * @inheritDoc
-     */
-    public function toQuery(): string
-    {
-		$operator = $this->getOperator();
+	/**
+	 * @inheritDoc
+	 */
+	public function toQuery(): string
+	{
+		$format = $this->insertParentheses ? "(%s)" : "%s";
+		$inner = $this->toInner();
 
-		$left = $this->left !== null ? $this->left->toQuery() : null;
-		$right = $this->right !== null ? $this->right->toQuery() : null;
+		return sprintf($format, $inner);
+	}
 
-		if ($left && $right) {
-			return sprintf($this->insertParentheses ? "(%s %s %s)" : "%s %s %s", $left, $operator, $right);
-		}
+	/**
+	 * Returns the inner part of the application of the operator, that is, without any parentheses.
+	 *
+	 * @return string
+	 */
+	abstract protected function toInner(): string;
 
-		if ($left === null xor $right === null) {
-			$pattern = $this->insertParentheses ? "(%s %s)" : "%s %s";
-
-			return $left === null ?
-				sprintf($pattern, $operator, $right) :
-				sprintf($pattern, $left, $operator);
-		}
-
-		throw new \LogicException("Both left and right value of '" . $operator . "' is NULL");
-    }
-
-    /**
-     * Returns the operator. For instance, this function would return "+" for the addition operator.
-     *
-     * @return string
-     */
-    abstract protected function getOperator(): string;
+	/**
+	 * Returns the operator. For instance, this function would return "-" for the minus operator.
+	 *
+	 * @return string
+	 */
+	abstract protected function getOperator(): string;
 }

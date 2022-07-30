@@ -27,7 +27,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 48)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-mathematical
  */
-class Subtraction extends MathematicalOperator
+final class Subtraction extends MathematicalBinaryOperator
 {
     /**
      * @inheritDoc

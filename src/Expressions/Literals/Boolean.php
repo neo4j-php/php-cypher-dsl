@@ -27,7 +27,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 /**
  * Represents a boolean (true or false) literal.
  */
-class Boolean implements BooleanType
+final class Boolean implements BooleanType
 {
     use BooleanTypeTrait;
 

@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\CompositeTypes;
 
-use WikibaseSolutions\CypherDSL\Expressions\In;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\In;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**

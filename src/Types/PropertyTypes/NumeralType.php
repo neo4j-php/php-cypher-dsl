@@ -21,13 +21,13 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
-use WikibaseSolutions\CypherDSL\Expressions\Addition;
-use WikibaseSolutions\CypherDSL\Expressions\Division;
-use WikibaseSolutions\CypherDSL\Expressions\Exponentiation;
-use WikibaseSolutions\CypherDSL\Expressions\Minus;
-use WikibaseSolutions\CypherDSL\Expressions\Modulo;
-use WikibaseSolutions\CypherDSL\Expressions\Multiplication;
-use WikibaseSolutions\CypherDSL\Expressions\Subtraction;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Addition;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Division;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Exponentiation;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\UnaryMinus;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\ModuloDivision;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Multiplication;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Subtraction;
 
 /**
  * Represents any numeral (integer, float, double).
@@ -66,9 +66,9 @@ interface NumeralType extends AliasablePropertyType, ComparablePropertyType
      *
      * @param NumeralType $right
      * @param bool $insertParentheses
-     * @return Modulo
+     * @return ModuloDivision
      */
-    public function mod(self $right, bool $insertParentheses = true): Modulo;
+    public function mod(self $right, bool $insertParentheses = true): ModuloDivision;
 
     /**
      * Perform a multiplication with the given expression.
@@ -91,7 +91,7 @@ interface NumeralType extends AliasablePropertyType, ComparablePropertyType
     /**
      * Negate this expression (negate the numeral using "0").
      *
-     * @return Minus
+     * @return UnaryMinus
      */
-    public function negate(): Minus;
+    public function negate(): UnaryMinus;
 }

@@ -21,20 +21,13 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use function sprintf;
-
 /**
  * Represents the IS NULL comparison operator.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
  */
-class IsNull extends UnaryOperator implements BooleanType
+final class IsNull extends ComparisonUnaryOperator
 {
-    use BooleanTypeTrait;
-
 	/**
 	 * @inheritDoc
 	 */
