@@ -19,28 +19,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits;
 
-use WikibaseSolutions\CypherDSL\Expressions\In;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\PropertyTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
 
 /**
- * This trait provides a default implementation to satisfy the "ListType" interface.
+ * This trait provides a default implementation to satisfy the "DateType" interface.
  *
- * @see ListType
+ * @implements DateType
  */
-trait ListTypeTrait
+trait DateTypeTrait
 {
-    /**
-     * Checks whether the given element exists in this list.
-     *
-     * @param PropertyType $left
-     * @param bool $insertParentheses
-     * @return In
-     */
-    public function has(PropertyType $left, bool $insertParentheses = true): In
-    {
-        return new In($left, $this, $insertParentheses);
-    }
+	use PropertyTypeTrait;
 }

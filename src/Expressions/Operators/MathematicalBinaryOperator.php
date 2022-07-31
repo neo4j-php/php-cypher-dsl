@@ -2,8 +2,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
@@ -21,18 +20,17 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 abstract class MathematicalBinaryOperator extends BinaryOperator implements NumeralType
 {
-	use CastTrait;
 	use NumeralTypeTrait;
 
 	/**
 	 * MathematicalBinaryOperator constructor.
 	 *
-	 * @param NumeralType|int|float $left The left-hand of the mathematical operator
-	 * @param NumeralType|int|float $right The right-hand of the mathematical operator
+	 * @param NumeralType $left The left-hand of the mathematical operator
+	 * @param NumeralType $right The right-hand of the mathematical operator
 	 * @param bool $insertParentheses Whether to insert parentheses around the expression
 	 */
-	public function __construct($left, $right, bool $insertParentheses = true)
+	public function __construct(NumeralType $left, NumeralType $right, bool $insertParentheses = true)
 	{
-		parent::__construct(self::toNumeralType($left), self::toNumeralType($right), $insertParentheses);
+		parent::__construct($left, $right, $insertParentheses);
 	}
 }

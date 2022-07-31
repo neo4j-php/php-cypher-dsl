@@ -21,9 +21,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\PatternPropertiesTrait;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\PatternPropertiesTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**

@@ -2,7 +2,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
@@ -16,9 +18,9 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 48)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-mathematical
  */
-abstract class StringSpecificComparisonBinaryOperator extends ComparisonBinaryOperator
+abstract class StringSpecificComparisonBinaryOperator extends ComparisonBinaryOperator implements BooleanType
 {
-	use CastTrait;
+	use BooleanTypeTrait;
 
 	/**
 	 * StringSpecificComparisonBinaryOperator constructor.
@@ -27,8 +29,8 @@ abstract class StringSpecificComparisonBinaryOperator extends ComparisonBinaryOp
 	 * @param StringType|string $right The right-hand of the comparison operator
 	 * @param bool $insertParentheses Whether to insert parentheses around the expression
 	 */
-	public function __construct($left, $right, bool $insertParentheses = true)
+	public function __construct(StringType $left, StringType $right, bool $insertParentheses = true)
 	{
-		parent::__construct(self::toStringType($left), self::toStringType($right), $insertParentheses);
+		parent::__construct($left, $right, $insertParentheses);
 	}
 }

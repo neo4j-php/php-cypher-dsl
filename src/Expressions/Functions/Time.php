@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\TimeTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\TimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 

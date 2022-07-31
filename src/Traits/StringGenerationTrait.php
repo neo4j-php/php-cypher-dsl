@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits\HelperTraits;
+namespace WikibaseSolutions\CypherDSL\Traits;
 
 /**
  * Used for automatically generating names.
@@ -27,7 +27,7 @@ namespace WikibaseSolutions\CypherDSL\Traits\HelperTraits;
 trait StringGenerationTrait
 {
     /**
-     * Generates a unique random string.
+     * Generates a unique random identifier.
      *
      * @note It is not entirely guaranteed that this function gives a truly unique string. However, because the
      *  number of possible strings is so huge, it should not be a problem. The returned string will consist of
@@ -42,7 +42,7 @@ trait StringGenerationTrait
      *
      * @return string
      */
-    private function generateString(string $prefix = '', int $length = 32): string
+    private function generateIdentifier(string $prefix = 'var', int $length = 32): string
     {
         $random = '';
         for ($i = 0; $i < $length; ++$i) {

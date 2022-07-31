@@ -23,7 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\QueryConvertible;
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 
 /**
  * This class represents a pattern.

@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**

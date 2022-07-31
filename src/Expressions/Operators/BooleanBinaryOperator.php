@@ -2,12 +2,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparablePropertyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
  * Represents a boolean binary operator. These are:
@@ -21,18 +18,17 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 abstract class BooleanBinaryOperator extends BinaryOperator implements BooleanType
 {
-	use CastTrait;
 	use BooleanTypeTrait;
 
 	/**
 	 * BooleanBinaryOperator constructor.
 	 *
-	 * @param BooleanType|bool $left The left-hand of the boolean operator
-	 * @param BooleanType|bool $right The right-hand of the boolean operator
+	 * @param BooleanType $left The left-hand of the boolean operator
+	 * @param BooleanType $right The right-hand of the boolean operator
 	 * @param bool $insertParentheses Whether to insert parentheses around the expression
 	 */
-	public function __construct($left, $right, bool $insertParentheses = true)
+	public function __construct(BooleanType $left, BooleanType $right, bool $insertParentheses = true)
 	{
-		parent::__construct(self::toBooleanType($left), self::toBooleanType($right), $insertParentheses);
+		parent::__construct($left, $right, $insertParentheses);
 	}
 }

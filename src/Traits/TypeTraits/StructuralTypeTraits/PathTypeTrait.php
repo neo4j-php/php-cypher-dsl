@@ -19,16 +19,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits;
 
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 
 /**
- * This trait provides a default implementation to satisfy the "DateTimeType" interface.
+ * This trait provides a default implementation to satisfy the "PathType" interface.
  *
- * @see DateTimeType
+ * @implements PathType
  */
-trait DateTimeTypeTrait
+trait PathTypeTrait
 {
-    use ComparablePropertyTypeTrait;
+	use StructuralTypeTrait;
 }

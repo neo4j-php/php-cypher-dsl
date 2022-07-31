@@ -1,30 +1,19 @@
 <?php
 
-namespace WikibaseSolutions\CypherDSL\Traits\HelperTraits;
+namespace WikibaseSolutions\CypherDSL\Traits;
 
+use Symfony\Polyfill\Php81\Php81;
 use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Patterns\Node;
-use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
-use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparablePropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * Helper trait for casting native PHP types to Cypher-DSL types.
@@ -94,6 +83,18 @@ trait CastTrait
 	}
 
 	/**
+	 * Casts the given value to a Variable.
+	 *
+	 * @param $variable
+	 * @return Variable
+	 */
+	private static function toVariable($variable): Variable
+	{
+		self::assertClass('variable', [Variable::class, 'string'], $variable);
+		return $variable instanceof Variable ? $variable : new Variable($variable);
+	}
+
+	/**
 	 * Casts the given value to an AnyType.
 	 *
 	 * @param AnyType|Pattern|int|float|string|bool|array $value
@@ -112,42 +113,11 @@ trait CastTrait
 		}
 
 		if (is_array($value)) {
-			return self::arrayIsList($value) ?
+			return array_is_list($value) ?
 				new ExpressionList($value) :
 				new PropertyMap($value);
 		}
 
 		return Literal::literal($value);
-	}
-
-	/**
-	 * Polyfill for PHP8.1 "array_is_list" function.
-	 *
-	 * @author Nicolas Grekas <p@tchwork.com>
-	 * @see https://github.com/symfony/polyfill-php81/blob/main/Php81.php
-	 *
-	 * @param array $array
-	 * @return bool
-	 */
-	private static function arrayIsList(array $array): bool
-	{
-		if (version_compare(PHP_VERSION, "8.1") >= 0) {
-			// If the version is at least PHP 8.1, use the native implementation
-			return array_is_list($array);
-		}
-
-		if ([] === $array || $array === array_values($array)) {
-			return true;
-		}
-
-		$nextKey = -1;
-
-		foreach ($array as $k => $v) {
-			if ($k !== ++$nextKey) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 }

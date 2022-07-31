@@ -49,6 +49,7 @@ abstract class BinaryOperator extends Operator
     public function __construct(AnyType $left, AnyType $right, bool $insertParentheses = true)
     {
 		parent::__construct($insertParentheses);
+
         $this->left = $left;
         $this->right = $right;
     }

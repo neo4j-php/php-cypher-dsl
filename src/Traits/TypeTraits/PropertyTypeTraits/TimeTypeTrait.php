@@ -19,27 +19,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits;
 
-use WikibaseSolutions\CypherDSL\Expressions\Property;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 
 /**
- * This trait provides a default implementation to satisfy the "MapType" interface.
+ * This trait provides a default implementation to satisfy the "TimeType" interface.
  *
- * @see MapType
+ * @implements TimeType
  */
-trait MapTypeTrait
+trait TimeTypeTrait
 {
-    /**
-     * Returns the property of the given name for this expression. For instance, if this expression is the
-     * variable "foo", a function call like $expression->property("bar") would yield "foo.bar".
-     *
-     * @param string $property
-     * @return Property
-     */
-    public function property(string $property): Property
-    {
-        return new Property($this, $property);
-    }
+    use PropertyTypeTrait;
 }

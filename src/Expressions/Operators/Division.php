@@ -21,9 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
-
 /**
  * Represents the application of the division (/) operator.
  *

@@ -21,11 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
-use WikibaseSolutions\CypherDSL\Expressions\Equality;
-use WikibaseSolutions\CypherDSL\Expressions\In;
-use WikibaseSolutions\CypherDSL\Expressions\Inequality;
-use WikibaseSolutions\CypherDSL\Expressions\IsNotNull;
-use WikibaseSolutions\CypherDSL\Expressions\IsNull;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\In;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 
@@ -50,55 +46,16 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
  * Homogeneous lists of simple types can also be stored as properties, although lists in
  * general cannot.
  *
- * This type is further divided up into:
- *
- * - AliasablePropertyType, for any expression that can be aliased,
- * - ComparablePropertyType, for any expression that can be compared (<, <=, >, >=).
- *
  * @note This interface should not be implemented by any class directly.
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#property-types
  */
 interface PropertyType extends AnyType
 {
     /**
-     * Perform an equality check with the given expression.
-     *
-     * @param PropertyType $right
-     * @return Equality
-     */
-    public function equals(self $right): Equality;
-
-    /**
-     * Perform an inequality comparison against the given expression.
-     *
-     * @param PropertyType $right
-     * @return Inequality
-     */
-    public function notEquals(self $right): Inequality;
-
-    /**
      * Checks whether the element exists in the given list.
      *
-     * @param ListType $right
+     * @param ListType|array $right
      * @return In
      */
-    public function in(ListType $right): In;
-
-    /**
-     * Checks whether the element is null.
-     *
-     * @param bool $insertsParentheses whether to insert parentheses.
-     *
-     * @return IsNull
-     */
-    public function isNull(bool $insertsParentheses = true): IsNull;
-
-    /**
-     * Checks whether the element is not null.
-     *
-     * @param bool $insertsParentheses whether to insert parentheses.
-     *
-     * @return IsNotNull
-     */
-    public function isNotNull(bool $insertsParentheses = true): IsNotNull;
+    public function in($right): In;
 }

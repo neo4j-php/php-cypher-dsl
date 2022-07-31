@@ -19,49 +19,54 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits;
 
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Conjunction;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Disjunction;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\ExclusiveOr;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Negation;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
- * Represents the leaf type "boolean".
+ * This trait provides a default implementation to satisfy the "BooleanType" interface.
+ *
+ * @implements BooleanType
  */
-interface BooleanType extends PropertyType
+trait BooleanTypeTrait
 {
-    /**
-     * Create a conjunction between this expression and the given expression.
-     *
-     * @param BooleanType|bool $right
-     * @param bool $insertParentheses
-     * @return Conjunction
-     */
-    public function and($right, bool $insertParentheses = true): Conjunction;
+	use CastTrait;
+	use PropertyTypeTrait;
 
     /**
-     * Create a disjunction between this expression and the given expression.
-     *
-     * @param BooleanType|bool $right
-     * @param bool $insertParentheses
-     * @return Disjunction
+     * @inheritDoc
      */
-    public function or($right, bool $insertParentheses = true): Disjunction;
+    public function and($right, bool $insertParentheses = true): Conjunction
+    {
+        return new Conjunction($this, self::toBooleanType($right), $insertParentheses);
+    }
 
-    /**
-     * Perform an XOR with the given expression.
-     *
-     * @param BooleanType|bool $right
-     * @param bool $insertParentheses
-     * @return ExclusiveOr
-     */
-    public function xor($right, bool $insertParentheses = true): ExclusiveOr;
+	/**
+	 * @inheritDoc
+	 */
+    public function or($right, bool $insertParentheses = true): Disjunction
+    {
+        return new Disjunction($this, self::toBooleanType($right), $insertParentheses);
+    }
 
-    /**
-     * Negate this expression (using the NOT operator).
-     *
-     * @return Negation
-     */
-    public function not(): Negation;
+	/**
+	 * @inheritDoc
+	 */
+    public function xor($right, bool $insertParentheses = true): ExclusiveOr
+    {
+        return new ExclusiveOr($this, self::toBooleanType($right), $insertParentheses);
+    }
+
+	/**
+	 * @inheritDoc
+	 */
+    public function not(): Negation
+    {
+        return new Negation($this);
+    }
 }

@@ -2,13 +2,10 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparablePropertyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
  * Represents a comparison binary operator. These are:
@@ -31,18 +28,17 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 abstract class ComparisonBinaryOperator extends BinaryOperator implements BooleanType
 {
-	use CastTrait;
 	use BooleanTypeTrait;
 
 	/**
 	 * ComparisonBinaryOperator constructor.
 	 *
-	 * @param AnyType|string|int|float|bool|array $left The left-hand of the comparison operator
-	 * @param AnyType|string|int|float|bool|array $right The right-hand of the comparison operator
+	 * @param AnyType $left The left-hand of the comparison operator
+	 * @param AnyType $right The right-hand of the comparison operator
 	 * @param bool $insertParentheses Whether to insert parentheses around the expression
 	 */
-	public function __construct($left, $right, bool $insertParentheses = true)
+	public function __construct(AnyType $left, AnyType $right, bool $insertParentheses = true)
 	{
-		parent::__construct(self::toAnyType($left), self::toAnyType($right), $insertParentheses);
+		parent::__construct($left, $right, $insertParentheses);
 	}
 }

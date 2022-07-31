@@ -19,16 +19,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits;
 
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\PropertyTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
 
 /**
- * This trait provides a default implementation to satisfy the "RelationshipType" interface.
+ * This trait provides a default implementation to satisfy the "DateTimeType" interface.
  *
- * @see RelationshipType
+ * @implements DateTimeType
  */
-trait RelationshipTypeTrait
+trait DateTimeTypeTrait
 {
-	use StructuralTypeTrait;
+	use PropertyTypeTrait;
 }

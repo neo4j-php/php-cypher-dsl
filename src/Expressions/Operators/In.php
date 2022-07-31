@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
@@ -36,18 +36,17 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 final class In extends BinaryOperator implements BooleanType
 {
     use BooleanTypeTrait;
-	use CastTrait;
 
 	/**
 	 * BinaryOperator constructor.
 	 *
-	 * @param PropertyType|float|int|string|bool $left The left-hand of the expression
-	 * @param ListType|array $right The right-hand of the expression
+	 * @param PropertyType $left The left-hand of the expression
+	 * @param ListType $right The right-hand of the expression
 	 * @param bool $insertParentheses Whether to insert parentheses around the expression
 	 */
-    public function __construct($left, $right, bool $insertParentheses = true)
+    public function __construct(PropertyType $left, ListType $right, bool $insertParentheses = true)
     {
-        parent::__construct(self::toPropertyType($left), self::toListType($right), $insertParentheses);
+        parent::__construct($left, $right, $insertParentheses);
     }
 
     /**

@@ -2,12 +2,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparablePropertyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
  * Represents a boolean unary operator. These are:
@@ -19,17 +16,16 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 abstract class BooleanUnaryOperator extends UnaryOperator implements BooleanType
 {
-	use CastTrait;
 	use BooleanTypeTrait;
 
 	/**
 	 * BooleanUnaryOperator constructor.
 	 *
-	 * @param BooleanType|bool $expression The expression
+	 * @param BooleanType $expression The expression
 	 * @param bool $insertParentheses Whether to insert parentheses around the expression
 	 */
-	public function __construct($expression, bool $insertParentheses = true)
+	public function __construct(BooleanType $expression, bool $insertParentheses = true)
 	{
-		parent::__construct(self::toBooleanType($expression), $insertParentheses);
+		parent::__construct($expression, $insertParentheses);
 	}
 }

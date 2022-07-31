@@ -2,8 +2,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
@@ -16,17 +15,16 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 abstract class MathematicalUnaryOperator extends UnaryOperator implements NumeralType
 {
-	use CastTrait;
 	use NumeralTypeTrait;
 
 	/**
 	 * MathematicalUnaryOperator constructor.
 	 *
-	 * @param NumeralType|int|float $expression The expression
+	 * @param NumeralType $expression The expression
 	 * @param bool $insertParentheses Whether to insert parentheses around the expression
 	 */
-	public function __construct($expression, bool $insertParentheses = true)
+	public function __construct(NumeralType $expression, bool $insertParentheses = true)
 	{
-		parent::__construct(self::toNumeralType($expression), $insertParentheses);
+		parent::__construct($expression, $insertParentheses);
 	}
 }

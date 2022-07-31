@@ -21,18 +21,18 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\DateTimeTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\DateTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\ListTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\LocalDateTimeTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\LocalTimeTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\MapTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\NumeralTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PointTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StringTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\TimeTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\DateTimeTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\DateTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\LocalDateTimeTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\LocalTimeTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\NumeralTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\PointTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\StringTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\TimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -62,7 +62,6 @@ class Property implements
     LocalTimeType,
     TimeType
 {
-    use EscapeTrait;
     use DateTypeTrait;
     use DateTimeTypeTrait;
     use BooleanTypeTrait;
@@ -81,17 +80,17 @@ class Property implements
     private MapType $expression;
 
     /**
-     * @var string The name of the property
+     * @var Variable The name of the property
      */
-    private string $property;
+    private Variable $property;
 
     /**
      * Property constructor.
      *
      * @param MapType $expression
-     * @param string $property
+     * @param Variable $property
      */
-    public function __construct(MapType $expression, string $property)
+    public function __construct(MapType $expression, Variable $property)
     {
         $this->expression = $expression;
         $this->property = $property;
@@ -111,9 +110,9 @@ class Property implements
     /**
      * Returns the property name.
      *
-     * @return string
+     * @return Variable
      */
-    public function getProperty(): string
+    public function getProperty(): Variable
     {
         return $this->property;
     }
@@ -133,6 +132,6 @@ class Property implements
      */
     public function toQuery(): string
     {
-        return sprintf("%s.%s", $this->expression->toQuery(), $this->escape($this->property));
+        return sprintf("%s.%s", $this->expression->toQuery(), $this->property->toQuery());
     }
 }

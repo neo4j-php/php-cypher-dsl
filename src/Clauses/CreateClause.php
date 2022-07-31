@@ -24,7 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Traits\HelperTraits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 
 /**
  * This class represents a CREATE clause. The CREATE clause is used to create graph elements.

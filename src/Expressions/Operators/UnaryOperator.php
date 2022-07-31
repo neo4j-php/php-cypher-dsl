@@ -43,6 +43,7 @@ abstract class UnaryOperator extends Operator
     public function __construct(AnyType $expression, bool $insertParentheses = true)
     {
 		parent::__construct($insertParentheses);
+
         $this->expression = $expression;
     }
 

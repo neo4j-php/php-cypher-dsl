@@ -19,16 +19,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits;
 
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalTimeType;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits\StructuralTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 
 /**
- * This trait provides a default implementation to satisfy the "LocalTimeType" interface.
+ * This trait provides a default implementation to satisfy the "NodeType" interface.
  *
- * @see LocalTimeType
+ * @implements NodeType
  */
-trait LocalTimeTypeTrait
+trait NodeTypeTrait
 {
-    use PropertyTypeTrait;
+	use StructuralTypeTrait;
 }

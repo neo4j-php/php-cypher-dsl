@@ -19,23 +19,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits;
 
-use WikibaseSolutions\CypherDSL\Expressions\Alias;
-use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\PropertyTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalTimeType;
 
 /**
- * Represents any property type that can be aliased.
+ * This trait provides a default implementation to satisfy the "LocalTimeType" interface.
  *
- * @note This interface should not be implemented by any class directly.
+ * @implements LocalTimeType
  */
-interface AliasablePropertyType extends PropertyType
+trait LocalTimeTypeTrait
 {
-	/**
-	 * Creates an alias of the current expression.
-	 *
-	 * @param Variable $variable The alias to use
-	 * @return Alias
-	 */
-	public function alias(Variable $variable): Alias;
+    use PropertyTypeTrait;
 }

@@ -22,18 +22,21 @@
 namespace WikibaseSolutions\CypherDSL\Types\CompositeTypes;
 
 use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait;
 
 /**
  * Represents the leaf type "map".
+ *
+ * @see MapTypeTrait for a default implementation
  */
 interface MapType extends CompositeType
 {
     /**
-     * Returns the property of the given name for this expression. For instance, if this expression is the
-     * variable "foo", a function call like $expression->property("bar") would yield "foo.bar".
-     *
-     * @param string $property
+     * Returns the property of the given name in this map.
+	 *
+     * @param Variable|string $property
      * @return Property
      */
-    public function property(string $property): Property;
+    public function property($property): Property;
 }

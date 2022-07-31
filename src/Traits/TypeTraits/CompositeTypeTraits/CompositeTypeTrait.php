@@ -19,29 +19,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits;
 
-use WikibaseSolutions\CypherDSL\Expressions\Alias;
-use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\AliasablePropertyType;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\AnyTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\CompositeType;
 
 /**
- * This trait provides a default implementation to satisfy the "AliasablePropertyType" interface.
+ * This trait provides a default implementation to satisfy the "CompositeType" interface.
  *
- * @see AliasablePropertyType
+ * This trait should not be used by any class directly. Instead, the following subtraits should be used where
+ * appropriate:
+ *
+ * - ListTypeTrait
+ * - MapTypeTrait
+ *
+ * @implements CompositeType
  */
-trait AliasablePropertyTypeTrait
+trait CompositeTypeTrait
 {
-	use PropertyTypeTrait;
-
-    /**
-     * Creates an alias of the current expression.
-     *
-     * @param Variable $variable
-     * @return Alias
-     */
-    public function alias(Variable $variable): Alias
-    {
-        return new Alias($this, $variable);
-    }
+	use AnyTypeTrait;
 }

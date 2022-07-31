@@ -28,11 +28,11 @@ use WikibaseSolutions\CypherDSL\Expressions\Not;
 use WikibaseSolutions\CypherDSL\Expressions\OrOperator;
 use WikibaseSolutions\CypherDSL\Expressions\XorOperator;
 use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\BooleanTypeTrait
+ * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait
  */
 class BooleanTypeTraitTest extends TestCase
 {

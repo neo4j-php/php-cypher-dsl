@@ -19,16 +19,37 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
+namespace WikibaseSolutions\CypherDSL\Traits;
 
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
+use InvalidArgumentException;
 
 /**
- * This trait provides a default implementation to satisfy the "DateType" interface.
- *
- * @see DateType
+ * Trait for encoding certain structures that are used in multiple clauses in a
+ * Cypher query.
  */
-trait DateTypeTrait
+trait EscapeTrait
 {
-    use ComparablePropertyTypeTrait;
+    /**
+     * Escapes the given 'name'. A name is an unquoted literal in a Cypher query, such as variables,
+     * types or property names.
+     *
+     * @param string $name
+     * @return string
+     */
+    private static function escape(string $name): string
+    {
+        if ($name === "") {
+            return "";
+        }
+
+        if (ctype_alnum($name) && !ctype_digit($name)) {
+            return $name;
+        }
+
+        if (strpos($name, '`') !== false) {
+            throw new InvalidArgumentException("A name must not contain a backtick (`)");
+        }
+
+        return sprintf("`%s`", $name);
+    }
 }

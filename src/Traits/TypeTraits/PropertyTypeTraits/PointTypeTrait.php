@@ -19,16 +19,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits;
 
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\PropertyTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 
 /**
- * This trait provides a default implementation to satisfy the "TimeType" interface.
+ * This trait provides a default implementation to satisfy the "PointType" interface.
  *
- * @see TimeType
+ * @implements PointType
  */
-trait TimeTypeTrait
+trait PointTypeTrait
 {
-    use ComparablePropertyTypeTrait;
+    use PropertyTypeTrait;
 }

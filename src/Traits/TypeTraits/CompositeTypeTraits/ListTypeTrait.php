@@ -19,16 +19,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits;
 
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\In;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 
 /**
- * This trait provides a default implementation to satisfy the "LocalDateTimeType" interface.
+ * This trait provides a default implementation to satisfy the "ListType" interface.
  *
- * @see LocalDateTimeType
+ * @implements ListType
  */
-trait LocalDateTimeTypeTrait
+trait ListTypeTrait
 {
-    use PropertyTypeTrait;
+	use CastTrait;
+	use CompositeTypeTrait;
+
+    /**
+     * @inheritDoc
+     */
+    public function has($left, bool $insertParentheses = true): In
+    {
+        return new In(self::toPropertyType($left), $this, $insertParentheses);
+    }
 }

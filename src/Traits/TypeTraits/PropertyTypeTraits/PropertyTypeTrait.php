@@ -19,25 +19,41 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Types\CompositeTypes;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits;
 
 use WikibaseSolutions\CypherDSL\Expressions\Operators\In;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\AnyTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
- * Represent the leaf type "list".
+ * This trait provides a default implementation to satisfy the "PropertyType" interface.
  *
- * @see ListTypeTrait for a default implemenation
+ * This trait should not be used by any class directly. Instead, the following subtraits should be used where
+ * appropriate:
+ *
+ * - BooleanTypeTrait
+ * - DateTimeTypeTrait
+ * - DateTypeTrait
+ * - LocalDateTimeTypeTrait
+ * - LocalTimeTypeTrait
+ * - NumeralTypeTrait
+ * - PointTypeTrait
+ * - StringTypeTrait
+ * - TimeTypeTrait
+ *
+ * @implements PropertyType
  */
-interface ListType extends CompositeType
+trait PropertyTypeTrait
 {
-    /**
-     * Checks whether the given element exists in this list.
-     *
-     * @param PropertyType|bool|int|float|string $left
-     * @param bool $insertParentheses
-     * @return In
-     */
-    public function has($left, bool $insertParentheses = true): In;
+	use AnyTypeTrait;
+	use CastTrait;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function in($right, bool $insertParentheses = true): In
+	{
+		return new In($this, self::toListType($right), $insertParentheses);
+	}
 }

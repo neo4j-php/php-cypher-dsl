@@ -19,37 +19,28 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits\HelperTraits;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits;
 
-use InvalidArgumentException;
+use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\AnyTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
- * Trait for encoding certain structures that are used in multiple clauses in a
- * Cypher query.
+ * This trait provides a default implementation to satisfy the "MapType" interface.
+ *
+ * @implements MapType
  */
-trait EscapeTrait
+trait MapTypeTrait
 {
+	use CastTrait;
+	use CompositeTypeTrait;
+
     /**
-     * Escapes the given 'name'. A name is an unquoted literal in a Cypher query, such as variables,
-     * types or property names.
-     *
-     * @param string $name
-     * @return string
+     * @inheritDoc
      */
-    private static function escape(string $name): string
+    public function property($property): Property
     {
-        if ($name === "") {
-            return "";
-        }
-
-        if (ctype_alnum($name) && !ctype_digit($name)) {
-            return $name;
-        }
-
-        if (strpos($name, '`') !== false) {
-            throw new InvalidArgumentException("A name must not contain a backtick (`)");
-        }
-
-        return sprintf("`%s`", $name);
+        return new Property($this, self::toVariable($property));
     }
 }

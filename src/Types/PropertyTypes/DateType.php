@@ -24,6 +24,6 @@ namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 /**
  * Represents the leaf type "date".
  */
-interface DateType extends ComparablePropertyType
+interface DateType extends PropertyType
 {
 }

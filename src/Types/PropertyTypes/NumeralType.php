@@ -32,61 +32,61 @@ use WikibaseSolutions\CypherDSL\Expressions\Operators\Subtraction;
 /**
  * Represents any numeral (integer, float, double).
  */
-interface NumeralType extends AliasablePropertyType, ComparablePropertyType
+interface NumeralType extends PropertyType
 {
     /**
      * Add this expression to the given expression.
      *
-     * @param NumeralType $right
+     * @param NumeralType|int|float $right
      * @param bool $insertParentheses
      * @return Addition
      */
-    public function plus(self $right, bool $insertParentheses = true): Addition;
+    public function plus($right, bool $insertParentheses = true): Addition;
 
     /**
      * Divide this expression by the given expression.
      *
-     * @param NumeralType $right
+     * @param NumeralType|int|float $right
      * @param bool $insertParentheses
      * @return Division
      */
-    public function divide(self $right, bool $insertParentheses = true): Division;
+    public function divide($right, bool $insertParentheses = true): Division;
 
     /**
      * Perform an exponentiation with the given expression.
      *
-     * @param NumeralType $right
+     * @param NumeralType|int|float $right
      * @param bool $insertParentheses
      * @return Exponentiation
      */
-    public function exponentiate(self $right, bool $insertParentheses = true): Exponentiation;
+    public function exponentiate($right, bool $insertParentheses = true): Exponentiation;
 
     /**
      * Perform the modulo operation with the given expression.
      *
-     * @param NumeralType $right
+     * @param NumeralType|int|float $right
      * @param bool $insertParentheses
      * @return ModuloDivision
      */
-    public function mod(self $right, bool $insertParentheses = true): ModuloDivision;
+    public function mod($right, bool $insertParentheses = true): ModuloDivision;
 
     /**
      * Perform a multiplication with the given expression.
      *
-     * @param NumeralType $right
+     * @param NumeralType|int|float $right
      * @param bool $insertParentheses
      * @return Multiplication
      */
-    public function times(self $right, bool $insertParentheses = true): Multiplication;
+    public function times($right, bool $insertParentheses = true): Multiplication;
 
     /**
      * Subtract the given expression from this expression.
      *
-     * @param NumeralType $right
+     * @param NumeralType|int|float $right
      * @param bool $insertParentheses
      * @return Subtraction
      */
-    public function minus(self $right, bool $insertParentheses = true): Subtraction;
+    public function minus($right, bool $insertParentheses = true): Subtraction;
 
     /**
      * Negate this expression (negate the numeral using "0").

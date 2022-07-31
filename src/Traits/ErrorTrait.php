@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits\HelperTraits;
+namespace WikibaseSolutions\CypherDSL\Traits;
 
 use __PHP_Incomplete_Class;
 use InvalidArgumentException;

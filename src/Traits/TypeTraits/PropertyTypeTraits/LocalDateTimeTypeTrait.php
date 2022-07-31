@@ -19,16 +19,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits;
 
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\PropertyTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 
 /**
- * This trait provides a default implementation to satisfy the "PathType" interface.
+ * This trait provides a default implementation to satisfy the "LocalDateTimeType" interface.
  *
- * @see PathType
+ * @implements LocalDateTimeType
  */
-trait PathTypeTrait
+trait LocalDateTimeTypeTrait
 {
-	use StructuralTypeTrait;
+    use PropertyTypeTrait;
 }
