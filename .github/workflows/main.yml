@@ -9,14 +9,14 @@ on:
 
 jobs:
   unit:
-    name: "Unit tests for PHP ${{ matrix.php-version }}"
+    name: "Unit and mutation tests for PHP ${{ matrix.php-version }} on ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     continue-on-error: true
 
     strategy:
       matrix:
-        os: ["ubuntu-latest"]
-        php-version: ["7.4", "8.0", "8.1", "latest"]
+        os: [ "ubuntu-latest", "windows-latest" ]
+        php-version: [ "7.4", "8.0", "8.1", "8.2" ]
 
     env:
       COMPOSER_VERSION: 2
@@ -25,14 +25,35 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install dependencies
-        uses: php-actions/composer@v6
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          php_version: ${{ matrix.php-version }}
-          version: ${{ env.COMPOSER_VERSION }}
+          php-version: ${{ matrix.php-version }}
+          coverage: ${{ env.COVERAGE_DRIVER }}
+          ini-values: memory_limit=512M, xdebug.mode=off
+          tools: composer:${{ env.COMPOSER_VERSION }}
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('composer.*') }}
+          restore-keys: |
+            composer-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('composer.*') }}-
+            composer-${{ runner.os }}-${{ matrix.php-version }}-
+            composer-${{ runner.os }}-
+            composer-
+
+      - name: Install dependencies
+        run: |
+          composer install --no-interaction --prefer-dist --no-progress
 
       - name: Run unit tests
-        uses: php-actions/phpunit@v3
-        with:
-          php_version: ${{ matrix.php-version }}
-          args: --testsuite unit
+        run: XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite unit
+
+      - name: Run mutation tests
+        run: XDEBUG_MODE=coverage php vendor/bin/infection --show-mutations
