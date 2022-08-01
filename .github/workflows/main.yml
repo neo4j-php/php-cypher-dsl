@@ -46,6 +46,55 @@ jobs:
       - name: Run mutation tests
         run: XDEBUG_MODE=coverage php vendor/bin/infection --show-mutations --min-msi=${{ env.MINIMUM_MSI_PERCENTAGE }} --threads=4
 
+
+  integration:
+    name: "Integration testing"
+    runs-on: ${{ matrix.os }}
+    continue-on-error: true
+
+    strategy:
+      matrix:
+        os: [ "ubuntu-latest" ]
+        neo4j-version: ["4.2", "4.3", "4.4"]
+        php-version: [ "8.1" ]
+
+    services:
+      neo4j:
+        image: neo4j:${{ matrix.neo4j-version }}
+        env:
+          NEO4J_AUTH: neo4j/test
+          NEO4JLABS_PLUGINS: '["apoc"]'
+        ports:
+          - 7687:7687
+          - 7474:7474
+        options: >-
+          --health-cmd "wget -q --method=HEAD http://localhost:7474 || exit 1"
+          --health-start-period "60s"
+          --health-interval "30s"
+          --health-timeout "15s"
+          --health-retries "5"
+
+    env:
+      NEO4J_CONNECTIONS: bolt://neo4j:test@localhost,http://neo4j:test@localhost
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          ini-values: memory_limit=512M
+          tools: composer:${{ env.COMPOSER_VERSION }}
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Run integration tests
+        run: php vendor/bin/phpunit --testsuite integration --no-coverage
+
+
   lint:
     name: "Linting"
     runs-on: ${{ matrix.os }}
