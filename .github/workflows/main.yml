@@ -34,6 +34,5 @@ jobs:
       - name: Run unit tests
         uses: php-actions/phpunit@v3
         with:
-          configuration: phpunit.xml.dist
           php_version: ${{ matrix.php-version }}
-          args: --testsuite "Unit"
+          args: --testsuite unit
