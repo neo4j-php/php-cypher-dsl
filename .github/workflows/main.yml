@@ -43,7 +43,7 @@ jobs:
           php vendor/bin/coverage-check coverage/clover.xml ${{ env.MINIMUM_COVERAGE_PERCENTAGE }}
 
       - name: Run mutation tests
-        run: XDEBUG_MODE=coverage php vendor/bin/infection --show-mutations --min-msi=${{ env.MINIMUM_MSI_PERCENTAGE }} --threads=4 --test-framework-options="--testsuite unit"
+        run: XDEBUG_MODE=coverage php vendor/bin/infection --show-mutations --min-msi=${{ env.MINIMUM_MSI_PERCENTAGE }} --threads=4 --test-framework-options="--testsuite=unit"
 
 
   integration:
