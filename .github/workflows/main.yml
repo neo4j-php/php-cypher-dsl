@@ -9,13 +9,13 @@ on:
 
 jobs:
   unit:
-    name: "Unit and mutation tests for PHP ${{ matrix.php-version }} on ${{ matrix.os }}"
+    name: "Unit and mutation tests for PHP ${{ matrix.php-version }}"
     runs-on: ${{ matrix.os }}
     continue-on-error: true
 
     strategy:
       matrix:
-        os: [ "ubuntu-latest", "windows-latest" ]
+        os: [ "ubuntu-latest" ]
         php-version: [ "7.4", "8.0", "8.1" ]
 
     env:
