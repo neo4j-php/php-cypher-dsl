@@ -22,15 +22,33 @@ jobs:
       COMPOSER_VERSION: 2
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - uses: php-actions/composer@v6
+      - name: Get Composer cache directory
+        id: get-composer-cache-dir
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Restore Composer dependency cache
+        uses: actions/cache@v3
+        id: composer-cache
+        with:
+          path: ${{ steps.get-composer-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        uses: php-actions/composer@v6
         with:
           progress: yes
           php_version: ${{ matrix.php-version }}
           version: ${{ env.COMPOSER_VERSION }}
 
-      - uses: php-actions/phpunit@v3
+      - name: Run unit tests
+        uses: php-actions/phpunit@v3
         with:
           configuration: phpunit.xml.dist
           php_version: ${{ matrix.php-version }}
