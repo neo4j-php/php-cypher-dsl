@@ -71,6 +71,11 @@
     "php-cs-fixer":
        "php-cs-fixer fix --verbose --rules=@PSR12,align_multiline_comment,array_indentation,blank_line_before_statement,no_unused_imports,no_useless_else,no_useless_return,ordered_imports,phpdoc_scalar,return_assignment,simplified_if_return,trailing_comma_in_multiline"
   },
+  "config": {
+    "allow-plugins": {
+      "infection/extension-installer": true
+    }
+  },
   "minimum-stability": "stable",
   "prefer-stable": true
 }
