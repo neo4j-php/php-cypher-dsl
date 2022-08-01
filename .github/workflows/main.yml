@@ -35,17 +35,6 @@ jobs:
           ini-values: memory_limit=512M, xdebug.mode=off
           tools: composer:${{ env.COMPOSER_VERSION }}
 
-      - name: Get Composer cache directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Restore Composer cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: composer-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('composer.*') }}
-          restore-keys: composer-${{ runner.os }}-${{ matrix.php-version }}-
-
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
 
@@ -80,20 +69,8 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
 
-      - name: Get Composer cache directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Restore Composer cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: composer-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('composer.*') }}
-          restore-keys: composer-${{ runner.os }}-${{ matrix.php-version }}-
-
       - name: Install dependencies
-        run: |
-          composer install --no-interaction --prefer-dist --no-progress
+        run: composer install --no-interaction --prefer-dist --no-progress
 
       - name: Run PHP-CS-Fixer
         run: php vendor/bin/php-cs-fixer fix --config .php-cs-fixer.dist.php --verbose --dry-run
