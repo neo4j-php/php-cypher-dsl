@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
 use WikibaseSolutions\CypherDSL\Expressions\Operators\In;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\PropertyTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 
@@ -46,6 +47,7 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
  * Homogeneous lists of simple types can also be stored as properties, although lists in
  * general cannot.
  *
+ * @see PropertyTypeTrait for a default implementation
  * @note This interface should not be implemented by any class directly.
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#property-types
  */

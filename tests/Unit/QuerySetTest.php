@@ -3,7 +3,7 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Assignment;
+use WikibaseSolutions\CypherDSL\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
@@ -16,7 +16,7 @@ class QuerySetTest extends TestCase
 {
 	public function testSet(): void
 	{
-		$expression = $this->getQueryConvertibleMock(Assignment::class, "a.age");
+		$expression = $this->getQueryConvertibleMock(PropertyReplacement::class, "a.age");
 
 		$statement = (new Query())->set($expression)->build();
 

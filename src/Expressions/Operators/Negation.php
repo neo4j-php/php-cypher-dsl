@@ -24,15 +24,16 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 /**
  * Represents the application of the negation (NOT) operator.
  *
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 50)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-boolean
  */
 final class Negation extends BooleanUnaryOperator
 {
-	/**
-	 * @inheritDoc
-	 */
-	protected function getOperator(): string
-	{
-		return "NOT";
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getOperator(): string
+    {
+        return "NOT";
+    }
 }

@@ -21,18 +21,23 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
-use InvalidArgumentException;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
- * Represents a label. A label in Cypher would be something like "n:German" or "n:German:Swedish".
+ * Represents a label. A label in Cypher would be something like "n:German" or "n:German:Swedish". Label implements
+ * BooleanType, since it can be used in a "WHERE" clause like so:
+ *
+ *  MATCH (n) WHERE n:label1:label2 RETURN n
+ *
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 85)
+ * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/#filter-on-node-label
  */
 class Label implements BooleanType
 {
-    use EscapeTrait;
     use BooleanTypeTrait;
+    use EscapeTrait;
 
     /**
      * @var Variable The variable to which this label belongs
@@ -48,22 +53,38 @@ class Label implements BooleanType
      * Label constructor.
      *
      * @param Variable $variable
-     * @param string[] $labels
+     * @param string ...$labels
      */
-    public function __construct(Variable $variable, array $labels)
+    public function __construct(Variable $variable, string ...$labels)
     {
-        if (count($labels) === 0) {
-            throw new InvalidArgumentException("\$labels must have at least one label");
-        }
-
-        foreach ($labels as $label) {
-            if (!is_string($label)) {
-                throw new InvalidArgumentException("\$labels must consist of only strings");
-            }
-        }
-
         $this->variable = $variable;
         $this->labels = $labels;
+    }
+
+    /**
+     * Overrides the labels of this class with the given labels.
+     *
+     * @param string ...$labels
+     * @return $this
+     */
+    public function withLabels(string ...$labels): self
+    {
+        $this->labels = $labels;
+
+        return $this;
+    }
+
+    /**
+     * Adds the given labels to this class.
+     *
+     * @param string ...$labels
+     * @return $this
+     */
+    public function addLabels(string ...$labels): self
+    {
+        $this->labels = array_merge($this->labels, $labels);
+
+        return $this;
     }
 
     /**

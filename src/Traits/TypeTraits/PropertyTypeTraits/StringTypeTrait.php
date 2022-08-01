@@ -35,28 +35,28 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 trait StringTypeTrait
 {
-	use CastTrait;
-	use PropertyTypeTrait;
+    use CastTrait;
+    use PropertyTypeTrait;
 
-	/**
-	 * @inheritDoc
-	 */
+    /**
+     * @inheritDoc
+     */
     public function contains($right, bool $insertParentheses = true): Contains
     {
         return new Contains($this, self::toStringType($right), $insertParentheses);
     }
 
-	/**
-	 * @inheritDoc
-	 */
+    /**
+     * @inheritDoc
+     */
     public function endsWith($right, bool $insertParentheses = true): EndsWith
     {
         return new EndsWith($this, self::toStringType($right), $insertParentheses);
     }
 
-	/**
-	 * @inheritDoc
-	 */
+    /**
+     * @inheritDoc
+     */
     public function startsWith($right, bool $insertParentheses = true): StartsWith
     {
         return new StartsWith($this, self::toStringType($right), $insertParentheses);

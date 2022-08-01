@@ -33,8 +33,8 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  */
 trait MapTypeTrait
 {
-	use CastTrait;
-	use CompositeTypeTrait;
+    use CastTrait;
+    use CompositeTypeTrait;
 
     /**
      * @inheritDoc

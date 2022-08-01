@@ -21,8 +21,12 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\TimeTypeTrait;
+
 /**
  * Represents the leaf type "time".
+ *
+ * @see TimeTypeTrait for a default implementation
  */
 interface TimeType extends PropertyType
 {

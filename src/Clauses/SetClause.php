@@ -21,8 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Expressions\Assignment;
 use WikibaseSolutions\CypherDSL\Expressions\Label;
+use WikibaseSolutions\CypherDSL\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 
@@ -36,7 +36,7 @@ class SetClause extends Clause
     use ErrorTrait;
 
     /**
-     * @var Assignment[]|Label[] $expressions The expressions to set
+     * @var PropertyReplacement[]|Label[] $expressions The expressions to set
      */
     private array $expressions = [];
 
@@ -49,7 +49,7 @@ class SetClause extends Clause
     public function setAssignments(array $expressions): self
     {
         foreach ($expressions as $expression) {
-            $this->assertClass('expressions', [Assignment::class, Label::class], $expression);
+            $this->assertClass('expressions', [PropertyReplacement::class, Label::class], $expression);
         }
 
         $this->expressions = $expressions;
@@ -60,12 +60,12 @@ class SetClause extends Clause
     /**
      * Add an assignment.
      *
-     * @param Assignment|Label $expression The assignment to execute
+     * @param PropertyReplacement|Label $expression The assignment to execute
      * @return SetClause
      */
     public function addAssignment($expression): self
     {
-        $this->assertClass('expression', [Assignment::class, Label::class], $expression);
+        $this->assertClass('expression', [PropertyReplacement::class, Label::class], $expression);
         $this->expressions[] = $expression;
 
         return $this;
@@ -74,7 +74,7 @@ class SetClause extends Clause
     /**
      * Returns the expressions to SET.
      *
-     * @return Assignment[]|Label[]
+     * @return PropertyReplacement[]|Label[]
      */
     public function getExpressions(): array
     {

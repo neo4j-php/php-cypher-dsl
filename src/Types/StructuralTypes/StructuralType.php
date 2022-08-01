@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits\StructuralTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -39,6 +40,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  * - relationship
  * - path
  *
+ * @see StructuralTypeTrait for a default implementation
  * @note This interface should not be implemented by any class directly.
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#structural-types
  */

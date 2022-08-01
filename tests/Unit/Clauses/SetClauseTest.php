@@ -24,8 +24,8 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
-use WikibaseSolutions\CypherDSL\Expressions\Assignment;
 use WikibaseSolutions\CypherDSL\Expressions\Label;
+use WikibaseSolutions\CypherDSL\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
@@ -47,7 +47,7 @@ class SetClauseTest extends TestCase
     public function testSinglePattern(): void
     {
         $set = new SetClause();
-        $expression = $this->getQueryConvertibleMock(Assignment::class, "(a)");
+        $expression = $this->getQueryConvertibleMock(PropertyReplacement::class, "(a)");
 
         $set->addAssignment($expression);
 
@@ -58,8 +58,8 @@ class SetClauseTest extends TestCase
     public function testMultiplePattern(): void
     {
         $set = new SetClause();
-        $expressionA = $this->getQueryConvertibleMock(Assignment::class, "(a)");
-        $expressionB = $this->getQueryConvertibleMock(Assignment::class, "(b)");
+        $expressionA = $this->getQueryConvertibleMock(PropertyReplacement::class, "(a)");
+        $expressionB = $this->getQueryConvertibleMock(PropertyReplacement::class, "(b)");
 
         $set->addAssignment($expressionA);
         $set->addAssignment($expressionB);
@@ -74,7 +74,7 @@ class SetClauseTest extends TestCase
     public function testAcceptsAssignment(): void
     {
         $set = new SetClause();
-        $expression = $this->getQueryConvertibleMock(Assignment::class, "(a)");
+        $expression = $this->getQueryConvertibleMock(PropertyReplacement::class, "(a)");
 
         $set->addAssignment($expression);
 

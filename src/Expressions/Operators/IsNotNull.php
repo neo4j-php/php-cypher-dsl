@@ -24,23 +24,24 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 /**
  * Represents the IS NOT NULL comparison operator.
  *
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 49)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
  */
 final class IsNotNull extends ComparisonUnaryOperator
 {
-	/**
-	 * @inheritDoc
-	 */
-	public function isPostfix(): bool
-	{
-		return true;
-	}
+    /**
+     * @inheritDoc
+     */
+    public function isPostfix(): bool
+    {
+        return true;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	protected function getOperator(): string
-	{
-		return "IS NOT NULL";
-	}
+    /**
+     * @inheritDoc
+     */
+    protected function getOperator(): string
+    {
+        return "IS NOT NULL";
+    }
 }

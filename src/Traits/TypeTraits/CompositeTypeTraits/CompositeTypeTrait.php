@@ -37,5 +37,5 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\CompositeType;
  */
 trait CompositeTypeTrait
 {
-	use AnyTypeTrait;
+    use AnyTypeTrait;
 }

@@ -21,13 +21,10 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-
 /**
  * Represents the application of the exclusive or (XOR) operator.
  *
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 50)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-boolean
  */
 final class ExclusiveOr extends BooleanBinaryOperator

@@ -34,7 +34,7 @@ interface MapType extends CompositeType
 {
     /**
      * Returns the property of the given name in this map.
-	 *
+     *
      * @param Variable|string $property
      * @return Property
      */

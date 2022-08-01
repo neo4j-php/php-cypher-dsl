@@ -21,8 +21,12 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\PointTypeTrait;
+
 /**
  * Represents the leaf type "point".
+ *
+ * @see PointTypeTrait for a default implemenation
  */
 interface PointType extends PropertyType
 {

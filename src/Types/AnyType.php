@@ -38,87 +38,87 @@ use WikibaseSolutions\CypherDSL\Traits\TypeTraits\AnyTypeTrait;
 /**
  * Represents any type in Cypher.
  *
+ * @see AnyTypeTrait for a default implementation
  * @note This interface should not be implemented by any concrete class directly.
- * @see AnyTypeTrait
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/
  */
 interface AnyType extends QueryConvertible
 {
-	/**
-	 * Creates an alias of the current expression.
-	 *
-	 * @param Variable|string $right
-	 * @return Alias
-	 */
-	public function alias($right): Alias;
+    /**
+     * Creates an alias of the current expression.
+     *
+     * @param Variable|string $right
+     * @return Alias
+     */
+    public function alias($right): Alias;
 
-	/**
-	 * Perform an equality check with the given expression.
-	 *
-	 * @param AnyType|Pattern|int|float|string|bool|array $right
-	 * @param bool $insertParentheses
-	 * @return Equality
-	 */
-	public function equals($right, bool $insertParentheses = true): Equality;
+    /**
+     * Perform an equality check with the given expression.
+     *
+     * @param AnyType|Pattern|int|float|string|bool|array $right
+     * @param bool $insertParentheses
+     * @return Equality
+     */
+    public function equals($right, bool $insertParentheses = true): Equality;
 
-	/**
-	 * Perform an inequality comparison against the given expression.
-	 *
-	 * @param AnyType|Pattern|int|float|string|bool|array $right
-	 * @param bool $insertParentheses
-	 * @return Inequality
-	 */
-	public function notEquals($right, bool $insertParentheses = true): Inequality;
+    /**
+     * Perform an inequality comparison against the given expression.
+     *
+     * @param AnyType|Pattern|int|float|string|bool|array $right
+     * @param bool $insertParentheses
+     * @return Inequality
+     */
+    public function notEquals($right, bool $insertParentheses = true): Inequality;
 
-	/**
-	 * Perform a greater than comparison against the given expression.
-	 *
-	 * @param AnyType|Pattern|int|float|string|bool|array $right
-	 * @param bool $insertParentheses
-	 * @return GreaterThan
-	 */
-	public function gt($right, bool $insertParentheses = true): GreaterThan;
+    /**
+     * Perform a greater than comparison against the given expression.
+     *
+     * @param AnyType|Pattern|int|float|string|bool|array $right
+     * @param bool $insertParentheses
+     * @return GreaterThan
+     */
+    public function gt($right, bool $insertParentheses = true): GreaterThan;
 
-	/**
-	 * Perform a greater than or equal comparison against the given expression.
-	 *
-	 * @param AnyType|Pattern|int|float|string|bool|array $right
-	 * @param bool $insertParentheses
-	 * @return GreaterThanOrEqual
-	 */
-	public function gte($right, bool $insertParentheses = true): GreaterThanOrEqual;
+    /**
+     * Perform a greater than or equal comparison against the given expression.
+     *
+     * @param AnyType|Pattern|int|float|string|bool|array $right
+     * @param bool $insertParentheses
+     * @return GreaterThanOrEqual
+     */
+    public function gte($right, bool $insertParentheses = true): GreaterThanOrEqual;
 
-	/**
-	 * Perform a less than comparison against the given expression.
-	 *
-	 * @param AnyType|Pattern|int|float|string|bool|array $right
-	 * @param bool $insertParentheses
-	 * @return LessThan
-	 */
-	public function lt($right, bool $insertParentheses = true): LessThan;
+    /**
+     * Perform a less than comparison against the given expression.
+     *
+     * @param AnyType|Pattern|int|float|string|bool|array $right
+     * @param bool $insertParentheses
+     * @return LessThan
+     */
+    public function lt($right, bool $insertParentheses = true): LessThan;
 
-	/**
-	 * Perform a less than or equal comparison against the given expression.
-	 *
-	 * @param AnyType|Pattern|int|float|string|bool|array $right
-	 * @param bool $insertParentheses
-	 * @return LessThanOrEqual
-	 */
-	public function lte($right, bool $insertParentheses = true): LessThanOrEqual;
+    /**
+     * Perform a less than or equal comparison against the given expression.
+     *
+     * @param AnyType|Pattern|int|float|string|bool|array $right
+     * @param bool $insertParentheses
+     * @return LessThanOrEqual
+     */
+    public function lte($right, bool $insertParentheses = true): LessThanOrEqual;
 
-	/**
-	 * Checks whether the element is null.
-	 *
-	 * @param bool $insertParentheses
-	 * @return IsNull
-	 */
-	public function isNull(bool $insertParentheses = true): IsNull;
+    /**
+     * Checks whether the element is null.
+     *
+     * @param bool $insertParentheses
+     * @return IsNull
+     */
+    public function isNull(bool $insertParentheses = true): IsNull;
 
-	/**
-	 * Checks whether the element is not null.
-	 *
-	 * @param bool $insertParentheses
-	 * @return IsNotNull
-	 */
-	public function isNotNull(bool $insertParentheses = true): IsNotNull;
+    /**
+     * Checks whether the element is not null.
+     *
+     * @param bool $insertParentheses
+     * @return IsNotNull
+     */
+    public function isNotNull(bool $insertParentheses = true): IsNotNull;
 }

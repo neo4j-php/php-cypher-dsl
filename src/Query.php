@@ -40,7 +40,6 @@ use WikibaseSolutions\CypherDSL\Clauses\SkipClause;
 use WikibaseSolutions\CypherDSL\Clauses\UnionClause;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
-use WikibaseSolutions\CypherDSL\Expressions\Assignment;
 use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
 use WikibaseSolutions\CypherDSL\Expressions\Functions\FunctionCall;
 use WikibaseSolutions\CypherDSL\Expressions\Label;
@@ -54,7 +53,6 @@ use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
 use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
-use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
@@ -647,7 +645,7 @@ final class Query implements QueryConvertible
     /**
      * Create the SET clause.
      *
-     * @param Assignment|Label|(Assignment|Label)[] $expressions A single expression or a list of expressions
+     * @param PropertyReplacement|Label|(Assignment|Label)[] $expressions A single expression or a list of expressions
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/
@@ -662,7 +660,7 @@ final class Query implements QueryConvertible
         }
 
         foreach ($expressions as $expression) {
-            $this->assertClass('expression', [Assignment::class, Label::class], $expression);
+            $this->assertClass('expression', [PropertyReplacement::class, Label::class], $expression);
 
             $setClause->addAssignment($expression);
         }

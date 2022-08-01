@@ -129,8 +129,8 @@ abstract class Literal
      * Creates a date from the given year, month and day.
      *
      * @param int|NumeralType $year
-     * @param null|int|NumeralType $month
-     * @param null|int|NumeralType $day
+     * @param NullLiteral|int|NumeralType $month
+     * @param NullLiteral|int|NumeralType $day
      * @return DateType
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-date-calendar
@@ -148,8 +148,8 @@ abstract class Literal
      * Creates a date from the given year, week and weekday.
      *
      * @param int|NumeralType $year
-     * @param null|int|NumeralType $week
-     * @param null|int|NumeralType $weekday
+     * @param NullLiteral|int|NumeralType $week
+     * @param NullLiteral|int|NumeralType $weekday
      * @return DateType
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-date-week
@@ -206,15 +206,15 @@ abstract class Literal
      * Creates a date from the given year, month, day and time values.
      *
      * @param int|NumeralType $year
-     * @param null|int|NumeralType $month
-     * @param null|int|NumeralType $day
-     * @param null|int|NumeralType $hour
-     * @param null|int|NumeralType $minute
-     * @param null|int|NumeralType $second
-     * @param null|int|NumeralType $millisecond
-     * @param null|int|NumeralType $microsecond
-     * @param null|int|NumeralType $nanosecond
-     * @param null|string|StringType $timezone
+     * @param NullLiteral|int|NumeralType $month
+     * @param NullLiteral|int|NumeralType $day
+     * @param NullLiteral|int|NumeralType $hour
+     * @param NullLiteral|int|NumeralType $minute
+     * @param NullLiteral|int|NumeralType $second
+     * @param NullLiteral|int|NumeralType $millisecond
+     * @param NullLiteral|int|NumeralType $microsecond
+     * @param NullLiteral|int|NumeralType $nanosecond
+     * @param NullLiteral|string|StringType $timezone
      * @return DateTimeType
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime-calendar
@@ -249,15 +249,15 @@ abstract class Literal
      * Creates a datetime with the specified year, week, dayOfWeek, hour, minute, second, millisecond, microsecond, nanosecond and timezone component values.
      *
      * @param int|NumeralType $year
-     * @param null|int|NumeralType $week
-     * @param null|int|NumeralType $dayOfWeek
-     * @param null|int|NumeralType $hour
-     * @param null|int|NumeralType $minute
-     * @param null|int|NumeralType $second
-     * @param null|int|NumeralType $millisecond
-     * @param null|int|NumeralType $microsecond
-     * @param null|int|NumeralType $nanosecond
-     * @param null|string|StringType $timezone
+     * @param NullLiteral|int|NumeralType $week
+     * @param NullLiteral|int|NumeralType $dayOfWeek
+     * @param NullLiteral|int|NumeralType $hour
+     * @param NullLiteral|int|NumeralType $minute
+     * @param NullLiteral|int|NumeralType $second
+     * @param NullLiteral|int|NumeralType $millisecond
+     * @param NullLiteral|int|NumeralType $microsecond
+     * @param NullLiteral|int|NumeralType $nanosecond
+     * @param NullLiteral|string|StringType $timezone
      * @return DateTimeType
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime-week
@@ -292,15 +292,15 @@ abstract class Literal
      * Creates a datetime with the specified year, quarter, dayOfQuarter, hour, minute, second, millisecond, microsecond, nanosecond and timezone component values.
      *
      * @param int|NumeralType $year
-     * @param null|int|NumeralType $quarter
-     * @param null|int|NumeralType $dayOfQuarter
-     * @param null|int|NumeralType $hour
-     * @param null|int|NumeralType $minute
-     * @param null|int|NumeralType $second
-     * @param null|int|NumeralType $millisecond
-     * @param null|int|NumeralType $microsecond
-     * @param null|int|NumeralType $nanosecond
-     * @param null|string|StringType $timezone
+     * @param NullLiteral|int|NumeralType $quarter
+     * @param NullLiteral|int|NumeralType $dayOfQuarter
+     * @param NullLiteral|int|NumeralType $hour
+     * @param NullLiteral|int|NumeralType $minute
+     * @param NullLiteral|int|NumeralType $second
+     * @param NullLiteral|int|NumeralType $millisecond
+     * @param NullLiteral|int|NumeralType $microsecond
+     * @param NullLiteral|int|NumeralType $nanosecond
+     * @param NullLiteral|string|StringType $timezone
      * @return DateTimeType
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime-quarter
@@ -335,14 +335,14 @@ abstract class Literal
      * Creates a datetime with the specified year, ordinalDay, hour, minute, second, millisecond, microsecond, nanosecond and timezone component values.
      *
      * @param int|NumeralType $year
-     * @param null|int|NumeralType $ordinalDay
-     * @param null|int|NumeralType $hour
-     * @param null|int|NumeralType $minute
-     * @param null|int|NumeralType $second
-     * @param null|int|NumeralType $millisecond
-     * @param null|int|NumeralType $microsecond
-     * @param null|int|NumeralType $nanosecond
-     * @param null|string|StringType $timezone
+     * @param NullLiteral|int|NumeralType $ordinalDay
+     * @param NullLiteral|int|NumeralType $hour
+     * @param NullLiteral|int|NumeralType $minute
+     * @param NullLiteral|int|NumeralType $second
+     * @param NullLiteral|int|NumeralType $millisecond
+     * @param NullLiteral|int|NumeralType $microsecond
+     * @param NullLiteral|int|NumeralType $nanosecond
+     * @param NullLiteral|string|StringType $timezone
      * @return DateTimeType
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime-ordinal
@@ -389,7 +389,7 @@ abstract class Literal
     /**
      * Creates the current localDateTime value
      *
-     * @param null|string|StringType $timezone
+     * @param NullLiteral|string|StringType $timezone
      * @return LocalDateTimeType
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-current
@@ -411,14 +411,14 @@ abstract class Literal
      * Creates a LocalDateTime value with specified year, month, day and time props
      *
      * @param int|NumeralType $year
-     * @param null|int|NumeralType $month
-     * @param null|int|NumeralType $day
-     * @param null|int|NumeralType $hour
-     * @param null|int|NumeralType $minute
-     * @param null|int|NumeralType $second
-     * @param null|int|NumeralType $millisecond
-     * @param null|int|NumeralType $microsecond
-     * @param null|int|NumeralType $nanosecond
+     * @param NullLiteral|int|NumeralType $month
+     * @param NullLiteral|int|NumeralType $day
+     * @param NullLiteral|int|NumeralType $hour
+     * @param NullLiteral|int|NumeralType $minute
+     * @param NullLiteral|int|NumeralType $second
+     * @param NullLiteral|int|NumeralType $millisecond
+     * @param NullLiteral|int|NumeralType $microsecond
+     * @param NullLiteral|int|NumeralType $nanosecond
      * @return LocalDateTimeType
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-calendar
@@ -452,14 +452,14 @@ abstract class Literal
      * second, millisecond, microsecond and nanosecond component value
      *
      * @param int|NumeralType $year
-     * @param null|int|NumeralType $week
-     * @param null|int|NumeralType $dayOfWeek
-     * @param null|int|NumeralType $hour
-     * @param null|int|NumeralType $minute
-     * @param null|int|NumeralType $second
-     * @param null|int|NumeralType $millisecond
-     * @param null|int|NumeralType $microsecond
-     * @param null|int|NumeralType $nanosecond
+     * @param NullLiteral|int|NumeralType $week
+     * @param NullLiteral|int|NumeralType $dayOfWeek
+     * @param NullLiteral|int|NumeralType $hour
+     * @param NullLiteral|int|NumeralType $minute
+     * @param NullLiteral|int|NumeralType $second
+     * @param NullLiteral|int|NumeralType $millisecond
+     * @param NullLiteral|int|NumeralType $microsecond
+     * @param NullLiteral|int|NumeralType $nanosecond
      * @return LocalDateTimeType
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-week
@@ -492,14 +492,14 @@ abstract class Literal
      * Creates a LocalDateTime value with the specified year, quarter, dayOfQuarter, hour, minute, second, millisecond, microsecond and nanosecond component values
      *
      * @param $year
-     * @param null $quarter
-     * @param null $dayOfQuarter
-     * @param null $hour
-     * @param null $minute
-     * @param null $second
-     * @param null $millisecond
-     * @param null $microsecond
-     * @param null $nanosecond
+     * @param NullLiteral $quarter
+     * @param NullLiteral $dayOfQuarter
+     * @param NullLiteral $hour
+     * @param NullLiteral $minute
+     * @param NullLiteral $second
+     * @param NullLiteral $millisecond
+     * @param NullLiteral $microsecond
+     * @param NullLiteral $nanosecond
      * @return LocalDateTimeType
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-quarter
@@ -532,13 +532,13 @@ abstract class Literal
      * Creates a LocalDateTime value with the specified year, ordinalDay, hour, minute, second, millisecond, microsecond and nanosecond component values
      *
      * @param int|NumeralType $year
-     * @param null|int|NumeralType $ordinalDay
-     * @param null|int|NumeralType $hour
-     * @param null|int|NumeralType $minute
-     * @param null|int|NumeralType $second
-     * @param null|int|NumeralType $millisecond
-     * @param null|int|NumeralType $microsecond
-     * @param null|int|NumeralType $nanosecond
+     * @param NullLiteral|int|NumeralType $ordinalDay
+     * @param NullLiteral|int|NumeralType $hour
+     * @param NullLiteral|int|NumeralType $minute
+     * @param NullLiteral|int|NumeralType $second
+     * @param NullLiteral|int|NumeralType $millisecond
+     * @param NullLiteral|int|NumeralType $microsecond
+     * @param NullLiteral|int|NumeralType $nanosecond
      * @return LocalDateTimeType
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-ordinal
@@ -585,7 +585,7 @@ abstract class Literal
     /**
      * Creates the current LocalTime value
      *
-     * @param null|string|StringType $timezone
+     * @param NullLiteral|string|StringType $timezone
      * @return LocalTimeType
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localtime-current
@@ -607,11 +607,11 @@ abstract class Literal
      * Creates a LocalTime value with the specified hour, minute, second, millisecond, microsecond and nanosecond component values
      *
      * @param int|NumeralType $hour
-     * @param null|int|NumeralType $minute
-     * @param null|int|NumeralType $second
-     * @param null|int|NumeralType $millisecond
-     * @param null|int|NumeralType $microsecond
-     * @param null|int|NumeralType $nanosecond
+     * @param NullLiteral|int|NumeralType $minute
+     * @param NullLiteral|int|NumeralType $second
+     * @param NullLiteral|int|NumeralType $millisecond
+     * @param NullLiteral|int|NumeralType $microsecond
+     * @param NullLiteral|int|NumeralType $nanosecond
      * @return LocalTimeType
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localtime-create
@@ -652,7 +652,7 @@ abstract class Literal
     /**
      * Creates the current Time value
      *
-     * @param null|string|StringType $timezone
+     * @param NullLiteral|string|StringType $timezone
      * @return TimeType
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-time-current
@@ -674,12 +674,12 @@ abstract class Literal
      * Creates  a Time value with the specified hour, minute, second, millisecond, microsecond, nanosecond and timezone component values
      *
      * @param int|NumeralType $hour
-     * @param null|int|NumeralType $minute
-     * @param null|int|NumeralType $second
-     * @param null|int|NumeralType $millisecond
-     * @param null|int|NumeralType $microsecond
-     * @param null|int|NumeralType $nanosecond
-     * @param null|string|StringType $timezone
+     * @param NullLiteral|int|NumeralType $minute
+     * @param NullLiteral|int|NumeralType $second
+     * @param NullLiteral|int|NumeralType $millisecond
+     * @param NullLiteral|int|NumeralType $microsecond
+     * @param NullLiteral|int|NumeralType $nanosecond
+     * @param NullLiteral|string|StringType $timezone
      * @return TimeType
      *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-time-create

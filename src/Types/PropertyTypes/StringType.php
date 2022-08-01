@@ -25,9 +25,12 @@ use WikibaseSolutions\CypherDSL\Expressions\Operators\Contains;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\EndsWith;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Regex;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\StartsWith;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\StringTypeTrait;
 
 /**
  * Represents the leaf type "string".
+ *
+ * @see StringTypeTrait for a default implementation
  */
 interface StringType extends PropertyType
 {
@@ -60,8 +63,8 @@ interface StringType extends PropertyType
 
     /**
      * Perform a regex comparison with the given expression.
-	StringType|string
-     * @param StringType $right
+     *
+     * @param StringType|string $right
      * @param bool $insertParentheses
      * @return Regex
      */

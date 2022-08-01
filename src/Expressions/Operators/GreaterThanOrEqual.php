@@ -21,13 +21,10 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparablePropertyType;
-
 /**
  * Represents the application of the greater than or equal to (>=) operator.
  *
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 49)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
  */
 final class GreaterThanOrEqual extends ComparisonBinaryOperator

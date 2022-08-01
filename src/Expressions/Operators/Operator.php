@@ -25,56 +25,52 @@ use WikibaseSolutions\CypherDSL\QueryConvertible;
 
 /**
  * This class represents the application of an operator, such as "NOT" or "*".
+ *
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 46)
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/
  */
 abstract class Operator implements QueryConvertible
 {
-	/**
-	 * @var bool Whether to insert parentheses around the expression
-	 */
-	private bool $insertParentheses;
+    /**
+     * @var bool Whether to insert parentheses around the expression
+     */
+    private bool $insertParentheses;
 
-	/**
-	 * UnaryOperator constructor.
-	 *
-	 * @param bool $insertParentheses Whether to insert parentheses around the application of the operator
-	 */
-	public function __construct(bool $insertParentheses = true)
-	{
-		$this->insertParentheses = $insertParentheses;
-	}
+    /**
+     * UnaryOperator constructor.
+     *
+     * @param bool $insertParentheses Whether to insert parentheses around the application of the operator
+     */
+    public function __construct(bool $insertParentheses = true)
+    {
+        $this->insertParentheses = $insertParentheses;
+    }
 
-	/**
-	 * Returns whether the operator inserts parenthesis.
-	 *
-	 * @return bool
-	 */
-	public function insertsParentheses(): bool
-	{
-		return $this->insertParentheses;
-	}
+    /**
+     * Returns whether the operator inserts parenthesis.
+     *
+     * @return bool
+     */
+    public function insertsParentheses(): bool
+    {
+        return $this->insertParentheses;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function toQuery(): string
-	{
-		$format = $this->insertParentheses ? "(%s)" : "%s";
-		$inner = $this->toInner();
+    /**
+     * @inheritDoc
+     */
+    public function toQuery(): string
+    {
+        $format = $this->insertParentheses ? "(%s)" : "%s";
+        $inner = $this->toInner();
 
-		return sprintf($format, $inner);
-	}
+        return sprintf($format, $inner);
+    }
 
-	/**
-	 * Returns the inner part of the application of the operator, that is, without any parentheses.
-	 *
-	 * @return string
-	 */
-	abstract protected function toInner(): string;
-
-	/**
-	 * Returns the operator. For instance, this function would return "-" for the minus operator.
-	 *
-	 * @return string
-	 */
-	abstract protected function getOperator(): string;
+    /**
+     * Returns the inner part of the application of the operator, that is, without any parentheses.
+     *
+     * @return string
+     */
+    abstract protected function toInner(): string;
 }

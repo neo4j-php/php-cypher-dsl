@@ -25,9 +25,12 @@ use WikibaseSolutions\CypherDSL\Expressions\Operators\Conjunction;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Disjunction;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\ExclusiveOr;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Negation;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 
 /**
  * Represents the leaf type "boolean".
+ *
+ * @see BooleanTypeTrait for a default implementation
  */
 interface BooleanType extends PropertyType
 {

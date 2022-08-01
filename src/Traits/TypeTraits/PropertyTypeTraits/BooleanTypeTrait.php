@@ -35,8 +35,8 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  */
 trait BooleanTypeTrait
 {
-	use CastTrait;
-	use PropertyTypeTrait;
+    use CastTrait;
+    use PropertyTypeTrait;
 
     /**
      * @inheritDoc
@@ -46,25 +46,25 @@ trait BooleanTypeTrait
         return new Conjunction($this, self::toBooleanType($right), $insertParentheses);
     }
 
-	/**
-	 * @inheritDoc
-	 */
+    /**
+     * @inheritDoc
+     */
     public function or($right, bool $insertParentheses = true): Disjunction
     {
         return new Disjunction($this, self::toBooleanType($right), $insertParentheses);
     }
 
-	/**
-	 * @inheritDoc
-	 */
+    /**
+     * @inheritDoc
+     */
     public function xor($right, bool $insertParentheses = true): ExclusiveOr
     {
         return new ExclusiveOr($this, self::toBooleanType($right), $insertParentheses);
     }
 
-	/**
-	 * @inheritDoc
-	 */
+    /**
+     * @inheritDoc
+     */
     public function not(): Negation
     {
         return new Negation($this);

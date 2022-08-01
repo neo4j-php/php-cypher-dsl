@@ -21,8 +21,12 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits\PathTypeTrait;
+
 /**
  * Represents the leaf type "path".
+ *
+ * @see PathTypeTrait for a default implementation
  */
 interface PathType extends StructuralType
 {

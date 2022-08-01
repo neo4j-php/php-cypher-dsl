@@ -28,9 +28,12 @@ use WikibaseSolutions\CypherDSL\Expressions\Operators\UnaryMinus;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\ModuloDivision;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Multiplication;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Subtraction;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\NumeralTypeTrait;
 
 /**
- * Represents any numeral (integer, float, double).
+ * Represents the leaf type "numeral".
+ *
+ * @see NumeralTypeTrait for a default implementation
  */
 interface NumeralType extends PropertyType
 {

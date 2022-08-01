@@ -21,8 +21,12 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits\RelationshipTypeTrait;
+
 /**
  * Represents the leaf type "relationship".
+ *
+ * @see RelationshipTypeTrait for a default implementation
  */
 interface RelationshipType extends StructuralType
 {

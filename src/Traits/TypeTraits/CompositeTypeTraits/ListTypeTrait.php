@@ -32,8 +32,8 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
  */
 trait ListTypeTrait
 {
-	use CastTrait;
-	use CompositeTypeTrait;
+    use CastTrait;
+    use CompositeTypeTrait;
 
     /**
      * @inheritDoc

@@ -24,6 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 /**
  * Represents the application of the less than or equal to (<=) operator.
  *
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 49)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
  */
 final class LessThanOrEqual extends ComparisonBinaryOperator

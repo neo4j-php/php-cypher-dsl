@@ -34,7 +34,7 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  */
 class Node extends Pattern implements Relatable
 {
-	use ErrorTrait;
+    use ErrorTrait;
     use EscapeTrait;
     use PatternPropertiesTrait;
 
@@ -89,44 +89,44 @@ class Node extends Pattern implements Relatable
     /**
      * @inheritDoc
      */
-	public function relationship(Relationship $relationship, Relatable $relatable): Path
-	{
-		return (new Path($this))->relationship($relationship, $relatable);
-	}
+    public function relationship(Relationship $relationship, Relatable $relatable): Path
+    {
+        return (new Path($this))->relationship($relationship, $relatable);
+    }
 
     /**
      * @inheritDoc
      */
-	public function relationshipTo(Relatable $relatable, ?string $type = null, $properties = null, $name = null): Path
-	{
-		return (new Path($this))->relationshipTo($relatable, $type, $properties, $name);
-	}
+    public function relationshipTo(Relatable $relatable, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return (new Path($this))->relationshipTo($relatable, $type, $properties, $name);
+    }
 
     /**
      * @inheritDoc
      */
-	public function relationshipFrom(Relatable $relatable, ?string $type = null, $properties = null, $name = null): Path
-	{
-		return (new Path($this))->relationshipFrom($relatable, $type, $properties, $name);
-	}
+    public function relationshipFrom(Relatable $relatable, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return (new Path($this))->relationshipFrom($relatable, $type, $properties, $name);
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function relationshipUni(Relatable $relatable, ?string $type = null, $properties = null, $name = null): Path
-	{
-		return (new Path($this))->relationshipUni($relatable, $type, $properties, $name);
-	}
+    /**
+     * @inheritDoc
+     */
+    public function relationshipUni(Relatable $relatable, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return (new Path($this))->relationshipUni($relatable, $type, $properties, $name);
+    }
 
-	/**
-	 * Returns the labels of the node.
-	 *
-	 * @return string[]
-	 */
-	public function getLabels(): array
-	{
-		return $this->labels;
-	}
+    /**
+     * Returns the labels of the node.
+     *
+     * @return string[]
+     */
+    public function getLabels(): array
+    {
+        return $this->labels;
+    }
 
     /**
      * Returns the properties of this node.

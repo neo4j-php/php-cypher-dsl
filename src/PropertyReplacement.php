@@ -19,36 +19,50 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL;
 
+use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
- * Represents the application of the assignment (=/+=) operator.
+ * Represents the application of the property replacement (=/+=) operator.
  *
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 108)
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/#set-set-a-property
- * @see Equality For a semantically different, but syntactically identical operator
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#syntax-property-replacement-operator
  */
-class Assignment extends BinaryOperator
+class PropertyReplacement implements QueryConvertible
 {
     use ErrorTrait;
 
     /**
-     * @var bool Whether to use the property mutation instead of the property replacement
-     * operator.
+     * @var Variable|Property The property to assign a value to
+     */
+    private $property;
+
+    /**
+     * @var AnyType The value to assign to the property
+     */
+    private AnyType $value;
+
+    /**
+     * @var bool Whether to use the property mutation instead of the property replacement operator
      */
     private bool $mutate = false;
 
     /**
-     * @param Property|Variable $left
-     * @inheritDoc
+     * Assignment constructor.
+     *
+     * @param Variable|Property $property The property or variable to assign a value to
+     * @param AnyType $value The value to assign to the property
      */
-    public function __construct(AnyType $left, AnyType $right)
+    public function __construct($property, AnyType $value)
     {
-        self::assertClass('left', [Property::class, Variable::class], $left);
-
-        parent::__construct($left, $right, false);
+        self::assertClass('property', [Variable::class, Property::class], $property);
+        $this->property = $property;
+        $this->value = $value;
     }
 
     /**
@@ -78,8 +92,13 @@ class Assignment extends BinaryOperator
     /**
      * @inheritDoc
      */
-    protected function getOperator(): string
+    public function toQuery(): string
     {
-        return $this->mutate ? "+=" : "=";
+        return sprintf(
+            "%s %s %s",
+            $this->property->toQuery(),
+            $this->mutate ? "+=" : "=",
+            $this->value->toQuery()
+        );
     }
 }

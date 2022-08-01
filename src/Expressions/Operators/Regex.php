@@ -21,16 +21,10 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
-
 /**
  * Represents the application of the regex operator.
  *
- * @note This expression is not part of the openCypher standard.
- *
+ * @note This expression is not part of the openCypher standard (version 9)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-string
  */
 final class Regex extends StringSpecificComparisonBinaryOperator

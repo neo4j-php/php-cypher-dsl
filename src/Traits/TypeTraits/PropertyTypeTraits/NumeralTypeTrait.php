@@ -37,59 +37,59 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  */
 trait NumeralTypeTrait
 {
-	use PropertyTypeTrait;
+    use PropertyTypeTrait;
 
-	/**
-	 * @inheritDoc
-	 */
+    /**
+     * @inheritDoc
+     */
     public function plus($right, bool $insertParentheses = true): Addition
     {
         return new Addition($this, self::toNumeralType($right), $insertParentheses);
     }
 
-	/**
-	 * @inheritDoc
-	 */
+    /**
+     * @inheritDoc
+     */
     public function divide($right, bool $insertParentheses = true): Division
     {
         return new Division($this, self::toNumeralType($right), $insertParentheses);
     }
 
-	/**
-	 * @inheritDoc
-	 */
+    /**
+     * @inheritDoc
+     */
     public function exponentiate($right, bool $insertParentheses = true): Exponentiation
     {
         return new Exponentiation($this, self::toNumeralType($right), $insertParentheses);
     }
 
-	/**
-	 * @inheritDoc
-	 */
+    /**
+     * @inheritDoc
+     */
     public function mod($right, bool $insertParentheses = true): ModuloDivision
     {
         return new ModuloDivision($this, self::toNumeralType($right), $insertParentheses);
     }
 
-	/**
-	 * @inheritDoc
-	 */
+    /**
+     * @inheritDoc
+     */
     public function times($right, bool $insertParentheses = true): Multiplication
     {
         return new Multiplication($this, self::toNumeralType($right), $insertParentheses);
     }
 
-	/**
-	 * @inheritDoc
-	 */
+    /**
+     * @inheritDoc
+     */
     public function minus($right, bool $insertParentheses = true): Subtraction
     {
         return new Subtraction($this, self::toNumeralType($right), $insertParentheses);
     }
 
-	/**
-	 * @inheritDoc
-	 */
+    /**
+     * @inheritDoc
+     */
     public function negate(): UnaryMinus
     {
         return new UnaryMinus($this);

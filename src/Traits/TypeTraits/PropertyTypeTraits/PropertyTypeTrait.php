@@ -46,14 +46,14 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
  */
 trait PropertyTypeTrait
 {
-	use AnyTypeTrait;
-	use CastTrait;
+    use AnyTypeTrait;
+    use CastTrait;
 
-	/**
-	 * @inheritDoc
-	 */
-	public function in($right, bool $insertParentheses = true): In
-	{
-		return new In($this, self::toListType($right), $insertParentheses);
-	}
+    /**
+     * @inheritDoc
+     */
+    public function in($right, bool $insertParentheses = true): In
+    {
+        return new In($this, self::toListType($right), $insertParentheses);
+    }
 }

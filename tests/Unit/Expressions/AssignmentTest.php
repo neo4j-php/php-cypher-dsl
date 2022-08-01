@@ -23,13 +23,13 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\Assignment;
+use WikibaseSolutions\CypherDSL\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Assignment
+ * @covers \WikibaseSolutions\CypherDSL\PropertyReplacement
  */
 class AssignmentTest extends TestCase
 {
@@ -37,7 +37,7 @@ class AssignmentTest extends TestCase
 
     public function testToQuery()
     {
-        $assignment = new Assignment($this->getQueryConvertibleMock(Property::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
+        $assignment = new PropertyReplacement($this->getQueryConvertibleMock(Property::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
 
         $this->assertSame("foo.bar = true", $assignment->toQuery());
 
@@ -50,21 +50,21 @@ class AssignmentTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $assignment = new Assignment($this->getQueryConvertibleMock(AnyType::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
+        $assignment = new PropertyReplacement($this->getQueryConvertibleMock(AnyType::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
 
         $assignment->toQuery();
     }
 
     public function testLeftAcceptsProperty()
     {
-        $assignment = new Assignment($this->getQueryConvertibleMock(Property::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
+        $assignment = new PropertyReplacement($this->getQueryConvertibleMock(Property::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
 
         $this->assertSame("foo.bar = true", $assignment->toQuery());
     }
 
     public function testLeftAcceptsVariable()
     {
-        $assignment = new Assignment($this->getQueryConvertibleMock(Variable::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
+        $assignment = new PropertyReplacement($this->getQueryConvertibleMock(Variable::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
 
         $this->assertSame("foo.bar = true", $assignment->toQuery());
     }

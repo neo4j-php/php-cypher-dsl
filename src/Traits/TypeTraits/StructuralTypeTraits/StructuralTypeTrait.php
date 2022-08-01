@@ -19,5 +19,5 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
  */
 trait StructuralTypeTrait
 {
-	use AnyTypeTrait;
+    use AnyTypeTrait;
 }

@@ -21,7 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\PropertyTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
 
 /**
@@ -31,5 +30,5 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
  */
 trait DateTypeTrait
 {
-	use PropertyTypeTrait;
+    use PropertyTypeTrait;
 }

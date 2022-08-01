@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
@@ -100,11 +100,11 @@ class Property implements
      * Assign a value to this property.
      *
      * @param AnyType $value The value to assign
-     * @return Assignment
+     * @return PropertyReplacement
      */
-    public function assign(AnyType $value): Assignment
+    public function assign(AnyType $value): PropertyReplacement
     {
-        return new Assignment($this, $value);
+        return new PropertyReplacement($this, $value);
     }
 
     /**

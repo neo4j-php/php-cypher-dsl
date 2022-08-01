@@ -23,48 +23,51 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\QueryConvertible;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 
 /**
  * This class represents a pattern.
  *
  * @note A pattern is not an expression, but rather a syntactic construct used for pattern matching on the graph
- *  database.
+ *  database. It therefore does not have any type, and thus it cannot be used in an expression. Instead, the variable
+ *  to which this pattern is assigned should be used. This library makes this easier by generating a variable for a
+ *  pattern when necessary and by casting Pattern instances to their associated variable when used in an expression.
  */
 abstract class Pattern implements QueryConvertible
 {
-	use ErrorTrait;
+    use CastTrait;
+    use ErrorTrait;
 
-	/**
-	 * @var Variable|null The variable that this object is assigned
-	 */
-	protected ?Variable $variable = null;
+    /**
+     * @var Variable|null The variable that this object is assigned
+     */
+    protected ?Variable $variable = null;
 
-	/**
-	 * Alias of Pattern::setVariable().
-	 *
-	 * @param Variable|string $variable
-	 * @return $this
-	 */
-	public function withVariable($variable): self
-	{
-		$this->assertClass('variable', [Variable::class, 'string'], $variable);
-		$this->variable = is_string($variable) ? new Variable($variable) : $variable;
+    /**
+     * Explicitly assign a named variable to this pattern.
+     *
+     * @param Variable|string $variable
+     * @return $this
+     */
+    public function withVariable($variable): self
+    {
+        $this->variable = self::toVariable($variable);
+        
+        return $this;
+    }
 
-		return $this;
-	}
+    /**
+     * Returns the variable of the object. This function generates a variable if none has been set.
+     *
+     * @return Variable
+     */
+    public function getVariable(): Variable
+    {
+        if (!isset($this->variable)) {
+            $this->variable = new Variable();
+        }
 
-	/**
-	 * Returns the variable of the object. This function generates a variable if none has been set.
-	 *
-	 * @return Variable
-	 */
-	public function getVariable(): Variable
-	{
-		if (!isset($this->variable)) {
-			$this->variable = new Variable();
-		}
-
-		return $this->variable;
-	}
+        return $this->variable;
+    }
 }

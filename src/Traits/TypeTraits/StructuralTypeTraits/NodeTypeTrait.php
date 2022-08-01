@@ -31,5 +31,5 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
  */
 trait NodeTypeTrait
 {
-	use StructuralTypeTrait;
+    use StructuralTypeTrait;
 }

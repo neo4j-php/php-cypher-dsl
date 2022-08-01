@@ -30,20 +30,20 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 /**
  * Represents the application of the "IN" operator.
  *
- * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 90)
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 51)
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/#where-in-operator
  */
 final class In extends BinaryOperator implements BooleanType
 {
     use BooleanTypeTrait;
 
-	/**
-	 * BinaryOperator constructor.
-	 *
-	 * @param PropertyType $left The left-hand of the expression
-	 * @param ListType $right The right-hand of the expression
-	 * @param bool $insertParentheses Whether to insert parentheses around the expression
-	 */
+    /**
+     * In constructor.
+     *
+     * @param PropertyType $left The left-hand of the expression
+     * @param ListType $right The right-hand of the expression
+     * @param bool $insertParentheses Whether to insert parentheses around the expression
+     */
     public function __construct(PropertyType $left, ListType $right, bool $insertParentheses = true)
     {
         parent::__construct($left, $right, $insertParentheses);

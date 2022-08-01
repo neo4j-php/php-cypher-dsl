@@ -33,11 +33,11 @@ use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\LocalDateTi
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\LocalTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\PointTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits\RelationshipTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\StringTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\TimeTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits\NodeTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits\PathTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits\RelationshipTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
@@ -50,6 +50,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
@@ -67,6 +68,7 @@ class Variable implements
     MapType,
     NodeType,
     NumeralType,
+    PathType,
     PointType,
     RelationshipType,
     StringType,
@@ -81,6 +83,7 @@ class Variable implements
     use MapTypeTrait;
     use NodeTypeTrait;
     use NumeralTypeTrait;
+    use PathTypeTrait;
     use PointTypeTrait;
     use RelationshipTypeTrait;
     use StringTypeTrait;
@@ -103,48 +106,32 @@ class Variable implements
     public function __construct(?string $name = null)
     {
         if ($name === null) {
-            $name = $this->generateString('var');
-        } else {
-			self::assertValidName($name);
-		}
+            $name = $this->generateIdentifier();
+        }
 
+        self::assertValidName($name);
         $this->name = $name;
     }
-
-	/**
-	 * Returns the name of this variable.
-	 *
-	 * @return string
-	 */
-	public function getName(): string
-	{
-		return $this->name;
-	}
 
     /**
      * Returns a label with this variable.
      *
-     * @param string[]|string $labels
+     * @param string ...$labels
      * @return Label
      */
-    public function labeled($labels): Label
+    public function labeled(string ...$labels): Label
     {
-        if (is_string($labels)) {
-            $labels = [$labels];
-        }
-
-        return new Label($this, $labels);
+        return new Label($this, ...$labels);
     }
 
     /**
-     * Returns an assignment with this variable.
+     * Returns the name of this variable.
      *
-     * @param AnyType $value The value to assign
-     * @return Assignment
+     * @return string
      */
-    public function assign(AnyType $value): Assignment
+    public function getName(): string
     {
-        return new Assignment($this, $value);
+        return $this->name;
     }
 
     /**
