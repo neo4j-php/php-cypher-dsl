@@ -55,10 +55,9 @@ jobs:
           composer install --no-interaction --prefer-dist --no-progress
 
       - name: Run unit tests
-        run: XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite unit
-
-      - name: Checkout coverage report
-        run: php vendor/bin/coverage-check coverage/clover.xml ${{ env.MINIMUM_COVERAGE_PERCENTAGE }}
+        run: |
+          XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite unit
+          php vendor/bin/coverage-check coverage/clover.xml ${{ env.MINIMUM_COVERAGE_PERCENTAGE }}
 
       - name: Run mutation tests
         run: XDEBUG_MODE=coverage php vendor/bin/infection --show-mutations --min-msi=${{ env.MINIMUM_MSI_PERCENTAGE }} --threads=4
