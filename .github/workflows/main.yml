@@ -9,13 +9,12 @@ on:
 
 jobs:
   unit:
-    name: "Unit and mutation testing"
-    runs-on: ${{ matrix.os }}
+    name: "Unit and mutation testing (PHP ${{ matrix.php-version }})"
+    runs-on: "ubuntu-22.04"
     continue-on-error: true
 
     strategy:
       matrix:
-        os: [ "ubuntu-latest" ]
         php-version: [ "7.4", "8.0", "8.1" ]
 
     env:
@@ -44,17 +43,16 @@ jobs:
           php vendor/bin/coverage-check coverage/clover.xml ${{ env.MINIMUM_COVERAGE_PERCENTAGE }}
 
       - name: Run mutation tests
-        run: XDEBUG_MODE=coverage php vendor/bin/infection --show-mutations --min-msi=${{ env.MINIMUM_MSI_PERCENTAGE }} --threads=4
+        run: XDEBUG_MODE=coverage php vendor/bin/infection --show-mutations --min-msi=${{ env.MINIMUM_MSI_PERCENTAGE }} --threads=4 --test-framework-options="--testsuite unit"
 
 
   integration:
-    name: "Integration testing"
-    runs-on: ${{ matrix.os }}
+    name: "Integration testing (PHP ${{ matrix.php-version }}, Neo4j ${{ matrix.neo4j-version }})"
+    runs-on: "ubuntu-22.04"
     continue-on-error: true
 
     strategy:
       matrix:
-        os: [ "ubuntu-latest" ]
         neo4j-version: ["4.2", "4.3", "4.4"]
         php-version: [ "8.1" ]
 
@@ -96,13 +94,12 @@ jobs:
 
 
   lint:
-    name: "Linting"
+    name: "Linting (PHP ${{ matrix.php-version }})"
     runs-on: ${{ matrix.os }}
     continue-on-error: true
 
     strategy:
       matrix:
-        os: [ "ubuntu-latest" ]
         php-version: [ "8.1" ]
 
     env:
