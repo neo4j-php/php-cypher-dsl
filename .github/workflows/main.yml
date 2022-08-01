@@ -95,7 +95,7 @@ jobs:
 
   lint:
     name: "Linting (PHP ${{ matrix.php-version }})"
-    runs-on: ${{ matrix.os }}
+    runs-on: "ubuntu-22.04"
     continue-on-error: true
 
     strategy:
