@@ -1,4 +1,4 @@
-name: build
+name: main
 
 on:
   push:
@@ -8,60 +8,29 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-20.04
+  unit:
+    name: "Unit tests for PHP ${{ matrix.php-version }}"
+    runs-on: ${{ matrix.os }}
     continue-on-error: true
 
     strategy:
       matrix:
-        include:
-          - php_version: 7.4
-          - php_version: 8.0
-          - php_version: 8.1
-          - php_version: latest
-
-    container:
-      image: php:${{ matrix.php_version }}
+        os: ["ubuntu-latest"]
+        php-version: ["7.4", "8.0", "8.1", "latest"]
 
     env:
       COMPOSER_VERSION: 2
-      INSTALL_PATH: php-cypher-dsl
-      REPOSITORY_NAME: php-cypher-dsl
 
     steps:
-      # https://getcomposer.org/download/
-      - name: Install Composer
-        run: |
-          apt update
-          apt install -y unzip
-          php -r "copy('https://getcomposer.org/installer', 'installer');"
-          php -r "copy('https://composer.github.io/installer.sig', 'expected');"
-          echo `cat expected` " installer" | sha384sum -c -
-          php installer --${{ env.COMPOSER_VERSION }}
-          rm -f installer expected
-          mv composer.phar /usr/local/bin/composer
+      - uses: actions/checkout@v3
 
-      - name: Install Xdebug
-        run: |
-          pecl install xdebug
-          docker-php-ext-enable xdebug
-
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - uses: php-actions/composer@v6
         with:
-          repository: WikibaseSolutions/${{ env.REPOSITORY_NAME }}
-          path: ${{ env.REPOSITORY_NAME }}
+          progress: yes
+          php_version: ${{ matrix.php-version }}
+          version: ${{ env.COMPOSER_VERSION }}
 
-      - name: Install dependencies
-        run: composer update --working-dir ${{ env.INSTALL_PATH }}
-
-      - name: Run php-cs-fixer
-        run: |
-            composer php-cs-fixer --working-dir ${{ env.INSTALL_PATH }} -- --dry-run ./src
-            composer php-cs-fixer --working-dir ${{ env.INSTALL_PATH }} -- --dry-run ./tests
-
-      - name: Run unit tests
-        run: composer test --working-dir ${{ env.INSTALL_PATH }}
-
-      - name: Run mutation tests
-        run: composer infect --working-dir ${{ env.INSTALL_PATH }}
+      - uses: php-actions/phpunit@v3
+        with:
+          configuration: phpunit.xml.dist
+          php_version: ${{ matrix.php-version }}
