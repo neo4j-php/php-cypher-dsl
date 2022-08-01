@@ -9,4 +9,12 @@
             <directory>tests/Unit</directory>
         </testsuite>
     </testsuites>
+    <coverage processUncoveredFiles="true" cacheDirectory="coverage/cache" pathCoverage="true">
+        <report>
+            <clover outputFile="coverage/clover.xml" />
+        </report>
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+    </coverage>
 </phpunit>
