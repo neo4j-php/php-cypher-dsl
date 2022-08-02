@@ -22,8 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
 use InvalidArgumentException;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\FunctionCall;
-use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
+use WikibaseSolutions\CypherDSL\Expressions\Functions\Func;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
@@ -115,14 +114,14 @@ abstract class Literal
     public static function date($timezone = null): DateType
     {
         if ($timezone === null) {
-            return FunctionCall::date();
+            return Func::date();
         }
 
         if (!($timezone instanceof StringType)) {
             $timezone = self::string($timezone);
         }
 
-        return FunctionCall::date(Query::map(["timezone" => $timezone]));
+        return Func::date(Query::map(["timezone" => $timezone]));
     }
 
     /**
@@ -137,7 +136,7 @@ abstract class Literal
      */
     public static function dateYMD($year, $month = null, $day = null): DateType
     {
-        return FunctionCall::date(self::makeTemporalMap([
+        return Func::date(self::makeTemporalMap([
             "year" => $year,
             "month" => $month,
             "day" => $day,
@@ -156,7 +155,7 @@ abstract class Literal
      */
     public static function dateYWD($year, $week = null, $weekday = null): DateType
     {
-        return FunctionCall::date(self::makeTemporalMap([
+        return Func::date(self::makeTemporalMap([
             "year" => $year,
             "week" => $week,
             "dayOfWeek" => $weekday,
@@ -177,7 +176,7 @@ abstract class Literal
             $date = self::string($date);
         }
 
-        return FunctionCall::date($date);
+        return Func::date($date);
     }
 
     /**
@@ -192,14 +191,14 @@ abstract class Literal
     public static function dateTime($timezone = null): DateTimeType
     {
         if ($timezone === null) {
-            return FunctionCall::datetime();
+            return Func::datetime();
         }
 
         if (!($timezone instanceof StringType)) {
             $timezone = self::string($timezone);
         }
 
-        return FunctionCall::datetime(Query::map(["timezone" => $timezone]));
+        return Func::datetime(Query::map(["timezone" => $timezone]));
     }
 
     /**
@@ -231,7 +230,7 @@ abstract class Literal
         $nanosecond = null,
         $timezone = null
     ): DateTimeType {
-        return FunctionCall::datetime(self::makeTemporalMap([
+        return Func::datetime(self::makeTemporalMap([
             "year" => $year,
             "month" => $month,
             "day" => $day,
@@ -274,7 +273,7 @@ abstract class Literal
         $nanosecond = null,
         $timezone = null
     ): DateTimeType {
-        return FunctionCall::datetime(self::makeTemporalMap([
+        return Func::datetime(self::makeTemporalMap([
             "year" => $year,
             "week" => $week,
             "dayOfWeek" => $dayOfWeek,
@@ -317,7 +316,7 @@ abstract class Literal
         $nanosecond = null,
         $timezone = null
     ): DateTimeType {
-        return FunctionCall::datetime(self::makeTemporalMap([
+        return Func::datetime(self::makeTemporalMap([
             "year" => $year,
             "quarter" => $quarter,
             "dayOfQuarter" => $dayOfQuarter,
@@ -358,7 +357,7 @@ abstract class Literal
         $nanosecond = null,
         $timezone = null
     ): DateTimeType {
-        return FunctionCall::datetime(self::makeTemporalMap([
+        return Func::datetime(self::makeTemporalMap([
             "year" => $year,
             "ordinalDay" => $ordinalDay,
             "hour" => $hour,
@@ -383,7 +382,7 @@ abstract class Literal
             $dateString = self::string($dateString);
         }
 
-        return FunctionCall::datetime($dateString);
+        return Func::datetime($dateString);
     }
 
     /**
@@ -397,14 +396,14 @@ abstract class Literal
     public static function localDateTime($timezone = null): LocalDateTimeType
     {
         if ($timezone === null) {
-            return FunctionCall::localdatetime();
+            return Func::localdatetime();
         }
 
         if (!($timezone instanceof StringType)) {
             $timezone = self::string($timezone);
         }
 
-        return FunctionCall::localdatetime(Query::map(["timezone" => $timezone]));
+        return Func::localdatetime(Query::map(["timezone" => $timezone]));
     }
 
     /**
@@ -434,7 +433,7 @@ abstract class Literal
         $microsecond = null,
         $nanosecond = null
     ): LocalDateTimeType {
-        return FunctionCall::localdatetime(self::makeTemporalMap([
+        return Func::localdatetime(self::makeTemporalMap([
             "year" => $year,
             "month" => $month,
             "day" => $day,
@@ -475,7 +474,7 @@ abstract class Literal
         $microsecond = null,
         $nanosecond = null
     ): LocalDateTimeType {
-        return FunctionCall::localdatetime(self::makeTemporalMap([
+        return Func::localdatetime(self::makeTemporalMap([
             "year" => $year,
             "week" => $week,
             "dayOfWeek" => $dayOfWeek,
@@ -515,7 +514,7 @@ abstract class Literal
         $microsecond = null,
         $nanosecond = null
     ): LocalDateTimeType {
-        return FunctionCall::localdatetime(self::MakeTemporalMap([
+        return Func::localdatetime(self::MakeTemporalMap([
             "year" => $year,
             "quarter" => $quarter,
             "dayOfQuarter" => $dayOfQuarter,
@@ -553,7 +552,7 @@ abstract class Literal
         $microsecond = null,
         $nanosecond = null
     ): LocalDateTimeType {
-        return FunctionCall::localdatetime(self::makeTemporalMap([
+        return Func::localdatetime(self::makeTemporalMap([
             "year" => $year,
             "ordinalDay" => $ordinalDay,
             "hour" => $hour,
@@ -579,7 +578,7 @@ abstract class Literal
             $localDateTimeString = self::string($localDateTimeString);
         }
 
-        return FunctionCall::localdatetime($localDateTimeString);
+        return Func::localdatetime($localDateTimeString);
     }
 
     /**
@@ -593,14 +592,14 @@ abstract class Literal
     public static function localTimeCurrent($timezone = null): LocalTimeType
     {
         if ($timezone === null) {
-            return FunctionCall::localtime();
+            return Func::localtime();
         }
 
         if (!($timezone instanceof StringType)) {
             $timezone = self::string($timezone);
         }
 
-        return FunctionCall::localtime(Query::map(["timezone" => $timezone]));
+        return Func::localtime(Query::map(["timezone" => $timezone]));
     }
 
     /**
@@ -624,7 +623,7 @@ abstract class Literal
         $microsecond = null,
         $nanosecond = null
     ): LocalTimeType {
-        return FunctionCall::localtime(self::makeTemporalMap([
+        return Func::localtime(self::makeTemporalMap([
             "hour" => $hour,
             "minute" => $minute,
             "second" => $second,
@@ -646,7 +645,7 @@ abstract class Literal
             $localTimeString = self::string($localTimeString);
         }
 
-        return FunctionCall::localtime($localTimeString);
+        return Func::localtime($localTimeString);
     }
 
     /**
@@ -660,14 +659,14 @@ abstract class Literal
     public static function time($timezone = null): TimeType
     {
         if ($timezone === null) {
-            return FunctionCall::time();
+            return Func::time();
         }
 
         if (!($timezone instanceof StringType)) {
             $timezone = self::string($timezone);
         }
 
-        return FunctionCall::time(Query::map(["timezone" => $timezone]));
+        return Func::time(Query::map(["timezone" => $timezone]));
     }
 
     /**
@@ -693,7 +692,7 @@ abstract class Literal
         $nanosecond = null,
         $timezone = null
     ): TimeType {
-        return FunctionCall::time(self::makeTemporalMap([
+        return Func::time(self::makeTemporalMap([
             "hour" => $hour,
             "minute" => $minute,
             "second" => $second,
@@ -718,7 +717,7 @@ abstract class Literal
             $timeString = self::string($timeString);
         }
 
-        return FunctionCall::time($timeString);
+        return Func::time($timeString);
     }
 
     /**
@@ -747,7 +746,7 @@ abstract class Literal
 
         $map["crs"] = self::string("cartesian");
 
-        return FunctionCall::point(Query::map($map));
+        return Func::point(Query::map($map));
     }
 
     /**
@@ -782,7 +781,7 @@ abstract class Literal
 
         $map["crs"] = self::string("cartesian-3D");
 
-        return FunctionCall::point(Query::map($map));
+        return Func::point(Query::map($map));
     }
 
     /**
@@ -811,7 +810,7 @@ abstract class Literal
 
         $map["crs"] = self::string("WGS-84");
 
-        return FunctionCall::point(Query::map($map));
+        return Func::point(Query::map($map));
     }
 
     /**
@@ -846,7 +845,7 @@ abstract class Literal
 
         $map["crs"] = self::string("WGS-84-3D");
 
-        return FunctionCall::point(Query::map($map));
+        return Func::point(Query::map($map));
     }
 
     /**
@@ -859,9 +858,9 @@ abstract class Literal
      * - 'timezone' is made into StringLiteral.
      *
      * @param array $variables
-     * @return PropertyMap
+     * @return Map
      */
-    private static function makeTemporalMap(array $variables): PropertyMap
+    private static function makeTemporalMap(array $variables): Map
     {
         $map = [];
 

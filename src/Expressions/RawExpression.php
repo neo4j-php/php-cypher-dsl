@@ -51,10 +51,10 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
- * Represents a raw expression. This can contain any expression (even invalid ones) and is used for
- * unimplemented features.
+ * Represents a raw expression. This can contain any expression (even invalid ones) and is used for unimplemented
+ * features.
  */
-class RawExpression implements
+final class RawExpression implements
     BooleanType,
     DateType,
     DateTimeType,

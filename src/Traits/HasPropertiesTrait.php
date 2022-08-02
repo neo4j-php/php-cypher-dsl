@@ -22,18 +22,16 @@
 namespace WikibaseSolutions\CypherDSL\Traits;
 
 use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
- * Trait used by patterns that can have properties. These are:
- *
- * - node
- * - relationship
+ * Trait used by objects that can contain properties (such as a relationship or a node).
  */
-trait PatternPropertiesTrait
+trait HasPropertiesTrait
 {
+    use CastTrait;
     use ErrorTrait;
 
     /**
@@ -49,8 +47,7 @@ trait PatternPropertiesTrait
      */
     public function withProperties($properties): self
     {
-        $this->assertClass('properties', [MapType::class, 'array'], $properties);
-        $this->properties = is_array($properties) ? Query::map($properties) : $properties;
+        $this->properties = self::toMapType($properties);
 
         return $this;
     }
@@ -67,8 +64,10 @@ trait PatternPropertiesTrait
     public function addProperty(string $key, $property): self
     {
         if (!isset($this->properties)) {
-            $this->properties = new PropertyMap();
-        } elseif (!$this->properties instanceof PropertyMap) {
+            $this->properties = new Map();
+        }
+
+        if (!$this->properties instanceof Map) {
             throw new TypeError('$this->properties must be of type PropertyMap to support "addProperty"');
         }
 
@@ -82,25 +81,35 @@ trait PatternPropertiesTrait
      * property map. An exception will be thrown if they are anything else (such as a variable). If the object
      * does not yet contain any properties, a new property map will be created.
      *
-     * @param PropertyMap|array $properties
+     * @param Map|array $properties
      * @return $this
      */
     public function addProperties($properties): self
     {
-        self::assertClass('properties', [PropertyMap::class, 'array'], $properties);
-
         if (!isset($this->properties)) {
-            $this->properties = new PropertyMap();
-        } elseif (!$this->properties instanceof PropertyMap) {
+            $this->properties = new Map();
+        }
+
+        if (!$this->properties instanceof Map) {
             throw new TypeError('$this->properties must be of type PropertyMap to support "addProperty"');
         }
 
-        if (!$properties instanceof PropertyMap) {
-            $properties = new PropertyMap($properties);
+        if (!$properties instanceof Map) {
+            $properties = new Map($properties);
         }
 
         $this->properties->mergeWith($properties);
 
         return $this;
+    }
+
+    /**
+     * Returns the properties of this object.
+     *
+     * @return MapType|null
+     */
+    public function getProperties(): ?MapType
+    {
+        return $this->properties;
     }
 }

@@ -24,10 +24,10 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\ExpressionList;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
-use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
@@ -190,7 +190,7 @@ class NodeTest extends TestCase
         $node->addProperties(["foo" => new StringLiteral("baz"), "qux" => new StringLiteral("baz")]);
         $this->assertSame("({foo: 'baz', baz: 'test', qux: 'baz'})", $node->toQuery());
 
-        $node->addProperties(new PropertyMap(["foo" => new StringLiteral("test")]));
+        $node->addProperties(new Map(["foo" => new StringLiteral("test")]));
         $this->assertSame("({foo: 'test', baz: 'test', qux: 'baz'})", $node->toQuery());
     }
 
@@ -215,7 +215,7 @@ class NodeTest extends TestCase
 
     public function testGetProperties(): void
     {
-        $properties = new PropertyMap(['foo' => 'bar']);
+        $properties = new Map(['foo' => 'bar']);
 
         $node = new Node();
         $node->withProperties($properties);

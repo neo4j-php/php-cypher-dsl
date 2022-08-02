@@ -19,16 +19,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
  * This class represents a map of properties. For example, this class can represent the following
@@ -38,7 +35,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-properties
  */
-class PropertyMap implements MapType
+final class Map implements MapType
 {
 	use EscapeTrait;
 	use ErrorTrait;
@@ -68,7 +65,7 @@ class PropertyMap implements MapType
      * @param string $key The name of the property
      * @param mixed $value The value of the property
      *
-     * @return PropertyMap
+     * @return Map
      */
     public function addProperty(string $key, $value): self
     {
@@ -84,10 +81,10 @@ class PropertyMap implements MapType
     /**
      * Merges the given PropertyMap with this PropertyMap.
      *
-     * @param PropertyMap $propertyMap
-     * @return PropertyMap
+     * @param Map $propertyMap
+     * @return Map
      */
-    public function mergeWith(PropertyMap $propertyMap): self
+    public function mergeWith(Map $propertyMap): self
     {
         $this->properties = array_merge($this->properties, $propertyMap->properties);
 

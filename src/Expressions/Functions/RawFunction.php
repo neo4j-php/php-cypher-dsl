@@ -38,7 +38,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 /**
  * This class represents any function call.
  */
-class RawFunction extends FunctionCall implements
+class RawFunction extends Func implements
 	BooleanType,
 	ListType,
     MapType,

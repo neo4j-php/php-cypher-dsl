@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Addition;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
-use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Addition
@@ -62,8 +62,8 @@ class AdditionTest extends TestCase
 
     public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
-		$left = new PropertyMap([]);
-		$right = new PropertyMap([]);
+		$left = new Map([]);
+		$right = new Map([]);
 
         $this->expectException(TypeError::class);
 

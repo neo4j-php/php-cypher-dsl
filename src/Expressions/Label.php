@@ -34,7 +34,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 85)
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/#filter-on-node-label
  */
-class Label implements BooleanType
+final class Label implements BooleanType
 {
     use BooleanTypeTrait;
     use EscapeTrait;
@@ -52,8 +52,8 @@ class Label implements BooleanType
     /**
      * Label constructor.
      *
-     * @param Variable $variable
-     * @param string ...$labels
+     * @param Variable $variable The variable to attach the labels to
+     * @param string ...$labels The labels to attach to the variable
      */
     public function __construct(Variable $variable, string ...$labels)
     {
@@ -62,22 +62,9 @@ class Label implements BooleanType
     }
 
     /**
-     * Overrides the labels of this class with the given labels.
+     * Adds one or more labels to this class.
      *
-     * @param string ...$labels
-     * @return $this
-     */
-    public function withLabels(string ...$labels): self
-    {
-        $this->labels = $labels;
-
-        return $this;
-    }
-
-    /**
-     * Adds the given labels to this class.
-     *
-     * @param string ...$labels
+     * @param string ...$labels One or more labels to add
      * @return $this
      */
     public function addLabels(string ...$labels): self
@@ -88,7 +75,7 @@ class Label implements BooleanType
     }
 
     /**
-     * Returns the labels.
+     * Returns the labels in this class.
      *
      * @return string[]
      */
@@ -98,7 +85,7 @@ class Label implements BooleanType
     }
 
     /**
-     * Returns the variable of the label.
+     * Returns the variable to which the labels are attached.
      *
      * @return Variable
      */

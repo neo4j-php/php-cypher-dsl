@@ -21,16 +21,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
-use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\AndOperator;
-use WikibaseSolutions\CypherDSL\Expressions\Not;
-use WikibaseSolutions\CypherDSL\Expressions\OrOperator;
-use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Expressions\XorOperator;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
@@ -40,10 +33,9 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 5)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#structural-types
  */
-class Path extends Pattern implements BooleanType, Relatable
+final class Path extends Pattern implements BooleanType
 {
 	use BooleanTypeTrait;
-
     use ErrorTrait;
 
     /**
@@ -52,9 +44,9 @@ class Path extends Pattern implements BooleanType, Relatable
     private array $relationships;
 
     /**
-	 * @var Relatable[]
+	 * @var Node[]
 	 */
-    private array $relatables;
+    private array $nodes;
 
     /**
      * @param Node|Node[] $nodes
@@ -65,18 +57,18 @@ class Path extends Pattern implements BooleanType, Relatable
         self::assertClass('nodes', [Node::class, 'array'], $nodes);
         self::assertClass('relationships', [Relationship::class, 'array'], $relationships);
 
-        $this->relatables = is_array($nodes) ? $nodes : [$nodes];
+        $this->nodes = is_array($nodes) ? $nodes : [$nodes];
         $this->relationships = is_array($relationships) ? $relationships : [$relationships];
     }
 
     /**
-     * Returns the nodes in the path in sequential order.
+     * Returns the relatables in the path in sequential order.
      *
      * @return Node[]
      */
-    public function getRelatables(): array
+    public function getNodes(): array
     {
-        return $this->relatables;
+        return $this->nodes;
     }
 
     /**
@@ -92,18 +84,72 @@ class Path extends Pattern implements BooleanType, Relatable
     /**
      * @inheritDoc
      */
+	public function relationship(Relationship $relationship, Pattern $pattern): self
+	{
+		$this->relationships[] = $relationship;
+
+		if ($pattern instanceof self) {
+            // If the given relatable is also a path, we can merge their relatables and relationships
+			$this->relationships = array_merge($this->relationships, $pattern->getRelationships());
+			$this->nodes = array_merge($this->nodes, $pattern->getNodes());
+
+            return $this;
+		}
+
+        // Otherwise, add the relatable to the list of nodes
+        $this->nodes[] = $pattern;
+
+		return $this;
+	}
+
+    /**
+     * @inheritDoc
+     */
+	public function relationshipTo(Pattern $pattern, ?string $type = null, $properties = null, $name = null): self
+	{
+		return $this->relationship(
+			self::buildRelationship(Relationship::DIR_RIGHT, $type, $properties, $name),
+            $pattern
+        );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function relationshipFrom(Pattern $pattern, ?string $type = null, $properties = null, $name = null): self
+	{
+		return $this->relationship(
+			self::buildRelationship(Relationship::DIR_LEFT, $type, $properties, $name),
+            $pattern
+        );
+	}
+
+    /**
+     * @inheritDoc
+     */
+	public function relationshipUni(Pattern $pattern, ?string $type = null, $properties = null, $name = null): self
+	{
+		return $this->relationship(
+            self::buildRelationship(Relationship::DIR_UNI, $type, $properties, $name),
+            $pattern
+        );
+	}
+
+    /**
+     * @inheritDoc
+     */
     public function toQuery(): string
     {
         // If there are no nodes in the path, it must be empty.
-        if (count($this->relatables) === 0) {
+        if (count($this->nodes) === 0) {
             return '';
         }
 
         $cql = '';
 
         // If a variable exists, we need to assign following the expression to it; this results in a named
-		// path as described in page 66 of the openCypher reference (version 9). This is semantically
-		// different from an assignment.
+        // path as described in page 66 of the openCypher reference (version 9). This is semantically
+        // different from an assignment.
         if (isset($this->variable)) {
             $cql = $this->variable->toQuery() . ' = ';
         }
@@ -118,12 +164,12 @@ class Path extends Pattern implements BooleanType, Relatable
             // If the following node does not exist, we must break the loop early.
             // This case will be triggered if the amount of nodes is equal or less than the amount of relationships
             // and is thus very unlikely.
-            if (!array_key_exists($i + 1, $this->relatables)) {
+            if (!array_key_exists($i + 1, $this->nodes)) {
                 --$i;
 
                 break;
             }
-            $cql .= $this->relatables[$i]->toQuery();
+            $cql .= $this->nodes[$i]->toQuery();
             $cql .= $relationship->toQuery();
         }
 
@@ -131,62 +177,10 @@ class Path extends Pattern implements BooleanType, Relatable
         // If the path is simply a single node, $i won't be defined, hence the null coalescing operator with -1. By
         // coalescing with -1 instead of 0, we remove the need of a separate if check, making both cases valid when they
         // are incremented by 1.
-        $cql .= $this->relatables[($i ?? -1) + 1]->toQuery();
+        $cql .= $this->nodes[($i ?? -1) + 1]->toQuery();
 
         return $cql;
     }
-
-    /**
-     * @inheritDoc
-     */
-	public function relationship(Relationship $relationship, Relatable $relatable): Path
-	{
-		$this->relationships[] = $relationship;
-
-		if ($relatable instanceof Path) {
-            // If the given relatable is also a path, we can merge their relatables and relationships
-			$this->relationships = array_merge($this->relationships, $relatable->getRelationships());
-			$this->relatables = array_merge($this->relatables, $relatable->getRelatables());
-		} else {
-            // Otherwise, add the relatable to the list of relatables
-			$this->relatables[] = $relatable;
-		}
-
-		return $this;
-	}
-
-    /**
-     * @inheritDoc
-     */
-	public function relationshipTo(Relatable $relatable, ?string $type = null, $properties = null, $name = null): Path
-	{
-		return $this->relationship(
-			self::buildRelationship(Relationship::DIR_RIGHT, $type, $properties, $name),
-            $relatable
-        );
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function relationshipFrom(Relatable $relatable, ?string $type = null, $properties = null, $name = null): Path
-	{
-		return $this->relationship(
-			self::buildRelationship(Relationship::DIR_LEFT, $type, $properties, $name),
-            $relatable
-        );
-	}
-
-    /**
-     * @inheritDoc
-     */
-	public function relationshipUni(Relatable $relatable, ?string $type = null, $properties = null, $name = null): Path
-	{
-		return $this->relationship(
-            self::buildRelationship(Relationship::DIR_UNI, $type, $properties, $name),
-            $relatable
-        );
-	}
 
     /**
      * @param array $direction

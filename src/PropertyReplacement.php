@@ -33,7 +33,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/#set-set-a-property
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#syntax-property-replacement-operator
  */
-class PropertyReplacement implements QueryConvertible
+final class PropertyReplacement implements QueryConvertible
 {
     use ErrorTrait;
 

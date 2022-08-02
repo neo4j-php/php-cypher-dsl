@@ -23,11 +23,11 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\ExpressionList;
 use WikibaseSolutions\CypherDSL\Query;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\ExpressionList
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Literals\ExpressionList
  */
 class ExpressionListTest extends TestCase
 {

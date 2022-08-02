@@ -19,9 +19,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
@@ -34,9 +33,9 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
  *
  * ['a', 2, n.property]
  *
- * @see PropertyMap for a construct that takes keys into account
+ * @see Map for a construct that takes keys into account
  */
-class ExpressionList implements ListType
+final class ExpressionList implements ListType
 {
     use EscapeTrait;
     use ErrorTrait;

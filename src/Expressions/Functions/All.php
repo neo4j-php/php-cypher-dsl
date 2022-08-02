@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
 
-use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\ExpressionList;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
@@ -33,7 +33,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-all
  */
-class All extends FunctionCall implements BooleanType
+class All extends Func implements BooleanType
 {
     use BooleanTypeTrait;
 

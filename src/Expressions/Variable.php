@@ -58,7 +58,7 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/variables/
  */
-class Variable implements
+final class Variable implements
     BooleanType,
     DateType,
     DateTimeType,
@@ -116,7 +116,7 @@ class Variable implements
     /**
      * Returns a label with this variable.
      *
-     * @param string ...$labels
+     * @param string ...$labels The labels to attach to this variable
      * @return Label
      */
     public function labeled(string ...$labels): Label

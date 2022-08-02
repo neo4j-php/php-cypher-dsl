@@ -51,7 +51,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/parameters/
  */
-class Parameter implements
+final class Parameter implements
     BooleanType,
     DateType,
     DateTimeType,

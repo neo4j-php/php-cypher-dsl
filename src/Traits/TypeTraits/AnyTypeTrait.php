@@ -2,7 +2,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
 
-use WikibaseSolutions\CypherDSL\Expressions\Alias;
+use WikibaseSolutions\CypherDSL\Alias;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Equality;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThan;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThanOrEqual;

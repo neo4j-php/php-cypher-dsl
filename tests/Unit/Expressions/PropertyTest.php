@@ -22,8 +22,8 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
-use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
@@ -51,9 +51,9 @@ class PropertyTest extends TestCase
     {
         return [
             [new Variable("a"), "a", "a.a"],
-            [new PropertyMap(["b" => "c"]), "b", "{b: 'c'}.b"],
+            [new Map(["b" => "c"]), "b", "{b: 'c'}.b"],
             [new Variable("b"), "a", "b.a"],
-            [new PropertyMap([":" => "c"]), ":", "{`:`: 'c'}.`:`"]
+            [new Map([":" => "c"]), ":", "{`:`: 'c'}.`:`"]
         ];
     }
 }

@@ -49,7 +49,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 /**
  * Represents a property. A property in Cypher would be something like "n.prop" or "n.a".
  */
-class Property implements
+final class Property implements
     BooleanType,
     DateType,
     DateTimeType,

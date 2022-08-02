@@ -19,8 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Expressions;
+namespace WikibaseSolutions\CypherDSL;
 
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use function sprintf;
 
@@ -30,7 +31,7 @@ use function sprintf;
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/with/#with-introduce-variables
  */
-class Alias implements AnyType
+final class Alias
 {
     /**
      * @var AnyType The original item to be aliased

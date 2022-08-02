@@ -33,7 +33,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/spatial/
  */
-class Point extends FunctionCall implements PointType
+class Point extends Func implements PointType
 {
     use PointTypeTrait;
 

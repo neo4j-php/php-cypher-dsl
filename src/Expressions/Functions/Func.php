@@ -23,21 +23,18 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
 
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\QueryConvertible;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\AliasablePropertyTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
- * This class represents any function call.
+ * This class represents any function call. This class is named "Func", because "Function" is an invalid class name.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/
  */
-abstract class FunctionCall implements QueryConvertible
+abstract class Func implements QueryConvertible
 {
-    use AliasablePropertyTypeTrait;
-
     /**
      * Produces a raw function call. This enables the usage of unimplemented functions in your
      * Cypher queries. The parameters of this function are not type-checked.

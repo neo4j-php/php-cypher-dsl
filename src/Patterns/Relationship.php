@@ -24,23 +24,28 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 use DomainException;
 use InvalidArgumentException;
 use LogicException;
-use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\PatternPropertiesTrait;
+use WikibaseSolutions\CypherDSL\Traits\HasPropertiesTrait;
+use WikibaseSolutions\CypherDSL\Traits\HasVariableTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
- * This class represents an arbitrary relationship between two nodes.
+ * This class represents an arbitrary relationship.
  *
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 10)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
  */
-class Relationship extends Pattern
+final class Relationship
 {
+    use CastTrait;
 	use ErrorTrait;
     use EscapeTrait;
-    use PatternPropertiesTrait;
+    use HasPropertiesTrait;
+    use HasVariableTrait;
 
     public const DIR_RIGHT = ["-", "->"];
     public const DIR_LEFT = ["<-", "-"];
@@ -199,14 +204,14 @@ class Relationship extends Pattern
 	}
 
     /**
-	 * Add a type to require for this relationship.
+	 * Add one or more types to require for this relationship.
 	 *
-     * @param string $type
+     * @param string ...$type
      * @return $this
      */
-    public function addType(string $type): self
+    public function addType(string ...$type): self
     {
-        $this->types[] = $type;
+        $this->types = array_merge($this->types, $type);
 
         return $this;
     }
@@ -324,7 +329,7 @@ class Relationship extends Pattern
 
         if (isset($this->properties)) {
             // Only add the properties if they're not empty
-            if (!$this->properties instanceof PropertyMap || $this->properties->getProperties() !== []) {
+            if (!$this->properties instanceof Map || $this->properties->getProperties() !== []) {
                 $map = $this->properties->toQuery();
 
                 if ($conditionInner !== "") {

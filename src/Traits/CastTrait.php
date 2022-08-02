@@ -2,14 +2,14 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
-use Symfony\Polyfill\Php81\Php81;
-use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\ExpressionList;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
-use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
@@ -33,6 +33,18 @@ trait CastTrait
 		self::assertClass('list', [ListType::class, 'array'], $list);
 		return $list instanceof ListType ? $list : new ExpressionList($list);
 	}
+
+    /**
+     * Casts the given value to a MapType.
+     *
+     * @param MapType|array $map
+     * @return MapType
+     */
+    private static function toMapType($map): MapType
+    {
+        self::assertClass('map', [MapType::class, 'array'], $map);
+        return $map instanceof MapType ? $map : new Map($map);
+    }
 
 	/**
 	 * Casts the given value to a StringType.
@@ -115,7 +127,7 @@ trait CastTrait
 		if (is_array($value)) {
 			return array_is_list($value) ?
 				new ExpressionList($value) :
-				new PropertyMap($value);
+				new Map($value);
 		}
 
 		return Literal::literal($value);

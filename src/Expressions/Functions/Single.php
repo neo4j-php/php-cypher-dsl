@@ -32,7 +32,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-single
  */
-class Single extends FunctionCall implements BooleanType
+class Single extends Func implements BooleanType
 {
     use BooleanTypeTrait;
 

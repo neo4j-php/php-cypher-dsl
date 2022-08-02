@@ -34,7 +34,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-isempty
  */
-class IsEmpty extends FunctionCall implements BooleanType
+class IsEmpty extends Func implements BooleanType
 {
     use BooleanTypeTrait;
     use ErrorTrait;

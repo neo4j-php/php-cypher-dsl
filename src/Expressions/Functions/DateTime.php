@@ -33,7 +33,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime
  */
-class DateTime extends FunctionCall implements DateTimeType
+class DateTime extends Func implements DateTimeType
 {
     use DateTimeTypeTrait;
 

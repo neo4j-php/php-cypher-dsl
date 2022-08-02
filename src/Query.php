@@ -40,16 +40,16 @@ use WikibaseSolutions\CypherDSL\Clauses\SkipClause;
 use WikibaseSolutions\CypherDSL\Clauses\UnionClause;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
-use WikibaseSolutions\CypherDSL\Expressions\ExpressionList;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\FunctionCall;
+use WikibaseSolutions\CypherDSL\Expressions\Functions\Func;
 use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\ExpressionList;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
 use WikibaseSolutions\CypherDSL\Expressions\Parameter;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
-use WikibaseSolutions\CypherDSL\Expressions\PropertyMap;
 use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
@@ -83,7 +83,7 @@ final class Query implements QueryConvertible
     public const literal = Literal::class;
 
     // A reference to the FunctionCall class
-    public const function = FunctionCall::class;
+    public const function = Func::class;
 
     /**
      * @var Clause[] $clauses Ordered list of clauses for this query
@@ -207,11 +207,11 @@ final class Query implements QueryConvertible
      * Creates a property map.
      *
      * @param array $values The map of properties as a number of key-expression pairs
-     * @return PropertyMap
+     * @return Map
      */
-    public static function map(array $values): PropertyMap
+    public static function map(array $values): Map
     {
-        return new PropertyMap($values);
+        return new Map($values);
     }
 
     /**
@@ -230,7 +230,7 @@ final class Query implements QueryConvertible
      *
      * Query::function()::raw(...)
      *
-     * @return FunctionCall|string
+     * @return Func|string
      */
     public static function function(): string
     {

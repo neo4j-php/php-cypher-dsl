@@ -23,7 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\PatternPropertiesTrait;
+use WikibaseSolutions\CypherDSL\Traits\HasPropertiesTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
@@ -32,11 +32,11 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 8)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
  */
-class Node extends Pattern implements Relatable
+final class Node extends Pattern
 {
     use ErrorTrait;
     use EscapeTrait;
-    use PatternPropertiesTrait;
+    use HasPropertiesTrait;
 
     /**
      * @var string[] The labels of this node
@@ -74,48 +74,16 @@ class Node extends Pattern implements Relatable
     }
 
     /**
-     * Adds a label to the node.
+     * Adds one or more labels to this node.
      *
-     * @param string $label
+     * @param string ...$label
      * @return $this
      */
-    public function addLabel(string $label): self
+    public function addLabel(string ...$label): self
     {
-        $this->labels[] = $label;
+        $this->labels = array_merge($this->labels, $label);
 
         return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function relationship(Relationship $relationship, Relatable $relatable): Path
-    {
-        return (new Path($this))->relationship($relationship, $relatable);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function relationshipTo(Relatable $relatable, ?string $type = null, $properties = null, $name = null): Path
-    {
-        return (new Path($this))->relationshipTo($relatable, $type, $properties, $name);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function relationshipFrom(Relatable $relatable, ?string $type = null, $properties = null, $name = null): Path
-    {
-        return (new Path($this))->relationshipFrom($relatable, $type, $properties, $name);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function relationshipUni(Relatable $relatable, ?string $type = null, $properties = null, $name = null): Path
-    {
-        return (new Path($this))->relationshipUni($relatable, $type, $properties, $name);
     }
 
     /**
@@ -129,13 +97,35 @@ class Node extends Pattern implements Relatable
     }
 
     /**
-     * Returns the properties of this node.
-     *
-     * @return MapType|null
+     * @inheritDoc
      */
-    public function getProperties(): ?MapType
+    public function relationship(Relationship $relationship, Pattern $pattern): Path
     {
-        return $this->properties;
+        return (new Path($this))->relationship($relationship, $pattern);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationshipTo(Pattern $pattern, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return (new Path($this))->relationshipTo($pattern, $type, $properties, $name);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationshipFrom(Pattern $pattern, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return (new Path($this))->relationshipFrom($pattern, $type, $properties, $name);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationshipUni(Pattern $pattern, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return (new Path($this))->relationshipUni($pattern, $type, $properties, $name);
     }
 
     /**

@@ -33,7 +33,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalTimeType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localtime
  */
-class LocalTime extends FunctionCall implements LocalTimeType
+class LocalTime extends Func implements LocalTimeType
 {
     use LocalTimeTypeTrait;
 

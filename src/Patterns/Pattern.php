@@ -25,49 +25,75 @@ use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\HasVariableTrait;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
- * This class represents a pattern.
+ * This class represents a pattern. A pattern can be:
  *
- * @note A pattern is not an expression, but rather a syntactic construct used for pattern matching on the graph
- *  database. It therefore does not have any type, and thus it cannot be used in an expression. Instead, the variable
- *  to which this pattern is assigned should be used. This library makes this easier by generating a variable for a
- *  pattern when necessary and by casting Pattern instances to their associated variable when used in an expression.
+ * - a node
+ * - a path (alternating sequence of nodes and relationships)
+ *
+ * A pattern is not an expression, but rather a syntactic construct used for pattern matching on the graph
+ * database. It therefore does not have any type, and thus it cannot be used in an expression. Instead, the variable
+ * to which this pattern is assigned should be used. This library makes this easier by generating a variable for a
+ * pattern when necessary and by casting Pattern instances to their associated variable when used in an expression.
+ *
+ * @see Relationship for the class implementing a relationship
  */
 abstract class Pattern implements QueryConvertible
 {
     use CastTrait;
     use ErrorTrait;
+    use HasVariableTrait;
 
     /**
-     * @var Variable|null The variable that this object is assigned
-     */
-    protected ?Variable $variable = null;
-
-    /**
-     * Explicitly assign a named variable to this pattern.
+     * Forms a new path by adding the given relatable pattern to the end of this pattern using the given relationship
+     * pattern.
      *
-     * @param Variable|string $variable
-     * @return $this
+     * @param Relationship $relationship The relationship to use
+     * @param Pattern $pattern The relatable pattern to attach to this pattern
+     *
+     * @return Path
      */
-    public function withVariable($variable): self
-    {
-        $this->variable = self::toVariable($variable);
-        
-        return $this;
-    }
+    abstract public function relationship(Relationship $relationship, Pattern $pattern): Path;
 
     /**
-     * Returns the variable of the object. This function generates a variable if none has been set.
+     * Forms a new path by adding the given relatable pattern to the end of this pattern using a right (-->)
+     * relationship.
      *
-     * @return Variable
+     * @param Pattern $pattern The pattern to attach to the end of this pattern
+     * @param string|null $type The type of the relationship
+     * @param MapType|array|null $properties The properties to attach to the relationship
+     * @param Variable|string|null $name The name fo the relationship
+     *
+     * @return Path
      */
-    public function getVariable(): Variable
-    {
-        if (!isset($this->variable)) {
-            $this->variable = new Variable();
-        }
+    abstract public function relationshipTo(Pattern $pattern, ?string $type = null, $properties = null, $name = null): Path;
 
-        return $this->variable;
-    }
+    /**
+     * Forms a new path by adding the given relatable pattern to the end of this pattern using a left (<--)
+     * relationship.
+     *
+     * @param Pattern $pattern The pattern to attach to the end of this pattern
+     * @param string|null $type The type of the relationship
+     * @param MapType|array|null $properties The properties to attach to the relationship
+     * @param Variable|string|null $name The name fo the relationship
+     *
+     * @return Path
+     */
+    abstract public function relationshipFrom(Pattern $pattern, ?string $type = null, $properties = null, $name = null): Path;
+
+    /**
+     * Forms a new path by adding the given relatable pattern to the end of this pattern using a unidirectional
+     * (--/<-->) relationship.
+     *
+     * @param Pattern $pattern The pattern to attach to the end of this pattern
+     * @param string|null $type The type of the relationship
+     * @param MapType|array|null $properties The properties to attach to the relationship
+     * @param Variable|string|null $name The name fo the relationship
+     *
+     * @return Path
+     */
+    abstract public function relationshipUni(Pattern $pattern, ?string $type = null, $properties = null, $name = null): Path;
 }

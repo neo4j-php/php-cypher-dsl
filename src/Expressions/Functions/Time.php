@@ -33,7 +33,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-time
  */
-class Time extends FunctionCall implements TimeType
+class Time extends Func implements TimeType
 {
     use TimeTypeTrait;
 
