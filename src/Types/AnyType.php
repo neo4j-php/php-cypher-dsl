@@ -21,7 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Types;
 
-use WikibaseSolutions\CypherDSL\Alias;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Equality;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThan;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThanOrEqual;
@@ -33,6 +32,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThanOrEqual;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\QueryConvertible;
+use WikibaseSolutions\CypherDSL\Syntax\Alias;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\AnyTypeTrait;
 
 /**

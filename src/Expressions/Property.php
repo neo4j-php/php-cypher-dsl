@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
-use WikibaseSolutions\CypherDSL\PropertyReplacement;
+use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;

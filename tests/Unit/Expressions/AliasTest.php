@@ -3,11 +3,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Alias;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Syntax\Alias;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Alias
+ * @covers \WikibaseSolutions\CypherDSL\Syntax\Alias
  */
 class AliasTest extends TestCase
 {

@@ -23,13 +23,13 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\PropertyReplacement
+ * @covers \WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement
  */
 class AssignmentTest extends TestCase
 {

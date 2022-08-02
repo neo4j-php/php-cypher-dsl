@@ -3,8 +3,8 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Query;
+use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**

@@ -22,8 +22,8 @@
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Expressions\Label;
-use WikibaseSolutions\CypherDSL\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\QueryConvertible;
+use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 
 /**

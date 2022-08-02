@@ -19,10 +19,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL;
+namespace WikibaseSolutions\CypherDSL\Syntax;
 
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 

@@ -2,7 +2,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
 
-use WikibaseSolutions\CypherDSL\Alias;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Equality;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThan;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThanOrEqual;
@@ -11,6 +10,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Operators\IsNotNull;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\IsNull;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThan;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThanOrEqual;
+use WikibaseSolutions\CypherDSL\Syntax\Alias;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 

@@ -54,6 +54,7 @@ use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
+use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;

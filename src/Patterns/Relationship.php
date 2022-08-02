@@ -25,13 +25,9 @@ use DomainException;
 use InvalidArgumentException;
 use LogicException;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
-use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\HasPropertiesTrait;
 use WikibaseSolutions\CypherDSL\Traits\HasVariableTrait;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
  * This class represents an arbitrary relationship.
@@ -41,9 +37,8 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  */
 final class Relationship
 {
-    use CastTrait;
-	use ErrorTrait;
     use EscapeTrait;
+
     use HasPropertiesTrait;
     use HasVariableTrait;
 
@@ -76,16 +71,16 @@ final class Relationship
      */
     private ?int $exactHops = null;
 
-	/**
-	 * @var bool Whether to allow arbitrary hops between nodes
-	 */
-	private bool $arbitraryHops = false;
+    /**
+     * @var bool Whether to allow arbitrary hops between nodes
+     */
+    private bool $arbitraryHops = false;
 
-	/**
+    /**
      * @param array $direction The direction of the relationship, should be either:
      *  - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
-	 *  - Relationship::DIR_LEFT (for a relation of (a)<--(b))
-	 *  - Relationship::DIR_UNI (for a relation of (a)--(b))
+     *  - Relationship::DIR_LEFT (for a relation of (a)<--(b))
+     *  - Relationship::DIR_UNI (for a relation of (a)--(b))
      */
     public function __construct(array $direction)
     {
@@ -173,39 +168,39 @@ final class Relationship
         return $this;
     }
 
-	/**
-	 * Set the number of hops to be an arbitrary number (wildcard).
-	 *
-	 * @param bool $arbitraryHops
-	 * @return $this
-	 */
-	public function setArbitraryHops(bool $arbitraryHops = true): self
-	{
-		if (isset($this->minHops) || isset($this->maxHops) || isset($this->exactHops)) {
-			throw new LogicException("arbitraryHops cannot be used in combination with minHops, maxHops or exactHops");
-		}
+    /**
+     * Set the number of hops to be an arbitrary number (wildcard).
+     *
+     * @param bool $arbitraryHops
+     * @return $this
+     */
+    public function setArbitraryHops(bool $arbitraryHops = true): self
+    {
+        if (isset($this->minHops) || isset($this->maxHops) || isset($this->exactHops)) {
+            throw new LogicException("arbitraryHops cannot be used in combination with minHops, maxHops or exactHops");
+        }
 
-		$this->arbitraryHops = $arbitraryHops;
+        $this->arbitraryHops = $arbitraryHops;
 
-		return $this;
-	}
-
-	/**
-	 * The types to require for this relationship. Will overwrite any previously set types.
-	 *
-	 * @param string[] $types
-	 * @return $this
-	 */
-	public function withTypes(array $types): self
-	{
-		$this->types = $types;
-
-		return $this;
-	}
+        return $this;
+    }
 
     /**
-	 * Add one or more types to require for this relationship.
-	 *
+     * The types to require for this relationship. Will overwrite any previously set types.
+     *
+     * @param string[] $types
+     * @return $this
+     */
+    public function withTypes(array $types): self
+    {
+        $this->types = $types;
+
+        return $this;
+    }
+
+    /**
+     * Add one or more types to require for this relationship.
+     *
      * @param string ...$type
      * @return $this
      */
@@ -227,54 +222,44 @@ final class Relationship
     }
 
     /**
-     * Returns the properties of this node.
+     * Returns the exact amount of hops configured.
      *
-     * @return MapType
+     * @return int|null
      */
-    public function getProperties(): ?MapType
+    public function getExactHops(): ?int
     {
-        return $this->properties;
+        return $this->exactHops;
     }
 
-	/**
-	 * Returns the exact amount of hops configured.
-	 *
-	 * @return int|null
-	 */
-	public function getExactHops(): ?int
-	{
-		return $this->exactHops;
-	}
+    /**
+     * Returns the maximum amount of hops configured
+     *
+     * @return int|null
+     */
+    public function getMaxHops(): ?int
+    {
+        return $this->maxHops;
+    }
 
-	/**
-	 * Returns the maximum amount of hops configured
-	 *
-	 * @return int|null
-	 */
-	public function getMaxHops(): ?int
-	{
-		return $this->maxHops;
-	}
+    /**
+     * Returns the minimum amount of hops configured.
+     *
+     * @return int|null
+     */
+    public function getMinHops(): ?int
+    {
+        return $this->minHops;
+    }
 
-	/**
-	 * Returns the minimum amount of hops configured.
-	 *
-	 * @return int|null
-	 */
-	public function getMinHops(): ?int
-	{
-		return $this->minHops;
-	}
-
-	/**
-	 * Returns the types of the relationship.
-	 *
-	 * @return string[]
-	 */
-	public function getTypes(): array
-	{
-		return $this->types;
-	}
+    /**
+     * Returns the types of the relationship.
+     *
+     * @return string[]
+     */
+    public function getTypes(): array
+    {
+        return $this->types;
+    }
 
     /**
      * Returns the string representation of this relationship that can be used directly
@@ -324,8 +309,8 @@ final class Relationship
             $conditionInner .= '*' . $this->exactHops;
         } elseif ($this->arbitraryHops) {
             // We have an arbitrary number of hops
-			$conditionInner .= '*';
-		}
+            $conditionInner .= '*';
+        }
 
         if (isset($this->properties)) {
             // Only add the properties if they're not empty

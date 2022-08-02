@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 use WikibaseSolutions\CypherDSL\Expressions\Label;
-use WikibaseSolutions\CypherDSL\PropertyReplacement;
+use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 

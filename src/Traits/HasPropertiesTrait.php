@@ -23,7 +23,6 @@ namespace WikibaseSolutions\CypherDSL\Traits;
 
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
-use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
@@ -65,10 +64,12 @@ trait HasPropertiesTrait
     {
         if (!isset($this->properties)) {
             $this->properties = new Map();
-        }
-
-        if (!$this->properties instanceof Map) {
-            throw new TypeError('$this->properties must be of type PropertyMap to support "addProperty"');
+        } elseif (!$this->properties instanceof Map) {
+            // Adding to a map is not natively supported by the MapType, but it is supported by Map. Syntactically, it
+            // is not possible to add new items to, for instance, a Variable, eventhough it implements MapType. It is
+            // however still useful to be able to add items to objects where a Map is used (that is, an object of
+            // MapType with the {} syntax).
+            throw new TypeError('$this->properties must be of type Map to support "addProperty"');
         }
 
         $this->properties->addProperty($key, $property);
@@ -86,15 +87,16 @@ trait HasPropertiesTrait
      */
     public function addProperties($properties): self
     {
+        self::assertClass('properties', [Map::class, 'array'], $properties);
+
         if (!isset($this->properties)) {
             $this->properties = new Map();
-        }
-
-        if (!$this->properties instanceof Map) {
+        } elseif (!$this->properties instanceof Map) {
             throw new TypeError('$this->properties must be of type PropertyMap to support "addProperty"');
         }
 
-        if (!$properties instanceof Map) {
+        if (is_array($properties)) {
+            // Cast the array to a Map
             $properties = new Map($properties);
         }
 
