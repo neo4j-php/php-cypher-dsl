@@ -87,17 +87,17 @@ final class Parameter implements
     /**
      * Parameter constructor.
      *
-     * @param string|null $parameter The parameter; this parameter may only consist of alphanumeric
-     *  characters and underscores
+     * @param string|null $parameter The parameter; this parameter may only consist of alphanumeric characters and
+     * underscores
      */
     public function __construct(?string $parameter = null)
     {
         if (!isset($parameter)) {
-            $parameter = $this->generateString('param');
+            $parameter = $this->generateIdentifier('param');
         } else {
-			// Validation is only needed when the user supplied their own parameter
-			self::assertValidName($parameter);
-		}
+            // Validation is only needed when the user supplied their own parameter
+            self::assertValidName($parameter);
+        }
 
         $this->parameter = $parameter;
     }

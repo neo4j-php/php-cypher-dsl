@@ -37,9 +37,9 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  */
 final class Map implements MapType
 {
-	use EscapeTrait;
-	use ErrorTrait;
-	use MapTypeTrait;
+    use EscapeTrait;
+    use ErrorTrait;
+    use MapTypeTrait;
 
     /**
      * @var AnyType[] The map of properties
@@ -53,7 +53,7 @@ final class Map implements MapType
      */
     public function __construct(array $properties = [])
     {
-		$this->properties = array_map(
+        $this->properties = array_map(
             fn ($value): AnyType => $value instanceof AnyType ? $value : Literal::literal($value),
             $properties
         );

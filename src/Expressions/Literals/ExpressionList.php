@@ -21,6 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
+use WikibaseSolutions\CypherDSL\Patterns\Pattern;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
@@ -37,6 +39,7 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
  */
 final class ExpressionList implements ListType
 {
+    use CastTrait;
     use EscapeTrait;
     use ErrorTrait;
     use ListTypeTrait;
@@ -51,12 +54,22 @@ final class ExpressionList implements ListType
      *
      * @param array $expressions The list of expressions
      */
-    public function __construct(iterable $expressions)
+    public function __construct(array $expressions)
     {
-        $this->expressions = array_map(
-			fn ($value): AnyType => $value instanceof AnyType ? $value : Literal::literal($value),
-			$expressions
-		);
+        $this->expressions = array_map([self::class, 'toAnyType'], $expressions);
+    }
+
+    /**
+     * Add one or more expressions to the list.
+     *
+     * @param AnyType|Pattern|int|float|string|bool|array ...$expressions
+     * @return $this
+     */
+    public function addExpression(...$expressions): self
+    {
+        $this->expressions = array_merge($this->expressions, array_map([self::class, 'toAnyType'], $expressions));
+
+        return $this;
     }
 
     /**
