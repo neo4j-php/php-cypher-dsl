@@ -23,7 +23,9 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\HasPropertiesTrait;
+use WikibaseSolutions\CypherDSL\Traits\PatternTraits\AssignablePatternTrait;
+use WikibaseSolutions\CypherDSL\Traits\PatternTraits\MatchablePatternTrait;
+use WikibaseSolutions\CypherDSL\Traits\PatternTraits\RelatablePatternTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
@@ -32,11 +34,14 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 8)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
  */
-final class Node extends Pattern
+final class Node implements AssignablePattern, MatchablePattern, RelatablePattern
 {
     use ErrorTrait;
     use EscapeTrait;
-    use HasPropertiesTrait;
+
+    use AssignablePatternTrait;
+    use MatchablePatternTrait;
+    use RelatablePatternTrait;
 
     /**
      * @var string[] The labels of this node
@@ -52,6 +57,7 @@ final class Node extends Pattern
      * Node constructor.
      *
      * @param string|null $label
+     * @internal
      */
     public function __construct(string $label = null)
     {

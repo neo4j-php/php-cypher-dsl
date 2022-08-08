@@ -46,6 +46,7 @@ abstract class StringSpecificComparisonBinaryOperator extends ComparisonBinaryOp
      * @param StringType $left The left-hand of the comparison operator
      * @param StringType $right The right-hand of the comparison operator
      * @param bool $insertParentheses Whether to insert parentheses around the expression
+	 * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(StringType $left, StringType $right, bool $insertParentheses = true)
     {

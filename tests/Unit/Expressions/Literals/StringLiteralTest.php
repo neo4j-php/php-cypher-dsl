@@ -22,17 +22,17 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Literals;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Literals\String_
  */
 class StringLiteralTest extends TestCase
 {
     public function testEmptySingleQuotes(): void
     {
-        $string = new StringLiteral("");
+        $string = new String_("");
         $string->useDoubleQuotes(false);
 
         $this->assertSame("''", $string->toQuery());
@@ -42,7 +42,7 @@ class StringLiteralTest extends TestCase
 
     public function testEmptyDoubleQuotes(): void
     {
-        $string = new StringLiteral("");
+        $string = new String_("");
         $string->useDoubleQuotes(true);
 
         $this->assertSame('""', $string->toQuery());
@@ -52,7 +52,7 @@ class StringLiteralTest extends TestCase
 
     public function testInstanceOfStringType(): void
     {
-        $this->assertInstanceOf(StringType::class, new StringLiteral(""));
+        $this->assertInstanceOf(StringType::class, new String_(""));
     }
 
     /**
@@ -62,7 +62,7 @@ class StringLiteralTest extends TestCase
      */
     public function testSingleQuotes(string $string, string $expected): void
     {
-        $literal = new StringLiteral($string);
+        $literal = new String_($string);
         $literal->useDoubleQuotes(false);
 
         $this->assertSame($expected, $literal->toQuery());
@@ -77,7 +77,7 @@ class StringLiteralTest extends TestCase
      */
     public function testDoubleQuotes(string $string, string $expected): void
     {
-        $literal = new StringLiteral($string);
+        $literal = new String_($string);
         $literal->useDoubleQuotes(true);
 
         $this->assertSame($expected, $literal->toQuery());

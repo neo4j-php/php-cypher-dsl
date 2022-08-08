@@ -1,14 +1,20 @@
 <?php
 
-namespace WikibaseSolutions\CypherDSL\Traits;
+namespace WikibaseSolutions\CypherDSL\Traits\PatternTraits;
 
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Patterns\Pattern;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 
 /**
- * Trait used by objects that can contain a variable (such as relationships, nodes or paths).
+ * This trait provides a default implementation to satisfy the "Pattern" interface.
+ *
+ * @implements Pattern
  */
-trait HasVariableTrait
+trait PatternTrait
 {
+    use CastTrait;
+
     /**
      * @var Variable|null The variable that this object is assigned
      */

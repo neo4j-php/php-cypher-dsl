@@ -32,6 +32,7 @@ interface QueryConvertible
      * Converts the object into a (partial) query.
      *
      * @return string
+     * @internal This method is not covered by the backwards compatibility promise of php-cypher-dsl
      */
     public function toQuery(): string;
 }

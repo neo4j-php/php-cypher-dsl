@@ -23,42 +23,51 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\PatternTraits\MatchablePatternTrait;
+use WikibaseSolutions\CypherDSL\Traits\PatternTraits\RelatablePatternTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
- * This class represents a path which is an alternating sequence of nodes and relationships.
+ * This class represents a path, which is an alternating sequence of nodes and relationships.
  *
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 5)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#structural-types
  */
-final class Path extends Pattern implements BooleanType
+final class Path implements BooleanType, MatchablePattern, RelatablePattern
 {
-	use BooleanTypeTrait;
     use ErrorTrait;
 
+    use BooleanTypeTrait;
+    use MatchablePatternTrait;
+    use RelatablePatternTrait;
+
     /**
-	 * @var Relationship[]
-	 */
+     * @var Relationship[]
+     */
     private array $relationships;
 
     /**
-	 * @var Node[]
-	 */
+     * @var Node[]
+     */
     private array $nodes;
 
     /**
      * @param Node|Node[] $nodes
      * @param Relationship|Relationship[] $relationships
+     * @internal
      */
     public function __construct($nodes = [], $relationships = [])
     {
-        self::assertClass('nodes', [Node::class, 'array'], $nodes);
-        self::assertClass('relationships', [Relationship::class, 'array'], $relationships);
+        $nodes = is_array($nodes) ? $nodes : [$nodes];
+        $relationships = is_array($relationships) ? $relationships : [$relationships];
 
-        $this->nodes = is_array($nodes) ? $nodes : [$nodes];
-        $this->relationships = is_array($relationships) ? $relationships : [$relationships];
+        self::assertClassArray('nodes', Node::class, $nodes);
+        self::assertClassArray('relationships', Relationship::class, $relationships);
+
+        $this->nodes = $nodes;
+        $this->relationships = $relationships;
     }
 
     /**
@@ -84,56 +93,56 @@ final class Path extends Pattern implements BooleanType
     /**
      * @inheritDoc
      */
-	public function relationship(Relationship $relationship, Pattern $pattern): self
-	{
-		$this->relationships[] = $relationship;
+    public function relationship(Relationship $relationship, Pattern $pattern): self
+    {
+        $this->relationships[] = $relationship;
 
-		if ($pattern instanceof self) {
+        if ($pattern instanceof self) {
             // If the given relatable is also a path, we can merge their relatables and relationships
-			$this->relationships = array_merge($this->relationships, $pattern->getRelationships());
-			$this->nodes = array_merge($this->nodes, $pattern->getNodes());
+            $this->relationships = array_merge($this->relationships, $pattern->getRelationships());
+            $this->nodes = array_merge($this->nodes, $pattern->getNodes());
 
             return $this;
-		}
+        }
 
         // Otherwise, add the relatable to the list of nodes
         $this->nodes[] = $pattern;
 
-		return $this;
-	}
+        return $this;
+    }
 
     /**
      * @inheritDoc
      */
-	public function relationshipTo(Pattern $pattern, ?string $type = null, $properties = null, $name = null): self
-	{
-		return $this->relationship(
-			self::buildRelationship(Relationship::DIR_RIGHT, $type, $properties, $name),
+    public function relationshipTo(Pattern $pattern, ?string $type = null, $properties = null, $name = null): self
+    {
+        return $this->relationship(
+            self::buildRelationship(Relationship::DIR_RIGHT, $type, $properties, $name),
             $pattern
         );
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function relationshipFrom(Pattern $pattern, ?string $type = null, $properties = null, $name = null): self
-	{
-		return $this->relationship(
-			self::buildRelationship(Relationship::DIR_LEFT, $type, $properties, $name),
-            $pattern
-        );
-	}
+    }
 
     /**
      * @inheritDoc
      */
-	public function relationshipUni(Pattern $pattern, ?string $type = null, $properties = null, $name = null): self
-	{
-		return $this->relationship(
+    public function relationshipFrom(Pattern $pattern, ?string $type = null, $properties = null, $name = null): self
+    {
+        return $this->relationship(
+            self::buildRelationship(Relationship::DIR_LEFT, $type, $properties, $name),
+            $pattern
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationshipUni(Pattern $pattern, ?string $type = null, $properties = null, $name = null): self
+    {
+        return $this->relationship(
             self::buildRelationship(Relationship::DIR_UNI, $type, $properties, $name),
             $pattern
         );
-	}
+    }
 
     /**
      * @inheritDoc
@@ -183,18 +192,17 @@ final class Path extends Pattern implements BooleanType
     }
 
     /**
-     * @param array $direction
-     * @param string|null $type
-     * @param mixed $properties
-     * @param mixed $name
+     * Construct a new relationship from the given parameters.
+     *
+     * @param array $direction The direction of the relationship (should be a Relationship::DIR_* constant)
+     * @param string|null $type The type of the relationship
+     * @param array|MapType|null $properties The properties to add to the relationship
+     * @param string|Variable|null $name The name of the variable to which to assign this relationship
      *
      * @return Relationship
      */
-    private static function buildRelationship(array $direction, ?string $type, $properties, $name): Relationship
+    private static function buildRelationship(array $direction, ?string $type = null, $properties = null, $name = null): Relationship
     {
-        self::assertClass('properties', [MapType::class, 'array', 'null'], $properties);
-        self::assertClass('name', [Variable::class, 'string', 'null'], $name);
-
         $relationship = new Relationship($direction);
 
         if ($type !== null) {

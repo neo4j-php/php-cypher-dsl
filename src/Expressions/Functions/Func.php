@@ -1,31 +1,20 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
+ * This file is part of php-cypher-dsl.
+ *
  * Copyright (C) 2021  Wikibase Solutions
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
 
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
@@ -33,7 +22,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/
  */
-abstract class Func implements QueryConvertible
+abstract class Func implements PropertyType
 {
     /**
      * Produces a raw function call. This enables the usage of unimplemented functions in your
@@ -42,11 +31,11 @@ abstract class Func implements QueryConvertible
      * @param string $functionName The name of the function to call
      * @param AnyType[] $parameters The parameters to pass to the function call
      *
-     * @return RawFunction
+     * @return Raw
      */
-    public static function raw(string $functionName, array $parameters): RawFunction
+    public static function raw(string $functionName, array $parameters): Raw
     {
-        return new RawFunction($functionName, $parameters);
+        return new Raw($functionName, $parameters);
     }
 
     /**
@@ -149,9 +138,12 @@ abstract class Func implements QueryConvertible
      * point(input :: MAP?) :: (POINT?)
      *
      * @param MapType $map The map to use for constructing the point
-     * @note You probably want to use the Literal class instead of this function
-     *
      * @return Point
+     *
+     * @see Literal::point2d()
+     * @see Literal::point2dWGS84()
+     * @see Literal::point3d()
+     * @see Literal::point3dWGS84()
      */
     public static function point(MapType $map): Point
     {
@@ -164,9 +156,12 @@ abstract class Func implements QueryConvertible
      * date(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (DATE?)
      *
      * @param AnyType|null $value The input to the date function, from which to construct the date
-     * @note You probably want to use the Literal class instead of this function
-     *
      * @return Date
+     *
+     * @see Literal::date()
+     * @see Literal::dateString()
+     * @see Literal::dateYWD()
+     * @see Literal::dateYMD()
      */
     public static function date(?AnyType $value = null): Date
     {
@@ -179,9 +174,14 @@ abstract class Func implements QueryConvertible
      * datetime(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (DATETIME?)
      *
      * @param AnyType|null $value The input to the datetime function, from which to construct the datetime
-     * @note You probably want to use the Literal class instead of this function
-     *
      * @return DateTime
+     *
+     * @see Literal::dateTime()
+     * @see Literal::dateTimeString()
+     * @see Literal::dateTimeYD()
+     * @see Literal::dateTimeYWD()
+     * @see Literal::dateTimeYMD()
+     * @see Literal::dateTimeYQD()
      */
     public static function datetime(?AnyType $value = null): DateTime
     {
@@ -194,9 +194,14 @@ abstract class Func implements QueryConvertible
      * datetime(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (LOCALDATETIME?)
      *
      * @param AnyType|null $value The input to the localdatetime function, from which to construct the localdatetime
-     * @note You probably want to use the Literal class instead of this function
-     *
      * @return LocalDateTime
+     *
+     * @see Literal::localDateTime()
+     * @see Literal::localDateTimeString()
+     * @see Literal::localDateTimeYD()
+     * @see Literal::localDateTimeYWD()
+     * @see Literal::localDateTimeYMD()
+     * @see Literal::localDateTimeYQD()
      */
     public static function localdatetime(?AnyType $value = null): LocalDateTime
     {
@@ -209,9 +214,11 @@ abstract class Func implements QueryConvertible
      * localtime(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (LOCALTIME?)
      *
      * @param AnyType|null $value The input to the localtime function, from which to construct the localtime
-     * @note You probably want to use the Literal class instead of this function
-     *
      * @return LocalTime
+     *
+     * @see Literal::localTime()
+     * @see Literal::localTimeCurrent()
+     * @see Literal::localTimeString()
      */
     public static function localtime(?AnyType $value = null): LocalTime
     {
@@ -224,9 +231,11 @@ abstract class Func implements QueryConvertible
      * time(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (TIME?)
      *
      * @param AnyType|null $value The input to the localtime function, from which to construct the time
-     * @note You probably want to use the Literal class instead of this function
-     *
      * @return Time
+     *
+     * @see Literal::time()
+     * @see Literal::timeHMS()
+     * @see Literal::timeString()
      */
     public static function time(?AnyType $value = null): Time
     {
@@ -240,7 +249,7 @@ abstract class Func implements QueryConvertible
     {
         $signature = $this->getSignature();
         $parameters = array_map(
-            fn (QueryConvertible $convertable): string => $convertable->toQuery(),
+            fn (AnyType $value): string => $value->toQuery(),
             $this->getParameters()
         );
 
@@ -259,7 +268,7 @@ abstract class Func implements QueryConvertible
 
     /**
      * The parameters for this function as QueryConvertable objects. These parameters are inserted, in order, into
-     * the signature string retrieved from ::getSignature().
+     * the signature string retrieved from $this->getSignature().
      *
      * @return AnyType[]
      */

@@ -1,24 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
+ * This file is part of php-cypher-dsl.
+ *
  * Copyright (C) 2021  Wikibase Solutions
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
 
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
@@ -31,8 +19,11 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  * This class represents the "single()" function.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-single
+ * @see Func::single()
+ *
+ * @internal This class is not covered by the backwards compatibility promise of php-cypher-dsl
  */
-class Single extends Func implements BooleanType
+final class Single extends Func implements BooleanType
 {
     use BooleanTypeTrait;
 
@@ -52,7 +43,7 @@ class Single extends Func implements BooleanType
     private AnyType $predicate;
 
     /**
-     * Single constructor. The signature of the "single()" function is:
+     * The signature of the "single()" function is:
      *
      * single(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
      *

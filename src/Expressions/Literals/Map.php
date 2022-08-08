@@ -1,24 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
+ * This file is part of php-cypher-dsl.
+ *
  * Copyright (C) 2021  Wikibase Solutions
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
@@ -47,16 +35,13 @@ final class Map implements MapType
     private array $properties;
 
     /**
-     * PropertyMap constructor.
-     *
-     * @param array $properties The map of properties as a number of key-expression pairs
+     * @param AnyType[] $properties The map of expression
+     * @internal This method is not covered by the backwards compatibility promise of php-cypher-dsl
      */
     public function __construct(array $properties = [])
     {
-        $this->properties = array_map(
-            fn ($value): AnyType => $value instanceof AnyType ? $value : Literal::literal($value),
-            $properties
-        );
+        self::assertClassArray('properties', AnyType::class, $properties);
+        $this->properties = $properties;
     }
 
     /**
@@ -64,8 +49,7 @@ final class Map implements MapType
      *
      * @param string $key The name of the property
      * @param mixed $value The value of the property
-     *
-     * @return Map
+     * @return $this
      */
     public function addProperty(string $key, $value): self
     {
@@ -79,14 +63,14 @@ final class Map implements MapType
     }
 
     /**
-     * Merges the given PropertyMap with this PropertyMap.
+     * Merges the given map with this map.
      *
-     * @param Map $propertyMap
-     * @return Map
+     * @param Map $map The map to merge
+     * @return $this
      */
-    public function mergeWith(Map $propertyMap): self
+    public function mergeWith(Map $map): self
     {
-        $this->properties = array_merge($this->properties, $propertyMap->properties);
+        $this->properties = array_merge($this->properties, $map->properties);
 
         return $this;
     }

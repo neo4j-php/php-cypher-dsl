@@ -54,6 +54,7 @@ abstract class ComparisonBinaryOperator extends BinaryOperator implements Boolea
      * @param AnyType $left The left-hand of the comparison operator
      * @param AnyType $right The right-hand of the comparison operator
      * @param bool $insertParentheses Whether to insert parentheses around the expression
+	 * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(AnyType $left, AnyType $right, bool $insertParentheses = true)
     {

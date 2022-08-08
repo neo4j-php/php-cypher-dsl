@@ -19,19 +19,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits;
+namespace WikibaseSolutions\CypherDSL\Traits\PatternTraits;
 
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
+use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
- * Trait used by objects that can contain properties (such as a relationship or a node).
+ * This trait provides a default implementation to satisfy the "AssignablePattern" interface.
+ *
+ * @implements AssignablePatternTrait
  */
-trait HasPropertiesTrait
+trait AssignablePatternTrait
 {
     use CastTrait;
     use ErrorTrait;
+    use PatternTrait;
 
     /**
      * @var MapType|null The properties of this object
@@ -39,10 +45,15 @@ trait HasPropertiesTrait
     private ?MapType $properties = null;
 
     /**
-     * Set the properties of this object.
-     *
-     * @param MapType|array $properties
-     * @return $this
+     * @inheritDoc
+     */
+    public function property($property): Property
+    {
+        return new Property($this->getVariable(), self::toVariable($property));
+    }
+
+    /**
+     * @inheritDoc
      */
     public function withProperties($properties): self
     {
@@ -52,13 +63,7 @@ trait HasPropertiesTrait
     }
 
     /**
-     * Add a property to the properties in this object. This is only possible if the properties in this object are a
-     * property map. An exception will be thrown if they are anything else (such as a variable). If the object
-     * does not yet contain any properties, a new property map will be created.
-     *
-     * @param string $key
-     * @param mixed $property
-     * @return $this
+     * @inheritDoc
      */
     public function addProperty(string $key, $property): self
     {
@@ -78,12 +83,7 @@ trait HasPropertiesTrait
     }
 
     /**
-     * Add the given properties to the object. This is only possible if the properties in this object are a
-     * property map. An exception will be thrown if they are anything else (such as a variable). If the object
-     * does not yet contain any properties, a new property map will be created.
-     *
-     * @param Map|array $properties
-     * @return $this
+     * @inheritDoc
      */
     public function addProperties($properties): self
     {
@@ -106,9 +106,7 @@ trait HasPropertiesTrait
     }
 
     /**
-     * Returns the properties of this object.
-     *
-     * @return MapType|null
+     * @inheritDoc
      */
     public function getProperties(): ?MapType
     {

@@ -26,10 +26,10 @@ use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\ExpressionList;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Parameter;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
@@ -115,21 +115,21 @@ class QueryTest extends TestCase
     {
         $list = Query::list([]);
 
-        $this->assertInstanceOf(ExpressionList::class, $list);
+        $this->assertInstanceOf(List_::class, $list);
     }
 
     public function testListOfLiterals(): void
     {
         $list = Query::list(["hello", "world", 1.0, 1, 2, 3, true]);
 
-        $this->assertInstanceOf(ExpressionList::class, $list);
+        $this->assertInstanceOf(List_::class, $list);
     }
 
     public function testListOfMixed(): void
     {
         $list = Query::list([$this->getQueryConvertibleMock(AnyType::class, "hello"), "world"]);
 
-        $this->assertInstanceOf(ExpressionList::class, $list);
+        $this->assertInstanceOf(List_::class, $list);
     }
 
     public function testListOfAnyType(): void
@@ -139,14 +139,14 @@ class QueryTest extends TestCase
             $this->getQueryConvertibleMock(AnyType::class, "world"),
         ]);
 
-        $this->assertInstanceOf(ExpressionList::class, $list);
+        $this->assertInstanceOf(List_::class, $list);
     }
 
     public function testNestedList(): void
     {
         $list = Query::list([Query::list([])]);
 
-        $this->assertInstanceOf(ExpressionList::class, $list);
+        $this->assertInstanceOf(List_::class, $list);
     }
 
     public function testIteratorList(): void
@@ -184,7 +184,7 @@ class QueryTest extends TestCase
 
         $list = Query::list($iterator);
 
-        $this->assertInstanceOf(ExpressionList::class, $list);
+        $this->assertInstanceOf(List_::class, $list);
     }
 
     public function testInvalidList(): void
@@ -282,7 +282,7 @@ class QueryTest extends TestCase
     public function testString(): void
     {
         $literal = Query::literal('abc');
-        self::assertInstanceOf(StringLiteral::class, $literal);
+        self::assertInstanceOf(String_::class, $literal);
         self::assertEquals("'abc'", $literal->toQuery());
     }
 
@@ -294,7 +294,7 @@ class QueryTest extends TestCase
                 return 'stringable abc';
             }
         });
-        self::assertInstanceOf(StringLiteral::class, $literal);
+        self::assertInstanceOf(String_::class, $literal);
         self::assertEquals("'stringable abc'", $literal->toQuery());
     }
 
@@ -341,9 +341,9 @@ class QueryTest extends TestCase
     public function provideLiteralData(): array
     {
         return [
-            ['foobar', new StringLiteral('foobar')],
-            ['0', new StringLiteral('0')],
-            ['100', new StringLiteral('100')],
+            ['foobar', new String_('foobar')],
+            ['0', new String_('0')],
+            ['100', new String_('100')],
             [0, new Decimal(0)],
             [100, new Decimal(100)],
             [10.0, new Decimal(10.0)],

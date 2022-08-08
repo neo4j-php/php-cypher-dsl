@@ -25,9 +25,9 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\ExpressionList;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
@@ -175,22 +175,22 @@ class NodeTest extends TestCase
     {
         $node = new Node();
 
-        $node->addProperty("foo", new StringLiteral("bar"));
+        $node->addProperty("foo", new String_("bar"));
         $this->assertSame("({foo: 'bar'})", $node->toQuery());
 
-        $node->addProperty("foo", new StringLiteral("bar"));
+        $node->addProperty("foo", new String_("bar"));
         $this->assertSame("({foo: 'bar'})", $node->toQuery());
 
-        $node->addProperty("baz", new StringLiteral("bar"));
+        $node->addProperty("baz", new String_("bar"));
         $this->assertSame("({foo: 'bar', baz: 'bar'})", $node->toQuery());
 
         $node->addProperty("baz", "test");
         $this->assertSame("({foo: 'bar', baz: 'test'})", $node->toQuery());
 
-        $node->addProperties(["foo" => new StringLiteral("baz"), "qux" => new StringLiteral("baz")]);
+        $node->addProperties(["foo" => new String_("baz"), "qux" => new String_("baz")]);
         $this->assertSame("({foo: 'baz', baz: 'test', qux: 'baz'})", $node->toQuery());
 
-        $node->addProperties(new Map(["foo" => new StringLiteral("test")]));
+        $node->addProperties(new Map(["foo" => new String_("test")]));
         $this->assertSame("({foo: 'test', baz: 'test', qux: 'baz'})", $node->toQuery());
     }
 
@@ -296,36 +296,36 @@ class NodeTest extends TestCase
     public function provideWithNameAndPropertiesData(): array
     {
         return [
-            ['a', ['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "(a {a: 'b', b: 'c'})"],
+            ['a', ['a' => new String_('b'), 'b' => new String_('c')], "(a {a: 'b', b: 'c'})"],
             ['b', ['a' => new Decimal(0), 'b' => new Decimal(1)], "(b {a: 0, b: 1})"],
-            ['c', [':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "(c {`:`: [1, 'a']})"],
+            ['c', [':' => new List_([new Decimal(1), new String_('a')])], "(c {`:`: [1, 'a']})"],
         ];
     }
 
     public function provideWithLabelAndPropertiesData(): array
     {
         return [
-            ['a', ['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "(:a {a: 'b', b: 'c'})"],
+            ['a', ['a' => new String_('b'), 'b' => new String_('c')], "(:a {a: 'b', b: 'c'})"],
             ['b', ['a' => new Decimal(0), 'b' => new Decimal(1)], "(:b {a: 0, b: 1})"],
-            ['c', [':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "(:c {`:`: [1, 'a']})"],
+            ['c', [':' => new List_([new Decimal(1), new String_('a')])], "(:c {`:`: [1, 'a']})"],
         ];
     }
 
     public function provideOnlyPropertiesData(): array
     {
         return [
-            [['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "({a: 'b', b: 'c'})"],
+            [['a' => new String_('b'), 'b' => new String_('c')], "({a: 'b', b: 'c'})"],
             [['a' => new Decimal(0), 'b' => new Decimal(1)], "({a: 0, b: 1})"],
-            [[':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "({`:`: [1, 'a']})"],
+            [[':' => new List_([new Decimal(1), new String_('a')])], "({`:`: [1, 'a']})"],
         ];
     }
 
     public function provideWithNameAndLabelAndPropertiesData(): array
     {
         return [
-            ['a', 'd', ['a' => new StringLiteral('b'), 'b' => new StringLiteral('c')], "(a:d {a: 'b', b: 'c'})"],
+            ['a', 'd', ['a' => new String_('b'), 'b' => new String_('c')], "(a:d {a: 'b', b: 'c'})"],
             ['b', 'e', ['a' => new Decimal(0), 'b' => new Decimal(1)], "(b:e {a: 0, b: 1})"],
-            ['c', 'f', [':' => new ExpressionList([new Decimal(1), new StringLiteral('a')])], "(c:f {`:`: [1, 'a']})"],
+            ['c', 'f', [':' => new List_([new Decimal(1), new String_('a')])], "(c:f {`:`: [1, 'a']})"],
         ];
     }
 

@@ -33,7 +33,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 
 /**
@@ -47,7 +47,7 @@ class LiteralTest extends TestCase
     {
         $string = Literal::literal('Testing is a virtue!');
 
-        $this->assertInstanceOf(StringLiteral::class, $string);
+        $this->assertInstanceOf(String_::class, $string);
     }
 
     public function testLiteralBoolean(): void
@@ -80,7 +80,7 @@ class LiteralTest extends TestCase
             }
         });
 
-        $this->assertInstanceOf(StringLiteral::class, $stringable);
+        $this->assertInstanceOf(String_::class, $stringable);
     }
 
     public function testBoolean(): void
@@ -98,7 +98,7 @@ class LiteralTest extends TestCase
     {
         $string = Literal::string('Testing is a virtue!');
 
-        $this->assertInstanceOf(StringLiteral::class, $string);
+        $this->assertInstanceOf(String_::class, $string);
     }
 
     public function testDecimal(): void
@@ -116,21 +116,21 @@ class LiteralTest extends TestCase
     {
         $point = Literal::point2d(1, 2);
 
-        $this->assertEquals(new Point(new Map(["x" => new Decimal(1), "y" => new Decimal(2), "crs" => new StringLiteral("cartesian")])), $point);
+        $this->assertEquals(new Point(new Map(["x" => new Decimal(1), "y" => new Decimal(2), "crs" => new String_("cartesian")])), $point);
 
         $point = Literal::point2d(
             new Decimal(1),
             new Decimal(2)
         );
 
-        $this->assertEquals(new Point(new Map(["x" => new Decimal(1), "y" => new Decimal(2), "crs" => new StringLiteral("cartesian")])), $point);
+        $this->assertEquals(new Point(new Map(["x" => new Decimal(1), "y" => new Decimal(2), "crs" => new String_("cartesian")])), $point);
     }
 
     public function testPoint3d(): void
     {
         $point = Literal::point3d(1, 2, 3);
 
-        $this->assertEquals(new Point(new Map(["x" => new Decimal(1), "y" => new Decimal(2), "z" => new Decimal(3), "crs" => new StringLiteral("cartesian-3D")])), $point);
+        $this->assertEquals(new Point(new Map(["x" => new Decimal(1), "y" => new Decimal(2), "z" => new Decimal(3), "crs" => new String_("cartesian-3D")])), $point);
 
         $point = Literal::point3d(
             new Decimal(1),
@@ -138,28 +138,28 @@ class LiteralTest extends TestCase
             new Decimal(3)
         );
 
-        $this->assertEquals(new Point(new Map(["x" => new Decimal(1), "y" => new Decimal(2), "z" => new Decimal(3), "crs" => new StringLiteral("cartesian-3D")])), $point);
+        $this->assertEquals(new Point(new Map(["x" => new Decimal(1), "y" => new Decimal(2), "z" => new Decimal(3), "crs" => new String_("cartesian-3D")])), $point);
     }
 
     public function testPoint2dWGS84(): void
     {
         $point = Literal::point2dWGS84(1, 2);
 
-        $this->assertEquals(new Point(new Map(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "crs" => new StringLiteral("WGS-84")])), $point);
+        $this->assertEquals(new Point(new Map(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "crs" => new String_("WGS-84")])), $point);
 
         $point = Literal::point2dWGS84(
             new Decimal(1),
             new Decimal(2)
         );
 
-        $this->assertEquals(new Point(new Map(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "crs" => new StringLiteral("WGS-84")])), $point);
+        $this->assertEquals(new Point(new Map(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "crs" => new String_("WGS-84")])), $point);
     }
 
     public function testPoint3dWGS84(): void
     {
         $point = Literal::point3dWGS84(1, 2, 3);
 
-        $this->assertEquals(new Point(new Map(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "height" => new Decimal(3), "crs" => new StringLiteral("WGS-84-3D")])), $point);
+        $this->assertEquals(new Point(new Map(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "height" => new Decimal(3), "crs" => new String_("WGS-84-3D")])), $point);
 
         $point = Literal::point3dWGS84(
             new Decimal(1),
@@ -167,7 +167,7 @@ class LiteralTest extends TestCase
             new Decimal(3)
         );
 
-        $this->assertEquals(new Point(new Map(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "height" => new Decimal(3), "crs" => new StringLiteral("WGS-84-3D")])), $point);
+        $this->assertEquals(new Point(new Map(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "height" => new Decimal(3), "crs" => new String_("WGS-84-3D")])), $point);
     }
 
     public function testDate(): void
@@ -181,11 +181,11 @@ class LiteralTest extends TestCase
     {
         $date = Literal::date("Europe/Amsterdam");
 
-        $this->assertEquals(new Date(new Map(["timezone" => new StringLiteral("Europe/Amsterdam")])), $date);
+        $this->assertEquals(new Date(new Map(["timezone" => new String_("Europe/Amsterdam")])), $date);
 
-        $date = Literal::date(new StringLiteral("Europe/Amsterdam"));
+        $date = Literal::date(new String_("Europe/Amsterdam"));
 
-        $this->assertEquals(new Date(new Map(["timezone" => new StringLiteral("Europe/Amsterdam")])), $date);
+        $this->assertEquals(new Date(new Map(["timezone" => new String_("Europe/Amsterdam")])), $date);
     }
 
     /**
@@ -238,7 +238,7 @@ class LiteralTest extends TestCase
     {
         $date = Literal::dateString('2000-17-12');
 
-        $this->assertEquals(new Date(new StringLiteral('2000-17-12')), $date);
+        $this->assertEquals(new Date(new String_('2000-17-12')), $date);
     }
 
     public function testDateTimeWithoutTimeZone(): void
@@ -252,7 +252,7 @@ class LiteralTest extends TestCase
     {
         $datetime = Literal::dateTime("America/Los Angeles");
 
-        $this->assertEquals(new DateTime(new Map(["timezone" => new StringLiteral("America/Los Angeles")])), $datetime);
+        $this->assertEquals(new DateTime(new Map(["timezone" => new String_("America/Los Angeles")])), $datetime);
     }
 
     /**
@@ -378,7 +378,7 @@ class LiteralTest extends TestCase
     {
         $datetime = Literal::dateTimeString("2015-07-21T21:40:32.142+01:00");
 
-        $this->assertEquals(new DateTime(new StringLiteral("2015-07-21T21:40:32.142+01:00")), $datetime);
+        $this->assertEquals(new DateTime(new String_("2015-07-21T21:40:32.142+01:00")), $datetime);
     }
 
     public function testLocalDateTimeWithoutTimezone(): void
@@ -392,7 +392,7 @@ class LiteralTest extends TestCase
     {
         $localDateTime = Literal::localDateTime("America/Los Angeles");
 
-        $this->assertEquals(new LocalDateTime(new Map(["timezone" => new StringLiteral("America/Los Angeles")])), $localDateTime);
+        $this->assertEquals(new LocalDateTime(new Map(["timezone" => new String_("America/Los Angeles")])), $localDateTime);
     }
 
     /**
@@ -514,7 +514,7 @@ class LiteralTest extends TestCase
     {
         $localDatetime = Literal::localDateTimeString("2015-W30-2T214032.142");
 
-        $this->assertEquals(new LocalDateTime(new StringLiteral("2015-W30-2T214032.142")), $localDatetime);
+        $this->assertEquals(new LocalDateTime(new String_("2015-W30-2T214032.142")), $localDatetime);
     }
 
     public function testLocalTimeCurrentWithoutTimezone(): void
@@ -526,7 +526,7 @@ class LiteralTest extends TestCase
     public function testLocalTimeCurrentWithTimezone(): void
     {
         $localTime = Literal::localTimeCurrent("America/Los Angeles");
-        $this->assertEquals(new LocalTime(new Map(["timezone" => new StringLiteral("America/Los Angeles")])), $localTime);
+        $this->assertEquals(new LocalTime(new Map(["timezone" => new String_("America/Los Angeles")])), $localTime);
     }
 
     /**
@@ -557,7 +557,7 @@ class LiteralTest extends TestCase
     public function testLocalTimeString(): void
     {
         $localTime = Literal::localTimeString("21:40:32.142");
-        $this->assertEquals(new LocalTime(new StringLiteral("21:40:32.142")), $localTime);
+        $this->assertEquals(new LocalTime(new String_("21:40:32.142")), $localTime);
     }
 
     public function testTimeCurrentWithoutTimezone(): void
@@ -569,7 +569,7 @@ class LiteralTest extends TestCase
     public function testTimeCurrentWithTimezone(): void
     {
         $time = Literal::time("America/Los Angeles");
-        $this->assertEquals($time, new Time(new Map(["timezone" => new StringLiteral("America/Los Angeles")])));
+        $this->assertEquals($time, new Time(new Map(["timezone" => new String_("America/Los Angeles")])));
     }
 
     /**
@@ -600,7 +600,7 @@ class LiteralTest extends TestCase
     public function testTimeString(): void
     {
         $time = Literal::timeString("21:40:32.142+0100");
-        $this->assertEquals($time, new Time(new StringLiteral("21:40:32.142+0100")));
+        $this->assertEquals($time, new Time(new String_("21:40:32.142+0100")));
     }
 
     public function provideDateYMDData(): array
@@ -642,7 +642,7 @@ class LiteralTest extends TestCase
             [2000, 12, 15, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
             [2000, 12, 15, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
             [2000, 12, 15, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
-            [2000, 12, 15, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new StringLiteral("America/Los Angeles")]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new String_("America/Los Angeles")]))],
 
             // types
             [new Decimal(2000), null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000)]))],
@@ -654,7 +654,7 @@ class LiteralTest extends TestCase
             [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
             [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), null, null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
             [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
-            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), new StringLiteral("America/Los Angeles"), new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new StringLiteral("America/Los Angeles")]))],
+            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new String_("America/Los Angeles")]))],
         ];
     }
 
@@ -671,7 +671,7 @@ class LiteralTest extends TestCase
             [2000, 9, 4, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
             [2000, 9, 4, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
             [2000, 9, 4, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
-            [2000, 9, 4, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new StringLiteral("America/Los Angeles")]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new String_("America/Los Angeles")]))],
 
             // types
             [new Decimal(2000), null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000)]))],
@@ -683,7 +683,7 @@ class LiteralTest extends TestCase
             [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
             [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), null, null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
             [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
-            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), new StringLiteral("America/Los Angeles"), new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new StringLiteral("America/Los Angeles")]))],
+            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new String_("America/Los Angeles")]))],
         ];
     }
 
@@ -700,7 +700,7 @@ class LiteralTest extends TestCase
             [2000, 3, 4, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
             [2000, 3, 4, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
             [2000, 3, 4, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
-            [2000, 3, 4, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new StringLiteral("America/Los Angeles")]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new String_("America/Los Angeles")]))],
 
             // types
             [new Decimal(2000), null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000)]))],
@@ -712,7 +712,7 @@ class LiteralTest extends TestCase
             [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
             [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), null, null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
             [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), new StringLiteral("America/Los Angeles"), new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new StringLiteral("America/Los Angeles")]))],
+            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new String_("America/Los Angeles")]))],
         ];
     }
 
@@ -728,7 +728,7 @@ class LiteralTest extends TestCase
             [2000, 3, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
             [2000, 3, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
             [2000, 3, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
-            [2000, 3, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new StringLiteral("America/Los Angeles")]))],
+            [2000, 3, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new String_("America/Los Angeles")]))],
 
             // types
             [new Decimal(2000), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000)]))],
@@ -739,7 +739,7 @@ class LiteralTest extends TestCase
             [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
             [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), null, null, new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
             [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), null, new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), new StringLiteral("America/Los Angeles"), new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new StringLiteral("America/Los Angeles")]))],
+            [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new String_("America/Los Angeles")]))],
         ];
     }
 

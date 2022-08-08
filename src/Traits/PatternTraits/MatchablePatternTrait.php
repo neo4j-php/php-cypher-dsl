@@ -19,18 +19,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits;
+namespace WikibaseSolutions\CypherDSL\Traits\PatternTraits;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTraits\PropertyMethodTrait;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Patterns\MatchablePattern;
 
 /**
- * This trait provides a default implementation to satisfy the "NodeType" interface.
+ * This trait provides a default implementation to satisfy the "MatchablePattern" interface.
  *
- * @implements NodeType
+ * @implements MatchablePattern
  */
-trait NodeTypeTrait
+trait MatchablePatternTrait
 {
-    use StructuralTypeTrait;
-    use PropertyMethodTrait;
+    use PatternTrait;
 }

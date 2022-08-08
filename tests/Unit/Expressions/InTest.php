@@ -24,8 +24,8 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\In;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\ExpressionList;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
@@ -61,7 +61,7 @@ class InTest extends TestCase
 
     public function testInExpressionList(): void
     {
-        $inequality = new In($this->getQueryConvertibleMock(PropertyType::class, "a"), new ExpressionList([new StringLiteral('a'), new StringLiteral('b')]));
+        $inequality = new In($this->getQueryConvertibleMock(PropertyType::class, "a"), new List_([new String_('a'), new String_('b')]));
 
         $this->assertSame("(a IN ['a', 'b'])", $inequality->toQuery());
 

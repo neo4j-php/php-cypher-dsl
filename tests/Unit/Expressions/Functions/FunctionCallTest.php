@@ -33,7 +33,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Functions\LocalDateTime;
 use WikibaseSolutions\CypherDSL\Expressions\Functions\LocalTime;
 use WikibaseSolutions\CypherDSL\Expressions\Functions\None;
 use WikibaseSolutions\CypherDSL\Expressions\Functions\Point;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\RawFunction;
+use WikibaseSolutions\CypherDSL\Expressions\Functions\Raw;
 use WikibaseSolutions\CypherDSL\Expressions\Functions\Single;
 use WikibaseSolutions\CypherDSL\Expressions\Functions\Time;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
@@ -53,7 +53,7 @@ class FunctionCallTest extends TestCase
     {
         $raw = Func::raw("foo", []);
 
-        $this->assertInstanceOf(RawFunction::class, $raw);
+        $this->assertInstanceOf(Raw::class, $raw);
     }
 
     public function testAll()

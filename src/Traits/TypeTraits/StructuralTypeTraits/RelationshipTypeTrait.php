@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits;
 
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTraits\PropertyMethodTrait;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
@@ -31,4 +32,5 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 trait RelationshipTypeTrait
 {
     use StructuralTypeTrait;
+    use PropertyMethodTrait;
 }

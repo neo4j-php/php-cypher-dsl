@@ -22,12 +22,13 @@
 namespace WikibaseSolutions\CypherDSL\Types\StructuralTypes;
 
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits\NodeTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\Methods\PropertyMethod;
 
 /**
  * Represents the leaf type "node".
  *
  * @see NodeTypeTrait for a default implementation
  */
-interface NodeType extends StructuralType
+interface NodeType extends StructuralType, PropertyMethod
 {
 }

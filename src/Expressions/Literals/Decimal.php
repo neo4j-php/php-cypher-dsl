@@ -1,24 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
+ * This file is part of php-cypher-dsl.
+ *
  * Copyright (C) 2021  Wikibase Solutions
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
@@ -31,35 +19,35 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 final class Decimal implements NumeralType
 {
     use NumeralTypeTrait;
-	use ErrorTrait;
+
+    use ErrorTrait;
 
     /**
-     * @var string The value
+     * @var int|float The value
      */
-    private string $value;
+    private $value;
 
     /**
-     * Decimal constructor.
-     *
-     * @param int|float $value
+     * @param int|float $value The value
+     * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct($value)
     {
-		$this->assertClass('value', ['int', 'float'], $value);
+        $this->assertClass('value', ['int', 'float'], $value);
         $this->value = $value;
     }
 
-	/**
-	 * Returns the numeric string value.
-	 *
-	 * @return string
-	 */
-	public function getValue(): string
-	{
-		return $this->value;
-	}
+    /**
+     * Returns the numeric value.
+     *
+     * @return int|float
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
 
-	/**
+    /**
      * @inheritDoc
      */
     public function toQuery(): string

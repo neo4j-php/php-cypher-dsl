@@ -23,7 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -78,8 +78,8 @@ class PropertyMapTest extends TestCase
 
     public function testMergeWith()
     {
-        $propertyMap = new Map(["foo" => new StringLiteral("bar")]);
-        $propertyMap->mergeWith(new Map(["boo" => new StringLiteral("far")]));
+        $propertyMap = new Map(["foo" => new String_("bar")]);
+        $propertyMap->mergeWith(new Map(["boo" => new String_("far")]));
 
         $this->assertSame("{foo: 'bar', boo: 'far'}", $propertyMap->toQuery());
 
@@ -90,12 +90,12 @@ class PropertyMapTest extends TestCase
 
     public function testAddProperty()
     {
-        $propertyMap = new Map(["foo" => new StringLiteral("bar")]);
-        $propertyMap->addProperty('foo', new StringLiteral("baz"));
+        $propertyMap = new Map(["foo" => new String_("bar")]);
+        $propertyMap->addProperty('foo', new String_("baz"));
 
         $this->assertSame("{foo: 'baz'}", $propertyMap->toQuery());
 
-        $propertyMap->addProperty('boo', new StringLiteral("far"));
+        $propertyMap->addProperty('boo', new String_("far"));
 
         $this->assertSame("{foo: 'baz', boo: 'far'}", $propertyMap->toQuery());
 

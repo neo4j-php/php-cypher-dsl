@@ -25,7 +25,7 @@ use DomainException;
 use LogicException;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Query;
@@ -584,8 +584,8 @@ class RelationshipTest extends TestCase
     {
         return [
             [[], 10, 100, Relationship::DIR_LEFT, "<-[*10..100]-"],
-            [[new StringLiteral('a')], 10, null, Relationship::DIR_LEFT, "<-[*10.. {`0`: 'a'}]-"],
-            [['a' => new StringLiteral('b')], null, 10, Relationship::DIR_LEFT, "<-[*..10 {a: 'b'}]-"],
+            [[new String_('a')], 10, null, Relationship::DIR_LEFT, "<-[*10.. {`0`: 'a'}]-"],
+            [['a' => new String_('b')], null, 10, Relationship::DIR_LEFT, "<-[*..10 {a: 'b'}]-"],
         ];
     }
 
@@ -593,10 +593,10 @@ class RelationshipTest extends TestCase
     {
         return [
             ['a', 'a', [], 10, 100, Relationship::DIR_LEFT, "<-[a:a*10..100]-"],
-            ['b', 'a', [new StringLiteral('a')], null, 10, Relationship::DIR_LEFT, "<-[b:a*..10 {`0`: 'a'}]-"],
-            ['a', 'b', [new StringLiteral('a')], 10, 100, Relationship::DIR_LEFT, "<-[a:b*10..100 {`0`: 'a'}]-"],
-            ['a', '', ['a' => new StringLiteral('b')], null, 10, Relationship::DIR_LEFT, "<-[a*..10 {a: 'b'}]-"],
-            ['a', ':', ['a' => new StringLiteral('b'), new StringLiteral('c')], 10, null, Relationship::DIR_LEFT, "<-[a:`:`*10.. {a: 'b', `0`: 'c'}]-"],
+            ['b', 'a', [new String_('a')], null, 10, Relationship::DIR_LEFT, "<-[b:a*..10 {`0`: 'a'}]-"],
+            ['a', 'b', [new String_('a')], 10, 100, Relationship::DIR_LEFT, "<-[a:b*10..100 {`0`: 'a'}]-"],
+            ['a', '', ['a' => new String_('b')], null, 10, Relationship::DIR_LEFT, "<-[a*..10 {a: 'b'}]-"],
+            ['a', ':', ['a' => new String_('b'), new String_('c')], 10, null, Relationship::DIR_LEFT, "<-[a:`:`*10.. {a: 'b', `0`: 'c'}]-"],
         ];
     }
 
@@ -633,9 +633,9 @@ class RelationshipTest extends TestCase
     {
         return [
             [[], Relationship::DIR_LEFT, "<--"],
-            [[new StringLiteral('a')], Relationship::DIR_LEFT, "<-[{`0`: 'a'}]-"],
-            [['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "<-[{a: 'b'}]-"],
-            [['a' => new StringLiteral('b'), new StringLiteral('c')], Relationship::DIR_LEFT, "<-[{a: 'b', `0`: 'c'}]-"],
+            [[new String_('a')], Relationship::DIR_LEFT, "<-[{`0`: 'a'}]-"],
+            [['a' => new String_('b')], Relationship::DIR_LEFT, "<-[{a: 'b'}]-"],
+            [['a' => new String_('b'), new String_('c')], Relationship::DIR_LEFT, "<-[{a: 'b', `0`: 'c'}]-"],
             [[':' => new Decimal(12)], Relationship::DIR_LEFT, "<-[{`:`: 12}]-"],
 			[['a' => 'b', 'c' => 12, 'd' => 12.38], Relationship::DIR_LEFT, "<-[{a: 'b', c: 12, d: 12.38}]-"]
         ];
@@ -653,7 +653,7 @@ class RelationshipTest extends TestCase
     {
         return [
             ['a', [], Relationship::DIR_LEFT, "<-[a]-"],
-            ['b', [new StringLiteral('a')], Relationship::DIR_LEFT, "<-[b {`0`: 'a'}]-"],
+            ['b', [new String_('a')], Relationship::DIR_LEFT, "<-[b {`0`: 'a'}]-"],
         ];
     }
 
@@ -661,10 +661,10 @@ class RelationshipTest extends TestCase
     {
         return [
             ['a', 'a', [], Relationship::DIR_LEFT, "<-[a:a]-"],
-            ['b', 'a', [new StringLiteral('a')], Relationship::DIR_LEFT, "<-[b:a {`0`: 'a'}]-"],
-            ['a', 'b', [new StringLiteral('a')], Relationship::DIR_LEFT, "<-[a:b {`0`: 'a'}]-"],
-            ['a', '', ['a' => new StringLiteral('b')], Relationship::DIR_LEFT, "<-[a {a: 'b'}]-"],
-            ['a', ':', ['a' => new StringLiteral('b'), new StringLiteral('c')], Relationship::DIR_LEFT, "<-[a:`:` {a: 'b', `0`: 'c'}]-"],
+            ['b', 'a', [new String_('a')], Relationship::DIR_LEFT, "<-[b:a {`0`: 'a'}]-"],
+            ['a', 'b', [new String_('a')], Relationship::DIR_LEFT, "<-[a:b {`0`: 'a'}]-"],
+            ['a', '', ['a' => new String_('b')], Relationship::DIR_LEFT, "<-[a {a: 'b'}]-"],
+            ['a', ':', ['a' => new String_('b'), new String_('c')], Relationship::DIR_LEFT, "<-[a:`:` {a: 'b', `0`: 'c'}]-"],
         ];
     }
 
@@ -672,8 +672,8 @@ class RelationshipTest extends TestCase
     {
         return [
             ['a', [], [], Relationship::DIR_LEFT, "<-[a]-"],
-            ['b', ['a'], [new StringLiteral('a')], Relationship::DIR_LEFT, "<-[b:a {`0`: 'a'}]-"],
-            ['a', ['a', 'b', 'c'], [new StringLiteral('a')], Relationship::DIR_LEFT, "<-[a:a|b|c {`0`: 'a'}]-"],
+            ['b', ['a'], [new String_('a')], Relationship::DIR_LEFT, "<-[b:a {`0`: 'a'}]-"],
+            ['a', ['a', 'b', 'c'], [new String_('a')], Relationship::DIR_LEFT, "<-[a:a|b|c {`0`: 'a'}]-"],
             ['a', ['a', 'b'], [], Relationship::DIR_LEFT, "<-[a:a|b]-"],
         ];
     }

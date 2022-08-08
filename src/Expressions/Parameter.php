@@ -28,6 +28,7 @@ use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTr
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\DateTimeTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\DateTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\LocalDateTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\LocalTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\NumeralTypeTrait;
@@ -64,16 +65,17 @@ final class Parameter implements
     StringType,
     TimeType
 {
-    use DateTimeTypeTrait;
-    use ListTypeTrait;
-    use LocalDateTimeTypeTrait;
-    use LocalTimeTypeTrait;
-    use BooleanTypeTrait;
-    use MapTypeTrait;
-    use NumeralTypeTrait;
-    use PointTypeTrait;
-    use StringTypeTrait;
-    use TimeTypeTrait;
+    use BooleanTypeTrait,
+        DateTypeTrait,
+        DateTimeTypeTrait,
+        ListTypeTrait,
+        LocalDateTimeTypeTrait,
+        LocalTimeTypeTrait,
+        MapTypeTrait,
+        NumeralTypeTrait,
+        PointTypeTrait,
+        StringTypeTrait,
+        TimeTypeTrait;
 
     use EscapeTrait;
     use StringGenerationTrait;

@@ -21,9 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits;
 
-use WikibaseSolutions\CypherDSL\Expressions\Property;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\AnyTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTraits\PropertyMethodTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
@@ -33,14 +31,6 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  */
 trait MapTypeTrait
 {
-    use CastTrait;
     use CompositeTypeTrait;
-
-    /**
-     * @inheritDoc
-     */
-    public function property($property): Property
-    {
-        return new Property($this, self::toVariable($property));
-    }
+    use PropertyMethodTrait;
 }

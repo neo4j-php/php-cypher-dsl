@@ -41,6 +41,7 @@ abstract class BooleanUnaryOperator extends UnaryOperator implements BooleanType
      *
      * @param BooleanType $expression The expression
      * @param bool $insertParentheses Whether to insert parentheses around the expression
+	 * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(BooleanType $expression, bool $insertParentheses = true)
     {

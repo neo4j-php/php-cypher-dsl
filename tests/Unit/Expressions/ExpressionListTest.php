@@ -23,11 +23,11 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\ExpressionList;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Query;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Literals\ExpressionList
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Literals\List_
  */
 class ExpressionListTest extends TestCase
 {
@@ -35,7 +35,7 @@ class ExpressionListTest extends TestCase
 
     public function testEmpty()
     {
-        $expressionList = new ExpressionList([]);
+        $expressionList = new List_([]);
 
         $this->assertSame("[]", $expressionList->toQuery());
     }
@@ -47,7 +47,7 @@ class ExpressionListTest extends TestCase
      */
     public function testOneDimensional(array $expressions, string $expected)
     {
-        $expressionList = new ExpressionList($expressions);
+        $expressionList = new List_($expressions);
 
         $this->assertSame($expected, $expressionList->toQuery());
     }
@@ -59,7 +59,7 @@ class ExpressionListTest extends TestCase
      */
     public function testMultidimensional(array $expressions, string $expected)
     {
-        $expressionList = new ExpressionList($expressions);
+        $expressionList = new List_($expressions);
 
         $this->assertSame($expected, $expressionList->toQuery());
     }
@@ -76,9 +76,9 @@ class ExpressionListTest extends TestCase
     public function provideMultidimensionalData(): array
     {
         return [
-            [[new ExpressionList([Query::literal(12)])], "[[12]]"],
-            [[new ExpressionList([Query::literal('12')])], "[['12']]"],
-            [[new ExpressionList([Query::literal('12'), Query::literal('14')]), new ExpressionList([Query::literal('13')])], "[['12', '14'], ['13']]"],
+            [[new List_([Query::literal(12)])], "[[12]]"],
+            [[new List_([Query::literal('12')])], "[['12']]"],
+            [[new List_([Query::literal('12'), Query::literal('14')]), new List_([Query::literal('13')])], "[['12', '14'], ['13']]"],
         ];
     }
 
@@ -88,6 +88,6 @@ class ExpressionListTest extends TestCase
 
         $this->expectException(TypeError::class);
 
-        new ExpressionList([$a]);
+        new List_([$a]);
     }
 }

@@ -1,24 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
+ * This file is part of php-cypher-dsl.
+ *
  * Copyright (C) 2021  Wikibase Solutions
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\StringTypeTrait;
@@ -27,11 +15,9 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 /**
  * Represents a string literal.
  *
- * @note The name of this class diverges from the naming scheme, because a class in PHP cannot be named "String".
- *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/expressions/#cypher-expressions-string-literals
  */
-final class StringLiteral implements StringType
+final class String_ implements StringType
 {
     use StringTypeTrait;
 
@@ -46,13 +32,22 @@ final class StringLiteral implements StringType
     private bool $useDoubleQuotes = false;
 
     /**
-     * StringLiteral constructor.
-     *
-     * @param string $value
+     * @param string $value The value
+     * @internal This method is not covered by the backwards compatibility promise of php-cypher-dsl
      */
     public function __construct(string $value)
     {
         $this->value = $value;
+    }
+
+    /**
+     * Whether to use double quotes or not.
+     *
+     * @param bool $useDoubleQuotes
+     */
+    public function useDoubleQuotes(bool $useDoubleQuotes = true): void
+    {
+        $this->useDoubleQuotes = $useDoubleQuotes;
     }
 
     /**
@@ -73,16 +68,6 @@ final class StringLiteral implements StringType
     public function usesDoubleQuotes(): bool
     {
         return $this->useDoubleQuotes;
-    }
-
-    /**
-     * Whether to use double quotes or not.
-     *
-     * @param bool $useDoubleQuotes
-     */
-    public function useDoubleQuotes(bool $useDoubleQuotes = true): void
-    {
-        $this->useDoubleQuotes = $useDoubleQuotes;
     }
 
     /**

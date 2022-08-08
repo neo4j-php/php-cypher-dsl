@@ -45,6 +45,8 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
  * Represents a property. A property in Cypher would be something like "n.prop" or "n.a".
@@ -62,22 +64,22 @@ final class Property implements
     LocalTimeType,
     TimeType
 {
-    use DateTypeTrait;
-    use DateTimeTypeTrait;
-    use BooleanTypeTrait;
-    use ListTypeTrait;
-    use NumeralTypeTrait;
-    use StringTypeTrait;
-    use PointTypeTrait;
-    use MapTypeTrait;
-    use LocalDateTimeTypeTrait;
-    use LocalTimeTypeTrait;
-    use TimeTypeTrait;
+    use BooleanTypeTrait,
+        DateTypeTrait,
+        DateTimeTypeTrait,
+        ListTypeTrait,
+        LocalDateTimeTypeTrait,
+        LocalTimeTypeTrait,
+        MapTypeTrait,
+        NumeralTypeTrait,
+        PointTypeTrait,
+        StringTypeTrait,
+        TimeTypeTrait;
 
     /**
-     * @var MapType The expression to which this property belongs
+     * @var MapType|NodeType|RelationshipType The expression to which this property belongs
      */
-    private MapType $expression;
+    private $expression;
 
     /**
      * @var Variable The name of the property
@@ -87,11 +89,13 @@ final class Property implements
     /**
      * Property constructor.
      *
-     * @param MapType $expression
+     * @param MapType|NodeType|RelationshipType $expression
      * @param Variable $property
      */
-    public function __construct(MapType $expression, Variable $property)
+    public function __construct($expression, Variable $property)
     {
+        self::assertClass('expression', [MapType::class, NodeType::class, RelationshipType::class], $expression);
+
         $this->expression = $expression;
         $this->property = $property;
     }
@@ -120,9 +124,9 @@ final class Property implements
     /**
      * Returns the map type of the property.
      *
-     * @return MapType
+     * @return MapType|NodeType|RelationshipType
      */
-    public function getExpression(): MapType
+    public function getExpression()
     {
         return $this->expression;
     }

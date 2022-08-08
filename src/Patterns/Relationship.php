@@ -26,8 +26,7 @@ use InvalidArgumentException;
 use LogicException;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\HasPropertiesTrait;
-use WikibaseSolutions\CypherDSL\Traits\HasVariableTrait;
+use WikibaseSolutions\CypherDSL\Traits\PatternTraits\AssignablePatternTrait;
 
 /**
  * This class represents an arbitrary relationship.
@@ -35,12 +34,11 @@ use WikibaseSolutions\CypherDSL\Traits\HasVariableTrait;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 10)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
  */
-final class Relationship
+final class Relationship implements AssignablePattern
 {
     use EscapeTrait;
 
-    use HasPropertiesTrait;
-    use HasVariableTrait;
+    use AssignablePatternTrait;
 
     public const DIR_RIGHT = ["-", "->"];
     public const DIR_LEFT = ["<-", "-"];
@@ -81,6 +79,7 @@ final class Relationship
      *  - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
      *  - Relationship::DIR_LEFT (for a relation of (a)<--(b))
      *  - Relationship::DIR_UNI (for a relation of (a)--(b))
+     * @internal
      */
     public function __construct(array $direction)
     {

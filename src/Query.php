@@ -44,10 +44,10 @@ use WikibaseSolutions\CypherDSL\Expressions\Functions\Func;
 use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\ExpressionList;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\StringLiteral;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Parameter;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
@@ -117,9 +117,10 @@ final class Query implements QueryConvertible
     /**
      * Creates a relationship.
      *
-     * @param array $direction The direction of the relationship, should be either Path::DIR_RIGHT
-	 *  (for a relation of (a)-->(b)), Path::DIR_LEFT (for a relation of (a)<--(b)) or Path::DIR_UNI
-	 *  (for a relation of (a)--(b))
+     * @param array $direction The direction of the relationship, should be either:
+     *  - Path::DIR_RIGHT (for a relation of (a)-->(b))
+     *  - Path::DIR_LEFT (for a relation of (a)<--(b))
+     *  - Path::DIR_UNI (for a relation of (a)--(b))
      *
      * @return Relationship
      * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
@@ -151,38 +152,38 @@ final class Query implements QueryConvertible
      *  Query::literal()::point3d(...) - For a 3D cartesian point
      *  Query::literal()::point2dWGS84(...) - For a 2D WGS 84 point
      *  Query::literal()::point3dWGS84(...) - For a 3D WGS 84 point
-	 *
-	 * And a Date literal by using one of the following functions:
-	 *
-	 *  Query::literal()::date(...) - For the current date
-	 *  Query::literal()::dateYMD(...) - For a date from the given year, month and day
-	 *  Query::literal()::dateYWD(...) - For a date from the given year, week and day
-	 *  Query::literal()::dateString(...) - For a date from the given date string
-	 *  Query::literal()::dateTime(...) - For the current datetime
-	 *  Query::literal()::dateTimeYMD(...) - For a datetime from the given parameters (see function definition)
-	 *  Query::literal()::dateTimeYWD(...) - For a datetime from the given parameters (see function definition)
-	 *  Query::literal()::dateTimeYQD(...) - For a datetime from the given parameters (see function definition)
-	 *  Query::literal()::dateTimeYD(...) - For a datetime from the given parameters (see function definition)
-	 *  Query::literal()::dateTimeString(...) - For a datetime from the given datetime string
-	 *  Query::literal()::localDateTime(...) - For the current local datetime
-	 *  Query::literal()::localDateTimeYMD(...) - For a local datetime from the given parameters (see function definition)
-	 *  Query::literal()::localDateTimeYWD(...) - For a local datetime from the given parameters (see function definition)
-	 *  Query::literal()::localDateTimeYQD(...) - For a local datetime from the given parameters (see function definition)
-	 *  Query::literal()::localDateTimeYD(...) - For a local datetime from the given parameters (see function definition)
-	 *  Query::literal()::localDateTimeString(...) - For a local datetime from the given datetime string
-	 *  Query::literal()::localTimeCurrent(...) - For the current LocalTime
-	 *  Query::literal()::localTime(...) - For a local time from the given parameters (see function definition)
-	 *  Query::literal()::localTimeString(...) - For a local time from the given time string
-	 *  Query::literal()::time(...) - For the curren time
-	 *  Query::literal()::timeHMS(...) - For a time from the given hour, minute and second
-	 *  Query::literal()::timeString(...) - For a time from the given time string
-	 *
-	 * When no arguments are given to this function (or NULL is passed as its only argument), the function will return
-	 * a reference to the Literal class.
-	 *
-     * @param string|int|float|bool|null $literal The literal to construct
-     * @return StringLiteral|Boolean|Decimal|Literal|string The string literal that was created (or a reference to
-	 *  the Literal class)
+     *
+     * And a Date literal by using one of the following functions:
+     *
+     *  Query::literal()::date(...) - For the current date
+     *  Query::literal()::dateYMD(...) - For a date from the given year, month and day
+     *  Query::literal()::dateYWD(...) - For a date from the given year, week and day
+     *  Query::literal()::dateString(...) - For a date from the given date string
+     *  Query::literal()::dateTime(...) - For the current datetime
+     *  Query::literal()::dateTimeYMD(...) - For a datetime from the given parameters (see function definition)
+     *  Query::literal()::dateTimeYWD(...) - For a datetime from the given parameters (see function definition)
+     *  Query::literal()::dateTimeYQD(...) - For a datetime from the given parameters (see function definition)
+     *  Query::literal()::dateTimeYD(...) - For a datetime from the given parameters (see function definition)
+     *  Query::literal()::dateTimeString(...) - For a datetime from the given datetime string
+     *  Query::literal()::localDateTime(...) - For the current local datetime
+     *  Query::literal()::localDateTimeYMD(...) - For a local datetime from the given parameters (see function definition)
+     *  Query::literal()::localDateTimeYWD(...) - For a local datetime from the given parameters (see function definition)
+     *  Query::literal()::localDateTimeYQD(...) - For a local datetime from the given parameters (see function definition)
+     *  Query::literal()::localDateTimeYD(...) - For a local datetime from the given parameters (see function definition)
+     *  Query::literal()::localDateTimeString(...) - For a local datetime from the given datetime string
+     *  Query::literal()::localTimeCurrent(...) - For the current LocalTime
+     *  Query::literal()::localTime(...) - For a local time from the given parameters (see function definition)
+     *  Query::literal()::localTimeString(...) - For a local time from the given time string
+     *  Query::literal()::time(...) - For the curren time
+     *  Query::literal()::timeHMS(...) - For a time from the given hour, minute and second
+     *  Query::literal()::timeString(...) - For a time from the given time string
+     *
+     * When no arguments are given to this function (or NULL is passed as its only argument), the function will return
+     * a reference to the Literal class.
+     *
+     * @param string|int|float|bool|array|null $literal The literal to construct
+     * @return String_|Boolean|Decimal|Literal|Map|List_|string The string literal that was created (or a reference to
+     *  the Literal class)
      */
     public static function literal($literal = null)
     {
@@ -194,21 +195,23 @@ final class Query implements QueryConvertible
     }
 
     /**
-     * Creates a list of expressions.
+     * Creates a list.
      *
-     * @param array $values An iterable of values from which to construct the list
-     * @return ExpressionList
+     * @param array $values An array of values from which to construct the list
+     * @return List_
+     * @see Query::literal() for a function that automatically determines the class to construct
      */
-    public static function list(iterable $values): ExpressionList
+    public static function list(array $values): List_
     {
-		return new ExpressionList($values);
+        return Literal::literal($values);
     }
 
     /**
-     * Creates a property map.
+     * Creates a map.
      *
      * @param array $values The map of properties as a number of key-expression pairs
      * @return Map
+     * @see Query::literal() for a function that automatically determines the class to construct
      */
     public static function map(array $values): Map
     {
@@ -249,99 +252,99 @@ final class Query implements QueryConvertible
         return new RawExpression($expression);
     }
 
-	/**
-	 * Creates a CALL sub query clause and adds it to the query.
-	 *
-	 * @param Query|callable(Query):void $query A callable decorating a query, or the actual CALL subquery
-	 * @param Variable|Variable[]|string $variables The variables to include in the WITH clause for correlation
-	 *
-	 * @return Query
-	 *
-	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/
-	 * @see CallClause
-	 */
-	public function call($query = null, $variables = []): self
-	{
-		$this->assertClass('query', [Query::class, Closure::class, 'callable'], $query);
+    /**
+     * Creates a CALL sub query clause and adds it to the query.
+     *
+     * @param Query|callable(Query):void $query A callable decorating a query, or the actual CALL subquery
+     * @param Variable|Variable[]|string $variables The variables to include in the WITH clause for correlation
+     *
+     * @return Query
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/
+     * @see CallClause
+     */
+    public function call($query = null, $variables = []): self
+    {
+        $this->assertClass('query', [Query::class, Closure::class, 'callable'], $query);
 
-		if (is_callable($query)) {
-			$subQuery = self::new();
-			$query($subQuery);
-		} else {
-			$subQuery = $query;
-		}
+        if (is_callable($query)) {
+            $subQuery = self::new();
+            $query($subQuery);
+        } else {
+            $subQuery = $query;
+        }
 
-		if (!is_array($variables)) {
-			$variables = [$variables];
-		}
+        if (!is_array($variables)) {
+            $variables = [$variables];
+        }
 
-		$variables = array_map(function ($variable): Variable {
-			self::assertClass();
+        $variables = array_map(function ($variable): Variable {
+            self::assertClass();
 
-			if (is_string($variable)) {
-				return self::variable($variable);
-			}
+            if (is_string($variable)) {
+                return self::variable($variable);
+            }
 
-			return $variable->getVariable();
-		}, $variables);
+            return $variable->getVariable();
+        }, $variables);
 
-		$callClause = new CallClause();
-		$callClause->withSubQuery($subQuery);
-		$callClause->withVariables($variables);
+        $callClause = new CallClause();
+        $callClause->withSubQuery($subQuery);
+        $callClause->withVariables($variables);
 
-		$this->clauses[] = $callClause;
+        $this->clauses[] = $callClause;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Creates the CALL procedure clause.
-	 *
-	 * @param string $procedure The procedure to call
-	 * @param AnyType[]|AnyType|string[]|string|bool[]|bool|float[]|float|int[]|int $arguments The arguments to pass to the procedure (ignored if $procedure is of type FunctionCall)
-	 * @param Variable[]|Variable|HasVariable[]|HasVariable|string[]|string $yields The result field that will be returned
-	 *
-	 * @return Query
-	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/call/
-	 */
-	public function callProcedure(string $procedure, $arguments = [], $yields = []): self
-	{
-		$callProcedureClause = new CallProcedureClause();
-		$callProcedureClause->setProcedure($procedure);
+    /**
+     * Creates the CALL procedure clause.
+     *
+     * @param string $procedure The procedure to call
+     * @param AnyType[]|AnyType|string[]|string|bool[]|bool|float[]|float|int[]|int $arguments The arguments to pass to the procedure (ignored if $procedure is of type FunctionCall)
+     * @param Variable[]|Variable|HasVariable[]|HasVariable|string[]|string $yields The result field that will be returned
+     *
+     * @return Query
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/call/
+     */
+    public function callProcedure(string $procedure, $arguments = [], $yields = []): self
+    {
+        $callProcedureClause = new CallProcedureClause();
+        $callProcedureClause->setProcedure($procedure);
 
-		if (!is_array($arguments)) {
-			$arguments = [$arguments];
-		}
+        if (!is_array($arguments)) {
+            $arguments = [$arguments];
+        }
 
-		$arguments = array_map(function ($argument): AnyType {
-			return $argument instanceof AnyType ? $argument : self::literal($argument);
-		}, $arguments);
+        $arguments = array_map(function ($argument): AnyType {
+            return $argument instanceof AnyType ? $argument : self::literal($argument);
+        }, $arguments);
 
-		if (!is_array($yields)) {
-			$yields = [$yields];
-		}
+        if (!is_array($yields)) {
+            $yields = [$yields];
+        }
 
-		$yields = array_map(function ($yield): Variable {
-			$this->assertClass('yields', [Variable::class, HasVariable::class, 'string'], $yield);
+        $yields = array_map(function ($yield): Variable {
+            $this->assertClass('yields', [Variable::class, HasVariable::class, 'string'], $yield);
 
-			if (is_string($yield)) {
-				return self::variable($yield);
-			}
+            if (is_string($yield)) {
+                return self::variable($yield);
+            }
 
-			if ($yield instanceof HasVariable) {
-				return $yield->getVariable();
-			}
+            if ($yield instanceof HasVariable) {
+                return $yield->getVariable();
+            }
 
-			return $yield;
-		}, $yields);
+            return $yield;
+        }, $yields);
 
-		$callProcedureClause->setArguments($arguments);
-		$callProcedureClause->setYields($yields);
+        $callProcedureClause->setArguments($arguments);
+        $callProcedureClause->setYields($yields);
 
-		$this->clauses[] = $callProcedureClause;
+        $this->clauses[] = $callProcedureClause;
 
-		return $this;
-	}
+        return $this;
+    }
 
     /**
      * Creates the MATCH clause.
@@ -354,13 +357,13 @@ final class Query implements QueryConvertible
      */
     public function match($patterns): self
     {
-		$matchClause = new MatchClause();
+        $matchClause = new MatchClause();
 
-		if (!is_array($patterns)) {
-			$patterns = [$patterns];
-		}
+        if (!is_array($patterns)) {
+            $patterns = [$patterns];
+        }
 
-		$matchClause->setPatterns($patterns);
+        $matchClause->setPatterns($patterns);
 
         $this->clauses[] = $matchClause;
 
@@ -381,20 +384,20 @@ final class Query implements QueryConvertible
      */
     public function returning($expressions, bool $distinct = false): self
     {
-		$returnClause = new ReturnClause();
+        $returnClause = new ReturnClause();
 
-		if (!is_array($expressions)) {
-			$expressions = [$expressions];
-		}
+        if (!is_array($expressions)) {
+            $expressions = [$expressions];
+        }
 
-		$expressions = array_map(function ($expression): AnyType {
-			// If it has a variable, we want to put the variable in the RETURN clause instead of the
-			// object itself. Theoretically, a node could be returned directly, but this is extremely
-			// rare. If a user wants to do this, they can use the ReturnClause class directly.
-			return $expression instanceof HasVariable ? $expression->getVariable() : $expression;
-		}, $expressions);
+        $expressions = array_map(function ($expression): AnyType {
+            // If it has a variable, we want to put the variable in the RETURN clause instead of the
+            // object itself. Theoretically, a node could be returned directly, but this is extremely
+            // rare. If a user wants to do this, they can use the ReturnClause class directly.
+            return $expression instanceof HasVariable ? $expression->getVariable() : $expression;
+        }, $expressions);
 
-		$returnClause->setColumns($expressions);
+        $returnClause->setColumns($expressions);
         $returnClause->setDistinct($distinct);
 
         $this->clauses[] = $returnClause;
@@ -790,39 +793,39 @@ final class Query implements QueryConvertible
         return $this->clauses;
     }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function toQuery(): string
-	{
-		return $this->build();
-	}
+    /**
+     * @inheritDoc
+     */
+    public function toQuery(): string
+    {
+        return $this->build();
+    }
 
-	/**
-	 * Automatically build the query if this object is used as a string somewhere.
-	 *
-	 * @return string
-	 */
-	public function __toString(): string
-	{
-		return $this->build();
-	}
+    /**
+     * Automatically build the query if this object is used as a string somewhere.
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->build();
+    }
 
-	/**
-	 * Builds the query.
-	 *
-	 * @return string The fully constructed query
-	 */
-	public function build(): string
-	{
-		$builtClauses = array_map(
-			fn (Clause $clause): string => $clause->toQuery(),
-			$this->clauses
-		);
+    /**
+     * Builds the query.
+     *
+     * @return string The fully constructed query
+     */
+    public function build(): string
+    {
+        $builtClauses = array_map(
+            fn (Clause $clause): string => $clause->toQuery(),
+            $this->clauses
+        );
 
-		return implode(
-			" ",
-			array_filter($builtClauses, fn ($clause) => !empty($clause))
-		);
-	}
+        return implode(
+            " ",
+            array_filter($builtClauses, fn ($clause) => !empty($clause))
+        );
+    }
 }

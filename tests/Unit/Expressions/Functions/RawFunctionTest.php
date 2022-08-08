@@ -23,12 +23,12 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\RawFunction;
+use WikibaseSolutions\CypherDSL\Expressions\Functions\Raw;
 use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Functions\RawFunction
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Functions\Raw
  */
 class RawFunctionTest extends TestCase
 {
@@ -40,7 +40,7 @@ class RawFunctionTest extends TestCase
         $b = $this->getQueryConvertibleMock(AnyType::class, "b");
         $c = $this->getQueryConvertibleMock(AnyType::class, "c");
 
-        $raw = new RawFunction("foobar", [$a, $b, $c]);
+        $raw = new Raw("foobar", [$a, $b, $c]);
 
         $this->assertSame("foobar(a, b, c)", $raw->toQuery());
     }
@@ -51,6 +51,6 @@ class RawFunctionTest extends TestCase
 
         $this->expectException(TypeError::class);
 
-        new RawFunction('foobar', [$a]);
+        new Raw('foobar', [$a]);
     }
 }

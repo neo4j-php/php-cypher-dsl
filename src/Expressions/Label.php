@@ -37,6 +37,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 final class Label implements BooleanType
 {
     use BooleanTypeTrait;
+
     use EscapeTrait;
 
     /**

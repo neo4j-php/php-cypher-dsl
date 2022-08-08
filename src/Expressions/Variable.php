@@ -74,20 +74,20 @@ final class Variable implements
     StringType,
     TimeType
 {
-    use BooleanTypeTrait;
-    use DateTypeTrait;
-    use DateTimeTypeTrait;
-    use ListTypeTrait;
-    use LocalDateTimeTypeTrait;
-    use LocalTimeTypeTrait;
-    use MapTypeTrait;
-    use NodeTypeTrait;
-    use NumeralTypeTrait;
-    use PathTypeTrait;
-    use PointTypeTrait;
-    use RelationshipTypeTrait;
-    use StringTypeTrait;
-    use TimeTypeTrait;
+    use BooleanTypeTrait,
+        DateTypeTrait,
+        DateTimeTypeTrait,
+        ListTypeTrait,
+        LocalDateTimeTypeTrait,
+        LocalTimeTypeTrait,
+        MapTypeTrait,
+        NodeTypeTrait,
+        NumeralTypeTrait,
+        PathTypeTrait,
+        PointTypeTrait,
+        RelationshipTypeTrait,
+        StringTypeTrait,
+        TimeTypeTrait;
 
     use EscapeTrait;
     use StringGenerationTrait;

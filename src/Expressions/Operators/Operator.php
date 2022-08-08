@@ -40,6 +40,7 @@ abstract class Operator implements QueryConvertible
      * UnaryOperator constructor.
      *
      * @param bool $insertParentheses Whether to insert parentheses around the application of the operator
+     * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(bool $insertParentheses = true)
     {
@@ -71,6 +72,7 @@ abstract class Operator implements QueryConvertible
      * Returns the inner part of the application of the operator, that is, without any parentheses.
      *
      * @return string
+     * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     abstract protected function toInner(): string;
 }

@@ -38,6 +38,7 @@ abstract class UnaryOperator extends Operator
      *
      * @param AnyType $expression The expression
      * @param bool $insertParentheses Whether to insert parentheses around the expression
+	 * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(AnyType $expression, bool $insertParentheses = true)
     {
@@ -69,7 +70,7 @@ abstract class UnaryOperator extends Operator
     /**
      * @inheritDoc
      */
-    public function toInner(): string
+    protected function toInner(): string
     {
         $expression = $this->expression->toQuery();
         $operator = $this->getOperator();
