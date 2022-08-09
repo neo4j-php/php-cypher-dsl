@@ -22,8 +22,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-isempty
  * @see Func::isEmpty()
- *
- * @internal This class is not covered by the backwards compatibility promise of php-cypher-dsl
  */
 final class IsEmpty extends Func implements BooleanType
 {
@@ -43,6 +41,7 @@ final class IsEmpty extends Func implements BooleanType
      * isEmpty(input :: STRING?) :: (BOOLEAN?) - to check whether a string is empty
      *
      * @param ListType|MapType|StringType $list An expression that returns a list
+	 * @internal This method is not covered by the backwards compatibility promise of php-cypher-dsl
      */
     public function __construct(AnyType $list)
     {

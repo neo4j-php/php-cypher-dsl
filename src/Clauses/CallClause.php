@@ -69,7 +69,7 @@ class CallClause extends Clause
 	 *
 	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/#subquery-correlated-importing
 	 */
-	public function withVariables(array $variables): self
+	public function withVariables(...$variables): self
 	{
 		$res = [];
 

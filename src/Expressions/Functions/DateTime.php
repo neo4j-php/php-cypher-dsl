@@ -18,8 +18,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime
  * @see Func::datetime()
- *
- * @internal This class is not covered by the backwards compatibility promise of php-cypher-dsl
  */
 final class DateTime extends Func implements DateTimeType
 {
@@ -36,6 +34,7 @@ final class DateTime extends Func implements DateTimeType
      * datetime(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (DATETIME?)
      *
      * @param AnyType|null $value The input to the datetime function, from which to construct the datetime
+	 * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(?AnyType $value = null)
     {

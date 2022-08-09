@@ -18,8 +18,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime
  * @see Func::localdatetime()
- *
- * @internal This class is not covered by the backwards compatibility promise of php-cypher-dsl
  */
 final class LocalDateTime extends Func implements LocalDateTimeType
 {
@@ -36,6 +34,7 @@ final class LocalDateTime extends Func implements LocalDateTimeType
      * localdatetime(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (LOCALDATETIME?)
      *
      * @param AnyType|null $value The input to the localdatetime function, from which to construct the localdatetime
+	 * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(?AnyType $value = null)
     {

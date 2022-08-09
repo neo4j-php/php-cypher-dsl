@@ -21,8 +21,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-all
  * @see Func::all()
- *
- * @internal This class is not covered by the backwards compatibility promise of php-cypher-dsl
  */
 final class All extends Func implements BooleanType
 {
@@ -51,6 +49,7 @@ final class All extends Func implements BooleanType
      * @param Variable|string $variable A variable that can be used from within the predicate
      * @param ListType|array $list A list
      * @param AnyType $predicate A predicate that is tested against all items in the list
+	 * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct($variable, $list, AnyType $predicate)
     {

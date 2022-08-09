@@ -25,8 +25,6 @@ abstract class Operator implements QueryConvertible
     private bool $insertParentheses;
 
     /**
-     * UnaryOperator constructor.
-     *
      * @param bool $insertParentheses Whether to insert parentheses around the application of the operator
      * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */

@@ -27,11 +27,8 @@ abstract class ComparisonUnaryOperator extends UnaryOperator implements BooleanT
     use BooleanTypeTrait;
 
     /**
-     * ComparisonUnaryOperator constructor.
-     *
-     * @param AnyType $expression The expression
-     * @param bool $insertParentheses Whether to insert parentheses around the expression
-     * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
+     * @inheritDoc
+     * @param AnyType $expression The unary expression
      */
     public function __construct(AnyType $expression, bool $insertParentheses = true)
     {

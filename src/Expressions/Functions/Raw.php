@@ -10,11 +10,14 @@
 namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
 
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\DateTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\DateTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\FloatTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\IntegerTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\LocalDateTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\LocalTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\NumeralTypeTrait;
@@ -27,6 +30,8 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
@@ -38,14 +43,13 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
  * This class represents any function call.
  *
  * @see Func::raw()
- *
- * @internal This class is not covered by the backwards compatibility promise of php-cypher-dsl
  */
 final class Raw extends Func implements
     BooleanType,
     DateType,
     DateTimeType,
-    NumeralType,
+    FloatType,
+    IntegerType,
     StringType,
     MapType,
     PointType,
@@ -57,6 +61,8 @@ final class Raw extends Func implements
     use BooleanTypeTrait,
         DateTypeTrait,
         DateTimeTypeTrait,
+        FloatTypeTrait,
+        IntegerTypeTrait,
         ListTypeTrait,
         LocalDateTimeTypeTrait,
         LocalTimeTypeTrait,
@@ -67,6 +73,7 @@ final class Raw extends Func implements
         TimeTypeTrait;
 
     use ErrorTrait;
+    use EscapeTrait;
 
     /**
      * @var string $functionName The name of the function to call
@@ -81,13 +88,13 @@ final class Raw extends Func implements
     /**
      * @param string $functionName The name of the function to call
      * @param AnyType[] $parameters The parameters to pass to the function call
+     * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(string $functionName, array $parameters)
     {
         self::assertClassArray('parameters', AnyType::class, $parameters);
-        self::assertValidName($functionName);
 
-        $this->functionName = $functionName;
+        $this->functionName = self::escape($functionName);
         $this->parameters = $parameters;
     }
 

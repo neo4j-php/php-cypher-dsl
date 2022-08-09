@@ -22,11 +22,12 @@
 namespace WikibaseSolutions\CypherDSL\Traits;
 
 use __PHP_Incomplete_Class;
-use InvalidArgumentException;
 use TypeError;
 
 /**
- * Convenience trait including simple assertions and error reporting functions
+ * Convenience trait including simple assertions and error reporting functions.
+ *
+ * @internal This trait is not covered by the backwards compatibility guarantee of php-cypher-dsl
  */
 trait ErrorTrait
 {
@@ -71,7 +72,7 @@ trait ErrorTrait
      *
      * @see https://github.com/symfony/polyfill/blob/main/src/Php80/Php80.php
      */
-    public static function getDebugType($value): string
+    private static function getDebugType($value): string
     {
         return self::detectScalar($value)
             ?? self::detectClass($value)
@@ -96,30 +97,6 @@ trait ErrorTrait
     }
 
     /**
-     * Validates the name to see if it can be used as a parameter or variable. The name may still require escaping.
-     *
-     * @see https://neo4j.com/docs/cypher-manual/current/syntax/naming/#_naming_rules
-     *
-     * @param string $name
-     *
-     * @return void
-     */
-    private static function assertValidName(string $name): void
-    {
-        $name = trim($name);
-
-        if ($name === "") {
-            throw new InvalidArgumentException("A name cannot be the empty string");
-        }
-
-        if (strlen($name) > 65534) {
-            // NOTE: Some versions of Neo4j support names up to 65535 characters, but to be safe, we deny any names that
-            // are over 65534 characters long.
-            throw new InvalidArgumentException("A name cannot be longer than 65534 (2^16 - 2) characters");
-        }
-    }
-
-    /**
      * @param string $varName
      * @param string[] $classNames
      * @param mixed $userInput
@@ -127,23 +104,14 @@ trait ErrorTrait
      */
     private static function typeError(string $varName, array $classNames, $userInput): TypeError
     {
-        return new TypeError(self::getTypeErrorText($varName, $classNames, $userInput));
-    }
-
-    /**
-     * @param string $varName
-     * @param string[] $classNames
-     * @param mixed $userInput
-     * @return string
-     */
-    private static function getTypeErrorText(string $varName, array $classNames, $userInput): string
-    {
-        return sprintf(
-            '$%s should be a %s object, %s given.',
+        $errorText = sprintf(
+            '$%s should be a %s, %s given.',
             $varName,
             implode(' or ', $classNames),
             self::getDebugType($userInput)
         );
+
+        return new TypeError($errorText);
     }
 
     /**

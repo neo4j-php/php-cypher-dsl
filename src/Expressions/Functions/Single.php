@@ -20,8 +20,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-single
  * @see Func::single()
- *
- * @internal This class is not covered by the backwards compatibility promise of php-cypher-dsl
  */
 final class Single extends Func implements BooleanType
 {
@@ -50,6 +48,7 @@ final class Single extends Func implements BooleanType
      * @param Variable $variable A variable that can be used from within the predicate
      * @param ListType $list A list
      * @param AnyType $predicate A predicate that is tested against all items in the list
+	 * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(Variable $variable, ListType $list, AnyType $predicate)
     {

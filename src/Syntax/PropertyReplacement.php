@@ -42,14 +42,14 @@ final class PropertyReplacement implements QueryConvertible
     private bool $mutate = false;
 
     /**
-     * Assignment constructor.
-     *
      * @param Variable|Property $property The property or variable to assign a value to
      * @param AnyType $value The value to assign to the property
+     * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct($property, AnyType $value)
     {
         self::assertClass('property', [Variable::class, Property::class], $property);
+
         $this->property = $property;
         $this->value = $value;
     }

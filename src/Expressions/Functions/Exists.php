@@ -18,8 +18,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-exists
  * @see Func::exists()
- *
- * @internal This class is not covered by the backwards compatibility promise of php-cypher-dsl
  */
 final class Exists extends Func implements BooleanType
 {
@@ -36,6 +34,7 @@ final class Exists extends Func implements BooleanType
      * exists(input :: ANY?) :: (BOOLEAN?)
      *
      * @param AnyType $expression The value to check whether it exists
+	 * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(AnyType $expression)
     {

@@ -18,8 +18,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/spatial/
  * @see Func::point()
- *
- * @internal This class is not covered by the backwards compatibility promise of php-cypher-dsl
  */
 final class Point extends Func implements PointType
 {
@@ -36,6 +34,7 @@ final class Point extends Func implements PointType
      * point(input :: MAP?) :: (POINT?) - returns a point object
      *
      * @param MapType $map The map to use for constructing the point
+	 * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(MapType $map)
     {

@@ -18,8 +18,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-time
  * @see Func::time()
- *
- * @internal This class is not covered by the backwards compatibility promise of php-cypher-dsl
  */
 final class Time extends Func implements TimeType
 {
@@ -36,6 +34,7 @@ final class Time extends Func implements TimeType
      * time(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (TIME?)
      *
      * @param AnyType|null $value The input to the time function, from which to construct the time
+	 * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(?AnyType $value = null)
     {

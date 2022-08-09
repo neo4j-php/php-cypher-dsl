@@ -9,9 +9,11 @@
  */
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
+use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\StringGenerationTrait;
+use WikibaseSolutions\CypherDSL\Traits\NameGenerationTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
@@ -28,6 +30,7 @@ use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\TimeTypeTra
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits\PathTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits\RelationshipTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
@@ -84,7 +87,7 @@ final class Variable implements
         TimeTypeTrait;
 
     use EscapeTrait;
-    use StringGenerationTrait;
+    use NameGenerationTrait;
     use ErrorTrait;
 
     /**
@@ -93,8 +96,6 @@ final class Variable implements
     private string $name;
 
     /**
-     * Variable constructor.
-     *
      * @param string|null $name The name of the variable
      * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
@@ -104,9 +105,7 @@ final class Variable implements
             $name = $this->generateIdentifier();
         }
 
-        self::assertValidName($name);
-
-        $this->name = $name;
+        $this->name = self::escape($name);
     }
 
     /**
@@ -121,7 +120,18 @@ final class Variable implements
     }
 
     /**
-     * Returns the name of this variable.
+     * Assign a value to this property.
+     *
+     * @param Map|array $value The value to assign
+     * @return PropertyReplacement
+     */
+    public function assign($value): PropertyReplacement
+    {
+        return new PropertyReplacement($this, self::toMapType($value));
+    }
+
+    /**
+     * Returns the escaped name of this variable.
      *
      * @return string
      */
@@ -135,6 +145,6 @@ final class Variable implements
      */
     public function toQuery(): string
     {
-        return self::escape($this->name);
+        return $this->name;
     }
 }

@@ -33,10 +33,9 @@ final class Alias implements QueryConvertible
     private Variable $variable;
 
     /**
-     * Alias constructor.
-     *
      * @param AnyType $original The original item to be aliased
      * @param Variable $variable The new variable aliasing the original
+     * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(AnyType $original, Variable $variable)
     {

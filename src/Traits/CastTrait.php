@@ -17,6 +17,8 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
  * Helper trait for casting native PHP types to Cypher-DSL types. Casts are added to this class on an as-needed basis.
+ *
+ * @internal This trait is not covered by the backwards compatibility guarantee of php-cypher-dsl
  */
 trait CastTrait
 {

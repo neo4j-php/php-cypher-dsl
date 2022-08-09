@@ -26,7 +26,7 @@ final class Float_ implements FloatType
 
     /**
      * @param float $value The value
-     * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
+     * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(float $value)
     {

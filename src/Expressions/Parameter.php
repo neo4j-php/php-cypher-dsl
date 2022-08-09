@@ -11,7 +11,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
 
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\StringGenerationTrait;
+use WikibaseSolutions\CypherDSL\Traits\NameGenerationTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
@@ -72,7 +72,7 @@ final class Parameter implements
         TimeTypeTrait;
 
     use EscapeTrait;
-    use StringGenerationTrait;
+    use NameGenerationTrait;
     use ErrorTrait;
 
     /**
@@ -81,26 +81,21 @@ final class Parameter implements
     private string $parameter;
 
     /**
-     * Parameter constructor.
-     *
      * @param string|null $parameter The parameter; this parameter may only consist of alphanumeric characters and
-     * underscores
+     *  underscores
      * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(?string $parameter = null)
     {
         if (!isset($parameter)) {
             $parameter = $this->generateIdentifier('param');
-        } else {
-            // Validation is only needed when the user supplied their own parameter
-            self::assertValidName($parameter);
         }
 
-        $this->parameter = $parameter;
+        $this->parameter = self::escape($parameter);
     }
 
     /**
-     * Returns the parameter name.
+     * Returns the escaped parameter name.
      *
      * @return string
      */
