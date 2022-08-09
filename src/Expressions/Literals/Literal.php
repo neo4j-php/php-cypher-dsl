@@ -18,6 +18,8 @@ use WikibaseSolutions\CypherDSL\Expressions\Functions\LocalTime;
 use WikibaseSolutions\CypherDSL\Expressions\Functions\Point;
 use WikibaseSolutions\CypherDSL\Expressions\Functions\Time;
 use WikibaseSolutions\CypherDSL\Query;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
@@ -28,6 +30,9 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 final class Literal
 {
+    use CastTrait;
+    use ErrorTrait;
+
     /**
      * Prevent the construction of this class by making the constructor private.
      */
@@ -40,7 +45,7 @@ final class Literal
      * class based on the type of the value given.
      *
      * @param mixed $literal The literal to construct
-     * @return String_|Boolean|Decimal|List_|Map
+     * @return String_|Boolean|Float_|Integer|List_|Map
      */
     public static function literal($literal)
     {
@@ -52,8 +57,12 @@ final class Literal
             return self::boolean($literal);
         }
 
-        if (is_int($literal) || is_float($literal)) {
-            return self::decimal($literal);
+        if (is_int($literal)) {
+            return self::integer($literal);
+        }
+
+        if (is_float($literal)) {
+            return self::float($literal);
         }
 
         if (is_array($literal)) {
@@ -66,6 +75,31 @@ final class Literal
     }
 
     /**
+     * Creates a new numeral literal.
+     *
+     * @param int|float $value
+     * @return Float_|Integer
+     * @see Literal::number()
+     * @deprecated
+     */
+    public static function decimal($value)
+    {
+        return self::number($value);
+    }
+
+    /**
+     * Creates a new numeral literal.
+     *
+     * @param int|float $value
+     * @return Float_|Integer
+     */
+    public static function number($value)
+    {
+        self::assertClass('value', ['int', 'float'], $value);
+        return is_int($value) ? self::integer($value) : self::float($value);
+    }
+
+    /**
      * Creates a new boolean.
      *
      * @param bool $value
@@ -74,7 +108,7 @@ final class Literal
     public static function boolean(bool $value): Boolean
     {
         // PhpStorm warns about a type error here, this is a bug.
-        // @see https://youtrack.jetbrains.com/issue/WI-68030
+        // @see https://youtrack.jetbrains.com/issue/WI-39239
         return new Boolean($value);
     }
 
@@ -90,14 +124,27 @@ final class Literal
     }
 
     /**
-     * Creates a new decimal literal.
+     * Creates a new integer.
      *
-     * @param int|float $value
-     * @return Decimal
+     * @param int $value
+     * @return Integer
      */
-    public static function decimal($value): Decimal
+    public static function integer(int $value): Integer
     {
-        return new Decimal($value);
+        // PhpStorm warns about a type error here, this is a bug.
+        // @see https://youtrack.jetbrains.com/issue/WI-39239
+        return new Integer($value);
+    }
+
+    /**
+     * Creates a new float.
+     *
+     * @param float $value
+     * @return Float_
+     */
+    public static function float(float $value): Float_
+    {
+        return new Float_($value);
     }
 
     /**
@@ -108,7 +155,7 @@ final class Literal
      */
     public static function list(array $value): List_
     {
-        return new List_(array_map([self::class, 'literal'], $value));
+        return new List_(array_map([self::class, 'toAnyType'], $value));
     }
 
     /**
@@ -119,7 +166,7 @@ final class Literal
      */
     public static function map(array $value): Map
     {
-        return new Map(array_map([self::class, 'literal'], $value));
+        return new Map(array_map([self::class, 'toAnyType'], $value));
     }
 
     /**
@@ -137,11 +184,7 @@ final class Literal
             return Func::date();
         }
 
-        if (!($timezone instanceof StringType)) {
-            $timezone = self::string($timezone);
-        }
-
-        return Func::date(Query::map(["timezone" => $timezone]));
+        return Func::date(Query::map(["timezone" => self::toStringType($timezone)]));
     }
 
     /**
@@ -192,11 +235,7 @@ final class Literal
      */
     public static function dateString($date): Date
     {
-        if (!$date instanceof StringType) {
-            $date = self::string($date);
-        }
-
-        return Func::date($date);
+        return Func::date(self::toStringType($date));
     }
 
     /**
@@ -214,11 +253,7 @@ final class Literal
             return Func::datetime();
         }
 
-        if (!$timezone instanceof StringType) {
-            $timezone = self::string($timezone);
-        }
-
-        return Func::datetime(Query::map(["timezone" => $timezone]));
+        return Func::datetime(Query::map(["timezone" => self::toStringType($timezone)]));
     }
 
     /**
@@ -398,11 +433,7 @@ final class Literal
      */
     public static function dateTimeString($dateString): DateTime
     {
-        if (!($dateString instanceof StringType)) {
-            $dateString = self::string($dateString);
-        }
-
-        return Func::datetime($dateString);
+        return Func::datetime(self::toStringType($dateString));
     }
 
     /**
@@ -419,11 +450,7 @@ final class Literal
             return Func::localdatetime();
         }
 
-        if (!$timezone instanceof StringType) {
-            $timezone = self::string($timezone);
-        }
-
-        return Func::localdatetime(Query::map(["timezone" => $timezone]));
+        return Func::localdatetime(Query::map(["timezone" => self::toStringType($timezone)]));
     }
 
     /**
@@ -594,11 +621,7 @@ final class Literal
      */
     public static function localDateTimeString($localDateTimeString): LocalDateTime
     {
-        if (!$localDateTimeString instanceof StringType) {
-            $localDateTimeString = self::string($localDateTimeString);
-        }
-
-        return Func::localdatetime($localDateTimeString);
+        return Func::localdatetime(self::toStringType($localDateTimeString));
     }
 
     /**
@@ -615,11 +638,7 @@ final class Literal
             return Func::localtime();
         }
 
-        if (!$timezone instanceof StringType) {
-            $timezone = self::string($timezone);
-        }
-
-        return Func::localtime(Query::map(["timezone" => $timezone]));
+        return Func::localtime(Query::map(["timezone" => self::toStringType($timezone)]));
     }
 
     /**
@@ -661,11 +680,7 @@ final class Literal
      */
     public static function localTimeString($localTimeString): LocalTime
     {
-        if (!($localTimeString instanceof StringType)) {
-            $localTimeString = self::string($localTimeString);
-        }
-
-        return Func::localtime($localTimeString);
+        return Func::localtime(self::toStringType($localTimeString));
     }
 
     /**
@@ -682,11 +697,7 @@ final class Literal
             return Func::time();
         }
 
-        if (!($timezone instanceof StringType)) {
-            $timezone = self::string($timezone);
-        }
-
-        return Func::time(Query::map(["timezone" => $timezone]));
+        return Func::time(Query::map(["timezone" => self::toStringType($timezone)]));
     }
 
     /**
@@ -733,11 +744,7 @@ final class Literal
      */
     public static function timeString($timeString): Time
     {
-        if (!($timeString instanceof StringType)) {
-            $timeString = self::string($timeString);
-        }
-
-        return Func::time($timeString);
+        return Func::time(self::toStringType($timeString));
     }
 
     /**
@@ -751,17 +758,9 @@ final class Literal
      */
     public static function point2d($x, $y): Point
     {
-        if (!($x instanceof NumeralType)) {
-            $x = self::decimal($x);
-        }
-
-        if (!($y instanceof NumeralType)) {
-            $y = self::decimal($y);
-        }
-
         $map = [
-            "x" => $x,
-            "y" => $y,
+            "x" => self::toNumeralType($x),
+            "y" => self::toNumeralType($y),
         ];
 
         $map["crs"] = self::string("cartesian");
@@ -781,22 +780,10 @@ final class Literal
      */
     public static function point3d($x, $y, $z): Point
     {
-        if (!($x instanceof NumeralType)) {
-            $x = self::decimal($x);
-        }
-
-        if (!($y instanceof NumeralType)) {
-            $y = self::decimal($y);
-        }
-
-        if (!($z instanceof NumeralType)) {
-            $z = self::decimal($z);
-        }
-
         $map = [
-            "x" => $x,
-            "y" => $y,
-            "z" => $z,
+            "x" => self::toNumeralType($x),
+            "y" => self::toNumeralType($y),
+            "z" => self::toNumeralType($z)
         ];
 
         $map["crs"] = self::string("cartesian-3D");
@@ -815,17 +802,9 @@ final class Literal
      */
     public static function point2dWGS84($longitude, $latitude): Point
     {
-        if (!($longitude instanceof NumeralType)) {
-            $longitude = self::decimal($longitude);
-        }
-
-        if (!($latitude instanceof NumeralType)) {
-            $latitude = self::decimal($latitude);
-        }
-
         $map = [
-            "longitude" => $longitude,
-            "latitude" => $latitude,
+            "longitude" => self::toNumeralType($longitude),
+            "latitude" => self::toNumeralType($latitude)
         ];
 
         $map["crs"] = self::string("WGS-84");
@@ -845,22 +824,10 @@ final class Literal
      */
     public static function point3dWGS84($longitude, $latitude, $height): Point
     {
-        if (!($longitude instanceof NumeralType)) {
-            $longitude = self::decimal($longitude);
-        }
-
-        if (!($latitude instanceof NumeralType)) {
-            $latitude = self::decimal($latitude);
-        }
-
-        if (!($height instanceof NumeralType)) {
-            $height = self::decimal($height);
-        }
-
         $map = [
-            "longitude" => $longitude,
-            "latitude" => $latitude,
-            "height" => $height,
+            "longitude" => self::toNumeralType($longitude),
+            "latitude" => self::toNumeralType($latitude),
+            "height" => self::toNumeralType($height)
         ];
 
         $map["crs"] = self::string("WGS-84-3D");
@@ -896,7 +863,7 @@ final class Literal
 
             if ($key === 'timezone') {
                 // Timezone can always be added, and is a string.
-                $map[$key] = self::convertToString($variable);
+                $map[$key] = self::toStringType($variable);
             } else {
                 if (!$secondsFound && $nullEncountered) {
                     // Check if none of the previous, i.e. more important components, are null.
@@ -908,40 +875,10 @@ final class Literal
                     $secondsFound = true;
                 }
 
-                $map[$key] = self::convertToNumeral($variable);
+                $map[$key] = self::toNumeralType($variable);
             }
         }
 
         return Query::map($map);
-    }
-
-    /**
-     * Convert the given value to a numeral.
-     *
-     * @param NumeralType|float|int $var
-     * @return Decimal
-     */
-    private static function convertToNumeral($var): NumeralType
-    {
-        if ($var instanceof NumeralType) {
-            return $var;
-        }
-
-        return self::decimal($var);
-    }
-
-    /**
-     * Convert the given value to a string.
-     *
-     * @param $var
-     * @return StringType
-     */
-    private static function convertToString($var): StringType
-    {
-        if ($var instanceof StringType) {
-            return $var;
-        }
-
-        return self::string($var);
     }
 }

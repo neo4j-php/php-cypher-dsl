@@ -22,17 +22,17 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Literals;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Number;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Literals\Number
  */
 class DecimalTest extends TestCase
 {
     public function testZero(): void
     {
-        $decimal = new Decimal(0);
+        $decimal = new Number(0);
 
         $this->assertSame("0", $decimal->toQuery());
         $this->assertEquals('0', $decimal->getValue());
@@ -40,7 +40,7 @@ class DecimalTest extends TestCase
 
     public function testInstanceOfNumeralType(): void
     {
-        $this->assertInstanceOf(NumeralType::class, new Decimal(0));
+        $this->assertInstanceOf(NumeralType::class, new Number(0));
     }
 
     /**
@@ -50,7 +50,7 @@ class DecimalTest extends TestCase
      */
     public function testToQuery($number, string $expected): void
     {
-        $decimal = new Decimal($number);
+        $decimal = new Number($number);
 
         $this->assertSame($expected, $decimal->toQuery());
         $this->assertEquals($expected, $decimal->getValue());

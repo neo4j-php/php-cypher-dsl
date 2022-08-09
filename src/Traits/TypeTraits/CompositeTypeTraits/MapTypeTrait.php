@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTraits\PropertyMethodTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\MethodTraits\PropertyMethodTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**

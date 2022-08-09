@@ -25,7 +25,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Number;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
@@ -268,14 +268,14 @@ class QueryTest extends TestCase
     public function testInt(): void
     {
         $literal = Query::literal(1);
-        self::assertInstanceOf(Decimal::class, $literal);
+        self::assertInstanceOf(Number::class, $literal);
         self::assertEquals('1', $literal->toQuery());
     }
 
     public function testFloat(): void
     {
         $literal = Query::literal(1.2);
-        self::assertInstanceOf(Decimal::class, $literal);
+        self::assertInstanceOf(Number::class, $literal);
         self::assertEquals('1.2', $literal->toQuery());
     }
 
@@ -344,11 +344,11 @@ class QueryTest extends TestCase
             ['foobar', new String_('foobar')],
             ['0', new String_('0')],
             ['100', new String_('100')],
-            [0, new Decimal(0)],
-            [100, new Decimal(100)],
-            [10.0, new Decimal(10.0)],
-            [69420, new Decimal(69420)],
-            [10.0000000000000000000000000000001, new Decimal(10.0000000000000000000000000000001)],
+            [0, new Number(0)],
+            [100, new Number(100)],
+            [10.0, new Number(10.0)],
+            [69420, new Number(69420)],
+            [10.0000000000000000000000000000001, new Number(10.0000000000000000000000000000001)],
             [false, new Boolean(false)],
             [true, new Boolean(true)],
         ];

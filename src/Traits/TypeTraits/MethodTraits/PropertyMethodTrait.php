@@ -1,6 +1,6 @@
 <?php
 
-namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTraits;
+namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\MethodTraits;
 
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Types\Methods\PropertyMethod;

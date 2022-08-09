@@ -96,7 +96,7 @@ trait ErrorTrait
     }
 
     /**
-     * Validates the name to see if it can be used as a parameter or variable.
+     * Validates the name to see if it can be used as a parameter or variable. The name may still require escaping.
      *
      * @see https://neo4j.com/docs/cypher-manual/current/syntax/naming/#_naming_rules
      *
@@ -109,15 +109,13 @@ trait ErrorTrait
         $name = trim($name);
 
         if ($name === "") {
-            throw new InvalidArgumentException("A name cannot be an empty string");
+            throw new InvalidArgumentException("A name cannot be the empty string");
         }
 
-        if (!preg_match('/^\p{L}[\p{L}\d_]*$/u', $name)) {
-            throw new InvalidArgumentException('A name can only contain alphanumeric characters and underscores and must begin with an alphabetic character');
-        }
-
-        if (strlen($name) >= 65535) {
-            throw new InvalidArgumentException('A name cannot be longer than 65534 characters');
+        if (strlen($name) > 65534) {
+            // NOTE: Some versions of Neo4j support names up to 65535 characters, but to be safe, we deny any names that
+            // are over 65534 characters long.
+            throw new InvalidArgumentException("A name cannot be longer than 65534 (2^16 - 2) characters");
         }
     }
 

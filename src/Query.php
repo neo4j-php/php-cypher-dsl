@@ -40,10 +40,12 @@ use WikibaseSolutions\CypherDSL\Clauses\SkipClause;
 use WikibaseSolutions\CypherDSL\Clauses\UnionClause;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
+use WikibaseSolutions\CypherDSL\Expressions\Exists;
 use WikibaseSolutions\CypherDSL\Expressions\Functions\Func;
 use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
@@ -52,6 +54,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Parameter;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Patterns\MatchablePattern;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
@@ -63,6 +66,8 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
@@ -181,9 +186,18 @@ final class Query implements QueryConvertible
      * When no arguments are given to this function (or NULL is passed as its only argument), the function will return
      * a reference to the Literal class.
      *
+     * You can also directly use the constructors of the most basic types, namely:
+     *
+     *  Query::boolean() - For a boolean
+     *  Query::string() - For a string
+     *  Query::integer() - For an integer
+     *  Query::float() - For a float
+     *  Query::list() - For a list
+     *  Query::map() - For a map
+     *
      * @param string|int|float|bool|array|null $literal The literal to construct
-     * @return String_|Boolean|Decimal|Literal|Map|List_|string The string literal that was created (or a reference to
-     *  the Literal class)
+     * @return String_|Boolean|Float_|Integer|Map|List_|Literal|string The string literal that was created (or a
+     *  reference to the Literal class)
      */
     public static function literal($literal = null)
     {
@@ -195,27 +209,69 @@ final class Query implements QueryConvertible
     }
 
     /**
-     * Creates a list.
+     * Creates a new boolean.
      *
-     * @param array $values An array of values from which to construct the list
-     * @return List_
-     * @see Query::literal() for a function that automatically determines the class to construct
+     * @param bool $value
+     * @return Boolean
      */
-    public static function list(array $values): List_
+    public static function boolean(bool $value): Boolean
     {
-        return Literal::literal($values);
+        return self::literal()::boolean($value);
     }
 
     /**
-     * Creates a map.
+     * Creates a new string.
      *
-     * @param array $values The map of properties as a number of key-expression pairs
-     * @return Map
-     * @see Query::literal() for a function that automatically determines the class to construct
+     * @param string $value
+     * @return String_
      */
-    public static function map(array $values): Map
+    public static function string(string $value): String_
     {
-        return new Map($values);
+        return self::literal()::string($value);
+    }
+
+    /**
+     * Creates a new integer.
+     *
+     * @param int $value
+     * @return Integer
+     */
+    public static function integer(int $value): Integer
+    {
+        return self::literal()::integer($value);
+    }
+
+    /**
+     * Creates a new float.
+     *
+     * @param float $value
+     * @return Float_
+     */
+    public static function float(float $value): Float_
+    {
+        return self::literal()::float($value);
+    }
+
+    /**
+     * Creates a new list literal.
+     *
+     * @param array $value
+     * @return List_
+     */
+    public static function list(array $value): List_
+    {
+        return self::literal()::list($value);
+    }
+
+    /**
+     * Creates a new map literal.
+     *
+     * @param array $value
+     * @return Map
+     */
+    public static function map(array $value): Map
+    {
+        return self::literal()::map($value);
     }
 
     /**
@@ -230,7 +286,7 @@ final class Query implements QueryConvertible
     }
 
     /**
-     * Returns the name of the FunctionCall class. This can be used to more easily create new functions calls, like so:
+     * Returns the name of the Func class. This can be used to more easily create new functions calls, like so:
      *
      * Query::function()::raw(...)
      *
@@ -245,11 +301,35 @@ final class Query implements QueryConvertible
      * Creates a raw expression.
      *
      * @param string $expression The raw expression
-     * @return ListType|MapType|BooleanType|DateTimeType|DateType|LocalDateTimeType|PointType|NumeralType|StringType|TimeType|NodeType|PathType|RelationshipType
+     * @return ListType|MapType|BooleanType|DateTimeType|DateType|LocalDateTimeType|PointType|FloatType|IntegerType|StringType|TimeType|NodeType|PathType|RelationshipType
      */
-    public static function rawExpression(string $expression): AnyType
+    public static function rawExpression(string $expression): RawExpression
     {
         return new RawExpression($expression);
+    }
+
+    /**
+     * Creates an EXISTS expression.
+     *
+     * @param MatchablePattern|MatchablePattern[]|MatchClause $match
+     * @param BooleanType|BooleanType[]|WhereClause|null $where
+     * @param bool $insertParentheses
+     * @return Exists
+     */
+    public static function exists($match, $where = null, bool $insertParentheses = false): Exists
+    {
+        if (!$match instanceof MatchClause) {
+            $match = is_array($match) ? $match : [$match];
+            $match = (new MatchClause())->setPatterns($match);
+        }
+
+        if (!$where instanceof WhereClause && $where !== null) {
+            $where = is_array($where) ? $where : [$where];
+            $whereExpression = array_reduce($where, fn ($c, $i) => $c->and($i));
+            $where = (new WhereClause())->setExpression($whereExpression);
+        }
+
+        return new Exists($match, $where, $insertParentheses);
     }
 
     /**
@@ -497,7 +577,7 @@ final class Query implements QueryConvertible
         $limitClause = new LimitClause();
 
         if (is_float($limit) || is_int($limit)) {
-            $limit = Literal::decimal($limit);
+            $limit = Literal::number($limit);
         }
 
         $limitClause->setLimit($limit);
@@ -520,7 +600,7 @@ final class Query implements QueryConvertible
         $skipClause = new SkipClause();
 
         if (is_float($amount) || is_int($amount)) {
-            $amount = Literal::decimal($amount);
+            $amount = Literal::number($amount);
         }
 
         $skipClause->setSkip($amount);
@@ -794,24 +874,6 @@ final class Query implements QueryConvertible
     }
 
     /**
-     * @inheritDoc
-     */
-    public function toQuery(): string
-    {
-        return $this->build();
-    }
-
-    /**
-     * Automatically build the query if this object is used as a string somewhere.
-     *
-     * @return string
-     */
-    public function __toString(): string
-    {
-        return $this->build();
-    }
-
-    /**
      * Builds the query.
      *
      * @return string The fully constructed query
@@ -827,5 +889,23 @@ final class Query implements QueryConvertible
             " ",
             array_filter($builtClauses, fn ($clause) => !empty($clause))
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toQuery(): string
+    {
+        return $this->build();
+    }
+
+    /**
+     * Automatically build the query if this object is used as a string somewhere.
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->build();
     }
 }

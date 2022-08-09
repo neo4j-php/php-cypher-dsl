@@ -21,7 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTraits\PropertyMethodTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\MethodTraits\PropertyMethodTrait;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 
 /**

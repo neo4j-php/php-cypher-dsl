@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Patterns\MatchablePattern;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
@@ -42,30 +43,26 @@ class MatchClause extends Clause
     /**
      * Sets the pattern of the MATCH clause. This overwrites any previously added patterns.
      *
-     * @param PathType[]|NodeType[] $patterns
+     * @param MatchablePattern[] $patterns
      * @return $this
      */
     public function setPatterns(array $patterns): self
     {
-        foreach ($patterns as $pattern) {
-            $this->assertClass('pattern', [PathType::class, NodeType::class], $pattern);
-        }
-
+        self::assertClassArray('patterns', MatchablePattern::class, $patterns);
         $this->patterns = $patterns;
 
         return $this;
     }
 
     /**
-     * Add a pattern to the MATCH clause.
+     * Add one or more patterns to the MATCH clause.
      *
-     * @param PathType|NodeType $pattern
+     * @param MatchablePattern ...$pattern
      * @return MatchClause
      */
-    public function addPattern($pattern): self
+    public function addPattern(MatchablePattern ...$pattern): self
     {
-        $this->assertClass('pattern', [PathType::class, NodeType::class], $pattern);
-        $this->patterns[] = $pattern;
+        $this->patterns = array_merge($this->patterns, $pattern);
 
         return $this;
     }

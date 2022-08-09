@@ -16,6 +16,8 @@ interface and corresponding trait. These types are combined into a hierarchy, li
     └ LocalDateTimeType
     └ LocalTimeType
     └ NumeralType
+      └ FloatType
+      └ IntegerType
     └ PointType
     └ StringType
     └ TimeType
@@ -42,7 +44,12 @@ Trait method NodeTypeTrait::property has not been applied as Variable::property,
 ```
 
 To solve this, we extract the colliding method out into a separate trait, which is then used by all traits that need
-to implement that function. This works, because methods originating from the same sub-trait are not considered as 
-conflicting (see https://bugs.php.net/bug.php?id=63911).
+to implement that function. This works since PHP 7.3, because methods originating from the same sub-trait are no longer 
+considered as conflicting (see https://bugs.php.net/bug.php?id=63911). To guarantee the function definition stays the 
+same across the types, we do the same for the interface.
 
-To guarantee the function definition stays the same across the types, we do the same for the interface.
+This approach was chosen instead of using the `insteadof` operator for a number of reasons:
+
+* The function definition needs to be written only once;
+* Less work is required to implement an interface;
+* There is no definition that has to take precedence.

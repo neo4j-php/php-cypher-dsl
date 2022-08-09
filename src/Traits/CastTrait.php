@@ -16,7 +16,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
- * Helper trait for casting native PHP types to Cypher-DSL types.
+ * Helper trait for casting native PHP types to Cypher-DSL types. Casts are added to this class on an as-needed basis.
  */
 trait CastTrait
 {
@@ -31,7 +31,7 @@ trait CastTrait
     private static function toListType($list): ListType
     {
         self::assertClass('list', [ListType::class, 'array'], $list);
-        return $list instanceof ListType ? $list : new List_($list);
+        return $list instanceof ListType ? $list : Literal::list($list);
     }
 
     /**
@@ -43,7 +43,7 @@ trait CastTrait
     private static function toMapType($map): MapType
     {
         self::assertClass('map', [MapType::class, 'array'], $map);
-        return $map instanceof MapType ? $map : new Map($map);
+        return $map instanceof MapType ? $map : Literal::map($map);
     }
 
     /**
@@ -67,7 +67,7 @@ trait CastTrait
     private static function toNumeralType($numeral): NumeralType
     {
         self::assertClass('numeral', [NumeralType::class, 'int', 'float'], $numeral);
-        return $numeral instanceof NumeralType ? $numeral : Literal::decimal($numeral);
+        return $numeral instanceof NumeralType ? $numeral : Literal::number($numeral);
     }
 
     /**
@@ -122,12 +122,6 @@ trait CastTrait
 
         if ($value instanceof Pattern) {
             return $value->getVariable();
-        }
-
-        if (is_array($value)) {
-            return array_is_list($value) ?
-                new List_($value) :
-                new Map($value);
         }
 
         return Literal::literal($value);

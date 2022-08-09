@@ -24,7 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Addition;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Number;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 
 /**
@@ -34,8 +34,8 @@ class AdditionTest extends TestCase
 {
     public function testToQuery(): void
     {
-		$left = new Decimal(10);
-		$right = new Decimal(15);
+		$left = new Number(10);
+		$right = new Number(15);
         $addition = new Addition($left, $right);
 
         $this->assertSame("(10 + 15)", $addition->toQuery());

@@ -19,18 +19,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits;
+namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\MethodTraits\PropertyMethodTrait;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\FloatTypeTrait;
 
 /**
- * This trait provides a default implementation to satisfy the "RelationshipType" interface.
+ * Represents the leaf type "float".
  *
- * @implements RelationshipType
+ * @see FloatTypeTrait for a default implementation
  */
-trait RelationshipTypeTrait
+interface FloatType extends NumeralType
 {
-    use StructuralTypeTrait;
-    use PropertyMethodTrait;
 }

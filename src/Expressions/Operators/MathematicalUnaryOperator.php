@@ -1,27 +1,17 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
+ * This file is part of php-cypher-dsl.
+ *
  * Copyright (C) 2021  Wikibase Solutions
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\NumeralTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
@@ -32,7 +22,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 48)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-mathematical
  */
-abstract class MathematicalUnaryOperator extends UnaryOperator implements NumeralType
+abstract class MathematicalUnaryOperator extends UnaryOperator implements FloatType, IntegerType
 {
     use NumeralTypeTrait;
 
@@ -41,6 +31,7 @@ abstract class MathematicalUnaryOperator extends UnaryOperator implements Numera
      *
      * @param NumeralType $expression The expression
      * @param bool $insertParentheses Whether to insert parentheses around the expression
+	 * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(NumeralType $expression, bool $insertParentheses = true)
     {

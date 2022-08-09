@@ -1,24 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
+ * This file is part of php-cypher-dsl.
+ *
  * Copyright (C) 2021  Wikibase Solutions
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
@@ -26,6 +14,8 @@ use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTra
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\DateTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\DateTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\FloatTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\IntegerTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\LocalDateTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\LocalTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\NumeralTypeTrait;
@@ -40,6 +30,8 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
@@ -58,12 +50,13 @@ final class RawExpression implements
     BooleanType,
     DateType,
     DateTimeType,
+    FloatType,
+    IntegerType,
     ListType,
     LocalDateTimeType,
     LocalTimeType,
     MapType,
     NodeType,
-    NumeralType,
     PathType,
     PointType,
     RelationshipType,
@@ -73,12 +66,13 @@ final class RawExpression implements
     use BooleanTypeTrait,
         DateTypeTrait,
         DateTimeTypeTrait,
+        FloatTypeTrait,
+        IntegerTypeTrait,
         ListTypeTrait,
         LocalDateTimeTypeTrait,
         LocalTimeTypeTrait,
         MapTypeTrait,
         NodeTypeTrait,
-        NumeralTypeTrait,
         PathTypeTrait,
         PointTypeTrait,
         RelationshipTypeTrait,
@@ -94,6 +88,7 @@ final class RawExpression implements
      * RawExpression constructor.
      *
      * @param string $expression The raw expression
+	 * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(string $expression)
     {

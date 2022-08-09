@@ -4,7 +4,7 @@ namespace WikibaseSolutions\CypherDSL\Types\Methods;
 
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTraits\PropertyMethodTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\MethodTraits\PropertyMethodTrait;
 
 /**
  * Represents the "property" method.

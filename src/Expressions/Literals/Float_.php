@@ -9,40 +9,36 @@
  */
 namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\NumeralTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\FloatTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
 
 /**
- * Represents a decimal (integer or float) literal.
+ * Represents a float literal.
  */
-final class Decimal implements NumeralType
+final class Float_ implements FloatType
 {
-    use NumeralTypeTrait;
-
-    use ErrorTrait;
+    use FloatTypeTrait;
 
     /**
-     * @var int|float The value
+     * @var float The value
      */
-    private $value;
+    private float $value;
 
     /**
-     * @param int|float $value The value
+     * @param float $value The value
      * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
-    public function __construct($value)
+    public function __construct(float $value)
     {
-        $this->assertClass('value', ['int', 'float'], $value);
         $this->value = $value;
     }
 
     /**
-     * Returns the numeric value.
+     * Returns the integer value.
      *
-     * @return int|float
+     * @return float
      */
-    public function getValue()
+    public function getValue(): float
     {
         return $this->value;
     }

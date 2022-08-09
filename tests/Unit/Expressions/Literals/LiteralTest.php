@@ -30,7 +30,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Functions\LocalTime;
 use WikibaseSolutions\CypherDSL\Expressions\Functions\Point;
 use WikibaseSolutions\CypherDSL\Expressions\Functions\Time;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Decimal;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Number;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
@@ -61,14 +61,14 @@ class LiteralTest extends TestCase
     {
         $integer = Literal::literal(1);
 
-        $this->assertInstanceOf(Decimal::class, $integer);
+        $this->assertInstanceOf(Number::class, $integer);
     }
 
     public function testLiteralFloat(): void
     {
         $float = Literal::literal(1.0);
 
-        $this->assertInstanceOf(Decimal::class, $float);
+        $this->assertInstanceOf(Number::class, $float);
     }
 
     public function testStringable(): void
@@ -105,69 +105,69 @@ class LiteralTest extends TestCase
     {
         $decimal = Literal::decimal(1);
 
-        $this->assertInstanceOf(Decimal::class, $decimal);
+        $this->assertInstanceOf(Number::class, $decimal);
 
         $decimal = Literal::decimal(1.0);
 
-        $this->assertInstanceOf(Decimal::class, $decimal);
+        $this->assertInstanceOf(Number::class, $decimal);
     }
 
     public function testPoint2d(): void
     {
         $point = Literal::point2d(1, 2);
 
-        $this->assertEquals(new Point(new Map(["x" => new Decimal(1), "y" => new Decimal(2), "crs" => new String_("cartesian")])), $point);
+        $this->assertEquals(new Point(new Map(["x" => new Number(1), "y" => new Number(2), "crs" => new String_("cartesian")])), $point);
 
         $point = Literal::point2d(
-            new Decimal(1),
-            new Decimal(2)
+            new Number(1),
+            new Number(2)
         );
 
-        $this->assertEquals(new Point(new Map(["x" => new Decimal(1), "y" => new Decimal(2), "crs" => new String_("cartesian")])), $point);
+        $this->assertEquals(new Point(new Map(["x" => new Number(1), "y" => new Number(2), "crs" => new String_("cartesian")])), $point);
     }
 
     public function testPoint3d(): void
     {
         $point = Literal::point3d(1, 2, 3);
 
-        $this->assertEquals(new Point(new Map(["x" => new Decimal(1), "y" => new Decimal(2), "z" => new Decimal(3), "crs" => new String_("cartesian-3D")])), $point);
+        $this->assertEquals(new Point(new Map(["x" => new Number(1), "y" => new Number(2), "z" => new Number(3), "crs" => new String_("cartesian-3D")])), $point);
 
         $point = Literal::point3d(
-            new Decimal(1),
-            new Decimal(2),
-            new Decimal(3)
+            new Number(1),
+            new Number(2),
+            new Number(3)
         );
 
-        $this->assertEquals(new Point(new Map(["x" => new Decimal(1), "y" => new Decimal(2), "z" => new Decimal(3), "crs" => new String_("cartesian-3D")])), $point);
+        $this->assertEquals(new Point(new Map(["x" => new Number(1), "y" => new Number(2), "z" => new Number(3), "crs" => new String_("cartesian-3D")])), $point);
     }
 
     public function testPoint2dWGS84(): void
     {
         $point = Literal::point2dWGS84(1, 2);
 
-        $this->assertEquals(new Point(new Map(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "crs" => new String_("WGS-84")])), $point);
+        $this->assertEquals(new Point(new Map(["longitude" => new Number(1), "latitude" => new Number(2), "crs" => new String_("WGS-84")])), $point);
 
         $point = Literal::point2dWGS84(
-            new Decimal(1),
-            new Decimal(2)
+            new Number(1),
+            new Number(2)
         );
 
-        $this->assertEquals(new Point(new Map(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "crs" => new String_("WGS-84")])), $point);
+        $this->assertEquals(new Point(new Map(["longitude" => new Number(1), "latitude" => new Number(2), "crs" => new String_("WGS-84")])), $point);
     }
 
     public function testPoint3dWGS84(): void
     {
         $point = Literal::point3dWGS84(1, 2, 3);
 
-        $this->assertEquals(new Point(new Map(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "height" => new Decimal(3), "crs" => new String_("WGS-84-3D")])), $point);
+        $this->assertEquals(new Point(new Map(["longitude" => new Number(1), "latitude" => new Number(2), "height" => new Number(3), "crs" => new String_("WGS-84-3D")])), $point);
 
         $point = Literal::point3dWGS84(
-            new Decimal(1),
-            new Decimal(2),
-            new Decimal(3)
+            new Number(1),
+            new Number(2),
+            new Number(3)
         );
 
-        $this->assertEquals(new Point(new Map(["longitude" => new Decimal(1), "latitude" => new Decimal(2), "height" => new Decimal(3), "crs" => new String_("WGS-84-3D")])), $point);
+        $this->assertEquals(new Point(new Map(["longitude" => new Number(1), "latitude" => new Number(2), "height" => new Number(3), "crs" => new String_("WGS-84-3D")])), $point);
     }
 
     public function testDate(): void
@@ -606,12 +606,12 @@ class LiteralTest extends TestCase
     public function provideDateYMDData(): array
     {
         return [
-            [2000, null, null, new Date(new Map(["year" => new Decimal(2000)]))],
-            [2000, 12, null, new Date(new Map(["year" => new Decimal(2000), "month" => new Decimal(12)]))],
-            [2000, 12, 17, new Date(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(17)]))],
-            [new Decimal(2000), null, null, new Date(new Map(["year" => new Decimal(2000)]))],
-            [new Decimal(2000), new Decimal(12), null, new Date(new Map(["year" => new Decimal(2000), "month" => new Decimal(12)]))],
-            [new Decimal(2000), new Decimal(12), new Decimal(17), new Date(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(17)]))],
+            [2000, null, null, new Date(new Map(["year" => new Number(2000)]))],
+            [2000, 12, null, new Date(new Map(["year" => new Number(2000), "month" => new Number(12)]))],
+            [2000, 12, 17, new Date(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(17)]))],
+            [new Number(2000), null, null, new Date(new Map(["year" => new Number(2000)]))],
+            [new Number(2000), new Number(12), null, new Date(new Map(["year" => new Number(2000), "month" => new Number(12)]))],
+            [new Number(2000), new Number(12), new Number(17), new Date(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(17)]))],
 
         ];
     }
@@ -619,12 +619,12 @@ class LiteralTest extends TestCase
     public function provideDateYWDData(): array
     {
         return [
-            [2000, null, null, new Date(new Map(["year" => new Decimal(2000)]))],
-            [2000, 12, null, new Date(new Map(["year" => new Decimal(2000), "week" => new Decimal(12)]))],
-            [2000, 12, 17, new Date(new Map(["year" => new Decimal(2000), "week" => new Decimal(12), "dayOfWeek" => new Decimal(17)]))],
-            [new Decimal(2000), null, null, new Date(new Map(["year" => new Decimal(2000)]))],
-            [new Decimal(2000), new Decimal(12), null, new Date(new Map(["year" => new Decimal(2000), "week" => new Decimal(12)]))],
-            [new Decimal(2000), new Decimal(12), new Decimal(17), new Date(new Map(["year" => new Decimal(2000), "week" => new Decimal(12), "dayOfWeek" => new Decimal(17)]))],
+            [2000, null, null, new Date(new Map(["year" => new Number(2000)]))],
+            [2000, 12, null, new Date(new Map(["year" => new Number(2000), "week" => new Number(12)]))],
+            [2000, 12, 17, new Date(new Map(["year" => new Number(2000), "week" => new Number(12), "dayOfWeek" => new Number(17)]))],
+            [new Number(2000), null, null, new Date(new Map(["year" => new Number(2000)]))],
+            [new Number(2000), new Number(12), null, new Date(new Map(["year" => new Number(2000), "week" => new Number(12)]))],
+            [new Number(2000), new Number(12), new Number(17), new Date(new Map(["year" => new Number(2000), "week" => new Number(12), "dayOfWeek" => new Number(17)]))],
 
         ];
     }
@@ -633,28 +633,28 @@ class LiteralTest extends TestCase
     {
         // [$year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000)]))],
-            [2000, 12, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12)]))],
-            [2000, 12, 15, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15)]))],
-            [2000, 12, 15, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8)]))],
-            [2000, 12, 15, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
-            [2000, 12, 15, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
-            [2000, 12, 15, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
-            [2000, 12, 15, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
-            [2000, 12, 15, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
-            [2000, 12, 15, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new String_("America/Los Angeles")]))],
+            [2000, null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
+            [2000, 12, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12)]))],
+            [2000, 12, 15, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15)]))],
+            [2000, 12, 15, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8)]))],
+            [2000, 12, 15, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [2000, 12, 15, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [2000, 12, 15, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
 
             // types
-            [new Decimal(2000), null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000)]))],
-            [new Decimal(2000), new Decimal(12), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12)]))],
-            [new Decimal(2000), new Decimal(12), new Decimal(15), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15)]))],
-            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8)]))],
-            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
-            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), new Decimal(44), null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
-            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
-            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), null, null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
-            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), null, new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
-            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new String_("America/Los Angeles")]))],
+            [new Number(2000), null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
+            [new Number(2000), new Number(12), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12)]))],
+            [new Number(2000), new Number(12), new Number(15), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), new Number(18), null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
         ];
     }
 
@@ -662,28 +662,28 @@ class LiteralTest extends TestCase
     {
         // [$year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000)]))],
-            [2000, 9, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9)]))],
-            [2000, 9, 4, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4)]))],
-            [2000, 9, 4, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8)]))],
-            [2000, 9, 4, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
-            [2000, 9, 4, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
-            [2000, 9, 4, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
-            [2000, 9, 4, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
-            [2000, 9, 4, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
-            [2000, 9, 4, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new String_("America/Los Angeles")]))],
+            [2000, null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
+            [2000, 9, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9)]))],
+            [2000, 9, 4, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4)]))],
+            [2000, 9, 4, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8)]))],
+            [2000, 9, 4, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [2000, 9, 4, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [2000, 9, 4, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
 
             // types
-            [new Decimal(2000), null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000)]))],
-            [new Decimal(2000), new Decimal(9), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9)]))],
-            [new Decimal(2000), new Decimal(9), new Decimal(4), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4)]))],
-            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8)]))],
-            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
-            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
-            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
-            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), null, null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
-            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), null, new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
-            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new String_("America/Los Angeles")]))],
+            [new Number(2000), null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
+            [new Number(2000), new Number(9), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9)]))],
+            [new Number(2000), new Number(9), new Number(4), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
         ];
     }
 
@@ -691,28 +691,28 @@ class LiteralTest extends TestCase
     {
         // [$year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000)]))],
-            [2000, 3, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3)]))],
-            [2000, 3, 4, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4)]))],
-            [2000, 3, 4, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8)]))],
-            [2000, 3, 4, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
-            [2000, 3, 4, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
-            [2000, 3, 4, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
-            [2000, 3, 4, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
-            [2000, 3, 4, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
-            [2000, 3, 4, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new String_("America/Los Angeles")]))],
+            [2000, null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
+            [2000, 3, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3)]))],
+            [2000, 3, 4, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4)]))],
+            [2000, 3, 4, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8)]))],
+            [2000, 3, 4, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [2000, 3, 4, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [2000, 3, 4, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
 
             // types
-            [new Decimal(2000), null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000)]))],
-            [new Decimal(2000), new Decimal(3), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(4), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), null, null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), null, new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new String_("America/Los Angeles")]))],
+            [new Number(2000), null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
+            [new Number(2000), new Number(3), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3)]))],
+            [new Number(2000), new Number(3), new Number(4), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
         ];
     }
 
@@ -720,26 +720,26 @@ class LiteralTest extends TestCase
     {
         // [$year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000)]))],
-            [2000, 3, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3)]))],
-            [2000, 3, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8)]))],
-            [2000, 3, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
-            [2000, 3, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
-            [2000, 3, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
-            [2000, 3, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
-            [2000, 3, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
-            [2000, 3, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new String_("America/Los Angeles")]))],
+            [2000, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
+            [2000, 3, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3)]))],
+            [2000, 3, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8)]))],
+            [2000, 3, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [2000, 3, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [2000, 3, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [2000, 3, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [2000, 3, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [2000, 3, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
 
             // types
-            [new Decimal(2000), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000)]))],
-            [new Decimal(2000), new Decimal(3), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), null, null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), null, null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), null, null, null, new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), null, null, new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), null, new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31), "timezone" => new String_("America/Los Angeles")]))],
+            [new Number(2000), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
+            [new Number(2000), new Number(3), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3)]))],
+            [new Number(2000), new Number(3), new Number(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), new Number(18), null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
         ];
     }
 
@@ -747,26 +747,26 @@ class LiteralTest extends TestCase
     {
         // [$year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000)]))],
-            [2000, 12, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12)]))],
-            [2000, 12, 15, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15)]))],
-            [2000, 12, 15, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8)]))],
-            [2000, 12, 15, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
-            [2000, 12, 15, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
-            [2000, 12, 15, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
-            [2000, 12, 15, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
-            [2000, 12, 15, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
+            [2000, null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000)]))],
+            [2000, 12, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12)]))],
+            [2000, 12, 15, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15)]))],
+            [2000, 12, 15, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8)]))],
+            [2000, 12, 15, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [2000, 12, 15, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [2000, 12, 15, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
 
             // types
-            [new Decimal(2000), null, null, null, null, null, null, null, null,new LocalDateTime(new Map(["year" => new Decimal(2000)]))],
-            [new Decimal(2000), new Decimal(12), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12)]))],
-            [new Decimal(2000), new Decimal(12), new Decimal(15), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15)]))],
-            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8)]))],
-            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
-            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), new Decimal(44), null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
-            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
-            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), null, new LocalDateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
-            [new Decimal(2000), new Decimal(12), new Decimal(15), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), new LocalDateTime(new Map(["year" => new Decimal(2000), "month" => new Decimal(12), "day" => new Decimal(15), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
+            [new Number(2000), null, null, null, null, null, null, null, null,new LocalDateTime(new Map(["year" => new Number(2000)]))],
+            [new Number(2000), new Number(12), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12)]))],
+            [new Number(2000), new Number(12), new Number(15), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), new Number(18), null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
         ];
     }
 
@@ -774,26 +774,26 @@ class LiteralTest extends TestCase
     {
         // [$year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000)]))],
-            [2000, 9, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9)]))],
-            [2000, 9, 4, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4)]))],
-            [2000, 9, 4, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8)]))],
-            [2000, 9, 4, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
-            [2000, 9, 4, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
-            [2000, 9, 4, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
-            [2000, 9, 4, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
-            [2000, 9, 4, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
+            [2000, null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000)]))],
+            [2000, 9, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9)]))],
+            [2000, 9, 4, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4)]))],
+            [2000, 9, 4, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8)]))],
+            [2000, 9, 4, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [2000, 9, 4, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [2000, 9, 4, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
 
             // types
-            [new Decimal(2000), null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000)]))],
-            [new Decimal(2000), new Decimal(9), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9)]))],
-            [new Decimal(2000), new Decimal(9), new Decimal(4), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4)]))],
-            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8)]))],
-            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
-            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
-            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
-            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), null, new LocalDateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
-            [new Decimal(2000), new Decimal(9), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), new LocalDateTime(new Map(["year" => new Decimal(2000), "week" => new Decimal(9), "dayOfWeek" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
+            [new Number(2000), null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000)]))],
+            [new Number(2000), new Number(9), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9)]))],
+            [new Number(2000), new Number(9), new Number(4), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
         ];
     }
 
@@ -802,26 +802,26 @@ class LiteralTest extends TestCase
     {
         // [$year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000)]))],
-            [2000, 3, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3)]))],
-            [2000, 3, 4, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4)]))],
-            [2000, 3, 4, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8)]))],
-            [2000, 3, 4, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
-            [2000, 3, 4, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
-            [2000, 3, 4, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
-            [2000, 3, 4, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
-            [2000, 3, 4, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
+            [2000, null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000)]))],
+            [2000, 3, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3)]))],
+            [2000, 3, 4, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4)]))],
+            [2000, 3, 4, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8)]))],
+            [2000, 3, 4, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [2000, 3, 4, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [2000, 3, 4, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
 
             // types
-            [new Decimal(2000), null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000)]))],
-            [new Decimal(2000), new Decimal(3), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(4), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), null, new LocalDateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(4), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), new LocalDateTime(new Map(["year" => new Decimal(2000), "quarter" => new Decimal(3), "dayOfQuarter" => new Decimal(4), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
+            [new Number(2000), null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000)]))],
+            [new Number(2000), new Number(3), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3)]))],
+            [new Number(2000), new Number(3), new Number(4), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
         ];
     }
 
@@ -829,24 +829,24 @@ class LiteralTest extends TestCase
     {
         // [$year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000)]))],
-            [2000, 3, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3)]))],
-            [2000, 3, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8)]))],
-            [2000, 3, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
-            [2000, 3, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
-            [2000, 3, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
-            [2000, 3, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
-            [2000, 3, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
+            [2000, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000)]))],
+            [2000, 3, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3)]))],
+            [2000, 3, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8)]))],
+            [2000, 3, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [2000, 3, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [2000, 3, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [2000, 3, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [2000, 3, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
 
             // types
-            [new Decimal(2000), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000)]))],
-            [new Decimal(2000), new Decimal(3), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), null, null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), null, null, new LocalDateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), null, new LocalDateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6)]))],
-            [new Decimal(2000), new Decimal(3), new Decimal(8), new Decimal(25), new Decimal(44), new Decimal(18), new Decimal(6), new Decimal(31), new LocalDateTime(new Map(["year" => new Decimal(2000), "ordinalDay" => new Decimal(3), "hour" => new Decimal(8), "minute" => new Decimal(25), "second" => new Decimal(44), "millisecond" => new Decimal(18), "microsecond" => new Decimal(6), "nanosecond" => new Decimal(31)]))],
+            [new Number(2000), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000)]))],
+            [new Number(2000), new Number(3), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3)]))],
+            [new Number(2000), new Number(3), new Number(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), new Number(18), null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
         ];
     }
 
@@ -854,20 +854,20 @@ class LiteralTest extends TestCase
     {
         // [$hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
-            [11, null, null, null, null, null, new LocalTime(new Map(["hour" => new Decimal(11)]))],
-            [11, 23, null, null, null, null, new LocalTime(new Map(["hour" => new Decimal(11), "minute" => new Decimal(23)]))],
-            [11, 23, 2, null, null, null, new LocalTime(new Map(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2)]))],
-            [11, 23, 2, 54, null, null, new LocalTime(new Map(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54)]))],
-            [11, 23, 2, 54, 8, null, new LocalTime(new Map(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54), "microsecond" => new Decimal(8)]))],
-            [11, 23, 2, 54, 8, 29, new LocalTime(new Map(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54), "microsecond" => new Decimal(8), "nanosecond" => new Decimal(29)]))],
+            [11, null, null, null, null, null, new LocalTime(new Map(["hour" => new Number(11)]))],
+            [11, 23, null, null, null, null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23)]))],
+            [11, 23, 2, null, null, null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2)]))],
+            [11, 23, 2, 54, null, null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54)]))],
+            [11, 23, 2, 54, 8, null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8)]))],
+            [11, 23, 2, 54, 8, 29, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8), "nanosecond" => new Number(29)]))],
 
             // types
-            [new Decimal(11), null, null, null, null, null, new LocalTime(new Map(["hour" => new Decimal(11)]))],
-            [new Decimal(11), new Decimal(23), null, null, null, null, new LocalTime(new Map(["hour" => new Decimal(11), "minute" => new Decimal(23)]))],
-            [new Decimal(11), new Decimal(23), new Decimal(2), null, null, null, new LocalTime(new Map(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2)]))],
-            [new Decimal(11), new Decimal(23), new Decimal(2), new Decimal(54), null, null, new LocalTime(new Map(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54)]))],
-            [new Decimal(11), new Decimal(23), new Decimal(2), new Decimal(54), new Decimal(8), null, new LocalTime(new Map(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54), "microsecond" => new Decimal(8)]))],
-            [new Decimal(11), new Decimal(23), new Decimal(2), new Decimal(54), new Decimal(8), new Decimal(29), new LocalTime(new Map(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54), "microsecond" => new Decimal(8), "nanosecond" => new Decimal(29)]))],
+            [new Number(11), null, null, null, null, null, new LocalTime(new Map(["hour" => new Number(11)]))],
+            [new Number(11), new Number(23), null, null, null, null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23)]))],
+            [new Number(11), new Number(23), new Number(2), null, null, null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2)]))],
+            [new Number(11), new Number(23), new Number(2), new Number(54), null, null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54)]))],
+            [new Number(11), new Number(23), new Number(2), new Number(54), new Number(8), null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8)]))],
+            [new Number(11), new Number(23), new Number(2), new Number(54), new Number(8), new Number(29), new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8), "nanosecond" => new Number(29)]))],
         ];
     }
 
@@ -875,20 +875,20 @@ class LiteralTest extends TestCase
     {
         // [$hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
-            [11, null, null, null, null, null, new Time(new Map(["hour" => new Decimal(11)]))],
-            [11, 23, null, null, null, null, new Time(new Map(["hour" => new Decimal(11), "minute" => new Decimal(23)]))],
-            [11, 23, 2, null, null, null, new Time(new Map(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2)]))],
-            [11, 23, 2, 54, null, null, new Time(new Map(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54)]))],
-            [11, 23, 2, 54, 8, null, new Time(new Map(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54), "microsecond" => new Decimal(8)]))],
-            [11, 23, 2, 54, 8, 29, new Time(new Map(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54), "microsecond" => new Decimal(8), "nanosecond" => new Decimal(29)]))],
+            [11, null, null, null, null, null, new Time(new Map(["hour" => new Number(11)]))],
+            [11, 23, null, null, null, null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23)]))],
+            [11, 23, 2, null, null, null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2)]))],
+            [11, 23, 2, 54, null, null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54)]))],
+            [11, 23, 2, 54, 8, null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8)]))],
+            [11, 23, 2, 54, 8, 29, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8), "nanosecond" => new Number(29)]))],
 
             // types
-            [new Decimal(11), null, null, null, null, null, new Time(new Map(["hour" => new Decimal(11)]))],
-            [new Decimal(11), new Decimal(23), null, null, null, null, new Time(new Map(["hour" => new Decimal(11), "minute" => new Decimal(23)]))],
-            [new Decimal(11), new Decimal(23), new Decimal(2), null, null, null, new Time(new Map(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2)]))],
-            [new Decimal(11), new Decimal(23), new Decimal(2), new Decimal(54), null, null, new Time(new Map(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54)]))],
-            [new Decimal(11), new Decimal(23), new Decimal(2), new Decimal(54), new Decimal(8), null, new Time(new Map(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54), "microsecond" => new Decimal(8)]))],
-            [new Decimal(11), new Decimal(23), new Decimal(2), new Decimal(54), new Decimal(8), new Decimal(29), new Time(new Map(["hour" => new Decimal(11), "minute" => new Decimal(23), "second" => new Decimal(2), "millisecond" => new Decimal(54), "microsecond" => new Decimal(8), "nanosecond" => new Decimal(29)]))],
+            [new Number(11), null, null, null, null, null, new Time(new Map(["hour" => new Number(11)]))],
+            [new Number(11), new Number(23), null, null, null, null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23)]))],
+            [new Number(11), new Number(23), new Number(2), null, null, null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2)]))],
+            [new Number(11), new Number(23), new Number(2), new Number(54), null, null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54)]))],
+            [new Number(11), new Number(23), new Number(2), new Number(54), new Number(8), null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8)]))],
+            [new Number(11), new Number(23), new Number(2), new Number(54), new Number(8), new Number(29), new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8), "nanosecond" => new Number(29)]))],
         ];
     }
 }
