@@ -21,7 +21,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
-use InvalidArgumentException;
+use function preg_match;
+use function sprintf;
+use function str_replace;
 
 /**
  * Trait for encoding certain structures that are used in multiple clauses in a
@@ -30,25 +32,31 @@ use InvalidArgumentException;
 trait EscapeTrait
 {
     /**
-     * Escapes the given 'name'. A name is an unquoted literal in a Cypher query, such as variables,
-     * types or property names.
+     * Escapes a 'name' if it needs to be escaped.
+     * @see https://neo4j.com/docs/cypher-manual/4.4/syntax/naming
+     * A 'name' in cypher is any string that should be included directly in a cypher query,
+     * such as variable names, labels, property names and relation types
      *
      * @param string $name
      * @return string
      */
     private static function escape(string $name): string
     {
-        if ($name === "") {
-            return "";
-        }
-
-        if (ctype_alnum($name) && !ctype_digit($name)) {
+        if (preg_match('/^\p{L}[\p{L}\d_]*$/u', $name)) {
             return $name;
         }
 
-        if (strpos($name, '`') !== false) {
-            throw new InvalidArgumentException("A name must not contain a backtick (`)");
-        }
+        return self::escapeRaw($name);
+    }
+
+    /**
+     * Escapes the given $name to be used directly in a CYPHER query.
+     * Note: according to https://github.com/neo4j/neo4j/issues/12901 backslashes might give problems in some Neo4j versions.
+     */
+    public static function escapeRaw($name)
+    {
+        // Escape backticks that are included in $name by doubling them.
+        $name = str_replace('`', '``', $name);
 
         return sprintf("`%s`", $name);
     }

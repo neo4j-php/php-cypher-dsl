@@ -21,7 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Number;
@@ -44,13 +43,19 @@ class NodeTest extends TestCase
         $this->assertSame("()", $node->toQuery());
     }
 
-    public function testBacktickThrowsException(): void
+    // Further tests can be found in Traits/EscapeTraitTest
+    public function testBacktickIsEscaped(): void
     {
         $node = new Node();
 
+<<<<<<< HEAD
         $this->expectException(InvalidArgumentException::class);
         $this->expectDeprecationMessage('A name can only contain alphanumeric characters and underscores');
         $node->withVariable('abcdr`eer');
+=======
+        $node->named('abcdr`eer');
+        $this->assertEquals('(`abcdr``eer`)', $node->toQuery());
+>>>>>>> main
     }
 
     /**

@@ -68,10 +68,7 @@ class ParameterTest extends TestCase
     {
         return [
             [""],
-            ["@"],
-            ["!"],
-            ["-"],
-            [''],
+            [str_repeat('a', 65535)],
         ];
     }
 }
