@@ -5,7 +5,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Traits\NameGenerationTrait;
 
-class StringGenerationTraitTest extends TestCase
+class NameGenerationTraitTest extends TestCase
 {
     private $hasName;
 
@@ -13,15 +13,15 @@ class StringGenerationTraitTest extends TestCase
     {
         $this->hasName = new class () {
             use NameGenerationTrait {
-                generateString as public;
+                generateIdentifier as public;
             }
         };
     }
 
     public function testGenerateName(): void
     {
-        $this->assertMatchesRegularExpression('/var\w{32}/', $this->hasName->generateString('var'));
-        $this->assertMatchesRegularExpression('/x\w{16}/', $this->hasName->generateString('x', 16));
+        $this->assertMatchesRegularExpression('/var\w{32}/', $this->hasName->generateIdentifier('var'));
+        $this->assertMatchesRegularExpression('/x\w{16}/', $this->hasName->generateIdentifier('x', 16));
     }
 
 }

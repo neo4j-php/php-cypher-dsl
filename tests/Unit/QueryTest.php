@@ -324,7 +324,7 @@ class QueryTest extends TestCase
 
         $this->assertMatchesRegularExpression('/var[0-9a-f]+\.foo/', $node->property('foo')->toQuery());
 
-        $node->setVariable('foo');
+        $node->withVariable('foo');
 
         $this->assertSame('foo.bar', $node->property('bar')->toQuery());
 

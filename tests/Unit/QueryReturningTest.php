@@ -2,6 +2,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
+use TypeError;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
@@ -44,7 +45,7 @@ class QueryReturningTest extends TestCase
 		$this->assertMatchesRegularExpression("/(RETURN var[0-9a-f]+)/", $statement);
 
 		$node = Query::node("m");
-		$node->setVariable('example');
+		$node->withVariable('example');
 
 		$statement = (new Query())->returning($node)->build();
 

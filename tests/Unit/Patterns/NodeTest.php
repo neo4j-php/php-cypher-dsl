@@ -48,14 +48,8 @@ class NodeTest extends TestCase
     {
         $node = new Node();
 
-<<<<<<< HEAD
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectDeprecationMessage('A name can only contain alphanumeric characters and underscores');
-        $node->withVariable('abcdr`eer');
-=======
         $node->named('abcdr`eer');
         $this->assertEquals('(`abcdr``eer`)', $node->toQuery());
->>>>>>> main
     }
 
     /**

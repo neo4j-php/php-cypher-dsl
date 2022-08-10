@@ -26,8 +26,9 @@ use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\OptionalMatchClause;
 use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
+use WikibaseSolutions\CypherDSL\Patterns\Node;
+use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\OptionalMatchClause
@@ -47,7 +48,7 @@ class OptionalMatchTest extends TestCase
     public function testSinglePattern(): void
     {
         $match = new OptionalMatchClause();
-        $pattern = $this->getQueryConvertibleMock(NodeType::class, "(a)");
+        $pattern = (new Node)->withVariable('a');
         $match->addPattern($pattern);
 
         $this->assertSame("OPTIONAL MATCH (a)", $match->toQuery());
@@ -57,8 +58,11 @@ class OptionalMatchTest extends TestCase
     public function testMultiplePatterns(): void
     {
         $match = new OptionalMatchClause();
-        $patternA = $this->getQueryConvertibleMock(NodeType::class, "(a)");
-        $patternB = $this->getQueryConvertibleMock(PathType::class, "(b)-->(c)");
+        $patternA = (new Node)->withVariable('a');
+        $patternB = new Path(
+            [(new Node)->withVariable('b'), (new Node)->withVariable('c')],
+            [new Relationship(Relationship::DIR_RIGHT)]
+        );
 
         $match->addPattern($patternA);
         $match->addPattern($patternB);
@@ -73,7 +77,7 @@ class OptionalMatchTest extends TestCase
     public function testAcceptsNodeType(): void
     {
         $match = new OptionalMatchClause();
-        $match->addPattern($this->getQueryConvertibleMock(NodeType::class, "(a)"));
+        $match->addPattern((new Node)->withVariable('a'));
 
         $match->toQuery();
     }
@@ -84,18 +88,7 @@ class OptionalMatchTest extends TestCase
     public function testAcceptsPathType(): void
     {
         $match = new OptionalMatchClause();
-        $match->addPattern($this->getQueryConvertibleMock(PathType::class, "(a)"));
-
-        $match->toQuery();
-    }
-
-    public function testDoesNotAcceptAnyType(): void
-    {
-        $match = new OptionalMatchClause();
-
-        $this->expectException(TypeError::class);
-
-        $match->addPattern($this->getQueryConvertibleMock(AnyType::class, "(a)"));
+        $match->addPattern(new Path([(new Node)->withVariable('a')]));
 
         $match->toQuery();
     }
