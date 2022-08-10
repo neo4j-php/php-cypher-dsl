@@ -93,8 +93,7 @@ trait AssignablePatternTrait
         return $this;
     }
 
-
-    private function MakeProperties(): void
+    private function makeProperties(): void
     {
         if (!isset($this->properties)) {
             $this->properties = new Map();
