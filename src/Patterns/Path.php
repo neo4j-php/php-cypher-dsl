@@ -145,8 +145,7 @@ final class Path implements BooleanType, MatchablePattern, RelatablePattern
         $cql = '';
 
         // If a variable exists, we need to assign following the expression to it; this results in a named
-        // path as described in page 66 of the openCypher reference (version 9). This is semantically
-        // different from an assignment.
+        // path as described in page 66 of the openCypher reference (version 9).
         if (isset($this->variable)) {
             $cql = $this->variable->toQuery() . ' = ';
         }

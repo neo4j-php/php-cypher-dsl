@@ -23,8 +23,6 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Patterns\MatchablePattern;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 
 /**
  * This class represents a MATCH clause.
@@ -36,12 +34,12 @@ class MatchClause extends Clause
     use ErrorTrait;
 
     /**
-     * @var PathType[]|NodeType[] List of patterns
+     * @var MatchablePattern[] List of patterns
      */
     private array $patterns = [];
 
     /**
-     * Sets the pattern of the MATCH clause. This overwrites any previously added patterns.
+     * Sets the patterns of the MATCH clause. This overwrites any previously added patterns.
      *
      * @param MatchablePattern[] $patterns
      * @return $this
@@ -70,7 +68,7 @@ class MatchClause extends Clause
     /**
      * Returns the patterns to match.
      *
-     * @return PathType[]|NodeType[]
+     * @return MatchablePattern[]
      */
     public function getPatterns(): array
     {
@@ -92,7 +90,7 @@ class MatchClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn ($pattern): string => $pattern->toQuery(), $this->patterns)
+            array_map(fn (MatchablePattern $pattern): string => $pattern->toQuery(), $this->patterns)
         );
     }
 }
