@@ -19,49 +19,50 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\Multiplication;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Modulo;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Multiplication
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Modulo
  */
-class MultiplicationTest extends TestCase
+class ModuloTest extends TestCase
 {
     use TestHelper;
 
     public function testToQuery(): void
     {
-        $multiplication = new Multiplication($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
+        $modulo = new Modulo($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
 
-        $this->assertSame("(10 * 15)", $multiplication->toQuery());
+        $this->assertSame("(10 % 15)", $modulo->toQuery());
 
-        $multiplication = new Multiplication($multiplication, $multiplication);
+        $modulo = new Modulo($modulo, $modulo);
 
-        $this->assertSame("((10 * 15) * (10 * 15))", $multiplication->toQuery());
+        $this->assertSame("((10 % 15) % (10 % 15))", $modulo->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $multiplication = new Multiplication($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"), false);
+        $modulo = new Modulo($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"), false);
 
-        $this->assertSame("10 * 15", $multiplication->toQuery());
+        $this->assertSame("10 % 15", $modulo->toQuery());
 
-        $multiplication = new Multiplication($multiplication, $multiplication);
+        $modulo = new Modulo($modulo, $modulo);
 
-        $this->assertSame("(10 * 15 * 10 * 15)", $multiplication->toQuery());
+        $this->assertSame("(10 % 15 % 10 % 15)", $modulo->toQuery());
     }
 
     public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 
-        $multiplication = new Multiplication($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
+        $modulo = new Modulo($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
 
-        $multiplication->toQuery();
+        $modulo->toQuery();
     }
 }

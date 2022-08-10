@@ -19,31 +19,39 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\IsNull;
+use TypeError;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Not;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Not
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Not
  */
-class IsNullTest extends TestCase
+class NotTest extends TestCase
 {
     use TestHelper;
 
-    public function testToQuery(): void
+    public function testToQuery()
     {
-        $not = new IsNull($this->getQueryConvertibleMock(BooleanType::class, "true"), false);
+        $not = new Not($this->getQueryConvertibleMock(BooleanType::class, "true"));
 
-        $this->assertFalse($not->insertsParentheses());
+        $this->assertSame("(NOT true)", $not->toQuery());
 
-        $this->assertSame("true IS NULL", $not->toQuery());
+        $not = new Not($not);
 
-        $not = new IsNull($not);
+        $this->assertSame("(NOT (NOT true))", $not->toQuery());
+    }
 
-        $this->assertSame("(true IS NULL IS NULL)", $not->toQuery());
+    public function testDoesNotAcceptAnyTypeAsOperands()
+    {
+        $this->expectException(TypeError::class);
 
-        $this->assertTrue($not->insertsParentheses());
+        $and = new Not($this->getQueryConvertibleMock(AnyType::class, "true"));
+
+        $and->toQuery();
     }
 }
