@@ -16,11 +16,14 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
- * This class represents a map of properties. For example, this class can represent the following
+ * This class represents a CYPHER map. For example, this class can represent the following
  * construct:
  *
  * {name: 'Andy', sport: 'Brazilian Ju-Jitsu'}
  *
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/maps/
+ *
+ * For its use for properties, see
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-properties
  */
 final class Map implements MapType
@@ -30,12 +33,12 @@ final class Map implements MapType
     use MapTypeTrait;
 
     /**
-     * @var AnyType[] The map of properties
+     * @var AnyType[] The map
      */
-    private array $properties;
+    private array $elements;
 
     /**
-     * @param AnyType[] $properties The map of expression
+     * @param AnyType[] $elements Associative array of the elements that this map should have
      * @internal This method is not covered by the backwards compatibility promise of php-cypher-dsl
      */
     public function __construct(array $properties = [])
@@ -45,19 +48,19 @@ final class Map implements MapType
     }
 
     /**
-     * Adds a property for the given name with the given value. Overrides the property if it already exists.
+     * Adds an element for the given name with the given value. Overrides the element if the $key already exists.
      *
-     * @param string $key The name of the property
-     * @param mixed $value The value of the property
+     * @param string $key The name/label for the element
+     * @param mixed $value The value of the element
      * @return $this
      */
-    public function addProperty(string $key, $value): self
+    public function add(string $key, $value): self
     {
         if (!$value instanceof AnyType) {
             $value = Literal::literal($value);
         }
 
-        $this->properties[$key] = $value;
+        $this->elements[$key] = $value;
 
         return $this;
     }
@@ -70,19 +73,19 @@ final class Map implements MapType
      */
     public function mergeWith(Map $map): self
     {
-        $this->properties = array_merge($this->properties, $map->properties);
+        $this->elements = array_merge($this->elements, $map->getElements());
 
         return $this;
     }
 
     /**
-     * Returns the map of properties as a number of key-expression pairs.
+     * Returns the elements of this map as an associative array with key-value pairs.
      *
      * @return AnyType[]
      */
-    public function getProperties(): array
+    public function getElements(): array
     {
-        return $this->properties;
+        return $this->elements;
     }
 
     /**
@@ -92,7 +95,7 @@ final class Map implements MapType
     {
         $pairs = [];
 
-        foreach ($this->properties as $key => $value) {
+        foreach ($this->elements as $key => $value) {
             $pairs[] = sprintf("%s: %s", $this->escape(strval($key)), $value->toQuery());
         }
 

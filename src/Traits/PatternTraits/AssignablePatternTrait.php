@@ -67,17 +67,9 @@ trait AssignablePatternTrait
      */
     public function addProperty(string $key, $property): self
     {
-        if (!isset($this->properties)) {
-            $this->properties = new Map();
-        } elseif (!$this->properties instanceof Map) {
-            // Adding to a map is not natively supported by the MapType, but it is supported by Map. Syntactically, it
-            // is not possible to add new items to, for instance, a Variable, eventhough it implements MapType. It is
-            // however still useful to be able to add items to objects where a Map is used (that is, an object of
-            // MapType with the {} syntax).
-            throw new TypeError('$this->properties must be of type Map to support "addProperty"');
-        }
+        $this->makeProperties();
 
-        $this->properties->addProperty($key, $property);
+        $this->properties->add($key, $property);
 
         return $this;
     }
@@ -89,11 +81,7 @@ trait AssignablePatternTrait
     {
         self::assertClass('properties', [Map::class, 'array'], $properties);
 
-        if (!isset($this->properties)) {
-            $this->properties = new Map();
-        } elseif (!$this->properties instanceof Map) {
-            throw new TypeError('$this->properties must be of type PropertyMap to support "addProperty"');
-        }
+        $this->makeProperties();
 
         if (is_array($properties)) {
             // Cast the array to a Map
@@ -103,6 +91,19 @@ trait AssignablePatternTrait
         $this->properties->mergeWith($properties);
 
         return $this;
+    }
+
+    private function makeProperties(): void
+    {
+        if (!isset($this->properties)) {
+            $this->properties = new Map();
+        } elseif (!($this->properties instanceof Map)) {
+            // Adding to a map is not natively supported by the MapType, but it is supported by Map. Syntactically, it
+            // is not possible to add new items to, for instance, a Variable, even though it implements MapType. It is
+            // however still useful to be able to add items to objects where a Map is used (that is, an object of
+            // MapType with the {} syntax).
+            throw new TypeError('$this->properties must be of type Map to support "addProperty"');
+        }
     }
 
     /**
