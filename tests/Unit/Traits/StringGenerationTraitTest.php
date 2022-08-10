@@ -3,7 +3,7 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Traits\StringGenerationTrait;
+use WikibaseSolutions\CypherDSL\Traits\NameGenerationTrait;
 
 class StringGenerationTraitTest extends TestCase
 {
@@ -12,7 +12,7 @@ class StringGenerationTraitTest extends TestCase
     public function setUp(): void
     {
         $this->hasName = new class () {
-            use StringGenerationTrait {
+            use NameGenerationTrait {
                 generateString as public;
             }
         };

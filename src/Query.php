@@ -94,7 +94,16 @@ final class Query implements QueryConvertible
     /**
      * @var Clause[] $clauses Ordered list of clauses for this query
      */
-    public array $clauses = [];
+    private array $clauses = [];
+
+    /**
+     * @see Query::new()
+     * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
+     */
+    public function __construct()
+    {
+        // This constructor currently does nothing, but we still define it, so we can mark it as internal
+    }
 
     /**
      * Construct a new Query instance.
@@ -885,10 +894,8 @@ final class Query implements QueryConvertible
             $this->clauses
         );
 
-        return implode(
-            " ",
-            array_filter($builtClauses, fn ($clause) => !empty($clause))
-        );
+        // Filter any empty clauses to prevent double spaces
+        return implode(" ", array_filter($builtClauses, fn ($clause) => !empty($clause)));
     }
 
     /**

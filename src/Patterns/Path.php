@@ -44,7 +44,7 @@ final class Path implements BooleanType, MatchablePattern, RelatablePattern
     /**
      * @param Node|Node[] $nodes
      * @param Relationship|Relationship[] $relationships
-     * @internal
+     * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct($nodes = [], $relationships = [])
     {

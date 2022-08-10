@@ -39,8 +39,6 @@ final class Label implements BooleanType
     private array $labels;
 
     /**
-     * Label constructor.
-     *
      * @param Variable $variable The variable to attach the labels to
      * @param string ...$labels The labels to attach to the variable
      * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
@@ -48,7 +46,7 @@ final class Label implements BooleanType
     public function __construct(Variable $variable, string ...$labels)
     {
         $this->variable = $variable;
-        $this->labels = $labels;
+        $this->labels = array_map([self::class, 'escape'], $labels);
     }
 
     /**
@@ -59,13 +57,13 @@ final class Label implements BooleanType
      */
     public function addLabels(string ...$labels): self
     {
-        $this->labels = array_merge($this->labels, $labels);
+        $this->labels = array_merge($this->labels, array_map([self::class, 'escape'], $labels));
 
         return $this;
     }
 
     /**
-     * Returns the labels in this class.
+     * Returns the escaped labels in this class.
      *
      * @return string[]
      */
@@ -92,7 +90,7 @@ final class Label implements BooleanType
         $query = $this->variable->toQuery();
 
         foreach ($this->labels as $label) {
-            $query = sprintf("%s:%s", $query, $this->escape($label));
+            $query = sprintf("%s:%s", $query, $label);
         }
 
         return $query;

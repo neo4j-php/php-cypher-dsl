@@ -32,12 +32,9 @@ abstract class MathematicalBinaryOperator extends BinaryOperator implements Floa
     use NumeralTypeTrait;
 
     /**
-     * MathematicalBinaryOperator constructor.
-     *
+     * @inheritDoc
      * @param NumeralType $left The left-hand of the mathematical operator
      * @param NumeralType $right The right-hand of the mathematical operator
-     * @param bool $insertParentheses Whether to insert parentheses around the expression
-	 * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(NumeralType $left, NumeralType $right, bool $insertParentheses = true)
     {

@@ -61,17 +61,17 @@ class CallClause extends Clause
         return $this;
     }
 
-    /**
-     * Sets the variables to include in the WITH clause. This overwrites any previously set variables.
-     *
-     * @param Variable[]|string[] $variables A list of variable objects, or strings to cast to variables
-     * @return $this
-     *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/#subquery-correlated-importing
-     */
-    public function withVariables(array $variables): self
-    {
-        $res = [];
+	/**
+	 * Sets the variables to include in the WITH clause. This overwrites any previously set variables.
+	 *
+	 * @param Variable[]|string[] $variables A list of variable objects, or strings to cast to variables
+	 * @return $this
+	 *
+	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/#subquery-correlated-importing
+	 */
+	public function withVariables(...$variables): self
+	{
+		$res = [];
 
         foreach ($variables as $variable) {
             $this->assertClass('variables', [Variable::class, 'string'], $variable);

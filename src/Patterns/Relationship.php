@@ -67,7 +67,7 @@ final class Relationship implements AssignablePattern
      *  - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
      *  - Relationship::DIR_LEFT (for a relation of (a)<--(b))
      *  - Relationship::DIR_UNI (for a relation of (a)--(b))
-     * @internal
+     * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(array $direction)
     {

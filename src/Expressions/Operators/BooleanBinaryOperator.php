@@ -27,12 +27,9 @@ abstract class BooleanBinaryOperator extends BinaryOperator implements BooleanTy
     use BooleanTypeTrait;
 
     /**
-     * BooleanBinaryOperator constructor.
-     *
+     * @inheritDoc
      * @param BooleanType $left The left-hand of the boolean operator
      * @param BooleanType $right The right-hand of the boolean operator
-     * @param bool $insertParentheses Whether to insert parentheses around the expression
-	 * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(BooleanType $left, BooleanType $right, bool $insertParentheses = true)
     {

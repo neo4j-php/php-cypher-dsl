@@ -18,8 +18,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-date
  * @see Func::date()
- *
- * @internal This class is not covered by the backwards compatibility promise of php-cypher-dsl
  */
 final class Date extends Func implements DateType
 {
@@ -36,6 +34,7 @@ final class Date extends Func implements DateType
      * date(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (DATE?)
      *
      * @param AnyType|null $value The input to the date function, from which to construct the date
+	 * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(?AnyType $value = null)
     {

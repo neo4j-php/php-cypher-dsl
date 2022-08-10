@@ -23,8 +23,10 @@ namespace WikibaseSolutions\CypherDSL\Traits;
 
 /**
  * Used for automatically generating names.
+ *
+ * @internal This trait is not covered by the backwards compatibility guarantee of php-cypher-dsl
  */
-trait StringGenerationTrait
+trait NameGenerationTrait
 {
     /**
      * Generates a unique random identifier.

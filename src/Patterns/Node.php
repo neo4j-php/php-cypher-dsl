@@ -42,10 +42,8 @@ final class Node implements AssignablePattern, MatchablePattern, RelatablePatter
     private ?MapType $properties = null;
 
     /**
-     * Node constructor.
-     *
-     * @param string|null $label
-     * @internal
+     * @param string|null $label The initial label to include on this node
+     * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(string $label = null)
     {

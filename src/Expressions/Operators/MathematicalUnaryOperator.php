@@ -27,11 +27,8 @@ abstract class MathematicalUnaryOperator extends UnaryOperator implements FloatT
     use NumeralTypeTrait;
 
     /**
-     * MathematicalUnaryOperator constructor.
-     *
-     * @param NumeralType $expression The expression
-     * @param bool $insertParentheses Whether to insert parentheses around the expression
-	 * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
+     * @inheritDoc
+     * @param NumeralType $expression The unary expression
      */
     public function __construct(NumeralType $expression, bool $insertParentheses = true)
     {

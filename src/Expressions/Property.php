@@ -9,8 +9,10 @@
  */
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
+use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
@@ -34,6 +36,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
@@ -70,6 +73,8 @@ final class Property implements
         StringTypeTrait,
         TimeTypeTrait;
 
+    use CastTrait;
+
     /**
      * @var MapType|NodeType|RelationshipType The expression to which this property belongs
      */
@@ -83,8 +88,8 @@ final class Property implements
     /**
      * Property constructor.
      *
-     * @param MapType|NodeType|RelationshipType $expression
-     * @param string $property
+     * @param MapType|NodeType|RelationshipType $expression  The expression that has the property
+     * @param string                            $property    The name of the property
      * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct($expression, string $property)
@@ -98,12 +103,17 @@ final class Property implements
     /**
      * Replace the value of this property with something else.
      *
-     * @param AnyType $value The new value to give to this property
+     * TODO: Disallow this function to be used outside the context of a SET
+     *
+     * @note This function only makes sense when used in the context of a SET
+     * @param PropertyType|bool|int|float|string $value The new value to give to this property
      * @return PropertyReplacement
+     *
+     * TODO: Allow this function to take arrays of property types
      */
     public function replaceWith(AnyType $value): PropertyReplacement
     {
-        return new PropertyReplacement($this, $value);
+        return new PropertyReplacement($this, self::toPropertyType($value));
     }
 
     /**

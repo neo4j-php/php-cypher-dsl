@@ -88,7 +88,7 @@ final class RawExpression implements
      * RawExpression constructor.
      *
      * @param string $expression The raw expression
-	 * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
+     * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(string $expression)
     {
