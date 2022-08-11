@@ -126,7 +126,7 @@ jobs:
 
 
   validate:
-    name: "Validating (Composer)"
+    name: "Validating (composer.json)"
     runs-on: "ubuntu-22.04"
     continue-on-error: true
 
