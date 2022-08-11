@@ -36,17 +36,17 @@ use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
  */
 class CallClause extends Clause
 {
-	use ErrorTrait;
+    use ErrorTrait;
 
     /**
      * @var Query|null The subquery to call, or NULL if no subquery has been set yet
      */
     private ?Query $subQuery = null;
 
-	/**
-	 * @var Variable[] The variables to include in the WITH clause (for correlated queries)
-	 */
-	private array $withVariables = [];
+    /**
+     * @var Variable[] The variables to include in the WITH clause (for correlated queries)
+     */
+    private array $withVariables = [];
 
     /**
      * Sets the query to call. This overwrites any previously set subquery.
@@ -73,15 +73,15 @@ class CallClause extends Clause
 	{
 		$res = [];
 
-		foreach ($variables as $variable) {
-			$this->assertClass('variables', [Variable::class, 'string'], $variable);
-			$res[] = is_string($variable) ? new Variable($variable) : $variable;
-		}
+        foreach ($variables as $variable) {
+            $this->assertClass('variables', [Variable::class, 'string'], $variable);
+            $res[] = is_string($variable) ? new Variable($variable) : $variable;
+        }
 
-		$this->withVariables = $res;
+        $this->withVariables = $res;
 
-		return $this;
-	}
+        return $this;
+    }
 
 	/**
 	 * Add a variable to include in the WITH clause.
@@ -129,23 +129,20 @@ class CallClause extends Clause
             return '';
         }
 
-		$subQuery = '';
+        $subQuery = $this->subQuery->build();
 
-		if ($this->withVariables !== []) {
-			$withClause = new WithClause();
-			$withClause->setEntries($this->withVariables);
+        if ($subQuery === '') {
+            return '';
+        }
 
-			$subQuery .= $withClause->toQuery();
-		}
+        if ($this->withVariables !== []) {
+            $withClause = new WithClause();
+            $withClause->setEntries($this->withVariables);
 
-		if ($subQuery !== '') {
-			// Add some padding for the next structure
-			$subQuery .= ' ';
-		}
+            $subQuery = $withClause->toQuery() . ' ' . $subQuery;
+        }
 
-		$subQuery .= $this->subQuery->build();
-
-		return sprintf('{ %s }', $subQuery);
+        return sprintf('{ %s }', $subQuery);
     }
 
     /**

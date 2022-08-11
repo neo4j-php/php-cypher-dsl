@@ -27,7 +27,7 @@ final class PropertyReplacement implements QueryConvertible
     use ErrorTrait;
 
     /**
-     * @var Variable|Property The property to assign a value to
+     * @var Variable|Property The name of the property to which we assign a (new) value
      */
     private $property;
 
@@ -37,11 +37,13 @@ final class PropertyReplacement implements QueryConvertible
     private AnyType $value;
 
     /**
-     * @var bool Whether to use the property mutation instead of the property replacement operator
+     * @var bool Whether to use the property mutation (+=) instead of the property replacement (=) operator
      */
     private bool $mutate = false;
 
     /**
+     * PropertyReplacement constructor.
+     *
      * @param Variable|Property $property The property or variable to assign a value to
      * @param AnyType $value The value to assign to the property
      * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl

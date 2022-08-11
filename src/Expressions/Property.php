@@ -11,6 +11,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
 
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
+use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait;
@@ -61,6 +62,7 @@ final class Property implements
     use BooleanTypeTrait,
         DateTypeTrait,
         DateTimeTypeTrait,
+        EscapeTrait,
         FloatTypeTrait,
         IntegerTypeTrait,
         ListTypeTrait,
@@ -76,19 +78,21 @@ final class Property implements
     /**
      * @var MapType|NodeType|RelationshipType The expression to which this property belongs
      */
-    private $expression;
+    private AnyType $expression;
 
     /**
-     * @var Variable The name of the property
+     * @var string The name of the property
      */
-    private Variable $property;
+    private string $property;
 
     /**
-     * @param MapType|NodeType|RelationshipType $expression The expression to get the property of
-     * @param Variable $property The name of the property to get
+     * Property constructor.
+     *
+     * @param MapType|NodeType|RelationshipType $expression  The expression that has the property
+     * @param string                            $property    The name of the property
      * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
-    public function __construct($expression, Variable $property)
+    public function __construct($expression, string $property)
     {
         self::assertClass('expression', [MapType::class, NodeType::class, RelationshipType::class], $expression);
 
@@ -97,17 +101,17 @@ final class Property implements
     }
 
     /**
-     * Assign a value to this property.
+     * Replace the value of this property with something else.
      *
      * TODO: Disallow this function to be used outside the context of a SET
      *
      * @note This function only makes sense when used in the context of a SET
-     * @param PropertyType|bool|int|float|string $value The value to assign
+     * @param PropertyType|bool|int|float|string $value The new value to give to this property
      * @return PropertyReplacement
      *
      * TODO: Allow this function to take arrays of property types
      */
-    public function assign($value): PropertyReplacement
+    public function replaceWith(AnyType $value): PropertyReplacement
     {
         return new PropertyReplacement($this, self::toPropertyType($value));
     }
@@ -115,19 +119,19 @@ final class Property implements
     /**
      * Returns the property name.
      *
-     * @return Variable
+     * @return string
      */
-    public function getProperty(): Variable
+    public function getProperty(): string
     {
         return $this->property;
     }
 
     /**
-     * Returns the expression of the property.
+     * Returns the expression to which the property belongs.
      *
      * @return MapType|NodeType|RelationshipType
      */
-    public function getExpression()
+    public function getExpression(): AnyType
     {
         return $this->expression;
     }
@@ -137,6 +141,6 @@ final class Property implements
      */
     public function toQuery(): string
     {
-        return sprintf("%s.%s", $this->expression->toQuery(), $this->property->toQuery());
+        return sprintf("%s.%s", $this->expression->toQuery(), $this->escape($this->property));
     }
 }

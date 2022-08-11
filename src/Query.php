@@ -738,7 +738,7 @@ final class Query implements QueryConvertible
     /**
      * Create the SET clause.
      *
-     * @param PropertyReplacement|Label|(Assignment|Label)[] $expressions A single expression or a list of expressions
+     * @param PropertyReplacement|Label|(PropertyReplacement|Label)[] $expressions A single expression or a list of expressions
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/
@@ -755,7 +755,7 @@ final class Query implements QueryConvertible
         foreach ($expressions as $expression) {
             $this->assertClass('expression', [PropertyReplacement::class, Label::class], $expression);
 
-            $setClause->addAssignment($expression);
+            $setClause->add($expression);
         }
 
         $this->clauses[] = $setClause;
