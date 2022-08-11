@@ -345,7 +345,7 @@ final class Query implements QueryConvertible
      * Creates a CALL sub query clause and adds it to the query.
      *
      * @param Query|callable(Query):void $query A callable decorating a query, or the actual CALL subquery
-     * @param Variable|Variable[]|string $variables The variables to include in the WITH clause for correlation
+     * @param Variable|Variable[]|string|string[] $variables The variables to include in the WITH clause for correlation
      *
      * @return Query
      *
@@ -367,19 +367,9 @@ final class Query implements QueryConvertible
             $variables = [$variables];
         }
 
-        $variables = array_map(function ($variable): Variable {
-            self::assertClass();
-
-            if (is_string($variable)) {
-                return self::variable($variable);
-            }
-
-            return $variable->getVariable();
-        }, $variables);
-
         $callClause = new CallClause();
         $callClause->withSubQuery($subQuery);
-        $callClause->withVariables($variables);
+        $callClause->addVariable(...$variables);
 
         $this->clauses[] = $callClause;
 

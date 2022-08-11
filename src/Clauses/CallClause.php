@@ -23,6 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Query;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 
 /**
@@ -34,8 +35,9 @@ use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/
  * @see Query::call() for a more convenient method to construct this class
  */
-class CallClause extends Clause
+final class CallClause extends Clause
 {
+    use CastTrait;
     use ErrorTrait;
 
     /**
@@ -61,47 +63,30 @@ class CallClause extends Clause
         return $this;
     }
 
-	/**
-	 * Sets the variables to include in the WITH clause. This overwrites any previously set variables.
-	 *
-	 * @param Variable[]|string[] $variables A list of variable objects, or strings to cast to variables
-	 * @return $this
-	 *
-	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/#subquery-correlated-importing
-	 */
-	public function withVariables(...$variables): self
-	{
-		$res = [];
+    /**
+     * Add one or more variables to include in the WITH clause.
+     *
+     * @param Variable|string ...$variables
+     * @return $this
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/#subquery-correlated-importing
+     */
+    public function addVariable(...$variables): self
+    {
+        $res = [];
 
         foreach ($variables as $variable) {
-            $this->assertClass('variables', [Variable::class, 'string'], $variable);
-            $res[] = is_string($variable) ? new Variable($variable) : $variable;
+            $res[] = self::toVariable($variable);
         }
 
-        $this->withVariables = $res;
+        $this->withVariables = array_merge($this->withVariables, $res);
 
         return $this;
     }
 
-	/**
-	 * Add a variable to include in the WITH clause.
-	 *
-	 * @param Variable|string $variable A variable or a string to cast to a variable
-	 * @return $this
-	 *
-	 * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/#subquery-correlated-importing
-	 */
-	public function addVariable($variable): self
-	{
-		$this->assertClass('variable', [Variable::class, 'string'], $variable);
-		$this->withVariables[] = is_string($variable) ? new Variable($variable) : $variable;
-
-		return $this;
-	}
-
     /**
      * Returns the query that is being called. This query does not include the WITH clause that is inserted
-	 * if there are any correlated variables.
+     * if there are any correlated variables.
      *
      * @return Query|null
      */
@@ -110,15 +95,15 @@ class CallClause extends Clause
         return $this->subQuery;
     }
 
-	/**
-	 * Returns the variables that will be included in the WITH clause.
-	 *
-	 * @return Variable[]
-	 */
-	public function getWithVariables(): array
-	{
-		return $this->withVariables;
-	}
+    /**
+     * Returns the variables that will be included in the WITH clause.
+     *
+     * @return Variable[]
+     */
+    public function getWithVariables(): array
+    {
+        return $this->withVariables;
+    }
 
     /**
      * @inheritDoc
@@ -138,7 +123,6 @@ class CallClause extends Clause
         if ($this->withVariables !== []) {
             $withClause = new WithClause();
             $withClause->setEntries($this->withVariables);
-
             $subQuery = $withClause->toQuery() . ' ' . $subQuery;
         }
 
