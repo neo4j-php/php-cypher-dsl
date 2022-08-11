@@ -19,6 +19,7 @@ jobs:
 
     env:
       COMPOSER_VERSION: 2
+      COVERAGE_DRIVER: xdebug
       MINIMUM_COVERAGE_PERCENTAGE: 80
       MINIMUM_MSI_PERCENTAGE: 80
 
@@ -38,9 +39,10 @@ jobs:
         run: composer install --no-interaction --prefer-dist --no-progress
 
       - name: Run unit tests
-        run: |
-          XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite unit
-          php vendor/bin/coverage-check coverage/clover.xml ${{ env.MINIMUM_COVERAGE_PERCENTAGE }}
+        run: XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite unit
+
+      - name: Check coverage
+        run: php vendor/bin/coverage-check coverage/clover.xml ${{ env.MINIMUM_COVERAGE_PERCENTAGE }}
 
       - name: Run mutation tests
         run: XDEBUG_MODE=coverage php vendor/bin/infection --show-mutations --min-msi=${{ env.MINIMUM_MSI_PERCENTAGE }} --threads=4 --test-framework-options="--testsuite=unit"
@@ -53,8 +55,8 @@ jobs:
 
     strategy:
       matrix:
-        neo4j-version: ["4.2", "4.3", "4.4"]
-        php-version: [ "8.1" ]
+        neo4j-version: [ "4.2", "4.3", "4.4" ]
+        php-version: [ "7.4", "8.0", "8.1" ]
 
     services:
       neo4j:
@@ -73,6 +75,7 @@ jobs:
           --health-retries "5"
 
     env:
+      COMPOSER_VERSION: 2
       NEO4J_CONNECTIONS: bolt://neo4j:test@localhost,http://neo4j:test@localhost
 
     steps:
@@ -104,7 +107,6 @@ jobs:
 
     env:
       COMPOSER_VERSION: 2
-      PHP_CS_FIXER_CACHE_FILE: .php-cs-fixer.cache
 
     steps:
       - name: Checkout repository
@@ -114,9 +116,31 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
+          tools: composer:${{ env.COMPOSER_VERSION }}
 
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
 
       - name: Run PHP-CS-Fixer
         run: php vendor/bin/php-cs-fixer fix --config .php-cs-fixer.dist.php --verbose --dry-run
+
+
+  validate:
+    name: "Validating (Composer)"
+    runs-on: "ubuntu-22.04"
+    continue-on-error: true
+
+    env:
+      COMPOSER_VERSION: 2
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          tools: composer:${{ env.COMPOSER_VERSION }}
+
+      - name: Run composer validate
+        run: composer validate
