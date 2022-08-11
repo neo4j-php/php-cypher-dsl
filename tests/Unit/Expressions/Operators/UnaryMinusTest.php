@@ -19,38 +19,39 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\Not;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\UnaryMinus;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Not
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\UnaryMinus
  */
-class NotTest extends TestCase
+class MinusTest extends TestCase
 {
     use TestHelper;
 
     public function testToQuery()
     {
-        $not = new Not($this->getQueryConvertibleMock(BooleanType::class, "true"));
+        $minus = new Minus($this->getQueryConvertibleMock(NumeralType::class, "10"));
 
-        $this->assertSame("(NOT true)", $not->toQuery());
+        $this->assertSame("-10", $minus->toQuery());
 
-        $not = new Not($not);
+        $minus = new Minus($minus);
 
-        $this->assertSame("(NOT (NOT true))", $not->toQuery());
+        $this->assertSame("--10", $minus->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands()
+    public function testDoesNotAcceptAnyTypeAsOperand()
     {
         $this->expectException(TypeError::class);
 
-        $and = new Not($this->getQueryConvertibleMock(AnyType::class, "true"));
+        $minus = new Minus($this->getQueryConvertibleMock(AnyType::class, "10"));
 
-        $and->toQuery();
+        $minus->toQuery();
     }
 }

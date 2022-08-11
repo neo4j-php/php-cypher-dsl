@@ -19,49 +19,50 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\Inequality;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Equality;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Inequality
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Equality
  */
-class InequalityTest extends TestCase
+class EqualityTest extends TestCase
 {
     use TestHelper;
 
     public function testToQuery(): void
     {
-        $inequality = new Inequality($this->getQueryConvertibleMock(PropertyType::class, "a"), $this->getQueryConvertibleMock(PropertyType::class, "b"));
+        $equality = new Equality(new Property(new Variable('v'), "10"), new Property(new Variable('v'), "15"));
 
-        $this->assertSame("(a <> b)", $inequality->toQuery());
+        $this->assertSame("(10 = 15)", $equality->toQuery());
 
-        $inequality = new Inequality($inequality, $inequality);
+        $equality = new Equality($equality, $equality);
 
-        $this->assertSame("((a <> b) <> (a <> b))", $inequality->toQuery());
+        $this->assertSame("((10 = 15) = (10 = 15))", $equality->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $inequality = new Inequality($this->getQueryConvertibleMock(PropertyType::class, "a"), $this->getQueryConvertibleMock(PropertyType::class, "b"), false);
+        $equality = new Equality(new Property(new Variable('v'), "10"), new Property(new Variable('v'), "15"), false);
 
-        $this->assertSame("a <> b", $inequality->toQuery());
+        $this->assertSame("10 = 15", $equality->toQuery());
 
-        $inequality = new Inequality($inequality, $inequality);
+        $equality = new Equality($equality, $equality);
 
-        $this->assertSame("(a <> b <> a <> b)", $inequality->toQuery());
+        $this->assertSame("(10 = 15 = 10 = 15)", $equality->toQuery());
     }
 
     public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 
-        $inequality = new Inequality($this->getQueryConvertibleMock(AnyType::class, "a"), $this->getQueryConvertibleMock(AnyType::class, "b"));
+        $equality = new Equality($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
 
-        $inequality->toQuery();
+        $equality->toQuery();
     }
 }

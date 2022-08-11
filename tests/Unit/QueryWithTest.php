@@ -35,7 +35,7 @@ class QueryWithTest extends TestCase
 		$this->assertMatchesRegularExpression("/(WITH var[0-9a-f]+)/", $statement);
 
 		$node = Query::node("m");
-		$node->setVariable('example');
+		$node->withVariable('example');
 
 		$statement = (new Query())->with($node)->build();
 

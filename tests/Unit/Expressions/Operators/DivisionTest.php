@@ -19,49 +19,50 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\Modulo;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Division;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Modulo
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Division
  */
-class ModuloTest extends TestCase
+class DivisionTest extends TestCase
 {
     use TestHelper;
 
     public function testToQuery(): void
     {
-        $modulo = new Modulo($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
+        $division = new Division($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
 
-        $this->assertSame("(10 % 15)", $modulo->toQuery());
+        $this->assertSame("(10 / 15)", $division->toQuery());
 
-        $modulo = new Modulo($modulo, $modulo);
+        $division = new Division($division, $division);
 
-        $this->assertSame("((10 % 15) % (10 % 15))", $modulo->toQuery());
+        $this->assertSame("((10 / 15) / (10 / 15))", $division->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $modulo = new Modulo($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"), false);
+        $division = new Division($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"), false);
 
-        $this->assertSame("10 % 15", $modulo->toQuery());
+        $this->assertSame("10 / 15", $division->toQuery());
 
-        $modulo = new Modulo($modulo, $modulo);
+        $division = new Division($division, $division);
 
-        $this->assertSame("(10 % 15 % 10 % 15)", $modulo->toQuery());
+        $this->assertSame("(10 / 15 / 10 / 15)", $division->toQuery());
     }
 
     public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 
-        $modulo = new Modulo($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
+        $division = new Division($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
 
-        $modulo->toQuery();
+        $division->toQuery();
     }
 }

@@ -19,52 +19,53 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\LessThan;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Regex;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\LessThan
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Regex
  */
-class LessThanTest extends TestCase
+class RegexTest extends TestCase
 {
     use TestHelper;
 
     public function testToQuery(): void
     {
-        $lessThan = new LessThan($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
+        $regex = new Regex($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
 
-        $this->assertSame("(10 < 15)", $lessThan->toQuery());
+        $this->assertSame("(a =~ b)", $regex->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $lessThan = new LessThan($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"), false);
+        $regex = new Regex($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"), false);
 
-        $this->assertSame("10 < 15", $lessThan->toQuery());
+        $this->assertSame("a =~ b", $regex->toQuery());
     }
 
     public function testCannotBeNested(): void
     {
-        $lessThan = new LessThan($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
+        $regex = new Regex($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
 
         $this->expectException(TypeError::class);
 
-        $lessThan = new LessThan($lessThan, $lessThan);
+        $regex = new Regex($regex, $regex);
 
-        $this->assertSame("((10 < 15) < (10 < 15))", $lessThan->toQuery());
+        $regex->toQuery();
     }
 
     public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 
-        $lessThan = new LessThan($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
+        $regex = new Regex($this->getQueryConvertibleMock(AnyType::class, "a"), $this->getQueryConvertibleMock(AnyType::class, "b"));
 
-        $lessThan->toQuery();
+        $regex->toQuery();
     }
 }

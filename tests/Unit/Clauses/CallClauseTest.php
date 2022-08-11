@@ -24,7 +24,7 @@ class CallClauseTest extends TestCase
 
         $this->assertSame('', $clause->toQuery());
 
-		$clause->withVariables([Query::variable('x')]);
+		$clause->withVariables(Query::variable('x'));
 
 		$this->assertSame('', $clause->toQuery());
     }
@@ -41,7 +41,7 @@ class CallClauseTest extends TestCase
 
     public function testCallClauseFilled(): void
     {
-        $query = Query::new()->match(Query::node('X')->setVariable('x'))->returning(Query::rawExpression('*'));
+        $query = Query::new()->match(Query::node('X')->withVariable('x'))->returning(Query::rawExpression('*'));
 
         $clause = new CallClause();
         $clause->withSubQuery($query);
@@ -51,11 +51,11 @@ class CallClauseTest extends TestCase
 
 	public function testCallClauseWithVariables(): void
 	{
-		$query = Query::new()->match(Query::node('X')->setVariable('x'))->returning(Query::rawExpression('*'));
+		$query = Query::new()->match(Query::node('X')->withVariable('x'))->returning(Query::rawExpression('*'));
 
 		$clause = new CallClause();
 		$clause->withSubQuery($query);
-		$clause->withVariables([Query::variable('x')]);
+		$clause->withVariables(Query::variable('x'));
 
 		$this->assertSame('CALL { WITH x MATCH (x:X) RETURN * }', $clause->toQuery());
 	}
@@ -92,7 +92,7 @@ class CallClauseTest extends TestCase
 		$b = Query::variable('b');
 		$c = Query::variable('c');
 
-		$clause->withVariables([$a]);
+		$clause->withVariables($a);
 		$clause->addVariable($b);
 		$clause->addVariable($c);
 

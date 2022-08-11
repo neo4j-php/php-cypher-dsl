@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Syntax;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
@@ -27,45 +27,46 @@ use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikiBaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement
  */
-class AssignmentTest extends TestCase
+class PropertyReplacementTest extends TestCase
 {
     use TestHelper;
 
     public function testToQuery()
     {
-        $assignment = new PropertyReplacement($this->getQueryConvertibleMock(Property::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
+        $propRepl = new PropertyReplacement($this->getQueryConvertibleMock(Property::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
 
-        $this->assertSame("foo.bar = true", $assignment->toQuery());
+        $this->assertSame("foo.bar = true", $propRepl->toQuery());
 
-        $assignment->setMutate();
+        $propRepl->setMutate();
 
-        $this->assertSame("foo.bar += true", $assignment->toQuery());
+        $this->assertSame("foo.bar += true", $propRepl->toQuery());
     }
 
     public function testLeftDoesNotAcceptAnyType()
     {
         $this->expectException(TypeError::class);
 
-        $assignment = new PropertyReplacement($this->getQueryConvertibleMock(AnyType::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
+        $propRepl = new PropertyReplacement($this->getQueryConvertibleMock(AnyType::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
 
-        $assignment->toQuery();
+        $propRepl->toQuery();
     }
 
     public function testLeftAcceptsProperty()
     {
-        $assignment = new PropertyReplacement($this->getQueryConvertibleMock(Property::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
+        $propRepl = new PropertyReplacement($this->getQueryConvertibleMock(Property::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
 
-        $this->assertSame("foo.bar = true", $assignment->toQuery());
+        $this->assertSame("foo.bar = true", $propRepl->toQuery());
     }
 
     public function testLeftAcceptsVariable()
     {
-        $assignment = new PropertyReplacement($this->getQueryConvertibleMock(Variable::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
+        $propRepl = new PropertyReplacement($this->getQueryConvertibleMock(Variable::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
 
-        $this->assertSame("foo.bar = true", $assignment->toQuery());
+        $this->assertSame("foo.bar = true", $propRepl->toQuery());
     }
 }

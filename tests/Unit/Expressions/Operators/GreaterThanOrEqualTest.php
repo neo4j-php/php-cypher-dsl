@@ -19,52 +19,53 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\GreaterThan;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\GreaterThanOrEqual;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\GreaterThan
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThanOrEqual
  */
-class GreaterThanTest extends TestCase
+class GreaterThanOrEqualTest extends TestCase
 {
     use TestHelper;
 
     public function testToQuery(): void
     {
-        $greaterThan = new GreaterThan($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
+        $greaterThanOrEqual = new GreaterThanOrEqual($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
 
-        $this->assertSame("(10 > 15)", $greaterThan->toQuery());
+        $this->assertSame("(10 >= 15)", $greaterThanOrEqual->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $greaterThan = new GreaterThan($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"), false);
+        $greaterThanOrEqual = new GreaterThanOrEqual($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"), false);
 
-        $this->assertSame("10 > 15", $greaterThan->toQuery());
+        $this->assertSame("10 >= 15", $greaterThanOrEqual->toQuery());
     }
 
     public function testCannotBeNested(): void
     {
-        $greaterThan = new GreaterThan($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
+        $greaterThanOrEqual = new GreaterThanOrEqual($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
 
         $this->expectException(TypeError::class);
 
-        $greaterThan = new GreaterThan($greaterThan, $greaterThan);
+        $greaterThanOrEqual = new GreaterThanOrEqual($greaterThanOrEqual, $greaterThanOrEqual);
 
-        $greaterThan->toQuery();
+        $greaterThanOrEqual->toQuery();
     }
 
     public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 
-        $greaterThan = new GreaterThan($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
+        $greaterThanOrEqual = new GreaterThanOrEqual($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
 
-        $greaterThan->toQuery();
+        $greaterThanOrEqual->toQuery();
     }
 }
