@@ -28,6 +28,7 @@ use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
  * This class represents a MATCH clause.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 57)
  */
 class MatchClause extends Clause
 {
@@ -37,20 +38,6 @@ class MatchClause extends Clause
      * @var MatchablePattern[] List of patterns
      */
     private array $patterns = [];
-
-    /**
-     * Sets the patterns of the MATCH clause. This overwrites any previously added patterns.
-     *
-     * @param MatchablePattern[] $patterns
-     * @return $this
-     */
-    public function setPatterns(array $patterns): self
-    {
-        self::assertClassArray('patterns', MatchablePattern::class, $patterns);
-        $this->patterns = $patterns;
-
-        return $this;
-    }
 
     /**
      * Add one or more patterns to the MATCH clause.

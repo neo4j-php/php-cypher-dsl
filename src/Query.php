@@ -428,21 +428,21 @@ final class Query implements QueryConvertible
     /**
      * Creates the MATCH clause.
      *
-     * @param PathType|NodeType|PathType[]|NodeType[] $patterns A single pattern or a list of patterns
+     * @param MatchablePattern|MatchablePattern[] $patterns A single pattern or a list of patterns
      *
      * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/
+     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 57)
      */
     public function match($patterns): self
     {
-        $matchClause = new MatchClause();
-
         if (!is_array($patterns)) {
             $patterns = [$patterns];
         }
 
-        $matchClause->setPatterns($patterns);
+        $matchClause = new MatchClause();
+        $matchClause->addPattern(...$patterns);
 
         $this->clauses[] = $matchClause;
 

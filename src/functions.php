@@ -30,6 +30,14 @@ function query(): Query
 }
 
 /**
+ * @see Query::new()
+ */
+function _(): Query
+{
+    return Query::new();
+}
+
+/**
  * @see Query::node()
  */
 function node(string $label = null): Node
@@ -123,12 +131,4 @@ function function_(): string
 function raw(string $expression): RawExpression
 {
     return Query::rawExpression($expression);
-}
-
-/**
- * @see Query::exists()
- */
-function exists($match, $where = null, bool $insertParentheses = false): Exists
-{
-    return Query::exists($match, $where, $insertParentheses);
 }

@@ -2,12 +2,10 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
-use TypeError;
 use PHPUnit\Framework\TestCase;
+use TypeError;
+use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 
 /**
  * Tests the "match" method of the Query class.
@@ -16,36 +14,42 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
  */
 class QueryMatchTest extends TestCase
 {
-	public function testMatch(): void
+    public function testMatch(): void
+    {
+        $m = Query::node('Movie')->withVariable('m');
+
+        $statement = Query::new()->match($m)->build();
+
+        $this->assertSame("MATCH (m:Movie)", $statement);
+
+        $statement = Query::new()->match([$m, $m])->build();
+
+        $this->assertSame("MATCH (m:Movie), (m:Movie)", $statement);
+    }
+
+    public function testMatchDoesNotAcceptRelationship(): void
+    {
+        $r = Query::relationship(Relationship::DIR_LEFT);
+
+        $this->expectException(TypeError::class);
+
+        Query::new()->match($r);
+    }
+
+    public function testMatchDoesNotAcceptRelationshipWithNode(): void
+    {
+        $r = Query::relationship(Relationship::DIR_LEFT);
+        $m = Query::node();
+
+        $this->expectException(TypeError::class);
+
+        Query::new()->match([$m, $r]);
+    }
+
+	public function testMatchDoesNotAcceptTypeOtherThanMatchablePattern(): void
 	{
-		$m = $this->getQueryConvertibleMock(NodeType::class, "(m:Movie)");
-
-		$statement = (new Query())->match($m)->build();
-
-		$this->assertSame("MATCH (m:Movie)", $statement);
-
-		$statement = (new Query())->match([$m, $m])->build();
-
-		$this->assertSame("MATCH (m:Movie), (m:Movie)", $statement);
-	}
-
-	/**
-	 * @doesNotPerformAssertions
-	 */
-	public function testMatchTypeAcceptance(): void
-	{
-		$path = $this->getQueryConvertibleMock(PathType::class, '(a)-->(b)');
-		$node = $this->getQueryConvertibleMock(NodeType::class, '(a)');
-
-		(new Query())->match([$path, $node]);
-	}
-
-	public function testMatchRejectsAnyType(): void
-	{
-		$m = $this->getQueryConvertibleMock(AnyType::class, 'foo');
-
 		$this->expectException(TypeError::class);
 
-		(new Query())->match($m);
+		Query::new()->match(false);
 	}
 }

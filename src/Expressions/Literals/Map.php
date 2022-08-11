@@ -41,10 +41,10 @@ final class Map implements MapType
      * @param AnyType[] $elements Associative array of the elements that this map should have
      * @internal This method is not covered by the backwards compatibility promise of php-cypher-dsl
      */
-    public function __construct(array $properties = [])
+    public function __construct(array $elements = [])
     {
-        self::assertClassArray('properties', AnyType::class, $properties);
-        $this->properties = $properties;
+        self::assertClassArray('properties', AnyType::class, $elements);
+        $this->elements = $elements;
     }
 
     /**
