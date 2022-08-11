@@ -22,13 +22,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
-use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\MatchClause;
 use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
-
+use WikibaseSolutions\CypherDSL\Patterns\Node;
+use WikibaseSolutions\CypherDSL\Patterns\Path;
+use InvalidArgumentException;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\MatchClause
  */
@@ -47,7 +45,7 @@ class MatchClauseTest extends TestCase
     public function testSinglePattern(): void
     {
         $match = new MatchClause();
-        $pattern = $this->getQueryConvertibleMock(NodeType::class, "(a)");
+        $pattern = (new Node())->withVariable('a');
         $match->addPattern($pattern);
 
         $this->assertSame("MATCH (a)", $match->toQuery());
@@ -57,54 +55,22 @@ class MatchClauseTest extends TestCase
     public function testMultiplePatterns(): void
     {
         $match = new MatchClause();
-        $patternA = $this->getQueryConvertibleMock(NodeType::class, "(a)");
-        $patternB = $this->getQueryConvertibleMock(PathType::class, "(b)-->(c)");
+        $patternA = (new Node())->withVariable('a');
+        $patternB = (new Node())->withVariable('b')->relationshipTo((new Node())->withVariable('c'), 'Foo');
 
         $match->addPattern($patternA);
         $match->addPattern($patternB);
 
-        $this->assertSame("MATCH (a), (b)-->(c)", $match->toQuery());
+        $this->assertSame("MATCH (a), (b)-[:Foo]->(c)", $match->toQuery());
         $this->assertEquals([$patternA, $patternB], $match->getPatterns());
-    }
-
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsNodeType(): void
-    {
-        $match = new MatchClause();
-        $match->addPattern($this->getQueryConvertibleMock(NodeType::class, "(a)"));
-
-        $match->toQuery();
-    }
-
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsPathType(): void
-    {
-        $match = new MatchClause();
-        $match->addPattern($this->getQueryConvertibleMock(PathType::class, "(a)"));
-
-        $match->toQuery();
-    }
-
-    public function testDoesNotAcceptAnyType(): void
-    {
-        $this->expectException(TypeError::class);
-
-        $match = new MatchClause();
-        $match->addPattern($this->getQueryConvertibleMock(AnyType::class, "(a)"));
-
-        $match->toQuery();
     }
 
     public function testSetPatterns(): void
     {
         $match = new MatchClause();
-        $match->addPattern($this->getQueryConvertibleMock(PathType::class, "(c)"));
+        $match->addPattern((new Node())->withVariable('c'));
 
-        $patterns = [$this->getQueryConvertibleMock(PathType::class, "(a)"), $this->getQueryConvertibleMock(NodeType::class, "(b)")];
+        $patterns = [(new Path([(new Node())->withVariable('a')])), new Path([(new Node())->withVariable('b')])];
 
         $match->setPatterns($patterns);
 
@@ -116,7 +82,7 @@ class MatchClauseTest extends TestCase
     {
         $match = new MatchClause();
 
-        $this->expectException(TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $match->setPatterns([$this->getQueryConvertibleMock(AnyType::class, "(a)")]);
         $match->toQuery();
@@ -125,10 +91,10 @@ class MatchClauseTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testSetPatternsAcceptsPathType(): void
+    public function testSetPatternsAcceptsPath(): void
     {
         $match = new MatchClause();
-        $match->setPatterns([$this->getQueryConvertibleMock(PathType::class, "(a)")]);
+        $match->setPatterns([new Path([(new Node)->withVariable('a')])]);
 
         $match->toQuery();
     }
@@ -137,7 +103,7 @@ class MatchClauseTest extends TestCase
     {
         $match = new MatchClause();
 
-        $patterns = [$this->getQueryConvertibleMock(PathType::class, "(a)")];
+        $patterns = [new Path([(new Node)->withVariable('a')])];
 
         $match->setPatterns($patterns);
 

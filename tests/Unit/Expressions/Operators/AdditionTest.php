@@ -19,16 +19,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Expressions\Addition;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Number;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Addition
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Addition
  */
 class AdditionTest extends TestCase
 {

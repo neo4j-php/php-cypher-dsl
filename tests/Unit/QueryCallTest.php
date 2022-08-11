@@ -2,6 +2,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
+use TypeError;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Query;
 
@@ -37,7 +38,7 @@ class QueryCallTest extends TestCase
 
 		$query = Query::new()->call(function (Query $query) {
 			$query->match(Query::node('x'));
-		}, Query::node()->setVariable('x'));
+		}, Query::node()->withVariable('x'));
 
 		$this->assertSame('CALL { WITH x MATCH (:x) }', $query->toQuery());
 

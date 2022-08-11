@@ -2,6 +2,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
+use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Types\AnyType;

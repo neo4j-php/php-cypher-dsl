@@ -2,6 +2,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
+use TypeError;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Types\AnyType;

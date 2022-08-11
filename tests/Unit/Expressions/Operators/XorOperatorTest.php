@@ -19,49 +19,50 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\OrOperator;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\XorOperator;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\OrOperator
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\XorOperator
  */
-class OrOperatorTest extends TestCase
+class XorOperatorTest extends TestCase
 {
     use TestHelper;
 
     public function testToQuery(): void
     {
-        $or = new OrOperator($this->getQueryConvertibleMock(BooleanType::class, "true"), $this->getQueryConvertibleMock(BooleanType::class, "false"));
+        $xor = new XorOperator($this->getQueryConvertibleMock(BooleanType::class, "true"), $this->getQueryConvertibleMock(BooleanType::class, "false"));
 
-        $this->assertSame("(true OR false)", $or->toQuery());
+        $this->assertSame("(true XOR false)", $xor->toQuery());
 
-        $or = new OrOperator($or, $or);
+        $xor = new XorOperator($xor, $xor);
 
-        $this->assertSame("((true OR false) OR (true OR false))", $or->toQuery());
+        $this->assertSame("((true XOR false) XOR (true XOR false))", $xor->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $or = new OrOperator($this->getQueryConvertibleMock(BooleanType::class, "true"), $this->getQueryConvertibleMock(BooleanType::class, "false"), false);
+        $xor = new XorOperator($this->getQueryConvertibleMock(BooleanType::class, "true"), $this->getQueryConvertibleMock(BooleanType::class, "false"), false);
 
-        $this->assertSame("true OR false", $or->toQuery());
+        $this->assertSame("true XOR false", $xor->toQuery());
 
-        $or = new OrOperator($or, $or);
+        $xor = new XorOperator($xor, $xor);
 
-        $this->assertSame("(true OR false OR true OR false)", $or->toQuery());
+        $this->assertSame("(true XOR false XOR true XOR false)", $xor->toQuery());
     }
 
     public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 
-        $or = new OrOperator($this->getQueryConvertibleMock(AnyType::class, "true"), $this->getQueryConvertibleMock(AnyType::class, "false"));
+        $and = new XorOperator($this->getQueryConvertibleMock(AnyType::class, "true"), $this->getQueryConvertibleMock(AnyType::class, "false"));
 
-        $or->toQuery();
+        $and->toQuery();
     }
 }

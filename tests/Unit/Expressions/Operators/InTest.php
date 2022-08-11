@@ -19,10 +19,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Expressions\In;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
@@ -31,7 +32,7 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\In
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\In
  */
 class InTest extends TestCase
 {
@@ -39,7 +40,7 @@ class InTest extends TestCase
 
     public function testToQuery(): void
     {
-        $inequality = new In($this->getQueryConvertibleMock(PropertyType::class, "a"), $this->getQueryConvertibleMock(ListType::class, "b"));
+        $inequality = new In(new Property(new Variable('v'), "a"), $this->getQueryConvertibleMock(ListType::class, "b"));
 
         $this->assertSame("(a IN b)", $inequality->toQuery());
 
@@ -50,7 +51,7 @@ class InTest extends TestCase
 
     public function testToQueryNoParentheses(): void
     {
-        $inequality = new In($this->getQueryConvertibleMock(PropertyType::class, "a"), $this->getQueryConvertibleMock(ListType::class, "b"), false);
+        $inequality = new In(new Property(new Variable('v'), "a"), $this->getQueryConvertibleMock(ListType::class, "b"), false);
 
         $this->assertSame("a IN b", $inequality->toQuery());
 
@@ -61,7 +62,7 @@ class InTest extends TestCase
 
     public function testInExpressionList(): void
     {
-        $inequality = new In($this->getQueryConvertibleMock(PropertyType::class, "a"), new List_([new String_('a'), new String_('b')]));
+        $inequality = new In(new Property(new Variable('v'), "a"), new List_([new String_('a'), new String_('b')]));
 
         $this->assertSame("(a IN ['a', 'b'])", $inequality->toQuery());
 

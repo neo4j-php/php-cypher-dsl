@@ -19,16 +19,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Expressions\Exponentiation;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Exponentiation
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Exponentiation
  */
 class ExponentiationTest extends TestCase
 {

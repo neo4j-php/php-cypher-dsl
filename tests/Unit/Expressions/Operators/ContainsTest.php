@@ -19,52 +19,53 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\StartsWith;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Contains;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\StartsWith
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Contains
  */
-class StartsWithTest extends TestCase
+class ContainsTest extends TestCase
 {
     use TestHelper;
 
     public function testToQuery(): void
     {
-        $startsWith = new StartsWith($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
+        $contains = new Contains($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
 
-        $this->assertSame("(a STARTS WITH b)", $startsWith->toQuery());
+        $this->assertSame("(a CONTAINS b)", $contains->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $startsWith = new StartsWith($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"), false);
+        $contains = new Contains($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"), false);
 
-        $this->assertSame("a STARTS WITH b", $startsWith->toQuery());
+        $this->assertSame("a CONTAINS b", $contains->toQuery());
     }
 
     public function testCannotBeNested(): void
     {
-        $startsWith = new StartsWith($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
+        $contains = new Contains($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
 
         $this->expectException(TypeError::class);
 
-        $startsWith = new StartsWith($startsWith, $startsWith);
+        $contains = new Contains($contains, $contains);
 
-        $startsWith->toQuery();
+        $contains->toQuery();
     }
 
     public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 
-        $startsWith = new StartsWith($this->getQueryConvertibleMock(AnyType::class, "a"), $this->getQueryConvertibleMock(AnyType::class, "b"));
+        $contains = new Contains($this->getQueryConvertibleMock(AnyType::class, "a"), $this->getQueryConvertibleMock(AnyType::class, "b"));
 
-        $startsWith->toQuery();
+        $contains->toQuery();
     }
 }

@@ -19,52 +19,53 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\EndsWith;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\GreaterThan;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\EndsWith
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThan
  */
-class EndsWithTest extends TestCase
+class GreaterThanTest extends TestCase
 {
     use TestHelper;
 
     public function testToQuery(): void
     {
-        $endsWith = new EndsWith($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
+        $greaterThan = new GreaterThan($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
 
-        $this->assertSame("(a ENDS WITH b)", $endsWith->toQuery());
+        $this->assertSame("(10 > 15)", $greaterThan->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $endsWith = new EndsWith($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"), false);
+        $greaterThan = new GreaterThan($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"), false);
 
-        $this->assertSame("a ENDS WITH b", $endsWith->toQuery());
+        $this->assertSame("10 > 15", $greaterThan->toQuery());
     }
 
     public function testCannotBeNested(): void
     {
-        $endsWith = new EndsWith($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
+        $greaterThan = new GreaterThan($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
 
         $this->expectException(TypeError::class);
 
-        $endsWith = new EndsWith($endsWith, $endsWith);
+        $greaterThan = new GreaterThan($greaterThan, $greaterThan);
 
-        $endsWith->toQuery();
+        $greaterThan->toQuery();
     }
 
     public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 
-        $endsWith = new EndsWith($this->getQueryConvertibleMock(AnyType::class, "a"), $this->getQueryConvertibleMock(AnyType::class, "b"));
+        $greaterThan = new GreaterThan($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
 
-        $endsWith->toQuery();
+        $greaterThan->toQuery();
     }
 }

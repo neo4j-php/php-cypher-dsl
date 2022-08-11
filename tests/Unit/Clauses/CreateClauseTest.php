@@ -27,8 +27,6 @@ use WikibaseSolutions\CypherDSL\Clauses\CreateClause;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\CreateClause
@@ -46,7 +44,7 @@ class CreateClauseTest extends TestCase
     public function testSinglePattern(): void
     {
         $createClause = new CreateClause();
-        $pattern = Query::node()->setVariable('a');
+        $pattern = Query::node()->withVariable('a');
 
         $createClause->addPattern($pattern);
 
@@ -58,49 +56,14 @@ class CreateClauseTest extends TestCase
     {
         $createClause = new CreateClause();
 
-        $patternA = Query::node()->setVariable('a');
-        $patternB = Query::node()->setVariable('b')->relationshipTo(Query::node()->setVariable('c'));
+        $patternA = Query::node()->withVariable('a');
+        $patternB = Query::node()->withVariable('b')->relationshipTo(Query::node()->withVariable('c'), 'Foo');
 
         $createClause->addPattern($patternA);
         $createClause->addPattern($patternB);
 
-        $this->assertSame("CREATE (a), (b)-->(c)", $createClause->toQuery());
+        $this->assertSame("CREATE (a), (b)-[:Foo]->(c)", $createClause->toQuery());
         $this->assertEquals([$patternA, $patternB], $createClause->getPatterns());
-    }
-
-    public function testAcceptsNodeType(): void
-    {
-        $createClause = new CreateClause();
-
-        $patternA = Query::node();
-
-        $createClause->addPattern($patternA);
-        $createClause->toQuery();
-
-        $this->assertEquals([$patternA], $createClause->getPatterns());
-    }
-
-    public function testAcceptsPathType(): void
-    {
-        $createClause = new CreateClause();
-
-        $patternA = Query::node()->relationshipTo(Query::node());
-
-        $createClause->addPattern($patternA);
-        $createClause->toQuery();
-        $this->assertEquals([$patternA], $createClause->getPatterns());
-    }
-
-    public function testDoesNotAcceptAnyType(): void
-    {
-        $createClause = new CreateClause();
-
-        $patternA = Query::function()::date();
-
-        $this->expectException(TypeError::class);
-
-        $createClause->addPattern($patternA);
-        $createClause->toQuery();
     }
 
     public function testSetPatterns(): void
@@ -110,7 +73,7 @@ class CreateClauseTest extends TestCase
         $pathExpression = Query::node()->relationshipTo(Query::node());
         $createClause->addPattern($pathExpression);
 
-        $createClause->setPatterns([Query::node()->setVariable('a'), Query::node()->setVariable('b')]);
+        $createClause->setPatterns([Query::node()->withVariable('a'), Query::node()->withVariable('b')]);
 
         $this->assertSame("CREATE (a), (b)", $createClause->toQuery());
     }
@@ -119,8 +82,8 @@ class CreateClauseTest extends TestCase
     {
         $createClause = new CreateClause();
 
-        $createClause->addPattern(Query::node()->setVariable('a'));
-        $createClause->addPattern(Query::node()->setVariable('b'));
+        $createClause->addPattern(Query::node()->withVariable('a'));
+        $createClause->addPattern(Query::node()->withVariable('b'));
 
         $this->assertSame("CREATE (a), (b)", $createClause->toQuery());
     }
