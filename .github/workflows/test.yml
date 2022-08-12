@@ -3,7 +3,6 @@ name: test
 on:
   push:
   pull_request:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -75,6 +74,7 @@ jobs:
 
     env:
       COMPOSER_VERSION: 2
+      COVERAGE_DRIVER: none
       NEO4J_CONNECTIONS: bolt://neo4j:test@localhost,http://neo4j:test@localhost
 
     steps:
@@ -85,6 +85,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
+          coverage: ${{ env.COVERAGE_DRIVER }}
           ini-values: memory_limit=512M
           tools: composer:${{ env.COMPOSER_VERSION }}
 

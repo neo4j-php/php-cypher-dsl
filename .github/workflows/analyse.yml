@@ -3,7 +3,6 @@ name: analyse
 on:
   push:
   pull_request:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -18,7 +17,7 @@ jobs:
 
     env:
       COMPOSER_VERSION: 2
-      COVERAGE_DRIVER: xdebug
+      COVERAGE_DRIVER: none
 
     steps:
       - name: Checkout code
@@ -28,8 +27,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
+          coverage: ${{ env.COVERAGE_DRIVER }}
           tools: composer:${{ env.COMPOSER_VERSION }}
-          coverage: none
 
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
