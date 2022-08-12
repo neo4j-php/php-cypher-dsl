@@ -55,8 +55,7 @@ class CallProcedureClause extends Clause
     private array $yields = [];
 
     /**
-     * Sets the procedure to call. This can be for instance "apoc.load.json". This procedure name is automatically
-	 * escaped.
+     * Sets the procedure to call. This can be for instance "apoc.load.json".
      *
      * @param string $procedure The procedure to call
      * @return $this
@@ -68,23 +67,23 @@ class CallProcedureClause extends Clause
         return $this;
     }
 
-	/**
-	 * Sets the literal arguments to pass to this procedure call. This overwrites any previously passed
-	 * arguments.
-	 *
-	 * @param AnyType[] $arguments The arguments to pass to the procedure
-	 * @return $this
-	 */
-	public function setArguments(array $arguments): self
-	{
-		foreach ($arguments as $argument) {
-			$this->assertClass('arguments', AnyType::class, $argument);
-		}
+    /**
+     * Sets the literal arguments to pass to this procedure call. This overwrites any previously passed
+     * arguments.
+     *
+     * @param AnyType[] $arguments The arguments to pass to the procedure
+     * @return $this
+     */
+    public function setArguments(array $arguments): self
+    {
+        foreach ($arguments as $argument) {
+            $this->assertClass('arguments', AnyType::class, $argument);
+        }
 
-		$this->arguments = $arguments;
+        $this->arguments = $arguments;
 
-		return $this;
-	}
+        return $this;
+    }
 
     /**
      * Add a literal argument to pass to this procedure call.
@@ -94,46 +93,46 @@ class CallProcedureClause extends Clause
      */
     public function addArgument(AnyType $argument): self
     {
-		$this->arguments[] = $argument;
+        $this->arguments[] = $argument;
 
-		return $this;
+        return $this;
     }
 
-	/**
-	 * Used to explicitly select which available result fields are returned as newly-bound
-	 * variables. If a key is non-numerical, it will be used as an alias.
-	 *
-	 * @param Variable[] $variables
-	 * @return $this
-	 */
-	public function setYields(array $variables): self
-	{
-		foreach ($variables as $variable) {
-			$this->assertClass('variables', Variable::class, $variable);
-		}
+    /**
+     * Used to explicitly select which available result fields are returned as newly-bound
+     * variables. If a key is non-numerical, it will be used as an alias.
+     *
+     * @param Variable[] $variables
+     * @return $this
+     */
+    public function setYields(array $variables): self
+    {
+        foreach ($variables as $variable) {
+            $this->assertClass('variables', Variable::class, $variable);
+        }
 
-		$this->yields = $variables;
+        $this->yields = $variables;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Adds a variable to yield.
-	 *
-	 * @param Variable $variable The variable to yield
-	 * @param string|null $alias Optionally the alias to use for the variable
-	 * @return $this
-	 */
-	public function addYield(Variable $variable, ?string $alias = null): self
-	{
-		if ($alias !== null) {
-			$this->yields[$alias] = $variable;
-		} else {
-			$this->yields[] = $variable;
-		}
+    /**
+     * Adds a variable to yield.
+     *
+     * @param Variable $variable The variable to yield
+     * @param string|null $alias Optionally the alias to use for the variable
+     * @return $this
+     */
+    public function addYield(Variable $variable, ?string $alias = null): self
+    {
+        if ($alias !== null) {
+            $this->yields[$alias] = $variable;
+        } else {
+            $this->yields[] = $variable;
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
     /**
      * Returns the procedure to call.
@@ -182,10 +181,10 @@ class CallProcedureClause extends Clause
             return "";
         }
 
-		$procedure = implode(
-			'.',
-			array_map(fn (string $part): string => $this->escape($part), explode('.', $this->procedure))
-		);
+        $procedure = implode(
+            '.',
+            array_map(fn (string $part): string => $this->escape($part), explode('.', $this->procedure))
+        );
 
         $arguments = implode(
             ", ",
@@ -193,12 +192,12 @@ class CallProcedureClause extends Clause
         );
 
         if (count($this->yields) > 0) {
-			$yieldParameters = [];
-			foreach ($this->yields as $alias => $yieldVariable) {
-				$yieldParameters[] = is_int($alias) ?
-					$yieldVariable->toQuery() :
-					sprintf("%s AS %s", $yieldVariable->toQuery(), $this->escape($alias));
-			}
+            $yieldParameters = [];
+            foreach ($this->yields as $alias => $yieldVariable) {
+                $yieldParameters[] = is_int($alias) ?
+                    $yieldVariable->toQuery() :
+                    sprintf("%s AS %s", $yieldVariable->toQuery(), $this->escape($alias));
+            }
 
             return sprintf("%s(%s) YIELD %s", $procedure, $arguments, implode(", ", $yieldParameters));
         }

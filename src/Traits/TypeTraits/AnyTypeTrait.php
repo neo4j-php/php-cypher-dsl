@@ -28,7 +28,7 @@ trait AnyTypeTrait
      */
     public function alias($right): Alias
     {
-        return new Alias($this, self::toVariable($right));
+        return new Alias($this, self::toName($right));
     }
 
     /**

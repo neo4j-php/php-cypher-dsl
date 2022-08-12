@@ -9,7 +9,6 @@
  */
 namespace WikibaseSolutions\CypherDSL;
 
-use WikibaseSolutions\CypherDSL\Expressions\Exists;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;

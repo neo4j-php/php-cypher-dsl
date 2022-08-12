@@ -15,34 +15,54 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 class QueryOrderByTest extends TestCase
 {
-	public function testOrderBy(): void
-	{
-		$property = $this->getQueryConvertibleMock(Property::class, "a.foo");
+    public function testEmptyArray(): void
+    {
+        $statement = Query::new()->orderBy([]);
 
-		$statement = (new Query())->orderBy($property)->build();
+        $this->assertSame("", $statement->toQuery());
+    }
 
-		$this->assertSame("ORDER BY a.foo", $statement);
+    public function testSingleProperty(): void
+    {
+        $property = Query::variable('a')->property('foo');
+        $statement = Query::new()->orderBy($property);
 
-		$statement = (new Query())->orderBy([$property, $property])->build();
+        $this->assertSame("ORDER BY a.foo", $statement->toQuery());
+    }
 
-		$this->assertSame("ORDER BY a.foo, a.foo", $statement);
+    public function testMultipleProperties(): void
+    {
+        $a = Query::variable('a')->property('foo');
+        $b = Query::variable('b')->property('foo');
 
-		$statement = (new Query())->orderBy([$property, $property], false)->build();
+        $statement = Query::new()->orderBy([$a, $b]);
 
-		$this->assertSame("ORDER BY a.foo, a.foo", $statement);
+        $this->assertSame("ORDER BY a.foo, b.foo", $statement->toQuery());
+    }
 
-		$statement = (new Query())->orderBy([$property, $property], true)->build();
+    public function testDefaultIsNonDescending(): void
+    {
+        $a = Query::variable('a')->property('foo');
 
-		$this->assertSame("ORDER BY a.foo, a.foo DESCENDING", $statement);
-	}
+        $default = Query::new()->orderBy($a);
+        $explicit = Query::new()->orderBy($a, false);
 
-	public function testOrderByRejectsAnyType(): void
-	{
-		$m = $this->getQueryConvertibleMock(AnyType::class, 'foo');
+        $this->assertSame($explicit->toQuery(), $default->toQuery());
+    }
 
-		$this->expectException(TypeError::class);
+    public function testDescending(): void
+    {
+        $a = Query::variable('a')->property('foo');
 
-		(new Query())->orderBy([$m, $m]);
-	}
+        $statement = Query::new()->orderBy($a, true);
 
+        $this->assertSame("ORDER BY a.foo DESCENDING", $statement->toQuery());
+    }
+
+    public function testDoesNotAcceptAnyType(): void
+    {
+        $this->expectException(TypeError::class);
+
+        Query::new()->orderBy("foo");
+    }
 }

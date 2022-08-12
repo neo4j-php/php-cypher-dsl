@@ -15,8 +15,8 @@ trait PropertyMethodTrait
     /**
      * @inheritDoc
      */
-    public function property($property): Property
+    public function property(string $property): Property
     {
-        return new Property($this, self::toVariable($property));
+        return new Property($this, $property);
     }
 }

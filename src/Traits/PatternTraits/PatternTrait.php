@@ -28,7 +28,7 @@ trait PatternTrait
      */
     public function withVariable($variable): self
     {
-        $this->variable = self::toVariable($variable);
+        $this->variable = self::toName($variable);
 
         return $this;
     }

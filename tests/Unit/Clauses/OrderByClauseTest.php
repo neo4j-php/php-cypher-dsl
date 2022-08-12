@@ -1,110 +1,121 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) 2021- Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\OrderByClause;
-use WikibaseSolutions\CypherDSL\Expressions\Property;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Query;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\OrderByClause
  */
 class OrderByClauseTest extends TestCase
 {
-    use TestHelper;
-
     public function testEmptyClause(): void
     {
         $orderBy = new OrderByClause();
 
         $this->assertSame("", $orderBy->toQuery());
-        $this->assertEquals([], $orderBy->getProperties());
-        $this->assertFalse($orderBy->isDescending());
     }
 
     public function testSingleProperty(): void
     {
+        $property = Query::variable('a')->property('a');
+
         $orderBy = new OrderByClause();
-        $property = $this->getQueryConvertibleMock(Property::class, "a.a");
         $orderBy->addProperty($property);
 
         $this->assertSame("ORDER BY a.a", $orderBy->toQuery());
-        $this->assertEquals([$property], $orderBy->getProperties());
-        $this->assertFalse($orderBy->isDescending());
     }
 
     public function testMultipleProperties(): void
     {
-        $orderBy = new OrderByClause();
-        $propertyA = $this->getQueryConvertibleMock(Property::class, "a.a");
-        $propertyB = $this->getQueryConvertibleMock(Property::class, "a.b");
+        $a = Query::variable('a')->property('a');
+        $b = Query::variable('a')->property('b');
 
-        $orderBy->addProperty($propertyA);
-        $orderBy->addProperty($propertyB);
+        $orderBy = new OrderByClause();
+
+        $orderBy->addProperty($a);
+        $orderBy->addProperty($b);
 
         $this->assertSame("ORDER BY a.a, a.b", $orderBy->toQuery());
-        $this->assertEquals([$propertyA, $propertyB], $orderBy->getProperties());
-        $this->assertFalse($orderBy->isDescending());
+    }
+
+    public function testMultiplePropertiesSingleCall(): void
+    {
+        $a = Query::variable('a')->property('a');
+        $b = Query::variable('a')->property('b');
+
+        $orderBy = new OrderByClause();
+
+        $orderBy->addProperty($a, $b);
+
+        $this->assertSame("ORDER BY a.a, a.b", $orderBy->toQuery());
+    }
+
+    public function testMultiplePropertiesSingleCallArrayUnpacking(): void
+    {
+        $a = Query::variable('a')->property('a');
+        $b = Query::variable('a')->property('b');
+
+        $orderBy = new OrderByClause();
+
+        $orderBy->addProperty(...[$a, $b]);
+
+        $this->assertSame("ORDER BY a.a, a.b", $orderBy->toQuery());
     }
 
     public function testSinglePropertyDesc(): void
     {
+        $a = Query::variable('a')->property('a');
+
         $orderBy = new OrderByClause();
-        $property = $this->getQueryConvertibleMock(Property::class, "a.a");
-        $orderBy->addProperty($property);
+        $orderBy->addProperty($a);
         $orderBy->setDescending();
 
         $this->assertSame("ORDER BY a.a DESCENDING", $orderBy->toQuery());
-        $this->assertEquals([$property], $orderBy->getProperties());
-        $this->assertTrue($orderBy->isDescending());
     }
 
     public function testMultiplePropertiesDesc(): void
     {
-        $orderBy = new OrderByClause();
-        $propertyA = $this->getQueryConvertibleMock(Property::class, "a.a");
-        $propertyB = $this->getQueryConvertibleMock(Property::class, "a.b");
+        $a = Query::variable('a')->property('a');
+        $b = Query::variable('a')->property('b');
 
-        $orderBy->addProperty($propertyA);
-        $orderBy->addProperty($propertyB);
+        $orderBy = new OrderByClause();
+
+        $orderBy->addProperty($a);
+        $orderBy->addProperty($b);
         $orderBy->setDescending();
 
         $this->assertSame("ORDER BY a.a, a.b DESCENDING", $orderBy->toQuery());
-        $this->assertEquals([$propertyA, $propertyB], $orderBy->getProperties());
-        $this->assertTrue($orderBy->isDescending());
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsProperty(): void
+    public function testSetDescendingTakesBoolean(): void
     {
-        $orderBy = new OrderByClause();
-        $orderBy->addProperty($this->getQueryConvertibleMock(Property::class, "a.a"));
+        $a = Query::variable('a')->property('a');
 
-        $orderBy->toQuery();
+        $orderBy = new OrderByClause();
+
+        $orderBy->addProperty($a);
+        $orderBy->setDescending();
+
+        $this->assertSame("ORDER BY a.a DESCENDING", $orderBy->toQuery());
+
+        $orderBy->setDescending(true);
+
+        $this->assertSame("ORDER BY a.a DESCENDING", $orderBy->toQuery());
+
+        $orderBy->setDescending(false);
+
+        $this->assertSame("ORDER BY a.a", $orderBy->toQuery());
     }
 
     public function testDoesNotAcceptAnyType(): void
@@ -113,8 +124,37 @@ class OrderByClauseTest extends TestCase
 
         $this->expectException(TypeError::class);
 
-        $orderBy->addProperty($this->getQueryConvertibleMock(AnyType::class, "a.a"));
+        $orderBy->addProperty('a');
+    }
 
-        $orderBy->toQuery();
+    public function testGetProperties(): void
+    {
+        $orderBy = new OrderByClause();
+
+        $a = Query::variable()->property('a');
+        $b = Query::variable()->property('b');
+
+        $orderBy->addProperty($a, $b);
+
+        $this->assertSame([$a, $b], $orderBy->getProperties());
+    }
+
+    public function testIsDescending(): void
+    {
+        $orderBy = new OrderByClause();
+
+        $this->assertFalse($orderBy->isDescending());
+
+        $orderBy->setDescending();
+
+        $this->assertTrue($orderBy->isDescending());
+    }
+
+    public function testAddPropertyReturnsSameInstance(): void
+    {
+        $original = new OrderByClause();
+        $returned = $original->addProperty(Query::variable()->property('a'));
+
+        $this->assertSame($original, $returned);
     }
 }

@@ -28,10 +28,10 @@ interface AssignablePattern extends Pattern
     /**
      * Returns the property of the given name in this pattern.
      *
-     * @param Variable|string $property
+     * @param string $property
      * @return Property
      */
-    public function property($property): Property;
+    public function property(string $property): Property;
 
     /**
      * Set the properties of this pattern.

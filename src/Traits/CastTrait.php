@@ -2,9 +2,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits;
 
-use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
@@ -99,13 +97,36 @@ trait CastTrait
     /**
      * Casts the given value to a Variable.
      *
-     * @param Variable|string $variable
+     * @param Variable|Pattern|string $variable
      * @return Variable
+     * @see CastTrait::toName() for a function that does not accept Pattern
      */
     private static function toVariable($variable): Variable
     {
-        self::assertClass('variable', [Variable::class, 'string'], $variable);
-        return $variable instanceof Variable ? $variable : new Variable($variable);
+        self::assertClass('variable', [Variable::class, Pattern::class, 'string'], $variable);
+
+        if ($variable instanceof Variable) {
+            return $variable;
+        }
+
+        if ($variable instanceof Pattern) {
+            return $variable->getVariable();
+        }
+        
+        return new Variable($variable);
+    }
+
+    /**
+     * Casts the given value to a name (as a variable).
+     *
+     * @param Variable|string $name
+     * @return Variable
+     * @see CastTrait::toVariable() for a function that accepts Pattern
+     */
+    private static function toName($name): Variable
+    {
+        self::assertClass('name', [Variable::class, 'string'], $name);
+        return $name instanceof Variable ? $name : new Variable($name);
     }
 
     /**

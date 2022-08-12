@@ -47,9 +47,9 @@ trait AssignablePatternTrait
     /**
      * @inheritDoc
      */
-    public function property($property): Property
+    public function property(string $property): Property
     {
-        return new Property($this->getVariable(), self::toVariable($property));
+        return new Property($this->getVariable(), $property);
     }
 
     /**

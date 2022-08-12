@@ -1,27 +1,16 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) 2021-  Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
@@ -30,7 +19,7 @@ use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
  * This class represents a CALL {} (subquery) clause. The CALL {} clause evaluates a subquery that returns
  * some values.
  *
- * @note This clause is not officially part of the openCypher standard.
+ * @note This feature is not officially part of the openCypher standard. For more information, see https://github.com/opencypher/openCypher/blob/a507292d35280aca9e37bf938cdec4fdd1e64ba9/docs/standardisation-scope.adoc.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/
  * @see Query::call() for a more convenient method to construct this class
@@ -66,12 +55,12 @@ final class CallClause extends Clause
     /**
      * Add one or more variables to include in the WITH clause.
      *
-     * @param Variable|string ...$variables
+     * @param Variable|Pattern|string ...$variables
      * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/#subquery-correlated-importing
      */
-    public function addVariable(...$variables): self
+    public function addWithVariable(...$variables): self
     {
         $res = [];
 
@@ -121,9 +110,7 @@ final class CallClause extends Clause
         }
 
         if ($this->withVariables !== []) {
-            $withClause = new WithClause();
-            $withClause->setEntries($this->withVariables);
-            $subQuery = $withClause->toQuery() . ' ' . $subQuery;
+            $subQuery = Query::new()->with($this->withVariables)->toQuery() . ' ' . $subQuery;
         }
 
         return sprintf('{ %s }', $subQuery);

@@ -1,112 +1,125 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) 2021- Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\MatchClause;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Patterns\Node;
-use WikibaseSolutions\CypherDSL\Patterns\Path;
-use InvalidArgumentException;
+use WikibaseSolutions\CypherDSL\Patterns\Relationship;
+use WikibaseSolutions\CypherDSL\Query;
+
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\MatchClause
  */
 class MatchClauseTest extends TestCase
 {
-    use TestHelper;
-
     public function testEmptyClause(): void
     {
         $match = new MatchClause();
 
         $this->assertSame("", $match->toQuery());
-        $this->assertEquals([], $match->getPatterns());
     }
 
     public function testSinglePattern(): void
     {
+        $pattern = Query::node()->withVariable('a');
+
         $match = new MatchClause();
-        $pattern = (new Node())->withVariable('a');
         $match->addPattern($pattern);
 
         $this->assertSame("MATCH (a)", $match->toQuery());
-        $this->assertEquals([$pattern], $match->getPatterns());
     }
 
     public function testMultiplePatterns(): void
     {
-        $match = new MatchClause();
-        $patternA = (new Node())->withVariable('a');
-        $patternB = (new Node())->withVariable('b')->relationshipTo((new Node())->withVariable('c'), 'Foo');
+        $patternA = Query::node()->withVariable('a');
+        $patternB = Query::node()->withVariable('b');
 
+        $match = new MatchClause();
+        $match->addPattern($patternA, $patternB);
+
+        $this->assertSame("MATCH (a), (b)", $match->toQuery());
+    }
+
+    public function testMultiplePatternsSeparateFunctionCalls()
+    {
+        $patternA = Query::node()->withVariable('a');
+        $patternB = Query::node()->withVariable('b');
+
+        $match = new MatchClause();
         $match->addPattern($patternA);
         $match->addPattern($patternB);
 
-        $this->assertSame("MATCH (a), (b)-[:Foo]->(c)", $match->toQuery());
-        $this->assertEquals([$patternA, $patternB], $match->getPatterns());
+        $this->assertSame("MATCH (a), (b)", $match->toQuery());
     }
 
-    public function testSetPatterns(): void
+    public function testMultiplePatternsMerge()
     {
+        $patternA = Query::node()->withVariable('a');
+        $patternB = Query::node()->withVariable('b');
+        $patternC = Query::node()->withVariable('c');
+        $patternD = Query::node()->withVariable('d');
+
         $match = new MatchClause();
-        $match->addPattern((new Node())->withVariable('c'));
+        $match->addPattern($patternA, $patternB);
+        $match->addPattern($patternC, $patternD);
 
-        $patterns = [(new Path([(new Node())->withVariable('a')])), new Path([(new Node())->withVariable('b')])];
+        $this->assertSame("MATCH (a), (b), (c), (d)", $match->toQuery());
+    }
 
-        $match->setPatterns($patterns);
+    public function testAddPatternAcceptsAnyMatchablePattern()
+    {
+        $node = Query::node();
 
-        $this->assertSame($patterns, $match->getPatterns());
+        $match = new MatchClause();
+        $match->addPattern($node);
+
+        $path = Query::node()->relationshipTo(Query::node());
+
+        $match->addPattern($path);
+
+        $this->assertSame('MATCH (), ()-->()', $match->toQuery());
+    }
+
+    public function testAddPatternDoesNotAcceptRelationship()
+    {
+        $rel = Query::relationship(Relationship::DIR_LEFT);
+
+        $match = new MatchClause();
+
+        $this->expectException(\TypeError::class);
+
+        $match->addPattern($rel);
+    }
+
+    public function testAddPatternArrayUnpacking()
+    {
+        $patternA = Query::node()->withVariable('a');
+        $patternB = Query::node()->withVariable('b');
+
+        $patterns = [$patternA, $patternB];
+
+        $match = new MatchClause();
+        $match->addPattern(...$patterns);
+
         $this->assertSame('MATCH (a), (b)', $match->toQuery());
-    }
-
-    public function testSetPatternsDoesNotAcceptAnyType(): void
-    {
-        $match = new MatchClause();
-
-        $this->expectException(InvalidArgumentException::class);
-
-        $match->setPatterns([$this->getQueryConvertibleMock(AnyType::class, "(a)")]);
-        $match->toQuery();
-    }
-
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testSetPatternsAcceptsPath(): void
-    {
-        $match = new MatchClause();
-        $match->setPatterns([new Path([(new Node)->withVariable('a')])]);
-
-        $match->toQuery();
     }
 
     public function testGetPatterns(): void
     {
+        $pattern1 = Query::node();
+        $pattern2 = Query::node();
+
         $match = new MatchClause();
+        $match->addPattern($pattern1);
+        $match->addPattern($pattern2);
 
-        $patterns = [new Path([(new Node)->withVariable('a')])];
-
-        $match->setPatterns($patterns);
-
-        $this->assertSame($patterns, $match->getPatterns());
+        $this->assertSame([$pattern1, $pattern2], $match->getPatterns());
     }
 }

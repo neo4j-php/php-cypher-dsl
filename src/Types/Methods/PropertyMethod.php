@@ -16,8 +16,8 @@ interface PropertyMethod
     /**
      * Returns the property of the given name in this map.
      *
-     * @param Variable|string $property
+     * @param string $property
      * @return Property
      */
-    public function property($property): Property;
+    public function property(string $property): Property;
 }

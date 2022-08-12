@@ -56,6 +56,7 @@ use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\MatchablePattern;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
+use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
@@ -345,7 +346,7 @@ final class Query implements QueryConvertible
      * Creates a CALL sub query clause and adds it to the query.
      *
      * @param Query|callable(Query):void $query A callable decorating a query, or the actual CALL subquery
-     * @param Variable|Variable[]|string|string[] $variables The variables to include in the WITH clause for correlation
+     * @param Variable|Pattern|string|Variable[]|Pattern[]|string[] $variables The variables to include in the WITH clause for correlation
      *
      * @return Query
      *
@@ -369,7 +370,7 @@ final class Query implements QueryConvertible
 
         $callClause = new CallClause();
         $callClause->withSubQuery($subQuery);
-        $callClause->addVariable(...$variables);
+        $callClause->addWithVariable(...$variables);
 
         $this->clauses[] = $callClause;
 
@@ -563,22 +564,18 @@ final class Query implements QueryConvertible
     }
 
     /**
-     * Creates the LIMIT clause.
+     * Adds a LIMIT clause.
      *
-     * @param NumeralType|int|float $limit The amount to use as the limit
+     * @param NumeralType|int $limit The amount to use as the limit
      *
      * @return $this
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/limit/
      *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/limit/
+     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 98)
      */
     public function limit($limit): self
     {
         $limitClause = new LimitClause();
-
-        if (is_float($limit) || is_int($limit)) {
-            $limit = Literal::number($limit);
-        }
-
         $limitClause->setLimit($limit);
 
         $this->clauses[] = $limitClause;
@@ -679,18 +676,13 @@ final class Query implements QueryConvertible
      */
     public function orderBy($properties, bool $descending = false): self
     {
-        $orderByClause = new OrderByClause();
-        $orderByClause->setDescending($descending);
-
         if (!is_array($properties)) {
             $properties = [$properties];
         }
 
-        foreach ($properties as $property) {
-            $this->assertClass('property', Property::class, $property);
-
-            $orderByClause->addProperty($property);
-        }
+        $orderByClause = new OrderByClause();
+        $orderByClause->setDescending($descending);
+        $orderByClause->addProperty(...$properties);
 
         $this->clauses[] = $orderByClause;
 

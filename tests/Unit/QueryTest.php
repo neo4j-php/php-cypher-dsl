@@ -25,7 +25,6 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Number;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
@@ -37,7 +36,6 @@ use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
@@ -48,8 +46,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
  */
 class QueryTest extends TestCase
 {
-    use TestHelper;
-
     public function testNodeWithoutLabel(): void
     {
         $actual = Query::node();
