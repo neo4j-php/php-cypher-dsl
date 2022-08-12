@@ -1,0 +1,96 @@
+name: test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  unit:
+    name: "Unit and mutation testing (PHP ${{ matrix.php-version }})"
+    runs-on: "ubuntu-22.04"
+    continue-on-error: true
+
+    strategy:
+      matrix:
+        php-version: [ "7.4", "8.0", "8.1" ]
+
+    env:
+      COMPOSER_VERSION: 2
+      COVERAGE_DRIVER: xdebug
+      MINIMUM_COVERAGE_PERCENTAGE: 80
+      MINIMUM_MSI_PERCENTAGE: 80
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: ${{ env.COVERAGE_DRIVER }}
+          ini-values: memory_limit=512M, xdebug.mode=off
+          tools: composer:${{ env.COMPOSER_VERSION }}
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Run unit tests
+        run: XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite unit
+
+      - name: Check coverage
+        run: php vendor/bin/coverage-check coverage/clover.xml ${{ env.MINIMUM_COVERAGE_PERCENTAGE }}
+
+      - name: Run mutation tests
+        run: XDEBUG_MODE=coverage php vendor/bin/infection --show-mutations --min-msi=${{ env.MINIMUM_MSI_PERCENTAGE }} --threads=4
+
+
+  integration:
+    name: "Integration testing (PHP ${{ matrix.php-version }}, Neo4j ${{ matrix.neo4j-version }})"
+    runs-on: "ubuntu-22.04"
+    continue-on-error: true
+
+    strategy:
+      matrix:
+        neo4j-version: [ "4.2", "4.3", "4.4" ]
+        php-version: [ "7.4", "8.0", "8.1" ]
+
+    services:
+      neo4j:
+        image: neo4j:${{ matrix.neo4j-version }}
+        env:
+          NEO4J_AUTH: neo4j/test
+          NEO4JLABS_PLUGINS: '["apoc"]'
+        ports:
+          - 7687:7687
+          - 7474:7474
+        options: >-
+          --health-cmd "wget -q --method=HEAD http://localhost:7474 || exit 1"
+          --health-start-period "60s"
+          --health-interval "30s"
+          --health-timeout "15s"
+          --health-retries "5"
+
+    env:
+      COMPOSER_VERSION: 2
+      COVERAGE_DRIVER: none
+      NEO4J_CONNECTIONS: bolt://neo4j:test@localhost,http://neo4j:test@localhost
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: ${{ env.COVERAGE_DRIVER }}
+          ini-values: memory_limit=512M
+          tools: composer:${{ env.COMPOSER_VERSION }}
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Run integration tests
+        run: php vendor/bin/phpunit --testsuite integration --no-coverage

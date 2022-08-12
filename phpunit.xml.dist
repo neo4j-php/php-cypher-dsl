@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit
-        backupGlobals="false"
-        backupStaticAttributes="false"
-        colors="true"
-        convertErrorsToExceptions="true"
-        convertNoticesToExceptions="true"
-        convertWarningsToExceptions="true"
-        processIsolation="false"
-        stopOnFailure="false"
-        bootstrap="./vendor/autoload.php">
+<phpunit colors="true" verbose="true"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+>
     <testsuites>
-        <testsuite name="Unit">
-            <directory>./tests/Unit/</directory>
+        <testsuite name="unit">
+            <directory>tests/Unit</directory>
         </testsuite>
-        <testsuite name="All">
-            <directory>./tests/</directory>
+        <testsuite name="integration">
+            <directory>tests/Integration</directory>
         </testsuite>
     </testsuites>
-    <coverage>
+    <coverage processUncoveredFiles="true" cacheDirectory="coverage/cache" pathCoverage="true">
+        <report>
+            <clover outputFile="coverage/clover.xml" />
+        </report>
         <include>
             <directory suffix=".php">src</directory>
         </include>
