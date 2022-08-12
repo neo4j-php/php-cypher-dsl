@@ -1,0 +1,38 @@
+name: analyse
+
+on:
+  push:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  analyse:
+    name: "Static analysis (PHP ${{ matrix.php-version }})"
+    runs-on: "ubuntu-22.04"
+    continue-on-error: true
+
+    strategy:
+      matrix:
+        php-version: [ "8.1" ]
+
+    env:
+      COMPOSER_VERSION: 2
+      COVERAGE_DRIVER: xdebug
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          tools: composer:${{ env.COMPOSER_VERSION }}
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Execute type checking
+        run: php vendor/bin/phpstan

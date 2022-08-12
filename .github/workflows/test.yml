@@ -1,8 +1,7 @@
-name: main
+name: test
 
 on:
   push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -94,53 +93,3 @@ jobs:
 
       - name: Run integration tests
         run: php vendor/bin/phpunit --testsuite integration --no-coverage
-
-
-  lint:
-    name: "Linting (PHP ${{ matrix.php-version }})"
-    runs-on: "ubuntu-22.04"
-    continue-on-error: true
-
-    strategy:
-      matrix:
-        php-version: [ "8.1" ]
-
-    env:
-      COMPOSER_VERSION: 2
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-version }}
-          tools: composer:${{ env.COMPOSER_VERSION }}
-
-      - name: Install dependencies
-        run: composer install --no-interaction --prefer-dist --no-progress
-
-      - name: Run PHP-CS-Fixer
-        run: php vendor/bin/php-cs-fixer fix --config .php-cs-fixer.dist.php --verbose --dry-run
-
-
-  validate:
-    name: "Validating (composer.json)"
-    runs-on: "ubuntu-22.04"
-    continue-on-error: true
-
-    env:
-      COMPOSER_VERSION: 2
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          tools: composer:${{ env.COMPOSER_VERSION }}
-
-      - name: Run composer validate
-        run: composer validate

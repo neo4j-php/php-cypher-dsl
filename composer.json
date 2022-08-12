@@ -55,7 +55,8 @@
     "infection/infection": "^0.25.5",
     "friendsofphp/php-cs-fixer": "^3.0",
     "rregeer/phpunit-coverage-check": "^0.3.1",
-    "stefanak-michal/bolt": "^4.1"
+    "stefanak-michal/bolt": "^4.1",
+    "phpstan/phpstan": "^1.8"
   },
   "autoload": {
     "psr-4": {
