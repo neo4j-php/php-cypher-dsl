@@ -23,7 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -44,7 +44,7 @@ class WithClauseTest extends TestCase
     public function testSingleEntry(): void
     {
         $return = new WithClause();
-        $entry = $this->getQueryConvertableMock(AnyType::class, "a");
+        $entry = $this->getQueryConvertibleMock(AnyType::class, "a");
         $return->addEntry($entry);
 
         $this->assertSame("WITH a", $return->toQuery());
@@ -54,9 +54,9 @@ class WithClauseTest extends TestCase
     public function testMultipleEntries(): void
     {
         $return = new WithClause();
-        $entryA = $this->getQueryConvertableMock(AnyType::class, "a");
-        $entryB = $this->getQueryConvertableMock(AnyType::class, "b");
-        $entryC = $this->getQueryConvertableMock(AnyType::class, "c");
+        $entryA = $this->getQueryConvertibleMock(AnyType::class, "a");
+        $entryB = $this->getQueryConvertibleMock(AnyType::class, "b");
+        $entryC = $this->getQueryConvertibleMock(AnyType::class, "c");
 
         $return->addEntry($entryA);
         $return->addEntry($entryB);
@@ -69,7 +69,7 @@ class WithClauseTest extends TestCase
     public function testSingleAlias(): void
     {
         $return = new WithClause();
-        $entry = $this->getQueryConvertableMock(AnyType::class, "a");
+        $entry = $this->getQueryConvertibleMock(AnyType::class, "a");
         $return->addEntry($entry, "b");
 
         $this->assertSame("WITH a AS b", $return->toQuery());
@@ -79,8 +79,8 @@ class WithClauseTest extends TestCase
     public function testMultipleAliases(): void
     {
         $return = new WithClause();
-        $entryA = $this->getQueryConvertableMock(AnyType::class, "a");
-        $entryB = $this->getQueryConvertableMock(AnyType::class, "b");
+        $entryA = $this->getQueryConvertibleMock(AnyType::class, "a");
+        $entryB = $this->getQueryConvertibleMock(AnyType::class, "b");
 
         $return->addEntry($entryA, "b");
         $return->addEntry($entryB, "c");
@@ -92,9 +92,9 @@ class WithClauseTest extends TestCase
     public function testMixedAliases(): void
     {
         $return = new WithClause();
-        $entryA = $this->getQueryConvertableMock(AnyType::class, "a");
-        $entryB = $this->getQueryConvertableMock(AnyType::class, "c");
-        $entryC = $this->getQueryConvertableMock(AnyType::class, "b");
+        $entryA = $this->getQueryConvertibleMock(AnyType::class, "a");
+        $entryB = $this->getQueryConvertibleMock(AnyType::class, "c");
+        $entryC = $this->getQueryConvertibleMock(AnyType::class, "b");
 
         $return->addEntry($entryA, "b");
         $return->addEntry($entryB);
@@ -107,7 +107,7 @@ class WithClauseTest extends TestCase
     public function testAliasIsEscaped(): void
     {
         $return = new WithClause();
-        $entry = $this->getQueryConvertableMock(AnyType::class, "a");
+        $entry = $this->getQueryConvertibleMock(AnyType::class, "a");
         $return->addEntry($entry, ":");
 
         $this->assertSame("WITH a AS `:`", $return->toQuery());
@@ -120,7 +120,7 @@ class WithClauseTest extends TestCase
     public function testAcceptsAnyType(): void
     {
         $return = new WithClause();
-        $return->addEntry($this->getQueryConvertableMock(AnyType::class, "a"), ":");
+        $return->addEntry($this->getQueryConvertibleMock(AnyType::class, "a"), ":");
 
         $return->toQuery();
     }

@@ -3,7 +3,8 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Traits\HasVariableTrait;
+use WikibaseSolutions\CypherDSL\HasVariable;
+use WikibaseSolutions\CypherDSL\Traits\HelperTraits\VariableTrait;
 
 class HasVariableTraitTest extends TestCase
 {
@@ -11,32 +12,25 @@ class HasVariableTraitTest extends TestCase
 
     public function setUp(): void
     {
-        $this->hasVariable = new class () {
-            use HasVariableTrait;
+        $this->hasVariable = new class () implements HasVariable {
+            use VariableTrait;
         };
     }
 
     public function testDefaultGeneration(): void
     {
-        self::assertNull($this->hasVariable->getVariable());
-        self::assertNotNull($this->hasVariable->getName());
+        $this->assertFalse($this->hasVariable->hasVariable());
+        $this->assertNotNull($this->hasVariable->getVariable());
+        $this->assertTrue($this->hasVariable->hasVariable());
 
-        self::assertMatchesRegularExpression('/var\w{32}/', $this->hasVariable->getVariable()->getName());
+        $this->assertMatchesRegularExpression('/var\w{32}/', $this->hasVariable->getVariable()->getName());
     }
 
     public function testNamed(): void
     {
-        $this->hasVariable->named('x');
+        $this->hasVariable->withVariable('x');
 
-        self::assertSame($this->hasVariable->getVariable(), $this->hasVariable->getName());
-        self::assertEquals('x', $this->hasVariable->getVariable()->getName());
-    }
-
-    public function testSetName(): void
-    {
-        $this->hasVariable->setName('x');
-
-        self::assertSame($this->hasVariable->getVariable(), $this->hasVariable->getName());
-        self::assertEquals('x', $this->hasVariable->getVariable()->getName());
+        $this->assertTrue($this->hasVariable->hasVariable());
+        $this->assertEquals('x', $this->hasVariable->getVariable()->getName());
     }
 }

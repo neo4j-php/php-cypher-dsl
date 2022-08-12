@@ -1,56 +1,44 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
+ * This file is part of php-cypher-dsl.
+ *
  * Copyright (C) 2021  Wikibase Solutions
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use DomainException;
 use InvalidArgumentException;
 use LogicException;
-use WikibaseSolutions\CypherDSL\Property;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\RelationshipTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
+use WikibaseSolutions\CypherDSL\Traits\PatternTraits\AssignablePatternTrait;
 
 /**
- * This class represents an arbitrary relationship between two nodes, a node and a
- * relationship or between two relationships.
+ * This class represents an arbitrary relationship.
  *
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 10)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
  */
-class Relationship implements RelationshipType
+final class Relationship implements AssignablePattern
 {
     use EscapeTrait;
-    use RelationshipTypeTrait;
+
+    use AssignablePatternTrait;
 
     public const DIR_RIGHT = ["-", "->"];
     public const DIR_LEFT = ["<-", "-"];
     public const DIR_UNI = ["-", "-"];
 
     /**
-     * @var string[] The direction of the relationship
+     * @var string[] The direction of the relationship (one of the DIR_* constants)
      */
     private array $direction;
 
     /**
-     * @var string[]
+     * @var string[] A list of relationship condition types
      */
     private array $types = [];
 
@@ -70,13 +58,16 @@ class Relationship implements RelationshipType
     private ?int $exactHops = null;
 
     /**
-     * Path constructor.
-     *
+     * @var bool Whether to allow arbitrary hops between nodes
+     */
+    private bool $arbitraryHops = false;
+
+    /**
      * @param array $direction The direction of the relationship, should be either:
-     *                           - Path::DIR_RIGHT (for a relation of
-     *                           (a)-->(b)) - Path::DIR_LEFT (for a relation
-     *                           of (a)<--(b)) - Path::DIR_UNI (for a
-     *                           relation of (a)--(b))
+     *  - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
+     *  - Relationship::DIR_LEFT (for a relation of (a)<--(b))
+     *  - Relationship::DIR_UNI (for a relation of (a)--(b))
+     * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(array $direction)
     {
@@ -88,20 +79,12 @@ class Relationship implements RelationshipType
     }
 
     /**
-     * @return string[]
-     */
-    public function getDirection(): array
-    {
-        return $this->direction;
-    }
-
-    /**
      * Set the minimum number of `relationship->node` hops away to search.
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels
      *
      * @param int $minHops
-     * @return Relationship
+     * @return $this
      */
     public function withMinHops(int $minHops): self
     {
@@ -113,8 +96,8 @@ class Relationship implements RelationshipType
             throw new DomainException("minHops cannot be greater than maxHops");
         }
 
-        if (isset($this->exactHops)) {
-            throw new LogicException("Cannot use minHops in combination with exactHops");
+        if (isset($this->exactHops) || $this->arbitraryHops) {
+            throw new LogicException("minHops cannot be used in combination with exactHops or arbitraryHops");
         }
 
         $this->minHops = $minHops;
@@ -128,7 +111,7 @@ class Relationship implements RelationshipType
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels
      *
      * @param int $maxHops
-     * @return Relationship
+     * @return $this
      */
     public function withMaxHops(int $maxHops): self
     {
@@ -140,8 +123,8 @@ class Relationship implements RelationshipType
             throw new DomainException("maxHops cannot be less than minHops");
         }
 
-        if (isset($this->exactHops)) {
-            throw new LogicException("Cannot use maxHops in combination with exactHops");
+        if (isset($this->exactHops) || $this->arbitraryHops) {
+            throw new LogicException("maxHops cannot be used in combination with exactHops or arbitraryHops");
         }
 
         $this->maxHops = $maxHops;
@@ -155,7 +138,7 @@ class Relationship implements RelationshipType
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels
      *
      * @param int $exactHops
-     * @return Relationship
+     * @return $this
      */
     public function withExactHops(int $exactHops): self
     {
@@ -163,8 +146,8 @@ class Relationship implements RelationshipType
             throw new DomainException("exactHops cannot be less than 1");
         }
 
-        if (isset($this->minHops) || isset($this->maxHops)) {
-            throw new LogicException("Cannot use exactHops in combination with minHops or maxHops");
+        if (isset($this->minHops) || isset($this->maxHops) || $this->arbitraryHops) {
+            throw new LogicException("exactHops cannot be used in combination with minHops, maxHops or arbitraryHops");
         }
 
         $this->exactHops = $exactHops;
@@ -173,74 +156,56 @@ class Relationship implements RelationshipType
     }
 
     /**
-     * @param string $type
-     * @return Relationship
+     * Set the number of hops to be an arbitrary number (wildcard).
+     *
+     * @param bool $arbitraryHops
+     * @return $this
      */
-    public function withType(string $type): self
+    public function setArbitraryHops(bool $arbitraryHops = true): self
     {
-        $this->types[] = $type;
+        if (isset($this->minHops) || isset($this->maxHops) || isset($this->exactHops)) {
+            throw new LogicException("arbitraryHops cannot be used in combination with minHops, maxHops or exactHops");
+        }
+
+        $this->arbitraryHops = $arbitraryHops;
 
         return $this;
     }
 
     /**
-     * Returns the string representation of this relationship that can be used directly
-     * in a query.
+     * The types to require for this relationship. Will overwrite any previously set types.
      *
-     * @return string
+     * @param string[] $types
+     * @return $this
      */
-    public function toQuery(): string
+    public function withTypes(array $types): self
     {
-        return $this->direction[0] . $this->conditionToString() . $this->direction[1];
+        $this->types = $types;
+
+        return $this;
     }
 
     /**
-     * @return string
+     * Add one or more types to require for this relationship.
+     *
+     * @param string ...$type
+     * @return $this
      */
-    private function conditionToString(): string
+    public function addType(string ...$type): self
     {
-        $conditionInner = "";
+        $this->types = array_merge($this->types, $type);
 
-        // The condition always starts with the variable
-        if (isset($this->variable)) {
-            $conditionInner .= $this->variable->toQuery();
-        }
+        return $this;
+    }
 
-        $types = array_filter($this->types);
-
-        if (count($types) !== 0) {
-            // If we have at least one condition type, escape them and insert them into the query
-            $escapedTypes = array_map(fn (string $type): string => $this->escape($type), $types);
-            $conditionInner .= sprintf(":%s", implode("|", $escapedTypes));
-        }
-
-        if (isset($this->minHops) || isset($this->maxHops)) {
-            // We have either a minHop, maxHop or both
-            $conditionInner .= "*";
-
-            if (isset($this->minHops)) {
-                $conditionInner .= $this->minHops;
-            }
-
-            $conditionInner .= '..';
-
-            if (isset($this->maxHops)) {
-                $conditionInner .= $this->maxHops;
-            }
-        } elseif (isset($this->exactHops)) {
-            $conditionInner .= '*' . $this->exactHops;
-        }
-
-        if (isset($this->properties)) {
-            if ($conditionInner !== "") {
-                // Add some padding between the property list and the preceding structure
-                $conditionInner .= " ";
-            }
-
-            $conditionInner .= $this->properties->toQuery();
-        }
-
-        return sprintf("[%s]", $conditionInner);
+    /**
+     * Returns the direction of this relationship (one of the Relationship::DIR_* constants).
+     *
+     * @return string[]
+     */
+    public function getDirection(): array
+    {
+        return $this->direction;
     }
 
     /**
@@ -283,8 +248,76 @@ class Relationship implements RelationshipType
         return $this->types;
     }
 
-    public function property(string $property): Property
+    /**
+     * Returns the string representation of this relationship that can be used directly
+     * in a query.
+     *
+     * @return string
+     */
+    public function toQuery(): string
     {
-        return new Property($this->getName(), $property);
+        return $this->direction[0] . $this->relationshipDetailToString() . $this->direction[1];
+    }
+
+    /**
+     * @return string
+     */
+    private function relationshipDetailToString(): string
+    {
+        $conditionInner = "";
+
+        if (isset($this->variable)) {
+            $conditionInner .= $this->variable->toQuery();
+        }
+
+        $types = array_filter($this->types);
+
+        if (count($types) !== 0) {
+            // If we have at least one condition type, escape them and insert them into the query
+            $escapedTypes = array_map(fn (string $type): string => $this->escape($type), $types);
+            $conditionInner .= sprintf(":%s", implode("|", $escapedTypes));
+        }
+
+        if (isset($this->minHops) || isset($this->maxHops)) {
+            // We have either a minHop, maxHop or both
+            $conditionInner .= "*";
+
+            if (isset($this->minHops)) {
+                $conditionInner .= $this->minHops;
+            }
+
+            $conditionInner .= '..';
+
+            if (isset($this->maxHops)) {
+                $conditionInner .= $this->maxHops;
+            }
+        } elseif (isset($this->exactHops)) {
+            // We have an exact number of hops
+            $conditionInner .= '*' . $this->exactHops;
+        } elseif ($this->arbitraryHops) {
+            // We have an arbitrary number of hops
+            $conditionInner .= '*';
+        }
+
+        if (isset($this->properties)) {
+            // Only add the properties if they're not empty
+            if (!$this->properties instanceof Map || $this->properties->getProperties() !== []) {
+                $map = $this->properties->toQuery();
+
+                if ($conditionInner !== "") {
+                    // Add some padding between the property map and the preceding structure
+                    $conditionInner .= " ";
+                }
+
+                $conditionInner .= $map;
+            }
+        }
+
+        if ($conditionInner === '') {
+            // If there is no condition, we can also omit the square brackets
+            return '';
+        }
+
+        return sprintf("[%s]", $conditionInner);
     }
 }

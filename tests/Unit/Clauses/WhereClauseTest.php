@@ -23,7 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -44,7 +44,7 @@ class WhereClauseTest extends TestCase
     public function testExpression(): void
     {
         $where = new WhereClause();
-        $expression = $this->getQueryConvertableMock(AnyType::class, "(a)");
+        $expression = $this->getQueryConvertibleMock(AnyType::class, "(a)");
 
         $where->setExpression($expression);
 
@@ -58,7 +58,7 @@ class WhereClauseTest extends TestCase
     public function testAcceptsAnyType(): void
     {
         $where = new WhereClause();
-        $expression = $this->getQueryConvertableMock(AnyType::class, "(a)");
+        $expression = $this->getQueryConvertibleMock(AnyType::class, "(a)");
 
         $where->setExpression($expression);
 

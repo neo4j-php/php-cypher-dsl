@@ -21,20 +21,35 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\QueryConvertable;
+use WikibaseSolutions\CypherDSL\QueryConvertible;
 
 /**
  * This class represents all the clauses in the Cypher query language.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/
  */
-abstract class Clause implements QueryConvertable
+abstract class Clause implements QueryConvertible
 {
+	/**
+	 * Returns whether this clause is still valid if it has an empty subject.
+	 *
+	 * @return bool
+	 */
+	public function canBeEmpty(): bool
+	{
+		return false;
+	}
+
     /**
      * @inheritDoc
      */
     public function toQuery(): string
     {
+		if ($this->getClause() === "") {
+			// If we have an empty clause (for example, for RAW queries), return nothing at all
+			return "";
+		}
+
         if ($this->getSubject() === "") {
             // If we have an empty subject, either return the empty clause, or nothing at all
             return $this->canBeEmpty() ? $this->getClause() : "";
@@ -51,16 +66,6 @@ abstract class Clause implements QueryConvertable
      * @return string
      */
     abstract protected function getSubject(): string;
-
-    /**
-     * Returns whether this clause is still valid if it has an empty subject.
-     *
-     * @return bool
-     */
-    public function canBeEmpty(): bool
-    {
-        return false;
-    }
 
     /**
      * Returns the clause this object describes. For instance "MATCH".

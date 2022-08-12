@@ -23,16 +23,16 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Contains;
-use WikibaseSolutions\CypherDSL\EndsWith;
-use WikibaseSolutions\CypherDSL\Regex;
-use WikibaseSolutions\CypherDSL\StartsWith;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
-use WikibaseSolutions\CypherDSL\Traits\StringTypeTrait;
+use WikibaseSolutions\CypherDSL\Expressions\Contains;
+use WikibaseSolutions\CypherDSL\Expressions\EndsWith;
+use WikibaseSolutions\CypherDSL\Expressions\Regex;
+use WikibaseSolutions\CypherDSL\Expressions\StartsWith;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\StringTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Traits\StringTypeTrait
+ * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\StringTypeTrait
  */
 class StringTypeTraitTest extends TestCase
 {
@@ -58,7 +58,7 @@ class StringTypeTraitTest extends TestCase
                 return '10';
             }
         };
-        $this->b = $this->getQueryConvertableMock(StringType::class, "15");
+        $this->b = $this->getQueryConvertibleMock(StringType::class, "15");
     }
 
     public function testContains(): void

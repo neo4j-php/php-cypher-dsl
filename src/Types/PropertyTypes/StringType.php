@@ -21,49 +21,52 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
-use WikibaseSolutions\CypherDSL\Contains;
-use WikibaseSolutions\CypherDSL\EndsWith;
-use WikibaseSolutions\CypherDSL\Regex;
-use WikibaseSolutions\CypherDSL\StartsWith;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Contains;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\EndsWith;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Regex;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\StartsWith;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\StringTypeTrait;
 
 /**
- * Represents the type "string".
+ * Represents the leaf type "string".
+ *
+ * @see StringTypeTrait for a default implementation
  */
-interface StringType extends ComparableType
+interface StringType extends PropertyType
 {
     /**
      * Check whether this expression the given expression.
      *
-     * @param StringType $right
+     * @param StringType|string $right
      * @param bool $insertParentheses
      * @return Contains
      */
-    public function contains(StringType $right, bool $insertParentheses = true): Contains;
+    public function contains($right, bool $insertParentheses = true): Contains;
 
     /**
      * Perform a suffix string search with the given expression.
      *
-     * @param StringType $right
+     * @param StringType|string $right
      * @param bool $insertParentheses
      * @return EndsWith
      */
-    public function endsWith(StringType $right, bool $insertParentheses = true): EndsWith;
+    public function endsWith($right, bool $insertParentheses = true): EndsWith;
 
     /**
      * Perform a prefix string search with the given expression.
      *
-     * @param StringType $right
+     * @param StringType|string $right
      * @param bool $insertParentheses
      * @return StartsWith
      */
-    public function startsWith(StringType $right, bool $insertParentheses = true): StartsWith;
+    public function startsWith($right, bool $insertParentheses = true): StartsWith;
 
     /**
      * Perform a regex comparison with the given expression.
      *
-     * @param StringType $right
+     * @param StringType|string $right
      * @param bool $insertParentheses
      * @return Regex
      */
-    public function regex(StringType $right, bool $insertParentheses = true): Regex;
+    public function regex($right, bool $insertParentheses = true): Regex;
 }

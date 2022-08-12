@@ -21,20 +21,23 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\CompositeTypes;
 
-use WikibaseSolutions\CypherDSL\In;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\In;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
- * Represent the type "list".
+ * Represent the leaf type "list".
+ *
+ * @see ListTypeTrait for a default implemenation
  */
 interface ListType extends CompositeType
 {
     /**
      * Checks whether the given element exists in this list.
      *
-     * @param PropertyType $left
+     * @param PropertyType|bool|int|float|string $left
      * @param bool $insertParentheses
      * @return In
      */
-    public function has(PropertyType $left, bool $insertParentheses = true): In;
+    public function has($left, bool $insertParentheses = true): In;
 }

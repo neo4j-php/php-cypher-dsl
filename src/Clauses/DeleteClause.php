@@ -21,7 +21,8 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Variable;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * This class represents a DELETE clause.
@@ -30,6 +31,8 @@ use WikibaseSolutions\CypherDSL\Variable;
  */
 class DeleteClause extends Clause
 {
+    use ErrorTrait;
+
     /**
      * Whether the DETACH modifier is needed.
      *
@@ -38,18 +41,16 @@ class DeleteClause extends Clause
     private bool $detach = false;
 
     /**
-     * The variables that needs to be deleted.
-     *
-     * @var Variable[] $variables
+     * @var StructuralType[] The structures to delete
      */
-    private array $variables = [];
+    private array $structures = [];
 
     /**
-     * Sets the clause to DETACH DELETE. Without DETACH DELETE, all relationships need to be explicitly
-     * deleted.
+     * Sets the clause to DETACH DELETE. Without DETACH DELETE,
+     * all relationships connected to the nodes/paths need to be explicitly deleted.
      *
-     * @param bool $detach Whether to use DETACH DELETE.
-     * @return DeleteClause
+     * @param bool $detach Whether to use DETACH DELETE
+     * @return $this
      */
     public function setDetach(bool $detach = true): self
     {
@@ -59,14 +60,31 @@ class DeleteClause extends Clause
     }
 
     /**
-     * Add the variable to be deleted. The expression must return a node when evaluated.
+     * Sets the structures to be deleted. This overwrites previous structures if they exist.
      *
-     * @param Variable $variable The name of the object that should be deleted
-     * @return DeleteClause
+     * @param StructuralType[] $structures The structures to delete
+     * @return $this
      */
-    public function addVariable(Variable $variable): self
+    public function setStructures(array $structures): self
     {
-        $this->variables[] = $variable;
+        foreach ($structures as $structure) {
+            $this->assertClass('structure', StructuralType::class, $structure);
+        }
+
+        $this->structures = $structures;
+
+        return $this;
+    }
+
+    /**
+     * Add a structure to be deleted.
+     *
+     * @param StructuralType $structure The structure that should be deleted
+     * @return $this
+     */
+    public function addStructure(StructuralType $structure): self
+    {
+        $this->structures[] = $structure;
 
         return $this;
     }
@@ -82,13 +100,13 @@ class DeleteClause extends Clause
     }
 
     /**
-     * Returns the variables to delete.
+     * Returns the structures to delete.
      *
-     * @return Variable[]
+     * @return StructuralType[]
      */
-    public function getVariables(): array
+    public function getStructures(): array
     {
-        return $this->variables;
+        return $this->structures;
     }
 
     /**
@@ -110,7 +128,7 @@ class DeleteClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (Variable $variable) => $variable->toQuery(), $this->variables)
+            array_map(fn (StructuralType $structure) => $structure->toQuery(), $this->structures)
         );
     }
 }

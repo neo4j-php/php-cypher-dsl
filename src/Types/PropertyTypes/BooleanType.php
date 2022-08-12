@@ -21,47 +21,50 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
-use WikibaseSolutions\CypherDSL\AndOperator;
-use WikibaseSolutions\CypherDSL\Not;
-use WikibaseSolutions\CypherDSL\OrOperator;
-use WikibaseSolutions\CypherDSL\XorOperator;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Conjunction;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Disjunction;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\ExclusiveOr;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Negation;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 
 /**
- * Represents the type "boolean".
+ * Represents the leaf type "boolean".
+ *
+ * @see BooleanTypeTrait for a default implementation
  */
 interface BooleanType extends PropertyType
 {
     /**
      * Create a conjunction between this expression and the given expression.
      *
-     * @param BooleanType $right
+     * @param BooleanType|bool $right
      * @param bool $insertParentheses
-     * @return AndOperator
+     * @return Conjunction
      */
-    public function and(BooleanType $right, bool $insertParentheses = true): AndOperator;
+    public function and($right, bool $insertParentheses = true): Conjunction;
 
     /**
      * Create a disjunction between this expression and the given expression.
      *
-     * @param BooleanType $right
+     * @param BooleanType|bool $right
      * @param bool $insertParentheses
-     * @return OrOperator
+     * @return Disjunction
      */
-    public function or(BooleanType $right, bool $insertParentheses = true): OrOperator;
+    public function or($right, bool $insertParentheses = true): Disjunction;
 
     /**
      * Perform an XOR with the given expression.
      *
-     * @param BooleanType $right
+     * @param BooleanType|bool $right
      * @param bool $insertParentheses
-     * @return XorOperator
+     * @return ExclusiveOr
      */
-    public function xor(BooleanType $right, bool $insertParentheses = true): XorOperator;
+    public function xor($right, bool $insertParentheses = true): ExclusiveOr;
 
     /**
      * Negate this expression (using the NOT operator).
      *
-     * @return Not
+     * @return Negation
      */
-    public function not(): Not;
+    public function not(): Negation;
 }

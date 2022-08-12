@@ -21,77 +21,81 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
-use WikibaseSolutions\CypherDSL\Addition;
-use WikibaseSolutions\CypherDSL\Division;
-use WikibaseSolutions\CypherDSL\Exponentiation;
-use WikibaseSolutions\CypherDSL\Minus;
-use WikibaseSolutions\CypherDSL\Modulo;
-use WikibaseSolutions\CypherDSL\Multiplication;
-use WikibaseSolutions\CypherDSL\Subtraction;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Addition;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Division;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Exponentiation;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\UnaryMinus;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\ModuloDivision;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Multiplication;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Subtraction;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\NumeralTypeTrait;
 
 /**
- * Represents any numeral (integer, float, double).
+ * Represents the abstract type "numeral", which has the subtypes "float" and "integer".
+ *
+ * @see NumeralTypeTrait for a default implementation
+ * @note This interface should not be implemented by any class directly.
  */
-interface NumeralType extends ComparableType
+interface NumeralType extends PropertyType
 {
     /**
      * Add this expression to the given expression.
      *
-     * @param NumeralType $right
+     * @param NumeralType|int|float $right
      * @param bool $insertParentheses
      * @return Addition
      */
-    public function plus(NumeralType $right, bool $insertParentheses = true): Addition;
+    public function plus($right, bool $insertParentheses = true): Addition;
 
     /**
      * Divide this expression by the given expression.
      *
-     * @param NumeralType $right
+     * @param NumeralType|int|float $right
      * @param bool $insertParentheses
      * @return Division
      */
-    public function divide(NumeralType $right, bool $insertParentheses = true): Division;
+    public function divide($right, bool $insertParentheses = true): Division;
 
     /**
      * Perform an exponentiation with the given expression.
      *
-     * @param NumeralType $right
+     * @param NumeralType|int|float $right
      * @param bool $insertParentheses
      * @return Exponentiation
      */
-    public function exponentiate(NumeralType $right, bool $insertParentheses = true): Exponentiation;
+    public function exponentiate($right, bool $insertParentheses = true): Exponentiation;
 
     /**
      * Perform the modulo operation with the given expression.
      *
-     * @param NumeralType $right
+     * @param NumeralType|int|float $right
      * @param bool $insertParentheses
-     * @return Modulo
+     * @return ModuloDivision
      */
-    public function mod(NumeralType $right, bool $insertParentheses = true): Modulo;
+    public function mod($right, bool $insertParentheses = true): ModuloDivision;
 
     /**
      * Perform a multiplication with the given expression.
      *
-     * @param NumeralType $right
+     * @param NumeralType|int|float $right
      * @param bool $insertParentheses
      * @return Multiplication
      */
-    public function times(NumeralType $right, bool $insertParentheses = true): Multiplication;
+    public function times($right, bool $insertParentheses = true): Multiplication;
 
     /**
      * Subtract the given expression from this expression.
      *
-     * @param NumeralType $right
+     * @param NumeralType|int|float $right
      * @param bool $insertParentheses
      * @return Subtraction
      */
-    public function minus(NumeralType $right, bool $insertParentheses = true): Subtraction;
+    public function minus($right, bool $insertParentheses = true): Subtraction;
 
     /**
      * Negate this expression (negate the numeral using "0").
      *
-     * @return Minus
+     * @return UnaryMinus
      */
-    public function negate(): Minus;
+    public function negate(): UnaryMinus;
 }

@@ -42,11 +42,37 @@ class RawClause extends Clause
      * @param string $clause The name of the clause; for instance "MATCH"
      * @param string $subject The subject/body of the clause
      */
-    public function __construct(string $clause, string $subject)
+    public function __construct(string $clause = "", string $subject = "")
     {
-        $this->clause = $clause;
-        $this->subject = $subject;
+		$this->clause = $clause;
+		$this->subject = $subject;
     }
+
+	/**
+	 * Sets the name of this clause.
+	 *
+	 * @param string $clause
+	 * @return static
+	 */
+	public function setClause(string $clause): self
+	{
+		$this->clause = $clause;
+
+		return $this;
+	}
+
+	/**
+	 * Sets the subject of this clause.
+	 *
+	 * @param string $subject
+	 * @return static
+	 */
+	public function setSubject(string $subject): self
+	{
+		$this->subject = $subject;
+
+		return $this;
+	}
 
     /**
      * @inheritDoc

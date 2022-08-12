@@ -23,16 +23,16 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\AndOperator;
-use WikibaseSolutions\CypherDSL\Not;
-use WikibaseSolutions\CypherDSL\OrOperator;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
-use WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Expressions\AndOperator;
+use WikibaseSolutions\CypherDSL\Expressions\Not;
+use WikibaseSolutions\CypherDSL\Expressions\OrOperator;
+use WikibaseSolutions\CypherDSL\Expressions\XorOperator;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use WikibaseSolutions\CypherDSL\XorOperator;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Traits\BooleanTypeTrait
+ * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait
  */
 class BooleanTypeTraitTest extends TestCase
 {
@@ -58,7 +58,7 @@ class BooleanTypeTraitTest extends TestCase
                 return '';
             }
         };
-        $this->b = $this->getQueryConvertableMock(BooleanType::class, "false");
+        $this->b = $this->getQueryConvertibleMock(BooleanType::class, "false");
     }
 
     public function testAnd(): void

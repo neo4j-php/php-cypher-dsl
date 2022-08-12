@@ -22,7 +22,9 @@
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
 /**
- * Represents the type "localdatetime".
+ * Represents the leaf type "localdatetime".
+ *
+ * @see LocalDateTimeType for a default implementation
  */
 interface LocalDateTimeType extends PropertyType
 {

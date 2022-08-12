@@ -23,7 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\RawClause;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\RawClause

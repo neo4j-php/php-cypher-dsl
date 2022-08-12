@@ -24,9 +24,10 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\RemoveClause;
-use WikibaseSolutions\CypherDSL\Label;
-use WikibaseSolutions\CypherDSL\Property;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Label;
+use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -47,11 +48,11 @@ class RemoveClauseTest extends TestCase
     public function testSingleExpression(): void
     {
         $remove = new RemoveClause();
-        $expression = $this->getQueryConvertableMock(Property::class, "(a)");
+        $expression = new Property(new Variable('Foo'),'Bar');
 
         $remove->addExpression($expression);
 
-        $this->assertSame("REMOVE (a)", $remove->toQuery());
+        $this->assertSame("REMOVE Foo.Bar", $remove->toQuery());
         $this->assertEquals([$expression], $remove->getExpressions());
     }
 
@@ -59,13 +60,13 @@ class RemoveClauseTest extends TestCase
     {
         $remove = new RemoveClause();
 
-        $a = $this->getQueryConvertableMock(Property::class, "(a)");
-        $b = $this->getQueryConvertableMock(Property::class, "(b)");
+        $a = new Property(new Variable('Foo'), 'Bar');
+        $b = new Label(new Variable('a'), 'B');
 
         $remove->addExpression($a);
         $remove->addExpression($b);
 
-        $this->assertSame("REMOVE (a), (b)", $remove->toQuery());
+        $this->assertSame("REMOVE Foo.Bar, a:B", $remove->toQuery());
         $this->assertEquals([$a, $b], $remove->getExpressions());
     }
 
@@ -75,7 +76,7 @@ class RemoveClauseTest extends TestCase
     public function testAcceptsProperty(): void
     {
         $remove = new RemoveClause();
-        $expression = $this->getQueryConvertableMock(Property::class, "(a)");
+        $expression = new Property(new Variable('Foo'),'Bar');
 
         $remove->addExpression($expression);
 
@@ -88,7 +89,7 @@ class RemoveClauseTest extends TestCase
     public function testAcceptsLabel(): void
     {
         $remove = new RemoveClause();
-        $expression = $this->getQueryConvertableMock(Label::class, "(a)");
+        $expression = new Label(new Variable('a'), 'B');
 
         $remove->addExpression($expression);
 
@@ -98,7 +99,7 @@ class RemoveClauseTest extends TestCase
     public function testDoesNotAcceptAnyType(): void
     {
         $remove = new RemoveClause();
-        $expression = $this->getQueryConvertableMock(AnyType::class, "(a)");
+        $expression = $this->getQueryConvertibleMock(AnyType::class, "(a)");
 
         $this->expectException(TypeError::class);
 

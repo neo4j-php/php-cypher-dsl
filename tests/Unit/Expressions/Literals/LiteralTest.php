@@ -1,0 +1,894 @@
+<?php
+
+/*
+ * Cypher DSL
+ * Copyright (C) 2021  Wikibase Solutions
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Literals;
+
+use LogicException;
+use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Expressions\Functions\Date;
+use WikibaseSolutions\CypherDSL\Expressions\Functions\DateTime;
+use WikibaseSolutions\CypherDSL\Expressions\Functions\LocalDateTime;
+use WikibaseSolutions\CypherDSL\Expressions\Functions\LocalTime;
+use WikibaseSolutions\CypherDSL\Expressions\Functions\Point;
+use WikibaseSolutions\CypherDSL\Expressions\Functions\Time;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Number;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+
+/**
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Literals\Literal
+ */
+class LiteralTest extends TestCase
+{
+    use TestHelper;
+
+    public function testLiteralString(): void
+    {
+        $string = Literal::literal('Testing is a virtue!');
+
+        $this->assertInstanceOf(String_::class, $string);
+    }
+
+    public function testLiteralBoolean(): void
+    {
+        $boolean = Literal::literal(true);
+
+        $this->assertInstanceOf(Boolean::class, $boolean);
+    }
+
+    public function testLiteralInteger(): void
+    {
+        $integer = Literal::literal(1);
+
+        $this->assertInstanceOf(Number::class, $integer);
+    }
+
+    public function testLiteralFloat(): void
+    {
+        $float = Literal::literal(1.0);
+
+        $this->assertInstanceOf(Number::class, $float);
+    }
+
+    public function testStringable(): void
+    {
+        $stringable = Literal::literal(new class () {
+            public function __toString()
+            {
+                return 'Testing is a virtue!';
+            }
+        });
+
+        $this->assertInstanceOf(String_::class, $stringable);
+    }
+
+    public function testBoolean(): void
+    {
+        $boolean = Literal::boolean(true);
+
+        $this->assertInstanceOf(Boolean::class, $boolean);
+
+        $boolean = Literal::boolean(false);
+
+        $this->assertInstanceOf(Boolean::class, $boolean);
+    }
+
+    public function testString(): void
+    {
+        $string = Literal::string('Testing is a virtue!');
+
+        $this->assertInstanceOf(String_::class, $string);
+    }
+
+    public function testDecimal(): void
+    {
+        $decimal = Literal::decimal(1);
+
+        $this->assertInstanceOf(Number::class, $decimal);
+
+        $decimal = Literal::decimal(1.0);
+
+        $this->assertInstanceOf(Number::class, $decimal);
+    }
+
+    public function testPoint2d(): void
+    {
+        $point = Literal::point2d(1, 2);
+
+        $this->assertEquals(new Point(new Map(["x" => new Number(1), "y" => new Number(2), "crs" => new String_("cartesian")])), $point);
+
+        $point = Literal::point2d(
+            new Number(1),
+            new Number(2)
+        );
+
+        $this->assertEquals(new Point(new Map(["x" => new Number(1), "y" => new Number(2), "crs" => new String_("cartesian")])), $point);
+    }
+
+    public function testPoint3d(): void
+    {
+        $point = Literal::point3d(1, 2, 3);
+
+        $this->assertEquals(new Point(new Map(["x" => new Number(1), "y" => new Number(2), "z" => new Number(3), "crs" => new String_("cartesian-3D")])), $point);
+
+        $point = Literal::point3d(
+            new Number(1),
+            new Number(2),
+            new Number(3)
+        );
+
+        $this->assertEquals(new Point(new Map(["x" => new Number(1), "y" => new Number(2), "z" => new Number(3), "crs" => new String_("cartesian-3D")])), $point);
+    }
+
+    public function testPoint2dWGS84(): void
+    {
+        $point = Literal::point2dWGS84(1, 2);
+
+        $this->assertEquals(new Point(new Map(["longitude" => new Number(1), "latitude" => new Number(2), "crs" => new String_("WGS-84")])), $point);
+
+        $point = Literal::point2dWGS84(
+            new Number(1),
+            new Number(2)
+        );
+
+        $this->assertEquals(new Point(new Map(["longitude" => new Number(1), "latitude" => new Number(2), "crs" => new String_("WGS-84")])), $point);
+    }
+
+    public function testPoint3dWGS84(): void
+    {
+        $point = Literal::point3dWGS84(1, 2, 3);
+
+        $this->assertEquals(new Point(new Map(["longitude" => new Number(1), "latitude" => new Number(2), "height" => new Number(3), "crs" => new String_("WGS-84-3D")])), $point);
+
+        $point = Literal::point3dWGS84(
+            new Number(1),
+            new Number(2),
+            new Number(3)
+        );
+
+        $this->assertEquals(new Point(new Map(["longitude" => new Number(1), "latitude" => new Number(2), "height" => new Number(3), "crs" => new String_("WGS-84-3D")])), $point);
+    }
+
+    public function testDate(): void
+    {
+        $date = Literal::date();
+
+        $this->assertEquals(new Date(), $date);
+    }
+
+    public function testDateTimezone(): void
+    {
+        $date = Literal::date("Europe/Amsterdam");
+
+        $this->assertEquals(new Date(new Map(["timezone" => new String_("Europe/Amsterdam")])), $date);
+
+        $date = Literal::date(new String_("Europe/Amsterdam"));
+
+        $this->assertEquals(new Date(new Map(["timezone" => new String_("Europe/Amsterdam")])), $date);
+    }
+
+    /**
+     * @dataProvider provideDateYMDData
+     * @param $year
+     * @param $month
+     * @param $day
+     * @param $expected
+     */
+    public function testDateYMD($year, $month, $day, $expected): void
+    {
+        $date = Literal::dateYMD($year, $month, $day);
+
+        $this->assertEquals($expected, $date);
+    }
+
+    public function testDateYMDMissingMonth(): void
+    {
+        $this->expectException(LogicException::class);
+
+        $date = Literal::dateYMD(2000, null, 17);
+
+        $date->toQuery();
+    }
+
+    /**
+     * @dataProvider provideDateYWDData
+     * @param $year
+     * @param $week
+     * @param $weekday
+     * @param $expected
+     */
+    public function testDateYWD($year, $week, $weekday, $expected): void
+    {
+        $date = Literal::dateYWD($year, $week, $weekday);
+
+        $this->assertEquals($expected, $date);
+    }
+
+    public function testDateYWDMissingWeek(): void
+    {
+        $this->expectException(LogicException::class);
+
+        $date = Literal::dateYWD(2000, null, 17);
+
+        $date->toQuery();
+    }
+
+    public function testDateString(): void
+    {
+        $date = Literal::dateString('2000-17-12');
+
+        $this->assertEquals(new Date(new String_('2000-17-12')), $date);
+    }
+
+    public function testDateTimeWithoutTimeZone(): void
+    {
+        $datetime = Literal::dateTime();
+
+        $this->assertEquals(new DateTime(), $datetime);
+    }
+
+    public function testDateTimeWithTimeZone(): void
+    {
+        $datetime = Literal::dateTime("America/Los Angeles");
+
+        $this->assertEquals(new DateTime(new Map(["timezone" => new String_("America/Los Angeles")])), $datetime);
+    }
+
+    /**
+     * @dataProvider provideDatetimeYMDData
+     * @param $year
+     * @param $month
+     * @param $day
+     * @param $hour
+     * @param $minute
+     * @param $second
+     * @param $millisecond
+     * @param $microsecond
+     * @param $nanosecond
+     * @param $timezone
+     * @param $expected
+     */
+    public function testDatetimeYMD($year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected): void
+    {
+        $datetime = Literal::dateTimeYMD($year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone);
+
+        $this->assertEquals($expected, $datetime);
+    }
+
+    public function testDatetimeYMDMissingMonth(): void
+    {
+        $this->expectException(LogicException::class);
+
+        $datetime = Literal::dateTimeYMD(2000, null, 17);
+
+        $datetime->toQuery();
+    }
+
+    /**
+     * @dataProvider provideDatetimeYWDData
+     * @param $year
+     * @param $week
+     * @param $dayOfWeek
+     * @param $hour
+     * @param $minute
+     * @param $second
+     * @param $millisecond
+     * @param $microsecond
+     * @param $nanosecond
+     * @param $timezone
+     * @param $expected
+     */
+    public function testDatetimeYWD($year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected): void
+    {
+        $datetime = Literal::dateTimeYWD($year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone);
+
+        $this->assertEquals($expected, $datetime);
+    }
+
+    public function testDatetimeYWDMissingWeek(): void
+    {
+        $this->expectException(LogicException::class);
+
+        $datetime = Literal::dateTimeYWD(2000, null, 17);
+
+        $datetime->toQuery();
+    }
+
+    /**
+     * @dataProvider provideDatetimeYQDData
+     * @param $year
+     * @param $quarter
+     * @param $dayOfQuarter
+     * @param $hour
+     * @param $minute
+     * @param $second
+     * @param $millisecond
+     * @param $microsecond
+     * @param $nanosecond
+     * @param $timezone
+     * @param $expected
+     */
+    public function testDatetimeYQD($year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected): void
+    {
+        $datetime = Literal::dateTimeYQD($year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone);
+
+        $this->assertEquals($expected, $datetime);
+    }
+
+    public function testDatetimeYQDMissingQuarter(): void
+    {
+        $this->expectException(LogicException::class);
+
+        $datetime = Literal::dateTimeYQD(2000, null, 17);
+
+        $datetime->toQuery();
+    }
+
+    /**
+     * @dataProvider provideDatetimeYQData
+     * @param $year
+     * @param $ordinalDay
+     * @param $hour
+     * @param $minute
+     * @param $second
+     * @param $millisecond
+     * @param $microsecond
+     * @param $nanosecond
+     * @param $timezone
+     * @param $expected
+     */
+    public function testDatetimeYD($year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected): void
+    {
+        $datetime = Literal::dateTimeYD($year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone);
+
+        $this->assertEquals($expected, $datetime);
+    }
+
+    public function testDatetimeYDMissingOrdinalDay(): void
+    {
+        $this->expectException(LogicException::class);
+
+        $datetime = Literal::dateTimeYD(2000, null, 17);
+
+        $datetime->toQuery();
+    }
+
+    public function testDatetimeString(): void
+    {
+        $datetime = Literal::dateTimeString("2015-07-21T21:40:32.142+01:00");
+
+        $this->assertEquals(new DateTime(new String_("2015-07-21T21:40:32.142+01:00")), $datetime);
+    }
+
+    public function testLocalDateTimeWithoutTimezone(): void
+    {
+        $localDateTime = Literal::localDateTime();
+
+        $this->assertEquals(new LocalDateTime(), $localDateTime);
+    }
+
+    public function testLocalDateTimeWithTimezone(): void
+    {
+        $localDateTime = Literal::localDateTime("America/Los Angeles");
+
+        $this->assertEquals(new LocalDateTime(new Map(["timezone" => new String_("America/Los Angeles")])), $localDateTime);
+    }
+
+    /**
+     * @dataProvider provideLocalDatetimeYMDData
+     * @param $year
+     * @param $month
+     * @param $day
+     * @param $hour
+     * @param $minute
+     * @param $second
+     * @param $millisecond
+     * @param $microsecond
+     * @param $nanosecond
+     * @param $expected
+     */
+    public function testLocalDateTimeYMD($year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected): void
+    {
+        $localDatetime = Literal::localDateTimeYMD($year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
+
+        $this->assertEquals($expected, $localDatetime);
+    }
+
+    public function testLocalDateTimeYMDMissingMonth(): void
+    {
+        $this->expectException(LogicException::class);
+
+        $datetime = Literal::localDateTimeYMD(2000, null, 17);
+
+        $datetime->toQuery();
+    }
+
+    /**
+     * @dataProvider provideLocalDatetimeYWDData
+     * @param $year
+     * @param $week
+     * @param $dayOfWeek
+     * @param $hour
+     * @param $minute
+     * @param $second
+     * @param $millisecond
+     * @param $microsecond
+     * @param $nanosecond
+     * @param $expected
+     */
+    public function testLocalDateTimeYWD($year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected): void
+    {
+        $localDatetime = Literal::localDateTimeYWD($year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
+
+        $this->assertEquals($expected, $localDatetime);
+    }
+
+    public function testLocalDateTimeYWDMissingWeek(): void
+    {
+        $this->expectException(LogicException::class);
+
+        $datetime = Literal::localDateTimeYWD(2000, null, 17);
+
+        $datetime->toQuery();
+    }
+
+    /**
+     * @dataProvider provideLocalDatetimeYQDData
+     * @param $year
+     * @param $quarter
+     * @param $dayOfQuarter
+     * @param $hour
+     * @param $minute
+     * @param $second
+     * @param $millisecond
+     * @param $microsecond
+     * @param $nanosecond
+     * @param $expected
+     */
+    public function testLocalDatetimeYQD($year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected): void
+    {
+        $localDatetime = Literal::localDateTimeYQD($year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
+
+        $this->assertEquals($expected, $localDatetime);
+    }
+
+    public function testLocalDateTimeYQDMissingQuarter(): void
+    {
+        $this->expectException(LogicException::class);
+
+        $datetime = Literal::localDateTimeYQD(2000, null, 17);
+
+        $datetime->toQuery();
+    }
+
+    /**
+     * @dataProvider provideLocalDatetimeYQData
+     * @param $year
+     * @param $ordinalDay
+     * @param $hour
+     * @param $minute
+     * @param $second
+     * @param $millisecond
+     * @param $microsecond
+     * @param $nanosecond
+     * @param $expected
+     */
+    public function testLocalDatetimeYD($year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected): void
+    {
+        $localDatetime = Literal::localDateTimeYD($year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
+
+        $this->assertEquals($expected, $localDatetime);
+    }
+
+    public function testLocalDateTimeYDMissingOrdinalDay(): void
+    {
+        $this->expectException(LogicException::class);
+
+        $datetime = Literal::localDateTimeYD(2000, null, 17);
+
+        $datetime->toQuery();
+    }
+
+    public function testLocalDatetimeString(): void
+    {
+        $localDatetime = Literal::localDateTimeString("2015-W30-2T214032.142");
+
+        $this->assertEquals(new LocalDateTime(new String_("2015-W30-2T214032.142")), $localDatetime);
+    }
+
+    public function testLocalTimeCurrentWithoutTimezone(): void
+    {
+        $localTime = Literal::localTimeCurrent();
+        $this->assertEquals(new LocalTime(), $localTime);
+    }
+
+    public function testLocalTimeCurrentWithTimezone(): void
+    {
+        $localTime = Literal::localTimeCurrent("America/Los Angeles");
+        $this->assertEquals(new LocalTime(new Map(["timezone" => new String_("America/Los Angeles")])), $localTime);
+    }
+
+    /**
+     * @dataProvider provideLocalTimeData
+     * @param $hour
+     * @param $minute
+     * @param $second
+     * @param $millisecond
+     * @param $microsecond
+     * @param $nanosecond
+     * @param $expected
+     */
+    public function testLocalTime($hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected): void
+    {
+        $localTime = Literal::localTime($hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
+        $this->assertEquals($localTime, $expected);
+    }
+
+    public function testLocalTimeMissingMinute(): void
+    {
+        $this->expectException(LogicException::class);
+
+        $localTime = Literal::localTime(9, null, 17);
+
+        $localTime->toQuery();
+    }
+
+    public function testLocalTimeString(): void
+    {
+        $localTime = Literal::localTimeString("21:40:32.142");
+        $this->assertEquals(new LocalTime(new String_("21:40:32.142")), $localTime);
+    }
+
+    public function testTimeCurrentWithoutTimezone(): void
+    {
+        $time = Literal::time();
+        $this->assertEquals($time, new Time());
+    }
+
+    public function testTimeCurrentWithTimezone(): void
+    {
+        $time = Literal::time("America/Los Angeles");
+        $this->assertEquals($time, new Time(new Map(["timezone" => new String_("America/Los Angeles")])));
+    }
+
+    /**
+     * @dataProvider provideTimeData
+     * @param $hour
+     * @param $minute
+     * @param $second
+     * @param $millisecond
+     * @param $microsecond
+     * @param $nanosecond
+     * @param $expected
+     */
+    public function testTime($hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected): void
+    {
+        $time = Literal::timeHMS($hour, $minute, $second, $millisecond, $microsecond, $nanosecond);
+        $this->assertEquals($time, $expected);
+    }
+
+    public function testTimeMissingMinute(): void
+    {
+        $this->expectException(LogicException::class);
+
+        $time = Literal::timeHMS(9, null, 17);
+
+        $time->toQuery();
+    }
+
+    public function testTimeString(): void
+    {
+        $time = Literal::timeString("21:40:32.142+0100");
+        $this->assertEquals($time, new Time(new String_("21:40:32.142+0100")));
+    }
+
+    public function provideDateYMDData(): array
+    {
+        return [
+            [2000, null, null, new Date(new Map(["year" => new Number(2000)]))],
+            [2000, 12, null, new Date(new Map(["year" => new Number(2000), "month" => new Number(12)]))],
+            [2000, 12, 17, new Date(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(17)]))],
+            [new Number(2000), null, null, new Date(new Map(["year" => new Number(2000)]))],
+            [new Number(2000), new Number(12), null, new Date(new Map(["year" => new Number(2000), "month" => new Number(12)]))],
+            [new Number(2000), new Number(12), new Number(17), new Date(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(17)]))],
+
+        ];
+    }
+
+    public function provideDateYWDData(): array
+    {
+        return [
+            [2000, null, null, new Date(new Map(["year" => new Number(2000)]))],
+            [2000, 12, null, new Date(new Map(["year" => new Number(2000), "week" => new Number(12)]))],
+            [2000, 12, 17, new Date(new Map(["year" => new Number(2000), "week" => new Number(12), "dayOfWeek" => new Number(17)]))],
+            [new Number(2000), null, null, new Date(new Map(["year" => new Number(2000)]))],
+            [new Number(2000), new Number(12), null, new Date(new Map(["year" => new Number(2000), "week" => new Number(12)]))],
+            [new Number(2000), new Number(12), new Number(17), new Date(new Map(["year" => new Number(2000), "week" => new Number(12), "dayOfWeek" => new Number(17)]))],
+
+        ];
+    }
+
+    public function provideDatetimeYMDData(): array
+    {
+        // [$year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
+        return [
+            [2000, null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
+            [2000, 12, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12)]))],
+            [2000, 12, 15, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15)]))],
+            [2000, 12, 15, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8)]))],
+            [2000, 12, 15, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [2000, 12, 15, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [2000, 12, 15, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
+
+            // types
+            [new Number(2000), null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
+            [new Number(2000), new Number(12), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12)]))],
+            [new Number(2000), new Number(12), new Number(15), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), new Number(18), null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
+        ];
+    }
+
+    public function provideDatetimeYWDData(): array
+    {
+        // [$year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
+        return [
+            [2000, null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
+            [2000, 9, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9)]))],
+            [2000, 9, 4, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4)]))],
+            [2000, 9, 4, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8)]))],
+            [2000, 9, 4, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [2000, 9, 4, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [2000, 9, 4, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
+
+            // types
+            [new Number(2000), null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
+            [new Number(2000), new Number(9), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9)]))],
+            [new Number(2000), new Number(9), new Number(4), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
+        ];
+    }
+
+    public function provideDatetimeYQDData(): array
+    {
+        // [$year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
+        return [
+            [2000, null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
+            [2000, 3, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3)]))],
+            [2000, 3, 4, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4)]))],
+            [2000, 3, 4, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8)]))],
+            [2000, 3, 4, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [2000, 3, 4, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [2000, 3, 4, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
+
+            // types
+            [new Number(2000), null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
+            [new Number(2000), new Number(3), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3)]))],
+            [new Number(2000), new Number(3), new Number(4), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
+        ];
+    }
+
+    public function provideDatetimeYQData(): array
+    {
+        // [$year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
+        return [
+            [2000, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
+            [2000, 3, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3)]))],
+            [2000, 3, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8)]))],
+            [2000, 3, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [2000, 3, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [2000, 3, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [2000, 3, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [2000, 3, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [2000, 3, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
+
+            // types
+            [new Number(2000), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
+            [new Number(2000), new Number(3), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3)]))],
+            [new Number(2000), new Number(3), new Number(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), new Number(18), null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
+        ];
+    }
+
+    public function provideLocalDatetimeYMDData(): array
+    {
+        // [$year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
+        return [
+            [2000, null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000)]))],
+            [2000, 12, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12)]))],
+            [2000, 12, 15, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15)]))],
+            [2000, 12, 15, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8)]))],
+            [2000, 12, 15, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [2000, 12, 15, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [2000, 12, 15, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+
+            // types
+            [new Number(2000), null, null, null, null, null, null, null, null,new LocalDateTime(new Map(["year" => new Number(2000)]))],
+            [new Number(2000), new Number(12), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12)]))],
+            [new Number(2000), new Number(12), new Number(15), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), new Number(18), null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+        ];
+    }
+
+    public function provideLocalDatetimeYWDData(): array
+    {
+        // [$year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
+        return [
+            [2000, null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000)]))],
+            [2000, 9, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9)]))],
+            [2000, 9, 4, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4)]))],
+            [2000, 9, 4, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8)]))],
+            [2000, 9, 4, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [2000, 9, 4, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [2000, 9, 4, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+
+            // types
+            [new Number(2000), null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000)]))],
+            [new Number(2000), new Number(9), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9)]))],
+            [new Number(2000), new Number(9), new Number(4), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+        ];
+    }
+
+
+    public function provideLocalDatetimeYQDData(): array
+    {
+        // [$year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
+        return [
+            [2000, null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000)]))],
+            [2000, 3, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3)]))],
+            [2000, 3, 4, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4)]))],
+            [2000, 3, 4, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8)]))],
+            [2000, 3, 4, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [2000, 3, 4, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [2000, 3, 4, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+
+            // types
+            [new Number(2000), null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000)]))],
+            [new Number(2000), new Number(3), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3)]))],
+            [new Number(2000), new Number(3), new Number(4), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+        ];
+    }
+
+    public function provideLocalDatetimeYQData(): array
+    {
+        // [$year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
+        return [
+            [2000, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000)]))],
+            [2000, 3, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3)]))],
+            [2000, 3, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8)]))],
+            [2000, 3, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [2000, 3, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [2000, 3, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [2000, 3, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [2000, 3, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+
+            // types
+            [new Number(2000), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000)]))],
+            [new Number(2000), new Number(3), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3)]))],
+            [new Number(2000), new Number(3), new Number(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), new Number(18), null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
+            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+        ];
+    }
+
+    public function provideLocalTimeData(): array
+    {
+        // [$hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
+        return [
+            [11, null, null, null, null, null, new LocalTime(new Map(["hour" => new Number(11)]))],
+            [11, 23, null, null, null, null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23)]))],
+            [11, 23, 2, null, null, null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2)]))],
+            [11, 23, 2, 54, null, null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54)]))],
+            [11, 23, 2, 54, 8, null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8)]))],
+            [11, 23, 2, 54, 8, 29, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8), "nanosecond" => new Number(29)]))],
+
+            // types
+            [new Number(11), null, null, null, null, null, new LocalTime(new Map(["hour" => new Number(11)]))],
+            [new Number(11), new Number(23), null, null, null, null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23)]))],
+            [new Number(11), new Number(23), new Number(2), null, null, null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2)]))],
+            [new Number(11), new Number(23), new Number(2), new Number(54), null, null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54)]))],
+            [new Number(11), new Number(23), new Number(2), new Number(54), new Number(8), null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8)]))],
+            [new Number(11), new Number(23), new Number(2), new Number(54), new Number(8), new Number(29), new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8), "nanosecond" => new Number(29)]))],
+        ];
+    }
+
+    public function provideTimeData(): array
+    {
+        // [$hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
+        return [
+            [11, null, null, null, null, null, new Time(new Map(["hour" => new Number(11)]))],
+            [11, 23, null, null, null, null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23)]))],
+            [11, 23, 2, null, null, null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2)]))],
+            [11, 23, 2, 54, null, null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54)]))],
+            [11, 23, 2, 54, 8, null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8)]))],
+            [11, 23, 2, 54, 8, 29, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8), "nanosecond" => new Number(29)]))],
+
+            // types
+            [new Number(11), null, null, null, null, null, new Time(new Map(["hour" => new Number(11)]))],
+            [new Number(11), new Number(23), null, null, null, null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23)]))],
+            [new Number(11), new Number(23), new Number(2), null, null, null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2)]))],
+            [new Number(11), new Number(23), new Number(2), new Number(54), null, null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54)]))],
+            [new Number(11), new Number(23), new Number(2), new Number(54), new Number(8), null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8)]))],
+            [new Number(11), new Number(23), new Number(2), new Number(54), new Number(8), new Number(29), new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8), "nanosecond" => new Number(29)]))],
+        ];
+    }
+}

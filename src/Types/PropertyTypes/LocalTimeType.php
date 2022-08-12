@@ -21,8 +21,12 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\LocalTimeTypeTrait;
+
 /**
- * Represents the type "localtime".
+ * Represents the leaf type "localtime".
+ *
+ * @see LocalTimeTypeTrait for a default implementation
  */
 interface LocalTimeType extends PropertyType
 {

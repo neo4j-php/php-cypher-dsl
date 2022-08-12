@@ -24,18 +24,15 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\CreateClause;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Query;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\CreateClause
  */
 class CreateClauseTest extends TestCase
 {
-    use TestHelper;
-
     public function testEmptyClause(): void
     {
         $createClause = new CreateClause();
@@ -47,7 +44,7 @@ class CreateClauseTest extends TestCase
     public function testSinglePattern(): void
     {
         $createClause = new CreateClause();
-        $pattern = $this->getQueryConvertableMock(NodeType::class, "(a)");
+        $pattern = Query::node()->withVariable('a');
 
         $createClause->addPattern($pattern);
 
@@ -59,48 +56,66 @@ class CreateClauseTest extends TestCase
     {
         $createClause = new CreateClause();
 
-        $patternA = $this->getQueryConvertableMock(NodeType::class, "(a)");
-        $patternB = $this->getQueryConvertableMock(PathType::class, "(b)-->(c)");
+        $patternA = Query::node()->withVariable('a');
+        $patternB = Query::node()->withVariable('b')->relationshipTo(Query::node()->withVariable('c'), 'Foo');
 
         $createClause->addPattern($patternA);
         $createClause->addPattern($patternB);
 
-        $this->assertSame("CREATE (a), (b)-->(c)", $createClause->toQuery());
+        $this->assertSame("CREATE (a), (b)-[:Foo]->(c)", $createClause->toQuery());
         $this->assertEquals([$patternA, $patternB], $createClause->getPatterns());
     }
 
-    public function testAcceptsNodeType(): void
+    public function testSetPatterns(): void
     {
         $createClause = new CreateClause();
 
-        $patternA = $this->getQueryConvertableMock(NodeType::class, "(a)");
+        $pathExpression = Query::node()->relationshipTo(Query::node());
+        $createClause->addPattern($pathExpression);
 
-        $createClause->addPattern($patternA);
-        $createClause->toQuery();
+        $createClause->setPatterns([Query::node()->withVariable('a'), Query::node()->withVariable('b')]);
 
-        $this->assertEquals([$patternA], $createClause->getPatterns());
+        $this->assertSame("CREATE (a), (b)", $createClause->toQuery());
     }
 
-    public function testAcceptsPathType(): void
+    public function testAddPattern(): void
     {
         $createClause = new CreateClause();
 
-        $patternA = $this->getQueryConvertableMock(PathType::class, "(a)");
+        $createClause->addPattern(Query::node()->withVariable('a'));
+        $createClause->addPattern(Query::node()->withVariable('b'));
 
-        $createClause->addPattern($patternA);
-        $createClause->toQuery();
-        $this->assertEquals([$patternA], $createClause->getPatterns());
+        $this->assertSame("CREATE (a), (b)", $createClause->toQuery());
     }
 
-    public function testDoesNotAcceptAnyType(): void
+    public function testSetPatternsDoesNotAcceptAnyType(): void
     {
         $createClause = new CreateClause();
-
-        $patternA = $this->getQueryConvertableMock(AnyType::class, "(a)");
 
         $this->expectException(TypeError::class);
 
-        $createClause->addPattern($patternA);
+        $createClause->setPatterns([Query::function()::date()]);
         $createClause->toQuery();
+    }
+
+    public function testGetPatterns(): void
+    {
+        $createClause = new CreateClause();
+
+        $patterns = [
+            Query::node('a'),
+            Query::node('b')
+        ];
+
+        $createClause->setPatterns($patterns);
+
+        $this->assertSame($patterns, $createClause->getPatterns());
+
+        $patternC = Query::node('c');
+        $patterns[] = $patternC;
+
+        $createClause->addPattern($patternC);
+
+        $this->assertSame($patterns, $createClause->getPatterns());
     }
 }

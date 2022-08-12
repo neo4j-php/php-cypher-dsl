@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
@@ -32,6 +33,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 class ReturnClause extends Clause
 {
     use EscapeTrait;
+    use ErrorTrait;
 
     /**
      * @var bool Whether to be a RETURN DISTINCT query
@@ -42,6 +44,47 @@ class ReturnClause extends Clause
      * @var AnyType[] The expressions to return
      */
     private array $columns = [];
+
+    /**
+     * Sets the columns of this RETURN clause. This overwrites any previously set columns.
+     *
+     * @param AnyType[] $columns The columns; if the key is non-numerical, it will be used as the alias
+     *
+     * @return $this
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
+     */
+    public function setColumns(array $columns): self
+    {
+        foreach ($columns as $column) {
+            $this->assertClass('column', AnyType::class, $column);
+        }
+
+        $this->columns = $columns;
+
+        return $this;
+    }
+
+    /**
+     * Add a new column to this RETURN clause.
+     *
+     * @param AnyType $column The expression to return
+     * @param string $alias The alias of this column
+     *
+     * @return $this
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
+     */
+    public function addColumn(AnyType $column, string $alias = ""): self
+    {
+        if ($alias !== "") {
+            $this->columns[$alias] = $column;
+        } else {
+            $this->columns[] = $column;
+        }
+
+        return $this;
+    }
 
     /**
      * Sets this query to only retrieve unique rows.
@@ -75,26 +118,6 @@ class ReturnClause extends Clause
     public function isDistinct(): bool
     {
         return $this->distinct;
-    }
-
-    /**
-     * Add a new column to this RETURN clause.
-     *
-     * @param AnyType $column The expression to return
-     * @param string $alias The alias of this column
-     *
-     * @return ReturnClause
-     * @see    https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
-     */
-    public function addColumn(AnyType $column, string $alias = ""): self
-    {
-        if ($alias !== "") {
-            $this->columns[$alias] = $column;
-        } else {
-            $this->columns[] = $column;
-        }
-
-        return $this;
     }
 
     /**

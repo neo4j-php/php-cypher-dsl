@@ -21,9 +21,13 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\DateTypeTrait;
+
 /**
- * Represents the type "date".
+ * Represents the leaf type "date".
+ *
+ * @see DateTypeTrait for a default implementation
  */
-interface DateType extends ComparableType
+interface DateType extends PropertyType
 {
 }

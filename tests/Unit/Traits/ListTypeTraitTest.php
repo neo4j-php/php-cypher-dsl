@@ -23,13 +23,13 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\In;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\In;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Traits\ListTypeTrait
+ * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait
  */
 class ListTypeTraitTest extends TestCase
 {
@@ -47,8 +47,8 @@ class ListTypeTraitTest extends TestCase
 
     public function setUp(): void
     {
-        $this->a = $this->getQueryConvertableMock(PropertyType::class, "a");
-        $this->b = $this->getQueryConvertableMock(ListType::class, "[]");
+        $this->a = $this->getQueryConvertibleMock(PropertyType::class, "a");
+        $this->b = $this->getQueryConvertibleMock(ListType::class, "[]");
     }
 
     public function testHas()

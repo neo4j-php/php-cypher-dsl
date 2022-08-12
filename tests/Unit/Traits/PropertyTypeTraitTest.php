@@ -23,18 +23,18 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Equality;
-use WikibaseSolutions\CypherDSL\In;
-use WikibaseSolutions\CypherDSL\Inequality;
-use WikibaseSolutions\CypherDSL\IsNotNull;
-use WikibaseSolutions\CypherDSL\IsNull;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
-use WikibaseSolutions\CypherDSL\Traits\PropertyTypeTrait;
+use WikibaseSolutions\CypherDSL\Expressions\Equality;
+use WikibaseSolutions\CypherDSL\Expressions\In;
+use WikibaseSolutions\CypherDSL\Expressions\Inequality;
+use WikibaseSolutions\CypherDSL\Expressions\IsNotNull;
+use WikibaseSolutions\CypherDSL\Expressions\IsNull;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\PropertyTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Traits\PropertyTypeTrait
+ * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\PropertyTypeTrait
  */
 class PropertyTypeTraitTest extends TestCase
 {
@@ -65,8 +65,8 @@ class PropertyTypeTraitTest extends TestCase
                 return '10';
             }
         };
-        $this->b = $this->getQueryConvertableMock(PropertyType::class, "15");
-        $this->list = $this->getQueryConvertableMock(ListType::class, "['foobar']");
+        $this->b = $this->getQueryConvertibleMock(PropertyType::class, "15");
+        $this->list = $this->getQueryConvertibleMock(ListType::class, "['foobar']");
     }
 
     public function testEquals(): void

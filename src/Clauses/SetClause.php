@@ -21,9 +21,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Assignment;
-use WikibaseSolutions\CypherDSL\Label;
-use WikibaseSolutions\CypherDSL\QueryConvertable;
+use WikibaseSolutions\CypherDSL\Expressions\Label;
+use WikibaseSolutions\CypherDSL\QueryConvertible;
+use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 
 /**
@@ -36,33 +36,49 @@ class SetClause extends Clause
     use ErrorTrait;
 
     /**
-     * @var Assignment[]|Label[] $expressions The expressions to set
+     * @var PropertyReplacement[]|Label[] $expressions The expressions to set
      */
     private array $expressions = [];
 
     /**
+     * Sets the subjects of this SET clause. This will overwrite any previously added expressions.
+     *
+     * @param (PropertyReplacement|Label)[] $expressions The expressions to set
+     * @return $this
+     */
+    public function setExpressions(array $expressions): self
+    {
+        foreach ($expressions as $expression) {
+            $this->assertClass('expressions', [PropertyReplacement::class, Label::class], $expression);
+        }
+
+        $this->expressions = $expressions;
+
+        return $this;
+    }
+
+    /**
+     * Add an expression.
+     *
+     * @param PropertyReplacement|Label $expression The expression to add to this set clause
+     * @return $this
+     */
+    public function add($expression): self
+    {
+        $this->assertClass('expression', [PropertyReplacement::class, Label::class], $expression);
+        $this->expressions[] = $expression;
+
+        return $this;
+    }
+
+    /**
      * Returns the expressions to SET.
      *
-     * @return Assignment[]|Label[]
+     * @return (PropertyReplacement|Label)[]
      */
     public function getExpressions(): array
     {
         return $this->expressions;
-    }
-
-    /**
-     * Add an assignment.
-     *
-     * @param Assignment|Label $expression The assignment to execute
-     * @return SetClause
-     */
-    public function addAssignment($expression): self
-    {
-        $this->assertClass('expression', [Assignment::class, Label::class], $expression);
-
-        $this->expressions[] = $expression;
-
-        return $this;
     }
 
     /**
@@ -80,7 +96,7 @@ class SetClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (QueryConvertable $expression): string => $expression->toQuery(), $this->expressions)
+            array_map(fn (QueryConvertible $expression): string => $expression->toQuery(), $this->expressions)
         );
     }
 }

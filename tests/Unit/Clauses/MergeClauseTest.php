@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\Clauses\MergeClause;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
@@ -50,7 +50,7 @@ class MergeClauseTest extends TestCase
     public function testPattern(): void
     {
         $merge = new MergeClause();
-        $pattern = $this->getQueryConvertableMock(NodeType::class, "(a)");
+        $pattern = $this->getQueryConvertibleMock(NodeType::class, "(a)");
 
         $merge->setPattern($pattern);
 
@@ -64,8 +64,8 @@ class MergeClauseTest extends TestCase
     {
         $merge = new MergeClause();
 
-        $pattern = $this->getQueryConvertableMock(PathType::class, "(a)-->(b)");
-        $clause = $this->getQueryConvertableMock(Clause::class, "SET a = 10");
+        $pattern = $this->getQueryConvertibleMock(PathType::class, "(a)-->(b)");
+        $clause = $this->getQueryConvertibleMock(Clause::class, "SET a = 10");
 
         $merge->setPattern($pattern);
         $merge->setOnCreate($clause);
@@ -80,8 +80,8 @@ class MergeClauseTest extends TestCase
     {
         $merge = new MergeClause();
 
-        $pattern = $this->getQueryConvertableMock(NodeType::class, "(a)");
-        $clause = $this->getQueryConvertableMock(Clause::class, "SET a = 10");
+        $pattern = $this->getQueryConvertibleMock(NodeType::class, "(a)");
+        $clause = $this->getQueryConvertibleMock(Clause::class, "SET a = 10");
 
         $merge->setPattern($pattern);
         $merge->setOnMatch($clause);
@@ -96,8 +96,8 @@ class MergeClauseTest extends TestCase
     {
         $merge = new MergeClause();
 
-        $pattern = $this->getQueryConvertableMock(PathType::class, "(a)-->(b)");
-        $clause = $this->getQueryConvertableMock(Clause::class, "SET a = 10");
+        $pattern = $this->getQueryConvertibleMock(PathType::class, "(a)-->(b)");
+        $clause = $this->getQueryConvertibleMock(Clause::class, "SET a = 10");
 
         $merge->setPattern($pattern);
         $merge->setOnCreate($clause);
@@ -115,7 +115,7 @@ class MergeClauseTest extends TestCase
     public function testAcceptsNodeType(): void
     {
         $merge = new MergeClause();
-        $pattern = $this->getQueryConvertableMock(NodeType::class, "(a)");
+        $pattern = $this->getQueryConvertibleMock(NodeType::class, "(a)");
 
         $merge->setPattern($pattern);
 
@@ -128,7 +128,7 @@ class MergeClauseTest extends TestCase
     public function testAcceptsPathType(): void
     {
         $merge = new MergeClause();
-        $pattern = $this->getQueryConvertableMock(PathType::class, "(a)");
+        $pattern = $this->getQueryConvertibleMock(PathType::class, "(a)");
 
         $merge->setPattern($pattern);
 
@@ -138,12 +138,42 @@ class MergeClauseTest extends TestCase
     public function testDoesNotAcceptAnyType(): void
     {
         $merge = new MergeClause();
-        $pattern = $this->getQueryConvertableMock(AnyType::class, "(a)");
+        $pattern = $this->getQueryConvertibleMock(AnyType::class, "(a)");
 
         $this->expectException(TypeError::class);
 
         $merge->setPattern($pattern);
 
         $merge->toQuery();
+    }
+
+    public function testGetPattern(): void
+    {
+        $merge = new MergeClause();
+        $pattern = $this->getQueryConvertibleMock(NodeType::class, "(a)");
+
+        $merge->setPattern($pattern);
+
+        $this->assertSame($pattern, $merge->getPattern());
+    }
+
+    public function testGetOnCreateClause(): void
+    {
+        $merge = new MergeClause();
+        $onCreateClause = $this->getQueryConvertibleMock(Clause::class, "MATCH a");
+
+        $merge->setOnCreate($onCreateClause);
+
+        $this->assertSame($onCreateClause, $merge->getOnCreateClause());
+    }
+
+    public function testGetOnMatch(): void
+    {
+        $merge = new MergeClause();
+        $onMatchClause = $this->getQueryConvertibleMock(Clause::class, "MATCH a");
+
+        $merge->setOnMatch($onMatchClause);
+
+        $this->assertSame($onMatchClause, $merge->getOnMatchClause());
     }
 }

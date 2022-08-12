@@ -21,6 +21,7 @@
 
 namespace WikibaseSolutions\CypherDSL\Types\CompositeTypes;
 
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\CompositeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -38,6 +39,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  * - list
  * - map
  *
+ * @see CompositeTypeTrait for a default implemenation
  * @note This interface should not be implemented by any class directly.
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#composite-types
  */

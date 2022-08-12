@@ -23,11 +23,14 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Assignment;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
-use WikibaseSolutions\CypherDSL\Label;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Label;
+use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\SetClause
@@ -47,36 +50,46 @@ class SetClauseTest extends TestCase
     public function testSinglePattern(): void
     {
         $set = new SetClause();
-        $expression = $this->getQueryConvertableMock(Assignment::class, "(a)");
+        $expression = new PropertyReplacement(
+            new Property(new Variable('Foo'),'Bar'),
+            $this->getQueryConvertibleMock(PropertyType::class, "a")
+        );
 
-        $set->addAssignment($expression);
+        $set->add($expression);
 
-        $this->assertSame("SET (a)", $set->toQuery());
+        $this->assertSame("SET Foo.Bar = a", $set->toQuery());
         $this->assertEquals([$expression], $set->getExpressions());
     }
 
     public function testMultiplePattern(): void
     {
         $set = new SetClause();
-        $expressionA = $this->getQueryConvertableMock(Assignment::class, "(a)");
-        $expressionB = $this->getQueryConvertableMock(Assignment::class, "(b)");
+        $foo = new Variable('Foo');
+        $expressionA = new PropertyReplacement(
+            new Property($foo,'Bar'),
+            $this->getQueryConvertibleMock(PropertyType::class, "a")
+        );
+        $expressionB = new Label($foo,'Baz');
 
-        $set->addAssignment($expressionA);
-        $set->addAssignment($expressionB);
+        $set->add($expressionA);
+        $set->add($expressionB);
 
-        $this->assertSame("SET (a), (b)", $set->toQuery());
+        $this->assertSame("SET Foo.Bar = a, Foo:Baz", $set->toQuery());
         $this->assertEquals([$expressionA, $expressionB], $set->getExpressions());
     }
 
     /**
      * @doesNotPerformAssertions
      */
-    public function testAcceptsAssignment(): void
+    public function testAcceptsPropertyReplacement(): void
     {
         $set = new SetClause();
-        $expression = $this->getQueryConvertableMock(Assignment::class, "(a)");
+        $expression = new PropertyReplacement(
+            new Property(new Variable('Foo'),'Bar'),
+            $this->getQueryConvertibleMock(PropertyType::class, "a")
+        );
 
-        $set->addAssignment($expression);
+        $set->add($expression);
 
         $set->toQuery();
     }
@@ -87,9 +100,9 @@ class SetClauseTest extends TestCase
     public function testAcceptsLabel(): void
     {
         $set = new SetClause();
-        $expression = $this->getQueryConvertableMock(Label::class, "(a)");
+        $expression = new Label(new Variable('Foo'),'Baz');
 
-        $set->addAssignment($expression);
+        $set->add($expression);
 
         $set->toQuery();
     }
@@ -97,11 +110,11 @@ class SetClauseTest extends TestCase
     public function testDoesNotAcceptAnyType(): void
     {
         $set = new SetClause();
-        $expression = $this->getQueryConvertableMock(AnyType::class, "(a)");
+        $expression = $this->getQueryConvertibleMock(AnyType::class, "(a)");
 
         $this->expectException(TypeError::class);
 
-        $set->addAssignment($expression);
+        $set->add($expression);
 
         $set->toQuery();
     }

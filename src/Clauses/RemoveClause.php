@@ -21,9 +21,9 @@
 
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Label;
-use WikibaseSolutions\CypherDSL\Property;
-use WikibaseSolutions\CypherDSL\QueryConvertable;
+use WikibaseSolutions\CypherDSL\Expressions\Label;
+use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 
 /**
@@ -41,13 +41,20 @@ class RemoveClause extends Clause
     private array $expressions = [];
 
     /**
-     * Returns the expressions in the REMOVE clause.
+     * Sets the expressions of the REMOVE clause. This overwrites any previously set expressions.
      *
-     * @return Label[]|Property[]
+     * @param (Property|Label)[] $expressions The expressions to remove
+     * @return RemoveClause
      */
-    public function getExpressions(): array
+    public function setExpressions(array $expressions): self
     {
-        return $this->expressions;
+        foreach ($expressions as $expression) {
+            $this->assertClass('expression', [Property::class, Label::class], $expression);
+        }
+
+        $this->expressions = $expressions;
+
+        return $this;
     }
 
     /**
@@ -59,10 +66,19 @@ class RemoveClause extends Clause
     public function addExpression($expression): self
     {
         $this->assertClass('expression', [Property::class, Label::class], $expression);
-
         $this->expressions[] = $expression;
 
         return $this;
+    }
+
+    /**
+     * Returns the expressions in the REMOVE clause.
+     *
+     * @return Label[]|Property[]
+     */
+    public function getExpressions(): array
+    {
+        return $this->expressions;
     }
 
     /**
@@ -80,7 +96,7 @@ class RemoveClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (QueryConvertable $expression) => $expression->toQuery(), $this->expressions)
+            array_map(fn (QueryConvertible $expression) => $expression->toQuery(), $this->expressions)
         );
     }
 }

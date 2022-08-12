@@ -22,8 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
+use WikibaseSolutions\CypherDSL\Patterns\MatchablePattern;
 
 /**
  * This class represents an OPTIONAL MATCH clause.
@@ -35,14 +34,14 @@ class OptionalMatchClause extends Clause
     use ErrorTrait;
 
     /**
-     * @var (PathType|NodeType)[] List of patterns
+     * @var MatchablePattern[] List of patterns
      */
     private array $patterns = [];
 
     /**
      * Returns the patterns to optionally match.
      *
-     * @return (PathType|NodeType)[]
+     * @return MatchablePattern[]
      */
     public function getPatterns(): array
     {
@@ -50,14 +49,30 @@ class OptionalMatchClause extends Clause
     }
 
     /**
-     * Add a pattern to the optional match clause.
+     * Sets the pattern of the OPTIONAL MATCH clause. This overwrites any previously added patterns.
      *
-     * @param PathType|NodeType $pattern
-     * @return OptionalMatchClause
+     * @param MatchablePattern[] $patterns
+     * @return $this
      */
-    public function addPattern($pattern): self
+    public function setPatterns(array $patterns): self
     {
-        $this->assertClass('pattern', [NodeType::class, PathType::class], $pattern);
+        foreach ($patterns as $pattern) {
+            $this->assertClass('pattern', MatchablePattern::class, $pattern);
+        }
+
+        $this->patterns = $patterns;
+
+        return $this;
+    }
+
+    /**
+     * Add a pattern to the OPTIONAL MATCH clause.
+     *
+     * @param MatchablePattern $pattern
+     * @return $this
+     */
+    public function addPattern(MatchablePattern $pattern): self
+    {
         $this->patterns[] = $pattern;
 
         return $this;
@@ -78,7 +93,7 @@ class OptionalMatchClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn ($pattern): string => $pattern->toQuery(), $this->patterns)
+            array_map(fn (MatchablePattern $pattern): string => $pattern->toQuery(), $this->patterns)
         );
     }
 }

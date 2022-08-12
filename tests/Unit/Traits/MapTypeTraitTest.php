@@ -23,12 +23,12 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Property;
-use WikibaseSolutions\CypherDSL\Tests\Unit\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Traits\MapTypeTrait
+ * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait
  */
 class MapTypeTraitTest extends TestCase
 {
@@ -41,7 +41,7 @@ class MapTypeTraitTest extends TestCase
 
     public function setUp(): void
     {
-        $this->a = $this->getQueryConvertableMock(MapType::class, "{}");
+        $this->a = $this->getQueryConvertibleMock(MapType::class, "{}");
     }
 
     public function testProperty()

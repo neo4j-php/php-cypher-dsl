@@ -21,7 +21,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 
@@ -30,16 +29,17 @@ use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
  */
 class EscapeTraitTest extends TestCase
 {
-    /**
-     * @var MockObject|EscapeTrait
-     */
-    private MockObject $trait;
+    private $trait;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->trait = $this->getMockForTrait(EscapeTrait::class);
+        $this->trait = new class {
+			use EscapeTrait {
+				escape as public;
+			}
+		};
     }
 
     /**
