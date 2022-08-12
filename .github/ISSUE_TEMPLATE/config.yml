@@ -1,0 +1,4 @@
+contact_links:
+  - name: Support question
+    url: https://github.com/neo4j-php/php-cypher-dsl/discussions/new
+    about: Please open a new discussion instead. Thank you.
