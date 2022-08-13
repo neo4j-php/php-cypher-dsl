@@ -22,60 +22,45 @@
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Patterns\MatchablePattern;
+use WikibaseSolutions\CypherDSL\Patterns\CompletePattern;
 
 /**
  * This class represents an OPTIONAL MATCH clause.
  *
+ * The OPTIONAL MATCH clause is used to search for the pattern described in it, while using nulls for missing parts
+ * of the pattern.
+ *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/optional-match/
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 69)
  */
-class OptionalMatchClause extends Clause
+final class OptionalMatchClause extends Clause
 {
-    use ErrorTrait;
-
     /**
-     * @var MatchablePattern[] List of patterns
+     * @var CompletePattern[] List of patterns
      */
     private array $patterns = [];
 
     /**
+     * Add one or more patterns to the OPTIONAL MATCH clause.
+     *
+     * @param CompletePattern ...$pattern
+     * @return $this
+     */
+    public function addPattern(CompletePattern ...$pattern): self
+    {
+        $this->patterns = array_merge($this->patterns, $pattern);
+
+        return $this;
+    }
+
+    /**
      * Returns the patterns to optionally match.
      *
-     * @return MatchablePattern[]
+     * @return CompletePattern[]
      */
     public function getPatterns(): array
     {
         return $this->patterns;
-    }
-
-    /**
-     * Sets the pattern of the OPTIONAL MATCH clause. This overwrites any previously added patterns.
-     *
-     * @param MatchablePattern[] $patterns
-     * @return $this
-     */
-    public function setPatterns(array $patterns): self
-    {
-        foreach ($patterns as $pattern) {
-            $this->assertClass('pattern', MatchablePattern::class, $pattern);
-        }
-
-        $this->patterns = $patterns;
-
-        return $this;
-    }
-
-    /**
-     * Add a pattern to the OPTIONAL MATCH clause.
-     *
-     * @param MatchablePattern $pattern
-     * @return $this
-     */
-    public function addPattern(MatchablePattern $pattern): self
-    {
-        $this->patterns[] = $pattern;
-
-        return $this;
     }
 
     /**
@@ -93,7 +78,7 @@ class OptionalMatchClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (MatchablePattern $pattern): string => $pattern->toQuery(), $this->patterns)
+            array_map(fn (CompletePattern $pattern): string => $pattern->toQuery(), $this->patterns)
         );
     }
 }

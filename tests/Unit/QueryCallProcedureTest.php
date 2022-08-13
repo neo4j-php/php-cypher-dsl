@@ -3,9 +3,8 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * Tests the "callProcedure" method of the Query class.
@@ -14,24 +13,49 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 class QueryCallProcedureTest extends TestCase
 {
-	public function testCallProcedure(): void
+	public function testOnlyProcedure(): void
 	{
-		$procedure = "apoc.json";
+		$procedure = Procedure::localtime();
 
-		$statement = (new Query())->callProcedure($procedure)->build();
+		$statement = Query::new()->callProcedure($procedure);
 
-		$this->assertSame("CALL apoc.json()", $statement);
+		$this->assertSame("CALL localtime()", $statement->toQuery());
+	}
 
-		$expression = $this->getQueryConvertibleMock(AnyType::class, "a < b");
+	public function testProcedureWithVariableYield(): void
+	{
+		$procedure = Procedure::localtime();
 
-		$statement = (new Query())->callProcedure($procedure, [$expression])->build();
+		$statement = Query::new()->callProcedure($procedure, Query::variable('a'));
 
-		$this->assertSame("CALL apoc.json(a < b)", $statement);
+		$this->assertSame("CALL localtime() YIELD a", $statement->toQuery());
+	}
 
-		$variable = $this->getQueryConvertibleMock(Variable::class, "a");
+	public function testProcedureWithStringYield(): void
+	{
+		$procedure = Procedure::localtime();
 
-		$statement = (new Query())->callProcedure($procedure, [$expression], [$variable])->build();
+		$statement = Query::new()->callProcedure($procedure, 'a');
 
-		$this->assertSame("CALL apoc.json(a < b) YIELD a", $statement);
+		$this->assertSame("CALL localtime() YIELD a", $statement->toQuery());
+	}
+
+	public function testProcedureWithMultipleYields(): void
+	{
+		$procedure = Procedure::localtime();
+
+		$statement = Query::new()->callProcedure($procedure, ['a', Query::variable('b')]);
+
+		$this->assertSame("CALL localtime() YIELD a, b", $statement->toQuery());
+	}
+
+	public function testReturnsSameInstance(): void
+	{
+		$procedure = Procedure::localtime();
+
+		$expected = Query::new();
+		$actual = $expected->callProcedure($procedure);
+
+		$this->assertSame($expected, $actual);
 	}
 }

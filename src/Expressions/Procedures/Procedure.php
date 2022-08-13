@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Procedures;
 
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
@@ -18,11 +18,11 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
- * This class represents any function call. This class is named "Func", because "Function" is an invalid class name.
+ * This class represents any procedure.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/
  */
-abstract class Func implements PropertyType
+abstract class Procedure implements PropertyType
 {
     /**
      * Produces a raw function call. This enables the usage of unimplemented functions in your

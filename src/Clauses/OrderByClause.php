@@ -14,8 +14,10 @@ use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 
 /**
- * This class represents an ORDER BY sub-clause. It should always follow a RETURN or WITH clause, and it specifies
- * that the output should be sorted and how.
+ * This class represents an ORDER BY sub-clause.
+ *
+ * ORDER BY is a sub-clause following RETURN or WITH, and it specifies that the output should be sorted
+ * and how.
  *
  * TODO: Allow order modifier to be applied for each property (see #39).
  *

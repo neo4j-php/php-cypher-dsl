@@ -11,7 +11,7 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Traits\PatternTraits\MatchablePatternTrait;
+use WikibaseSolutions\CypherDSL\Traits\PatternTraits\CompletePatternTrait;
 use WikibaseSolutions\CypherDSL\Traits\PatternTraits\RelatablePatternTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -23,12 +23,12 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 5)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#structural-types
  */
-final class Path implements BooleanType, MatchablePattern, RelatablePattern
+final class Path implements BooleanType, CompletePattern, RelatablePattern
 {
     use ErrorTrait;
 
     use BooleanTypeTrait;
-    use MatchablePatternTrait;
+    use CompletePatternTrait;
     use RelatablePatternTrait;
 
     /**

@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Procedures;
 
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\DateTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
@@ -17,9 +17,9 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
  * This class represents the "datetime()" function.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime
- * @see Func::datetime()
+ * @see Procedure::datetime()
  */
-final class DateTime extends Func implements DateTimeType
+final class DateTime extends Procedure implements DateTimeType
 {
     use DateTimeTypeTrait;
 

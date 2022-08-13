@@ -16,6 +16,8 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 /**
  * This class represents a LIMIT clause.
  *
+ * LIMIT constrains the number of records in the output.
+ *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/limit/
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 98)
  * @see Query::limit() for a more convenient method to construct this class

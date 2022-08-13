@@ -111,7 +111,7 @@ final class Property implements
      *
      * TODO: Allow this function to take arrays of property types
      */
-    public function replaceWith(AnyType $value): PropertyReplacement
+    public function replaceWith($value): PropertyReplacement
     {
         return new PropertyReplacement($this, self::toPropertyType($value));
     }

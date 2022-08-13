@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Procedures;
 
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
@@ -19,9 +19,9 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  * This class represents the "none()" function.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-none
- * @see Func::none()
+ * @see Procedure::none()
  */
-final class None extends Func implements BooleanType
+final class None extends Procedure implements BooleanType
 {
     use BooleanTypeTrait;
 

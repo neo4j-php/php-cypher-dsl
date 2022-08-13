@@ -22,20 +22,20 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\All;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\Any;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\Date;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\DateTime;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\Exists;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\Func;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\IsEmpty;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\LocalDateTime;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\LocalTime;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\None;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\Point;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\Raw;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\Single;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\Time;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\All;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Any;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Date;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\DateTime;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Exists;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\IsEmpty;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\LocalDateTime;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\LocalTime;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\None;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Point;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Raw;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Single;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Time;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
@@ -43,7 +43,7 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Functions\Func
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure
  */
 class FunctionCallTest extends TestCase
 {
@@ -51,7 +51,7 @@ class FunctionCallTest extends TestCase
 
     public function testRaw()
     {
-        $raw = Func::raw("foo", []);
+        $raw = Procedure::raw("foo", []);
 
         $this->assertInstanceOf(Raw::class, $raw);
     }
@@ -62,7 +62,7 @@ class FunctionCallTest extends TestCase
         $list = $this->getQueryConvertibleMock(ListType::class, "[]");
         $predicate = $this->getQueryConvertibleMock(AnyType::class, "b");
 
-        $all = Func::all($variable, $list, $predicate);
+        $all = Procedure::all($variable, $list, $predicate);
 
         $this->assertInstanceOf(All::class, $all);
     }
@@ -73,7 +73,7 @@ class FunctionCallTest extends TestCase
         $list = $this->getQueryConvertibleMock(ListType::class, "[]");
         $predicate = $this->getQueryConvertibleMock(AnyType::class, "b");
 
-        $any = Func::any($variable, $list, $predicate);
+        $any = Procedure::any($variable, $list, $predicate);
 
         $this->assertInstanceOf(Any::class, $any);
     }
@@ -82,7 +82,7 @@ class FunctionCallTest extends TestCase
     {
         $expression = $this->getQueryConvertibleMock(AnyType::class, "a");
 
-        $exists = Func::exists($expression);
+        $exists = Procedure::exists($expression);
 
         $this->assertInstanceOf(Exists::class, $exists);
     }
@@ -91,7 +91,7 @@ class FunctionCallTest extends TestCase
     {
         $list = $this->getQueryConvertibleMock(ListType::class, "[]");
 
-        $isEmpty = Func::isEmpty($list);
+        $isEmpty = Procedure::isEmpty($list);
 
         $this->assertInstanceOf(IsEmpty::class, $isEmpty);
     }
@@ -102,7 +102,7 @@ class FunctionCallTest extends TestCase
         $list = $this->getQueryConvertibleMock(ListType::class, "[]");
         $predicate = $this->getQueryConvertibleMock(AnyType::class, "b");
 
-        $none = Func::none($variable, $list, $predicate);
+        $none = Procedure::none($variable, $list, $predicate);
 
         $this->assertInstanceOf(None::class, $none);
     }
@@ -113,7 +113,7 @@ class FunctionCallTest extends TestCase
         $list = $this->getQueryConvertibleMock(ListType::class, "[]");
         $predicate = $this->getQueryConvertibleMock(AnyType::class, "b");
 
-        $single = Func::single($variable, $list, $predicate);
+        $single = Procedure::single($variable, $list, $predicate);
 
         $this->assertInstanceOf(Single::class, $single);
     }
@@ -122,7 +122,7 @@ class FunctionCallTest extends TestCase
     {
         $map = $this->getQueryConvertibleMock(MapType::class, "map");
 
-        $point = Func::point($map);
+        $point = Procedure::point($map);
 
         $this->assertInstanceOf(Point::class, $point);
     }
@@ -131,11 +131,11 @@ class FunctionCallTest extends TestCase
     {
         $value = $this->getQueryConvertibleMock(AnyType::class, "value");
 
-        $date = Func::date($value);
+        $date = Procedure::date($value);
 
         $this->assertInstanceOf(Date::class, $date);
 
-        $date = Func::date();
+        $date = Procedure::date();
 
         $this->assertInstanceOf(Date::class, $date);
     }
@@ -144,11 +144,11 @@ class FunctionCallTest extends TestCase
     {
         $value = $this->getQueryConvertibleMock(AnyType::class, "value");
 
-        $date = Func::datetime($value);
+        $date = Procedure::datetime($value);
 
         $this->assertInstanceOf(DateTime::class, $date);
 
-        $date = Func::datetime();
+        $date = Procedure::datetime();
 
         $this->assertInstanceOf(DateTime::class, $date);
     }
@@ -157,11 +157,11 @@ class FunctionCallTest extends TestCase
     {
         $value = $this->getQueryConvertibleMock(AnyType::class, "value");
 
-        $date = Func::localdatetime($value);
+        $date = Procedure::localdatetime($value);
 
         $this->assertInstanceOf(LocalDateTime::class, $date);
 
-        $date = Func::localdatetime();
+        $date = Procedure::localdatetime();
 
         $this->assertInstanceOf(LocalDateTime::class, $date);
     }
@@ -170,11 +170,11 @@ class FunctionCallTest extends TestCase
     {
         $value = $this->getQueryConvertibleMock(AnyType::class, "value");
 
-        $date = Func::localtime($value);
+        $date = Procedure::localtime($value);
 
         $this->assertInstanceOf(LocalTime::class, $date);
 
-        $date = Func::localtime();
+        $date = Procedure::localtime();
 
         $this->assertInstanceOf(LocalTime::class, $date);
     }
@@ -183,11 +183,11 @@ class FunctionCallTest extends TestCase
     {
         $value = $this->getQueryConvertibleMock(AnyType::class, "value");
 
-        $date = Func::time($value);
+        $date = Procedure::time($value);
 
         $this->assertInstanceOf(Time::class, $date);
 
-        $date = Func::time();
+        $date = Procedure::time();
 
         $this->assertInstanceOf(Time::class, $date);
     }

@@ -1,64 +1,51 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) 2021-  Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Patterns\CompletePattern;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * This class represents a MERGE clause.
  *
+ * The MERGE clause ensures that a pattern exists in the graph. Either the pattern already exists, or it
+ * needs to be created.
+ *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 115)
  */
-class MergeClause extends Clause
+final class MergeClause extends Clause
 {
-    use ErrorTrait;
+    /**
+     * @var CompletePattern|null $pattern The pattern to merge
+     */
+    private ?CompletePattern $pattern = null;
 
     /**
-     * @var PathType|NodeType|null $pattern The pattern to merge
+     * @var SetClause|null $createClause The clause to execute when the pattern is created
      */
-    private ?StructuralType $pattern = null;
+    private ?SetClause $createClause = null;
 
     /**
-     * @var Clause|null $createClause The clause to execute when the pattern is created
+     * @var SetClause|null $matchClause The clause to execute when the pattern is matched
      */
-    private ?Clause $createClause = null;
-
-    /**
-     * @var Clause|null $matchClause The clause to execute when the pattern is matched
-     */
-    private ?Clause $matchClause = null;
+    private ?SetClause $matchClause = null;
 
     /**
      * Sets the pattern to merge.
      *
-     * @param PathType|NodeType $pattern The pattern to merge
-     * @return MergeClause
+     * @param CompletePattern $pattern The pattern to merge
+     * @return $this
      */
-    public function setPattern($pattern): self
+    public function setPattern(CompletePattern $pattern): self
     {
-        $this->assertClass('pattern', [PathType::class, NodeType::class], $pattern);
         $this->pattern = $pattern;
 
         return $this;
@@ -69,10 +56,10 @@ class MergeClause extends Clause
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/#merge-merge-with-on-create
      *
-     * @param Clause $createClause
-     * @return MergeClause
+     * @param SetClause $createClause
+     * @return $this
      */
-    public function setOnCreate(Clause $createClause): self
+    public function setOnCreate(SetClause $createClause): self
     {
         $this->createClause = $createClause;
 
@@ -84,10 +71,10 @@ class MergeClause extends Clause
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/#merge-merge-with-on-match
      *
-     * @param Clause $matchClause
-     * @return MergeClause
+     * @param SetClause $matchClause
+     * @return $this
      */
-    public function setOnMatch(Clause $matchClause): self
+    public function setOnMatch(SetClause $matchClause): self
     {
         $this->matchClause = $matchClause;
 
@@ -97,9 +84,9 @@ class MergeClause extends Clause
     /**
      * Returns the pattern to MERGE.
      *
-     * @return PathType|NodeType|null
+     * @return CompletePattern|null
      */
-    public function getPattern(): ?StructuralType
+    public function getPattern(): ?CompletePattern
     {
         return $this->pattern;
     }
@@ -107,9 +94,9 @@ class MergeClause extends Clause
     /**
      * Returns the clause to execute when the pattern is matched.
      *
-     * @return Clause|null
+     * @return SetClause|null
      */
-    public function getOnCreateClause(): ?Clause
+    public function getOnCreateClause(): ?SetClause
     {
         return $this->createClause;
     }
@@ -117,9 +104,9 @@ class MergeClause extends Clause
     /**
      * Returns the clause to execute when the pattern is matched.
      *
-     * @return Clause|null
+     * @return SetClause|null
      */
-    public function getOnMatchClause(): ?Clause
+    public function getOnMatchClause(): ?SetClause
     {
         return $this->matchClause;
     }

@@ -19,7 +19,7 @@ use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
  * This class represents a CALL {} (subquery) clause. The CALL {} clause evaluates a subquery that returns
  * some values.
  *
- * @note This feature is not officially part of the openCypher standard. For more information, see https://github.com/opencypher/openCypher/blob/a507292d35280aca9e37bf938cdec4fdd1e64ba9/docs/standardisation-scope.adoc.
+ * @note This feature is not part of the openCypher standard. For more information, see https://github.com/opencypher/openCypher/blob/a507292d35280aca9e37bf938cdec4fdd1e64ba9/docs/standardisation-scope.adoc.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/
  * @see Query::call() for a more convenient method to construct this class

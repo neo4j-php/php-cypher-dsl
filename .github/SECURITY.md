@@ -6,7 +6,7 @@
 
 If you discover a security vulnerability within php-cypher-dsl, please send an e-mail to Marijn van Wezel at marijnvanwezel@gmail.com. All security vulnerabilities will be promptly addressed.
 
-You may optionally encrypt your report with GPG, using the following key (fingerprint: `98ED 96AA 2260 D7E3`, proof: [keybase.io](https://keybase.io/01101101)):
+You may optionally encrypt your report with PGP, using the following key (fingerprint: `98ED96AA2260D7E3`, proof: [keybase.io](https://keybase.io/01101101)):
 
 ```text
 -----BEGIN PGP PUBLIC KEY BLOCK-----

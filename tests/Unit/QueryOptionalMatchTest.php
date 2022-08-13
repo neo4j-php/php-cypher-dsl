@@ -1,13 +1,18 @@
-<?php
-
+<?php declare(strict_types=1);
+/*
+ * This file is part of php-cypher-dsl.
+ *
+ * Copyright (C) 2021-  Wikibase Solutions
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
-use TypeError;
 use PHPUnit\Framework\TestCase;
+use TypeError;
+use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 
 /**
  * Tests the "optionalMatch" method of the Query class.
@@ -16,36 +21,52 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
  */
 class QueryOptionalMatchTest extends TestCase
 {
-	public function testOptionalMatch(): void
-	{
-		$pattern = $this->getQueryConvertibleMock(NodeType::class, "(m)");
+    public function testClause(): void
+    {
+        $m = Query::node('Movie')->withVariable('m');
 
-		$statement = (new Query())->optionalMatch($pattern)->build();
+        $statement = Query::new()->optionalMatch($m)->build();
 
-		$this->assertSame("OPTIONAL MATCH (m)", $statement);
+        $this->assertSame("OPTIONAL MATCH (m:Movie)", $statement);
 
-		$statement = (new Query())->optionalMatch([$pattern, $pattern])->build();
+        $statement = Query::new()->optionalMatch([$m, $m])->build();
 
-		$this->assertSame("OPTIONAL MATCH (m), (m)", $statement);
-	}
+        $this->assertSame("OPTIONAL MATCH (m:Movie), (m:Movie)", $statement);
+    }
 
-	/**
-	 * @doesNotPerformAssertions
-	 */
-	public function testOptionalMatchTypeAcceptance(): void
-	{
-		$path = $this->getQueryConvertibleMock(PathType::class, '(a)-->(b)');
-		$node = $this->getQueryConvertibleMock(NodeType::class, '(a)');
+    public function testDoesNotAcceptRelationship(): void
+    {
+        $r = Query::relationship(Relationship::DIR_LEFT);
 
-		(new Query())->optionalMatch([$path, $node]);
-	}
+        $this->expectException(TypeError::class);
 
-	public function testOptionalMatchRejectsAnyType(): void
-	{
-		$m = $this->getQueryConvertibleMock(AnyType::class, 'foo');
+        Query::new()->optionalMatch($r);
+    }
 
-		$this->expectException(TypeError::class);
+    public function testDoesNotAcceptRelationshipWithNode(): void
+    {
+        $r = Query::relationship(Relationship::DIR_LEFT);
+        $m = Query::node();
 
-		(new Query())->optionalMatch([$m, $m]);
-	}
+        $this->expectException(TypeError::class);
+
+        Query::new()->optionalMatch([$m, $r]);
+    }
+
+    public function testDoesNotAcceptTypeOtherThanMatchablePattern(): void
+    {
+        $this->expectException(TypeError::class);
+
+        Query::new()->optionalMatch(false);
+    }
+
+    public function testReturnsSameInstance(): void
+    {
+        $m = Query::node();
+
+        $expected = Query::new();
+        $actual = $expected->optionalMatch($m);
+
+        $this->assertSame($expected, $actual);
+    }
 }

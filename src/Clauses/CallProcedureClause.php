@@ -1,66 +1,52 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) 2021-  Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
- * This class represents a CALL procedure clause. The CALL clause is used to call a procedure deployed in the database.
+ * This class represents a CALL procedure clause.
+ *
+ * The CALL clause is used to call a procedure deployed in the database.
  *
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 122)
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/call/
  * @see Query::callProcedure() for a more convenient method to construct this class
  */
-class CallProcedureClause extends Clause
+final class CallProcedureClause extends Clause
 {
+    use CastTrait;
     use EscapeTrait;
     use ErrorTrait;
 
     /**
-     * @var string|null The procedure to call
+     * @var Procedure|null The procedure to call
      */
-    private ?string $procedure = null;
+    private ?Procedure $procedure = null;
 
     /**
-     * @var PropertyType[] The arguments passed to the procedure
-     */
-    private array $arguments = [];
-
-    /**
-     * @var Variable[] The result fields that will be returned
+     * @var Variable[] The result fields that yielded
      */
     private array $yields = [];
 
     /**
-     * Sets the procedure to call. This can be for instance "apoc.load.json".
+     * Sets the procedure to call.
      *
-     * @param string $procedure The procedure to call
+     * @param Procedure $procedure The procedure to call
      * @return $this
      */
-    public function setProcedure(string $procedure): self
+    public function setProcedure(Procedure $procedure): self
     {
         $this->procedure = $procedure;
 
@@ -68,68 +54,22 @@ class CallProcedureClause extends Clause
     }
 
     /**
-     * Sets the literal arguments to pass to this procedure call. This overwrites any previously passed
-     * arguments.
-     *
-     * @param AnyType[] $arguments The arguments to pass to the procedure
-     * @return $this
-     */
-    public function setArguments(array $arguments): self
-    {
-        foreach ($arguments as $argument) {
-            $this->assertClass('arguments', AnyType::class, $argument);
-        }
-
-        $this->arguments = $arguments;
-
-        return $this;
-    }
-
-    /**
-     * Add a literal argument to pass to this procedure call.
-     *
-     * @param AnyType $argument The argument to pass to the procedure
-     * @return $this
-     */
-    public function addArgument(AnyType $argument): self
-    {
-        $this->arguments[] = $argument;
-
-        return $this;
-    }
-
-    /**
-     * Used to explicitly select which available result fields are returned as newly-bound
-     * variables. If a key is non-numerical, it will be used as an alias.
-     *
-     * @param Variable[] $variables
-     * @return $this
-     */
-    public function setYields(array $variables): self
-    {
-        foreach ($variables as $variable) {
-            $this->assertClass('variables', Variable::class, $variable);
-        }
-
-        $this->yields = $variables;
-
-        return $this;
-    }
-
-    /**
      * Adds a variable to yield.
      *
-     * @param Variable $variable The variable to yield
-     * @param string|null $alias Optionally the alias to use for the variable
+     * TODO: Allow variables to be aliased
+     *
+     * @param Variable|string $yields The variable to yield
      * @return $this
      */
-    public function addYield(Variable $variable, ?string $alias = null): self
+    public function addYield(...$yields): self
     {
-        if ($alias !== null) {
-            $this->yields[$alias] = $variable;
-        } else {
-            $this->yields[] = $variable;
+        $res = [];
+
+        foreach ($yields as $yield) {
+            $res[] = self::toName($yield);
         }
+
+        $this->yields = array_merge($this->yields, $res);
 
         return $this;
     }
@@ -137,21 +77,11 @@ class CallProcedureClause extends Clause
     /**
      * Returns the procedure to call.
      *
-     * @return string|null
+     * @return Procedure
      */
-    public function getProcedure(): ?string
+    public function getProcedure(): ?Procedure
     {
         return $this->procedure;
-    }
-
-    /**
-     * Returns the arguments of the procedure.
-     *
-     * @return AnyType[]
-     */
-    public function getArguments(): array
-    {
-        return $this->arguments;
     }
 
     /**
@@ -181,27 +111,13 @@ class CallProcedureClause extends Clause
             return "";
         }
 
-        $procedure = implode(
-            '.',
-            array_map(fn (string $part): string => $this->escape($part), explode('.', $this->procedure))
-        );
+        $subject = $this->procedure->toQuery();
 
-        $arguments = implode(
-            ", ",
-            array_map(fn (AnyType $pattern): string => $pattern->toQuery(), $this->arguments)
-        );
-
-        if (count($this->yields) > 0) {
-            $yieldParameters = [];
-            foreach ($this->yields as $alias => $yieldVariable) {
-                $yieldParameters[] = is_int($alias) ?
-                    $yieldVariable->toQuery() :
-                    sprintf("%s AS %s", $yieldVariable->toQuery(), $this->escape($alias));
-            }
-
-            return sprintf("%s(%s) YIELD %s", $procedure, $arguments, implode(", ", $yieldParameters));
+        if (!empty($this->yields)) {
+            $yields = array_map(fn (Variable $variable): string => $variable->toQuery(), $this->yields);
+            $subject .= sprintf(" YIELD %s", implode(", ", $yields));
         }
 
-        return sprintf("%s(%s)", $procedure, $arguments);
+        return $subject;
     }
 }

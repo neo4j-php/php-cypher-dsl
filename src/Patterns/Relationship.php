@@ -14,7 +14,7 @@ use InvalidArgumentException;
 use LogicException;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\PatternTraits\AssignablePatternTrait;
+use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PropertyPatternTrait;
 
 /**
  * This class represents an arbitrary relationship.
@@ -22,11 +22,11 @@ use WikibaseSolutions\CypherDSL\Traits\PatternTraits\AssignablePatternTrait;
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 10)
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
  */
-final class Relationship implements AssignablePattern
+final class Relationship implements PropertyPattern
 {
     use EscapeTrait;
 
-    use AssignablePatternTrait;
+    use PropertyPatternTrait;
 
     public const DIR_RIGHT = ["-", "->"];
     public const DIR_LEFT = ["<-", "-"];

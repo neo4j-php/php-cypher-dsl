@@ -70,9 +70,9 @@ class CallClauseTest extends TestCase
 
         $this->assertSame('CALL { WITH x MATCH (x:X) RETURN * }', $clause->toQuery());
 
-		$clause->addWithVariable(Query::variable('y'));
+        $clause->addWithVariable(Query::variable('y'));
 
-		$this->assertSame('CALL { WITH x, y MATCH (x:X) RETURN * }', $clause->toQuery());
+        $this->assertSame('CALL { WITH x, y MATCH (x:X) RETURN * }', $clause->toQuery());
     }
 
     public function testAddWithVariableSingleCall(): void
@@ -82,18 +82,18 @@ class CallClauseTest extends TestCase
 
         $clause->addWithVariable(Query::variable('a'), Query::variable('b'));
 
-		$this->assertSame('CALL { WITH a, b MATCH (:x) }', $clause->toQuery());
+        $this->assertSame('CALL { WITH a, b MATCH (:x) }', $clause->toQuery());
     }
 
-	public function testAddWithVariableSting(): void
-	{
-		$clause = new CallClause();
-		$clause->withSubQuery(Query::new()->match(Query::node('x')));
+    public function testAddWithVariableSting(): void
+    {
+        $clause = new CallClause();
+        $clause->withSubQuery(Query::new()->match(Query::node('x')));
 
-		$clause->addWithVariable('a');
+        $clause->addWithVariable('a');
 
-		$this->assertSame('CALL { WITH a MATCH (:x) }', $clause->toQuery());
-	}
+        $this->assertSame('CALL { WITH a MATCH (:x) }', $clause->toQuery());
+    }
 
     public function testGetSubQuery(): void
     {
@@ -113,10 +113,29 @@ class CallClauseTest extends TestCase
         $b = Query::variable('b');
         $c = Query::variable('c');
 
-        $clause->withVariables($a);
-        $clause->addWithVariable($b);
+        $clause->addWithVariable($a, $b);
         $clause->addWithVariable($c);
 
         $this->assertSame([$a, $b, $c], $clause->getWithVariables());
+    }
+
+    public function testWithSubQueryReturnsSameInstance(): void
+    {
+        $expected = new CallClause();
+        $actual = $expected->withSubQuery(Query::new());
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testAddWithVariableReturnsSameInstance(): void
+    {
+        $expected = new CallClause();
+        $actual = $expected->addWithVariable('a');
+
+        $this->assertSame($expected, $actual);
+
+        $actual = $expected->addWithVariable('a', 'b');
+
+        $this->assertSame($expected, $actual);
     }
 }

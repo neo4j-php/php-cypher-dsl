@@ -22,13 +22,13 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\LocalDateTime;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\LocalDateTime;
 use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Functions\LocalDateTime
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\LocalDateTime
  */
 class LocalDateTimeTest extends TestCase
 {

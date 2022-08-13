@@ -1,5 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
+/*
+ * This file is part of php-cypher-dsl.
+ *
+ * Copyright (C) 2021-  Wikibase Solutions
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
@@ -14,7 +21,7 @@ use WikibaseSolutions\CypherDSL\Query;
  */
 class QueryMatchTest extends TestCase
 {
-    public function testMatch(): void
+    public function testClause(): void
     {
         $m = Query::node('Movie')->withVariable('m');
 
@@ -27,7 +34,7 @@ class QueryMatchTest extends TestCase
         $this->assertSame("MATCH (m:Movie), (m:Movie)", $statement);
     }
 
-    public function testMatchDoesNotAcceptRelationship(): void
+    public function testDoesNotAcceptRelationship(): void
     {
         $r = Query::relationship(Relationship::DIR_LEFT);
 
@@ -36,7 +43,7 @@ class QueryMatchTest extends TestCase
         Query::new()->match($r);
     }
 
-    public function testMatchDoesNotAcceptRelationshipWithNode(): void
+    public function testDoesNotAcceptRelationshipWithNode(): void
     {
         $r = Query::relationship(Relationship::DIR_LEFT);
         $m = Query::node();
@@ -46,10 +53,20 @@ class QueryMatchTest extends TestCase
         Query::new()->match([$m, $r]);
     }
 
-	public function testMatchDoesNotAcceptTypeOtherThanMatchablePattern(): void
+	public function testDoesNotAcceptTypeOtherThanMatchablePattern(): void
 	{
 		$this->expectException(TypeError::class);
 
 		Query::new()->match(false);
+	}
+
+	public function testReturnsSameInstance(): void
+	{
+		$m = Query::node();
+
+		$expected = Query::new();
+		$actual = $expected->match($m);
+
+		$this->assertSame($expected, $actual);
 	}
 }

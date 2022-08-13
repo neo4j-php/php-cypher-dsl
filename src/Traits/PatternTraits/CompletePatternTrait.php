@@ -21,14 +21,14 @@
 
 namespace WikibaseSolutions\CypherDSL\Traits\PatternTraits;
 
-use WikibaseSolutions\CypherDSL\Patterns\MatchablePattern;
+use WikibaseSolutions\CypherDSL\Patterns\CompletePattern;
 
 /**
  * This trait provides a default implementation to satisfy the "MatchablePattern" interface.
  *
- * @implements MatchablePattern
+ * @implements CompletePattern
  */
-trait MatchablePatternTrait
+trait CompletePatternTrait
 {
     use PatternTrait;
 }

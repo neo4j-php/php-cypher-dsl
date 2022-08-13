@@ -1,30 +1,17 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
+ * This file is part of php-cypher-dsl.
+ *
  * Copyright (C) 2021  Wikibase Solutions
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
-use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause;
-use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Query;
 
 /**
@@ -37,146 +24,121 @@ class CallProcedureClauseTest extends TestCase
         $callProcedureClause = new CallProcedureClause();
 
         $this->assertSame("", $callProcedureClause->toQuery());
-        $this->assertEquals([], $callProcedureClause->getArguments());
+    }
+
+    public function testSetProcedure(): void
+    {
+        $procedure = Procedure::localtime();
+
+        $callProcedureClause = new CallProcedureClause();
+        $callProcedureClause->setProcedure($procedure);
+
+        $this->assertSame("CALL localtime()", $callProcedureClause->toQuery());
+    }
+
+    public function testAddSingleYield(): void
+    {
+        $procedure = Procedure::localtime();
+
+        $callProcedureClause = new CallProcedureClause();
+        $callProcedureClause->addYield(Query::variable('a'));
+        $callProcedureClause->setProcedure($procedure);
+
+        $this->assertSame("CALL localtime() YIELD a", $callProcedureClause->toQuery());
+    }
+
+    public function testAddMultipleYields(): void
+    {
+        $procedure = Procedure::localtime();
+
+        $callProcedureClause = new CallProcedureClause();
+        $callProcedureClause->addYield(Query::variable('a'));
+        $callProcedureClause->addYield(Query::variable('b'));
+        $callProcedureClause->setProcedure($procedure);
+
+        $this->assertSame("CALL localtime() YIELD a, b", $callProcedureClause->toQuery());
+    }
+
+    public function testAddMultipleYieldsSingleCall(): void
+    {
+        $procedure = Procedure::localtime();
+
+        $callProcedureClause = new CallProcedureClause();
+        $callProcedureClause->addYield(Query::variable('a'), Query::variable('b'));
+        $callProcedureClause->setProcedure($procedure);
+
+        $this->assertSame("CALL localtime() YIELD a, b", $callProcedureClause->toQuery());
+    }
+
+    public function testAddYieldString(): void
+    {
+        $procedure = Procedure::localtime();
+
+        $callProcedureClause = new CallProcedureClause();
+        $callProcedureClause->addYield('a');
+        $callProcedureClause->setProcedure($procedure);
+
+        $this->assertSame("CALL localtime() YIELD a", $callProcedureClause->toQuery());
+    }
+
+    public function testAddYieldWithoutProcedure(): void
+    {
+        $callProcedureClause = new CallProcedureClause();
+        $callProcedureClause->addYield('a');
+
+        $this->assertSame("", $callProcedureClause->toQuery());
+    }
+
+    public function testSetProcedureReturnsSameInstance(): void
+    {
+        $expected = new CallProcedureClause();
+        $actual = $expected->setProcedure(Procedure::localtime());
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testAddYieldReturnsSameInstance(): void
+    {
+        $expected = new CallProcedureClause();
+        $actual = $expected->addYield('a');
+
+        $this->assertSame($expected, $actual);
+
+        $actual = $expected->addYield('b', 'c');
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testGetProcedure(): void
+    {
+        $procedure = Procedure::localtime();
+
+        $callProcedureClause = new CallProcedureClause();
+
         $this->assertNull($callProcedureClause->getProcedure());
-        $this->assertEquals([], $callProcedureClause->getYields());
+
+        $callProcedureClause->setProcedure($procedure);
+
+        $this->assertSame($procedure, $callProcedureClause->getProcedure());
     }
 
-    public function testZeroArguments(): void
-    {
-        $callProcedureClause = new CallProcedureClause();
-        $callProcedureClause->setProcedure("apoc.json");
-
-        $this->assertSame("CALL apoc.json()", $callProcedureClause->toQuery());
-        $this->assertEquals([], $callProcedureClause->getArguments());
-        $this->assertEquals('apoc.json', $callProcedureClause->getProcedure());
-        $this->assertEquals([], $callProcedureClause->getYields());
-    }
-
-    public function testOneArgument(): void
-    {
-        $callProcedureClause = new CallProcedureClause();
-        $callProcedureClause->setProcedure("apoc.json");
-
-        $param = Query::literal('text');
-        $callProcedureClause->addArgument($param);
-
-        $this->assertSame("CALL apoc.json('text')", $callProcedureClause->toQuery());
-        $this->assertEquals('apoc.json', $callProcedureClause->getProcedure());
-        $this->assertEquals([$param], $callProcedureClause->getArguments());
-        $this->assertEquals([], $callProcedureClause->getYields());
-    }
-
-    public function testMultipleArgument(): void
-    {
-        $callProcedureClause = new CallProcedureClause();
-        $callProcedureClause->setProcedure("apoc.json");
-
-        $expression = Query::literal('text');
-
-        $callProcedureClause->addArgument($expression);
-        $callProcedureClause->addArgument($expression);
-        $callProcedureClause->addArgument($expression);
-
-        $this->assertSame("CALL apoc.json('text', 'text', 'text')", $callProcedureClause->toQuery());
-        $this->assertEquals([$expression, $expression, $expression], $callProcedureClause->getArguments());
-        $this->assertEquals('apoc.json', $callProcedureClause->getProcedure());
-        $this->assertEquals([], $callProcedureClause->getYields());
-    }
-
-    public function testWithArguments(): void
-    {
-        $callProcedureClause = new CallProcedureClause();
-        $callProcedureClause->setProcedure("apoc.json");
-
-        $expression = Query::literal('text');
-
-        $callProcedureClause->addArgument($expression);
-        $callProcedureClause->addArgument($expression);
-        $callProcedureClause->addArgument($expression);
-
-        // This should overwrite the previous calls to addArgument
-        $callProcedureClause->setArguments([$expression]);
-
-        $this->assertSame("CALL apoc.json('text')", $callProcedureClause->toQuery());
-        $this->assertEquals([$expression], $callProcedureClause->getArguments());
-        $this->assertEquals('apoc.json', $callProcedureClause->getProcedure());
-        $this->assertEquals([], $callProcedureClause->getYields());
-    }
-
-    public function testWithYield(): void
+    public function testGetYields(): void
     {
         $callProcedureClause = new CallProcedureClause();
 
-        $callProcedureClause->setProcedure("apoc.json");
+        $this->assertEmpty($callProcedureClause->getYields());
 
         $a = Query::variable('a');
+
+        $callProcedureClause->addYield($a);
+
+        $this->assertSame([$a], $callProcedureClause->getYields());
+
         $b = Query::variable('b');
         $c = Query::variable('c');
 
-        // This should overwrite the previous calls to addArgument
-        $callProcedureClause->setYields([$a, $b, $c]);
+        $callProcedureClause->addYield($b, $c);
 
-        $this->assertSame("CALL apoc.json() YIELD a, b, c", $callProcedureClause->toQuery());
-        $this->assertEquals([], $callProcedureClause->getArguments());
-        $this->assertEquals('apoc.json', $callProcedureClause->getProcedure());
-        $this->assertEquals([$a, $b, $c], $callProcedureClause->getYields());
+        $this->assertSame([$a, $b, $c], $callProcedureClause->getYields());
     }
-
-    public function testYieldDoesNotAcceptAnyType(): void
-    {
-        $callProcedureClause = new CallProcedureClause();
-
-        $a = Query::literal('a');
-
-        $this->expectException(TypeError::class);
-
-        $callProcedureClause->setYields([$a]);
-    }
-
-    public function testArgumentsOnlyAcceptsAnyType(): void
-    {
-        $callProcedureClause = new CallProcedureClause();
-
-        $a = new class () {};
-
-        $this->expectException(TypeError::class);
-
-        $callProcedureClause->setArguments([$a]);
-    }
-
-    public function testProcedureNameIsEscaped(): void
-    {
-        $callProcedureClause = new CallProcedureClause();
-        $callProcedureClause->setProcedure('apoc\\json');
-
-        $this->assertSame('CALL `apoc\\json`()', $callProcedureClause->toQuery());
-
-        $callProcedureClause->setProcedure('apoc\\json.more');
-
-        $this->assertSame('CALL `apoc\\json`.more()', $callProcedureClause->toQuery());
-
-        $callProcedureClause->setProcedure('apoc\\json.more.even\\more');
-
-        $this->assertSame('CALL `apoc\\json`.more.`even\\more`()', $callProcedureClause->toQuery());
-    }
-
-	public function testAlias(): void
-	{
-		$callProcedureClause = new CallProcedureClause();
-		$callProcedureClause->setProcedure('db.labels');
-		$callProcedureClause->setYields([
-			'alias' => new Variable('a')
-		]);
-
-		$this->assertSame('CALL db.labels() YIELD a AS alias', $callProcedureClause->toQuery());
-
-		$callProcedureClause->addYield(new Variable('b'), 'alias2');
-
-		$this->assertSame('CALL db.labels() YIELD a AS alias, b AS alias2', $callProcedureClause->toQuery());
-
-		$callProcedureClause->addYield(new Variable('c'));
-
-		$this->assertSame('CALL db.labels() YIELD a AS alias, b AS alias2, c', $callProcedureClause->toQuery());
-	}
 }

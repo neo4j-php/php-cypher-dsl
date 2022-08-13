@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Procedures;
 
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
@@ -42,9 +42,9 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 /**
  * This class represents any function call.
  *
- * @see Func::raw()
+ * @see Procedure::raw()
  */
-final class Raw extends Func implements
+final class Raw extends Procedure implements
     BooleanType,
     DateType,
     DateTimeType,

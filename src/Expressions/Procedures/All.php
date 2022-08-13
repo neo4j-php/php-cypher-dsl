@@ -7,8 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Procedures;
 
+use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
@@ -16,12 +17,12 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
- * Represents the "any()" function.
+ * Represents the "all()" function.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-any
- * @see Func::any()
+ * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-all
+ * @see Procedure::all()
  */
-final class Any extends Func implements BooleanType
+final class All extends Procedure implements BooleanType
 {
     use BooleanTypeTrait;
 
@@ -41,19 +42,19 @@ final class Any extends Func implements BooleanType
     private AnyType $predicate;
 
     /**
-     * The signature of the "any()" function is:
+     * The signature of the "all()" function is:
      *
-     * any(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
+     * all(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
      *
-     * @param Variable $variable A variable that can be used from within the predicate
-     * @param ListType $list A list
+     * @param Variable|string $variable A variable that can be used from within the predicate
+     * @param ListType|array $list A list
      * @param AnyType $predicate A predicate that is tested against all items in the list
 	 * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
-    public function __construct(Variable $variable, ListType $list, AnyType $predicate)
+    public function __construct($variable, $list, AnyType $predicate)
     {
-        $this->variable = $variable;
-        $this->list = $list;
+        $this->variable = is_string($variable) ? new Variable($variable) : $variable;
+        $this->list = is_array($list) ? new List_($list) : $list;
         $this->predicate = $predicate;
     }
 
@@ -62,7 +63,7 @@ final class Any extends Func implements BooleanType
      */
     protected function getSignature(): string
     {
-        return "any(%s IN %s WHERE %s)";
+        return "all(%s IN %s WHERE %s)";
     }
 
     /**

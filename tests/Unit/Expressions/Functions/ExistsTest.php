@@ -22,12 +22,12 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\Exists;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Exists;
 use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Functions\Exists
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\Exists
  */
 class ExistsTest extends TestCase
 {

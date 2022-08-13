@@ -7,33 +7,33 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Procedures;
 
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\DateTypeTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\TimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 
 /**
- * This class represents the "date()" function.
+ * This class represents the "time()" function.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-date
- * @see Func::date()
+ * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-time
+ * @see Procedure::time()
  */
-final class Date extends Func implements DateType
+final class Time extends Procedure implements TimeType
 {
-    use DateTypeTrait;
+    use TimeTypeTrait;
 
     /**
-     * @var AnyType|null The input to the date function, from which to construct the date
+     * @var AnyType|null The input to the localtime function, from which to construct the time
      */
     private ?AnyType $value;
 
     /**
-     * The signature of the "date()" function is:
+     * The signature of the "time()" function is:
      *
-     * date(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (DATE?)
+     * time(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (TIME?)
      *
-     * @param AnyType|null $value The input to the date function, from which to construct the date
+     * @param AnyType|null $value The input to the time function, from which to construct the time
 	 * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(?AnyType $value = null)
@@ -46,7 +46,7 @@ final class Date extends Func implements DateType
      */
     protected function getSignature(): string
     {
-        return $this->value ? "date(%s)" : "date()";
+        return $this->value ? "time(%s)" : "time()";
     }
 
     /**

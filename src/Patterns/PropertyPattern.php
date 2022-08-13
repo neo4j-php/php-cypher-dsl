@@ -11,8 +11,7 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
-use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Traits\PatternTraits\AssignablePatternTrait;
+use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PropertyPatternTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
@@ -21,9 +20,9 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  * - node
  * - relationship
  *
- * @see AssignablePatternTrait for a default implementation
+ * @see PropertyPatternTrait for a default implementation
  */
-interface AssignablePattern extends Pattern
+interface PropertyPattern extends Pattern
 {
     /**
      * Returns the property of the given name in this pattern.

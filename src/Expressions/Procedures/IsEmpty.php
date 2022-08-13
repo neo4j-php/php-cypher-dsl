@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Procedures;
 
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
@@ -21,9 +21,9 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  * This class represents the "isEmpty()" function.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-isempty
- * @see Func::isEmpty()
+ * @see Procedure::isEmpty()
  */
-final class IsEmpty extends Func implements BooleanType
+final class IsEmpty extends Procedure implements BooleanType
 {
     use BooleanTypeTrait;
     use ErrorTrait;

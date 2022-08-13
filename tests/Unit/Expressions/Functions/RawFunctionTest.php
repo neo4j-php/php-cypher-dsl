@@ -23,12 +23,12 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\Raw;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Raw;
 use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Functions\Raw
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\Raw
  */
 class RawFunctionTest extends TestCase
 {

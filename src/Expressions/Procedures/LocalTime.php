@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Procedures;
 
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\LocalTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
@@ -17,9 +17,9 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalTimeType;
  * This class represents the "localtime()" function.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localtime
- * @see Func::localtime()
+ * @see Procedure::localtime()
  */
-final class LocalTime extends Func implements LocalTimeType
+final class LocalTime extends Procedure implements LocalTimeType
 {
     use LocalTimeTypeTrait;
 

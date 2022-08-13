@@ -9,10 +9,12 @@
  */
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Patterns\MatchablePattern;
+use WikibaseSolutions\CypherDSL\Patterns\CompletePattern;
 
 /**
  * This class represents a MATCH clause.
+ *
+ * The MATCH clause is used to search for the pattern described in it.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/
  * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 57)
@@ -21,17 +23,17 @@ use WikibaseSolutions\CypherDSL\Patterns\MatchablePattern;
 final class MatchClause extends Clause
 {
     /**
-     * @var MatchablePattern[] List of patterns
+     * @var CompletePattern[] List of patterns
      */
     private array $patterns = [];
 
     /**
      * Add one or more patterns to the MATCH clause.
      *
-     * @param MatchablePattern ...$pattern
+     * @param CompletePattern ...$pattern
      * @return $this
      */
-    public function addPattern(MatchablePattern ...$pattern): self
+    public function addPattern(CompletePattern ...$pattern): self
     {
         $this->patterns = array_merge($this->patterns, $pattern);
 
@@ -41,7 +43,7 @@ final class MatchClause extends Clause
     /**
      * Returns the patterns to match.
      *
-     * @return MatchablePattern[]
+     * @return CompletePattern[]
      */
     public function getPatterns(): array
     {
@@ -63,7 +65,7 @@ final class MatchClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (MatchablePattern $pattern): string => $pattern->toQuery(), $this->patterns)
+            array_map(fn (CompletePattern $pattern): string => $pattern->toQuery(), $this->patterns)
         );
     }
 }

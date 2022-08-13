@@ -23,12 +23,12 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Literals;
 
 use LogicException;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\Date;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\DateTime;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\LocalDateTime;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\LocalTime;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\Point;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\Time;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Date;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\DateTime;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\LocalDateTime;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\LocalTime;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Point;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Time;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Number;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;

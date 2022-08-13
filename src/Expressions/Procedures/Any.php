@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Procedures;
 
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
@@ -16,12 +16,12 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
- * This class represents the "single()" function.
+ * Represents the "any()" function.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-single
- * @see Func::single()
+ * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-any
+ * @see Procedure::any()
  */
-final class Single extends Func implements BooleanType
+final class Any extends Procedure implements BooleanType
 {
     use BooleanTypeTrait;
 
@@ -41,9 +41,9 @@ final class Single extends Func implements BooleanType
     private AnyType $predicate;
 
     /**
-     * The signature of the "single()" function is:
+     * The signature of the "any()" function is:
      *
-     * single(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
+     * any(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
      *
      * @param Variable $variable A variable that can be used from within the predicate
      * @param ListType $list A list
@@ -62,7 +62,7 @@ final class Single extends Func implements BooleanType
      */
     protected function getSignature(): string
     {
-        return "single(%s IN %s WHERE %s)";
+        return "any(%s IN %s WHERE %s)";
     }
 
     /**

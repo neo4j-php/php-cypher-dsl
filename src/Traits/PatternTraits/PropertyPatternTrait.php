@@ -31,9 +31,9 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 /**
  * This trait provides a default implementation to satisfy the "AssignablePattern" interface.
  *
- * @implements AssignablePatternTrait
+ * @implements PropertyPatternTrait
  */
-trait AssignablePatternTrait
+trait PropertyPatternTrait
 {
     use CastTrait;
     use ErrorTrait;

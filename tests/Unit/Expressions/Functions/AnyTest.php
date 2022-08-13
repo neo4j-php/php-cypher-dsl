@@ -23,14 +23,14 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\Any;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Any;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Functions\Any
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\Any
  */
 class AnyTest extends TestCase
 {

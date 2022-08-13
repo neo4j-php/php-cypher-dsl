@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace WikibaseSolutions\CypherDSL\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Expressions\Procedures;
 
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
@@ -17,9 +17,9 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  * This class represents the "exists()" function.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-exists
- * @see Func::exists()
+ * @see Procedure::exists()
  */
-final class Exists extends Func implements BooleanType
+final class Exists extends Procedure implements BooleanType
 {
     use BooleanTypeTrait;
 

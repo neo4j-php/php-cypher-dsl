@@ -1,30 +1,21 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) 2021-  Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 /**
  * Represents a raw clause.
+ *
+ * A raw clause is not a real clause, but rather a construct for php-cypher-dsl to support unimplemented
+ * clauses.
  */
-class RawClause extends Clause
+final class RawClause extends Clause
 {
     /**
      * @var string The name of the clause; for instance "MATCH"
@@ -44,35 +35,9 @@ class RawClause extends Clause
      */
     public function __construct(string $clause = "", string $subject = "")
     {
-		$this->clause = $clause;
-		$this->subject = $subject;
+        $this->clause = $clause;
+        $this->subject = $subject;
     }
-
-	/**
-	 * Sets the name of this clause.
-	 *
-	 * @param string $clause
-	 * @return static
-	 */
-	public function setClause(string $clause): self
-	{
-		$this->clause = $clause;
-
-		return $this;
-	}
-
-	/**
-	 * Sets the subject of this clause.
-	 *
-	 * @param string $subject
-	 * @return static
-	 */
-	public function setSubject(string $subject): self
-	{
-		$this->subject = $subject;
-
-		return $this;
-	}
 
     /**
      * @inheritDoc

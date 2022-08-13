@@ -1,24 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
+ * This file is part of php-cypher-dsl.
+ *
  * Copyright (C) 2021  Wikibase Solutions
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL;
 
 use Closure;
@@ -41,7 +29,7 @@ use WikibaseSolutions\CypherDSL\Clauses\UnionClause;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
 use WikibaseSolutions\CypherDSL\Expressions\Exists;
-use WikibaseSolutions\CypherDSL\Expressions\Functions\Func;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
@@ -54,7 +42,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Parameter;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Patterns\MatchablePattern;
+use WikibaseSolutions\CypherDSL\Patterns\CompletePattern;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
@@ -90,7 +78,7 @@ final class Query implements QueryConvertible
     public const literal = Literal::class;
 
     // A reference to the FunctionCall class
-    public const function = Func::class;
+    public const function = Procedure::class;
 
     /**
      * @var Clause[] $clauses Ordered list of clauses for this query
@@ -300,7 +288,7 @@ final class Query implements QueryConvertible
      *
      * Query::function()::raw(...)
      *
-     * @return Func|string
+     * @return string
      */
     public static function function(): string
     {
@@ -311,7 +299,7 @@ final class Query implements QueryConvertible
      * Creates a raw expression.
      *
      * @param string $expression The raw expression
-     * @return ListType|MapType|BooleanType|DateTimeType|DateType|LocalDateTimeType|PointType|FloatType|IntegerType|StringType|TimeType|NodeType|PathType|RelationshipType
+     * @return RawExpression
      */
     public static function rawExpression(string $expression): RawExpression
     {
@@ -321,7 +309,7 @@ final class Query implements QueryConvertible
     /**
      * Creates an EXISTS expression.
      *
-     * @param MatchablePattern|MatchablePattern[]|MatchClause $match
+     * @param CompletePattern|CompletePattern[]|MatchClause $match
      * @param BooleanType|BooleanType[]|WhereClause|null $where
      * @param bool $insertParentheses
      * @return Exists
@@ -380,46 +368,22 @@ final class Query implements QueryConvertible
     /**
      * Creates the CALL procedure clause.
      *
-     * @param string $procedure The procedure to call
-     * @param AnyType[]|AnyType|string[]|string|bool[]|bool|float[]|float|int[]|int $arguments The arguments to pass to the procedure (ignored if $procedure is of type FunctionCall)
-     * @param Variable[]|Variable|HasVariable[]|HasVariable|string[]|string $yields The result field that will be returned
-     *
+     * @param Procedure $procedure The procedure to call
+     * @param string|Variable|string[]|Variable[] $yields The result fields that should be returned
      * @return Query
+     *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/call/
+     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 122)
      */
-    public function callProcedure(string $procedure, $arguments = [], $yields = []): self
+    public function callProcedure(Procedure $procedure, $yields = []): self
     {
-        $callProcedureClause = new CallProcedureClause();
-        $callProcedureClause->setProcedure($procedure);
-
-        if (!is_array($arguments)) {
-            $arguments = [$arguments];
-        }
-
-        $arguments = array_map(function ($argument): AnyType {
-            return $argument instanceof AnyType ? $argument : self::literal($argument);
-        }, $arguments);
-
         if (!is_array($yields)) {
             $yields = [$yields];
         }
 
-        $yields = array_map(function ($yield): Variable {
-            $this->assertClass('yields', [Variable::class, HasVariable::class, 'string'], $yield);
-
-            if (is_string($yield)) {
-                return self::variable($yield);
-            }
-
-            if ($yield instanceof HasVariable) {
-                return $yield->getVariable();
-            }
-
-            return $yield;
-        }, $yields);
-
-        $callProcedureClause->setArguments($arguments);
-        $callProcedureClause->setYields($yields);
+        $callProcedureClause = new CallProcedureClause();
+        $callProcedureClause->setProcedure($procedure);
+        $callProcedureClause->addYield(...$yields);
 
         $this->clauses[] = $callProcedureClause;
 
@@ -429,7 +393,7 @@ final class Query implements QueryConvertible
     /**
      * Creates the MATCH clause.
      *
-     * @param MatchablePattern|MatchablePattern[] $patterns A single pattern or a list of patterns
+     * @param CompletePattern|CompletePattern[] $patterns A single pattern or a list of patterns
      *
      * @return $this
      *
@@ -488,7 +452,7 @@ final class Query implements QueryConvertible
     /**
      * Creates the CREATE clause.
      *
-     * @param PathType|NodeType|PathType[]|NodeType[] $patterns A single pattern or a list of patterns
+     * @param CompletePattern|CompletePattern[] $patterns A single pattern or a list of patterns
      *
      * @return $this
      *
@@ -496,18 +460,13 @@ final class Query implements QueryConvertible
      */
     public function create($patterns): self
     {
-        $createClause = new CreateClause();
-
         if (!is_array($patterns)) {
             $patterns = [$patterns];
         }
 
-        foreach ($patterns as $pattern) {
-            $this->assertClass('pattern', [PathType::class, NodeType::class], $pattern);
-
-            $createClause->addPattern($pattern);
-        }
-
+        $createClause = new CreateClause();
+        $createClause->addPattern(...$patterns);
+        
         $this->clauses[] = $createClause;
 
         return $this;
@@ -609,17 +568,16 @@ final class Query implements QueryConvertible
     /**
      * Creates the MERGE clause.
      *
-     * @param PathType|NodeType $pattern The pattern to merge
-     * @param Clause|null $createClause The clause to execute when the pattern is created
-     * @param Clause|null $matchClause The clause to execute when the pattern is matched
-     *
+     * @param CompletePattern $pattern The pattern to merge
+     * @param SetClause|null $createClause The clause to execute when the pattern is created
+     * @param SetClause|null $matchClause The clause to execute when the pattern is matched
      * @return $this
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/
      *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/
+     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 115)
      */
-    public function merge($pattern, Clause $createClause = null, Clause $matchClause = null): self
+    public function merge(CompletePattern $pattern, SetClause $createClause = null, SetClause $matchClause = null): self
     {
-        $this->assertClass('pattern', [PathType::class, NodeType::class], $pattern);
         $mergeClause = new MergeClause();
         $mergeClause->setPattern($pattern);
 
@@ -639,25 +597,20 @@ final class Query implements QueryConvertible
     /**
      * Creates the OPTIONAL MATCH clause.
      *
-     * @param PathType|NodeType|(PathType|NodeType)[] $patterns A single pattern or a list of patterns
-     *
+     * @param CompletePattern|CompletePattern[] $patterns A single pattern or a list of patterns
      * @return $this
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/optional-match/
      *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/optional-match/
+     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 69)
      */
     public function optionalMatch($patterns): self
     {
-        $optionalMatchClause = new OptionalMatchClause();
-
         if (!is_array($patterns)) {
             $patterns = [$patterns];
         }
 
-        foreach ($patterns as $pattern) {
-            $this->assertClass('pattern', [PathType::class, NodeType::class], $pattern);
-
-            $optionalMatchClause->addPattern($pattern);
-        }
+        $optionalMatchClause = new OptionalMatchClause();
+        $optionalMatchClause->addPattern(...$patterns);
 
         $this->clauses[] = $optionalMatchClause;
 
