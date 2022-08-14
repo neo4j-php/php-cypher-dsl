@@ -65,6 +65,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * Builder class for building complex Cypher queries.
@@ -475,34 +476,23 @@ final class Query implements QueryConvertible
     /**
      * Creates the DELETE clause.
      *
-     * @param string|Variable|HasVariable|(string|Variable|HasVariable)[] $variables The nodes to delete
+     * @param StructuralType|Pattern|StructuralType[]|Pattern[] $structures The structures to delete
      * @param bool $detach Whether to DETACH DELETE
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
-     *
+     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 105)
      */
-    public function delete($variables, bool $detach = false): self
+    public function delete($structures, bool $detach = false): self
     {
+        if (!is_array($structures)) {
+            $structures = [$structures];
+        }
+
         $deleteClause = new DeleteClause();
         $deleteClause->setDetach($detach);
-
-        if (!is_array($variables)) {
-            $variables = [$variables];
-        }
-
-        foreach ($variables as $variable) {
-            $this->assertClass('variable', ['string', Variable::class, HasVariable::class], $variable);
-
-            if (is_string($variable)) {
-                $variable = Query::variable($variable);
-            } elseif ($variable instanceof HasVariable) {
-                $variable = $variable->getVariable();
-            }
-
-            $deleteClause->addVariable($variable);
-        }
-
+        $deleteClause->addStructure(...$structures);
+        
         $this->clauses[] = $deleteClause;
 
         return $this;

@@ -12,6 +12,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * Helper trait for casting native PHP types to Cypher-DSL types. Casts are added to this class on an as-needed basis.
@@ -92,6 +93,18 @@ trait CastTrait
     {
         self::assertClass('property', [PropertyType::class, 'bool', 'int', 'float', 'string'], $property);
         return $property instanceof PropertyType ? $property : Literal::literal($property);
+    }
+
+    /**
+     * Casts the given value to a StructuralType.
+     *
+     * @param StructuralType|Pattern $structure
+     * @return StructuralType
+     */
+    private static function toStructuralType($structure): StructuralType
+    {
+        self::assertClass('structure', [Pattern::class, StructuralType::class], $structure);
+        return $structure instanceof StructuralType ? $structure : $structure->getVariable();
     }
 
     /**

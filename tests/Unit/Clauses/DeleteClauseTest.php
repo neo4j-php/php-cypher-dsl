@@ -40,7 +40,7 @@ class DeleteClauseTest extends TestCase
         $delete = new DeleteClause();
 
         $this->assertSame("", $delete->toQuery());
-        $this->assertEquals([], $delete->getStructures());
+        $this->assertEquals([], $delete->getStructural());
         $this->assertFalse($delete->detachesDeletion());
     }
 
@@ -52,7 +52,7 @@ class DeleteClauseTest extends TestCase
         $delete->addStructure($variable);
 
         $this->assertSame("DELETE a", $delete->toQuery());
-        $this->assertEquals([$variable], $delete->getStructures());
+        $this->assertEquals([$variable], $delete->getStructural());
         $this->assertFalse($delete->detachesDeletion());
     }
 
@@ -67,7 +67,7 @@ class DeleteClauseTest extends TestCase
         $delete->addStructure($b);
 
         $this->assertSame("DELETE a, b", $delete->toQuery());
-        $this->assertEquals([$a, $b], $delete->getStructures());
+        $this->assertEquals([$a, $b], $delete->getStructural());
         $this->assertFalse($delete->detachesDeletion());
     }
 
@@ -80,7 +80,7 @@ class DeleteClauseTest extends TestCase
         $delete->setDetach(true);
 
         $this->assertSame("DETACH DELETE a", $delete->toQuery());
-        $this->assertEquals([$variable], $delete->getStructures());
+        $this->assertEquals([$variable], $delete->getStructural());
         $this->assertTrue($delete->detachesDeletion());
     }
 
@@ -91,7 +91,7 @@ class DeleteClauseTest extends TestCase
 
         $delete->addStructure($variable);
         $delete->toQuery();
-        $this->assertEquals([$variable], $delete->getStructures());
+        $this->assertEquals([$variable], $delete->getStructural());
         $this->assertFalse($delete->detachesDeletion());
     }
 
@@ -115,10 +115,10 @@ class DeleteClauseTest extends TestCase
 
         $variables = [$variableA, $variableB];
 
-        $delete->setStructures($variables);
+        $delete->setPatterns($variables);
 
         $this->assertSame("DELETE a, b", $delete->toQuery());
-        $this->assertSame($variables, $delete->getStructures());
+        $this->assertSame($variables, $delete->getStructural());
     }
 
     public function testSetVariablesDoesNotAcceptAnyType(): void
@@ -132,7 +132,7 @@ class DeleteClauseTest extends TestCase
 
         $this->expectException(TypeError::class);
 
-        $delete->setStructures($variables);
+        $delete->setPatterns($variables);
         $delete->toQuery();
     }
 
@@ -140,12 +140,12 @@ class DeleteClauseTest extends TestCase
     {
         $delete = new DeleteClause();
 
-        $this->assertSame([], $delete->getStructures());
+        $this->assertSame([], $delete->getStructural());
 
         $variables = [new Variable('a')];
-        $delete->setStructures($variables);
+        $delete->setPatterns($variables);
 
-        $this->assertSame($variables, $delete->getStructures());
+        $this->assertSame($variables, $delete->getStructural());
     }
 
     public function testDetachesDeletion(): void

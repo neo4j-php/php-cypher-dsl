@@ -1,37 +1,31 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) 2021-  Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Patterns\Pattern;
+use WikibaseSolutions\CypherDSL\Query;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * This class represents a DELETE clause.
  *
+ * The DELETE clause is used to delete graph element — nodes, relationships and paths.
+ *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 105)
+ * @see Query::delete() for a more convenient method to construct this class
  */
-class DeleteClause extends Clause
+final class DeleteClause extends Clause
 {
-    use ErrorTrait;
+    use CastTrait;
 
     /**
      * Whether the DETACH modifier is needed.
@@ -60,31 +54,20 @@ class DeleteClause extends Clause
     }
 
     /**
-     * Sets the structures to be deleted. This overwrites previous structures if they exist.
+     * Add one or more structures to delete.
      *
-     * @param StructuralType[] $structures The structures to delete
+     * @param StructuralType|Pattern $structures The structures to delete
      * @return $this
      */
-    public function setStructures(array $structures): self
+    public function addStructure(...$structures): self
     {
+        $res = [];
+
         foreach ($structures as $structure) {
-            $this->assertClass('structure', StructuralType::class, $structure);
+            $res[] = self::toStructuralType($structure);
         }
 
-        $this->structures = $structures;
-
-        return $this;
-    }
-
-    /**
-     * Add a structure to be deleted.
-     *
-     * @param StructuralType $structure The structure that should be deleted
-     * @return $this
-     */
-    public function addStructure(StructuralType $structure): self
-    {
-        $this->structures[] = $structure;
+        $this->structures = array_merge($this->structures, $res);
 
         return $this;
     }
@@ -104,7 +87,7 @@ class DeleteClause extends Clause
      *
      * @return StructuralType[]
      */
-    public function getStructures(): array
+    public function getStructural(): array
     {
         return $this->structures;
     }
