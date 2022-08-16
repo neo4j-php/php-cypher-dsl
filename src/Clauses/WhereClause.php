@@ -10,6 +10,7 @@
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use InvalidArgumentException;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
@@ -23,6 +24,8 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  */
 final class WhereClause extends Clause
 {
+    use CastTrait;
+
     public const AND = 'and';
     public const OR = 'or';
     public const XOR = 'xor';
@@ -35,13 +38,15 @@ final class WhereClause extends Clause
     /**
      * Add an expression to this WHERE clause.
      *
-     * @param BooleanType $expression The expression to add to the WHERE clause
+     * @param BooleanType|bool $expression The expression to add to the WHERE clause
      * @param string $operator The operator to use to combine the given expression with the existing expression, should
      *  be one of WhereClause::AND, WhereClause::OR or WhereClause::XOR
      * @return $this
      */
-    public function addExpression(BooleanType $expression, string $operator = self::AND): self
+    public function addExpression($expression, string $operator = self::AND): self
     {
+        $expression = self::toBooleanType($expression);
+
         if ($operator !== self::AND && $operator !== self::OR && $operator !== self::XOR) {
             throw new InvalidArgumentException('$operator must either be "and", "xor" or "or"');
         }

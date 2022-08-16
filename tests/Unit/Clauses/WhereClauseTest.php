@@ -46,7 +46,7 @@ class WhereClauseTest extends TestCase
         $where = new WhereClause();
         $expression = $this->getQueryConvertibleMock(AnyType::class, "(a)");
 
-        $where->setExpression($expression);
+        $where->addExpression($expression);
 
         $this->assertSame("WHERE (a)", $where->toQuery());
         $this->assertEquals($expression, $where->getExpression());
@@ -60,7 +60,7 @@ class WhereClauseTest extends TestCase
         $where = new WhereClause();
         $expression = $this->getQueryConvertibleMock(AnyType::class, "(a)");
 
-        $where->setExpression($expression);
+        $where->addExpression($expression);
 
         $where->toQuery();
     }

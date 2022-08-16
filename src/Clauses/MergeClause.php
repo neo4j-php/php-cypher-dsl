@@ -56,10 +56,10 @@ final class MergeClause extends Clause
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/#merge-merge-with-on-create
      *
-     * @param SetClause $createClause
+     * @param SetClause|null $createClause
      * @return $this
      */
-    public function setOnCreate(SetClause $createClause): self
+    public function setOnCreate(?SetClause $createClause): self
     {
         $this->createClause = $createClause;
 
@@ -71,10 +71,10 @@ final class MergeClause extends Clause
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/#merge-merge-with-on-match
      *
-     * @param SetClause $matchClause
+     * @param SetClause|null $matchClause
      * @return $this
      */
-    public function setOnMatch(SetClause $matchClause): self
+    public function setOnMatch(?SetClause $matchClause): self
     {
         $this->matchClause = $matchClause;
 

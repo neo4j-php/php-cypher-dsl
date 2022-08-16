@@ -28,8 +28,6 @@ use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 final class CallProcedureClause extends Clause
 {
     use CastTrait;
-    use EscapeTrait;
-    use ErrorTrait;
 
     /**
      * @var Procedure|null The procedure to call
