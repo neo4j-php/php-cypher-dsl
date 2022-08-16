@@ -19,12 +19,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Procedures;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\IsEmpty;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -35,15 +37,13 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 class IsEmptyTest extends TestCase
 {
-    use TestHelper;
-
     public function testToQuery()
     {
-        $list = $this->getQueryConvertibleMock(ListType::class, "list");
+        $list = new List_([new String_('a'), new String_('b')]);
 
         $isEmpty = new IsEmpty($list);
 
-        $this->assertSame("isEmpty(list)", $isEmpty->toQuery());
+        $this->assertSame("isEmpty(['a', 'b'])", $isEmpty->toQuery());
     }
 
     /**
@@ -51,7 +51,7 @@ class IsEmptyTest extends TestCase
      */
     public function testAcceptsListType()
     {
-        $list = $this->getQueryConvertibleMock(ListType::class, "list");
+        $list = new List_;
 
         $isEmpty = new IsEmpty($list);
 
@@ -63,7 +63,7 @@ class IsEmptyTest extends TestCase
      */
     public function testAcceptsMapType()
     {
-        $list = $this->getQueryConvertibleMock(MapType::class, "list");
+        $list = new Map;
 
         $isEmpty = new IsEmpty($list);
 
@@ -75,7 +75,7 @@ class IsEmptyTest extends TestCase
      */
     public function testAcceptsStringType()
     {
-        $list = $this->getQueryConvertibleMock(StringType::class, "list");
+        $list = new String_('a');
 
         $isEmpty = new IsEmpty($list);
 
@@ -84,7 +84,7 @@ class IsEmptyTest extends TestCase
 
     public function testDoestNotAcceptAnyType()
     {
-        $list = $this->getQueryConvertibleMock(AnyType::class, "list");
+        $list = $this->createMock(AnyType::class);
 
         $this->expectException(TypeError::class);
 

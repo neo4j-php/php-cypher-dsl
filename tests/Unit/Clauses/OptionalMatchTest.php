@@ -24,7 +24,6 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\OptionalMatchClause;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
@@ -35,7 +34,6 @@ use WikibaseSolutions\CypherDSL\Patterns\Relationship;
  */
 class OptionalMatchTest extends TestCase
 {
-    use TestHelper;
 
     public function testEmptyClause(): void
     {

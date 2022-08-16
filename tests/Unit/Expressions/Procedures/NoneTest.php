@@ -19,39 +19,39 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Procedures;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\None;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\None
  */
 class NoneTest extends TestCase
 {
-    use TestHelper;
 
     public function testToQuery()
     {
-        $variable = $this->getQueryConvertibleMock(Variable::class, "variable");
-        $list = $this->getQueryConvertibleMock(ListType::class, "list");
-        $predicate = $this->getQueryConvertibleMock(AnyType::class, "predicate");
+        $variable = new Variable("variable");
+        $list = new List_([new String_('foo'), new String_('bar')]);
+        $predicate = $this->createMock(AnyType::class);
+        $predicate->method('toQuery')->willReturn('predicate');
 
         $all = new None($variable, $list, $predicate);
 
-        $this->assertSame("none(variable IN list WHERE predicate)", $all->toQuery());
+        $this->assertSame("none(variable IN ['foo', 'bar'] WHERE predicate)", $all->toQuery());
     }
 
     public function testDoesNotAcceptAnyTypeAsVariable()
     {
-        $variable = $this->getQueryConvertibleMock(AnyType::class, "variable");
-        $list = $this->getQueryConvertibleMock(ListType::class, "list");
-        $predicate = $this->getQueryConvertibleMock(AnyType::class, "predicate");
+        $variable = $this->createMock(AnyType::class);
+        $list = new List_;
+        $predicate = $this->createMock(AnyType::class);
 
         $this->expectException(TypeError::class);
 
@@ -62,9 +62,9 @@ class NoneTest extends TestCase
 
     public function testDoesNotAcceptAnyTypeAsList()
     {
-        $variable = $this->getQueryConvertibleMock(Variable::class, "variable");
-        $list = $this->getQueryConvertibleMock(AnyType::class, "list");
-        $predicate = $this->getQueryConvertibleMock(AnyType::class, "predicate");
+        $variable = new Variable("variable");
+        $list = $this->createMock(AnyType::class);
+        $predicate = $this->createMock(AnyType::class);
 
         $this->expectException(TypeError::class);
 

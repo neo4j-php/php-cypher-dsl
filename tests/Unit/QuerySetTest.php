@@ -5,6 +5,9 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 use TypeError;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Query;
+use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
@@ -17,7 +20,7 @@ class QuerySetTest extends TestCase
 {
 	public function testSet(): void
 	{
-		$expression = $this->getQueryConvertibleMock(PropertyReplacement::class, "a.age");
+		$expression = new PropertyReplacement(new Property(new Variable('a'), 'age'),new Integer(55));
 
 		$statement = (new Query())->set($expression)->build();
 
@@ -30,7 +33,7 @@ class QuerySetTest extends TestCase
 
 	public function testSetRejectsAnyType(): void
 	{
-		$m = $this->getQueryConvertibleMock(AnyType::class, 'foo');
+		$m = $this->createMock(AnyType::class);
 
 		$this->expectException(TypeError::class);
 
@@ -39,7 +42,7 @@ class QuerySetTest extends TestCase
 
 	public function testSetWithLabel(): void
 	{
-		$label = Query::variable("n")->labeled(["LABEL1", "LABEL2", "LABEL3"]);
+		$label = Query::variable("n")->labeled("LABEL1", "LABEL2", "LABEL3");
 
 		$statement = (new Query())->set($label)->build();
 

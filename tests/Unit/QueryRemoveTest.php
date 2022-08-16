@@ -16,7 +16,7 @@ class QueryRemoveTest
 {
 	public function testRemove(): void
 	{
-		$expression = $this->getQueryConvertibleMock(Property::class, "a.age");
+		$expression = new Property(new Variable('a'),'age');
 
 		$statement = (new Query())->remove($expression)->build();
 
@@ -25,7 +25,7 @@ class QueryRemoveTest
 
 	public function testRemoveRejectsAnyType(): void
 	{
-		$m = $this->getQueryConvertibleMock(AnyType::class, 'foo');
+		$m = $this->createMock(AnyType::class);
 
 		$this->expectException(TypeError::class);
 

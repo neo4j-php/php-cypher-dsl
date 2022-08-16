@@ -19,35 +19,49 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\PatternTraits;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
+use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PatternTrait;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Patterns\Pattern
+ * @covers \WikibaseSolutions\CypherDSL\Traits\PatternTraits\PatternTrait
  */
-class PatternTest extends TestCase
+class PatternTraitTest extends TestCase
 {
+    /**
+     * @var Pattern
+     */
+    private Pattern $stub;
+
+    public function setUp(): void
+    {
+        $this->stub = new class () implements Pattern {
+            use PatternTrait;
+            public function toQuery(): string
+            {
+                return 'FooBar';
+            }
+        };
+    }
     public function testSetVariable(): void
     {
-        $stub = $this->getMockForAbstractClass(Pattern::class);
-        $stub->withVariable("hello");
+        $this->stub->withVariable("hello");
 
-        $this->assertSame("hello", $stub->getVariable()->getName());
+        $this->assertSame("hello", $this->stub->getVariable()->getName());
 
         $variable = new Variable("hello");
-        $stub->withVariable($variable);
+        $this->stub->withVariable($variable);
 
-        $this->assertSame($variable, $stub->getVariable());
+        $this->assertSame($variable, $this->stub->getVariable());
     }
 
     public function testGetVariableWithoutVariable(): void
     {
-        $stub = $this->getMockForAbstractClass(Pattern::class);
-        $variable = $stub->getVariable();
+        $variable = $this->stub->getVariable();
 
         $this->assertInstanceOf(Variable::class, $variable);
         $this->assertStringMatchesFormat("var%s", $variable->getName());
@@ -55,10 +69,8 @@ class PatternTest extends TestCase
 
 	public function testDoesNotAcceptAnyType(): void
 	{
-		$stub = $this->getMockForAbstractClass(Pattern::class);
-
 		$this->expectException(TypeError::class);
 
-		$stub->withVariable(new \stdClass());
+		$this->stub->withVariable(new \stdClass());
 	}
 }

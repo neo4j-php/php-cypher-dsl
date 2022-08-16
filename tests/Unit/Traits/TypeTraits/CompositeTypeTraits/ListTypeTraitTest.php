@@ -19,22 +19,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\TypeTraits;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\In;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\In;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait
  */
 class ListTypeTraitTest extends TestCase
 {
-    use TestHelper;
-
     /**
      * @var MockObject|PropertyType
      */
@@ -47,8 +45,8 @@ class ListTypeTraitTest extends TestCase
 
     public function setUp(): void
     {
-        $this->a = $this->getQueryConvertibleMock(PropertyType::class, "a");
-        $this->b = $this->getQueryConvertibleMock(ListType::class, "[]");
+        $this->a = new Property(new Variable('foo'), 'bar');
+        $this->b = new List_;
     }
 
     public function testHas()

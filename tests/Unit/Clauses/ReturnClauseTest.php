@@ -23,7 +23,6 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\ReturnClause;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -31,7 +30,6 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 class ReturnClauseTest extends TestCase
 {
-    use TestHelper;
 
     public function testEmptyClause(): void
     {
@@ -45,7 +43,7 @@ class ReturnClauseTest extends TestCase
     public function testSingleColumn(): void
     {
         $return = new ReturnClause();
-        $column = $this->getQueryConvertibleMock(AnyType::class, "a");
+        $column = $this->createMock(AnyType::class);
         $return->addColumn($column);
 
         $this->assertSame("RETURN a", $return->toQuery());
@@ -57,9 +55,9 @@ class ReturnClauseTest extends TestCase
     {
         $return = new ReturnClause();
 
-        $columnA = $this->getQueryConvertibleMock(AnyType::class, "a");
-        $columnB = $this->getQueryConvertibleMock(AnyType::class, "b");
-        $columnC = $this->getQueryConvertibleMock(AnyType::class, "c");
+        $columnA = $this->createMock(AnyType::class);
+        $columnB = $this->createMock(AnyType::class);
+        $columnC = $this->createMock(AnyType::class);
 
         $return->addColumn($columnA);
         $return->addColumn($columnB);
@@ -73,7 +71,7 @@ class ReturnClauseTest extends TestCase
     public function testSingleAlias(): void
     {
         $return = new ReturnClause();
-        $column = $this->getQueryConvertibleMock(AnyType::class, "a");
+        $column = $this->createMock(AnyType::class);
         $return->addColumn($column, "b");
 
         $this->assertSame("RETURN a AS b", $return->toQuery());
@@ -84,8 +82,8 @@ class ReturnClauseTest extends TestCase
     public function testMultipleAliases(): void
     {
         $return = new ReturnClause();
-        $columnA = $this->getQueryConvertibleMock(AnyType::class, "a");
-        $columnB = $this->getQueryConvertibleMock(AnyType::class, "b");
+        $columnA = $this->createMock(AnyType::class);
+        $columnB = $this->createMock(AnyType::class);
         $return->addColumn($columnA, "b");
         $return->addColumn($columnB, "c");
 
@@ -97,9 +95,9 @@ class ReturnClauseTest extends TestCase
     public function testMixedAliases(): void
     {
         $return = new ReturnClause();
-        $columnA = $this->getQueryConvertibleMock(AnyType::class, "a");
-        $columnB = $this->getQueryConvertibleMock(AnyType::class, "c");
-        $columnC = $this->getQueryConvertibleMock(AnyType::class, "b");
+        $columnA = $this->createMock(AnyType::class);
+        $columnB = $this->createMock(AnyType::class);
+        $columnC = $this->createMock(AnyType::class);
         $return->addColumn($columnA, "b");
         $return->addColumn($columnB);
         $return->addColumn($columnC, "c");
@@ -112,7 +110,7 @@ class ReturnClauseTest extends TestCase
     public function testAliasIsEscaped(): void
     {
         $return = new ReturnClause();
-        $column = $this->getQueryConvertibleMock(AnyType::class, "a");
+        $column = $this->createMock(AnyType::class);
         $return->addColumn($column, ":");
 
         $this->assertSame("RETURN a AS `:`", $return->toQuery());
@@ -123,7 +121,7 @@ class ReturnClauseTest extends TestCase
     public function testReturnDistinct(): void
     {
         $return = new ReturnClause();
-        $column = $this->getQueryConvertibleMock(AnyType::class, "a");
+        $column = $this->createMock(AnyType::class);
         $return->addColumn($column);
         $return->setDistinct();
 
@@ -138,7 +136,7 @@ class ReturnClauseTest extends TestCase
     public function testAcceptsAnyType(): void
     {
         $return = new ReturnClause();
-        $return->addColumn($this->getQueryConvertibleMock(AnyType::class, "a"));
+        $return->addColumn($this->createMock(AnyType::class));
         $return->setDistinct();
 
         $return->toQuery();

@@ -29,15 +29,14 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Literals\Map
  */
-class PropertyMapTest extends TestCase
+class MapTest extends TestCase
 {
-    use TestHelper;
 
     public function testEmpty()
     {
-        $propertyMap = new Map([]);
+        $map = new Map([]);
 
-        $this->assertSame("{}", $propertyMap->toQuery());
+        $this->assertSame("{}", $map->toQuery());
     }
 
     /**
@@ -47,9 +46,9 @@ class PropertyMapTest extends TestCase
      */
     public function testNumericalKeys(array $properties, string $expected)
     {
-        $propertyMap = new Map($properties);
+        $map = new Map($properties);
 
-        $this->assertSame($expected, $propertyMap->toQuery());
+        $this->assertSame($expected, $map->toQuery());
     }
 
     /**
@@ -59,75 +58,75 @@ class PropertyMapTest extends TestCase
      */
     public function testStringKeys(array $properties, string $expected)
     {
-        $propertyMap = new Map($properties);
+        $map = new Map($properties);
 
-        $this->assertSame($expected, $propertyMap->toQuery());
+        $this->assertSame($expected, $map->toQuery());
     }
 
     /**
-     * @dataProvider provideNestedPropertyMapsData
+     * @dataProvider provideNestedMapsData
      * @param array $properties
      * @param string $expected
      */
-    public function testNestedPropertyMaps(array $properties, string $expected)
+    public function testNestedMaps(array $properties, string $expected)
     {
-        $propertyMap = new Map($properties);
+        $map = new Map($properties);
 
-        $this->assertSame($expected, $propertyMap->toQuery());
+        $this->assertSame($expected, $map->toQuery());
     }
 
     public function testMergeWith()
     {
-        $propertyMap = new Map(["foo" => new String_("bar")]);
-        $propertyMap->mergeWith(new Map(["boo" => new String_("far")]));
+        $map = new Map(["foo" => new String_("bar")]);
+        $map->mergeWith(new Map(["boo" => new String_("far")]));
 
-        $this->assertSame("{foo: 'bar', boo: 'far'}", $propertyMap->toQuery());
+        $this->assertSame("{foo: 'bar', boo: 'far'}", $map->toQuery());
 
-        $propertyMap->mergeWith($propertyMap);
+        $map->mergeWith($map);
 
-        $this->assertSame("{foo: 'bar', boo: 'far'}", $propertyMap->toQuery());
+        $this->assertSame("{foo: 'bar', boo: 'far'}", $map->toQuery());
     }
 
-    public function testAddProperty()
+    public function testAdd()
     {
-        $propertyMap = new Map(["foo" => new String_("bar")]);
-        $propertyMap->addProperty('foo', new String_("baz"));
+        $map = new Map(["foo" => new String_("bar")]);
+        $map->add('foo', new String_("baz"));
 
-        $this->assertSame("{foo: 'baz'}", $propertyMap->toQuery());
+        $this->assertSame("{foo: 'baz'}", $map->toQuery());
 
-        $propertyMap->addProperty('boo', new String_("far"));
+        $map->add('boo', new String_("far"));
 
-        $this->assertSame("{foo: 'baz', boo: 'far'}", $propertyMap->toQuery());
+        $this->assertSame("{foo: 'baz', boo: 'far'}", $map->toQuery());
 
-        $propertyMap->addProperty('boo', false);
+        $map->add('boo', false);
 
-        $this->assertSame("{foo: 'baz', boo: false}", $propertyMap->toQuery());
+        $this->assertSame("{foo: 'baz', boo: false}", $map->toQuery());
     }
 
     public function provideNumericalKeysData(): array
     {
         return [
-            [[$this->getQueryConvertibleMock(AnyType::class, "'a'")], "{`0`: 'a'}"],
-            [[$this->getQueryConvertibleMock(AnyType::class, "'a'"), $this->getQueryConvertibleMock(AnyType::class, "'b'")], "{`0`: 'a', `1`: 'b'}"],
+            [[0 => new String_('a')], "{`0`: 'a'}"],
+            [[0 => new String_('a'), 1 => new String_('b')], "{`0`: 'a', `1`: 'b'}"],
         ];
     }
 
     public function provideStringKeysData(): array
     {
         return [
-            [['a' => $this->getQueryConvertibleMock(AnyType::class, "'a'")], "{a: 'a'}"],
-            [['a' => $this->getQueryConvertibleMock(AnyType::class, "'a'"), 'b' => $this->getQueryConvertibleMock(AnyType::class, "'b'")], "{a: 'a', b: 'b'}"],
-            [['a' => $this->getQueryConvertibleMock(AnyType::class, "'b'")], "{a: 'b'}"],
-            [[':' => $this->getQueryConvertibleMock(AnyType::class, "'a'")], "{`:`: 'a'}"],
+            [['a' => new String_('a')], "{a: 'a'}"],
+            [['a' => new String_('a'), 'b' => new String_('b')], "{a: 'a', b: 'b'}"],
+            [['a' => new String_('b')], "{a: 'b'}"],
+            [[':' => new String_('a')], "{`:`: 'a'}"],
         ];
     }
 
-    public function provideNestedPropertyMapsData()
+    public function provideNestedMapsData()
     {
         return [
             [['a' => new Map([])], "{a: {}}"],
-            [['a' => new Map(['a' => new Map(['a' => $this->getQueryConvertibleMock(AnyType::class, "'b'")])])], "{a: {a: {a: 'b'}}}"],
-            [['a' => new Map(['b' => $this->getQueryConvertibleMock(AnyType::class, "'c'")]), 'b' => $this->getQueryConvertibleMock(AnyType::class, "'d'")], "{a: {b: 'c'}, b: 'd'}"],
+            [['a' => new Map(['a' => new Map(['a' => new String_('b')])])], "{a: {a: {a: 'b'}}}"],
+            [['a' => new Map(['b' => new String_('c')]), 'b' => new String_('d')], "{a: {b: 'c'}, b: 'd'}"],
         ];
     }
 }

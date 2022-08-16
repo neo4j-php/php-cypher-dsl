@@ -114,7 +114,7 @@ class QueryCallTest extends TestCase
 	public function testReturnsSameInstance(): void
 	{
 		$expected = Query::new();
-		$actual = $expected->call([]);
+		$actual = $expected->call(Query::new());
 
 		$this->assertSame($expected, $actual);
 	}

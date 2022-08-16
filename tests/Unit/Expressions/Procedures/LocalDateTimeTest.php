@@ -19,35 +19,34 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Procedures;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\LocalDateTime;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\LocalDateTime
  */
 class LocalDateTimeTest extends TestCase
 {
-    use TestHelper;
 
     public function testToQuery()
     {
-        $map = $this->getQueryConvertibleMock(MapType::class, "map");
+        $map = new Map(['foo' => new String_('bar')]);
 
-        $date = new LocalDateTime($map);
+        $dateTime = new LocalDateTime($map);
 
-        $this->assertSame("localdatetime(map)", $date->toQuery());
+        $this->assertSame("localdatetime({foo: 'bar'})", $dateTime->toQuery());
     }
 
     public function testEmpty()
     {
-        $date = new LocalDateTime();
+        $dateTime = new LocalDateTime();
 
-        $this->assertSame("localdatetime()", $date->toQuery());
+        $this->assertSame("localdatetime()", $dateTime->toQuery());
     }
 
     /**
@@ -55,10 +54,10 @@ class LocalDateTimeTest extends TestCase
      */
     public function testAcceptsAnyType()
     {
-        $map = $this->getQueryConvertibleMock(AnyType::class, "map");
+        $map = $this->createMock(AnyType::class);
 
-        $date = new LocalDateTime($map);
+        $dateTime = new LocalDateTime($map);
 
-        $date->toQuery();
+        $dateTime->toQuery();
     }
 }

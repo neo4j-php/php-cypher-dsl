@@ -6,8 +6,9 @@ use TypeError;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
+use WikibaseSolutions\CypherDSL\Patterns\Node;
+use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 
 /**
  * Tests the "create" method of the Query class.
@@ -18,7 +19,7 @@ class QueryCreateTest extends TestCase
 {
 	public function testCreate(): void
 	{
-		$m = $this->getQueryConvertibleMock(PathType::class, "(m:Movie)-[:RELATED]->(b)");
+		$m = new Path([(new Node('Movie'))->withVariable('m'),(new Node)->withVariable('b')],[new Relationship(Relationship::DIR_RIGHT,'RELATED')]);
 
 		$statement = (new Query())->create($m)->build();
 
@@ -34,15 +35,15 @@ class QueryCreateTest extends TestCase
 	 */
 	public function testCreateTypeAcceptance(): void
 	{
-		$path = $this->getQueryConvertibleMock(PathType::class, '(a)-->(b)');
-		$node = $this->getQueryConvertibleMock(NodeType::class, '(a)');
+		$path = new Path([new Node, new Node], [new Relationship(Relationship::DIR_UNI)]);
+		$node = (new Node)->withVariable('a');
 
 		(new Query())->create([$path, $node]);
 	}
 
 	public function testCreateRejectsAnyType(): void
 	{
-		$m = $this->getQueryConvertibleMock(AnyType::class, 'foo');
+		$m = $this->createMock(AnyType::class);
 
 		$this->expectException(TypeError::class);
 

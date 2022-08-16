@@ -23,25 +23,22 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Expressions\Not;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Negation;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Not
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Negation
  */
-class NotTest extends TestCase
+class NegationTest extends TestCase
 {
-    use TestHelper;
-
     public function testToQuery()
     {
-        $not = new Not($this->getQueryConvertibleMock(BooleanType::class, "true"));
+        $not = new Negation(new Boolean(true));
 
         $this->assertSame("(NOT true)", $not->toQuery());
 
-        $not = new Not($not);
+        $not = new Negation($not);
 
         $this->assertSame("(NOT (NOT true))", $not->toQuery());
     }
@@ -50,7 +47,7 @@ class NotTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $and = new Not($this->getQueryConvertibleMock(AnyType::class, "true"));
+        $and = new Negation($this->createMock(AnyType::class));
 
         $and->toQuery();
     }

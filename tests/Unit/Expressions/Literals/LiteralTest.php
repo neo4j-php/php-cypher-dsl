@@ -30,18 +30,17 @@ use WikibaseSolutions\CypherDSL\Expressions\Procedures\LocalTime;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Point;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Time;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Number;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Literals\Literal
  */
 class LiteralTest extends TestCase
 {
-    use TestHelper;
 
     public function testLiteralString(): void
     {
@@ -61,14 +60,14 @@ class LiteralTest extends TestCase
     {
         $integer = Literal::literal(1);
 
-        $this->assertInstanceOf(Number::class, $integer);
+        $this->assertInstanceOf(Integer::class, $integer);
     }
 
     public function testLiteralFloat(): void
     {
         $float = Literal::literal(1.0);
 
-        $this->assertInstanceOf(Number::class, $float);
+        $this->assertInstanceOf(Float_::class, $float);
     }
 
     public function testStringable(): void
@@ -105,69 +104,69 @@ class LiteralTest extends TestCase
     {
         $decimal = Literal::decimal(1);
 
-        $this->assertInstanceOf(Number::class, $decimal);
+        $this->assertInstanceOf(Integer::class, $decimal);
 
         $decimal = Literal::decimal(1.0);
 
-        $this->assertInstanceOf(Number::class, $decimal);
+        $this->assertInstanceOf(Float_::class, $decimal);
     }
 
     public function testPoint2d(): void
     {
         $point = Literal::point2d(1, 2);
 
-        $this->assertEquals(new Point(new Map(["x" => new Number(1), "y" => new Number(2), "crs" => new String_("cartesian")])), $point);
+        $this->assertEquals(new Point(new Map(["x" => new Integer(1), "y" => new Integer(2), "crs" => new String_("cartesian")])), $point);
 
         $point = Literal::point2d(
-            new Number(1),
-            new Number(2)
+            new Integer(1),
+            new Integer(2)
         );
 
-        $this->assertEquals(new Point(new Map(["x" => new Number(1), "y" => new Number(2), "crs" => new String_("cartesian")])), $point);
+        $this->assertEquals(new Point(new Map(["x" => new Integer(1), "y" => new Integer(2), "crs" => new String_("cartesian")])), $point);
     }
 
     public function testPoint3d(): void
     {
         $point = Literal::point3d(1, 2, 3);
 
-        $this->assertEquals(new Point(new Map(["x" => new Number(1), "y" => new Number(2), "z" => new Number(3), "crs" => new String_("cartesian-3D")])), $point);
+        $this->assertEquals(new Point(new Map(["x" => new Integer(1), "y" => new Integer(2), "z" => new Integer(3), "crs" => new String_("cartesian-3D")])), $point);
 
         $point = Literal::point3d(
-            new Number(1),
-            new Number(2),
-            new Number(3)
+            new Integer(1),
+            new Integer(2),
+            new Integer(3)
         );
 
-        $this->assertEquals(new Point(new Map(["x" => new Number(1), "y" => new Number(2), "z" => new Number(3), "crs" => new String_("cartesian-3D")])), $point);
+        $this->assertEquals(new Point(new Map(["x" => new Integer(1), "y" => new Integer(2), "z" => new Integer(3), "crs" => new String_("cartesian-3D")])), $point);
     }
 
     public function testPoint2dWGS84(): void
     {
         $point = Literal::point2dWGS84(1, 2);
 
-        $this->assertEquals(new Point(new Map(["longitude" => new Number(1), "latitude" => new Number(2), "crs" => new String_("WGS-84")])), $point);
+        $this->assertEquals(new Point(new Map(["longitude" => new Integer(1), "latitude" => new Integer(2), "crs" => new String_("WGS-84")])), $point);
 
         $point = Literal::point2dWGS84(
-            new Number(1),
-            new Number(2)
+            new Integer(1),
+            new Integer(2)
         );
 
-        $this->assertEquals(new Point(new Map(["longitude" => new Number(1), "latitude" => new Number(2), "crs" => new String_("WGS-84")])), $point);
+        $this->assertEquals(new Point(new Map(["longitude" => new Integer(1), "latitude" => new Integer(2), "crs" => new String_("WGS-84")])), $point);
     }
 
     public function testPoint3dWGS84(): void
     {
         $point = Literal::point3dWGS84(1, 2, 3);
 
-        $this->assertEquals(new Point(new Map(["longitude" => new Number(1), "latitude" => new Number(2), "height" => new Number(3), "crs" => new String_("WGS-84-3D")])), $point);
+        $this->assertEquals(new Point(new Map(["longitude" => new Integer(1), "latitude" => new Integer(2), "height" => new Integer(3), "crs" => new String_("WGS-84-3D")])), $point);
 
         $point = Literal::point3dWGS84(
-            new Number(1),
-            new Number(2),
-            new Number(3)
+            new Integer(1),
+            new Integer(2),
+            new Integer(3)
         );
 
-        $this->assertEquals(new Point(new Map(["longitude" => new Number(1), "latitude" => new Number(2), "height" => new Number(3), "crs" => new String_("WGS-84-3D")])), $point);
+        $this->assertEquals(new Point(new Map(["longitude" => new Integer(1), "latitude" => new Integer(2), "height" => new Integer(3), "crs" => new String_("WGS-84-3D")])), $point);
     }
 
     public function testDate(): void
@@ -606,12 +605,12 @@ class LiteralTest extends TestCase
     public function provideDateYMDData(): array
     {
         return [
-            [2000, null, null, new Date(new Map(["year" => new Number(2000)]))],
-            [2000, 12, null, new Date(new Map(["year" => new Number(2000), "month" => new Number(12)]))],
-            [2000, 12, 17, new Date(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(17)]))],
-            [new Number(2000), null, null, new Date(new Map(["year" => new Number(2000)]))],
-            [new Number(2000), new Number(12), null, new Date(new Map(["year" => new Number(2000), "month" => new Number(12)]))],
-            [new Number(2000), new Number(12), new Number(17), new Date(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(17)]))],
+            [2000, null, null, new Date(new Map(["year" => new Integer(2000)]))],
+            [2000, 12, null, new Date(new Map(["year" => new Integer(2000), "month" => new Integer(12)]))],
+            [2000, 12, 17, new Date(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(17)]))],
+            [new Integer(2000), null, null, new Date(new Map(["year" => new Integer(2000)]))],
+            [new Integer(2000), new Integer(12), null, new Date(new Map(["year" => new Integer(2000), "month" => new Integer(12)]))],
+            [new Integer(2000), new Integer(12), new Integer(17), new Date(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(17)]))],
 
         ];
     }
@@ -619,12 +618,12 @@ class LiteralTest extends TestCase
     public function provideDateYWDData(): array
     {
         return [
-            [2000, null, null, new Date(new Map(["year" => new Number(2000)]))],
-            [2000, 12, null, new Date(new Map(["year" => new Number(2000), "week" => new Number(12)]))],
-            [2000, 12, 17, new Date(new Map(["year" => new Number(2000), "week" => new Number(12), "dayOfWeek" => new Number(17)]))],
-            [new Number(2000), null, null, new Date(new Map(["year" => new Number(2000)]))],
-            [new Number(2000), new Number(12), null, new Date(new Map(["year" => new Number(2000), "week" => new Number(12)]))],
-            [new Number(2000), new Number(12), new Number(17), new Date(new Map(["year" => new Number(2000), "week" => new Number(12), "dayOfWeek" => new Number(17)]))],
+            [2000, null, null, new Date(new Map(["year" => new Integer(2000)]))],
+            [2000, 12, null, new Date(new Map(["year" => new Integer(2000), "week" => new Integer(12)]))],
+            [2000, 12, 17, new Date(new Map(["year" => new Integer(2000), "week" => new Integer(12), "dayOfWeek" => new Integer(17)]))],
+            [new Integer(2000), null, null, new Date(new Map(["year" => new Integer(2000)]))],
+            [new Integer(2000), new Integer(12), null, new Date(new Map(["year" => new Integer(2000), "week" => new Integer(12)]))],
+            [new Integer(2000), new Integer(12), new Integer(17), new Date(new Map(["year" => new Integer(2000), "week" => new Integer(12), "dayOfWeek" => new Integer(17)]))],
 
         ];
     }
@@ -633,28 +632,28 @@ class LiteralTest extends TestCase
     {
         // [$year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
-            [2000, 12, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12)]))],
-            [2000, 12, 15, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15)]))],
-            [2000, 12, 15, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8)]))],
-            [2000, 12, 15, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25)]))],
-            [2000, 12, 15, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
-            [2000, 12, 15, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
-            [2000, 12, 15, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
-            [2000, 12, 15, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
-            [2000, 12, 15, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
+            [2000, null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000)]))],
+            [2000, 12, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12)]))],
+            [2000, 12, 15, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15)]))],
+            [2000, 12, 15, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8)]))],
+            [2000, 12, 15, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25)]))],
+            [2000, 12, 15, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
+            [2000, 12, 15, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31), "timezone" => new String_("America/Los Angeles")]))],
 
             // types
-            [new Number(2000), null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
-            [new Number(2000), new Number(12), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12)]))],
-            [new Number(2000), new Number(12), new Number(15), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15)]))],
-            [new Number(2000), new Number(12), new Number(15), new Number(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8)]))],
-            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25)]))],
-            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
-            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), new Number(18), null, null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
-            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
-            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), null, new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
-            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
+            [new Integer(2000), null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000)]))],
+            [new Integer(2000), new Integer(12), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12)]))],
+            [new Integer(2000), new Integer(12), new Integer(15), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15)]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8)]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25)]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31), "timezone" => new String_("America/Los Angeles")]))],
         ];
     }
 
@@ -662,28 +661,28 @@ class LiteralTest extends TestCase
     {
         // [$year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
-            [2000, 9, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9)]))],
-            [2000, 9, 4, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4)]))],
-            [2000, 9, 4, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8)]))],
-            [2000, 9, 4, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
-            [2000, 9, 4, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
-            [2000, 9, 4, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
-            [2000, 9, 4, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
-            [2000, 9, 4, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
-            [2000, 9, 4, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
+            [2000, null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000)]))],
+            [2000, 9, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9)]))],
+            [2000, 9, 4, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4)]))],
+            [2000, 9, 4, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8)]))],
+            [2000, 9, 4, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25)]))],
+            [2000, 9, 4, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
+            [2000, 9, 4, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31), "timezone" => new String_("America/Los Angeles")]))],
 
             // types
-            [new Number(2000), null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
-            [new Number(2000), new Number(9), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9)]))],
-            [new Number(2000), new Number(9), new Number(4), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4)]))],
-            [new Number(2000), new Number(9), new Number(4), new Number(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8)]))],
-            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
-            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
-            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), null, null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
-            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
-            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), null, new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
-            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
+            [new Integer(2000), null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000)]))],
+            [new Integer(2000), new Integer(9), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9)]))],
+            [new Integer(2000), new Integer(9), new Integer(4), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4)]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8)]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25)]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31), "timezone" => new String_("America/Los Angeles")]))],
         ];
     }
 
@@ -691,28 +690,28 @@ class LiteralTest extends TestCase
     {
         // [$year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
-            [2000, 3, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3)]))],
-            [2000, 3, 4, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4)]))],
-            [2000, 3, 4, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8)]))],
-            [2000, 3, 4, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
-            [2000, 3, 4, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
-            [2000, 3, 4, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
-            [2000, 3, 4, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
-            [2000, 3, 4, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
-            [2000, 3, 4, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
+            [2000, null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000)]))],
+            [2000, 3, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3)]))],
+            [2000, 3, 4, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4)]))],
+            [2000, 3, 4, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8)]))],
+            [2000, 3, 4, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25)]))],
+            [2000, 3, 4, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
+            [2000, 3, 4, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31), "timezone" => new String_("America/Los Angeles")]))],
 
             // types
-            [new Number(2000), null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
-            [new Number(2000), new Number(3), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3)]))],
-            [new Number(2000), new Number(3), new Number(4), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4)]))],
-            [new Number(2000), new Number(3), new Number(4), new Number(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8)]))],
-            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
-            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
-            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), null, null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
-            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
-            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), null, new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
-            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
+            [new Integer(2000), null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000)]))],
+            [new Integer(2000), new Integer(3), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3)]))],
+            [new Integer(2000), new Integer(3), new Integer(4), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4)]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8)]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25)]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31), "timezone" => new String_("America/Los Angeles")]))],
         ];
     }
 
@@ -720,26 +719,26 @@ class LiteralTest extends TestCase
     {
         // [$year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
-            [2000, 3, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3)]))],
-            [2000, 3, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8)]))],
-            [2000, 3, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25)]))],
-            [2000, 3, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
-            [2000, 3, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
-            [2000, 3, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
-            [2000, 3, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
-            [2000, 3, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
+            [2000, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000)]))],
+            [2000, 3, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3)]))],
+            [2000, 3, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8)]))],
+            [2000, 3, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25)]))],
+            [2000, 3, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
+            [2000, 3, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
+            [2000, 3, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
+            [2000, 3, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
+            [2000, 3, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31), "timezone" => new String_("America/Los Angeles")]))],
 
             // types
-            [new Number(2000), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000)]))],
-            [new Number(2000), new Number(3), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3)]))],
-            [new Number(2000), new Number(3), new Number(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8)]))],
-            [new Number(2000), new Number(3), new Number(8), new Number(25), null, null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25)]))],
-            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), null, null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
-            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), new Number(18), null, null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
-            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
-            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), null, new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
-            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31), "timezone" => new String_("America/Los Angeles")]))],
+            [new Integer(2000), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000)]))],
+            [new Integer(2000), new Integer(3), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3)]))],
+            [new Integer(2000), new Integer(3), new Integer(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8)]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25)]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31), "timezone" => new String_("America/Los Angeles")]))],
         ];
     }
 
@@ -747,26 +746,26 @@ class LiteralTest extends TestCase
     {
         // [$year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000)]))],
-            [2000, 12, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12)]))],
-            [2000, 12, 15, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15)]))],
-            [2000, 12, 15, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8)]))],
-            [2000, 12, 15, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25)]))],
-            [2000, 12, 15, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
-            [2000, 12, 15, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
-            [2000, 12, 15, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
-            [2000, 12, 15, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [2000, null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000)]))],
+            [2000, 12, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12)]))],
+            [2000, 12, 15, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15)]))],
+            [2000, 12, 15, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8)]))],
+            [2000, 12, 15, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25)]))],
+            [2000, 12, 15, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
+            [2000, 12, 15, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
 
             // types
-            [new Number(2000), null, null, null, null, null, null, null, null,new LocalDateTime(new Map(["year" => new Number(2000)]))],
-            [new Number(2000), new Number(12), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12)]))],
-            [new Number(2000), new Number(12), new Number(15), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15)]))],
-            [new Number(2000), new Number(12), new Number(15), new Number(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8)]))],
-            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25)]))],
-            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
-            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), new Number(18), null, null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
-            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
-            [new Number(2000), new Number(12), new Number(15), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new LocalDateTime(new Map(["year" => new Number(2000), "month" => new Number(12), "day" => new Number(15), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [new Integer(2000), null, null, null, null, null, null, null, null,new LocalDateTime(new Map(["year" => new Integer(2000)]))],
+            [new Integer(2000), new Integer(12), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12)]))],
+            [new Integer(2000), new Integer(12), new Integer(15), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15)]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8)]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25)]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
         ];
     }
 
@@ -774,54 +773,53 @@ class LiteralTest extends TestCase
     {
         // [$year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000)]))],
-            [2000, 9, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9)]))],
-            [2000, 9, 4, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4)]))],
-            [2000, 9, 4, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8)]))],
-            [2000, 9, 4, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
-            [2000, 9, 4, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
-            [2000, 9, 4, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
-            [2000, 9, 4, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
-            [2000, 9, 4, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [2000, null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000)]))],
+            [2000, 9, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9)]))],
+            [2000, 9, 4, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4)]))],
+            [2000, 9, 4, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8)]))],
+            [2000, 9, 4, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25)]))],
+            [2000, 9, 4, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
+            [2000, 9, 4, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
 
             // types
-            [new Number(2000), null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000)]))],
-            [new Number(2000), new Number(9), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9)]))],
-            [new Number(2000), new Number(9), new Number(4), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4)]))],
-            [new Number(2000), new Number(9), new Number(4), new Number(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8)]))],
-            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
-            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
-            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), null, null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
-            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
-            [new Number(2000), new Number(9), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new LocalDateTime(new Map(["year" => new Number(2000), "week" => new Number(9), "dayOfWeek" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [new Integer(2000), null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000)]))],
+            [new Integer(2000), new Integer(9), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9)]))],
+            [new Integer(2000), new Integer(9), new Integer(4), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4)]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8)]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25)]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
         ];
     }
-
 
     public function provideLocalDatetimeYQDData(): array
     {
         // [$year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000)]))],
-            [2000, 3, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3)]))],
-            [2000, 3, 4, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4)]))],
-            [2000, 3, 4, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8)]))],
-            [2000, 3, 4, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
-            [2000, 3, 4, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
-            [2000, 3, 4, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
-            [2000, 3, 4, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
-            [2000, 3, 4, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [2000, null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000)]))],
+            [2000, 3, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3)]))],
+            [2000, 3, 4, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4)]))],
+            [2000, 3, 4, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8)]))],
+            [2000, 3, 4, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25)]))],
+            [2000, 3, 4, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
+            [2000, 3, 4, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
 
             // types
-            [new Number(2000), null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000)]))],
-            [new Number(2000), new Number(3), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3)]))],
-            [new Number(2000), new Number(3), new Number(4), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4)]))],
-            [new Number(2000), new Number(3), new Number(4), new Number(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8)]))],
-            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25)]))],
-            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
-            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), null, null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
-            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
-            [new Number(2000), new Number(3), new Number(4), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new LocalDateTime(new Map(["year" => new Number(2000), "quarter" => new Number(3), "dayOfQuarter" => new Number(4), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [new Integer(2000), null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000)]))],
+            [new Integer(2000), new Integer(3), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3)]))],
+            [new Integer(2000), new Integer(3), new Integer(4), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4)]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8)]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25)]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
         ];
     }
 
@@ -829,24 +827,24 @@ class LiteralTest extends TestCase
     {
         // [$year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000)]))],
-            [2000, 3, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3)]))],
-            [2000, 3, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8)]))],
-            [2000, 3, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25)]))],
-            [2000, 3, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
-            [2000, 3, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
-            [2000, 3, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
-            [2000, 3, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [2000, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000)]))],
+            [2000, 3, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3)]))],
+            [2000, 3, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8)]))],
+            [2000, 3, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25)]))],
+            [2000, 3, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
+            [2000, 3, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
+            [2000, 3, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
+            [2000, 3, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
 
             // types
-            [new Number(2000), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000)]))],
-            [new Number(2000), new Number(3), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3)]))],
-            [new Number(2000), new Number(3), new Number(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8)]))],
-            [new Number(2000), new Number(3), new Number(8), new Number(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25)]))],
-            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), null, null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44)]))],
-            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), new Number(18), null, null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18)]))],
-            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), null, new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6)]))],
-            [new Number(2000), new Number(3), new Number(8), new Number(25), new Number(44), new Number(18), new Number(6), new Number(31), new LocalDateTime(new Map(["year" => new Number(2000), "ordinalDay" => new Number(3), "hour" => new Number(8), "minute" => new Number(25), "second" => new Number(44), "millisecond" => new Number(18), "microsecond" => new Number(6), "nanosecond" => new Number(31)]))],
+            [new Integer(2000), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000)]))],
+            [new Integer(2000), new Integer(3), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3)]))],
+            [new Integer(2000), new Integer(3), new Integer(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8)]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25)]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
         ];
     }
 
@@ -854,20 +852,20 @@ class LiteralTest extends TestCase
     {
         // [$hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
-            [11, null, null, null, null, null, new LocalTime(new Map(["hour" => new Number(11)]))],
-            [11, 23, null, null, null, null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23)]))],
-            [11, 23, 2, null, null, null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2)]))],
-            [11, 23, 2, 54, null, null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54)]))],
-            [11, 23, 2, 54, 8, null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8)]))],
-            [11, 23, 2, 54, 8, 29, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8), "nanosecond" => new Number(29)]))],
+            [11, null, null, null, null, null, new LocalTime(new Map(["hour" => new Integer(11)]))],
+            [11, 23, null, null, null, null, new LocalTime(new Map(["hour" => new Integer(11), "minute" => new Integer(23)]))],
+            [11, 23, 2, null, null, null, new LocalTime(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2)]))],
+            [11, 23, 2, 54, null, null, new LocalTime(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54)]))],
+            [11, 23, 2, 54, 8, null, new LocalTime(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54), "microsecond" => new Integer(8)]))],
+            [11, 23, 2, 54, 8, 29, new LocalTime(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54), "microsecond" => new Integer(8), "nanosecond" => new Integer(29)]))],
 
             // types
-            [new Number(11), null, null, null, null, null, new LocalTime(new Map(["hour" => new Number(11)]))],
-            [new Number(11), new Number(23), null, null, null, null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23)]))],
-            [new Number(11), new Number(23), new Number(2), null, null, null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2)]))],
-            [new Number(11), new Number(23), new Number(2), new Number(54), null, null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54)]))],
-            [new Number(11), new Number(23), new Number(2), new Number(54), new Number(8), null, new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8)]))],
-            [new Number(11), new Number(23), new Number(2), new Number(54), new Number(8), new Number(29), new LocalTime(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8), "nanosecond" => new Number(29)]))],
+            [new Integer(11), null, null, null, null, null, new LocalTime(new Map(["hour" => new Integer(11)]))],
+            [new Integer(11), new Integer(23), null, null, null, null, new LocalTime(new Map(["hour" => new Integer(11), "minute" => new Integer(23)]))],
+            [new Integer(11), new Integer(23), new Integer(2), null, null, null, new LocalTime(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2)]))],
+            [new Integer(11), new Integer(23), new Integer(2), new Integer(54), null, null, new LocalTime(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54)]))],
+            [new Integer(11), new Integer(23), new Integer(2), new Integer(54), new Integer(8), null, new LocalTime(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54), "microsecond" => new Integer(8)]))],
+            [new Integer(11), new Integer(23), new Integer(2), new Integer(54), new Integer(8), new Integer(29), new LocalTime(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54), "microsecond" => new Integer(8), "nanosecond" => new Integer(29)]))],
         ];
     }
 
@@ -875,20 +873,20 @@ class LiteralTest extends TestCase
     {
         // [$hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
-            [11, null, null, null, null, null, new Time(new Map(["hour" => new Number(11)]))],
-            [11, 23, null, null, null, null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23)]))],
-            [11, 23, 2, null, null, null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2)]))],
-            [11, 23, 2, 54, null, null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54)]))],
-            [11, 23, 2, 54, 8, null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8)]))],
-            [11, 23, 2, 54, 8, 29, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8), "nanosecond" => new Number(29)]))],
+            [11, null, null, null, null, null, new Time(new Map(["hour" => new Integer(11)]))],
+            [11, 23, null, null, null, null, new Time(new Map(["hour" => new Integer(11), "minute" => new Integer(23)]))],
+            [11, 23, 2, null, null, null, new Time(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2)]))],
+            [11, 23, 2, 54, null, null, new Time(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54)]))],
+            [11, 23, 2, 54, 8, null, new Time(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54), "microsecond" => new Integer(8)]))],
+            [11, 23, 2, 54, 8, 29, new Time(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54), "microsecond" => new Integer(8), "nanosecond" => new Integer(29)]))],
 
             // types
-            [new Number(11), null, null, null, null, null, new Time(new Map(["hour" => new Number(11)]))],
-            [new Number(11), new Number(23), null, null, null, null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23)]))],
-            [new Number(11), new Number(23), new Number(2), null, null, null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2)]))],
-            [new Number(11), new Number(23), new Number(2), new Number(54), null, null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54)]))],
-            [new Number(11), new Number(23), new Number(2), new Number(54), new Number(8), null, new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8)]))],
-            [new Number(11), new Number(23), new Number(2), new Number(54), new Number(8), new Number(29), new Time(new Map(["hour" => new Number(11), "minute" => new Number(23), "second" => new Number(2), "millisecond" => new Number(54), "microsecond" => new Number(8), "nanosecond" => new Number(29)]))],
+            [new Integer(11), null, null, null, null, null, new Time(new Map(["hour" => new Integer(11)]))],
+            [new Integer(11), new Integer(23), null, null, null, null, new Time(new Map(["hour" => new Integer(11), "minute" => new Integer(23)]))],
+            [new Integer(11), new Integer(23), new Integer(2), null, null, null, new Time(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2)]))],
+            [new Integer(11), new Integer(23), new Integer(2), new Integer(54), null, null, new Time(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54)]))],
+            [new Integer(11), new Integer(23), new Integer(2), new Integer(54), new Integer(8), null, new Time(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54), "microsecond" => new Integer(8)]))],
+            [new Integer(11), new Integer(23), new Integer(2), new Integer(54), new Integer(8), new Integer(29), new Time(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54), "microsecond" => new Integer(8), "nanosecond" => new Integer(29)]))],
         ];
     }
 }

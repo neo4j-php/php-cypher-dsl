@@ -23,7 +23,8 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Number;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
@@ -48,7 +49,7 @@ class NodeTest extends TestCase
     {
         $node = new Node();
 
-        $node->named('abcdr`eer');
+        $node->withVariable('abcdr`eer');
         $this->assertEquals('(`abcdr``eer`)', $node->toQuery());
     }
 
@@ -214,7 +215,7 @@ class NodeTest extends TestCase
 
     public function testGetProperties(): void
     {
-        $properties = new Map(['foo' => 'bar']);
+        $properties = new Map(['foo' => new String_('bar')]);
 
         $node = new Node();
         $node->withProperties($properties);
@@ -296,8 +297,8 @@ class NodeTest extends TestCase
     {
         return [
             ['a', ['a' => new String_('b'), 'b' => new String_('c')], "(a {a: 'b', b: 'c'})"],
-            ['b', ['a' => new Number(0), 'b' => new Number(1)], "(b {a: 0, b: 1})"],
-            ['c', [':' => new List_([new Number(1), new String_('a')])], "(c {`:`: [1, 'a']})"],
+            ['b', ['a' => new Integer(0), 'b' => new Float_(1)], "(b {a: 0, b: 1.0})"],
+            ['c', [':' => new List_([new Integer(1), new String_('a')])], "(c {`:`: [1, 'a']})"],
         ];
     }
 
@@ -305,8 +306,8 @@ class NodeTest extends TestCase
     {
         return [
             ['a', ['a' => new String_('b'), 'b' => new String_('c')], "(:a {a: 'b', b: 'c'})"],
-            ['b', ['a' => new Number(0), 'b' => new Number(1)], "(:b {a: 0, b: 1})"],
-            ['c', [':' => new List_([new Number(1), new String_('a')])], "(:c {`:`: [1, 'a']})"],
+            ['b', ['a' => new Integer(0), 'b' => new Float_(1)], "(:b {a: 0, b: 1.0})"],
+            ['c', [':' => new List_([new Integer(1), new String_('a')])], "(:c {`:`: [1, 'a']})"],
         ];
     }
 
@@ -314,8 +315,8 @@ class NodeTest extends TestCase
     {
         return [
             [['a' => new String_('b'), 'b' => new String_('c')], "({a: 'b', b: 'c'})"],
-            [['a' => new Number(0), 'b' => new Number(1)], "({a: 0, b: 1})"],
-            [[':' => new List_([new Number(1), new String_('a')])], "({`:`: [1, 'a']})"],
+            [['a' => new Integer(0), 'b' => new Float_(1)], "({a: 0, b: 1.0})"],
+            [[':' => new List_([new Integer(1), new String_('a')])], "({`:`: [1, 'a']})"],
         ];
     }
 
@@ -323,8 +324,8 @@ class NodeTest extends TestCase
     {
         return [
             ['a', 'd', ['a' => new String_('b'), 'b' => new String_('c')], "(a:d {a: 'b', b: 'c'})"],
-            ['b', 'e', ['a' => new Number(0), 'b' => new Number(1)], "(b:e {a: 0, b: 1})"],
-            ['c', 'f', [':' => new List_([new Number(1), new String_('a')])], "(c:f {`:`: [1, 'a']})"],
+            ['b', 'e', ['a' => new Integer(0), 'b' => new Float_(1)], "(b:e {a: 0, b: 1.0})"],
+            ['c', 'f', [':' => new List_([new Integer(1), new String_('a')])], "(c:f {`:`: [1, 'a']})"],
         ];
     }
 

@@ -15,7 +15,7 @@ class QueryWithTest extends TestCase
 {
 	public function testWith(): void
 	{
-		$expression = $this->getQueryConvertibleMock(AnyType::class, "a < b");
+		$expression = $this->createMock(AnyType::class);
 
 		$statement = (new Query())->with($expression)->build();
 

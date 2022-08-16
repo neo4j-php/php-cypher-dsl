@@ -23,21 +23,19 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Expressions\Exponentiation;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Exponentiation;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Exponentiation
  */
 class ExponentiationTest extends TestCase
 {
-    use TestHelper;
-
     public function testToQuery(): void
     {
-        $exponentiation = new Exponentiation($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
+        $exponentiation = new Exponentiation(new Integer(10), new Integer(15));
 
         $this->assertSame("(10 ^ 15)", $exponentiation->toQuery());
 
@@ -48,7 +46,7 @@ class ExponentiationTest extends TestCase
 
     public function testToQueryNoParentheses(): void
     {
-        $exponentiation = new Exponentiation($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"), false);
+        $exponentiation = new Exponentiation(new Integer(10), new Integer(15), false);
 
         $this->assertSame("10 ^ 15", $exponentiation->toQuery());
 
@@ -61,7 +59,7 @@ class ExponentiationTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $exponentiation = new Exponentiation($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
+        $exponentiation = new Exponentiation($this->createMock(AnyType::class), $this->createMock(AnyType::class));
 
         $exponentiation->toQuery();
     }

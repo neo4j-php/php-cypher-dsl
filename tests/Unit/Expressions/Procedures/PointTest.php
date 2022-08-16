@@ -19,12 +19,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Procedures;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Point;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
@@ -33,20 +34,19 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  */
 class PointTest extends TestCase
 {
-    use TestHelper;
 
     public function testToQuery()
     {
-        $map = $this->getQueryConvertibleMock(MapType::class, "{latitude: toInteger('1'), longitude: toInteger('1')}");
+        $map = new Map(['latitude' => new Float_(1.5), 'longitude' => new Float_(4.2)]);
 
         $point = new Point($map);
 
-        $this->assertSame("point({latitude: toInteger('1'), longitude: toInteger('1')})", $point->toQuery());
+        $this->assertSame("point({latitude: 1.5, longitude: 4.2})", $point->toQuery());
     }
 
     public function testDoesNotAcceptAnyTypeAsVariable()
     {
-        $map = $this->getQueryConvertibleMock(AnyType::class, "map");
+        $map = $this->createMock(AnyType::class);
 
         $this->expectException(TypeError::class);
 

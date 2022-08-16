@@ -23,36 +23,33 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Expressions\XorOperator;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\ExclusiveDisjunction;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\XorOperator
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\ExclusiveDisjunction
  */
-class XorOperatorTest extends TestCase
+class ExclusiveDisjunctionTest extends TestCase
 {
-    use TestHelper;
-
     public function testToQuery(): void
     {
-        $xor = new XorOperator($this->getQueryConvertibleMock(BooleanType::class, "true"), $this->getQueryConvertibleMock(BooleanType::class, "false"));
+        $xor = new ExclusiveDisjunction(new Boolean(true), new Boolean(false));
 
         $this->assertSame("(true XOR false)", $xor->toQuery());
 
-        $xor = new XorOperator($xor, $xor);
+        $xor = new ExclusiveDisjunction($xor, $xor);
 
         $this->assertSame("((true XOR false) XOR (true XOR false))", $xor->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $xor = new XorOperator($this->getQueryConvertibleMock(BooleanType::class, "true"), $this->getQueryConvertibleMock(BooleanType::class, "false"), false);
+        $xor = new ExclusiveDisjunction(new Boolean(true), new Boolean(false), false);
 
         $this->assertSame("true XOR false", $xor->toQuery());
 
-        $xor = new XorOperator($xor, $xor);
+        $xor = new ExclusiveDisjunction($xor, $xor);
 
         $this->assertSame("(true XOR false XOR true XOR false)", $xor->toQuery());
     }
@@ -61,7 +58,7 @@ class XorOperatorTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $and = new XorOperator($this->getQueryConvertibleMock(AnyType::class, "true"), $this->getQueryConvertibleMock(AnyType::class, "false"));
+        $and = new ExclusiveDisjunction($this->createMock(AnyType::class), $this->createMock(AnyType::class));
 
         $and->toQuery();
     }

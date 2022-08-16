@@ -19,37 +19,36 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\TypeTraits\PropertyTypeTraits;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Addition;
-use WikibaseSolutions\CypherDSL\Expressions\Division;
-use WikibaseSolutions\CypherDSL\Expressions\Exponentiation;
-use WikibaseSolutions\CypherDSL\Expressions\Minus;
-use WikibaseSolutions\CypherDSL\Expressions\Modulo;
-use WikibaseSolutions\CypherDSL\Expressions\Multiplication;
-use WikibaseSolutions\CypherDSL\Expressions\Subtraction;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Addition;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Division;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Exponentiation;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\UnaryMinus;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\ModuloDivision;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Multiplication;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Subtraction;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\NumeralTypeTrait
  */
 class NumeralTypeTraitTest extends TestCase
 {
-    use TestHelper;
 
     /**
-     * @var MockObject|NumeralType
+     * @var NumeralType
      */
-    private $a;
+    private NumeralType $a;
 
     /**
-     * @var MockObject|NumeralType
+     * @var NumeralType
      */
-    private $b;
+    private NumeralType $b;
 
     public function setUp(): void
     {
@@ -61,7 +60,7 @@ class NumeralTypeTraitTest extends TestCase
                 return '10';
             }
         };
-        $this->b = $this->getQueryConvertibleMock(NumeralType::class, "15");
+        $this->b = new Integer(15);
     }
 
     public function testPlus(): void
@@ -134,7 +133,7 @@ class NumeralTypeTraitTest extends TestCase
     {
         $mod = $this->a->mod($this->b);
 
-        $this->assertInstanceOf(Modulo::class, $mod);
+        $this->assertInstanceOf(ModuloDivision::class, $mod);
 
         $this->assertTrue($mod->insertsParentheses());
         $this->assertEquals($this->a, $mod->getLeft());
@@ -145,7 +144,7 @@ class NumeralTypeTraitTest extends TestCase
     {
         $mod = $this->a->mod($this->b, false);
 
-        $this->assertInstanceOf(Modulo::class, $mod);
+        $this->assertInstanceOf(ModuloDivision::class, $mod);
 
         $this->assertFalse($mod->insertsParentheses());
         $this->assertEquals($this->a, $mod->getLeft());
@@ -200,6 +199,6 @@ class NumeralTypeTraitTest extends TestCase
     {
         $negate = $this->a->negate();
 
-        $this->assertInstanceOf(Minus::class, $negate);
+        $this->assertInstanceOf(UnaryMinus::class, $negate);
     }
 }

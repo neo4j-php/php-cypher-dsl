@@ -31,7 +31,6 @@ use WikibaseSolutions\CypherDSL\Query;
  */
 class ExpressionListTest extends TestCase
 {
-    use TestHelper;
 
     public function testEmpty()
     {

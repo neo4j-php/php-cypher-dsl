@@ -19,16 +19,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\TypeTraits\PropertyTypeTraits;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Equality;
-use WikibaseSolutions\CypherDSL\Expressions\In;
-use WikibaseSolutions\CypherDSL\Expressions\Inequality;
-use WikibaseSolutions\CypherDSL\Expressions\IsNotNull;
-use WikibaseSolutions\CypherDSL\Expressions\IsNull;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Equality;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\In;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Inequality;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\IsNotNull;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\IsNull;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
+use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\PropertyTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
@@ -38,22 +41,21 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
  */
 class PropertyTypeTraitTest extends TestCase
 {
-    use TestHelper;
 
     /**
-     * @var MockObject|PropertyType
+     * @var PropertyType
      */
-    private $a;
+    private PropertyType $a;
 
     /**
-     * @var MockObject|PropertyType
+     * @var Property
      */
-    private $b;
+    private Property $b;
 
     /**
-     * @var MockObject|ListType
+     * @var List_
      */
-    private $list;
+    private List_ $list;
 
     public function setUp(): void
     {
@@ -65,8 +67,8 @@ class PropertyTypeTraitTest extends TestCase
                 return '10';
             }
         };
-        $this->b = $this->getQueryConvertibleMock(PropertyType::class, "15");
-        $this->list = $this->getQueryConvertibleMock(ListType::class, "['foobar']");
+        $this->b = new Property(new Variable('foo'), 'bar');
+        $this->list = new List_([new String_('foobar')]);
     }
 
     public function testEquals(): void

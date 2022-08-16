@@ -24,7 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 use DomainException;
 use LogicException;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Number;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
@@ -636,7 +636,7 @@ class RelationshipTest extends TestCase
             [[new String_('a')], Relationship::DIR_LEFT, "<-[{`0`: 'a'}]-"],
             [['a' => new String_('b')], Relationship::DIR_LEFT, "<-[{a: 'b'}]-"],
             [['a' => new String_('b'), new String_('c')], Relationship::DIR_LEFT, "<-[{a: 'b', `0`: 'c'}]-"],
-            [[':' => new Number(12)], Relationship::DIR_LEFT, "<-[{`:`: 12}]-"],
+            [[':' => new Integer(12)], Relationship::DIR_LEFT, "<-[{`:`: 12}]-"],
 			[['a' => 'b', 'c' => 12, 'd' => 12.38], Relationship::DIR_LEFT, "<-[{a: 'b', c: 12, d: 12.38}]-"]
         ];
     }

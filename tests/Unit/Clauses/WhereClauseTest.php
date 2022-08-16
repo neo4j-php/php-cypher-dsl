@@ -22,17 +22,16 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\WhereClause
  */
 class WhereClauseTest extends TestCase
 {
-    use TestHelper;
-
     public function testEmptyClause(): void
     {
         $where = new WhereClause();
@@ -44,7 +43,8 @@ class WhereClauseTest extends TestCase
     public function testExpression(): void
     {
         $where = new WhereClause();
-        $expression = $this->getQueryConvertibleMock(AnyType::class, "(a)");
+        $expression = $this->createMock(BooleanType::class);
+        $expression->method('toQuery')->willReturn('(a)');
 
         $where->addExpression($expression);
 
@@ -55,13 +55,12 @@ class WhereClauseTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testAcceptsAnyType(): void
+    public function testDoesNotAcceptAnyType(): void
     {
         $where = new WhereClause();
-        $expression = $this->getQueryConvertibleMock(AnyType::class, "(a)");
+        $expression = $this->createMock(AnyType::class);
+        $this->expectException(TypeError::class);
 
         $where->addExpression($expression);
-
-        $where->toQuery();
     }
 }

@@ -22,29 +22,27 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Expressions\IsNotNull;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\IsNotNull;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Not
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\IsNotNull
  */
 class IsNotNullTest extends TestCase
 {
-    use TestHelper;
 
     public function testToQuery(): void
     {
-        $not = new IsNotNull($this->getQueryConvertibleMock(BooleanType::class, "true"), false);
+        $isNotNull = new IsNotNull(new Boolean(true), false);
 
-        $this->assertFalse($not->insertsParentheses());
+        $this->assertFalse($isNotNull->insertsParentheses());
 
-        $this->assertSame("true IS NOT NULL", $not->toQuery());
+        $this->assertSame("true IS NOT NULL", $isNotNull->toQuery());
 
-        $not = new IsNotNull($not);
+        $isNotNull = new IsNotNull($isNotNull);
 
-        $this->assertSame("(true IS NOT NULL IS NOT NULL)", $not->toQuery());
+        $this->assertSame("(true IS NOT NULL IS NOT NULL)", $isNotNull->toQuery());
 
-        $this->assertTrue($not->insertsParentheses());
+        $this->assertTrue($isNotNull->insertsParentheses());
     }
 }

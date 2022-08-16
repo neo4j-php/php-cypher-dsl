@@ -23,35 +23,33 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Expressions\LessThan;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThan;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\LessThan
  */
 class LessThanTest extends TestCase
 {
-    use TestHelper;
 
     public function testToQuery(): void
     {
-        $lessThan = new LessThan($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
+        $lessThan = new LessThan(new Integer(10), new Integer(15));
 
         $this->assertSame("(10 < 15)", $lessThan->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $lessThan = new LessThan($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"), false);
+        $lessThan = new LessThan(new Integer(10), new Integer(15), false);
 
         $this->assertSame("10 < 15", $lessThan->toQuery());
     }
 
     public function testCannotBeNested(): void
     {
-        $lessThan = new LessThan($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
+        $lessThan = new LessThan(new Integer(10), new Integer(15));
 
         $this->expectException(TypeError::class);
 
@@ -64,7 +62,7 @@ class LessThanTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $lessThan = new LessThan($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
+        $lessThan = new LessThan($this->createMock(AnyType::class), $this->createMock(AnyType::class));
 
         $lessThan->toQuery();
     }

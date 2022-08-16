@@ -19,15 +19,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\TypeTraits\PropertyTypeTraits;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\AndOperator;
-use WikibaseSolutions\CypherDSL\Expressions\Not;
-use WikibaseSolutions\CypherDSL\Expressions\OrOperator;
-use WikibaseSolutions\CypherDSL\Expressions\XorOperator;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Conjunction;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Negation;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Disjunction;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\ExclusiveDisjunction;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
@@ -36,8 +36,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  */
 class BooleanTypeTraitTest extends TestCase
 {
-    use TestHelper;
-
     /**
      * @var MockObject|BooleanType
      */
@@ -58,14 +56,14 @@ class BooleanTypeTraitTest extends TestCase
                 return '';
             }
         };
-        $this->b = $this->getQueryConvertibleMock(BooleanType::class, "false");
+        $this->b = new Boolean(false);
     }
 
     public function testAnd(): void
     {
         $and = $this->a->and($this->b);
 
-        $this->assertInstanceOf(AndOperator::class, $and);
+        $this->assertInstanceOf(Conjunction::class, $and);
 
         $this->assertTrue($and->insertsParentheses());
         $this->assertEquals($this->a, $and->getLeft());
@@ -76,7 +74,7 @@ class BooleanTypeTraitTest extends TestCase
     {
         $and = $this->a->and($this->b, false);
 
-        $this->assertInstanceOf(AndOperator::class, $and);
+        $this->assertInstanceOf(Conjunction::class, $and);
 
         $this->assertFalse($and->insertsParentheses());
         $this->assertEquals($this->a, $and->getLeft());
@@ -87,7 +85,7 @@ class BooleanTypeTraitTest extends TestCase
     {
         $or = $this->a->or($this->b);
 
-        $this->assertInstanceOf(OrOperator::class, $or);
+        $this->assertInstanceOf(Disjunction::class, $or);
 
         $this->assertTrue($or->insertsParentheses());
         $this->assertEquals($this->a, $or->getLeft());
@@ -98,7 +96,7 @@ class BooleanTypeTraitTest extends TestCase
     {
         $or = $this->a->or($this->b, false);
 
-        $this->assertInstanceOf(OrOperator::class, $or);
+        $this->assertInstanceOf(Disjunction::class, $or);
 
         $this->assertFalse($or->insertsParentheses());
         $this->assertEquals($this->a, $or->getLeft());
@@ -109,7 +107,7 @@ class BooleanTypeTraitTest extends TestCase
     {
         $xor = $this->a->xor($this->b);
 
-        $this->assertInstanceOf(XorOperator::class, $xor);
+        $this->assertInstanceOf(ExclusiveDisjunction::class, $xor);
 
         $this->assertTrue($xor->insertsParentheses());
         $this->assertEquals($this->a, $xor->getLeft());
@@ -120,7 +118,7 @@ class BooleanTypeTraitTest extends TestCase
     {
         $xor = $this->a->xor($this->b, false);
 
-        $this->assertInstanceOf(XorOperator::class, $xor);
+        $this->assertInstanceOf(ExclusiveDisjunction::class, $xor);
 
         $this->assertFalse($xor->insertsParentheses());
         $this->assertEquals($this->a, $xor->getLeft());
@@ -131,6 +129,6 @@ class BooleanTypeTraitTest extends TestCase
     {
         $not = $this->a->not();
 
-        $this->assertInstanceOf(Not::class, $not);
+        $this->assertInstanceOf(Negation::class, $not);
     }
 }

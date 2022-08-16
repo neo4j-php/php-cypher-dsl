@@ -19,35 +19,33 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Procedures;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\DateTime;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\DateTime
  */
 class DateTimeTest extends TestCase
 {
-    use TestHelper;
-
     public function testToQuery()
     {
-        $map = $this->getQueryConvertibleMock(MapType::class, "map");
+        $map = new Map(['foo' => new String_('bar')]);
 
-        $date = new DateTime($map);
+        $dateTime = new DateTime($map);
 
-        $this->assertSame("datetime(map)", $date->toQuery());
+        $this->assertSame("datetime({foo => 'bar'})", $dateTime->toQuery());
     }
 
     public function testEmpty()
     {
-        $date = new DateTime();
+        $dateTime = new DateTime();
 
-        $this->assertSame("datetime()", $date->toQuery());
+        $this->assertSame("datetime()", $dateTime->toQuery());
     }
 
     /**
@@ -55,10 +53,10 @@ class DateTimeTest extends TestCase
      */
     public function testAcceptsAnyType()
     {
-        $map = $this->getQueryConvertibleMock(AnyType::class, "map");
+        $map = $this->createMock(AnyType::class);
 
-        $date = new DateTime($map);
+        $dateTime = new DateTime($map);
 
-        $date->toQuery();
+        $dateTime->toQuery();
     }
 }

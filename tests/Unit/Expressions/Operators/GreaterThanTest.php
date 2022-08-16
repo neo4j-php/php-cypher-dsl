@@ -23,35 +23,33 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Expressions\GreaterThan;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThan;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThan
  */
 class GreaterThanTest extends TestCase
 {
-    use TestHelper;
 
     public function testToQuery(): void
     {
-        $greaterThan = new GreaterThan($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
+        $greaterThan = new GreaterThan(new Integer(10), new Integer(15));
 
         $this->assertSame("(10 > 15)", $greaterThan->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $greaterThan = new GreaterThan($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"), false);
+        $greaterThan = new GreaterThan(new Integer(10), new Integer(15), false);
 
         $this->assertSame("10 > 15", $greaterThan->toQuery());
     }
 
     public function testCannotBeNested(): void
     {
-        $greaterThan = new GreaterThan($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
+        $greaterThan = new GreaterThan(new Integer(10), new Integer(15));
 
         $this->expectException(TypeError::class);
 
@@ -64,7 +62,7 @@ class GreaterThanTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $greaterThan = new GreaterThan($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
+        $greaterThan = new GreaterThan($this->createMock(AnyType::class), $this->createMock(AnyType::class));
 
         $greaterThan->toQuery();
     }

@@ -23,17 +23,16 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Expressions\Equality;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Equality;
+use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Equality
  */
 class EqualityTest extends TestCase
 {
-    use TestHelper;
 
     public function testToQuery(): void
     {
@@ -61,7 +60,7 @@ class EqualityTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $equality = new Equality($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
+        $equality = new Equality($this->createMock(AnyType::class), $this->createMock(AnyType::class));
 
         $equality->toQuery();
     }

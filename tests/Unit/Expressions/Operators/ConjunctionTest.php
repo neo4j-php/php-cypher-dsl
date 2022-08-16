@@ -23,36 +23,34 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Expressions\AndOperator;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Conjunction;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\AndOperator
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Conjunction
  */
-class AndOperatorTest extends TestCase
+class ConjunctionTest extends TestCase
 {
-    use TestHelper;
 
     public function testToQuery(): void
     {
-        $and = new AndOperator($this->getQueryConvertibleMock(BooleanType::class, "true"), $this->getQueryConvertibleMock(BooleanType::class, "false"));
+        $and = new Conjunction(new Boolean(true), new Boolean(false));
 
         $this->assertSame("(true AND false)", $and->toQuery());
 
-        $and = new AndOperator($and, $and);
+        $and = new Conjunction($and, $and);
 
         $this->assertSame("((true AND false) AND (true AND false))", $and->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $and = new AndOperator($this->getQueryConvertibleMock(BooleanType::class, "true"), $this->getQueryConvertibleMock(BooleanType::class, "false"), false);
+        $and = new Conjunction(new Boolean(true), new Boolean(false), false);
 
         $this->assertSame("true AND false", $and->toQuery());
 
-        $and = new AndOperator($and, $and);
+        $and = new Conjunction($and, $and);
 
         $this->assertSame("(true AND false AND true AND false)", $and->toQuery());
     }
@@ -61,7 +59,7 @@ class AndOperatorTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $and = new AndOperator($this->getQueryConvertibleMock(AnyType::class, "true"), $this->getQueryConvertibleMock(AnyType::class, "false"));
+        $and = new Conjunction($this->createMock(AnyType::class), $this->createMock(AnyType::class));
 
         $and->toQuery();
     }

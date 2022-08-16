@@ -23,8 +23,8 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Expressions\Regex;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Regex;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
@@ -33,25 +33,24 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 class RegexTest extends TestCase
 {
-    use TestHelper;
 
     public function testToQuery(): void
     {
-        $regex = new Regex($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
+        $regex = new Regex(new String_("a"), new String_("b"));
 
         $this->assertSame("(a =~ b)", $regex->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $regex = new Regex($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"), false);
+        $regex = new Regex(new String_("a"), new String_("b"), false);
 
         $this->assertSame("a =~ b", $regex->toQuery());
     }
 
     public function testCannotBeNested(): void
     {
-        $regex = new Regex($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
+        $regex = new Regex(new String_("a"), new String_("b"));
 
         $this->expectException(TypeError::class);
 
@@ -64,7 +63,7 @@ class RegexTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $regex = new Regex($this->getQueryConvertibleMock(AnyType::class, "a"), $this->getQueryConvertibleMock(AnyType::class, "b"));
+        $regex = new Regex($this->createMock(AnyType::class), $this->createMock(AnyType::class));
 
         $regex->toQuery();
     }

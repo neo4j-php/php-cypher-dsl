@@ -23,17 +23,16 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Expressions\Inequality;
+use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Inequality;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Inequality
  */
 class InequalityTest extends TestCase
 {
-    use TestHelper;
 
     public function testToQuery(): void
     {
@@ -61,7 +60,7 @@ class InequalityTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $inequality = new Inequality($this->getQueryConvertibleMock(AnyType::class, "a"), $this->getQueryConvertibleMock(AnyType::class, "b"));
+        $inequality = new Inequality($this->createMock(AnyType::class), $this->createMock(AnyType::class));
 
         $inequality->toQuery();
     }

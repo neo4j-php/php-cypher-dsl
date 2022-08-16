@@ -25,20 +25,18 @@ use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikiBaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement
  */
 class PropertyReplacementTest extends TestCase
 {
-    use TestHelper;
-
     public function testToQuery()
     {
-        $propRepl = new PropertyReplacement($this->getQueryConvertibleMock(Property::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
+        $propRepl = new PropertyReplacement(new Property(new Variable('foo'), 'bar'), new Boolean(true));
 
         $this->assertSame("foo.bar = true", $propRepl->toQuery());
 
@@ -51,22 +49,22 @@ class PropertyReplacementTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $propRepl = new PropertyReplacement($this->getQueryConvertibleMock(AnyType::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
+        $propRepl = new PropertyReplacement($this->createMock(AnyType::class), new Boolean(true));
 
         $propRepl->toQuery();
     }
 
     public function testLeftAcceptsProperty()
     {
-        $propRepl = new PropertyReplacement($this->getQueryConvertibleMock(Property::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
+        $propRepl = new PropertyReplacement(new Property(new Variable('foo'), 'bar'), new Boolean(true));
 
         $this->assertSame("foo.bar = true", $propRepl->toQuery());
     }
 
     public function testLeftAcceptsVariable()
     {
-        $propRepl = new PropertyReplacement($this->getQueryConvertibleMock(Variable::class, "foo.bar"), $this->getQueryConvertibleMock(AnyType::class, "true"));
+        $propRepl = new PropertyReplacement(new Variable('foo'), new Boolean(true));
 
-        $this->assertSame("foo.bar = true", $propRepl->toQuery());
+        $this->assertSame("foo = true", $propRepl->toQuery());
     }
 }
