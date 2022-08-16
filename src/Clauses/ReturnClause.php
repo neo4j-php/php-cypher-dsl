@@ -1,38 +1,31 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) 2021- Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Patterns\Pattern;
+use WikibaseSolutions\CypherDSL\QueryConvertible;
+use WikibaseSolutions\CypherDSL\Syntax\Alias;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * This class represents a RETURN clause.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 74)
+ * @see Query::returning() for a more convenient method to construct this class
  */
-class ReturnClause extends Clause
+final class ReturnClause extends Clause
 {
-    use EscapeTrait;
+    use CastTrait;
     use ErrorTrait;
 
     /**
@@ -41,47 +34,28 @@ class ReturnClause extends Clause
     private bool $distinct = false;
 
     /**
-     * @var AnyType[] The expressions to return
+     * @var AnyType[]|Alias[] The expressions to return
      */
     private array $columns = [];
 
     /**
-     * Sets the columns of this RETURN clause. This overwrites any previously set columns.
-     *
-     * @param AnyType[] $columns The columns; if the key is non-numerical, it will be used as the alias
-     *
-     * @return $this
-     *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
-     */
-    public function setColumns(array $columns): self
-    {
-        foreach ($columns as $column) {
-            $this->assertClass('column', AnyType::class, $column);
-        }
-
-        $this->columns = $columns;
-
-        return $this;
-    }
-
-    /**
      * Add a new column to this RETURN clause.
      *
-     * @param AnyType $column The expression to return
-     * @param string $alias The alias of this column
+     * @param AnyType|Alias|Pattern|int|float|string|bool|array ...$columns The values to return
      *
      * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
      */
-    public function addColumn(AnyType $column, string $alias = ""): self
+    public function addColumn(...$columns): self
     {
-        if ($alias !== "") {
-            $this->columns[$alias] = $column;
-        } else {
-            $this->columns[] = $column;
+        $res = [];
+
+        foreach ($columns as $column) {
+            $res[] = $column instanceof Alias ? $column : self::toAnyType($column);
         }
+
+        $this->columns = array_merge($this->columns, $res);
 
         return $this;
     }
@@ -89,9 +63,11 @@ class ReturnClause extends Clause
     /**
      * Sets this query to only retrieve unique rows.
      *
-     * @see    https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-unique-results
      * @param bool $distinct
-     * @return ReturnClause
+     *
+     * @return $this
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-unique-results
      */
     public function setDistinct(bool $distinct = true): self
     {
@@ -103,7 +79,7 @@ class ReturnClause extends Clause
     /**
      * Returns the columns to return. Aliased columns have string keys instead of integers.
      *
-     * @return AnyType[]
+     * @return AnyType[]|Alias[]
      */
     public function getColumns(): array
     {
@@ -135,15 +111,9 @@ class ReturnClause extends Clause
      */
     protected function getSubject(): string
     {
-        $expressions = [];
-
-        foreach ($this->columns as $alias => $expression) {
-            $expressionQuery = $expression->toQuery();
-            $expressions[] = is_int($alias) ?
-                $expressionQuery :
-                sprintf("%s AS %s", $expressionQuery, $this->escape($alias));
-        }
-
-        return implode(", ", $expressions);
+        return implode(
+            ", ",
+            array_map(fn (QueryConvertible $column) => $column->toQuery(), $this->columns)
+        );
     }
 }

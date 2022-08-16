@@ -1,24 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) 2021- Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Expressions\Label;
@@ -30,8 +18,10 @@ use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
  * This class represents a SET clause.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 107)
+ * @see Query::set() for a more convenient method to construct this class
  */
-class SetClause extends Clause
+final class SetClause extends Clause
 {
     use ErrorTrait;
 
@@ -43,7 +33,7 @@ class SetClause extends Clause
     /**
      * Sets the subjects of this SET clause. This will overwrite any previously added expressions.
      *
-     * @param (PropertyReplacement|Label)[] $expressions The expressions to set
+     * @param PropertyReplacement[]|Label[] $expressions The expressions to set
      * @return $this
      */
     public function setExpressions(array $expressions): self
@@ -58,15 +48,15 @@ class SetClause extends Clause
     }
 
     /**
-     * Add an expression.
+     * Add one or more expressions to this SET clause.
      *
-     * @param PropertyReplacement|Label $expression The expression to add to this set clause
+     * @param PropertyReplacement|Label $expressions The expressions to add to this set clause
      * @return $this
      */
-    public function add($expression): self
+    public function add(...$expressions): self
     {
-        $this->assertClass('expression', [PropertyReplacement::class, Label::class], $expression);
-        $this->expressions[] = $expression;
+        $this->assertClassArray('expression', [PropertyReplacement::class, Label::class], $expressions);
+        $this->expressions = array_merge($this->expressions, $expressions);
 
         return $this;
     }
@@ -74,7 +64,7 @@ class SetClause extends Clause
     /**
      * Returns the expressions to SET.
      *
-     * @return (PropertyReplacement|Label)[]
+     * @return PropertyReplacement[]|Label[]
      */
     public function getExpressions(): array
     {

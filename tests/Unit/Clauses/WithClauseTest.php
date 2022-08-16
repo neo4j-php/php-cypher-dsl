@@ -38,7 +38,7 @@ class WithClauseTest extends TestCase
         $return = new WithClause();
 
         $this->assertSame("", $return->toQuery());
-        $this->assertEquals([], $return->getExpressions());
+        $this->assertEquals([], $return->getEntries());
     }
 
     public function testSingleEntry(): void
@@ -48,7 +48,7 @@ class WithClauseTest extends TestCase
         $return->addEntry($entry);
 
         $this->assertSame("WITH a", $return->toQuery());
-        $this->assertEquals([$entry], $return->getExpressions());
+        $this->assertEquals([$entry], $return->getEntries());
     }
 
     public function testMultipleEntries(): void
@@ -63,7 +63,7 @@ class WithClauseTest extends TestCase
         $return->addEntry($entryC);
 
         $this->assertSame("WITH a, b, c", $return->toQuery());
-        $this->assertEquals([$entryA, $entryB, $entryC], $return->getExpressions());
+        $this->assertEquals([$entryA, $entryB, $entryC], $return->getEntries());
     }
 
     public function testSingleAlias(): void
@@ -73,7 +73,7 @@ class WithClauseTest extends TestCase
         $return->addEntry($entry, "b");
 
         $this->assertSame("WITH a AS b", $return->toQuery());
-        $this->assertEquals(['b' => $entry], $return->getExpressions());
+        $this->assertEquals(['b' => $entry], $return->getEntries());
     }
 
     public function testMultipleAliases(): void
@@ -86,7 +86,7 @@ class WithClauseTest extends TestCase
         $return->addEntry($entryB, "c");
 
         $this->assertSame("WITH a AS b, b AS c", $return->toQuery());
-        $this->assertEquals(['b' => $entryA, 'c' => $entryB], $return->getExpressions());
+        $this->assertEquals(['b' => $entryA, 'c' => $entryB], $return->getEntries());
     }
 
     public function testMixedAliases(): void
@@ -101,7 +101,7 @@ class WithClauseTest extends TestCase
         $return->addEntry($entryC, "c");
 
         $this->assertSame("WITH a AS b, c, b AS c", $return->toQuery());
-        $this->assertEquals(['b' => $entryA, $entryB, 'c' => $entryC], $return->getExpressions());
+        $this->assertEquals(['b' => $entryA, $entryB, 'c' => $entryC], $return->getEntries());
     }
 
     public function testAliasIsEscaped(): void
@@ -111,7 +111,7 @@ class WithClauseTest extends TestCase
         $return->addEntry($entry, ":");
 
         $this->assertSame("WITH a AS `:`", $return->toQuery());
-        $this->assertEquals([':' => $entry], $return->getExpressions());
+        $this->assertEquals([':' => $entry], $return->getEntries());
     }
 
     /**

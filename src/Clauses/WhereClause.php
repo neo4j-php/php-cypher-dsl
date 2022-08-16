@@ -1,51 +1,65 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) 2021- Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Expressions\Label;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
+use InvalidArgumentException;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * This class represents a WHERE clause.
  *
+ * WHERE adds constraints to the patterns in a MATCH or OPTIONAL MATCH clause or filters the results of a WITH clause.
+ *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 83)
+ * @see Query::where() for a more convenient method to construct this class
  */
-class WhereClause extends Clause
+final class WhereClause extends Clause
 {
-    /**
-     * @var BooleanType|Label|null The expression to match
-     */
-    private ?AnyType $expression = null;
+    use CastTrait;
+
+    public const AND = 'and';
+    public const OR = 'or';
+    public const XOR = 'xor';
 
     /**
-     * Sets the expression to match in this WHERE clause.
-     *
-     * @param BooleanType|Label $expression The expression to match
-     * @return WhereClause
+     * @var BooleanType|null The expression to match
      */
-    public function setExpression(AnyType $expression): self
+    private ?BooleanType $expression = null;
+
+    /**
+     * Add an expression to this WHERE clause.
+     *
+     * @param BooleanType|bool $expression The expression to add to the WHERE clause
+     * @param string $operator The operator to use to combine the given expression with the existing expression, should
+     *  be one of WhereClause::AND, WhereClause::OR or WhereClause::XOR
+     * @return $this
+     */
+    public function addExpression($expression, string $operator = self::AND): self
     {
-        $this->expression = $expression;
+        $expression = self::toBooleanType($expression);
+
+        if ($operator !== self::AND && $operator !== self::OR && $operator !== self::XOR) {
+            throw new InvalidArgumentException('$operator must either be "and", "xor" or "or"');
+        }
+
+        if ($this->expression === null) {
+            $this->expression = $expression;
+        } elseif ($operator === self::AND) {
+            $this->expression = $this->expression->and($expression);
+        } elseif ($operator === self::OR) {
+            $this->expression = $this->expression->or($expression);
+        } elseif ($operator === self::XOR) {
+            $this->expression = $this->expression->xor($expression);
+        }
 
         return $this;
     }
@@ -53,9 +67,9 @@ class WhereClause extends Clause
     /**
      * Returns the expression to match.
      *
-     * @return Label|BooleanType|null
+     * @return BooleanType|null
      */
-    public function getExpression()
+    public function getExpression(): ?BooleanType
     {
         return $this->expression;
     }

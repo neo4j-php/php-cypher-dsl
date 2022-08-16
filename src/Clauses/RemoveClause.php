@@ -1,24 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) 2021-  Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Expressions\Label;
@@ -30,8 +18,10 @@ use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
  * This class represents a REMOVE clause.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/remove/
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 113)
+ * @see Query::remove() for a more convenient method to construct this class
  */
-class RemoveClause extends Clause
+final class RemoveClause extends Clause
 {
     use ErrorTrait;
 
@@ -41,32 +31,15 @@ class RemoveClause extends Clause
     private array $expressions = [];
 
     /**
-     * Sets the expressions of the REMOVE clause. This overwrites any previously set expressions.
+     * Add one or more expressions to the REMOVE clause.
      *
-     * @param (Property|Label)[] $expressions The expressions to remove
+     * @param Property|Label ...$expressions The expressions to add
      * @return RemoveClause
      */
-    public function setExpressions(array $expressions): self
+    public function addExpression(...$expressions): self
     {
-        foreach ($expressions as $expression) {
-            $this->assertClass('expression', [Property::class, Label::class], $expression);
-        }
-
-        $this->expressions = $expressions;
-
-        return $this;
-    }
-
-    /**
-     * Add an expression to the REMOVE clause. This expression usually returns a property (a.b) or a label (a:b).
-     *
-     * @param Property|Label $expression The expression to add
-     * @return RemoveClause
-     */
-    public function addExpression($expression): self
-    {
-        $this->assertClass('expression', [Property::class, Label::class], $expression);
-        $this->expressions[] = $expression;
+        self::assertClassArray('expressions', [Property::class, Label::class], $expressions);
+        $this->expressions = array_merge($this->expressions, $expressions);
 
         return $this;
     }

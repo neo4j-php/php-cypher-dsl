@@ -27,8 +27,6 @@ use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
  */
 final class OrderByClause extends Clause
 {
-    use EscapeTrait;
-
     /**
      * @var Property[] The expressions to include in the clause
      */

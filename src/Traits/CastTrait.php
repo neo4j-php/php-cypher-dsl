@@ -9,6 +9,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
@@ -69,6 +70,18 @@ trait CastTrait
     {
         self::assertClass('numeral', [NumeralType::class, 'int', 'float'], $numeral);
         return $numeral instanceof NumeralType ? $numeral : Literal::number($numeral);
+    }
+
+    /**
+     * Casts the given value to an IntegerType.
+     *
+     * @param IntegerType|int $integer
+     * @return IntegerType
+     */
+    private static function toIntegerType($integer): IntegerType
+    {
+        self::assertClass('integer', [IntegerType::class, 'int'], $integer);
+        return $integer instanceof IntegerType ? $integer : Literal::integer($integer);
     }
 
     /**

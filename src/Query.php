@@ -46,25 +46,14 @@ use WikibaseSolutions\CypherDSL\Patterns\CompletePattern;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
+use WikibaseSolutions\CypherDSL\Syntax\Alias;
 use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
@@ -289,7 +278,7 @@ final class Query implements QueryConvertible
      *
      * Query::function()::raw(...)
      *
-     * @return string
+     * @return string|Procedure
      */
     public static function function(): string
     {
@@ -311,7 +300,7 @@ final class Query implements QueryConvertible
      * Creates an EXISTS expression.
      *
      * @param CompletePattern|CompletePattern[]|MatchClause $match
-     * @param BooleanType|BooleanType[]|WhereClause|null $where
+     * @param BooleanType|WhereClause|null $where
      * @param bool $insertParentheses
      * @return Exists
      */
@@ -319,13 +308,11 @@ final class Query implements QueryConvertible
     {
         if (!$match instanceof MatchClause) {
             $match = is_array($match) ? $match : [$match];
-            $match = (new MatchClause())->setPatterns($match);
+            $match = (new MatchClause())->addPattern(...$match);
         }
 
         if (!$where instanceof WhereClause && $where !== null) {
-            $where = is_array($where) ? $where : [$where];
-            $whereExpression = array_reduce($where, fn ($c, $i) => $c->and($i));
-            $where = (new WhereClause())->setExpression($whereExpression);
+            $where = (new WhereClause())->addExpression($where);
         }
 
         return new Exists($match, $where, $insertParentheses);
@@ -334,13 +321,14 @@ final class Query implements QueryConvertible
     /**
      * Creates a CALL sub query clause and adds it to the query.
      *
-     * @param Query|callable(Query):void $query A callable decorating a query, or the actual CALL subquery
+     * @note This feature is not part of the openCypher standard. For more information, see https://github.com/opencypher/openCypher/blob/a507292d35280aca9e37bf938cdec4fdd1e64ba9/docs/standardisation-scope.adoc.
+     *
+     * @param Query|callable(Query):void $query A callable decorating a query, or the actual subquery
      * @param Variable|Pattern|string|Variable[]|Pattern[]|string[] $variables The variables to include in the WITH clause for correlation
      *
-     * @return Query
+     * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/
-     * @see CallClause
      */
     public function call($query = null, $variables = []): self
     {
@@ -370,8 +358,9 @@ final class Query implements QueryConvertible
      * Creates the CALL procedure clause.
      *
      * @param Procedure $procedure The procedure to call
-     * @param string|Variable|string[]|Variable[] $yields The result fields that should be returned
-     * @return Query
+     * @param string|Variable|Alias|string[]|Variable[]|Alias[] $yields The result fields that should be returned
+     *
+     * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/call/
      * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 122)
@@ -418,31 +407,23 @@ final class Query implements QueryConvertible
     /**
      * Creates the RETURN clause.
      *
-     * @param AnyType|AnyType[] $expressions The expressions to return; if the array-key is
-     *                                             non-numerical, it is used as the alias
-     * @param bool $distinct
+     * @param AnyType|Alias|Pattern|int|float|string|bool|array|AnyType[]|Alias[]|Pattern[]|int[]|float[]|string[]|bool[]|array[] $expressions The expressions to return
+     * @param bool $distinct Whether to be a RETURN DISTINCT query
      *
      * @return $this
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/
+     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 74)
      */
     public function returning($expressions, bool $distinct = false): self
     {
-        $returnClause = new ReturnClause();
-
         if (!is_array($expressions)) {
             $expressions = [$expressions];
         }
 
-        $expressions = array_map(function ($expression): AnyType {
-            // If it has a variable, we want to put the variable in the RETURN clause instead of the
-            // object itself. Theoretically, a node could be returned directly (i.e. "RETURN (n)"),
-            // but this is extremely rare. If a user wants to do this, they can use the ReturnClause class directly.
-            return $expression instanceof Pattern ? $expression->getVariable() : $expression;
-        }, $expressions);
+        $returnClause = new ReturnClause();
+        $returnClause->addColumn(...$expressions);
 
-        $returnClause->setColumns($expressions);
         $returnClause->setDistinct($distinct);
 
         $this->clauses[] = $returnClause;
@@ -458,6 +439,7 @@ final class Query implements QueryConvertible
      * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/create/
+     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 99)
      */
     public function create($patterns): self
     {
@@ -501,10 +483,11 @@ final class Query implements QueryConvertible
     /**
      * Creates the DETACH DELETE clause.
      *
-     * @param string|Variable|Pattern|(string|Variable|Pattern)[] $variables The variables to delete, including nodes, relationships and paths
+     * @param Variable|Pattern|(Variable|Pattern)[] $variables The variables to delete, including nodes, relationships and paths
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
+     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 105)
      * @deprecated Use Query::delete(..., true) instead
      */
     public function detachDelete($variables): self
@@ -535,19 +518,16 @@ final class Query implements QueryConvertible
     /**
      * Creates the SKIP clause.
      *
-     * @param NumeralType|int|float $amount The amount to skip
+     * @param IntegerType|int $amount The amount to skip
      *
      * @return $this
+     *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/skip/
+     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 96)
      */
     public function skip($amount): self
     {
         $skipClause = new SkipClause();
-
-        if (is_float($amount) || is_int($amount)) {
-            $amount = Literal::number($amount);
-        }
-
         $skipClause->setSkip($amount);
 
         $this->clauses[] = $skipClause;
@@ -561,6 +541,7 @@ final class Query implements QueryConvertible
      * @param CompletePattern $pattern The pattern to merge
      * @param SetClause|null $createClause The clause to execute when the pattern is created
      * @param SetClause|null $matchClause The clause to execute when the pattern is matched
+     *
      * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/
@@ -570,14 +551,8 @@ final class Query implements QueryConvertible
     {
         $mergeClause = new MergeClause();
         $mergeClause->setPattern($pattern);
-
-        if (isset($createClause)) {
-            $mergeClause->setOnCreate($createClause);
-        }
-
-        if (isset($matchClause)) {
-            $mergeClause->setOnMatch($matchClause);
-        }
+        $mergeClause->setOnCreate($createClause);
+        $mergeClause->setOnMatch($matchClause);
 
         $this->clauses[] = $mergeClause;
 
@@ -588,6 +563,7 @@ final class Query implements QueryConvertible
      * Creates the OPTIONAL MATCH clause.
      *
      * @param CompletePattern|CompletePattern[] $patterns A single pattern or a list of patterns
+     *
      * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/optional-match/
@@ -614,8 +590,9 @@ final class Query implements QueryConvertible
      * @param bool $descending Whether to order in descending order
      *
      * @return $this
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/order-by/
      *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/order-by/
+     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 93)
      */
     public function orderBy($properties, bool $descending = false): self
     {
@@ -638,22 +615,18 @@ final class Query implements QueryConvertible
      * @param Property|Label|Property[]|Label[] $expressions The expressions to remove (should either be a Node or a Property)
      *
      * @return $this
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/remove/
      *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/remove/
+     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 113)
      */
     public function remove($expressions): self
     {
-        $removeClause = new RemoveClause();
-
         if (!is_array($expressions)) {
             $expressions = [$expressions];
         }
 
-        foreach ($expressions as $expression) {
-            $this->assertClass('expression', [Property::class, Label::class], $expression);
-
-            $removeClause->addExpression($expression);
-        }
+        $removeClause = new RemoveClause();
+        $removeClause->addExpression(...$expressions);
 
         $this->clauses[] = $removeClause;
 
@@ -663,25 +636,21 @@ final class Query implements QueryConvertible
     /**
      * Create the SET clause.
      *
-     * @param PropertyReplacement|Label|(PropertyReplacement|Label)[] $expressions A single expression or a list of expressions
+     * @param PropertyReplacement|Label|PropertyReplacement[]|Label[] $expressions A single expression or a list of expressions
      *
      * @return $this
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/
      *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/
+     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 107)
      */
     public function set($expressions): self
     {
-        $setClause = new SetClause();
-
         if (!is_array($expressions)) {
             $expressions = [$expressions];
         }
 
-        foreach ($expressions as $expression) {
-            $this->assertClass('expression', [PropertyReplacement::class, Label::class], $expression);
-
-            $setClause->add($expression);
-        }
+        $setClause = new SetClause();
+        $setClause->add(...$expressions);
 
         $this->clauses[] = $setClause;
 
@@ -691,16 +660,26 @@ final class Query implements QueryConvertible
     /**
      * Creates the WHERE clause.
      *
-     * @param AnyType $expression The expression to match
+     * @param BooleanType|bool|BooleanType[]|bool[] $expressions The expression to match
+     * @param string $operator The operator with which to unify the given expressions, should be either WhereClause::OR,
+     *  WhereClause::AND or WhereClause::XOR
      *
      * @return $this
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/
      *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/
+     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 83)
      */
-    public function where(AnyType $expression): self
+    public function where($expressions, string $operator = WhereClause::AND): self
     {
+        if (!is_array($expressions)) {
+            $expressions = [$expressions];
+        }
+
         $whereClause = new WhereClause();
-        $whereClause->setExpression($expression);
+
+        foreach ($expressions as $expression) {
+            $whereClause->addExpression($expression, $operator);
+        }
 
         $this->clauses[] = $whereClause;
 
@@ -710,29 +689,21 @@ final class Query implements QueryConvertible
     /**
      * Creates the WITH clause.
      *
-     * @param AnyType[]|AnyType $expressions The entries to add; if the array-key is non-numerical, it is used as the alias
+     * @param AnyType|Alias|Pattern|int|float|string|bool|array|AnyType[]|Alias[]|Pattern[]|int[]|float[]|string[]|bool[]|array[] $expressions The entries to add; if the array-key is non-numerical, it is used as the alias
      *
-     * @return Query
+     * @return $this
+     *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/with/
+     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 78)
      */
     public function with($expressions): self
     {
-        $withClause = new WithClause();
-
         if (!is_array($expressions)) {
             $expressions = [$expressions];
         }
 
-        foreach ($expressions as $maybeAlias => $expression) {
-            $this->assertClass('expression', [AnyType::class, Pattern::class], $expression);
-
-            if ($expression instanceof Pattern) {
-                $expression = $expression->getVariable();
-            }
-
-            $alias = is_int($maybeAlias) ? "" : $maybeAlias;
-            $withClause->addEntry($expression, $alias);
-        }
+        $withClause = new WithClause();
+        $withClause->addEntry(...$expressions);
 
         $this->clauses[] = $withClause;
 
@@ -744,7 +715,8 @@ final class Query implements QueryConvertible
      *
      * @param string $clause The name of the clause; for instance "MATCH"
      * @param string $subject The subject/body of the clause
-     * @return Query
+     *
+     * @return $this
      */
     public function raw(string $clause, string $subject): self
     {
@@ -759,23 +731,24 @@ final class Query implements QueryConvertible
      * @param Query|callable(Query):void $queryOrCallable The callable decorating a fresh query instance or the query instance to be attached after the union clause.
      * @param bool $all Whether the union should include all results or remove the duplicates instead.
      *
-     * @return Query
+     * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/union/
+     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 128)
      */
     public function union($queryOrCallable, bool $all = false): self
     {
-        $unionClause = new UnionClause();
-        $unionClause->setAll($all);
-
-        $this->clauses[] = $unionClause;
-
         if (is_callable($queryOrCallable)) {
             $query = Query::new();
             $queryOrCallable($query);
         } else {
             $query = $queryOrCallable;
         }
+
+        $unionClause = new UnionClause();
+        $unionClause->setAll($all);
+
+        $this->clauses[] = $unionClause;
 
         foreach ($query->getClauses() as $clause) {
             $this->clauses[] = $clause;
@@ -788,7 +761,8 @@ final class Query implements QueryConvertible
      * Add a clause to the query.
      *
      * @param Clause $clause The clause to add to the query
-     * @return Query
+     *
+     * @return $this
      */
     public function addClause(Clause $clause): self
     {
