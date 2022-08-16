@@ -301,7 +301,7 @@ final class Relationship implements PropertyPattern
 
         if (isset($this->properties)) {
             // Only add the properties if they're not empty
-            if (!$this->properties instanceof Map || $this->properties->getProperties() !== []) {
+            if (!$this->properties instanceof Map || $this->properties->getElements() !== []) {
                 $map = $this->properties->toQuery();
 
                 if ($conditionInner !== "") {

@@ -23,7 +23,7 @@ namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits;
 
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Conjunction;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Disjunction;
-use WikibaseSolutions\CypherDSL\Expressions\Operators\ExclusiveOr;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\ExclusiveDisjunction;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Negation;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
@@ -57,9 +57,9 @@ trait BooleanTypeTrait
     /**
      * @inheritDoc
      */
-    public function xor($right, bool $insertParentheses = true): ExclusiveOr
+    public function xor($right, bool $insertParentheses = true): ExclusiveDisjunction
     {
-        return new ExclusiveOr($this, self::toBooleanType($right), $insertParentheses);
+        return new ExclusiveDisjunction($this, self::toBooleanType($right), $insertParentheses);
     }
 
     /**

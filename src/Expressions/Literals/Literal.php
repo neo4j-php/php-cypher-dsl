@@ -69,8 +69,12 @@ final class Literal
             return array_is_list($literal) ? self::list($literal) : self::map($literal);
         }
 
+        if (is_object($literal) && method_exists($literal, '__toString')) {
+            return self::string($literal->__toString());
+        }
+
         throw new InvalidArgumentException(
-            "The literal type " . is_object($literal) ? get_class($literal) : gettype($literal) . " is not supported by Cypher"
+            "The literal type " . get_debug_type($literal) . " is not supported by Cypher"
         );
     }
 
@@ -153,8 +157,11 @@ final class Literal
      * @param array $value
      * @return List_
      */
-    public static function list(array $value): List_
+    public static function list(iterable $value): List_
     {
+        if (is_object($value)) {
+            $value = iterator_to_array($value);
+        }
         return new List_(array_map([self::class, 'toAnyType'], $value));
     }
 

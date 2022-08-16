@@ -257,7 +257,7 @@ final class Query implements QueryConvertible
      * @param array $value
      * @return List_
      */
-    public static function list(array $value): List_
+    public static function list(iterable $value): List_
     {
         return self::literal()::list($value);
     }
@@ -437,9 +437,9 @@ final class Query implements QueryConvertible
 
         $expressions = array_map(function ($expression): AnyType {
             // If it has a variable, we want to put the variable in the RETURN clause instead of the
-            // object itself. Theoretically, a node could be returned directly, but this is extremely
-            // rare. If a user wants to do this, they can use the ReturnClause class directly.
-            return $expression instanceof HasVariable ? $expression->getVariable() : $expression;
+            // object itself. Theoretically, a node could be returned directly (i.e. "RETURN (n)"),
+            // but this is extremely rare. If a user wants to do this, they can use the ReturnClause class directly.
+            return $expression instanceof Pattern ? $expression->getVariable() : $expression;
         }, $expressions);
 
         $returnClause->setColumns($expressions);
@@ -501,7 +501,7 @@ final class Query implements QueryConvertible
     /**
      * Creates the DETACH DELETE clause.
      *
-     * @param string|Variable|HasVariable|(string|Variable|HasVariable)[] $variables The variables to delete, including relationships
+     * @param string|Variable|Pattern|(string|Variable|Pattern)[] $variables The variables to delete, including nodes, relationships and paths
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
@@ -724,9 +724,9 @@ final class Query implements QueryConvertible
         }
 
         foreach ($expressions as $maybeAlias => $expression) {
-            $this->assertClass('expression', AnyType::class, $expression);
+            $this->assertClass('expression', [AnyType::class, Pattern::class], $expression);
 
-            if ($expression instanceof Node) {
+            if ($expression instanceof Pattern) {
                 $expression = $expression->getVariable();
             }
 

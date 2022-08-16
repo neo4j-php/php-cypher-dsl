@@ -46,8 +46,8 @@ trait EscapeTrait
     private static function escape(string $name): string
     {
         if ($name === "") {
-            // Although some versions of Neo4j do not crash when the empty string is used as a name, there is no real
-            // reason to ever use the empty string as a name
+            // Although some versions of Neo4j do not crash when the empty string is used as a name,
+            // there is no real reason to ever use the empty string as a name
             throw new InvalidArgumentException("A name cannot be the empty string");
         }
 
