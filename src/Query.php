@@ -483,7 +483,7 @@ final class Query implements QueryConvertible
     /**
      * Creates the DETACH DELETE clause.
      *
-     * @param Variable|Pattern|(Variable|Pattern)[] $variables The variables to delete, including nodes, relationships and paths
+     * @param StructuralType|Pattern|(StructuralType|Pattern)[] $variables The variables to delete, including nodes, relationships and paths
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
