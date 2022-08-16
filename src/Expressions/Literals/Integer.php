@@ -40,7 +40,7 @@ final class Integer implements IntegerType
            throw new TypeError(
                'A non-integer string has been provided: "'.$value.'".'
            );
-        } elseif (is_string($value) && $parsedValue !== $value)) {
+        } elseif (is_string($value) && $parsedValue !== $value) {
            throw new TypeError(
                'A non-integer string has been provided: "'.$value.'", should be something like "'.$parsedValue.'".'
            );
