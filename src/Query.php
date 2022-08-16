@@ -50,21 +50,8 @@ use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateTimeType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
@@ -289,7 +276,7 @@ final class Query implements QueryConvertible
      *
      * Query::function()::raw(...)
      *
-     * @return string
+     * @return string|Procedure
      */
     public static function function(): string
     {
@@ -311,7 +298,7 @@ final class Query implements QueryConvertible
      * Creates an EXISTS expression.
      *
      * @param CompletePattern|CompletePattern[]|MatchClause $match
-     * @param BooleanType|BooleanType[]|WhereClause|null $where
+     * @param BooleanType|WhereClause|null $where
      * @param bool $insertParentheses
      * @return Exists
      */
@@ -319,13 +306,11 @@ final class Query implements QueryConvertible
     {
         if (!$match instanceof MatchClause) {
             $match = is_array($match) ? $match : [$match];
-            $match = (new MatchClause())->setPatterns($match);
+            $match = (new MatchClause())->addPattern(...$match);
         }
 
         if (!$where instanceof WhereClause && $where !== null) {
-            $where = is_array($where) ? $where : [$where];
-            $whereExpression = array_reduce($where, fn ($c, $i) => $c->and($i));
-            $where = (new WhereClause())->setExpression($whereExpression);
+            $where = (new WhereClause())->addExpression($where);
         }
 
         return new Exists($match, $where, $insertParentheses);
@@ -429,20 +414,12 @@ final class Query implements QueryConvertible
      */
     public function returning($expressions, bool $distinct = false): self
     {
-        $returnClause = new ReturnClause();
-
         if (!is_array($expressions)) {
             $expressions = [$expressions];
         }
 
-        $expressions = array_map(function ($expression): AnyType {
-            // If it has a variable, we want to put the variable in the RETURN clause instead of the
-            // object itself. Theoretically, a node could be returned directly, but this is extremely
-            // rare. If a user wants to do this, they can use the ReturnClause class directly.
-            return $expression instanceof HasVariable ? $expression->getVariable() : $expression;
-        }, $expressions);
-
-        $returnClause->setColumns($expressions);
+        $returnClause = new ReturnClause();
+        $returnClause->addColumn(...$expressions);
         $returnClause->setDistinct($distinct);
 
         $this->clauses[] = $returnClause;
@@ -501,7 +478,7 @@ final class Query implements QueryConvertible
     /**
      * Creates the DETACH DELETE clause.
      *
-     * @param string|Variable|HasVariable|(string|Variable|HasVariable)[] $variables The variables to delete, including relationships
+     * @param StructuralType|Pattern|StructuralType[]|Pattern[] $variables The variables to delete, including relationships
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
@@ -543,11 +520,6 @@ final class Query implements QueryConvertible
     public function skip($amount): self
     {
         $skipClause = new SkipClause();
-
-        if (is_float($amount) || is_int($amount)) {
-            $amount = Literal::number($amount);
-        }
-
         $skipClause->setSkip($amount);
 
         $this->clauses[] = $skipClause;
@@ -643,17 +615,12 @@ final class Query implements QueryConvertible
      */
     public function remove($expressions): self
     {
-        $removeClause = new RemoveClause();
-
         if (!is_array($expressions)) {
             $expressions = [$expressions];
         }
 
-        foreach ($expressions as $expression) {
-            $this->assertClass('expression', [Property::class, Label::class], $expression);
-
-            $removeClause->addExpression($expression);
-        }
+        $removeClause = new RemoveClause();
+        $removeClause->addExpression(...$expressions);
 
         $this->clauses[] = $removeClause;
 
@@ -663,7 +630,7 @@ final class Query implements QueryConvertible
     /**
      * Create the SET clause.
      *
-     * @param PropertyReplacement|Label|(PropertyReplacement|Label)[] $expressions A single expression or a list of expressions
+     * @param PropertyReplacement|Label|PropertyReplacement[]|Label[] $expressions A single expression or a list of expressions
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/
@@ -671,17 +638,12 @@ final class Query implements QueryConvertible
      */
     public function set($expressions): self
     {
-        $setClause = new SetClause();
-
         if (!is_array($expressions)) {
             $expressions = [$expressions];
         }
 
-        foreach ($expressions as $expression) {
-            $this->assertClass('expression', [PropertyReplacement::class, Label::class], $expression);
-
-            $setClause->add($expression);
-        }
+        $setClause = new SetClause();
+        $setClause->add(...$expressions);
 
         $this->clauses[] = $setClause;
 
@@ -691,16 +653,24 @@ final class Query implements QueryConvertible
     /**
      * Creates the WHERE clause.
      *
-     * @param AnyType $expression The expression to match
+     * @param BooleanType|BooleanType[] $expressions The expression to match
+     * @param string $operator The operator with which to unify the given expressions, should be either WhereClause::OR,
+     *  WhereClause::AND or WhereClause::XOR
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/
-     *
      */
-    public function where(AnyType $expression): self
+    public function where($expressions, string $operator = WhereClause::AND): self
     {
+        if (!is_array($expressions)) {
+            $expressions = [$expressions];
+        }
+
         $whereClause = new WhereClause();
-        $whereClause->setExpression($expression);
+
+        foreach ($expressions as $expression) {
+            $whereClause->addExpression($expression, $operator);
+        }
 
         $this->clauses[] = $whereClause;
 
@@ -717,22 +687,12 @@ final class Query implements QueryConvertible
      */
     public function with($expressions): self
     {
-        $withClause = new WithClause();
-
         if (!is_array($expressions)) {
             $expressions = [$expressions];
         }
 
-        foreach ($expressions as $maybeAlias => $expression) {
-            $this->assertClass('expression', AnyType::class, $expression);
-
-            if ($expression instanceof Node) {
-                $expression = $expression->getVariable();
-            }
-
-            $alias = is_int($maybeAlias) ? "" : $maybeAlias;
-            $withClause->addEntry($expression, $alias);
-        }
+        $withClause = new WithClause();
+        $withClause->addEntry(...$expressions);
 
         $this->clauses[] = $withClause;
 
@@ -765,17 +725,17 @@ final class Query implements QueryConvertible
      */
     public function union($queryOrCallable, bool $all = false): self
     {
-        $unionClause = new UnionClause();
-        $unionClause->setAll($all);
-
-        $this->clauses[] = $unionClause;
-
         if (is_callable($queryOrCallable)) {
             $query = Query::new();
             $queryOrCallable($query);
         } else {
             $query = $queryOrCallable;
         }
+
+        $unionClause = new UnionClause();
+        $unionClause->setAll($all);
+
+        $this->clauses[] = $unionClause;
 
         foreach ($query->getClauses() as $clause) {
             $this->clauses[] = $clause;

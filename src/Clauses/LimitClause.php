@@ -11,6 +11,7 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
@@ -29,21 +30,19 @@ final class LimitClause extends Clause
     /**
      * The expression of the LIMIT statement.
      *
-     * @var NumeralType|null $limit
+     * @var IntegerType|null $limit
      */
-    private ?NumeralType $limit = null;
+    private ?IntegerType $limit = null;
 
     /**
      * Sets the expression that returns the limit.
      *
-     * TODO: Rewrite this to only accept IntegerType (this also requires work in other parts of the DSL)
-     *
-     * @param NumeralType|int $limit The limit
+     * @param IntegerType|int $limit The limit
      * @return $this
      */
     public function setLimit($limit): self
     {
-        $this->limit = self::toNumeralType($limit);
+        $this->limit = self::toIntegerType($limit);
 
         return $this;
     }
@@ -51,9 +50,9 @@ final class LimitClause extends Clause
     /**
      * Returns the limit of the clause.
      *
-     * @return NumeralType|null
+     * @return IntegerType|null
      */
-    public function getLimit(): ?NumeralType
+    public function getLimit(): ?IntegerType
     {
         return $this->limit;
     }

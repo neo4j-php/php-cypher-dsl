@@ -11,6 +11,7 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Syntax\Alias;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
@@ -56,9 +57,7 @@ final class CallProcedureClause extends Clause
     /**
      * Adds a variable to yield.
      *
-     * TODO: Allow variables to be aliased
-     *
-     * @param Variable|string $yields The variable to yield
+     * @param Variable|Alias|string $yields The variable to yield
      * @return $this
      */
     public function addYield(...$yields): self
@@ -66,7 +65,7 @@ final class CallProcedureClause extends Clause
         $res = [];
 
         foreach ($yields as $yield) {
-            $res[] = self::toName($yield);
+            $res[] = $yield instanceof Alias ? $yield : self::toName($yield);
         }
 
         $this->yields = array_merge($this->yields, $res);
