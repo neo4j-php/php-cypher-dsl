@@ -28,7 +28,6 @@ use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
@@ -37,7 +36,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
  */
 class SetClauseTest extends TestCase
 {
-    use TestHelper;
 
     public function testEmptyClause(): void
     {
@@ -50,9 +48,11 @@ class SetClauseTest extends TestCase
     public function testSinglePattern(): void
     {
         $set = new SetClause();
+        $value = $this->createMock(PropertyType::class);
+        $value->method('toQuery')->willReturn('a');
         $expression = new PropertyReplacement(
             new Property(new Variable('Foo'),'Bar'),
-            $this->getQueryConvertibleMock(PropertyType::class, "a")
+            $value
         );
 
         $set->add($expression);
@@ -65,9 +65,11 @@ class SetClauseTest extends TestCase
     {
         $set = new SetClause();
         $foo = new Variable('Foo');
+        $value = $this->createMock(PropertyType::class);
+        $value->method('toQuery')->willReturn('a');
         $expressionA = new PropertyReplacement(
             new Property($foo,'Bar'),
-            $this->getQueryConvertibleMock(PropertyType::class, "a")
+            $value
         );
         $expressionB = new Label($foo,'Baz');
 
@@ -84,9 +86,11 @@ class SetClauseTest extends TestCase
     public function testAcceptsPropertyReplacement(): void
     {
         $set = new SetClause();
+        $value = $this->createMock(PropertyType::class);
+        $value->method('toQuery')->willReturn('a');
         $expression = new PropertyReplacement(
             new Property(new Variable('Foo'),'Bar'),
-            $this->getQueryConvertibleMock(PropertyType::class, "a")
+            $value
         );
 
         $set->add($expression);
@@ -110,7 +114,7 @@ class SetClauseTest extends TestCase
     public function testDoesNotAcceptAnyType(): void
     {
         $set = new SetClause();
-        $expression = $this->getQueryConvertibleMock(AnyType::class, "(a)");
+        $expression = $this->createMock(AnyType::class);
 
         $this->expectException(TypeError::class);
 

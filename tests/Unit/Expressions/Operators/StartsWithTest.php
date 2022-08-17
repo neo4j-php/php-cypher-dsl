@@ -23,8 +23,9 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Expressions\StartsWith;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\StartsWith;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
@@ -33,25 +34,24 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 class StartsWithTest extends TestCase
 {
-    use TestHelper;
 
     public function testToQuery(): void
     {
-        $startsWith = new StartsWith($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
+        $startsWith = new StartsWith(new Variable("a"), new String_("b"));
 
-        $this->assertSame("(a STARTS WITH b)", $startsWith->toQuery());
+        $this->assertSame("(a STARTS WITH 'b')", $startsWith->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $startsWith = new StartsWith($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"), false);
+        $startsWith = new StartsWith(new Variable("a"), new String_("b"), false);
 
-        $this->assertSame("a STARTS WITH b", $startsWith->toQuery());
+        $this->assertSame("a STARTS WITH 'b'", $startsWith->toQuery());
     }
 
     public function testCannotBeNested(): void
     {
-        $startsWith = new StartsWith($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
+        $startsWith = new StartsWith(new Variable("a"), new String_("b"));
 
         $this->expectException(TypeError::class);
 
@@ -64,7 +64,7 @@ class StartsWithTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $startsWith = new StartsWith($this->getQueryConvertibleMock(AnyType::class, "a"), $this->getQueryConvertibleMock(AnyType::class, "b"));
+        $startsWith = new StartsWith($this->createMock(AnyType::class), $this->createMock(AnyType::class));
 
         $startsWith->toQuery();
     }

@@ -17,7 +17,7 @@ class QueryDeleteTest extends TestCase
 {
 	public function testDelete(): void
 	{
-		$m = $this->getQueryConvertibleMock(Variable::class, "m");
+		$m = new Variable("m");
 
 		$statement = (new Query())->delete($m)->build();
 
@@ -30,7 +30,7 @@ class QueryDeleteTest extends TestCase
 
 	public function testDeleteRejectsAnyType(): void
 	{
-		$m = $this->getQueryConvertibleMock(AnyType::class, 'foo');
+		$m = $this->createMock(AnyType::class);
 
 		$this->expectException(TypeError::class);
 
@@ -39,7 +39,7 @@ class QueryDeleteTest extends TestCase
 
 	public function testDetachDelete(): void
 	{
-		$m = $this->getQueryConvertibleMock(Variable::class, "m");
+		$m = new Variable("m");
 
 		$statement = (new Query())->detachDelete($m)->build();
 
@@ -52,7 +52,7 @@ class QueryDeleteTest extends TestCase
 
 	public function testDetachDeleteRejectsAnyType(): void
 	{
-		$m = $this->getQueryConvertibleMock(AnyType::class, 'foo');
+		$m = $this->createMock(AnyType::class);
 
 		$this->expectException(TypeError::class);
 

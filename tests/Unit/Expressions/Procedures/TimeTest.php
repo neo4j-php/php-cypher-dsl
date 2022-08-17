@@ -19,11 +19,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Procedures;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Time;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
@@ -32,22 +33,21 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  */
 class TimeTest extends TestCase
 {
-    use TestHelper;
 
     public function testToQuery()
     {
-        $map = $this->getQueryConvertibleMock(MapType::class, "map");
+        $map = new Map(['foo'=>new String_('bar')]);
 
-        $date = new Time($map);
+        $time = new Time($map);
 
-        $this->assertSame("time(map)", $date->toQuery());
+        $this->assertSame("time({foo: 'bar'})", $time->toQuery());
     }
 
     public function testEmpty()
     {
-        $date = new Time();
+        $time = new Time();
 
-        $this->assertSame("time()", $date->toQuery());
+        $this->assertSame("time()", $time->toQuery());
     }
 
     /**
@@ -55,10 +55,10 @@ class TimeTest extends TestCase
      */
     public function testAcceptsAnyType()
     {
-        $map = $this->getQueryConvertibleMock(AnyType::class, "map");
+        $map = $this->createMock(AnyType::class);
 
-        $date = new Time($map);
+        $time = new Time($map);
 
-        $date->toQuery();
+        $time->toQuery();
     }
 }

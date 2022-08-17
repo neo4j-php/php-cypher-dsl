@@ -19,28 +19,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Procedures;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Date;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\Date
  */
 class DateTest extends TestCase
 {
-    use TestHelper;
-
     public function testToQuery()
     {
-        $map = $this->getQueryConvertibleMock(MapType::class, "map");
+        $map = new Map(['foo' => new String_('bar')]);
 
         $date = new Date($map);
 
-        $this->assertSame("date(map)", $date->toQuery());
+        $this->assertSame("date({foo: 'bar'})", $date->toQuery());
     }
 
     public function testEmpty()
@@ -55,7 +53,7 @@ class DateTest extends TestCase
      */
     public function testAcceptsAnyType()
     {
-        $map = $this->getQueryConvertibleMock(AnyType::class, "map");
+        $map = $this->createMock(AnyType::class);
 
         $date = new Date($map);
 

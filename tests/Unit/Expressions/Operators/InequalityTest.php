@@ -23,46 +23,36 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Expressions\Inequality;
+use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Inequality;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Inequality
  */
 class InequalityTest extends TestCase
 {
-    use TestHelper;
 
     public function testToQuery(): void
     {
         $inequality = new Inequality(new Property(new Variable('v'), "a"), new Property(new Variable('v'), "b"));
 
-        $this->assertSame("(a <> b)", $inequality->toQuery());
+        $this->assertSame("(v.a <> v.b)", $inequality->toQuery());
 
         $inequality = new Inequality($inequality, $inequality);
 
-        $this->assertSame("((a <> b) <> (a <> b))", $inequality->toQuery());
+        $this->assertSame("((v.a <> v.b) <> (v.a <> v.b))", $inequality->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
         $inequality = new Inequality(new Property(new Variable('v'), "a"), new Property(new Variable('v'), "b"), false);
 
-        $this->assertSame("a <> b", $inequality->toQuery());
+        $this->assertSame("v.a <> v.b", $inequality->toQuery());
 
         $inequality = new Inequality($inequality, $inequality);
 
-        $this->assertSame("(a <> b <> a <> b)", $inequality->toQuery());
-    }
-
-    public function testDoesNotAcceptAnyTypeAsOperands(): void
-    {
-        $this->expectException(TypeError::class);
-
-        $inequality = new Inequality($this->getQueryConvertibleMock(AnyType::class, "a"), $this->getQueryConvertibleMock(AnyType::class, "b"));
-
-        $inequality->toQuery();
+        $this->assertSame("(v.a <> v.b <> v.a <> v.b)", $inequality->toQuery());
     }
 }

@@ -29,7 +29,6 @@ use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
  */
 class RawExpressionTest extends TestCase
 {
-    use TestHelper;
 
     public function testToQuery()
     {

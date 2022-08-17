@@ -23,36 +23,34 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Expressions\OrOperator;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Disjunction;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\OrOperator
+ * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Disjunction
  */
-class OrOperatorTest extends TestCase
+class DisjunctionTest extends TestCase
 {
-    use TestHelper;
 
     public function testToQuery(): void
     {
-        $or = new OrOperator($this->getQueryConvertibleMock(BooleanType::class, "true"), $this->getQueryConvertibleMock(BooleanType::class, "false"));
+        $or = new Disjunction(new Boolean(true), new Boolean(false));
 
         $this->assertSame("(true OR false)", $or->toQuery());
 
-        $or = new OrOperator($or, $or);
+        $or = new Disjunction($or, $or);
 
         $this->assertSame("((true OR false) OR (true OR false))", $or->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $or = new OrOperator($this->getQueryConvertibleMock(BooleanType::class, "true"), $this->getQueryConvertibleMock(BooleanType::class, "false"), false);
+        $or = new Disjunction(new Boolean(true), new Boolean(false), false);
 
         $this->assertSame("true OR false", $or->toQuery());
 
-        $or = new OrOperator($or, $or);
+        $or = new Disjunction($or, $or);
 
         $this->assertSame("(true OR false OR true OR false)", $or->toQuery());
     }
@@ -61,7 +59,7 @@ class OrOperatorTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $or = new OrOperator($this->getQueryConvertibleMock(AnyType::class, "true"), $this->getQueryConvertibleMock(AnyType::class, "false"));
+        $or = new Disjunction($this->createMock(AnyType::class), $this->createMock(AnyType::class));
 
         $or->toQuery();
     }

@@ -23,35 +23,34 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Expressions\EndsWith;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\EndsWith;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\EndsWith
  */
 class EndsWithTest extends TestCase
 {
-    use TestHelper;
 
     public function testToQuery(): void
     {
-        $endsWith = new EndsWith($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
+        $endsWith = new EndsWith(new Variable("a"), new String_("b"));
 
-        $this->assertSame("(a ENDS WITH b)", $endsWith->toQuery());
+        $this->assertSame("(a ENDS WITH 'b')", $endsWith->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $endsWith = new EndsWith($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"), false);
+        $endsWith = new EndsWith(new Variable("a"), new String_("b"), false);
 
-        $this->assertSame("a ENDS WITH b", $endsWith->toQuery());
+        $this->assertSame("a ENDS WITH 'b'", $endsWith->toQuery());
     }
 
     public function testCannotBeNested(): void
     {
-        $endsWith = new EndsWith($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
+        $endsWith = new EndsWith(new Variable("a"), new String_("b"));
 
         $this->expectException(TypeError::class);
 
@@ -64,7 +63,7 @@ class EndsWithTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $endsWith = new EndsWith($this->getQueryConvertibleMock(AnyType::class, "a"), $this->getQueryConvertibleMock(AnyType::class, "b"));
+        $endsWith = new EndsWith($this->createMock(AnyType::class), $this->createMock(AnyType::class));
 
         $endsWith->toQuery();
     }

@@ -23,21 +23,19 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Expressions\Equality;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Equality;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Equality
  */
 class EqualityTest extends TestCase
 {
-    use TestHelper;
-
     public function testToQuery(): void
     {
-        $equality = new Equality(new Property(new Variable('v'), "10"), new Property(new Variable('v'), "15"));
+        $equality = new Equality(new Integer(10), new Integer(15));
 
         $this->assertSame("(10 = 15)", $equality->toQuery());
 
@@ -48,21 +46,12 @@ class EqualityTest extends TestCase
 
     public function testToQueryNoParentheses(): void
     {
-        $equality = new Equality(new Property(new Variable('v'), "10"), new Property(new Variable('v'), "15"), false);
+        $equality = new Equality(new Integer(10), new Integer(15), false);
 
         $this->assertSame("10 = 15", $equality->toQuery());
 
         $equality = new Equality($equality, $equality);
 
         $this->assertSame("(10 = 15 = 10 = 15)", $equality->toQuery());
-    }
-
-    public function testDoesNotAcceptAnyTypeAsOperands(): void
-    {
-        $this->expectException(TypeError::class);
-
-        $equality = new Equality($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
-
-        $equality->toQuery();
     }
 }

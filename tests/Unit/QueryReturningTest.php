@@ -5,6 +5,9 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 use TypeError;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Query;
+use WikibaseSolutions\CypherDSL\Patterns\Node;
+use WikibaseSolutions\CypherDSL\Patterns\Path;
+use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
@@ -16,15 +19,15 @@ class QueryReturningTest extends TestCase
 {
 	public function testReturning(): void
 	{
-		$m = $this->getQueryConvertibleMock(StructuralType::class, "(m:Movie)");
+		$m = (new Node("Movie"))->withVariable('m');
 
 		$statement = (new Query())->returning($m)->build();
 
-		$this->assertSame("RETURN (m:Movie)", $statement);
+		$this->assertSame("RETURN m", $statement);
 
 		$statement = (new Query())->returning(["n" => $m])->build();
 
-		$this->assertSame("RETURN (m:Movie) AS n", $statement);
+		$this->assertSame("RETURN m AS n", $statement);
 	}
 
 	public function testReturningRejectsNotAnyType(): void
@@ -33,7 +36,7 @@ class QueryReturningTest extends TestCase
 
 		$this->expectException(TypeError::class);
 
-		(new Query())->returning([$m]);
+		(new Query())->returning($m);
 	}
 
 	public function testReturningWithNode(): void

@@ -19,15 +19,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\TypeTraits\PropertyTypeTraits;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Contains;
-use WikibaseSolutions\CypherDSL\Expressions\EndsWith;
-use WikibaseSolutions\CypherDSL\Expressions\Regex;
-use WikibaseSolutions\CypherDSL\Expressions\StartsWith;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Contains;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\EndsWith;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Regex;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\StartsWith;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\StringTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
@@ -36,7 +36,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 class StringTypeTraitTest extends TestCase
 {
-    use TestHelper;
 
     /**
      * @var MockObject|StringType
@@ -58,7 +57,7 @@ class StringTypeTraitTest extends TestCase
                 return '10';
             }
         };
-        $this->b = $this->getQueryConvertibleMock(StringType::class, "15");
+        $this->b = new String_('15');
     }
 
     public function testContains(): void

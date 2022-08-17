@@ -86,7 +86,6 @@ class EscapeTraitTest extends TestCase
     public function provideUnsafeValueIsEscapedData(): array
     {
         return [
-            [''],
             ['__FooBar__'],
             ['_'],
             ['__'],

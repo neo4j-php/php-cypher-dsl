@@ -4,7 +4,8 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Expressions\Label;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 
 /**
  * Tests the "where" method of the Query class.
@@ -15,10 +16,10 @@ class QueryWhereTest extends TestCase
 {
 	public function testWhere(): void
 	{
-		$expression = $this->getQueryConvertibleMock(BooleanType::class, "a.age");
+		$expression = new Label(new Variable('a'),'age');
 
 		$statement = (new Query())->where($expression)->build();
 
-		$this->assertSame("WHERE a.age", $statement);
+		$this->assertSame("WHERE a:age", $statement);
 	}
 }

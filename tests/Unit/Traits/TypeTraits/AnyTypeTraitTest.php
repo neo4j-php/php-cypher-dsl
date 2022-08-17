@@ -19,46 +19,44 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\TypeTraits;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\GreaterThan;
-use WikibaseSolutions\CypherDSL\Expressions\GreaterThanOrEqual;
-use WikibaseSolutions\CypherDSL\Expressions\LessThan;
-use WikibaseSolutions\CypherDSL\Expressions\LessThanOrEqual;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\ComparablePropertyTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\ComparablePropertyType;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThan;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThanOrEqual;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThan;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThanOrEqual;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\AnyTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\ComparablePropertyTypeTrait
+ * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\AnyTypeTrait
  */
-class ComparablePropertyTypeTraitTest extends TestCase
+class AnyTypeTraitTest extends TestCase
 {
-    use TestHelper;
-
     /**
-     * @var MockObject|ComparablePropertyType
+     * @var MockObject|AnyType
      */
     private $a;
 
     /**
-     * @var MockObject|ComparablePropertyType
+     * @var MockObject|AnyType
      */
     private $b;
 
     public function setUp(): void
     {
-        $this->a = new class () implements ComparablePropertyType {
-            use ComparablePropertyTypeTrait;
+        $this->a = new class () implements AnyType {
+            use AnyTypeTrait;
 
             public function toQuery(): string
             {
                 return '10';
             }
         };
-        $this->b = $this->getQueryConvertibleMock(ComparablePropertyType::class, "date({year: 2020, month: 12, day: 5})");
+        $this->b = $this->createMock(AnyType::class);
+        $this->b->method('toQuery')->willReturn("date({year: 2020, month: 12, day: 5})");
     }
 
     public function testGt(): void

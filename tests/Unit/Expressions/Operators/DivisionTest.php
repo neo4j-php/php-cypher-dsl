@@ -23,21 +23,19 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Expressions\Division;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Division;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Division
  */
 class DivisionTest extends TestCase
 {
-    use TestHelper;
 
     public function testToQuery(): void
     {
-        $division = new Division($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"));
+        $division = new Division(new Integer(10), new Integer(15));
 
         $this->assertSame("(10 / 15)", $division->toQuery());
 
@@ -48,7 +46,7 @@ class DivisionTest extends TestCase
 
     public function testToQueryNoParentheses(): void
     {
-        $division = new Division($this->getQueryConvertibleMock(NumeralType::class, "10"), $this->getQueryConvertibleMock(NumeralType::class, "15"), false);
+        $division = new Division(new Integer(10), new Integer(15), false);
 
         $this->assertSame("10 / 15", $division->toQuery());
 
@@ -61,7 +59,7 @@ class DivisionTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $division = new Division($this->getQueryConvertibleMock(AnyType::class, "10"), $this->getQueryConvertibleMock(AnyType::class, "15"));
+        $division = new Division($this->createMock(AnyType::class), $this->createMock(AnyType::class));
 
         $division->toQuery();
     }

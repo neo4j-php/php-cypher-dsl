@@ -23,35 +23,34 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Expressions\Contains;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Contains;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Contains
  */
 class ContainsTest extends TestCase
 {
-    use TestHelper;
 
     public function testToQuery(): void
     {
-        $contains = new Contains($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
+        $contains = new Contains(new Variable("a"), new String_("b"));
 
-        $this->assertSame("(a CONTAINS b)", $contains->toQuery());
+        $this->assertSame("(a CONTAINS 'b')", $contains->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $contains = new Contains($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"), false);
+        $contains = new Contains(new Variable("a"), new String_("b"), false);
 
-        $this->assertSame("a CONTAINS b", $contains->toQuery());
+        $this->assertSame("a CONTAINS 'b'", $contains->toQuery());
     }
 
     public function testCannotBeNested(): void
     {
-        $contains = new Contains($this->getQueryConvertibleMock(StringType::class, "a"), $this->getQueryConvertibleMock(StringType::class, "b"));
+        $contains = new Contains(new Variable("a"), new String_("b"));
 
         $this->expectException(TypeError::class);
 
@@ -64,7 +63,7 @@ class ContainsTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        $contains = new Contains($this->getQueryConvertibleMock(AnyType::class, "a"), $this->getQueryConvertibleMock(AnyType::class, "b"));
+        $contains = new Contains($this->createMock(AnyType::class), $this->createMock(AnyType::class));
 
         $contains->toQuery();
     }

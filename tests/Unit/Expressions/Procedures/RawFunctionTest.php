@@ -19,26 +19,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Procedures;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Raw;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\Raw
  */
 class RawFunctionTest extends TestCase
 {
-    use TestHelper;
-
     public function testToQuery()
     {
-        $a = $this->getQueryConvertibleMock(AnyType::class, "a");
-        $b = $this->getQueryConvertibleMock(AnyType::class, "b");
-        $c = $this->getQueryConvertibleMock(AnyType::class, "c");
+        $a = new Variable('a');
+        $b = new Variable('b');
+        $c = new Variable('c');
 
         $raw = new Raw("foobar", [$a, $b, $c]);
 

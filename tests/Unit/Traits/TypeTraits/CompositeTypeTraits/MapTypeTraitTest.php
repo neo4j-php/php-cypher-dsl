@@ -19,20 +19,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\TypeTraits;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait
  */
 class MapTypeTraitTest extends TestCase
 {
-    use TestHelper;
 
     /**
      * @var MockObject|MapType
@@ -41,7 +40,7 @@ class MapTypeTraitTest extends TestCase
 
     public function setUp(): void
     {
-        $this->a = $this->getQueryConvertibleMock(MapType::class, "{}");
+        $this->a = new Map;
     }
 
     public function testProperty()

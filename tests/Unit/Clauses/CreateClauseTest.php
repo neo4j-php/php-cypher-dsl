@@ -52,18 +52,6 @@ class CreateClauseTest extends TestCase
         $this->assertEquals([$patternA, $patternB], $createClause->getPatterns());
     }
 
-    public function testSetPatterns(): void
-    {
-        $createClause = new CreateClause();
-
-        $pathExpression = Query::node()->relationshipTo(Query::node());
-        $createClause->addPattern($pathExpression);
-
-        $createClause->setPatterns([Query::node()->withVariable('a'), Query::node()->withVariable('b')]);
-
-        $this->assertSame("CREATE (a), (b)", $createClause->toQuery());
-    }
-
     public function testAddPattern(): void
     {
         $createClause = new CreateClause();
@@ -74,13 +62,13 @@ class CreateClauseTest extends TestCase
         $this->assertSame("CREATE (a), (b)", $createClause->toQuery());
     }
 
-    public function testSetPatternsDoesNotAcceptAnyType(): void
+    public function testAddPatternDoesNotAcceptAnyType(): void
     {
         $createClause = new CreateClause();
 
         $this->expectException(TypeError::class);
 
-        $createClause->setPatterns([Query::function()::date()]);
+        $createClause->addPattern(Query::function()::date());
         $createClause->toQuery();
     }
 
@@ -93,7 +81,7 @@ class CreateClauseTest extends TestCase
             Query::node('b')
         ];
 
-        $createClause->setPatterns($patterns);
+        $createClause->addPattern(...$patterns);
 
         $this->assertSame($patterns, $createClause->getPatterns());
 

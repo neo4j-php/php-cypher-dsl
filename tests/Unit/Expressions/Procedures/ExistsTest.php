@@ -19,11 +19,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Procedures;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Exists;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -31,11 +30,11 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 class ExistsTest extends TestCase
 {
-    use TestHelper;
 
     public function testToQuery()
     {
-        $expression = $this->getQueryConvertibleMock(AnyType::class, "expression");
+        $expression = $this->createMock(AnyType::class);
+        $expression->method('toQuery')->willReturn('expression');
 
         $exists = new Exists($expression);
 
@@ -47,7 +46,7 @@ class ExistsTest extends TestCase
      */
     public function testAcceptsAnyType()
     {
-        $expression = $this->getQueryConvertibleMock(AnyType::class, "expression");
+        $expression = $this->createMock(AnyType::class);
 
         $exists = new Exists($expression);
 

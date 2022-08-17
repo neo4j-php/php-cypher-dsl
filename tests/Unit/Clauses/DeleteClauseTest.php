@@ -25,7 +25,6 @@ use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\DeleteClause;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -33,8 +32,6 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 class DeleteClauseTest extends TestCase
 {
-    use TestHelper;
-
     public function testEmptyClause(): void
     {
         $delete = new DeleteClause();
@@ -98,7 +95,7 @@ class DeleteClauseTest extends TestCase
     public function testDoesNotAcceptAnyType(): void
     {
         $delete = new DeleteClause();
-        $variable = $this->getQueryConvertibleMock(AnyType::class, "a");
+        $variable = $this->createMock(AnyType::class);
 
         $this->expectException(TypeError::class);
 
@@ -106,46 +103,44 @@ class DeleteClauseTest extends TestCase
         $delete->toQuery();
     }
 
-    public function testSetVariables(): void
+    public function testAddStructure(): void
     {
         $delete = new DeleteClause();
 
         $variableA = new Variable('a');
         $variableB = new Variable('b');
 
-        $variables = [$variableA, $variableB];
-
-        $delete->setPatterns($variables);
+        $delete->addStructure($variableA, $variableB);
 
         $this->assertSame("DELETE a, b", $delete->toQuery());
-        $this->assertSame($variables, $delete->getStructural());
+        $this->assertSame([$variableA, $variableB], $delete->getStructural());
     }
 
-    public function testSetVariablesDoesNotAcceptAnyType(): void
+    public function testAddStructureDoesNotAcceptAnyType(): void
     {
         $delete = new DeleteClause();
 
         $variableA = new Variable('a');
-        $variableB = $this->getQueryConvertibleMock(AnyType::class, "b");
+        $variableB = $this->createMock(AnyType::class);
 
         $variables = [$variableA, $variableB];
 
         $this->expectException(TypeError::class);
 
-        $delete->setPatterns($variables);
+        $delete->addStructure($variableA, $variableB);
         $delete->toQuery();
     }
 
-    public function testGetVariables(): void
+    public function testGetStructural(): void
     {
         $delete = new DeleteClause();
 
         $this->assertSame([], $delete->getStructural());
 
-        $variables = [new Variable('a')];
-        $delete->setPatterns($variables);
+        $variable = new Variable('a');
+        $delete->addStructure($variable);
 
-        $this->assertSame($variables, $delete->getStructural());
+        $this->assertSame([$variable], $delete->getStructural());
     }
 
     public function testDetachesDeletion(): void

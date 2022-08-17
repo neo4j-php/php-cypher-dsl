@@ -30,12 +30,11 @@ use WikibaseSolutions\CypherDSL\Expressions\Variable;
  */
 class LabelTest extends TestCase
 {
-    use TestHelper;
 
     public function testSingle()
     {
-        $expression = $this->getQueryConvertibleMock(Variable::class, "foo");
-        $label = ["Bar"];
+        $expression = new Variable("foo");
+        $label = "Bar";
 
         $label = new Label($expression, $label);
 
@@ -44,18 +43,18 @@ class LabelTest extends TestCase
 
     public function testMultiple()
     {
-        $expression = $this->getQueryConvertibleMock(Variable::class, "foo");
+        $expression = new Variable("foo");
         $label = ["Bar", "Baz"];
 
-        $label = new Label($expression, $label);
+        $label = new Label($expression, ...$label);
 
         $this->assertSame("foo:Bar:Baz", $label->toQuery());
     }
 
     public function testLabelIsEscaped()
     {
-        $expression = $this->getQueryConvertibleMock(Variable::class, "foo");
-        $label = ["{}"];
+        $expression = new Variable("foo");
+        $label = "{}";
 
         $label = new Label($expression, $label);
 

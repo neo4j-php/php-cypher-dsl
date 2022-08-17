@@ -23,34 +23,32 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\UnaryMinus;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\UnaryMinus
  */
-class MinusTest extends TestCase
+class UnaryMinusTest extends TestCase
 {
-    use TestHelper;
 
     public function testToQuery()
     {
-        $minus = new Minus($this->getQueryConvertibleMock(NumeralType::class, "10"));
+        $minus = new UnaryMinus(new Integer(-10));
 
-        $this->assertSame("-10", $minus->toQuery());
+        $this->assertSame("(- -10)", $minus->toQuery());
 
-        $minus = new Minus($minus);
+        $minus = new UnaryMinus($minus);
 
-        $this->assertSame("--10", $minus->toQuery());
+        $this->assertSame("(- (- -10))", $minus->toQuery());
     }
 
     public function testDoesNotAcceptAnyTypeAsOperand()
     {
         $this->expectException(TypeError::class);
 
-        $minus = new Minus($this->getQueryConvertibleMock(AnyType::class, "10"));
+        $minus = new UnaryMinus($this->createMock(AnyType::class));
 
         $minus->toQuery();
     }

@@ -24,16 +24,14 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\SkipClause;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\LimitClause
  */
 class SkipClauseTest extends TestCase
 {
-    use TestHelper;
 
     public function testEmptyClause(): void
     {
@@ -46,7 +44,7 @@ class SkipClauseTest extends TestCase
     public function testPattern(): void
     {
         $skip = new SkipClause();
-        $expression = $this->getQueryConvertibleMock(NumeralType::class, "10");
+        $expression = new Integer(10);
 
         $skip->setSkip($expression);
 
@@ -57,10 +55,10 @@ class SkipClauseTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testAcceptsNumeralType(): void
+    public function testAcceptsInteger(): void
     {
         $skip = new SkipClause();
-        $expression = $this->getQueryConvertibleMock(NumeralType::class, "10");
+        $expression = new Integer(10);
 
         $skip->setSkip($expression);
 
@@ -70,7 +68,7 @@ class SkipClauseTest extends TestCase
     public function testDoesNotAcceptAnyType(): void
     {
         $skip = new SkipClause();
-        $expression = $this->getQueryConvertibleMock(AnyType::class, "10");
+        $expression = $this->createMock(AnyType::class);
 
         $this->expectException(TypeError::class);
 

@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Functions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Procedures;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\All;
@@ -36,19 +36,16 @@ use WikibaseSolutions\CypherDSL\Expressions\Procedures\Point;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Raw;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Single;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Time;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure
  */
 class FunctionCallTest extends TestCase
 {
-    use TestHelper;
-
     public function testRaw()
     {
         $raw = Procedure::raw("foo", []);
@@ -58,9 +55,9 @@ class FunctionCallTest extends TestCase
 
     public function testAll()
     {
-        $variable = $this->getQueryConvertibleMock(Variable::class, "a");
-        $list = $this->getQueryConvertibleMock(ListType::class, "[]");
-        $predicate = $this->getQueryConvertibleMock(AnyType::class, "b");
+        $variable = new Variable("a");
+        $list = new List_;
+        $predicate = $this->createMock(AnyType::class);
 
         $all = Procedure::all($variable, $list, $predicate);
 
@@ -69,9 +66,9 @@ class FunctionCallTest extends TestCase
 
     public function testAny()
     {
-        $variable = $this->getQueryConvertibleMock(Variable::class, "a");
-        $list = $this->getQueryConvertibleMock(ListType::class, "[]");
-        $predicate = $this->getQueryConvertibleMock(AnyType::class, "b");
+        $variable = new Variable("a");
+        $list = new List_;
+        $predicate = $this->createMock(AnyType::class);
 
         $any = Procedure::any($variable, $list, $predicate);
 
@@ -80,7 +77,7 @@ class FunctionCallTest extends TestCase
 
     public function testExists()
     {
-        $expression = $this->getQueryConvertibleMock(AnyType::class, "a");
+        $expression = $this->createMock(AnyType::class);
 
         $exists = Procedure::exists($expression);
 
@@ -89,7 +86,7 @@ class FunctionCallTest extends TestCase
 
     public function testIsEmpty()
     {
-        $list = $this->getQueryConvertibleMock(ListType::class, "[]");
+        $list = new List_;
 
         $isEmpty = Procedure::isEmpty($list);
 
@@ -98,9 +95,9 @@ class FunctionCallTest extends TestCase
 
     public function testNone()
     {
-        $variable = $this->getQueryConvertibleMock(Variable::class, "a");
-        $list = $this->getQueryConvertibleMock(ListType::class, "[]");
-        $predicate = $this->getQueryConvertibleMock(AnyType::class, "b");
+        $variable = new Variable("a");
+        $list = new List_;
+        $predicate = $this->createMock(AnyType::class);
 
         $none = Procedure::none($variable, $list, $predicate);
 
@@ -109,9 +106,9 @@ class FunctionCallTest extends TestCase
 
     public function testSingle()
     {
-        $variable = $this->getQueryConvertibleMock(Variable::class, "a");
-        $list = $this->getQueryConvertibleMock(ListType::class, "[]");
-        $predicate = $this->getQueryConvertibleMock(AnyType::class, "b");
+        $variable = new Variable("a");
+        $list = new List_;
+        $predicate = $this->createMock(AnyType::class);
 
         $single = Procedure::single($variable, $list, $predicate);
 
@@ -120,7 +117,7 @@ class FunctionCallTest extends TestCase
 
     public function testPoint()
     {
-        $map = $this->getQueryConvertibleMock(MapType::class, "map");
+        $map = new Map([]);
 
         $point = Procedure::point($map);
 
@@ -129,7 +126,7 @@ class FunctionCallTest extends TestCase
 
     public function testDate()
     {
-        $value = $this->getQueryConvertibleMock(AnyType::class, "value");
+        $value = $this->createMock(AnyType::class);
 
         $date = Procedure::date($value);
 
@@ -142,7 +139,7 @@ class FunctionCallTest extends TestCase
 
     public function testDateTime()
     {
-        $value = $this->getQueryConvertibleMock(AnyType::class, "value");
+        $value = $this->createMock(AnyType::class);
 
         $date = Procedure::datetime($value);
 
@@ -155,7 +152,7 @@ class FunctionCallTest extends TestCase
 
     public function testLocalDateTime()
     {
-        $value = $this->getQueryConvertibleMock(AnyType::class, "value");
+        $value = $this->createMock(AnyType::class);
 
         $date = Procedure::localdatetime($value);
 
@@ -168,7 +165,7 @@ class FunctionCallTest extends TestCase
 
     public function testLocalTime()
     {
-        $value = $this->getQueryConvertibleMock(AnyType::class, "value");
+        $value = $this->createMock(AnyType::class);
 
         $date = Procedure::localtime($value);
 
@@ -181,7 +178,7 @@ class FunctionCallTest extends TestCase
 
     public function testTime()
     {
-        $value = $this->getQueryConvertibleMock(AnyType::class, "value");
+        $value = $this->createMock(AnyType::class);
 
         $date = Procedure::time($value);
 

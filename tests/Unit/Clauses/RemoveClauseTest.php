@@ -27,7 +27,6 @@ use WikibaseSolutions\CypherDSL\Clauses\RemoveClause;
 use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\TestHelper;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -35,8 +34,6 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 class RemoveClauseTest extends TestCase
 {
-    use TestHelper;
-
     public function testEmptyClause(): void
     {
         $remove = new RemoveClause();
@@ -99,7 +96,7 @@ class RemoveClauseTest extends TestCase
     public function testDoesNotAcceptAnyType(): void
     {
         $remove = new RemoveClause();
-        $expression = $this->getQueryConvertibleMock(AnyType::class, "(a)");
+        $expression = $this->createMock(AnyType::class);
 
         $this->expectException(TypeError::class);
 

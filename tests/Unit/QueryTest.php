@@ -22,16 +22,24 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use InvalidArgumentException;
+use TypeError;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
+use WikibaseSolutions\CypherDSL\Clauses\RawClause;
+use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThan;
+use WikibaseSolutions\CypherDSL\Clauses\WithClause;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
 use WikibaseSolutions\CypherDSL\Expressions\Parameter;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
@@ -59,7 +67,7 @@ class QueryTest extends TestCase
         $label = "m";
 
         $actual = Query::node($label);
-        $expected = (new Node())->labeled($label);
+        $expected = (new Node())->addLabel($label);
 
         $this->assertEquals($expected, $actual);
     }
@@ -123,7 +131,7 @@ class QueryTest extends TestCase
 
     public function testListOfMixed(): void
     {
-        $list = Query::list([$this->getQueryConvertibleMock(AnyType::class, "hello"), "world"]);
+        $list = Query::list([$this->createMock(AnyType::class), "world"]);
 
         $this->assertInstanceOf(List_::class, $list);
     }
@@ -131,8 +139,8 @@ class QueryTest extends TestCase
     public function testListOfAnyType(): void
     {
         $list = Query::list([
-            $this->getQueryConvertibleMock(AnyType::class, "hello"),
-            $this->getQueryConvertibleMock(AnyType::class, "world"),
+            $this->createMock(AnyType::class),
+            $this->createMock(AnyType::class),
         ]);
 
         $this->assertInstanceOf(List_::class, $list);
@@ -185,7 +193,7 @@ class QueryTest extends TestCase
 
     public function testInvalidList(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(TypeError::class);
         Query::list([new class () {}]);
     }
 
@@ -206,33 +214,31 @@ class QueryTest extends TestCase
 
     public function testAddClause(): void
     {
-        $clauseMockText = "FOOBAR foobar";
-        $clauseMock = $this->getQueryConvertibleMock(Clause::class, $clauseMockText);
+        $clauseMock = new RawClause('FOOBAR', 'foobar');
         $statement = (new Query())->addClause($clauseMock)->build();
 
-        $this->assertSame($clauseMockText, $statement);
+        $this->assertSame("FOOBAR foobar", $statement);
     }
 
     public function testBuild(): void
     {
-        $withClause = $this->getQueryConvertibleMock(Clause::class, "WITH foobar");
-        $whereClause = $this->getQueryConvertibleMock(Clause::class, "WHERE foobar");
+        $withClause = (new WithClause)->addEntry(new Variable("foobar"));
+        $whereClause = (new WhereClause)->addExpression(new Label(new Variable("foo"),"bar"));
 
         $query = new Query();
-        $query->clauses = [$withClause, $whereClause];
+        $query->addClause($withClause)->addClause($whereClause);
 
         $statement = $query->build();
 
-        $this->assertSame("WITH foobar WHERE foobar", $statement);
+        $this->assertSame("WITH foobar WHERE foo:bar", $statement);
 
-        $nodeMock = $this->getQueryConvertibleMock(Node::class, "(a)");
-        $nodeMock->method('getVariable')->willReturn($this->getQueryConvertibleMock(Variable::class, 'a'));
+        $variableMock = new Variable("a");
+        $nodeMock = (new Node)->withVariable($variableMock);
 
-        $variableMock = $this->getQueryConvertibleMock(Variable::class, "a");
-        $pathMock = $this->getQueryConvertibleMock(Path::class, "(a)->(b)");
-        $numeralMock = $this->getQueryConvertibleMock(NumeralType::class, "12");
-        $booleanMock = $this->getQueryConvertibleMock(BooleanType::class, "a > b");
-        $propertyMock = $this->getQueryConvertibleMock(Property::class, "a.b");
+        $pathMock = new Path([$nodeMock, (new Node)->withVariable('b')], [new Relationship(Relationship::DIR_RIGHT)]);
+        $numeralMock = new Integer(12);
+        $booleanMock = new GreaterThan($variableMock, new Variable('b'), false);
+        $propertyMock = new Property($variableMock, 'b');
 
         $query = new Query();
         $statement = $query->match([$pathMock, $nodeMock])
@@ -251,7 +257,7 @@ class QueryTest extends TestCase
             ->with(["#" => $nodeMock])
             ->build();
 
-        $this->assertSame("MATCH (a)->(b), (a) RETURN a AS `#` CREATE (a)->(b), (a) CREATE (a)->(b) DELETE a, a DETACH DELETE a, a LIMIT 12 MERGE (a) OPTIONAL MATCH (a), (a) ORDER BY a.b, a.b DESCENDING REMOVE a.b WHERE a > b WITH a AS `#`", $statement);
+        $this->assertSame("MATCH (a)-->(b), (a) RETURN a AS `#` CREATE (a)-->(b), (a) CREATE (a)-->(b) DELETE a, a DETACH DELETE a, a LIMIT 12 MERGE (a) OPTIONAL MATCH (a), (a) ORDER BY a.b, a.b DESCENDING REMOVE a.b WHERE a > b WITH a AS `#`", $statement);
     }
 
     public function testBuildEmpty(): void
@@ -264,14 +270,14 @@ class QueryTest extends TestCase
     public function testInt(): void
     {
         $literal = Query::literal(1);
-        self::assertInstanceOf(Number::class, $literal);
+        self::assertInstanceOf(Integer::class, $literal);
         self::assertEquals('1', $literal->toQuery());
     }
 
     public function testFloat(): void
     {
         $literal = Query::literal(1.2);
-        self::assertInstanceOf(Number::class, $literal);
+        self::assertInstanceOf(Float_::class, $literal);
         self::assertEquals('1.2', $literal->toQuery());
     }
 
@@ -340,11 +346,11 @@ class QueryTest extends TestCase
             ['foobar', new String_('foobar')],
             ['0', new String_('0')],
             ['100', new String_('100')],
-            [0, new Number(0)],
-            [100, new Number(100)],
-            [10.0, new Number(10.0)],
-            [69420, new Number(69420)],
-            [10.0000000000000000000000000000001, new Number(10.0000000000000000000000000000001)],
+            [0, new Integer(0)],
+            [100, new Integer(100)],
+            [10.0, new Float_(10.0)],
+            [69420.0, new Float_(69420)],
+            [10.0000000000000000000000000000001, new Float_(10.0000000000000000000000000000001)],
             [false, new Boolean(false)],
             [true, new Boolean(true)],
         ];
