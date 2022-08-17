@@ -72,6 +72,16 @@ final class List_ implements ListType
     }
 
     /**
+     * Returns whether this list is empty.
+     *
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        return empty($this->expressions);
+    }
+
+    /**
      * @inheritDoc
      */
     public function toQuery(): string
