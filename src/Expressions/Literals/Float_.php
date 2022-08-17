@@ -48,6 +48,13 @@ final class Float_ implements FloatType
      */
     public function toQuery(): string
     {
-        return (string)$this->value;
+        $value = (string) $this->value;
+        if (
+            ctype_digit($value)
+            || ($value[0] === '-' && ctype_digit(substr($value,1)) )
+        ) {
+            $value .= '.0';
+        }
+        return $value;
     }
 }

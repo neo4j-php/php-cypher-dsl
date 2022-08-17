@@ -48,6 +48,7 @@ use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Syntax\Alias;
 use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
@@ -63,6 +64,7 @@ final class Query implements QueryConvertible
 {
     use EscapeTrait;
     use ErrorTrait;
+    use CastTrait;
 
     // A reference to the Literal class
     public const literal = Literal::class;
@@ -246,7 +248,7 @@ final class Query implements QueryConvertible
      * @param array $value
      * @return List_
      */
-    public static function list(array $value): List_
+    public static function list(iterable $value): List_
     {
         return self::literal()::list($value);
     }
@@ -358,7 +360,7 @@ final class Query implements QueryConvertible
      * Creates the CALL procedure clause.
      *
      * @param Procedure $procedure The procedure to call
-     * @param string|Variable|Alias|string[]|Variable[]|Alias[] $yields The result fields that should be returned
+     * @param string|Variable|Alias|(string|Variable|Alias)[] $yields The result fields that should be returned
      *
      * @return $this
      *
@@ -370,6 +372,7 @@ final class Query implements QueryConvertible
         if (!is_array($yields)) {
             $yields = [$yields];
         }
+        $yields = $this->makeAliasArray($yields, 'toName');
 
         $callProcedureClause = new CallProcedureClause();
         $callProcedureClause->setProcedure($procedure);
@@ -407,7 +410,7 @@ final class Query implements QueryConvertible
     /**
      * Creates the RETURN clause.
      *
-     * @param AnyType|Alias|Pattern|int|float|string|bool|array|AnyType[]|Alias[]|Pattern[]|int[]|float[]|string[]|bool[]|array[] $expressions The expressions to return
+     * @param AnyType|Alias|Pattern|int|float|string|bool|array|(AnyType|Alias|Pattern|int|float|string|bool|array)[] $expressions The expressions to return
      * @param bool $distinct Whether to be a RETURN DISTINCT query
      *
      * @return $this
@@ -420,9 +423,11 @@ final class Query implements QueryConvertible
         if (!is_array($expressions)) {
             $expressions = [$expressions];
         }
+        $expressions = $this->makeAliasArray($expressions);
 
         $returnClause = new ReturnClause();
         $returnClause->addColumn(...$expressions);
+
         $returnClause->setDistinct($distinct);
 
         $this->clauses[] = $returnClause;
@@ -482,7 +487,7 @@ final class Query implements QueryConvertible
     /**
      * Creates the DETACH DELETE clause.
      *
-     * @param StructuralType|Pattern|StructuralType[]|Pattern[] $variables The variables to delete, including relationships
+     * @param StructuralType|Pattern|(StructuralType|Pattern)[] $variables The variables to delete, including nodes, relationships and paths
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
@@ -688,7 +693,7 @@ final class Query implements QueryConvertible
     /**
      * Creates the WITH clause.
      *
-     * @param AnyType|Alias|Pattern|int|float|string|bool|array|AnyType[]|Alias[]|Pattern[]|int[]|float[]|string[]|bool[]|array[] $expressions The entries to add; if the array-key is non-numerical, it is used as the alias
+     * @param AnyType|Alias|Pattern|int|float|string|bool|array|(AnyType|Alias|Pattern|int|float|string|bool|array)[] $expressions The entries to add; if the array-key is non-numerical, it is used as the alias
      *
      * @return $this
      *
@@ -700,6 +705,7 @@ final class Query implements QueryConvertible
         if (!is_array($expressions)) {
             $expressions = [$expressions];
         }
+        $expressions = $this->makeAliasArray($expressions);
 
         $withClause = new WithClause();
         $withClause->addEntry(...$expressions);
@@ -812,5 +818,24 @@ final class Query implements QueryConvertible
     public function __toString(): string
     {
         return $this->build();
+    }
+
+    /**
+     * Changes an associative array into an array of aliasses.
+     *
+     * @param  array   $array     The array to change into a sequential array
+     * @param  string  $castFunc  Name of the (static) method to use to cast the elements of $array.
+     * @return array   A sequential array, possibly consisting of aliasses.
+     */
+    private function makeAliasArray(array $array, string $castFunc = 'toAnyType'): array
+    {
+        if (array_is_list($array)) {
+            return array_map([self::class, $castFunc], $array);
+        }
+        $newArray = [];
+        foreach ($array as $key => $value) {
+            $newArray []= new Alias(call_user_func([self::class, $castFunc], $value), new Variable($key));
+        }
+        return $newArray;
     }
 }

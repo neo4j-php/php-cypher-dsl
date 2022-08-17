@@ -43,7 +43,7 @@ final class Map implements MapType
      */
     public function __construct(array $elements = [])
     {
-        self::assertClassArray('properties', AnyType::class, $elements);
+        self::assertClassArray('elements', AnyType::class, $elements);
         $this->elements = $elements;
     }
 

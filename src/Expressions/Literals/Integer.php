@@ -11,6 +11,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\IntegerTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
+use TypeError;
 
 /**
  * Represents an integer literal.
@@ -20,25 +21,40 @@ final class Integer implements IntegerType
     use IntegerTypeTrait;
 
     /**
-     * @var int The value
+     * @var string The value
      */
-    private int $value;
+    private string $value;
 
     /**
-     * @param int $value The value
+     * @param int|string $value The value
      * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
-    public function __construct(int $value)
+    public function __construct($value)
     {
-        $this->value = $value;
+        if (!is_int($value) && !is_string($value)) {
+            throw new TypeError('An integer should be given as a string or integer, '.gettype($value).' received.');
+        }
+        $parsedValue = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
+
+        if (false === $parsedValue) {
+           throw new TypeError(
+               'A non-integer string has been provided: "'.$value.'".'
+           );
+        } elseif (is_string($value) && $parsedValue !== $value) {
+           throw new TypeError(
+               'A non-integer string has been provided: "'.$value.'", should be something like "'.$parsedValue.'".'
+           );
+        }
+
+        $this->value = $parsedValue;
     }
 
     /**
-     * Returns the integer value.
+     * Returns a string representation of the integer value.
      *
-     * @return int
+     * @return string
      */
-    public function getValue(): int
+    public function getValue(): string
     {
         return $this->value;
     }
@@ -48,6 +64,6 @@ final class Integer implements IntegerType
      */
     public function toQuery(): string
     {
-        return (string)$this->value;
+        return $this->value;
     }
 }
