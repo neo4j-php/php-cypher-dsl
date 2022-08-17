@@ -165,12 +165,12 @@ trait CastTrait
     {
         self::assertClass('value', [AnyType::class, Pattern::class, 'int', 'float', 'string', 'bool', 'array'], $value);
 
-        if ($value instanceof AnyType) {
-            return $value;
-        }
-
         if ($value instanceof Pattern) {
             return $value->getVariable();
+        }
+
+        if ($value instanceof AnyType) {
+            return $value;
         }
 
         return Literal::literal($value);
