@@ -150,7 +150,7 @@ final class Node implements PropertyPattern, CompletePattern, RelatablePattern
             }
         }
 
-        if (isset($this->properties)) {
+        if (isset($this->properties) && !$this->properties->isEmpty()) {
             if ($nodeInner !== "") {
                 $nodeInner .= " ";
             }

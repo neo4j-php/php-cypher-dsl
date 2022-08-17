@@ -89,6 +89,16 @@ final class Map implements MapType
     }
 
     /**
+     * Checks if this map is empty
+     *
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        return empty($this->elements);
+    }
+
+    /**
      * @inheritDoc
      */
     public function toQuery(): string
