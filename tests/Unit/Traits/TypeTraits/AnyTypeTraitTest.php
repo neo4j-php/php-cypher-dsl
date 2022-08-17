@@ -31,7 +31,7 @@ use WikibaseSolutions\CypherDSL\Traits\TypeTraits\AnyTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\AnyTrait
+ * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\AnyTypeTrait
  */
 class AnyTypeTraitTest extends TestCase
 {
