@@ -38,6 +38,10 @@ class GreaterThanOrEqualTest extends TestCase
         $greaterThanOrEqual = new GreaterThanOrEqual(new Integer(10), new Integer(15));
 
         $this->assertSame("(10 >= 15)", $greaterThanOrEqual->toQuery());
+
+        $greaterThanOrEqual = new GreaterThanOrEqual($greaterThanOrEqual, $greaterThanOrEqual);
+
+        $this->assertSame("((10 >= 15) >= (10 >= 15))", $greaterThanOrEqual->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
@@ -45,25 +49,5 @@ class GreaterThanOrEqualTest extends TestCase
         $greaterThanOrEqual = new GreaterThanOrEqual(new Integer(10), new Integer(15), false);
 
         $this->assertSame("10 >= 15", $greaterThanOrEqual->toQuery());
-    }
-
-    public function testCannotBeNested(): void
-    {
-        $greaterThanOrEqual = new GreaterThanOrEqual(new Integer(10), new Integer(15));
-
-        $this->expectException(TypeError::class);
-
-        $greaterThanOrEqual = new GreaterThanOrEqual($greaterThanOrEqual, $greaterThanOrEqual);
-
-        $greaterThanOrEqual->toQuery();
-    }
-
-    public function testDoesNotAcceptAnyTypeAsOperands(): void
-    {
-        $this->expectException(TypeError::class);
-
-        $greaterThanOrEqual = new GreaterThanOrEqual($this->createMock(AnyType::class), $this->createMock(AnyType::class));
-
-        $greaterThanOrEqual->toQuery();
     }
 }

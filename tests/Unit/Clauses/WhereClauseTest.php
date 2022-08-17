@@ -52,9 +52,6 @@ class WhereClauseTest extends TestCase
         $this->assertEquals($expression, $where->getExpression());
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
     public function testDoesNotAcceptAnyType(): void
     {
         $where = new WhereClause();

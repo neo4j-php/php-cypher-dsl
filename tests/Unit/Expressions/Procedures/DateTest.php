@@ -38,7 +38,7 @@ class DateTest extends TestCase
 
         $date = new Date($map);
 
-        $this->assertSame("date({foo => 'bar'})", $date->toQuery());
+        $this->assertSame("date({foo: 'bar'})", $date->toQuery());
     }
 
     public function testEmpty()

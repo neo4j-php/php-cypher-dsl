@@ -35,18 +35,18 @@ class AdditionTest extends TestCase
 {
     public function testToQuery(): void
     {
-		$left = new Integer(10);
-		$right = new Float_(15);
+        $left = new Integer(10);
+        $right = new Float_(15);
         $addition = new Addition($left, $right);
 
-        $this->assertSame("(10 + 15)", $addition->toQuery());
+        $this->assertSame("(10 + 15.0)", $addition->toQuery());
 
         $this->assertSame($left, $addition->getLeft());
         $this->assertSame($right, $addition->getRight());
 
         $newAddition = new Addition($addition, $addition);
 
-        $this->assertSame("((10 + 15) + (10 + 15))", $newAddition->toQuery());
+        $this->assertSame("((10 + 15.0) + (10 + 15.0))", $newAddition->toQuery());
 
         $this->assertTrue($newAddition->insertsParentheses());
         $this->assertEquals($addition, $newAddition->getLeft());
@@ -54,7 +54,7 @@ class AdditionTest extends TestCase
 
         $newAddition = new Addition($addition, $addition, false);
 
-        $this->assertSame("(10 + 15) + (10 + 15)", $newAddition->toQuery());
+        $this->assertSame("(10 + 15.0) + (10 + 15.0)", $newAddition->toQuery());
 
         $this->assertFalse($newAddition->insertsParentheses());
         $this->assertEquals($addition, $newAddition->getLeft());
@@ -63,8 +63,8 @@ class AdditionTest extends TestCase
 
     public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
-		$left = new Map([]);
-		$right = new Map([]);
+        $left = new Map([]);
+        $right = new Map([]);
 
         $this->expectException(TypeError::class);
 

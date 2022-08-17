@@ -4,7 +4,10 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Query;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThan;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+
 
 /**
  * Tests the "with" method of the Query class.
@@ -15,7 +18,7 @@ class QueryWithTest extends TestCase
 {
 	public function testWith(): void
 	{
-		$expression = $this->createMock(AnyType::class);
+		$expression = new LessThan(new Variable('a'), new Variable('b'), false);
 
 		$statement = (new Query())->with($expression)->build();
 

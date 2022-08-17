@@ -38,6 +38,10 @@ class LessThanTest extends TestCase
         $lessThan = new LessThan(new Integer(10), new Integer(15));
 
         $this->assertSame("(10 < 15)", $lessThan->toQuery());
+
+        $lessThan = new LessThan($lessThan, $lessThan, false);
+
+        $this->assertSame("(10 < 15) < (10 < 15)", $lessThan->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
@@ -45,25 +49,5 @@ class LessThanTest extends TestCase
         $lessThan = new LessThan(new Integer(10), new Integer(15), false);
 
         $this->assertSame("10 < 15", $lessThan->toQuery());
-    }
-
-    public function testCannotBeNested(): void
-    {
-        $lessThan = new LessThan(new Integer(10), new Integer(15));
-
-        $this->expectException(TypeError::class);
-
-        $lessThan = new LessThan($lessThan, $lessThan);
-
-        $this->assertSame("((10 < 15) < (10 < 15))", $lessThan->toQuery());
-    }
-
-    public function testDoesNotAcceptAnyTypeAsOperands(): void
-    {
-        $this->expectException(TypeError::class);
-
-        $lessThan = new LessThan($this->createMock(AnyType::class), $this->createMock(AnyType::class));
-
-        $lessThan->toQuery();
     }
 }

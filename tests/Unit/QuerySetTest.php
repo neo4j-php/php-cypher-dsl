@@ -24,11 +24,11 @@ class QuerySetTest extends TestCase
 
 		$statement = (new Query())->set($expression)->build();
 
-		$this->assertSame("SET a.age", $statement);
+		$this->assertSame("SET a.age = 55", $statement);
 
 		$statement = (new Query())->set([$expression, $expression])->build();
 
-		$this->assertSame("SET a.age, a.age", $statement);
+		$this->assertSame("SET a.age = 55, a.age = 55", $statement);
 	}
 
 	public function testSetRejectsAnyType(): void

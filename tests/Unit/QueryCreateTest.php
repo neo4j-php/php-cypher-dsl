@@ -19,7 +19,10 @@ class QueryCreateTest extends TestCase
 {
 	public function testCreate(): void
 	{
-		$m = new Path([(new Node('Movie'))->withVariable('m'),(new Node)->withVariable('b')],[new Relationship(Relationship::DIR_RIGHT,'RELATED')]);
+		$m = new Path(
+                    [(new Node('Movie'))->withVariable('m'), (new Node)->withVariable('b')],
+                    [(new Relationship(Relationship::DIR_RIGHT))->addType('RELATED')]
+                );
 
 		$statement = (new Query())->create($m)->build();
 

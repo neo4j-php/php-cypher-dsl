@@ -24,6 +24,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\StartsWith;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
@@ -36,21 +37,21 @@ class StartsWithTest extends TestCase
 
     public function testToQuery(): void
     {
-        $startsWith = new StartsWith(new String_("a"), new String_("b"));
+        $startsWith = new StartsWith(new Variable("a"), new String_("b"));
 
-        $this->assertSame("(a STARTS WITH b)", $startsWith->toQuery());
+        $this->assertSame("(a STARTS WITH 'b')", $startsWith->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $startsWith = new StartsWith(new String_("a"), new String_("b"), false);
+        $startsWith = new StartsWith(new Variable("a"), new String_("b"), false);
 
-        $this->assertSame("a STARTS WITH b", $startsWith->toQuery());
+        $this->assertSame("a STARTS WITH 'b'", $startsWith->toQuery());
     }
 
     public function testCannotBeNested(): void
     {
-        $startsWith = new StartsWith(new String_("a"), new String_("b"));
+        $startsWith = new StartsWith(new Variable("a"), new String_("b"));
 
         $this->expectException(TypeError::class);
 

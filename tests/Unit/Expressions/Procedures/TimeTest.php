@@ -40,7 +40,7 @@ class TimeTest extends TestCase
 
         $time = new Time($map);
 
-        $this->assertSame("time(map)", $time->toQuery());
+        $this->assertSame("time({foo: 'bar'})", $time->toQuery());
     }
 
     public function testEmpty()

@@ -34,6 +34,7 @@ class ExistsTest extends TestCase
     public function testToQuery()
     {
         $expression = $this->createMock(AnyType::class);
+        $expression->method('toQuery')->willReturn('expression');
 
         $exists = new Exists($expression);
 

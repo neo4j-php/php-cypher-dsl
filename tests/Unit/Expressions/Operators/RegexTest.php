@@ -25,6 +25,7 @@ use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Regex;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
@@ -36,21 +37,21 @@ class RegexTest extends TestCase
 
     public function testToQuery(): void
     {
-        $regex = new Regex(new String_("a"), new String_("b"));
+        $regex = new Regex(new Variable("a"), new String_("b"));
 
-        $this->assertSame("(a =~ b)", $regex->toQuery());
+        $this->assertSame("(a =~ 'b')", $regex->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $regex = new Regex(new String_("a"), new String_("b"), false);
+        $regex = new Regex(new Variable("a"), new String_("b"), false);
 
-        $this->assertSame("a =~ b", $regex->toQuery());
+        $this->assertSame("a =~ 'b'", $regex->toQuery());
     }
 
     public function testCannotBeNested(): void
     {
-        $regex = new Regex(new String_("a"), new String_("b"));
+        $regex = new Regex(new Variable("a"), new String_("b"));
 
         $this->expectException(TypeError::class);
 

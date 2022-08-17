@@ -120,13 +120,13 @@ class ErrorTraitTest extends TestCase
     public function testGetTypeErrorText(): void
     {
         $this->assertEquals(
-            '$foo should be a WikibaseSolutions\CypherDSL\Tests\Unit\Traits\ErrorHelperDummyA object, int given.',
+            '$foo should be a WikibaseSolutions\CypherDSL\Tests\Unit\Traits\ErrorHelperDummyA, int given.',
             $this->errorImpl->call('typeError', ['foo', [ErrorHelperDummyA::class], 5])->getMessage()
         );
         $this->assertEquals(
             '$foo should be a ' .
             'WikibaseSolutions\CypherDSL\Tests\Unit\Traits\ErrorHelperDummyA or ' .
-            'WikibaseSolutions\CypherDSL\Tests\Unit\Traits\ErrorHelperDummyB object, int given.',
+            'WikibaseSolutions\CypherDSL\Tests\Unit\Traits\ErrorHelperDummyB, int given.',
             $this->errorImpl->call('typeError', ['foo', [ErrorHelperDummyA::class, ErrorHelperDummyB::class], 5])->getMessage()
         );
     }

@@ -22,6 +22,7 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use InvalidArgumentException;
+use TypeError;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
 use WikibaseSolutions\CypherDSL\Clauses\RawClause;
@@ -192,7 +193,7 @@ class QueryTest extends TestCase
 
     public function testInvalidList(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(TypeError::class);
         Query::list([new class () {}]);
     }
 
@@ -234,9 +235,9 @@ class QueryTest extends TestCase
         $variableMock = new Variable("a");
         $nodeMock = (new Node)->withVariable($variableMock);
 
-        $pathMock = new Path([$nodeMock, (new Node)->withVariable('b')],[new Relationship(Relationship::DIR_RIGHT)]);
+        $pathMock = new Path([$nodeMock, (new Node)->withVariable('b')], [new Relationship(Relationship::DIR_RIGHT)]);
         $numeralMock = new Integer(12);
-        $booleanMock = new GreaterThan($variableMock, new Variable('b'));
+        $booleanMock = new GreaterThan($variableMock, new Variable('b'), false);
         $propertyMock = new Property($variableMock, 'b');
 
         $query = new Query();
@@ -348,7 +349,7 @@ class QueryTest extends TestCase
             [0, new Integer(0)],
             [100, new Integer(100)],
             [10.0, new Float_(10.0)],
-            [69420, new Float_(69420)],
+            [69420.0, new Float_(69420)],
             [10.0000000000000000000000000000001, new Float_(10.0000000000000000000000000000001)],
             [false, new Boolean(false)],
             [true, new Boolean(true)],

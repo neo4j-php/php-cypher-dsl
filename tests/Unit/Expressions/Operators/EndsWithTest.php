@@ -26,6 +26,7 @@ use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\EndsWith;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\EndsWith
@@ -35,21 +36,21 @@ class EndsWithTest extends TestCase
 
     public function testToQuery(): void
     {
-        $endsWith = new EndsWith(new String_("a"), new String_("b"));
+        $endsWith = new EndsWith(new Variable("a"), new String_("b"));
 
-        $this->assertSame("(a ENDS WITH b)", $endsWith->toQuery());
+        $this->assertSame("(a ENDS WITH 'b')", $endsWith->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $endsWith = new EndsWith(new String_("a"), new String_("b"), false);
+        $endsWith = new EndsWith(new Variable("a"), new String_("b"), false);
 
-        $this->assertSame("a ENDS WITH b", $endsWith->toQuery());
+        $this->assertSame("a ENDS WITH 'b'", $endsWith->toQuery());
     }
 
     public function testCannotBeNested(): void
     {
-        $endsWith = new EndsWith(new String_("a"), new String_("b"));
+        $endsWith = new EndsWith(new Variable("a"), new String_("b"));
 
         $this->expectException(TypeError::class);
 

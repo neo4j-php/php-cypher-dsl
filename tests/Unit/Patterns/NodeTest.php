@@ -232,7 +232,7 @@ class NodeTest extends TestCase
         $amsterdam = new Node("City");
         $amsterdam->withProperties(["city" => "Amsterdam"]);
 
-        $this->assertSame("(:City)-[:`LIVES_IN`]->(:City {city: 'Amsterdam'})", $node->relationship($relationship, $amsterdam)->toQuery());
+        $this->assertSame("(:City)-[:LIVES_IN]->(:City {city: 'Amsterdam'})", $node->relationship($relationship, $amsterdam)->toQuery());
     }
 
     public function testRelationshipTo(): void
@@ -243,7 +243,7 @@ class NodeTest extends TestCase
 
         $relationship = $node->relationshipTo($amsterdam, "LIVES_IN");
 
-        $this->assertSame("(:City)-[:`LIVES_IN`]->(:City {city: 'Amsterdam'})", $relationship->toQuery());
+        $this->assertSame("(:City)-[:LIVES_IN]->(:City {city: 'Amsterdam'})", $relationship->toQuery());
     }
 
     public function testRelationshipFrom(): void
@@ -254,7 +254,7 @@ class NodeTest extends TestCase
 
         $relationship = $node->relationshipFrom($amsterdam, "LIVES_IN");
 
-        $this->assertSame("(:City)<-[:`LIVES_IN`]-(:City {city: 'Amsterdam'})", $relationship->toQuery());
+        $this->assertSame("(:City)<-[:LIVES_IN]-(:City {city: 'Amsterdam'})", $relationship->toQuery());
     }
 
     public function testRelationshipUni(): void
@@ -265,7 +265,7 @@ class NodeTest extends TestCase
 
         $relationship = $node->relationshipUni($amsterdam, "LIVES_IN");
 
-        $this->assertSame("(:City)-[:`LIVES_IN`]-(:City {city: 'Amsterdam'})", $relationship->toQuery());
+        $this->assertSame("(:City)-[:LIVES_IN]-(:City {city: 'Amsterdam'})", $relationship->toQuery());
     }
 
     public function provideOnlyLabelData(): array
@@ -315,7 +315,7 @@ class NodeTest extends TestCase
     {
         return [
             [['a' => new String_('b'), 'b' => new String_('c')], "({a: 'b', b: 'c'})"],
-            [['a' => new Integer(0), 'b' => new Float_(1)], "({a: 0, b: 1.0})"],
+            [['a' => new Integer(0), 'b' => new Float_(-1.0)], "({a: 0, b: -1.0})"],
             [[':' => new List_([new Integer(1), new String_('a')])], "({`:`: [1, 'a']})"],
         ];
     }

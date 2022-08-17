@@ -23,11 +23,11 @@ class QueryReturningTest extends TestCase
 
 		$statement = (new Query())->returning($m)->build();
 
-		$this->assertSame("RETURN (m:Movie)", $statement);
+		$this->assertSame("RETURN m", $statement);
 
 		$statement = (new Query())->returning(["n" => $m])->build();
 
-		$this->assertSame("RETURN (m:Movie) AS n", $statement);
+		$this->assertSame("RETURN m AS n", $statement);
 	}
 
 	public function testReturningRejectsNotAnyType(): void
@@ -36,7 +36,7 @@ class QueryReturningTest extends TestCase
 
 		$this->expectException(TypeError::class);
 
-		(new Query())->returning([$m]);
+		(new Query())->returning($m);
 	}
 
 	public function testReturningWithNode(): void

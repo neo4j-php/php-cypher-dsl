@@ -38,30 +38,21 @@ class InequalityTest extends TestCase
     {
         $inequality = new Inequality(new Property(new Variable('v'), "a"), new Property(new Variable('v'), "b"));
 
-        $this->assertSame("(a <> b)", $inequality->toQuery());
+        $this->assertSame("(v.a <> v.b)", $inequality->toQuery());
 
         $inequality = new Inequality($inequality, $inequality);
 
-        $this->assertSame("((a <> b) <> (a <> b))", $inequality->toQuery());
+        $this->assertSame("((v.a <> v.b) <> (v.a <> v.b))", $inequality->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
         $inequality = new Inequality(new Property(new Variable('v'), "a"), new Property(new Variable('v'), "b"), false);
 
-        $this->assertSame("a <> b", $inequality->toQuery());
+        $this->assertSame("v.a <> v.b", $inequality->toQuery());
 
         $inequality = new Inequality($inequality, $inequality);
 
-        $this->assertSame("(a <> b <> a <> b)", $inequality->toQuery());
-    }
-
-    public function testDoesNotAcceptAnyTypeAsOperands(): void
-    {
-        $this->expectException(TypeError::class);
-
-        $inequality = new Inequality($this->createMock(AnyType::class), $this->createMock(AnyType::class));
-
-        $inequality->toQuery();
+        $this->assertSame("(v.a <> v.b <> v.a <> v.b)", $inequality->toQuery());
     }
 }
