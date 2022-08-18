@@ -141,4 +141,10 @@ class CallProcedureClauseTest extends TestCase
 
         $this->assertSame([$a, $b, $c], $callProcedureClause->getYields());
     }
+
+    public function testCanBeEmpty(): void
+    {
+        $clause = new CallProcedureClause();
+        $this->assertFalse($clause->canBeEmpty());
+    }
 }

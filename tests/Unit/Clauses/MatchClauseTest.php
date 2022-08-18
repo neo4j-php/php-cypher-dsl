@@ -122,4 +122,10 @@ class MatchClauseTest extends TestCase
 
         $this->assertSame([$pattern1, $pattern2], $match->getPatterns());
     }
+
+    public function testCanBeEmpty(): void
+    {
+        $clause = new MatchClause();
+        $this->assertFalse($clause->canBeEmpty());
+    }
 }

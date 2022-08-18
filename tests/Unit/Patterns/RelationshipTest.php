@@ -312,7 +312,7 @@ class RelationshipTest extends TestCase
 	{
 		$r = new Relationship(Relationship::DIR_LEFT);
 		$r->withVariable('hello')->addType('world')->addType('testing')->withProperties(['is' => 'a virtue']);
-		$r->setArbitraryHops();
+		$r->withArbitraryHops();
 
 		$this->assertSame('<-[hello:world|testing* {is: \'a virtue\'}]-', $r->toQuery());
 	}
@@ -448,7 +448,7 @@ class RelationshipTest extends TestCase
 	public function testExactHopsWithArbitraryHops(): void
 	{
 		$r = new Relationship(Relationship::DIR_RIGHT);
-		$r->setArbitraryHops();
+		$r->withArbitraryHops();
 
 		$this->expectException(LogicException::class);
 
@@ -458,7 +458,7 @@ class RelationshipTest extends TestCase
 	public function testMinHopsWithArbitraryHops(): void
 	{
 		$r = new Relationship(Relationship::DIR_RIGHT);
-		$r->setArbitraryHops();
+		$r->withArbitraryHops();
 
 		$this->expectException(LogicException::class);
 
@@ -468,7 +468,7 @@ class RelationshipTest extends TestCase
 	public function testMaxHopsWithArbitraryHops(): void
 	{
 		$r = new Relationship(Relationship::DIR_RIGHT);
-		$r->setArbitraryHops();
+		$r->withArbitraryHops();
 
 		$this->expectException(LogicException::class);
 
@@ -482,7 +482,7 @@ class RelationshipTest extends TestCase
 
 		$this->expectException(LogicException::class);
 
-		$r->setArbitraryHops();
+		$r->withArbitraryHops();
 	}
 
 	public function testArbitraryHopsWithMinHops(): void
@@ -492,7 +492,7 @@ class RelationshipTest extends TestCase
 
 		$this->expectException(LogicException::class);
 
-		$r->setArbitraryHops();
+		$r->withArbitraryHops();
 	}
 
 	public function testArbitraryHopsWithMaxHops(): void
@@ -502,7 +502,7 @@ class RelationshipTest extends TestCase
 
 		$this->expectException(LogicException::class);
 
-		$r->setArbitraryHops();
+		$r->withArbitraryHops();
 	}
 
 	public function testGetDirection(): void

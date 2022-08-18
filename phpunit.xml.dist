@@ -15,6 +15,7 @@
     <coverage processUncoveredFiles="true" cacheDirectory="coverage/cache" pathCoverage="true">
         <report>
             <clover outputFile="coverage/clover.xml" />
+            <html outputDirectory="coverage/" />
         </report>
         <include>
             <directory suffix=".php">src</directory>

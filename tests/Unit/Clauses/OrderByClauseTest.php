@@ -157,4 +157,10 @@ class OrderByClauseTest extends TestCase
 
         $this->assertSame($original, $returned);
     }
+
+    public function testCanBeEmpty(): void
+    {
+        $clause = new OrderByClause();
+        $this->assertFalse($clause->canBeEmpty());
+    }
 }

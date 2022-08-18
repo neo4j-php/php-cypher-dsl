@@ -161,7 +161,7 @@ final class Relationship implements PropertyPattern
      * @param bool $arbitraryHops
      * @return $this
      */
-    public function setArbitraryHops(bool $arbitraryHops = true): self
+    public function withArbitraryHops(bool $arbitraryHops = true): self
     {
         if (isset($this->minHops) || isset($this->maxHops) || isset($this->exactHops)) {
             throw new LogicException("arbitraryHops cannot be used in combination with minHops, maxHops or exactHops");

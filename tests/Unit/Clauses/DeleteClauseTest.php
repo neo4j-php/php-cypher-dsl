@@ -153,4 +153,10 @@ class DeleteClauseTest extends TestCase
 
         $this->assertTrue($delete->detachesDeletion());
     }
+
+    public function testCanBeEmpty(): void
+    {
+        $clause = new DeleteClause();
+        $this->assertFalse($clause->canBeEmpty());
+    }
 }

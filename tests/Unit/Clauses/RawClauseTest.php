@@ -15,12 +15,26 @@ use WikibaseSolutions\CypherDSL\Clauses\RawClause;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\RawClause
  */
-class RawClauseTest extends TestCase
+final class RawClauseTest extends TestCase
 {
     public function testClause(): void
     {
         $raw = new RawClause("UNIMPLEMENTED", "clause body");
 
         $this->assertSame("UNIMPLEMENTED clause body", $raw->toQuery());
+    }
+
+    public function testEmptyClauseIsEmpty(): void
+    {
+        $raw = new RawClause('', 'body');
+
+        $this->assertSame('', $raw->toQuery());
+    }
+
+    public function testCanBeEmpty(): void
+    {
+        $clause = new RawClause();
+
+        $this->assertFalse($clause->canBeEmpty());
     }
 }

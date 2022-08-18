@@ -145,4 +145,10 @@ class MergeClauseTest extends TestCase
 
         $this->assertSame($clause, $merge->getOnMatchClause());
     }
+
+    public function testCanBeEmpty(): void
+    {
+        $clause = new MergeClause();
+        $this->assertFalse($clause->canBeEmpty());
+    }
 }

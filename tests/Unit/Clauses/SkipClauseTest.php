@@ -28,7 +28,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Clauses\LimitClause
+ * @covers \WikibaseSolutions\CypherDSL\Clauses\SkipClause
  */
 class SkipClauseTest extends TestCase
 {
@@ -75,5 +75,11 @@ class SkipClauseTest extends TestCase
         $skip->setSkip($expression);
 
         $skip->toQuery();
+    }
+
+    public function testCanBeEmpty(): void
+    {
+        $clause = new SkipClause();
+        $this->assertFalse($clause->canBeEmpty());
     }
 }

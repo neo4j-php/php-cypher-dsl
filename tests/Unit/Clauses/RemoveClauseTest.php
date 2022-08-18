@@ -104,4 +104,10 @@ class RemoveClauseTest extends TestCase
 
         $remove->toQuery();
     }
+
+    public function testCanBeEmpty(): void
+    {
+        $clause = new RemoveClause();
+        $this->assertFalse($clause->canBeEmpty());
+    }
 }

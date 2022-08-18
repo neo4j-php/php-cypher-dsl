@@ -28,7 +28,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Literals\String_
  */
-class StringLiteralTest extends TestCase
+class StringTest extends TestCase
 {
     public function testEmptySingleQuotes(): void
     {

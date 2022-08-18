@@ -372,6 +372,7 @@ final class Query implements QueryConvertible
         if (!is_array($yields)) {
             $yields = [$yields];
         }
+
         $yields = $this->makeAliasArray($yields, 'toName');
 
         $callProcedureClause = new CallProcedureClause();
@@ -423,6 +424,7 @@ final class Query implements QueryConvertible
         if (!is_array($expressions)) {
             $expressions = [$expressions];
         }
+
         $expressions = $this->makeAliasArray($expressions);
 
         $returnClause = new ReturnClause();
@@ -693,7 +695,7 @@ final class Query implements QueryConvertible
     /**
      * Creates the WITH clause.
      *
-     * @param AnyType|Alias|Pattern|int|float|string|bool|array|(AnyType|Alias|Pattern|int|float|string|bool|array)[] $expressions The entries to add; if the array-key is non-numerical, it is used as the alias
+     * @param AnyType|Alias|Pattern|int|float|string|bool|array|AnyType[]|Alias[]|Pattern[]|int[]|float[]|string[]|bool[]|array[] $expressions The entries to add; if the array-key is non-numerical, it is used as the alias
      *
      * @return $this
      *
@@ -705,6 +707,7 @@ final class Query implements QueryConvertible
         if (!is_array($expressions)) {
             $expressions = [$expressions];
         }
+
         $expressions = $this->makeAliasArray($expressions);
 
         $withClause = new WithClause();
@@ -821,21 +824,22 @@ final class Query implements QueryConvertible
     }
 
     /**
-     * Changes an associative array into an array of aliasses.
+     * Changes an associative array into an array of aliases.
      *
-     * @param  array   $array     The array to change into a sequential array
-     * @param  string  $castFunc  Name of the (static) method to use to cast the elements of $array.
-     * @return array   A sequential array, possibly consisting of aliasses.
+     * @param array $values The array to change into an array of aliases
+     * @param string $castFunc Name of the (static) method to use to cast the elements of $array
+     * @return array A sequential array, possibly consisting of aliases
      */
-    private function makeAliasArray(array $array, string $castFunc = 'toAnyType'): array
+    private function makeAliasArray(array $values, string $castFunc = 'toAnyType'): array
     {
-        if (array_is_list($array)) {
-            return array_map([self::class, $castFunc], $array);
+        $res = [];
+
+        foreach ($values as $key => $value) {
+            /** @var AnyType $value */
+            $value = call_user_func([self::class, $castFunc], $value);
+            $res[] = is_string($key) ? $value->alias($key) : $value;
         }
-        $newArray = [];
-        foreach ($array as $key => $value) {
-            $newArray []= new Alias(call_user_func([self::class, $castFunc], $value), new Variable($key));
-        }
-        return $newArray;
+
+        return $res;
     }
 }

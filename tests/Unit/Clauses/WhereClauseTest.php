@@ -1,36 +1,25 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) 2021- Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\WhereClause
  */
-class WhereClauseTest extends TestCase
+final class WhereClauseTest extends TestCase
 {
     public function testEmptyClause(): void
     {
@@ -40,24 +29,90 @@ class WhereClauseTest extends TestCase
         $this->assertNull($where->getExpression());
     }
 
-    public function testExpression(): void
+    public function testAddBooleanType(): void
     {
         $where = new WhereClause();
-        $expression = $this->createMock(BooleanType::class);
-        $expression->method('toQuery')->willReturn('(a)');
 
-        $where->addExpression($expression);
+        $where->addExpression(Literal::boolean(true));
 
-        $this->assertSame("WHERE (a)", $where->toQuery());
-        $this->assertEquals($expression, $where->getExpression());
+        $this->assertSame("WHERE true", $where->toQuery());
     }
 
-    public function testDoesNotAcceptAnyType(): void
+    public function testAddBooleanLiteral(): void
     {
         $where = new WhereClause();
-        $expression = $this->createMock(AnyType::class);
-        $this->expectException(TypeError::class);
+
+        $where->addExpression(true);
+
+        $this->assertSame("WHERE true", $where->toQuery());
+    }
+
+    public function testExpressionChainingDefaultAnd(): void
+    {
+        $where = new WhereClause();
+
+        $where->addExpression(true);
+        $where->addExpression(true);
+        $where->addExpression(false);
+
+        $this->assertSame("WHERE ((true AND true) AND false)", $where->toQuery());
+    }
+
+    public function testExpressionChaining(): void
+    {
+        $where = new WhereClause();
+
+        $where->addExpression(true);
+        $where->addExpression(true, WhereClause::OR);
+        $where->addExpression(true, WhereClause::AND);
+        $where->addExpression(true, WhereClause::XOR);
+
+        $this->assertSame('WHERE (((true OR true) AND true) XOR true)', $where->toQuery());
+    }
+
+    public function testExpressionChainingFirstArgumentDoesNothing(): void
+    {
+        $where = new WhereClause();
+
+        $where->addExpression(true, WhereClause::OR);
+
+        $this->assertSame('WHERE true', $where->toQuery());
+    }
+
+    public function testExpressionChainingInvalidOperator1(): void
+    {
+        $where = new WhereClause();
+
+        $this->expectException(\InvalidArgumentException::class);
+
+        $where->addExpression(true, 'bad');
+    }
+
+    public function testExpressionChainingInvalidOperator2(): void
+    {
+        $where = new WhereClause();
+
+        $where->addExpression(true);
+
+        $this->expectException(\InvalidArgumentException::class);
+
+        $where->addExpression(false, 'bad');
+    }
+
+    public function testGetExpression(): void
+    {
+        $expression = Literal::boolean(true);
+
+        $where = new WhereClause();
 
         $where->addExpression($expression);
+
+        $this->assertSame($expression, $where->getExpression());
+    }
+
+    public function testCanBeEmpty(): void
+    {
+        $clause = new WhereClause();
+        $this->assertFalse($clause->canBeEmpty());
     }
 }

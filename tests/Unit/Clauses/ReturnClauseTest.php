@@ -146,4 +146,10 @@ class ReturnClauseTest extends TestCase
 
         $return->toQuery();
     }
+
+    public function testCanBeEmpty(): void
+    {
+        $clause = new ReturnClause();
+        $this->assertFalse($clause->canBeEmpty());
+    }
 }

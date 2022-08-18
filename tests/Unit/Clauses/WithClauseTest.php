@@ -1,125 +1,110 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) 2021- Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
-use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Syntax\Alias;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Query;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\WithClause
  */
-class WithClauseTest extends TestCase
+final class WithClauseTest extends TestCase
 {
-
     public function testEmptyClause(): void
     {
-        $return = new WithClause();
+        $with = new WithClause();
 
-        $this->assertSame("", $return->toQuery());
-        $this->assertEquals([], $return->getEntries());
+        $this->assertSame("", $with->toQuery());
     }
 
     public function testSingleEntry(): void
     {
-        $return = new WithClause();
-        $entry = new Variable('a');
-        $return->addEntry($entry);
+        $with = new WithClause();
+        $with->addEntry(Query::variable('a'));
 
-        $this->assertSame("WITH a", $return->toQuery());
-        $this->assertEquals([$entry], $return->getEntries());
+        $this->assertSame("WITH a", $with->toQuery());
     }
 
     public function testMultipleEntries(): void
     {
-        $return = new WithClause();
-        $entryA = new Variable('a');
-        $entryB = new Variable('b');
-        $entryC = new Variable('c');
+        $with = new WithClause();
 
-        $return->addEntry($entryA);
-        $return->addEntry($entryB);
-        $return->addEntry($entryC);
+        $with->addEntry(Query::variable('a'));
+        $with->addEntry(Query::variable('b'));
+        $with->addEntry(Query::variable('c'));
 
-        $this->assertSame("WITH a, b, c", $return->toQuery());
-        $this->assertEquals([$entryA, $entryB, $entryC], $return->getEntries());
+        $this->assertSame("WITH a, b, c", $with->toQuery());
     }
 
     public function testSingleAlias(): void
     {
-        $return = new WithClause();
-        $entry = new Alias(new Variable('a'), new Variable('b'));
-        $return->addEntry($entry);
+        $with = new WithClause();
+        $with->addEntry(Query::variable('a')->alias('b'));
 
-        $this->assertSame("WITH a AS b", $return->toQuery());
-        $this->assertEquals([$entry], $return->getEntries());
+        $this->assertSame("WITH a AS b", $with->toQuery());
     }
 
     public function testMultipleAliases(): void
     {
-        $return = new WithClause();
-        $entryA = new Alias(new Variable('a'), new Variable('b'));
-        $entryB = new Alias(new Variable('b'), new Variable('c'));
+        $with = new WithClause();
+        $entryA = Query::variable('a')->alias('b');
+        $entryB = Query::variable('b')->alias('c');
 
-        $return->addEntry($entryA, $entryB);
+        $with->addEntry($entryA, $entryB);
 
-        $this->assertSame("WITH a AS b, b AS c", $return->toQuery());
-        $this->assertEquals([$entryA, $entryB], $return->getEntries());
+        $this->assertSame("WITH a AS b, b AS c", $with->toQuery());
     }
 
     public function testMixedAliases(): void
     {
-        $return = new WithClause();
-        $entryA = new Alias(new Variable('a'), new Variable('b'));
-        $entryB = new Variable('c');
-        $entryC = new Alias(new Variable('b'), new Variable('c'));
+        $entryA = Query::variable('a')->alias('b');
+        $entryB = Query::variable('c');
+        $entryC = Query::variable('b')->alias('c');
 
-        $return->addEntry($entryA, $entryB, $entryC);
+        $with = new WithClause();
+        $with->addEntry($entryA, $entryB, $entryC);
 
-        $this->assertSame("WITH a AS b, c, b AS c", $return->toQuery());
-        $this->assertEquals([$entryA, $entryB, $entryC], $return->getEntries());
+        $this->assertSame("WITH a AS b, c, b AS c", $with->toQuery());
     }
 
-    public function testAliasIsEscaped(): void
+    public function testAcceptsStringAsVariableName(): void
     {
-        $return = new WithClause();
-        $entry = new Alias(new Variable('__'), new Variable(':'));
-        $return->addEntry($entry);
+        $with = new WithClause();
+        $with->addEntry('a', 'b', 'c');
 
-        $this->assertSame("WITH `__` AS `:`", $return->toQuery());
-        $this->assertEquals([$entry], $return->getEntries());
+        $this->assertSame('WITH a, b, c', $with->toQuery());
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsAnyType(): void
+    public function testAcceptsPatternAsEntry(): void
     {
-        $return = new WithClause();
-        $return->addEntry($this->createMock(AnyType::class), ":");
+        $with = new WithClause();
+        $with->addEntry(Query::node());
 
-        $return->toQuery();
+        $this->assertStringMatchesFormat('WITH %s', $with->toQuery());
+    }
+
+    public function testGetEntries(): void
+    {
+        $entryA = Query::variable('a');
+        $entryB = Query::variable('b');
+
+        $with = new WithClause();
+        $with->addEntry($entryA, $entryB);
+
+        $this->assertSame([$entryA, $entryB], $with->getEntries());
+    }
+
+    public function testCanBeEmpty(): void
+    {
+        $clause = new WithClause();
+        $this->assertFalse($clause->canBeEmpty());
     }
 }

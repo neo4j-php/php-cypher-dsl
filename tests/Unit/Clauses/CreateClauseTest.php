@@ -92,4 +92,10 @@ class CreateClauseTest extends TestCase
 
         $this->assertSame($patterns, $createClause->getPatterns());
     }
+
+    public function testCanBeEmpty(): void
+    {
+        $clause = new CreateClause();
+        $this->assertFalse($clause->canBeEmpty());
+    }
 }

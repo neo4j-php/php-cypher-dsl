@@ -90,4 +90,10 @@ class OptionalMatchTest extends TestCase
 
         $match->toQuery();
     }
+
+    public function testCanBeEmpty(): void
+    {
+        $clause = new OptionalMatchClause();
+        $this->assertFalse($clause->canBeEmpty());
+    }
 }

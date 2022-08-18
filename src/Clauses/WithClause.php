@@ -9,12 +9,12 @@
  */
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Syntax\Alias;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * This class represents a WITH clause.
@@ -31,14 +31,14 @@ final class WithClause extends Clause
     use CastTrait;
 
     /**
-     * @var AnyType[]|Alias[] The expressions to include in the clause
+     * @var Variable[]|Alias[] The variables to include in the clause
      */
     private array $entries = [];
 
     /**
      * Add one or more new entries to the WITH clause.
      *
-     * @param AnyType|Alias|Pattern|int|float|string|bool|array ...$entries The entries to add
+     * @param Variable|Pattern|Alias|string ...$entries The entries to add
      *
      * @return $this
      */
@@ -47,7 +47,7 @@ final class WithClause extends Clause
         $res = [];
 
         foreach ($entries as $entry) {
-            $res[] = $entry instanceof Alias ? $entry : self::toAnyType($entry);
+            $res[] = $entry instanceof Alias ? $entry : self::toVariable($entry);
         }
 
         $this->entries = array_merge($this->entries, $res);
@@ -58,7 +58,7 @@ final class WithClause extends Clause
     /**
      * Returns the expression to include in the clause.
      *
-     * @return AnyType[]|Alias[]
+     * @return Variable[]|Alias[]
      */
     public function getEntries(): array
     {

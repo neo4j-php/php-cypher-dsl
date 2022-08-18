@@ -122,4 +122,10 @@ class SetClauseTest extends TestCase
 
         $set->toQuery();
     }
+
+    public function testCanBeEmpty(): void
+    {
+        $clause = new SetClause();
+        $this->assertFalse($clause->canBeEmpty());
+    }
 }

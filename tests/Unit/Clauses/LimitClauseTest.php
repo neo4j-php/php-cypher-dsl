@@ -74,4 +74,10 @@ class LimitClauseTest extends TestCase
 
         $this->assertSame($limit, $limit2);
     }
+
+    public function testCanBeEmpty(): void
+    {
+        $clause = new LimitClause();
+        $this->assertFalse($clause->canBeEmpty());
+    }
 }

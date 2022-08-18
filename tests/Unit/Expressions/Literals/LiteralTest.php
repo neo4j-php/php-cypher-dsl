@@ -41,7 +41,6 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
  */
 class LiteralTest extends TestCase
 {
-
     public function testLiteralString(): void
     {
         $string = Literal::literal('Testing is a virtue!');

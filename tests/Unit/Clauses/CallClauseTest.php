@@ -138,4 +138,10 @@ class CallClauseTest extends TestCase
 
         $this->assertSame($expected, $actual);
     }
+
+    public function testCanBeEmpty(): void
+    {
+        $clause = new CallClause();
+        $this->assertFalse($clause->canBeEmpty());
+    }
 }
