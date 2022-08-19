@@ -20,8 +20,7 @@ class NameGenerationTraitTest extends TestCase
 
     public function testGenerateName(): void
     {
-        $this->assertMatchesRegularExpression('/var\w{32}/', $this->hasName->generateIdentifier('var'));
+        $this->assertMatchesRegularExpression('/var\w{32}/', $this->hasName->generateIdentifier());
         $this->assertMatchesRegularExpression('/x\w{16}/', $this->hasName->generateIdentifier('x', 16));
     }
-
 }

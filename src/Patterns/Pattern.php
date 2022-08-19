@@ -27,9 +27,9 @@ use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PatternTrait;
  *
  * @note This interface should not be implemented by any class directly. Use any of the sub-interfaces instead:
  *
- * 	- PropertiedPattern: for patterns that can contain properties
+ *  - CompletePattern: for patterns that can be matched in a MATCH clause
+ * 	- PropertyPattern: for patterns that can contain properties
  * 	- RelatablePattern: for patterns that can be related to eachother using a Relationship
- * 	- MatchablePattern: for patterns that can be matched in a MATCH clause
  *
  * @see PatternTrait for a default implementation
  */
