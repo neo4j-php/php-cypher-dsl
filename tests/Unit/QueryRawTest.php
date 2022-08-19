@@ -17,7 +17,7 @@ use WikibaseSolutions\CypherDSL\Query;
  *
  * @covers \WikibaseSolutions\CypherDSL\Query
  */
-class QueryRawTest extends TestCase
+final class QueryRawTest extends TestCase
 {
     public function testClause(): void
     {

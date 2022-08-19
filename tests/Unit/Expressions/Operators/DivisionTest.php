@@ -1,38 +1,28 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
+ * This file is part of php-cypher-dsl.
+ *
  * Copyright (C) 2021  Wikibase Solutions
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Division;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Division
  */
-class DivisionTest extends TestCase
+final class DivisionTest extends TestCase
 {
-
     public function testToQuery(): void
     {
         $division = new Division(new Integer(10), new Integer(15));
@@ -55,12 +45,17 @@ class DivisionTest extends TestCase
         $this->assertSame("(10 / 15 / 10 / 15)", $division->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands(): void
+    public function testInstanceOfFloatType(): void
     {
-        $this->expectException(TypeError::class);
+        $division = new Division(Literal::integer(10), Literal::integer(10));
 
-        $division = new Division($this->createMock(AnyType::class), $this->createMock(AnyType::class));
+        $this->assertInstanceOf(FloatType::class, $division);
+    }
 
-        $division->toQuery();
+    public function testInstanceOfIntegerType(): void
+    {
+        $division = new Division(Literal::integer(10), Literal::integer(10));
+
+        $this->assertInstanceOf(IntegerType::class, $division);
     }
 }

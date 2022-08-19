@@ -18,7 +18,7 @@ use WikibaseSolutions\CypherDSL\Query;
  *
  * @covers \WikibaseSolutions\CypherDSL\Query
  */
-class QueryCallTest extends TestCase
+final class QueryCallTest extends TestCase
 {
     public function testWithCallable(): void
     {

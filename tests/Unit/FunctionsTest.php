@@ -42,7 +42,7 @@ use function WikibaseSolutions\CypherDSL\variable;
  *
  * @coversNothing
  */
-class FunctionsTest extends TestCase
+final class FunctionsTest extends TestCase
 {
     public function testQueryReturnsQuery()
     {

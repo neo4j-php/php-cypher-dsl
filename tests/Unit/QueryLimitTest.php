@@ -19,7 +19,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
  *
  * @covers \WikibaseSolutions\CypherDSL\Query
  */
-class QueryLimitTest extends TestCase
+final class QueryLimitTest extends TestCase
 {
     public function testClause(): void
     {

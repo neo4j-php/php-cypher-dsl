@@ -1,5 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
+/*
+ * This file is part of php-cypher-dsl.
+ *
+ * Copyright (C) 2021-  Wikibase Solutions
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use TypeError;
@@ -45,7 +52,7 @@ class QueryReturningTest extends TestCase
 
 		$statement = (new Query())->returning($node)->build();
 
-		$this->assertMatchesRegularExpression("/(RETURN var[0-9a-f]+)/", $statement);
+		$this->assertMatchesRegularExpression("/(RETURN var[\da-f]+)/", $statement);
 
 		$node = Query::node("m");
 		$node->withVariable('example');

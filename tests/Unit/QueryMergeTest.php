@@ -23,7 +23,7 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
  *
  * @covers \WikibaseSolutions\CypherDSL\Query
  */
-class QueryMergeTest extends TestCase
+final class QueryMergeTest extends TestCase
 {
     public function testClause(): void
     {

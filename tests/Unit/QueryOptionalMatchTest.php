@@ -19,7 +19,7 @@ use WikibaseSolutions\CypherDSL\Query;
  *
  * @covers \WikibaseSolutions\CypherDSL\Query
  */
-class QueryOptionalMatchTest extends TestCase
+final class QueryOptionalMatchTest extends TestCase
 {
     public function testClause(): void
     {

@@ -11,6 +11,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Procedures;
 
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -22,7 +23,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/
  */
-abstract class Procedure implements PropertyType
+abstract class Procedure implements QueryConvertible
 {
     /**
      * Produces a raw function call. This enables the usage of unimplemented functions in your

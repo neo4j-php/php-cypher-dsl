@@ -20,7 +20,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  *
  * @covers \WikibaseSolutions\CypherDSL\Query
  */
-class QueryOrderByTest extends TestCase
+final class QueryOrderByTest extends TestCase
 {
     public function testEmptyArray(): void
     {
