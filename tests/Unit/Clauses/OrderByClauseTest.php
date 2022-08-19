@@ -17,7 +17,7 @@ use WikibaseSolutions\CypherDSL\Query;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\OrderByClause
  */
-class OrderByClauseTest extends TestCase
+final class OrderByClauseTest extends TestCase
 {
     public function testEmptyClause(): void
     {

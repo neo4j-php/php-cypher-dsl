@@ -31,23 +31,6 @@ final class SetClause extends Clause
     private array $expressions = [];
 
     /**
-     * Sets the subjects of this SET clause. This will overwrite any previously added expressions.
-     *
-     * @param PropertyReplacement[]|Label[] $expressions The expressions to set
-     * @return $this
-     */
-    public function setExpressions(array $expressions): self
-    {
-        foreach ($expressions as $expression) {
-            $this->assertClass('expressions', [PropertyReplacement::class, Label::class], $expression);
-        }
-
-        $this->expressions = $expressions;
-
-        return $this;
-    }
-
-    /**
      * Add one or more expressions to this SET clause.
      *
      * @param PropertyReplacement|Label $expressions The expressions to add to this set clause

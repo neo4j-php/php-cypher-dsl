@@ -1,24 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) 2021- Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
@@ -32,9 +20,8 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\ReturnClause
  */
-class ReturnClauseTest extends TestCase
+final class ReturnClauseTest extends TestCase
 {
-
     public function testEmptyClause(): void
     {
         $return = new ReturnClause();
@@ -112,17 +99,6 @@ class ReturnClauseTest extends TestCase
         $this->assertFalse($return->isDistinct());
     }
 
-    public function testAliasIsEscaped(): void
-    {
-        $return = new ReturnClause();
-        $column = new Alias(new Variable('a'), new Variable(':'));
-        $return->addColumn($column);
-
-        $this->assertSame("RETURN a AS `:`", $return->toQuery());
-        $this->assertSame([$column], $return->getColumns());
-        $this->assertFalse($return->isDistinct());
-    }
-
     public function testReturnDistinct(): void
     {
         $return = new ReturnClause();
@@ -135,16 +111,30 @@ class ReturnClauseTest extends TestCase
         $this->assertTrue($return->isDistinct());
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsAnyType(): void
+    public function testAddColumnLiteral(): void
     {
         $return = new ReturnClause();
-        $return->addColumn($this->createMock(AnyType::class));
-        $return->setDistinct();
 
-        $return->toQuery();
+        $return->addColumn(100);
+        $return->addColumn("hello world");
+
+        $this->assertSame("RETURN 100, 'hello world'", $return->toQuery());
+    }
+
+    public function testAddColumnReturnsSameInstance(): void
+    {
+        $expected = new ReturnClause();
+        $actual = $expected->addColumn(100);
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testSetDistinctReturnsSameInstance(): void
+    {
+        $expected = new ReturnClause();
+        $actual = $expected->setDistinct();
+
+        $this->assertSame($expected, $actual);
     }
 
     public function testCanBeEmpty(): void

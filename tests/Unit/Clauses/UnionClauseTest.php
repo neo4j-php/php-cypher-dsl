@@ -16,7 +16,7 @@ use WikibaseSolutions\CypherDSL\Query;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\UnionClause
  */
-class UnionClauseTest extends TestCase
+final class UnionClauseTest extends TestCase
 {
     public function testNoCombine(): void
     {
@@ -57,6 +57,45 @@ class UnionClauseTest extends TestCase
         $query = UnionClause::union($left, $right, true);
 
         $this->assertEquals('MATCH (x:X) RETURN x UNION ALL MATCH (y:Y) RETURN y', $query->toQuery());
+    }
+
+    public function testSetAllDefaultIsTrue(): void
+    {
+        $union = new UnionClause();
+        $union->setAll();
+
+        $this->assertSame("UNION ALL", $union->toQuery());
+    }
+
+    public function testSetAllCanBeUnset(): void
+    {
+        $union = new UnionClause();
+        $union->setAll();
+
+        $this->assertSame("UNION ALL", $union->toQuery());
+
+        $union->setAll(false);
+
+        $this->assertSame("UNION", $union->toQuery());
+    }
+
+    public function testIncludesAll(): void
+    {
+        $union = new UnionClause();
+
+        $this->assertFalse($union->includesAll());
+
+        $union->setAll();
+
+        $this->assertTrue($union->includesAll());
+    }
+
+    public function testSetAllReturnsSameInstance(): void
+    {
+        $expected = new UnionClause();
+        $actual = $expected->setAll();
+
+        $this->assertSame($expected, $actual);
     }
 
     public function testCanBeEmpty(): void

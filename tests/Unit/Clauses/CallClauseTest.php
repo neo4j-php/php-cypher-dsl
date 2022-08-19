@@ -16,7 +16,7 @@ use WikibaseSolutions\CypherDSL\Query;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\CallClause
  */
-class CallClauseTest extends TestCase
+final class CallClauseTest extends TestCase
 {
     public function testCallClauseWithoutSubqueryIsEmpty(): void
     {

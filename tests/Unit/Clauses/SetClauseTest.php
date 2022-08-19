@@ -1,131 +1,150 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) 2021- Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
-use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
-use WikibaseSolutions\CypherDSL\Expressions\Label;
-use WikibaseSolutions\CypherDSL\Expressions\Property;
-use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
+use WikibaseSolutions\CypherDSL\Query;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\SetClause
  */
-class SetClauseTest extends TestCase
+final class SetClauseTest extends TestCase
 {
-
     public function testEmptyClause(): void
     {
         $set = new SetClause();
 
         $this->assertSame("", $set->toQuery());
-        $this->assertEquals([], $set->getExpressions());
     }
 
-    public function testSinglePattern(): void
+    public function testAddSinglePropertyReplacement(): void
     {
+        $map = Query::variable('a')->assign(['boo' => 'foo', 'far' => 'bar']);
+
         $set = new SetClause();
-        $value = $this->createMock(PropertyType::class);
-        $value->method('toQuery')->willReturn('a');
-        $expression = new PropertyReplacement(
-            new Property(new Variable('Foo'),'Bar'),
-            $value
-        );
+        $set->add($map);
 
-        $set->add($expression);
-
-        $this->assertSame("SET Foo.Bar = a", $set->toQuery());
-        $this->assertEquals([$expression], $set->getExpressions());
+        $this->assertSame("SET a = {boo: 'foo', far: 'bar'}", $set->toQuery());
     }
 
-    public function testMultiplePattern(): void
+    public function testAddSingleLabel(): void
     {
+        $label = Query::variable('a')->labeled('foo');
+
         $set = new SetClause();
-        $foo = new Variable('Foo');
-        $value = $this->createMock(PropertyType::class);
-        $value->method('toQuery')->willReturn('a');
-        $expressionA = new PropertyReplacement(
-            new Property($foo,'Bar'),
-            $value
-        );
-        $expressionB = new Label($foo,'Baz');
+        $set->add($label);
 
-        $set->add($expressionA);
-        $set->add($expressionB);
-
-        $this->assertSame("SET Foo.Bar = a, Foo:Baz", $set->toQuery());
-        $this->assertEquals([$expressionA, $expressionB], $set->getExpressions());
+        $this->assertSame("SET a:foo", $set->toQuery());
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsPropertyReplacement(): void
+    public function testAddMultiplePropertyReplacementSingleCall(): void
     {
+        $mapA = Query::variable('a')->assign(['boo' => 'foo', 'far' => 'bar']);
+        $mapB = Query::variable('b')->assign(['boo' => 'foo', 'far' => 'bar']);
+
         $set = new SetClause();
-        $value = $this->createMock(PropertyType::class);
-        $value->method('toQuery')->willReturn('a');
-        $expression = new PropertyReplacement(
-            new Property(new Variable('Foo'),'Bar'),
-            $value
-        );
+        $set->add($mapA, $mapB);
 
-        $set->add($expression);
-
-        $set->toQuery();
+        $this->assertSame("SET a = {boo: 'foo', far: 'bar'}, b = {boo: 'foo', far: 'bar'}", $set->toQuery());
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsLabel(): void
+    public function testAddMultiplePropertyReplacementMultipleCalls(): void
     {
+        $mapA = Query::variable('a')->assign(['boo' => 'foo', 'far' => 'bar']);
+        $mapB = Query::variable('b')->assign(['boo' => 'foo', 'far' => 'bar']);
+
         $set = new SetClause();
-        $expression = new Label(new Variable('Foo'),'Baz');
+        $set->add($mapA);
+        $set->add($mapB);
 
-        $set->add($expression);
-
-        $set->toQuery();
+        $this->assertSame("SET a = {boo: 'foo', far: 'bar'}, b = {boo: 'foo', far: 'bar'}", $set->toQuery());
     }
 
-    public function testDoesNotAcceptAnyType(): void
+    public function testAddMultipleLabelsSingleCall(): void
+    {
+        $labelA = Query::variable('a')->labeled('foo');
+        $labelB = Query::variable('b')->labeled('foo');
+
+        $set = new SetClause();
+        $set->add($labelA, $labelB);
+
+        $this->assertSame("SET a:foo, b:foo", $set->toQuery());
+    }
+
+    public function testAddMultipleLabelsMultipleCalls(): void
+    {
+        $labelA = Query::variable('a')->labeled('foo');
+        $labelB = Query::variable('b')->labeled('foo');
+
+        $set = new SetClause();
+        $set->add($labelA);
+        $set->add($labelB);
+
+        $this->assertSame("SET a:foo, b:foo", $set->toQuery());
+    }
+
+    public function testAddMultipleMixedSingleCall(): void
+    {
+        $labelA = Query::variable('a')->labeled('foo');
+        $mapB = Query::variable('a')->assign(['boo' => 'foo', 'far' => 'bar']);
+
+        $set = new SetClause();
+        $set->add($labelA, $mapB);
+
+        $this->assertSame("SET a:foo, a = {boo: 'foo', far: 'bar'}", $set->toQuery());
+    }
+
+    public function testAddMultipleMixedMultipleCalls(): void
+    {
+        $labelA = Query::variable('a')->labeled('foo');
+        $mapB = Query::variable('a')->assign(['boo' => 'foo', 'far' => 'bar']);
+
+        $set = new SetClause();
+        $set->add($labelA);
+        $set->add($mapB);
+
+        $this->assertSame("SET a:foo, a = {boo: 'foo', far: 'bar'}", $set->toQuery());
+    }
+
+    public function testAddReturnsSameInstance(): void
+    {
+        $expected = new SetClause();
+        $actual = $expected->add(Query::variable('a')->assign([]));
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testGetExpressions(): void
     {
         $set = new SetClause();
-        $expression = $this->createMock(AnyType::class);
 
-        $this->expectException(TypeError::class);
+        $this->assertSame([], $set->getExpressions());
 
-        $set->add($expression);
+        $labelA = Query::variable('a')->labeled('foo');
 
-        $set->toQuery();
+        $set->add($labelA);
+
+        $this->assertSame([$labelA], $set->getExpressions());
+
+        $labelB = Query::variable('b')->labeled('foo');
+
+        $set->add($labelB);
+
+        $this->assertSame([$labelA, $labelB], $set->getExpressions());
     }
 
     public function testCanBeEmpty(): void
     {
         $clause = new SetClause();
+
         $this->assertFalse($clause->canBeEmpty());
     }
 }

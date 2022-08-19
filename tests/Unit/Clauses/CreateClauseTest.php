@@ -93,6 +93,14 @@ class CreateClauseTest extends TestCase
         $this->assertSame($patterns, $createClause->getPatterns());
     }
 
+    public function testAddPatternReturnsSameInstance(): void
+    {
+        $expected = new CreateClause();
+        $actual = $expected->addPattern(Query::node());
+
+        $this->assertSame($expected, $actual);
+    }
+
     public function testCanBeEmpty(): void
     {
         $clause = new CreateClause();

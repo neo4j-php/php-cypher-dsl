@@ -102,6 +102,14 @@ final class WithClauseTest extends TestCase
         $this->assertSame([$entryA, $entryB], $with->getEntries());
     }
 
+    public function testAddEntryReturnsSameInstance(): void
+    {
+        $expected = new WithClause();
+        $actual = $expected->addEntry('a');
+
+        $this->assertSame($expected, $actual);
+    }
+
     public function testCanBeEmpty(): void
     {
         $clause = new WithClause();

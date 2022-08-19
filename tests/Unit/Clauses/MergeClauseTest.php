@@ -18,7 +18,7 @@ use WikibaseSolutions\CypherDSL\Query;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\MergeClause
  */
-class MergeClauseTest extends TestCase
+final class MergeClauseTest extends TestCase
 {
     public function testEmptyClause(): void
     {

@@ -1,24 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) 2021- Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
@@ -27,19 +15,18 @@ use WikibaseSolutions\CypherDSL\Clauses\RemoveClause;
 use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Query;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\RemoveClause
  */
-class RemoveClauseTest extends TestCase
+final class RemoveClauseTest extends TestCase
 {
     public function testEmptyClause(): void
     {
         $remove = new RemoveClause();
 
         $this->assertSame("", $remove->toQuery());
-        $this->assertEquals([], $remove->getExpressions());
     }
 
     public function testSingleExpression(): void
@@ -50,10 +37,21 @@ class RemoveClauseTest extends TestCase
         $remove->addExpression($expression);
 
         $this->assertSame("REMOVE Foo.Bar", $remove->toQuery());
-        $this->assertEquals([$expression], $remove->getExpressions());
     }
 
-    public function testMultipleExpressions(): void
+    public function testMultipleExpressionsSingleCall(): void
+    {
+        $remove = new RemoveClause();
+
+        $a = new Property(new Variable('Foo'), 'Bar');
+        $b = new Label(new Variable('a'), 'B');
+
+        $remove->addExpression($a, $b);
+
+        $this->assertSame("REMOVE Foo.Bar, a:B", $remove->toQuery());
+    }
+
+    public function testMultipleExpressionsMultipleCalls(): void
     {
         $remove = new RemoveClause();
 
@@ -64,45 +62,42 @@ class RemoveClauseTest extends TestCase
         $remove->addExpression($b);
 
         $this->assertSame("REMOVE Foo.Bar, a:B", $remove->toQuery());
-        $this->assertEquals([$a, $b], $remove->getExpressions());
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsProperty(): void
+    public function testAddExpressionReturnsSameInstance(): void
     {
-        $remove = new RemoveClause();
-        $expression = new Property(new Variable('Foo'),'Bar');
+        $expected = new RemoveClause();
+        $actual = $expected->addExpression(Query::variable('a')->property('b'));
 
-        $remove->addExpression($expression);
-
-        $remove->toQuery();
+        $this->assertSame($expected, $actual);
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsLabel(): void
+    public function testGetExpressions(): void
     {
         $remove = new RemoveClause();
-        $expression = new Label(new Variable('a'), 'B');
 
-        $remove->addExpression($expression);
+        $this->assertSame([], $remove->getExpressions());
 
-        $remove->toQuery();
+        $a = Query::variable('a')->property('a');
+
+        $remove->addExpression($a);
+
+        $this->assertSame([$a], $remove->getExpressions());
+
+        $b = Query::variable('a')->property('b');
+
+        $remove->addExpression($b);
+
+        $this->assertSame([$a, $b], $remove->getExpressions());
     }
 
-    public function testDoesNotAcceptAnyType(): void
+    public function testAddExpressionThrowsExceptionOnInvalidType(): void
     {
         $remove = new RemoveClause();
-        $expression = $this->createMock(AnyType::class);
 
         $this->expectException(TypeError::class);
 
-        $remove->addExpression($expression);
-
-        $remove->toQuery();
+        $remove->addExpression(10);
     }
 
     public function testCanBeEmpty(): void

@@ -17,7 +17,7 @@ use WikibaseSolutions\CypherDSL\Query;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\MatchClause
  */
-class MatchClauseTest extends TestCase
+final class MatchClauseTest extends TestCase
 {
     public function testEmptyClause(): void
     {
@@ -121,6 +121,14 @@ class MatchClauseTest extends TestCase
         $match->addPattern($pattern2);
 
         $this->assertSame([$pattern1, $pattern2], $match->getPatterns());
+    }
+
+    public function testAddPatternReturnsSameInstance(): void
+    {
+        $expected = new MatchClause();
+        $actual = $expected->addPattern(Query::node());
+
+        $this->assertSame($expected, $actual);
     }
 
     public function testCanBeEmpty(): void

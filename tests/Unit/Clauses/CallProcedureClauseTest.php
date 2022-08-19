@@ -17,7 +17,7 @@ use WikibaseSolutions\CypherDSL\Query;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause
  */
-class CallProcedureClauseTest extends TestCase
+final class CallProcedureClauseTest extends TestCase
 {
     public function testEmptyClause(): void
     {

@@ -30,7 +30,6 @@ final class List_ implements ListType
     use ListTypeTrait;
 
     use CastTrait;
-    use EscapeTrait;
     use ErrorTrait;
 
     /**
@@ -56,7 +55,7 @@ final class List_ implements ListType
      */
     public function addExpression(...$expressions): self
     {
-        $this->expressions = array_merge($this->expressions, array_map([Literal::class, 'literal'], $expressions));
+        $this->expressions = array_merge($this->expressions, array_map([self::class, 'toAnyType'], $expressions));
 
         return $this;
     }

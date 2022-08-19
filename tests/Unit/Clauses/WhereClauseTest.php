@@ -110,6 +110,14 @@ final class WhereClauseTest extends TestCase
         $this->assertSame($expression, $where->getExpression());
     }
 
+    public function testAddExpressionReturnsSameInstance(): void
+    {
+        $expected = new WhereClause();
+        $actual = $expected->addExpression(Literal::boolean(true));
+
+        $this->assertSame($expected, $actual);
+    }
+
     public function testCanBeEmpty(): void
     {
         $clause = new WhereClause();

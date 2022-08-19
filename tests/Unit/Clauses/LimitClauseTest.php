@@ -17,7 +17,7 @@ use WikibaseSolutions\CypherDSL\Query;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\LimitClause
  */
-class LimitClauseTest extends TestCase
+final class LimitClauseTest extends TestCase
 {
     public function testEmptyClause(): void
     {
