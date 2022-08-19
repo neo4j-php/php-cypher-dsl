@@ -46,15 +46,15 @@ final class All extends Procedure implements BooleanType
      *
      * all(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
      *
-     * @param Variable|string $variable A variable that can be used from within the predicate
-     * @param ListType|array $list A list
+     * @param Variable $variable A variable that can be used from within the predicate
+     * @param ListType $list A list
      * @param AnyType $predicate A predicate that is tested against all items in the list
 	 * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
-    public function __construct($variable, $list, AnyType $predicate)
+    public function __construct(Variable $variable, ListType $list, AnyType $predicate)
     {
-        $this->variable = is_string($variable) ? new Variable($variable) : $variable;
-        $this->list = is_array($list) ? new List_($list) : $list;
+        $this->variable = $variable;
+        $this->list = $list;
         $this->predicate = $predicate;
     }
 

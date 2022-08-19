@@ -11,11 +11,14 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Procedures;
 
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\QueryConvertible;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\CompositeType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
@@ -25,18 +28,26 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 abstract class Procedure implements QueryConvertible
 {
+    use CastTrait;
+    use ErrorTrait;
+
     /**
      * Produces a raw function call. This enables the usage of unimplemented functions in your
      * Cypher queries. The parameters of this function are not type-checked.
      *
      * @param string $functionName The name of the function to call
-     * @param AnyType[] $parameters The parameters to pass to the function call
-     *
+     * @param AnyType[]|Pattern[]|int[]|float[]|string[]|bool[]|array[]|AnyType|Pattern|int|float|string|bool|array $parameters The parameters to pass to the function call
      * @return Raw
      */
     public static function raw(string $functionName, array $parameters): Raw
     {
-        return new Raw($functionName, $parameters);
+        $res = [];
+
+        foreach ($parameters as $parameter) {
+            $res[] = self::toAnyType($parameter);
+        }
+
+        return new Raw($functionName, $res);
     }
 
     /**
@@ -44,15 +55,15 @@ abstract class Procedure implements QueryConvertible
      *
      * all(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
      *
-     * @param Variable $variable A variable that can be used from within the predicate
-     * @param ListType $list A list
-     * @param AnyType $predicate A predicate that is tested against all items in the list
+     * @param Variable|string $variable A variable that can be used from within the predicate
+     * @param ListType|array $list A list
+     * @param AnyType|Pattern|int|float|string|bool|array $predicate A predicate that is tested against all items in the list
      *
      * @return All
      */
-    public static function all(Variable $variable, ListType $list, AnyType $predicate): All
+    public static function all($variable, $list, $predicate): All
     {
-        return new All($variable, $list, $predicate);
+        return new All(self::toName($variable), self::toListType($list), self::toAnyType($predicate));
     }
 
     /**
@@ -60,15 +71,15 @@ abstract class Procedure implements QueryConvertible
      *
      * any(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
      *
-     * @param Variable $variable A variable that can be used from within the predicate
-     * @param ListType $list A list
-     * @param AnyType $predicate A predicate that is tested against all items in the list
+     * @param Variable|string $variable A variable that can be used from within the predicate
+     * @param ListType|array $list A list
+     * @param AnyType|Pattern|int|float|string|bool|array $predicate A predicate that is tested against all items in the list
      *
      * @return Any
      */
-    public static function any(Variable $variable, ListType $list, AnyType $predicate): Any
+    public static function any($variable, $list, $predicate): Any
     {
-        return new Any($variable, $list, $predicate);
+        return new Any(self::toName($variable), self::toListType($list), self::toAnyType($predicate));
     }
 
     /**
@@ -76,13 +87,13 @@ abstract class Procedure implements QueryConvertible
      *
      * exists(input :: ANY?) :: (BOOLEAN?)
      *
-     * @param AnyType $expression A pattern or property
+     * @param AnyType|Pattern|int|float|string|bool|array $expression A pattern or property
      *
      * @return Exists
      */
-    public static function exists(AnyType $expression): Exists
+    public static function exists($expression): Exists
     {
-        return new Exists($expression);
+        return new Exists(self::toAnyType($expression));
     }
 
     /**
@@ -96,8 +107,14 @@ abstract class Procedure implements QueryConvertible
      *
      * @return IsEmpty
      */
-    public static function isEmpty(AnyType $list): IsEmpty
+    public static function isEmpty($list): IsEmpty
     {
+        self::assertClass('list', [CompositeType::class, StringType::class, 'string', 'array'], $list);
+
+        if (!$list instanceof AnyType) {
+            $list = Literal::literal($list);
+        }
+
         return new IsEmpty($list);
     }
 
@@ -106,15 +123,15 @@ abstract class Procedure implements QueryConvertible
      *
      * none(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
      *
-     * @param Variable $variable A variable that can be used from within the predicate
-     * @param ListType $list A list
-     * @param AnyType $predicate A predicate that is tested against all items in the list
+     * @param Variable|string $variable A variable that can be used from within the predicate
+     * @param ListType|array $list A list
+     * @param AnyType|Pattern|int|float|string|bool|array $predicate A predicate that is tested against all items in the list
      *
      * @return None
      */
-    public static function none(Variable $variable, ListType $list, AnyType $predicate): None
+    public static function none($variable, $list, $predicate): None
     {
-        return new None($variable, $list, $predicate);
+        return new None(self::toName($variable), self::toListType($list), self::toAnyType($predicate));
     }
 
     /**
@@ -122,15 +139,15 @@ abstract class Procedure implements QueryConvertible
      *
      * single(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
      *
-     * @param Variable $variable A variable that can be used from within the predicate
-     * @param ListType $list A list
-     * @param AnyType $predicate A predicate that is tested against all items in the list
+     * @param Variable|string $variable A variable that can be used from within the predicate
+     * @param ListType|array $list A list
+     * @param AnyType|Pattern|int|float|string|bool|array $predicate A predicate that is tested against all items in the list
      *
      * @return Single
      */
-    public static function single(Variable $variable, ListType $list, AnyType $predicate): Single
+    public static function single($variable, $list, $predicate): Single
     {
-        return new Single($variable, $list, $predicate);
+        return new Single(self::toName($variable), self::toListType($list), self::toAnyType($predicate));
     }
 
     /**
@@ -138,7 +155,7 @@ abstract class Procedure implements QueryConvertible
      *
      * point(input :: MAP?) :: (POINT?)
      *
-     * @param MapType $map The map to use for constructing the point
+     * @param MapType|array $map The map to use for constructing the point
      * @return Point
      *
      * @see Literal::point2d()
@@ -146,9 +163,9 @@ abstract class Procedure implements QueryConvertible
      * @see Literal::point3d()
      * @see Literal::point3dWGS84()
      */
-    public static function point(MapType $map): Point
+    public static function point($map): Point
     {
-        return new Point($map);
+        return new Point(self::toMapType($map));
     }
 
     /**
@@ -156,7 +173,7 @@ abstract class Procedure implements QueryConvertible
      *
      * date(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (DATE?)
      *
-     * @param AnyType|null $value The input to the date function, from which to construct the date
+     * @param AnyType|Pattern|int|float|string|bool|array|null $value The input to the date function, from which to construct the date
      * @return Date
      *
      * @see Literal::date()
@@ -164,9 +181,9 @@ abstract class Procedure implements QueryConvertible
      * @see Literal::dateYWD()
      * @see Literal::dateYMD()
      */
-    public static function date(?AnyType $value = null): Date
+    public static function date($value = null): Date
     {
-        return new Date($value);
+        return new Date($value === null ? $value : self::toAnyType($value));
     }
 
     /**
@@ -174,7 +191,7 @@ abstract class Procedure implements QueryConvertible
      *
      * datetime(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (DATETIME?)
      *
-     * @param AnyType|null $value The input to the datetime function, from which to construct the datetime
+     * @param AnyType|Pattern|int|float|string|bool|array|null $value The input to the datetime function, from which to construct the datetime
      * @return DateTime
      *
      * @see Literal::dateTime()
@@ -186,7 +203,7 @@ abstract class Procedure implements QueryConvertible
      */
     public static function datetime(?AnyType $value = null): DateTime
     {
-        return new DateTime($value);
+        return new DateTime($value === null ? $value : self::toAnyType($value));
     }
 
     /**
@@ -194,7 +211,7 @@ abstract class Procedure implements QueryConvertible
      *
      * datetime(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (LOCALDATETIME?)
      *
-     * @param AnyType|null $value The input to the localdatetime function, from which to construct the localdatetime
+     * @param AnyType|Pattern|int|float|string|bool|array|null $value The input to the localdatetime function, from which to construct the localdatetime
      * @return LocalDateTime
      *
      * @see Literal::localDateTime()
@@ -206,7 +223,7 @@ abstract class Procedure implements QueryConvertible
      */
     public static function localdatetime(?AnyType $value = null): LocalDateTime
     {
-        return new LocalDateTime($value);
+        return new LocalDateTime($value === null ? $value : self::toAnyType($value));
     }
 
     /**
@@ -214,7 +231,7 @@ abstract class Procedure implements QueryConvertible
      *
      * localtime(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (LOCALTIME?)
      *
-     * @param AnyType|null $value The input to the localtime function, from which to construct the localtime
+     * @param AnyType|Pattern|int|float|string|bool|array|null $value The input to the localtime function, from which to construct the localtime
      * @return LocalTime
      *
      * @see Literal::localTime()
@@ -223,7 +240,7 @@ abstract class Procedure implements QueryConvertible
      */
     public static function localtime(?AnyType $value = null): LocalTime
     {
-        return new LocalTime($value);
+        return new LocalTime($value === null ? $value : self::toAnyType($value));
     }
 
     /**
@@ -231,7 +248,7 @@ abstract class Procedure implements QueryConvertible
      *
      * time(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (TIME?)
      *
-     * @param AnyType|null $value The input to the localtime function, from which to construct the time
+     * @param AnyType|Pattern|int|float|string|bool|array|null $value The input to the localtime function, from which to construct the time
      * @return Time
      *
      * @see Literal::time()
@@ -240,7 +257,7 @@ abstract class Procedure implements QueryConvertible
      */
     public static function time(?AnyType $value = null): Time
     {
-        return new Time($value);
+        return new Time($value === null ? $value : self::toAnyType($value));
     }
 
     /**
