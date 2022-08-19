@@ -1,37 +1,25 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
+ * This file is part of php-cypher-dsl.
+ *
  * Copyright (C) 2021  Wikibase Solutions
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Literals;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Literals\Map
  */
-class MapTest extends TestCase
+final class MapTest extends TestCase
 {
-
     public function testEmpty()
     {
         $map = new Map([]);
@@ -101,6 +89,24 @@ class MapTest extends TestCase
         $map->add('boo', false);
 
         $this->assertSame("{foo: 'baz', boo: false}", $map->toQuery());
+    }
+
+    public function testIsEmpty(): void
+    {
+        $map = new Map();
+
+        $this->assertTrue($map->isEmpty());
+
+        $map->add('boo', 'far');
+
+        $this->assertFalse($map->isEmpty());
+    }
+
+    public function testIsInstanceOfMapType(): void
+    {
+        $map = new Map();
+
+        $this->assertInstanceOf(MapType::class, $map);
     }
 
     public function provideNumericalKeysData(): array

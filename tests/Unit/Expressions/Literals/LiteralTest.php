@@ -1,28 +1,18 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
+ * This file is part of php-cypher-dsl.
+ *
  * Copyright (C) 2021  Wikibase Solutions
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Literals;
 
+use JetBrains\PhpStorm\Internal\TentativeType;
 use LogicException;
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Date;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\DateTime;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\LocalDateTime;
@@ -39,7 +29,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Literals\Literal
  */
-class LiteralTest extends TestCase
+final class LiteralTest extends TestCase
 {
     public function testLiteralString(): void
     {
@@ -67,6 +57,27 @@ class LiteralTest extends TestCase
         $float = Literal::literal(1.0);
 
         $this->assertInstanceOf(Float_::class, $float);
+    }
+
+    public function testLiteralList(): void
+    {
+        $list = Literal::literal(['a', 'b', 'c']);
+
+        $this->assertInstanceOf(List_::class, $list);
+    }
+
+    public function testLiteralMap(): void
+    {
+        $map = Literal::literal(['a' => 'b']);
+
+        $this->assertInstanceOf(Map::class, $map);
+    }
+
+    public function testInvalidTypeThrowsException(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        Literal::literal(new \stdClass());
     }
 
     public function testStringable(): void
@@ -108,6 +119,79 @@ class LiteralTest extends TestCase
         $decimal = Literal::decimal(1.0);
 
         $this->assertInstanceOf(Float_::class, $decimal);
+    }
+
+    public function testInteger(): void
+    {
+        $integer = Literal::integer(1);
+
+        $this->assertInstanceOf(Integer::class, $integer);
+    }
+
+    public function testFloat(): void
+    {
+        $float = Literal::float(1.0);
+
+        $this->assertInstanceOf(Float_::class, $float);
+    }
+
+    public function testList(): void
+    {
+        $list = Literal::list(['a', 'b', 'c']);
+
+        $this->assertInstanceOf(List_::class, $list);
+    }
+
+    public function testListAcceptsIterable(): void
+    {
+        $list = Literal::list(new class implements \Iterator {
+            public function current()
+            {
+                return 1;
+            }
+
+            public function next()
+            {
+                return 1;
+            }
+
+            public function key()
+            {
+            }
+
+            public function valid()
+            {
+                static $i = 0;
+                return $i++ < 10;
+            }
+
+            public function rewind()
+            {
+            }
+        } );
+
+        $this->assertInstanceOf(List_::class, $list);
+    }
+
+    public function testListCastsToAnyType(): void
+    {
+        $list = Literal::list(['a', 1, true]);
+
+        $this->assertSame("['a', 1, true]", $list->toQuery());
+    }
+
+    public function testMapCastsToAnyType(): void
+    {
+        $map = Literal::map(['a' => 'a', 'b' => 1, 'c' => true]);
+
+        $this->assertSame("{a: 'a', b: 1, c: true}", $map->toQuery());
+    }
+
+    public function testMap(): void
+    {
+        $map = Literal::map(['a' => 'b']);
+
+        $this->assertInstanceOf(Map::class, $map);
     }
 
     public function testPoint2d(): void

@@ -34,16 +34,15 @@ final class Integer implements IntegerType
         if (!is_int($value) && !is_string($value)) {
             throw new TypeError('An integer should be given as a string or integer, '.gettype($value).' received.');
         }
+
         $parsedValue = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
 
-        if (false === $parsedValue) {
-           throw new TypeError(
-               'A non-integer string has been provided: "'.$value.'".'
-           );
-        } elseif (is_string($value) && $parsedValue !== $value) {
-           throw new TypeError(
-               'A non-integer string has been provided: "'.$value.'", should be something like "'.$parsedValue.'".'
-           );
+        if ($parsedValue === false) {
+           throw new TypeError('A non-integer string has been provided: "'.$value.'".');
+        }
+
+        if (is_string($value) && $parsedValue !== $value) {
+           throw new TypeError('A non-integer string has been provided: "'.$value.'", should be something like "'.$parsedValue.'".');
         }
 
         $this->value = $parsedValue;

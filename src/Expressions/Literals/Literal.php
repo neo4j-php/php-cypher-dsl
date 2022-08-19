@@ -10,6 +10,7 @@
 namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
 use InvalidArgumentException;
+use Traversable;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Date;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\DateTime;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
@@ -154,14 +155,15 @@ final class Literal
     /**
      * Creates a new list literal.
      *
-     * @param array $value
+     * @param array|iterable $value
      * @return List_
      */
     public static function list(iterable $value): List_
     {
-        if (is_object($value)) {
+        if ($value instanceof Traversable) {
             $value = iterator_to_array($value);
         }
+
         return new List_(array_map([self::class, 'toAnyType'], $value));
     }
 
