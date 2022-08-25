@@ -22,7 +22,6 @@ final class MovieGraphTest extends TestCase
     {
         $bolt = new Bolt(new Socket());
         $this->protocol = $bolt->build();
-        $this->protocol->hello(Auth::basic('neo4j', 'test'));
     }
 
     /**
