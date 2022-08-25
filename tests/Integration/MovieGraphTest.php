@@ -4,7 +4,6 @@ namespace WikibaseSolutions\CypherDSL\Tests\Integration;
 
 use Bolt\Bolt;
 use Bolt\connection\Socket;
-use Bolt\helpers\Auth;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Query;
