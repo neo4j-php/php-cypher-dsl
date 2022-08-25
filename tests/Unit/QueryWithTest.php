@@ -22,32 +22,5 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 class QueryWithTest extends TestCase
 {
-	public function testWith(): void
-	{
-		$expression = new LessThan(new Variable('a'), new Variable('b'), false);
 
-		$statement = (new Query())->with($expression)->build();
-
-		$this->assertSame("WITH a < b", $statement);
-
-		$statement = (new Query())->with(["foobar" => $expression])->build();
-
-		$this->assertSame("WITH a < b AS foobar", $statement);
-	}
-
-	public function testWithWithNode(): void
-	{
-		$node = Query::node('m');
-
-		$statement = (new Query())->with($node)->build();
-
-		$this->assertMatchesRegularExpression("/(WITH var[\da-f]+)/", $statement);
-
-		$node = Query::node("m");
-		$node->withVariable('example');
-
-		$statement = (new Query())->with($node)->build();
-
-		$this->assertSame('WITH example', $statement);
-	}
 }

@@ -20,23 +20,43 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  *
  * @covers \WikibaseSolutions\CypherDSL\Query
  */
-class QueryRemoveTest extends TestCase
+final class QueryRemoveTest extends TestCase
 {
-	public function testRemove(): void
-	{
-		$expression = new Property(new Variable('a'),'age');
+	public function testSingleProperty(): void
+    {
+        $prop = Query::variable('hello')->property('world');
 
-		$statement = (new Query())->remove($expression)->build();
+        $query = Query::new()->remove($prop);
 
-		$this->assertSame("REMOVE a.age", $statement);
-	}
+        $this->assertSame('REMOVE hello.world', $query->toQuery());
+    }
 
-	public function testRemoveRejectsAnyType(): void
-	{
-		$m = $this->createMock(AnyType::class);
+    public function testMultipleProperties(): void
+    {
+        $a = Query::variable('hello')->property('world');
+        $b = Query::variable('world')->property('hello');
 
-		$this->expectException(TypeError::class);
+        $query = Query::new()->remove([$a, $b]);
 
-		(new Query())->remove($m);
-	}
+        $this->assertSame('REMOVE hello.world, world.hello', $query->toQuery());
+    }
+
+    public function testSingleLabel(): void
+    {
+        $tom = Query::variable('tom')->labeled('Actor');
+
+        $query = Query::new()->remove($tom);
+
+        $this->assertSame('REMOVE tom:Actor', $query->toQuery());
+    }
+
+    public function testMultipleLabels(): void
+    {
+        $tom = Query::variable('tom')->labeled('Actor');
+        $leonardo = Query::variable('leonardo')->labeled('Actor');
+
+        $query = Query::new()->remove([$tom, $leonardo]);
+
+        $this->assertSame('REMOVE tom:Actor, leonardo:Actor', $query->toQuery());
+    }
 }

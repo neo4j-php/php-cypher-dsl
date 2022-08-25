@@ -489,16 +489,16 @@ final class Query implements QueryConvertible
     /**
      * Creates the DETACH DELETE clause.
      *
-     * @param StructuralType|Pattern|(StructuralType|Pattern)[] $variables The variables to delete, including nodes, relationships and paths
+     * @param StructuralType|Pattern|StructuralType[]|Pattern[] $structures The variables to delete, including nodes, relationships and paths
      *
      * @return $this
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
      * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 105)
      * @deprecated Use Query::delete(..., true) instead
      */
-    public function detachDelete($variables): self
+    public function detachDelete($structures): self
     {
-        return $this->delete($variables, true);
+        return $this->delete($structures, true);
     }
 
     /**

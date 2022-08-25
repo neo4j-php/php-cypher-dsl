@@ -1,5 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
+/*
+ * This file is part of php-cypher-dsl.
+ *
+ * Copyright (C) 2021  Wikibase Solutions
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use TypeError;
@@ -13,49 +20,70 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  *
  * @covers \WikibaseSolutions\CypherDSL\Query
  */
-class QueryDeleteTest extends TestCase
+final class QueryDeleteTest extends TestCase
 {
-	public function testDelete(): void
-	{
-		$m = new Variable("m");
+	public function testSingleStructuralType(): void
+    {
+        $tom = Query::node()->withVariable('tom')->getVariable();
 
-		$statement = (new Query())->delete($m)->build();
+        $query = Query::new()->delete($tom);
 
-		$this->assertSame("DELETE m", $statement);
+        $this->assertSame('DELETE tom', $query->toQuery());
+    }
 
-		$statement = (new Query())->delete([$m, $m])->build();
+    public function testMultipleStructuralType(): void
+    {
+        $tom = Query::node()->withVariable('tom')->getVariable();
+        $jerry = Query::node()->withVariable('jerry')->getVariable();
 
-		$this->assertSame("DELETE m, m", $statement);
-	}
+        $query = Query::new()->delete([$tom, $jerry]);
 
-	public function testDeleteRejectsAnyType(): void
-	{
-		$m = $this->createMock(AnyType::class);
+        $this->assertSame('DELETE tom, jerry', $query->toQuery());
+    }
 
-		$this->expectException(TypeError::class);
+    public function testSinglePattern(): void
+    {
+        $tom = Query::node()->withVariable('tom');
 
-		(new Query())->delete([$m, $m]);
-	}
+        $query = Query::new()->delete($tom);
 
-	public function testDetachDelete(): void
-	{
-		$m = new Variable("m");
+        $this->assertSame('DELETE tom', $query->toQuery());
+    }
 
-		$statement = (new Query())->detachDelete($m)->build();
+    public function testMultiplePatterns(): void
+    {
+        $tom = Query::node()->withVariable('tom');
+        $jerry = Query::node()->withVariable('jerry');
 
-		$this->assertSame("DETACH DELETE m", $statement);
+        $query = Query::new()->delete([$tom, $jerry]);
 
-		$statement = (new Query())->detachDelete([$m, $m])->build();
+        $this->assertSame('DELETE tom, jerry', $query->toQuery());
+    }
 
-		$this->assertSame("DETACH DELETE m, m", $statement);
-	}
+    public function testPatternWithoutVariable(): void
+    {
+        $pattern = Query::node();
 
-	public function testDetachDeleteRejectsAnyType(): void
-	{
-		$m = $this->createMock(AnyType::class);
+        $query = Query::new()->delete($pattern);
 
-		$this->expectException(TypeError::class);
+        $this->assertStringMatchesFormat('DELETE var%s', $query->toQuery());
+    }
 
-		(new Query())->detachDelete([$m, $m]);
-	}
+    public function testDetachDelete(): void
+    {
+        $tom = Query::node()->withVariable('tom')->getVariable();
+
+        $query = Query::new()->delete($tom, true);
+
+        $this->assertSame('DETACH DELETE tom', $query->toQuery());
+    }
+
+    public function testDetachDeleteDeprecated(): void
+    {
+        $tom = Query::node()->withVariable('tom')->getVariable();
+
+        $query = Query::new()->detachDelete($tom);
+
+        $this->assertSame('DETACH DELETE tom', $query->toQuery());
+    }
 }

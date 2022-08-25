@@ -1,5 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
+/*
+ * This file is part of php-cypher-dsl.
+ *
+ * Copyright (C) 2021-  Wikibase Solutions
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use TypeError;
@@ -15,41 +22,33 @@ use WikibaseSolutions\CypherDSL\Patterns\Relationship;
  *
  * @covers \WikibaseSolutions\CypherDSL\Query
  */
-class QueryCreateTest extends TestCase
+final class QueryCreateTest extends TestCase
 {
-	public function testCreate(): void
+	public function testCreateSinglePattern(): void
 	{
-		$m = new Path(
-            [(new Node('Movie'))->withVariable('m'), (new Node)->withVariable('b')],
-            [(new Relationship(Relationship::DIR_RIGHT))->addType('RELATED')]
-        );
+		$pattern = Query::node()->withVariable('hello');
 
-		$statement = (new Query())->create($m)->build();
+        $query = Query::new()->create($pattern);
 
-		$this->assertSame("CREATE (m:Movie)-[:RELATED]->(b)", $statement);
-
-		$statement = (new Query())->create([$m, $m])->build();
-
-		$this->assertSame("CREATE (m:Movie)-[:RELATED]->(b), (m:Movie)-[:RELATED]->(b)", $statement);
+        $this->assertSame('CREATE (hello)', $query->toQuery());
 	}
 
-	/**
-	 * @doesNotPerformAssertions
-	 */
-	public function testCreateTypeAcceptance(): void
-	{
-		$path = new Path([new Node, new Node], [new Relationship(Relationship::DIR_UNI)]);
-		$node = (new Node)->withVariable('a');
+    public function testCreateMultiplePatterns(): void
+    {
+        $hello = Query::node()->withVariable('hello');
+        $world = Query::node()->withVariable('world');
 
-		(new Query())->create([$path, $node]);
-	}
+        $query = Query::new()->create([$hello, $world]);
 
-	public function testCreateRejectsAnyType(): void
-	{
-		$m = $this->createMock(AnyType::class);
+        $this->assertSame('CREATE (hello), (world)', $query->toQuery());
+    }
 
-		$this->expectException(TypeError::class);
+    public function testDoesNotAcceptRelationship(): void
+    {
+        $rel = Query::relationship(Relationship::DIR_RIGHT);
 
-		(new Query())->create([$m, $m]);
-	}
+        $this->expectException(TypeError::class);
+
+        Query::new()->create($rel);
+    }
 }
