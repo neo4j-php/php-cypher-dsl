@@ -1,39 +1,33 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
+ * This file is part of php-cypher-dsl.
+ *
  * Copyright (C) 2021  Wikibase Solutions
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\TypeTraits;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Equality;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThan;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThanOrEqual;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Inequality;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\IsNotNull;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\IsNull;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThan;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThanOrEqual;
+use WikibaseSolutions\CypherDSL\Query;
+use WikibaseSolutions\CypherDSL\Syntax\Alias;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\AnyTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\AnyTypeTrait
  */
-class AnyTypeTraitTest extends TestCase
+final class AnyTypeTraitTest extends TestCase
 {
     /**
      * @var MockObject|AnyType
@@ -70,6 +64,13 @@ class AnyTypeTraitTest extends TestCase
         $this->assertEquals($this->b, $gt->getRight());
     }
 
+    public function testGtLiteral(): void
+    {
+        $gt = $this->a->gt(10);
+
+        $this->assertInstanceOf(GreaterThan::class, $gt);
+    }
+
     public function testGtNoParentheses(): void
     {
         $gt = $this->a->gt($this->b, false);
@@ -90,6 +91,13 @@ class AnyTypeTraitTest extends TestCase
         $this->assertTrue($gte->insertsParentheses());
         $this->assertEquals($this->a, $gte->getLeft());
         $this->assertEquals($this->b, $gte->getRight());
+    }
+
+    public function testGteLiteral(): void
+    {
+        $gte = $this->a->gte(10);
+
+        $this->assertInstanceOf(GreaterThanOrEqual::class, $gte);
     }
 
     public function testGteNoParentheses(): void
@@ -114,6 +122,13 @@ class AnyTypeTraitTest extends TestCase
         $this->assertEquals($this->b, $lt->getRight());
     }
 
+    public function testLtLiteral(): void
+    {
+        $lt = $this->a->lt(10);
+
+        $this->assertInstanceOf(LessThan::class, $lt);
+    }
+
     public function testLtNoParentheses(): void
     {
         $lt = $this->a->lt($this->b, false);
@@ -136,6 +151,13 @@ class AnyTypeTraitTest extends TestCase
         $this->assertEquals($this->b, $lte->getRight());
     }
 
+    public function testLteLiteral(): void
+    {
+        $lte = $this->a->lte(10);
+
+        $this->assertInstanceOf(LessThanOrEqual::class, $lte);
+    }
+
     public function testLteNoParentheses(): void
     {
         $lte = $this->a->lte($this->b, false);
@@ -145,5 +167,117 @@ class AnyTypeTraitTest extends TestCase
         $this->assertFalse($lte->insertsParentheses());
         $this->assertEquals($this->a, $lte->getLeft());
         $this->assertEquals($this->b, $lte->getRight());
+    }
+
+    public function testAlias(): void
+    {
+        $alias = $this->a->alias(Query::variable('foo'));
+
+        $this->assertInstanceOf(Alias::class, $alias);
+    }
+
+    public function testAliasLiteral(): void
+    {
+        $alias = $this->a->alias('foo');
+
+        $this->assertInstanceOf(Alias::class, $alias);
+    }
+
+    public function testEquals(): void
+    {
+        $equals = $this->a->equals($this->b);
+
+        $this->assertInstanceOf(Equality::class, $equals);
+
+        $this->assertTrue($equals->insertsParentheses());
+        $this->assertEquals($this->a, $equals->getLeft());
+        $this->assertEquals($this->b, $equals->getRight());
+    }
+
+    public function testEqualsLiteral(): void
+    {
+        $equals = $this->a->equals(10);
+
+        $this->assertInstanceOf(Equality::class, $equals);
+    }
+
+    public function testEqualsNoParentheses(): void
+    {
+        $equals = $this->a->equals($this->b, false);
+
+        $this->assertInstanceOf(Equality::class, $equals);
+
+        $this->assertFalse($equals->insertsParentheses());
+        $this->assertEquals($this->a, $equals->getLeft());
+        $this->assertEquals($this->b, $equals->getRight());
+    }
+
+    public function testNotEquals(): void
+    {
+        $notEquals = $this->a->notEquals($this->b);
+
+        $this->assertInstanceOf(Inequality::class, $notEquals);
+
+        $this->assertTrue($notEquals->insertsParentheses());
+        $this->assertEquals($this->a, $notEquals->getLeft());
+        $this->assertEquals($this->b, $notEquals->getRight());
+    }
+
+    public function testNotEqualsLiteral(): void
+    {
+        $notEquals = $this->a->notEquals(10);
+
+        $this->assertInstanceOf(Inequality::class, $notEquals);
+    }
+
+    public function testNotEqualsNoParentheses(): void
+    {
+        $notEquals = $this->a->notEquals($this->b, false);
+
+        $this->assertInstanceOf(Inequality::class, $notEquals);
+
+        $this->assertFalse($notEquals->insertsParentheses());
+        $this->assertEquals($this->a, $notEquals->getLeft());
+        $this->assertEquals($this->b, $notEquals->getRight());
+    }
+
+    public function testIsNull(): void
+    {
+        $isNull = $this->a->isNull();
+
+        $this->assertInstanceOf(IsNull::class, $isNull);
+
+        $this->assertTrue($isNull->insertsParentheses());
+        $this->assertEquals($this->a, $isNull->getExpression());
+    }
+
+    public function testIsNullNoParentheses(): void
+    {
+        $isNull = $this->a->isNull(false);
+
+        $this->assertInstanceOf(IsNull::class, $isNull);
+
+        $this->assertFalse($isNull->insertsParentheses());
+        $this->assertEquals($this->a, $isNull->getExpression());
+    }
+
+    public function testIsNotNull(): void
+    {
+        $isNotNull = $this->a->isNotNull();
+
+        $this->assertInstanceOf(IsNotNull::class, $isNotNull);
+
+        $this->assertTrue($isNotNull->insertsParentheses());
+        $this->assertEquals($this->a, $isNotNull->getExpression());
+    }
+
+    public function testIsNotNullNoParentheses(): void
+    {
+        $isNotNull = $this->a->isNotNull(false);
+
+        $this->assertInstanceOf(IsNotNull::class, $isNotNull);
+
+        $this->assertFalse($isNotNull->insertsParentheses());
+        $this->assertEquals($this->a, $isNotNull->getExpression());
     }
 }

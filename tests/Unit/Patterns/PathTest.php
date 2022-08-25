@@ -15,7 +15,7 @@ use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Query;
 
-class PathTest extends TestCase
+final class PathTest extends TestCase
 {
     public function testEmpty(): void
     {

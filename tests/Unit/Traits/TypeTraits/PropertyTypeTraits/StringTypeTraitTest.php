@@ -1,24 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
+ * This file is part of php-cypher-dsl.
+ *
  * Copyright (C) 2021  Wikibase Solutions
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\TypeTraits\PropertyTypeTraits;
 
 use PHPUnit\Framework\MockObject\MockObject;
@@ -34,7 +22,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\StringTypeTrait
  */
-class StringTypeTraitTest extends TestCase
+final class StringTypeTraitTest extends TestCase
 {
 
     /**
@@ -71,6 +59,13 @@ class StringTypeTraitTest extends TestCase
         $this->assertEquals($this->b, $contains->getRight());
     }
 
+    public function testContainsLiteral(): void
+    {
+        $contains = $this->a->contains('test');
+
+        $this->assertInstanceOf(Contains::class, $contains);
+    }
+
     public function testContainsNoParentheses(): void
     {
         $contains = $this->a->contains($this->b, false);
@@ -91,6 +86,13 @@ class StringTypeTraitTest extends TestCase
         $this->assertTrue($endsWith->insertsParentheses());
         $this->assertEquals($this->a, $endsWith->getLeft());
         $this->assertEquals($this->b, $endsWith->getRight());
+    }
+
+    public function testEndsWithLiteral(): void
+    {
+        $endsWith = $this->a->endsWith('test');
+
+        $this->assertInstanceOf(EndsWith::class, $endsWith);
     }
 
     public function testEndsWithNoParentheses(): void
@@ -115,6 +117,13 @@ class StringTypeTraitTest extends TestCase
         $this->assertEquals($this->b, $startsWith->getRight());
     }
 
+    public function testStartsWithLiteral(): void
+    {
+        $startsWith = $this->a->startsWith('test');
+
+        $this->assertInstanceOf(StartsWith::class, $startsWith);
+    }
+
     public function testStartsWithNoParentheses(): void
     {
         $startsWith = $this->a->startsWith($this->b, false);
@@ -135,6 +144,13 @@ class StringTypeTraitTest extends TestCase
         $this->assertTrue($regex->insertsParentheses());
         $this->assertEquals($this->a, $regex->getLeft());
         $this->assertEquals($this->b, $regex->getRight());
+    }
+
+    public function testRegexLiteral(): void
+    {
+        $regex = $this->a->regex('/test/');
+
+        $this->assertInstanceOf(Regex::class, $regex);
     }
 
     public function testRegexNoParentheses(): void

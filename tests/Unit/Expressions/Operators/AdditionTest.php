@@ -15,7 +15,6 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Addition;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 

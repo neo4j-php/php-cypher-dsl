@@ -14,11 +14,12 @@ use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\ExclusiveDisjunction;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\ExclusiveDisjunction
  */
-class ExclusiveDisjunctionTest extends TestCase
+final class ExclusiveDisjunctionTest extends TestCase
 {
     public function testToQuery(): void
     {
@@ -42,12 +43,10 @@ class ExclusiveDisjunctionTest extends TestCase
         $this->assertSame("(true XOR false XOR true XOR false)", $xor->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands(): void
+    public function testInstanceOfBooleanType(): void
     {
-        $this->expectException(TypeError::class);
+        $and = new ExclusiveDisjunction(new Boolean(true), new Boolean(false));
 
-        $and = new ExclusiveDisjunction($this->createMock(AnyType::class), $this->createMock(AnyType::class));
-
-        $and->toQuery();
+        $this->assertInstanceOf(BooleanType::class, $and);
     }
 }

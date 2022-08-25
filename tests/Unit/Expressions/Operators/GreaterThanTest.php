@@ -14,11 +14,13 @@ use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThan;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThan
  */
-class GreaterThanTest extends TestCase
+final class GreaterThanTest extends TestCase
 {
 
     public function testToQuery(): void
@@ -37,5 +39,13 @@ class GreaterThanTest extends TestCase
         $greaterThan = new GreaterThan(new Integer(10), new Integer(15), false);
 
         $this->assertSame("10 > 15", $greaterThan->toQuery());
+    }
+
+    public function testInstanceOfNumeralType(): void
+    {
+        $and = new GreaterThan(new Integer(1), new Integer(1));
+
+        $this->assertInstanceOf(FloatType::class, $and);
+        $this->assertInstanceOf(IntegerType::class, $and);
     }
 }

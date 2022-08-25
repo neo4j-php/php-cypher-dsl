@@ -1,24 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
+ * This file is part of php-cypher-dsl.
+ *
  * Copyright (C) 2021  Wikibase Solutions
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\TypeTraits\PropertyTypeTraits;
 
 use PHPUnit\Framework\MockObject\MockObject;
@@ -37,9 +25,8 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\NumeralTypeTrait
  */
-class NumeralTypeTraitTest extends TestCase
+final class NumeralTypeTraitTest extends TestCase
 {
-
     /**
      * @var NumeralType
      */
@@ -74,6 +61,13 @@ class NumeralTypeTraitTest extends TestCase
         $this->assertEquals($this->b, $plus->getRight());
     }
 
+    public function testPlusLiteral(): void
+    {
+        $plus = $this->a->plus(1);
+
+        $this->assertInstanceOf(Addition::class, $plus);
+    }
+
     public function testPlusNoParentheses(): void
     {
         $plus = $this->a->plus($this->b, false);
@@ -94,6 +88,13 @@ class NumeralTypeTraitTest extends TestCase
         $this->assertTrue($divide->insertsParentheses());
         $this->assertEquals($this->a, $divide->getLeft());
         $this->assertEquals($this->b, $divide->getRight());
+    }
+
+    public function testDivideLiteral(): void
+    {
+        $divide = $this->a->divide(1);
+
+        $this->assertInstanceOf(Division::class, $divide);
     }
 
     public function testDivideNoParentheses(): void
@@ -118,6 +119,13 @@ class NumeralTypeTraitTest extends TestCase
         $this->assertEquals($this->b, $exponentiate->getRight());
     }
 
+    public function testExponentiateLiteral(): void
+    {
+        $exponentiate = $this->a->exponentiate(1);
+
+        $this->assertInstanceOf(Exponentiation::class, $exponentiate);
+    }
+
     public function testExponentiateNoParentheses(): void
     {
         $exponentiate = $this->a->exponentiate($this->b, false);
@@ -138,6 +146,13 @@ class NumeralTypeTraitTest extends TestCase
         $this->assertTrue($mod->insertsParentheses());
         $this->assertEquals($this->a, $mod->getLeft());
         $this->assertEquals($this->b, $mod->getRight());
+    }
+
+    public function testModLiteral(): void
+    {
+        $mod = $this->a->mod(1);
+
+        $this->assertInstanceOf(ModuloDivision::class, $mod);
     }
 
     public function testModNoParentheses(): void
@@ -162,6 +177,13 @@ class NumeralTypeTraitTest extends TestCase
         $this->assertEquals($this->b, $times->getRight());
     }
 
+    public function testTimesLiteral(): void
+    {
+        $times = $this->a->times(1);
+
+        $this->assertInstanceOf(Multiplication::class, $times);
+    }
+
     public function testTimesNoParentheses(): void
     {
         $times = $this->a->times($this->b, false);
@@ -182,6 +204,13 @@ class NumeralTypeTraitTest extends TestCase
         $this->assertTrue($minus->insertsParentheses());
         $this->assertEquals($this->a, $minus->getLeft());
         $this->assertEquals($this->b, $minus->getRight());
+    }
+
+    public function testMinusLiteral(): void
+    {
+        $minus = $this->a->minus(1);
+
+        $this->assertInstanceOf(Subtraction::class, $minus);
     }
 
     public function testMinusNoParentheses(): void

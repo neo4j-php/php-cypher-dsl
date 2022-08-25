@@ -21,7 +21,7 @@ use WikibaseSolutions\CypherDSL\Query;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Patterns\Relationship
  */
-class RelationshipTest extends TestCase
+final class RelationshipTest extends TestCase
 {
 	public function testExceptionIsThrownWhenInvalidDirection(): void
 	{

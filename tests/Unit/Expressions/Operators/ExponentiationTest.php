@@ -15,11 +15,13 @@ use WikibaseSolutions\CypherDSL\Expressions\Operators\Exponentiation;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Exponentiation
  */
-class ExponentiationTest extends TestCase
+final class ExponentiationTest extends TestCase
 {
     public function testToQuery(): void
     {
@@ -43,12 +45,11 @@ class ExponentiationTest extends TestCase
         $this->assertSame("(10 ^ 15 ^ 10 ^ 15)", $exponentiation->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands(): void
+    public function testInstanceOfNumeralType(): void
     {
-        $this->expectException(TypeError::class);
+        $and = new Exponentiation(new Integer(1), new Integer(1));
 
-        $exponentiation = new Exponentiation($this->createMock(AnyType::class), $this->createMock(AnyType::class));
-
-        $exponentiation->toQuery();
+        $this->assertInstanceOf(FloatType::class, $and);
+        $this->assertInstanceOf(IntegerType::class, $and);
     }
 }

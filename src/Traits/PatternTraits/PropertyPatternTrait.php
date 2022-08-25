@@ -24,14 +24,15 @@ namespace WikibaseSolutions\CypherDSL\Traits\PatternTraits;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Patterns\PropertyPattern;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
- * This trait provides a default implementation to satisfy the "AssignablePattern" interface.
+ * This trait provides a default implementation to satisfy the "PropertyPattern" interface.
  *
- * @implements PropertyPatternTrait
+ * @implements PropertyPattern
  */
 trait PropertyPatternTrait
 {
@@ -84,26 +85,19 @@ trait PropertyPatternTrait
         $this->makeProperties();
 
         if (is_array($properties)) {
+            $res = [];
+
+            foreach ($properties as $key => $property) {
+                $res[$key] = self::toAnyType($property);
+            }
+
             // Cast the array to a Map
-            $properties = new Map($properties);
+            $properties = new Map($res);
         }
 
         $this->properties->mergeWith($properties);
 
         return $this;
-    }
-
-    private function makeProperties(): void
-    {
-        if (!isset($this->properties)) {
-            $this->properties = new Map();
-        } elseif (!($this->properties instanceof Map)) {
-            // Adding to a map is not natively supported by the MapType, but it is supported by Map. Syntactically, it
-            // is not possible to add new items to, for instance, a Variable, even though it implements MapType. It is
-            // however still useful to be able to add items to objects where a Map is used (that is, an object of
-            // MapType with the {} syntax).
-            throw new TypeError('$this->properties must be of type Map to support "addProperty"');
-        }
     }
 
     /**
@@ -112,5 +106,23 @@ trait PropertyPatternTrait
     public function getProperties(): ?MapType
     {
         return $this->properties;
+    }
+
+    /**
+     * Initialises the properties in this pattern.
+     *
+     * @return void
+     */
+    private function makeProperties(): void
+    {
+        if (!isset($this->properties)) {
+            $this->properties = new Map();
+        } elseif (!$this->properties instanceof Map) {
+            // Adding to a map is not natively supported by the MapType, but it is supported by Map. Syntactically, it
+            // is not possible to add new items to, for instance, a Variable, even though it implements MapType. It is
+            // however still useful to be able to add items to objects where a Map is used (that is, an object of
+            // MapType with the {} syntax).
+            throw new TypeError('$this->properties must be of type Map to support "addProperty"');
+        }
     }
 }

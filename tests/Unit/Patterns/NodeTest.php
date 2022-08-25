@@ -23,7 +23,7 @@ use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Patterns\Node
  */
-class NodeTest extends TestCase
+final class NodeTest extends TestCase
 {
     public function testEmptyNode(): void
     {

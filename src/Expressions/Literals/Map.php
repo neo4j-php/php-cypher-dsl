@@ -56,11 +56,7 @@ final class Map implements MapType
      */
     public function add(string $key, $value): self
     {
-        if (!$value instanceof AnyType) {
-            $value = Literal::literal($value);
-        }
-
-        $this->elements[$key] = $value;
+        $this->elements[$key] = self::toAnyType($value);
 
         return $this;
     }

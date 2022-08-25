@@ -1,24 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
+ * This file is part of php-cypher-dsl.
+ *
  * Copyright (C) 2021  Wikibase Solutions
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\TypeTraits\PropertyTypeTraits;
 
 use PHPUnit\Framework\MockObject\MockObject;
@@ -34,7 +22,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait
  */
-class BooleanTypeTraitTest extends TestCase
+final class BooleanTypeTraitTest extends TestCase
 {
     /**
      * @var MockObject|BooleanType
@@ -70,6 +58,13 @@ class BooleanTypeTraitTest extends TestCase
         $this->assertEquals($this->b, $and->getRight());
     }
 
+    public function testAndLiteral(): void
+    {
+        $xor = $this->a->and(false);
+
+        $this->assertInstanceOf(Conjunction::class, $xor);
+    }
+
     public function testAndNoParentheses(): void
     {
         $and = $this->a->and($this->b, false);
@@ -92,6 +87,13 @@ class BooleanTypeTraitTest extends TestCase
         $this->assertEquals($this->b, $or->getRight());
     }
 
+    public function testOrLiteral(): void
+    {
+        $xor = $this->a->or(false);
+
+        $this->assertInstanceOf(Disjunction::class, $xor);
+    }
+
     public function testOrNoParentheses(): void
     {
         $or = $this->a->or($this->b, false);
@@ -112,6 +114,13 @@ class BooleanTypeTraitTest extends TestCase
         $this->assertTrue($xor->insertsParentheses());
         $this->assertEquals($this->a, $xor->getLeft());
         $this->assertEquals($this->b, $xor->getRight());
+    }
+
+    public function testXorLiteral(): void
+    {
+        $xor = $this->a->xor(false);
+
+        $this->assertInstanceOf(ExclusiveDisjunction::class, $xor);
     }
 
     public function testXorNoParentheses(): void

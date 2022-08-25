@@ -11,14 +11,17 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Exponentiation;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThanOrEqual;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThanOrEqual
  */
-class GreaterThanOrEqualTest extends TestCase
+final class GreaterThanOrEqualTest extends TestCase
 {
 
     public function testToQuery(): void
@@ -37,5 +40,13 @@ class GreaterThanOrEqualTest extends TestCase
         $greaterThanOrEqual = new GreaterThanOrEqual(new Integer(10), new Integer(15), false);
 
         $this->assertSame("10 >= 15", $greaterThanOrEqual->toQuery());
+    }
+
+    public function testInstanceOfNumeralType(): void
+    {
+        $and = new GreaterThanOrEqual(new Integer(1), new Integer(1));
+
+        $this->assertInstanceOf(FloatType::class, $and);
+        $this->assertInstanceOf(IntegerType::class, $and);
     }
 }
