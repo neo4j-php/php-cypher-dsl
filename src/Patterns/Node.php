@@ -28,8 +28,6 @@ final class Node implements PropertyPattern, CompletePattern, RelatablePattern
     use EscapeTrait;
 
     use PropertyPatternTrait;
-    use CompletePatternTrait;
-    use RelatablePatternTrait;
 
     /**
      * @var string[] The labels of this node

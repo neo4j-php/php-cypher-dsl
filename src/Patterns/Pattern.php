@@ -29,7 +29,7 @@ use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PatternTrait;
  *
  *  - CompletePattern: for patterns that can be matched in a MATCH clause
  * 	- PropertyPattern: for patterns that can contain properties
- * 	- RelatablePattern: for patterns that can be related to eachother using a Relationship
+ * 	- RelatablePattern: for patterns that can be related to each other using a Relationship
  *
  * @see PatternTrait for a default implementation
  */

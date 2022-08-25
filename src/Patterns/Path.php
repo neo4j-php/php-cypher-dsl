@@ -12,6 +12,7 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\PatternTraits\CompletePatternTrait;
+use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PatternTrait;
 use WikibaseSolutions\CypherDSL\Traits\PatternTraits\RelatablePatternTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -25,11 +26,10 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  */
 final class Path implements BooleanType, CompletePattern, RelatablePattern
 {
+    use BooleanTypeTrait;
     use ErrorTrait;
 
-    use BooleanTypeTrait;
-    use CompletePatternTrait;
-    use RelatablePatternTrait;
+    use PatternTrait;
 
     /**
      * @var Relationship[]

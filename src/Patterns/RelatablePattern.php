@@ -10,7 +10,6 @@
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Traits\PatternTraits\RelatablePatternTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
@@ -18,8 +17,6 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  *
  * - node
  * - path
- *
- * @see RelatablePatternTrait for a default implementation
  */
 interface RelatablePattern extends Pattern
 {

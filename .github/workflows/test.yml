@@ -75,7 +75,6 @@ jobs:
     env:
       COMPOSER_VERSION: 2
       COVERAGE_DRIVER: none
-      NEO4J_CONNECTIONS: bolt://neo4j:test@localhost,http://neo4j:test@localhost
 
     steps:
       - name: Checkout repository

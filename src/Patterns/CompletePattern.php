@@ -9,8 +9,6 @@
  */
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
-use WikibaseSolutions\CypherDSL\Traits\PatternTraits\CompletePatternTrait;
-
 /**
  * Interface to mark patterns that are complete, i.e. can be matched by a MATCH clause or created by
  * a CREATE clause. These are:
@@ -19,8 +17,6 @@ use WikibaseSolutions\CypherDSL\Traits\PatternTraits\CompletePatternTrait;
  * - path
  *
  * A relationship in itself cannot be matched/created, and therefore does not implement this interface.
- *
- * @see CompletePatternTrait for a default implementation
  */
 interface CompletePattern extends Pattern
 {

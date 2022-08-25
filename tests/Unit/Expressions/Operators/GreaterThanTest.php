@@ -14,6 +14,7 @@ use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThan;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 
@@ -22,7 +23,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
  */
 final class GreaterThanTest extends TestCase
 {
-
     public function testToQuery(): void
     {
         $greaterThan = new GreaterThan(new Integer(10), new Integer(15));
@@ -41,11 +41,10 @@ final class GreaterThanTest extends TestCase
         $this->assertSame("10 > 15", $greaterThan->toQuery());
     }
 
-    public function testInstanceOfNumeralType(): void
+    public function testInstanceOfBooleanType(): void
     {
-        $and = new GreaterThan(new Integer(1), new Integer(1));
+        $greaterThan = new GreaterThan(new Integer(1), new Integer(1));
 
-        $this->assertInstanceOf(FloatType::class, $and);
-        $this->assertInstanceOf(IntegerType::class, $and);
+        $this->assertInstanceOf(BooleanType::class, $greaterThan);
     }
 }
