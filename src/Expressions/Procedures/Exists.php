@@ -16,6 +16,8 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 /**
  * This class represents the "exists()" function.
  *
+ * @note: The "exists()" function is deprecated for Neo4j 4.3 and up. Use "IS NOT NULL" instead.
+ *
  * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-exists
  * @see Procedure::exists()
  */
