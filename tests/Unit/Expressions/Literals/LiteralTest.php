@@ -9,7 +9,7 @@
  */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Literals;
 
-use JetBrains\PhpStorm\Internal\TentativeType;
+use TypeError;
 use LogicException;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
@@ -75,7 +75,7 @@ final class LiteralTest extends TestCase
 
     public function testInvalidTypeThrowsException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(TypeError::class);
 
         Literal::literal(new \stdClass());
     }
@@ -90,6 +90,44 @@ final class LiteralTest extends TestCase
         });
 
         $this->assertInstanceOf(String_::class, $stringable);
+    }
+
+    /**
+     * @dataProvider literalDeductionFailureProvider
+     */
+    public function testLiteralDeductionFailure($value): void
+    {
+        $this->expectException(TypeError::class);
+        Literal::literal($value);
+    }
+
+    public function literalDeductionFailureProvider(): array
+    {
+        return [
+            [new class(){}],
+            [null],
+        ];
+    }
+
+    public function testNumberInteger(): void
+    {
+        $integer = Literal::number(1);
+
+        $this->assertInstanceOf(Integer::class, $integer);
+    }
+
+    public function testNumberFloat(): void
+    {
+        $float = Literal::number(1.0);
+
+        $this->assertInstanceOf(Float_::class, $float);
+    }
+
+    public function testNumberNoString(): void
+    {
+        $this->expectException(TypeError::class);
+
+        Literal::number('55');
     }
 
     public function testBoolean(): void
@@ -198,21 +236,21 @@ final class LiteralTest extends TestCase
     {
         $point = Literal::point2d(1, 2);
 
-        $this->assertEquals(new Point(new Map(["x" => new Integer(1), "y" => new Integer(2), "crs" => new String_("cartesian")])), $point);
+        $this->assertEquals(new Point(Literal::map(["x" => 1, "y" => 2, "crs" => "cartesian"])), $point);
 
         $point = Literal::point2d(
             new Integer(1),
             new Integer(2)
         );
 
-        $this->assertEquals(new Point(new Map(["x" => new Integer(1), "y" => new Integer(2), "crs" => new String_("cartesian")])), $point);
+        $this->assertEquals(new Point(Literal::map(["x" => 1, "y" => 2, "crs" => "cartesian"])), $point);
     }
 
     public function testPoint3d(): void
     {
         $point = Literal::point3d(1, 2, 3);
 
-        $this->assertEquals(new Point(new Map(["x" => new Integer(1), "y" => new Integer(2), "z" => new Integer(3), "crs" => new String_("cartesian-3D")])), $point);
+        $this->assertEquals(new Point(Literal::map(["x" => 1, "y" => 2, "z" => 3, "crs" => "cartesian-3D"])), $point);
 
         $point = Literal::point3d(
             new Integer(1),
@@ -220,28 +258,28 @@ final class LiteralTest extends TestCase
             new Integer(3)
         );
 
-        $this->assertEquals(new Point(new Map(["x" => new Integer(1), "y" => new Integer(2), "z" => new Integer(3), "crs" => new String_("cartesian-3D")])), $point);
+        $this->assertEquals(new Point(Literal::map(["x" => 1, "y" => 2, "z" => 3, "crs" => "cartesian-3D"])), $point);
     }
 
     public function testPoint2dWGS84(): void
     {
         $point = Literal::point2dWGS84(1, 2);
 
-        $this->assertEquals(new Point(new Map(["longitude" => new Integer(1), "latitude" => new Integer(2), "crs" => new String_("WGS-84")])), $point);
+        $this->assertEquals(new Point(Literal::map(["longitude" => 1, "latitude" => 2, "crs" => "WGS-84"])), $point);
 
         $point = Literal::point2dWGS84(
             new Integer(1),
             new Integer(2)
         );
 
-        $this->assertEquals(new Point(new Map(["longitude" => new Integer(1), "latitude" => new Integer(2), "crs" => new String_("WGS-84")])), $point);
+        $this->assertEquals(new Point(Literal::map(["longitude" => 1, "latitude" => 2, "crs" => "WGS-84"])), $point);
     }
 
     public function testPoint3dWGS84(): void
     {
         $point = Literal::point3dWGS84(1, 2, 3);
 
-        $this->assertEquals(new Point(new Map(["longitude" => new Integer(1), "latitude" => new Integer(2), "height" => new Integer(3), "crs" => new String_("WGS-84-3D")])), $point);
+        $this->assertEquals(new Point(Literal::map(["longitude" => 1, "latitude" => 2, "height" => 3, "crs" => "WGS-84-3D"])), $point);
 
         $point = Literal::point3dWGS84(
             new Integer(1),
@@ -249,7 +287,7 @@ final class LiteralTest extends TestCase
             new Integer(3)
         );
 
-        $this->assertEquals(new Point(new Map(["longitude" => new Integer(1), "latitude" => new Integer(2), "height" => new Integer(3), "crs" => new String_("WGS-84-3D")])), $point);
+        $this->assertEquals(new Point(Literal::map(["longitude" => 1, "latitude" => 2, "height" => 3, "crs" => "WGS-84-3D"])), $point);
     }
 
     public function testDate(): void
@@ -263,11 +301,11 @@ final class LiteralTest extends TestCase
     {
         $date = Literal::date("Europe/Amsterdam");
 
-        $this->assertEquals(new Date(new Map(["timezone" => new String_("Europe/Amsterdam")])), $date);
+        $this->assertEquals(new Date(Literal::map(["timezone" => "Europe/Amsterdam"])), $date);
 
         $date = Literal::date(new String_("Europe/Amsterdam"));
 
-        $this->assertEquals(new Date(new Map(["timezone" => new String_("Europe/Amsterdam")])), $date);
+        $this->assertEquals(new Date(Literal::map(["timezone" => "Europe/Amsterdam"])), $date);
     }
 
     /**
@@ -334,7 +372,7 @@ final class LiteralTest extends TestCase
     {
         $datetime = Literal::dateTime("America/Los Angeles");
 
-        $this->assertEquals(new DateTime(new Map(["timezone" => new String_("America/Los Angeles")])), $datetime);
+        $this->assertEquals(new DateTime(Literal::map(["timezone" => "America/Los Angeles"])), $datetime);
     }
 
     /**
@@ -474,7 +512,7 @@ final class LiteralTest extends TestCase
     {
         $localDateTime = Literal::localDateTime("America/Los Angeles");
 
-        $this->assertEquals(new LocalDateTime(new Map(["timezone" => new String_("America/Los Angeles")])), $localDateTime);
+        $this->assertEquals(new LocalDateTime(Literal::map(["timezone" => "America/Los Angeles"])), $localDateTime);
     }
 
     /**
@@ -608,7 +646,7 @@ final class LiteralTest extends TestCase
     public function testLocalTimeCurrentWithTimezone(): void
     {
         $localTime = Literal::localTimeCurrent("America/Los Angeles");
-        $this->assertEquals(new LocalTime(new Map(["timezone" => new String_("America/Los Angeles")])), $localTime);
+        $this->assertEquals(new LocalTime(Literal::map(["timezone" => "America/Los Angeles"])), $localTime);
     }
 
     /**
@@ -651,7 +689,7 @@ final class LiteralTest extends TestCase
     public function testTimeCurrentWithTimezone(): void
     {
         $time = Literal::time("America/Los Angeles");
-        $this->assertEquals($time, new Time(new Map(["timezone" => new String_("America/Los Angeles")])));
+        $this->assertEquals($time, new Time(Literal::map(["timezone" => "America/Los Angeles"])));
     }
 
     /**
@@ -688,12 +726,12 @@ final class LiteralTest extends TestCase
     public function provideDateYMDData(): array
     {
         return [
-            [2000, null, null, new Date(new Map(["year" => new Integer(2000)]))],
-            [2000, 12, null, new Date(new Map(["year" => new Integer(2000), "month" => new Integer(12)]))],
-            [2000, 12, 17, new Date(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(17)]))],
-            [new Integer(2000), null, null, new Date(new Map(["year" => new Integer(2000)]))],
-            [new Integer(2000), new Integer(12), null, new Date(new Map(["year" => new Integer(2000), "month" => new Integer(12)]))],
-            [new Integer(2000), new Integer(12), new Integer(17), new Date(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(17)]))],
+            [2000, null, null, new Date(Literal::map(["year" => 2000]))],
+            [2000, 12, null, new Date(Literal::map(["year" => 2000, "month" => 12]))],
+            [2000, 12, 17, new Date(Literal::map(["year" => 2000, "month" => 12, "day" => 17]))],
+            [new Integer(2000), null, null, new Date(Literal::map(["year" => 2000]))],
+            [new Integer(2000), new Integer(12), null, new Date(Literal::map(["year" => 2000, "month" => 12]))],
+            [new Integer(2000), new Integer(12), new Integer(17), new Date(Literal::map(["year" => 2000, "month" => 12, "day" => 17]))],
 
         ];
     }
@@ -701,12 +739,12 @@ final class LiteralTest extends TestCase
     public function provideDateYWDData(): array
     {
         return [
-            [2000, null, null, new Date(new Map(["year" => new Integer(2000)]))],
-            [2000, 12, null, new Date(new Map(["year" => new Integer(2000), "week" => new Integer(12)]))],
-            [2000, 12, 17, new Date(new Map(["year" => new Integer(2000), "week" => new Integer(12), "dayOfWeek" => new Integer(17)]))],
-            [new Integer(2000), null, null, new Date(new Map(["year" => new Integer(2000)]))],
-            [new Integer(2000), new Integer(12), null, new Date(new Map(["year" => new Integer(2000), "week" => new Integer(12)]))],
-            [new Integer(2000), new Integer(12), new Integer(17), new Date(new Map(["year" => new Integer(2000), "week" => new Integer(12), "dayOfWeek" => new Integer(17)]))],
+            [2000, null, null, new Date(Literal::map(["year" => 2000]))],
+            [2000, 12, null, new Date(Literal::map(["year" => 2000, "week" => 12]))],
+            [2000, 12, 17, new Date(Literal::map(["year" => 2000, "week" => 12, "dayOfWeek" => 17]))],
+            [new Integer(2000), null, null, new Date(Literal::map(["year" => 2000]))],
+            [new Integer(2000), new Integer(12), null, new Date(Literal::map(["year" => 2000, "week" => 12]))],
+            [new Integer(2000), new Integer(12), new Integer(17), new Date(Literal::map(["year" => 2000, "week" => 12, "dayOfWeek" => 17]))],
 
         ];
     }
@@ -715,28 +753,28 @@ final class LiteralTest extends TestCase
     {
         // [$year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000)]))],
-            [2000, 12, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12)]))],
-            [2000, 12, 15, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15)]))],
-            [2000, 12, 15, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8)]))],
-            [2000, 12, 15, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25)]))],
-            [2000, 12, 15, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
-            [2000, 12, 15, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
-            [2000, 12, 15, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
-            [2000, 12, 15, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
-            [2000, 12, 15, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31), "timezone" => new String_("America/Los Angeles")]))],
+            [2000, null, null, null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000]))],
+            [2000, 12, null, null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "month" => 12]))],
+            [2000, 12, 15, null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15]))],
+            [2000, 12, 15, 8, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8]))],
+            [2000, 12, 15, 8, 25, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25]))],
+            [2000, 12, 15, 8, 25, 44, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25, "second" => 44]))],
+            [2000, 12, 15, 8, 25, 44, 18, null, null, null, new DateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, null, null, new DateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, 31, null, new DateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31, "timezone" => "America/Los Angeles"]))],
 
             // types
-            [new Integer(2000), null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000)]))],
-            [new Integer(2000), new Integer(12), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12)]))],
-            [new Integer(2000), new Integer(12), new Integer(15), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15)]))],
-            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8)]))],
-            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25)]))],
-            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
-            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
-            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
-            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), null, new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
-            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31), "timezone" => new String_("America/Los Angeles")]))],
+            [new Integer(2000), null, null, null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000]))],
+            [new Integer(2000), new Integer(12), null, null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "month" => 12]))],
+            [new Integer(2000), new Integer(12), new Integer(15), null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), null, null, null, null, new DateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25, "second" => 44]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, null, new DateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, null, new DateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), null, new DateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new String_("America/Los Angeles"), new DateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31, "timezone" => "America/Los Angeles"]))],
         ];
     }
 
@@ -744,28 +782,28 @@ final class LiteralTest extends TestCase
     {
         // [$year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000)]))],
-            [2000, 9, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9)]))],
-            [2000, 9, 4, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4)]))],
-            [2000, 9, 4, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8)]))],
-            [2000, 9, 4, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25)]))],
-            [2000, 9, 4, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
-            [2000, 9, 4, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
-            [2000, 9, 4, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
-            [2000, 9, 4, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
-            [2000, 9, 4, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31), "timezone" => new String_("America/Los Angeles")]))],
+            [2000, null, null, null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000]))],
+            [2000, 9, null, null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "week" => 9]))],
+            [2000, 9, 4, null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4]))],
+            [2000, 9, 4, 8, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8]))],
+            [2000, 9, 4, 8, 25, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25]))],
+            [2000, 9, 4, 8, 25, 44, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25, "second" => 44]))],
+            [2000, 9, 4, 8, 25, 44, 18, null, null, null, new DateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, null, null, new DateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, 31, null, new DateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31, "timezone" => "America/Los Angeles"]))],
 
             // types
-            [new Integer(2000), null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000)]))],
-            [new Integer(2000), new Integer(9), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9)]))],
-            [new Integer(2000), new Integer(9), new Integer(4), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4)]))],
-            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8)]))],
-            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25)]))],
-            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
-            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
-            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
-            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), null, new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
-            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31), "timezone" => new String_("America/Los Angeles")]))],
+            [new Integer(2000), null, null, null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000]))],
+            [new Integer(2000), new Integer(9), null, null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "week" => 9]))],
+            [new Integer(2000), new Integer(9), new Integer(4), null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), null, null, null, null, new DateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25, "second" => 44]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, null, new DateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, null, new DateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), null, new DateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new String_("America/Los Angeles"), new DateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31, "timezone" => "America/Los Angeles"]))],
         ];
     }
 
@@ -773,28 +811,28 @@ final class LiteralTest extends TestCase
     {
         // [$year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000)]))],
-            [2000, 3, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3)]))],
-            [2000, 3, 4, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4)]))],
-            [2000, 3, 4, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8)]))],
-            [2000, 3, 4, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25)]))],
-            [2000, 3, 4, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
-            [2000, 3, 4, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
-            [2000, 3, 4, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
-            [2000, 3, 4, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
-            [2000, 3, 4, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31), "timezone" => new String_("America/Los Angeles")]))],
+            [2000, null, null, null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000]))],
+            [2000, 3, null, null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "quarter" => 3]))],
+            [2000, 3, 4, null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4]))],
+            [2000, 3, 4, 8, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8]))],
+            [2000, 3, 4, 8, 25, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25]))],
+            [2000, 3, 4, 8, 25, 44, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25, "second" => 44]))],
+            [2000, 3, 4, 8, 25, 44, 18, null, null, null, new DateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, null, null, new DateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, 31, null, new DateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31, "timezone" => "America/Los Angeles"]))],
 
             // types
-            [new Integer(2000), null, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000)]))],
-            [new Integer(2000), new Integer(3), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3)]))],
-            [new Integer(2000), new Integer(3), new Integer(4), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4)]))],
-            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8)]))],
-            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25)]))],
-            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
-            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
-            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
-            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), null, new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
-            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31), "timezone" => new String_("America/Los Angeles")]))],
+            [new Integer(2000), null, null, null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000]))],
+            [new Integer(2000), new Integer(3), null, null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "quarter" => 3]))],
+            [new Integer(2000), new Integer(3), new Integer(4), null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), null, null, null, null, new DateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25, "second" => 44]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, null, new DateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, null, new DateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), null, new DateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new String_("America/Los Angeles"), new DateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31, "timezone" => "America/Los Angeles"]))],
         ];
     }
 
@@ -802,26 +840,26 @@ final class LiteralTest extends TestCase
     {
         // [$year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000)]))],
-            [2000, 3, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3)]))],
-            [2000, 3, 8, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8)]))],
-            [2000, 3, 8, 25, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25)]))],
-            [2000, 3, 8, 25, 44, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
-            [2000, 3, 8, 25, 44, 18, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
-            [2000, 3, 8, 25, 44, 18, 6, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
-            [2000, 3, 8, 25, 44, 18, 6, 31, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
-            [2000, 3, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31), "timezone" => new String_("America/Los Angeles")]))],
+            [2000, null, null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000]))],
+            [2000, 3, null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "ordinalDay" => 3]))],
+            [2000, 3, 8, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8]))],
+            [2000, 3, 8, 25, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25]))],
+            [2000, 3, 8, 25, 44, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25, "second" => 44]))],
+            [2000, 3, 8, 25, 44, 18, null, null, null, new DateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18]))],
+            [2000, 3, 8, 25, 44, 18, 6, null, null, new DateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6]))],
+            [2000, 3, 8, 25, 44, 18, 6, 31, null, new DateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31]))],
+            [2000, 3, 8, 25, 44, 18, 6, 31, "America/Los Angeles", new DateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31, "timezone" => "America/Los Angeles"]))],
 
             // types
-            [new Integer(2000), null, null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000)]))],
-            [new Integer(2000), new Integer(3), null, null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3)]))],
-            [new Integer(2000), new Integer(3), new Integer(8), null, null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8)]))],
-            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), null, null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25)]))],
-            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), null, null, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
-            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
-            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
-            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), null, new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
-            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new String_("America/Los Angeles"), new DateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31), "timezone" => new String_("America/Los Angeles")]))],
+            [new Integer(2000), null, null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000]))],
+            [new Integer(2000), new Integer(3), null, null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "ordinalDay" => 3]))],
+            [new Integer(2000), new Integer(3), new Integer(8), null, null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), null, null, null, null, null, new DateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), null, null, null, null, new DateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25, "second" => 44]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, null, new DateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, null, new DateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), null, new DateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new String_("America/Los Angeles"), new DateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31, "timezone" => "America/Los Angeles"]))],
         ];
     }
 
@@ -829,26 +867,26 @@ final class LiteralTest extends TestCase
     {
         // [$year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000)]))],
-            [2000, 12, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12)]))],
-            [2000, 12, 15, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15)]))],
-            [2000, 12, 15, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8)]))],
-            [2000, 12, 15, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25)]))],
-            [2000, 12, 15, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
-            [2000, 12, 15, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
-            [2000, 12, 15, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
-            [2000, 12, 15, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
+            [2000, null, null, null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000]))],
+            [2000, 12, null, null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "month" => 12]))],
+            [2000, 12, 15, null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15]))],
+            [2000, 12, 15, 8, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8]))],
+            [2000, 12, 15, 8, 25, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25]))],
+            [2000, 12, 15, 8, 25, 44, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25, "second" => 44]))],
+            [2000, 12, 15, 8, 25, 44, 18, null, null, new LocalDateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, null, new LocalDateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6]))],
+            [2000, 12, 15, 8, 25, 44, 18, 6, 31, new LocalDateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31]))],
 
             // types
-            [new Integer(2000), null, null, null, null, null, null, null, null,new LocalDateTime(new Map(["year" => new Integer(2000)]))],
-            [new Integer(2000), new Integer(12), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12)]))],
-            [new Integer(2000), new Integer(12), new Integer(15), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15)]))],
-            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8)]))],
-            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25)]))],
-            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
-            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
-            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
-            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new LocalDateTime(new Map(["year" => new Integer(2000), "month" => new Integer(12), "day" => new Integer(15), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
+            [new Integer(2000), null, null, null, null, null, null, null, null,new LocalDateTime(Literal::map(["year" => 2000]))],
+            [new Integer(2000), new Integer(12), null, null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "month" => 12]))],
+            [new Integer(2000), new Integer(12), new Integer(15), null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25, "second" => 44]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, new LocalDateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, new LocalDateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6]))],
+            [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new LocalDateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31]))],
         ];
     }
 
@@ -856,26 +894,26 @@ final class LiteralTest extends TestCase
     {
         // [$year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000)]))],
-            [2000, 9, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9)]))],
-            [2000, 9, 4, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4)]))],
-            [2000, 9, 4, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8)]))],
-            [2000, 9, 4, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25)]))],
-            [2000, 9, 4, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
-            [2000, 9, 4, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
-            [2000, 9, 4, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
-            [2000, 9, 4, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
+            [2000, null, null, null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000]))],
+            [2000, 9, null, null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "week" => 9]))],
+            [2000, 9, 4, null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4]))],
+            [2000, 9, 4, 8, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8]))],
+            [2000, 9, 4, 8, 25, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25]))],
+            [2000, 9, 4, 8, 25, 44, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25, "second" => 44]))],
+            [2000, 9, 4, 8, 25, 44, 18, null, null, new LocalDateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, null, new LocalDateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6]))],
+            [2000, 9, 4, 8, 25, 44, 18, 6, 31, new LocalDateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31]))],
 
             // types
-            [new Integer(2000), null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000)]))],
-            [new Integer(2000), new Integer(9), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9)]))],
-            [new Integer(2000), new Integer(9), new Integer(4), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4)]))],
-            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8)]))],
-            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25)]))],
-            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
-            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
-            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
-            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new LocalDateTime(new Map(["year" => new Integer(2000), "week" => new Integer(9), "dayOfWeek" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
+            [new Integer(2000), null, null, null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000]))],
+            [new Integer(2000), new Integer(9), null, null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "week" => 9]))],
+            [new Integer(2000), new Integer(9), new Integer(4), null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25, "second" => 44]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, new LocalDateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, new LocalDateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6]))],
+            [new Integer(2000), new Integer(9), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new LocalDateTime(Literal::map(["year" => 2000, "week" => 9, "dayOfWeek" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31]))],
         ];
     }
 
@@ -883,26 +921,26 @@ final class LiteralTest extends TestCase
     {
         // [$year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000)]))],
-            [2000, 3, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3)]))],
-            [2000, 3, 4, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4)]))],
-            [2000, 3, 4, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8)]))],
-            [2000, 3, 4, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25)]))],
-            [2000, 3, 4, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
-            [2000, 3, 4, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
-            [2000, 3, 4, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
-            [2000, 3, 4, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
+            [2000, null, null, null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000]))],
+            [2000, 3, null, null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "quarter" => 3]))],
+            [2000, 3, 4, null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4]))],
+            [2000, 3, 4, 8, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8]))],
+            [2000, 3, 4, 8, 25, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25]))],
+            [2000, 3, 4, 8, 25, 44, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25, "second" => 44]))],
+            [2000, 3, 4, 8, 25, 44, 18, null, null, new LocalDateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, null, new LocalDateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6]))],
+            [2000, 3, 4, 8, 25, 44, 18, 6, 31, new LocalDateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31]))],
 
             // types
-            [new Integer(2000), null, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000)]))],
-            [new Integer(2000), new Integer(3), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3)]))],
-            [new Integer(2000), new Integer(3), new Integer(4), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4)]))],
-            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8)]))],
-            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25)]))],
-            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
-            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
-            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
-            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new LocalDateTime(new Map(["year" => new Integer(2000), "quarter" => new Integer(3), "dayOfQuarter" => new Integer(4), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
+            [new Integer(2000), null, null, null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000]))],
+            [new Integer(2000), new Integer(3), null, null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "quarter" => 3]))],
+            [new Integer(2000), new Integer(3), new Integer(4), null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25, "second" => 44]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, new LocalDateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, new LocalDateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6]))],
+            [new Integer(2000), new Integer(3), new Integer(4), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new LocalDateTime(Literal::map(["year" => 2000, "quarter" => 3, "dayOfQuarter" => 4, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31]))],
         ];
     }
 
@@ -910,24 +948,24 @@ final class LiteralTest extends TestCase
     {
         // [$year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
-            [2000, null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000)]))],
-            [2000, 3, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3)]))],
-            [2000, 3, 8, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8)]))],
-            [2000, 3, 8, 25, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25)]))],
-            [2000, 3, 8, 25, 44, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
-            [2000, 3, 8, 25, 44, 18, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
-            [2000, 3, 8, 25, 44, 18, 6, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
-            [2000, 3, 8, 25, 44, 18, 6, 31, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
+            [2000, null, null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000]))],
+            [2000, 3, null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "ordinalDay" => 3]))],
+            [2000, 3, 8, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8]))],
+            [2000, 3, 8, 25, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25]))],
+            [2000, 3, 8, 25, 44, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25, "second" => 44]))],
+            [2000, 3, 8, 25, 44, 18, null, null, new LocalDateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18]))],
+            [2000, 3, 8, 25, 44, 18, 6, null, new LocalDateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6]))],
+            [2000, 3, 8, 25, 44, 18, 6, 31, new LocalDateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31]))],
 
             // types
-            [new Integer(2000), null, null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000)]))],
-            [new Integer(2000), new Integer(3), null, null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3)]))],
-            [new Integer(2000), new Integer(3), new Integer(8), null, null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8)]))],
-            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), null, null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25)]))],
-            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), null, null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44)]))],
-            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18)]))],
-            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6)]))],
-            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new LocalDateTime(new Map(["year" => new Integer(2000), "ordinalDay" => new Integer(3), "hour" => new Integer(8), "minute" => new Integer(25), "second" => new Integer(44), "millisecond" => new Integer(18), "microsecond" => new Integer(6), "nanosecond" => new Integer(31)]))],
+            [new Integer(2000), null, null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000]))],
+            [new Integer(2000), new Integer(3), null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "ordinalDay" => 3]))],
+            [new Integer(2000), new Integer(3), new Integer(8), null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25, "second" => 44]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), new Integer(18), null, null, new LocalDateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), null, new LocalDateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6]))],
+            [new Integer(2000), new Integer(3), new Integer(8), new Integer(25), new Integer(44), new Integer(18), new Integer(6), new Integer(31), new LocalDateTime(Literal::map(["year" => 2000, "ordinalDay" => 3, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31]))],
         ];
     }
 
@@ -935,20 +973,20 @@ final class LiteralTest extends TestCase
     {
         // [$hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
-            [11, null, null, null, null, null, new LocalTime(new Map(["hour" => new Integer(11)]))],
-            [11, 23, null, null, null, null, new LocalTime(new Map(["hour" => new Integer(11), "minute" => new Integer(23)]))],
-            [11, 23, 2, null, null, null, new LocalTime(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2)]))],
-            [11, 23, 2, 54, null, null, new LocalTime(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54)]))],
-            [11, 23, 2, 54, 8, null, new LocalTime(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54), "microsecond" => new Integer(8)]))],
-            [11, 23, 2, 54, 8, 29, new LocalTime(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54), "microsecond" => new Integer(8), "nanosecond" => new Integer(29)]))],
+            [11, null, null, null, null, null, new LocalTime(Literal::map(["hour" => 11]))],
+            [11, 23, null, null, null, null, new LocalTime(Literal::map(["hour" => 11, "minute" => 23]))],
+            [11, 23, 2, null, null, null, new LocalTime(Literal::map(["hour" => 11, "minute" => 23, "second" => 2]))],
+            [11, 23, 2, 54, null, null, new LocalTime(Literal::map(["hour" => 11, "minute" => 23, "second" => 2, "millisecond" => 54]))],
+            [11, 23, 2, 54, 8, null, new LocalTime(Literal::map(["hour" => 11, "minute" => 23, "second" => 2, "millisecond" => 54, "microsecond" => 8]))],
+            [11, 23, 2, 54, 8, 29, new LocalTime(Literal::map(["hour" => 11, "minute" => 23, "second" => 2, "millisecond" => 54, "microsecond" => 8, "nanosecond" => 29]))],
 
             // types
-            [new Integer(11), null, null, null, null, null, new LocalTime(new Map(["hour" => new Integer(11)]))],
-            [new Integer(11), new Integer(23), null, null, null, null, new LocalTime(new Map(["hour" => new Integer(11), "minute" => new Integer(23)]))],
-            [new Integer(11), new Integer(23), new Integer(2), null, null, null, new LocalTime(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2)]))],
-            [new Integer(11), new Integer(23), new Integer(2), new Integer(54), null, null, new LocalTime(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54)]))],
-            [new Integer(11), new Integer(23), new Integer(2), new Integer(54), new Integer(8), null, new LocalTime(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54), "microsecond" => new Integer(8)]))],
-            [new Integer(11), new Integer(23), new Integer(2), new Integer(54), new Integer(8), new Integer(29), new LocalTime(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54), "microsecond" => new Integer(8), "nanosecond" => new Integer(29)]))],
+            [new Integer(11), null, null, null, null, null, new LocalTime(Literal::map(["hour" => 11]))],
+            [new Integer(11), new Integer(23), null, null, null, null, new LocalTime(Literal::map(["hour" => 11, "minute" => 23]))],
+            [new Integer(11), new Integer(23), new Integer(2), null, null, null, new LocalTime(Literal::map(["hour" => 11, "minute" => 23, "second" => 2]))],
+            [new Integer(11), new Integer(23), new Integer(2), new Integer(54), null, null, new LocalTime(Literal::map(["hour" => 11, "minute" => 23, "second" => 2, "millisecond" => 54]))],
+            [new Integer(11), new Integer(23), new Integer(2), new Integer(54), new Integer(8), null, new LocalTime(Literal::map(["hour" => 11, "minute" => 23, "second" => 2, "millisecond" => 54, "microsecond" => 8]))],
+            [new Integer(11), new Integer(23), new Integer(2), new Integer(54), new Integer(8), new Integer(29), new LocalTime(Literal::map(["hour" => 11, "minute" => 23, "second" => 2, "millisecond" => 54, "microsecond" => 8, "nanosecond" => 29]))],
         ];
     }
 
@@ -956,20 +994,20 @@ final class LiteralTest extends TestCase
     {
         // [$hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected]
         return [
-            [11, null, null, null, null, null, new Time(new Map(["hour" => new Integer(11)]))],
-            [11, 23, null, null, null, null, new Time(new Map(["hour" => new Integer(11), "minute" => new Integer(23)]))],
-            [11, 23, 2, null, null, null, new Time(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2)]))],
-            [11, 23, 2, 54, null, null, new Time(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54)]))],
-            [11, 23, 2, 54, 8, null, new Time(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54), "microsecond" => new Integer(8)]))],
-            [11, 23, 2, 54, 8, 29, new Time(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54), "microsecond" => new Integer(8), "nanosecond" => new Integer(29)]))],
+            [11, null, null, null, null, null, new Time(Literal::map(["hour" => 11]))],
+            [11, 23, null, null, null, null, new Time(Literal::map(["hour" => 11, "minute" => 23]))],
+            [11, 23, 2, null, null, null, new Time(Literal::map(["hour" => 11, "minute" => 23, "second" => 2]))],
+            [11, 23, 2, 54, null, null, new Time(Literal::map(["hour" => 11, "minute" => 23, "second" => 2, "millisecond" => 54]))],
+            [11, 23, 2, 54, 8, null, new Time(Literal::map(["hour" => 11, "minute" => 23, "second" => 2, "millisecond" => 54, "microsecond" => 8]))],
+            [11, 23, 2, 54, 8, 29, new Time(Literal::map(["hour" => 11, "minute" => 23, "second" => 2, "millisecond" => 54, "microsecond" => 8, "nanosecond" => 29]))],
 
             // types
-            [new Integer(11), null, null, null, null, null, new Time(new Map(["hour" => new Integer(11)]))],
-            [new Integer(11), new Integer(23), null, null, null, null, new Time(new Map(["hour" => new Integer(11), "minute" => new Integer(23)]))],
-            [new Integer(11), new Integer(23), new Integer(2), null, null, null, new Time(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2)]))],
-            [new Integer(11), new Integer(23), new Integer(2), new Integer(54), null, null, new Time(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54)]))],
-            [new Integer(11), new Integer(23), new Integer(2), new Integer(54), new Integer(8), null, new Time(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54), "microsecond" => new Integer(8)]))],
-            [new Integer(11), new Integer(23), new Integer(2), new Integer(54), new Integer(8), new Integer(29), new Time(new Map(["hour" => new Integer(11), "minute" => new Integer(23), "second" => new Integer(2), "millisecond" => new Integer(54), "microsecond" => new Integer(8), "nanosecond" => new Integer(29)]))],
+            [new Integer(11), null, null, null, null, null, new Time(Literal::map(["hour" => 11]))],
+            [new Integer(11), new Integer(23), null, null, null, null, new Time(Literal::map(["hour" => 11, "minute" => 23]))],
+            [new Integer(11), new Integer(23), new Integer(2), null, null, null, new Time(Literal::map(["hour" => 11, "minute" => 23, "second" => 2]))],
+            [new Integer(11), new Integer(23), new Integer(2), new Integer(54), null, null, new Time(Literal::map(["hour" => 11, "minute" => 23, "second" => 2, "millisecond" => 54]))],
+            [new Integer(11), new Integer(23), new Integer(2), new Integer(54), new Integer(8), null, new Time(Literal::map(["hour" => 11, "minute" => 23, "second" => 2, "millisecond" => 54, "microsecond" => 8]))],
+            [new Integer(11), new Integer(23), new Integer(2), new Integer(54), new Integer(8), new Integer(29), new Time(Literal::map(["hour" => 11, "minute" => 23, "second" => 2, "millisecond" => 54, "microsecond" => 8, "nanosecond" => 29]))],
         ];
     }
 }

@@ -835,9 +835,14 @@ final class Query implements QueryConvertible
         $res = [];
 
         foreach ($values as $key => $value) {
-            /** @var AnyType $value */
-            $value = call_user_func([self::class, $castFunc], $value);
-            $res[] = is_string($key) ? $value->alias($key) : $value;
+            if (is_string($key)) {
+                /** @var AnyType $value */
+                $value = call_user_func([self::class, $castFunc], $value);
+                $res[] = $value->alias($key);
+            } else {
+                // If key is numeric, keep value unchanged.
+                $res []= $value;
+            }
         }
 
         return $res;

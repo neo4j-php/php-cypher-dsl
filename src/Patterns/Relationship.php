@@ -264,10 +264,10 @@ final class Relationship implements PropertyPattern
      */
     private function relationshipDetailToString(): string
     {
-        $conditionInner = "";
-
         if (isset($this->variable)) {
-            $conditionInner .= $this->variable->toQuery();
+            $conditionInner = $this->variable->toQuery();
+        } else {
+            $conditionInner = "";
         }
 
         $types = array_filter($this->types);

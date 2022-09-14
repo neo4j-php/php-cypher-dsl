@@ -553,7 +553,8 @@ final class RelationshipTest extends TestCase
     public function provideVariableLengthRelationshipsWithNameData(): array
     {
         return [
-            ['b', 1, 100, Relationship::DIR_UNI, '-[b*1..100]-'],
+            ['b', 0, 100, Relationship::DIR_UNI, '-[b*0..100]-'],
+            ['b', 5, 5, Relationship::DIR_RIGHT, '-[b*5..5]->'],
             ['a', 10, null, Relationship::DIR_UNI, '-[a*10..]-'],
             ['a', null, 10, Relationship::DIR_LEFT, '<-[a*..10]-'],
         ];

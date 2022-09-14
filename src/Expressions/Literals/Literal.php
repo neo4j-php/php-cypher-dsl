@@ -9,8 +9,8 @@
  */
 namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
-use InvalidArgumentException;
 use Traversable;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Date;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\DateTime;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
@@ -46,6 +46,7 @@ final class Literal
      * class based on the type of the value given.
      *
      * @param mixed $literal The literal to construct
+     * @throws TypeError when the type could not be deduced.
      * @return String_|Boolean|Float_|Integer|List_|Map
      */
     public static function literal($literal)
@@ -74,7 +75,7 @@ final class Literal
             return self::string($literal->__toString());
         }
 
-        throw new InvalidArgumentException(
+        throw new TypeError(
             "The literal type " . get_debug_type($literal) . " is not supported by Cypher"
         );
     }

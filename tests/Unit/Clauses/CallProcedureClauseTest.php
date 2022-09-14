@@ -10,7 +10,9 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Syntax\Alias;
 use WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Query;
 
@@ -79,6 +81,17 @@ final class CallProcedureClauseTest extends TestCase
         $callProcedureClause->setProcedure($procedure);
 
         $this->assertSame("CALL localtime() YIELD a", $callProcedureClause->toQuery());
+    }
+
+    public function testAddYieldAlias(): void
+    {
+        $procedure = Procedure::localtime();
+
+        $callProcedureClause = new CallProcedureClause();
+        $callProcedureClause->addYield(new Alias(new Variable('a'), new Variable('b')));
+        $callProcedureClause->setProcedure($procedure);
+
+        $this->assertSame("CALL localtime() YIELD a AS b", $callProcedureClause->toQuery());
     }
 
     public function testAddYieldWithoutProcedure(): void

@@ -41,7 +41,7 @@ final class UnionClauseTest extends TestCase
         $left = Query::new()->match($nodeX)->returning($nodeX->getVariable());
         $right = Query::new()->match($nodeY)->returning($nodeY->getVariable());
 
-        $query = UnionClause::union($left, $right, false);
+        $query = UnionClause::union($left, $right);
 
         $this->assertEquals('MATCH (x:X) RETURN x UNION MATCH (y:Y) RETURN y', $query->toQuery());
     }

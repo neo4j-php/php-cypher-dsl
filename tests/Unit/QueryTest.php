@@ -9,7 +9,6 @@
  */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
-use InvalidArgumentException;
 use TypeError;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
@@ -146,11 +145,13 @@ class QueryTest extends TestCase
         $iterator = new class () implements \Iterator {
             private int $count = 0;
 
+            #[\ReturnTypeWillChange]
             public function current()
             {
                 return 1;
             }
 
+            #[\ReturnTypeWillChange]
             public function next()
             {
                 $this->count++;
@@ -158,18 +159,20 @@ class QueryTest extends TestCase
                 return 1;
             }
 
+            #[\ReturnTypeWillChange]
             public function key()
             {
                 return 0;
             }
 
+            #[\ReturnTypeWillChange]
             public function valid()
             {
                 // In order to avoid an infinite loop
                 return $this->count < 10;
             }
 
-            public function rewind()
+            public function rewind(): void
             {
             }
         };
@@ -230,7 +233,7 @@ class QueryTest extends TestCase
 
         $query = new Query();
         $statement = $query->match([$pathMock, $nodeMock])
-            ->returning(["#" => $nodeMock])
+            ->returning(["#" => $nodeMock], true)
             ->create([$pathMock, $nodeMock])
             ->create($pathMock)
             ->delete([$variableMock, $variableMock])
@@ -245,7 +248,7 @@ class QueryTest extends TestCase
             ->with(["#" => $nodeMock])
             ->build();
 
-        $this->assertSame("MATCH (a)-->(b), (a) RETURN a AS `#` CREATE (a)-->(b), (a) CREATE (a)-->(b) DELETE a, a DETACH DELETE a, a LIMIT 12 MERGE (a) OPTIONAL MATCH (a), (a) ORDER BY a.b, a.b DESCENDING REMOVE a.b WHERE a > b WITH a AS `#`", $statement);
+        $this->assertSame("MATCH (a)-->(b), (a) RETURN DISTINCT a AS `#` CREATE (a)-->(b), (a) CREATE (a)-->(b) DELETE a, a DETACH DELETE a, a LIMIT 12 MERGE (a) OPTIONAL MATCH (a), (a) ORDER BY a.b, a.b DESCENDING REMOVE a.b WHERE a > b WITH a AS `#`", $statement);
     }
 
     public function testBuildEmpty(): void
@@ -297,7 +300,7 @@ class QueryTest extends TestCase
 
     public function testInvalidLiteral(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(TypeError::class);
         Query::literal(Query::literal(true));
     }
 

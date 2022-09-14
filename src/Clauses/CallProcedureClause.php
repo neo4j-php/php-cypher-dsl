@@ -35,7 +35,7 @@ final class CallProcedureClause extends Clause
     private ?Procedure $procedure = null;
 
     /**
-     * @var Variable[] The result fields that yielded
+     * @var (Variable|Alias)[] The result fields that are yielded
      */
     private array $yields = [];
 
@@ -111,7 +111,7 @@ final class CallProcedureClause extends Clause
         $subject = $this->procedure->toQuery();
 
         if (!empty($this->yields)) {
-            $yields = array_map(fn (Variable $variable): string => $variable->toQuery(), $this->yields);
+            $yields = array_map(fn ($variableOrAlias): string => $variableOrAlias->toQuery(), $this->yields);
             $subject .= sprintf(" YIELD %s", implode(", ", $yields));
         }
 

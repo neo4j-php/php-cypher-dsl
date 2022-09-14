@@ -64,6 +64,15 @@ final class PathTest extends TestCase
         $this->assertEquals('x = ()--()-->()--()', $pathX->toQuery());
     }
 
+    public function testPathFewerNodes(): void
+    {
+        $path = new Path(
+            new Node,
+            [new Relationship(Relationship::DIR_UNI), new Relationship(Relationship::DIR_UNI)]
+        );
+        $this->assertSame('()', $path->toQuery());
+    }
+
     public function testRelationshipLong(): void
     {
         $path = new Path(new Node());
