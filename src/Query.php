@@ -325,7 +325,7 @@ final class Query implements QueryConvertible
      *
      * @note This feature is not part of the openCypher standard. For more information, see https://github.com/opencypher/openCypher/blob/a507292d35280aca9e37bf938cdec4fdd1e64ba9/docs/standardisation-scope.adoc.
      *
-     * @param Query|callable(Query):void $query A callable decorating a query, or the actual subquery
+     * @param Query|callable(Query):void $query A callable decorating a query, or the actual sub-query
      * @param Variable|Pattern|string|Variable[]|Pattern[]|string[] $variables The variables to include in the WITH clause for correlation
      *
      * @return $this
@@ -373,7 +373,7 @@ final class Query implements QueryConvertible
             $yields = [$yields];
         }
 
-        $yields = $this->makeAliasArray($yields, 'toName');
+        $yields = $this->makeAliasArray($yields, fn ($value) => $this->toName($value));
 
         $callProcedureClause = new CallProcedureClause();
         $callProcedureClause->setProcedure($procedure);
@@ -425,7 +425,7 @@ final class Query implements QueryConvertible
             $expressions = [$expressions];
         }
 
-        $expressions = $this->makeAliasArray($expressions);
+        $expressions = $this->makeAliasArray($expressions, fn ($value) => $this->toAnyType($value));
 
         $returnClause = new ReturnClause();
         $returnClause->addColumn(...$expressions);
@@ -708,7 +708,7 @@ final class Query implements QueryConvertible
             $expressions = [$expressions];
         }
 
-        $expressions = $this->makeAliasArray($expressions);
+        $expressions = $this->makeAliasArray($expressions, fn ($value) => $this->toAnyType($value));
 
         $withClause = new WithClause();
         $withClause->addEntry(...$expressions);
@@ -826,17 +826,19 @@ final class Query implements QueryConvertible
     /**
      * Changes an associative array into an array of aliases.
      *
-     * @param array $values The array to change into an array of aliases
-     * @param string $castFunc Name of the (static) method to use to cast the elements of $array
-     * @return array A sequential array, possibly consisting of aliases
+     * @param mixed[] $values The array to change into an array of aliases
+     * @param callable|null $castFunc Function to use to cast the elements of $array
+     * @return mixed[] A sequential array, possibly consisting of aliases
      */
-    private function makeAliasArray(array $values, string $castFunc = 'toAnyType'): array
+    private function makeAliasArray(array $values, ?callable $castFunc = null): array
     {
         $res = [];
 
         foreach ($values as $key => $value) {
-            /** @var AnyType $value */
-            $value = call_user_func([self::class, $castFunc], $value);
+            if ($castFunc !== null) {
+                $value = $castFunc($value);
+            }
+
             $res[] = is_string($key) ? $value->alias($key) : $value;
         }
 

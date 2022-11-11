@@ -25,25 +25,40 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
  */
 final class QueryMergeTest extends TestCase
 {
-    public function testClause(): void
+    public function testMergePattern(): void
     {
         $pattern = Query::node()->withVariable('a')->relationshipTo(Query::node()->withVariable('b'));
 
         $statement = Query::new()->merge($pattern);
 
         $this->assertSame("MERGE (a)-->(b)", $statement->toQuery());
+    }
 
+    public function testMergePatternWithOnCreate(): void
+    {
+        $pattern = Query::node()->withVariable('a')->relationshipTo(Query::node()->withVariable('b'));
         $onCreate = (new SetClause())->add(Query::variable('a')->property('a')->replaceWith('b'));
 
         $statement = Query::new()->merge($pattern, $onCreate);
 
         $this->assertSame("MERGE (a)-->(b) ON CREATE SET a.a = 'b'", $statement->toQuery());
+    }
 
+    public function testMergePatternWithOnMatch(): void
+    {
+        $pattern = Query::node()->withVariable('a')->relationshipTo(Query::node()->withVariable('b'));
         $onMatch = (new SetClause())->add(Query::variable('a')->property('a')->replaceWith('b'));
 
         $statement = Query::new()->merge($pattern, null, $onMatch);
 
         $this->assertSame("MERGE (a)-->(b) ON MATCH SET a.a = 'b'", $statement->toQuery());
+    }
+
+    public function testMergePatternWithBoth(): void
+    {
+        $pattern = Query::node()->withVariable('a')->relationshipTo(Query::node()->withVariable('b'));
+        $onCreate = (new SetClause())->add(Query::variable('a')->property('a')->replaceWith('b'));
+        $onMatch = (new SetClause())->add(Query::variable('a')->property('a')->replaceWith('b'));
 
         $statement = Query::new()->merge($pattern, $onCreate, $onMatch);
 

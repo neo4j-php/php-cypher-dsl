@@ -11,9 +11,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use TypeError;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * Tests the "orderBy" method of the Query class.
@@ -70,6 +68,7 @@ final class QueryOrderByTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
         Query::new()->orderBy("foo");
     }
 
