@@ -40,6 +40,7 @@ final class QueryMatchTest extends TestCase
 
         $this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
         Query::new()->match($r);
     }
 
@@ -50,6 +51,7 @@ final class QueryMatchTest extends TestCase
 
         $this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
         Query::new()->match([$m, $r]);
     }
 
@@ -57,6 +59,7 @@ final class QueryMatchTest extends TestCase
 	{
 		$this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
 		Query::new()->match(false);
 	}
 

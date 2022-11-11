@@ -49,6 +49,7 @@ final class QueryCreateTest extends TestCase
 
         $this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
         Query::new()->create($rel);
     }
 }

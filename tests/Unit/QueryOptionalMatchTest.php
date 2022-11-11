@@ -40,6 +40,7 @@ final class QueryOptionalMatchTest extends TestCase
 
         $this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
         Query::new()->optionalMatch($r);
     }
 
@@ -50,6 +51,7 @@ final class QueryOptionalMatchTest extends TestCase
 
         $this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
         Query::new()->optionalMatch([$m, $r]);
     }
 
@@ -57,6 +59,7 @@ final class QueryOptionalMatchTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
         Query::new()->optionalMatch(false);
     }
 

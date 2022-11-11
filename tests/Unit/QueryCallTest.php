@@ -33,6 +33,7 @@ final class QueryCallTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
         Query::new()->call(function (int $query): void {
         });
     }
@@ -101,6 +102,7 @@ final class QueryCallTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
         Query::new()->call('something bad');
     }
 
@@ -108,6 +110,7 @@ final class QueryCallTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
         Query::new()->call(Query::new(), 500);
     }
 

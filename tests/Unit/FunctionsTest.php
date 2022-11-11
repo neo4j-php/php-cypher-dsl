@@ -44,14 +44,14 @@ use function WikibaseSolutions\CypherDSL\variable;
  */
 final class FunctionsTest extends TestCase
 {
-    public function testQueryReturnsQuery()
+    public function testQueryReturnsQuery(): void
     {
         $query = query();
 
         $this->assertInstanceOf(Query::class, $query);
     }
 
-    public function testNodeReturnsNode()
+    public function testNodeReturnsNode(): void
     {
         $node = node('label');
 
@@ -59,7 +59,7 @@ final class FunctionsTest extends TestCase
         $this->assertSame('(:label)', $node->toQuery());
     }
 
-    public function testNodeAcceptsEmptyLabel()
+    public function testNodeAcceptsEmptyLabel(): void
     {
         $node = node();
 
@@ -67,14 +67,15 @@ final class FunctionsTest extends TestCase
         $this->assertSame('()', $node->toQuery());
     }
 
-    public function testNodeOnlyAcceptsStringLabel()
+    public function testNodeOnlyAcceptsStringLabel(): void
     {
         $this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
         node([]);
     }
 
-    public function testRelationshipReturnsRelationship()
+    public function testRelationshipReturnsRelationship(): void
     {
         $relationship = relationship(Relationship::DIR_RIGHT);
 
@@ -82,7 +83,7 @@ final class FunctionsTest extends TestCase
         $this->assertSame('-->', $relationship->toQuery());
     }
 
-    public function testVariableReturnsVariable()
+    public function testVariableReturnsVariable(): void
     {
         $variable = variable('foobar');
 
@@ -90,7 +91,7 @@ final class FunctionsTest extends TestCase
         $this->assertSame('foobar', $variable->toQuery());
     }
 
-    public function testVariableAcceptsEmptyArgument()
+    public function testVariableAcceptsEmptyArgument(): void
     {
         $variable = variable();
 
@@ -98,21 +99,22 @@ final class FunctionsTest extends TestCase
         $this->assertStringMatchesFormat('var%s', $variable->toQuery());
     }
 
-    public function testVariableOnlyAcceptsString()
+    public function testVariableOnlyAcceptsString(): void
     {
         $this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
         variable([]);
     }
 
-    public function testLiteralReturnsLiteralClass()
+    public function testLiteralReturnsLiteralClass(): void
     {
         $literal = literal();
 
         $this->assertSame(Literal::class, $literal);
     }
 
-    public function testLiteralReturnsLiteral()
+    public function testLiteralReturnsLiteral(): void
     {
         $literal = literal('foobar');
 
@@ -125,7 +127,7 @@ final class FunctionsTest extends TestCase
         $this->assertSame("true", $literal->toQuery());
     }
 
-    public function testBooleanReturnsBoolean()
+    public function testBooleanReturnsBoolean(): void
     {
         $boolean = \WikibaseSolutions\CypherDSL\boolean(true);
 
@@ -133,14 +135,15 @@ final class FunctionsTest extends TestCase
         $this->assertSame('true', $boolean->toQuery());
     }
 
-    public function testBooleanOnlyAcceptsBoolean()
+    public function testBooleanOnlyAcceptsBoolean(): void
     {
         $this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
         \WikibaseSolutions\CypherDSL\boolean([]);
     }
 
-    public function testStringReturnsString()
+    public function testStringReturnsString(): void
     {
         $string = string('hello world');
 
@@ -148,14 +151,15 @@ final class FunctionsTest extends TestCase
         $this->assertSame("'hello world'", $string->toQuery());
     }
 
-    public function testStringOnlyAcceptsString()
+    public function testStringOnlyAcceptsString(): void
     {
         $this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
         string([]);
     }
 
-	public function testIntegerReturnsInteger()
+	public function testIntegerReturnsInteger(): void
 	{
 		$integer = integer(1);
 
@@ -163,14 +167,15 @@ final class FunctionsTest extends TestCase
 		$this->assertSame("1", $integer->toQuery());
 	}
 
-	public function testIntegerOnlyAcceptsInteger()
+	public function testIntegerOnlyAcceptsInteger(): void
 	{
 		$this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
 		integer([]);
 	}
 
-	public function testFloatReturnsFloat()
+	public function testFloatReturnsFloat(): void
 	{
 		$float = float(1.1);
 
@@ -178,14 +183,15 @@ final class FunctionsTest extends TestCase
 		$this->assertSame("1.1", $float->toQuery());
 	}
 
-	public function testFloatOnlyAcceptsFloat()
+	public function testFloatOnlyAcceptsFloat(): void
 	{
 		$this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
 		float([]);
 	}
 
-	public function testListReturnsList()
+	public function testListReturnsList(): void
 	{
 		$list = list_(['a', 'b', 'c']);
 
@@ -193,14 +199,15 @@ final class FunctionsTest extends TestCase
 		$this->assertSame("['a', 'b', 'c']", $list->toQuery());
 	}
 
-	public function testListOnlyAcceptsArray()
+	public function testListOnlyAcceptsArray(): void
 	{
 		$this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
 		list_(1);
 	}
 
-	public function testMapReturnsMap()
+	public function testMapReturnsMap(): void
 	{
 		$map = map(['a' => 'b', 'c' => 'd']);
 
@@ -208,21 +215,22 @@ final class FunctionsTest extends TestCase
 		$this->assertSame("{a: 'b', c: 'd'}", $map->toQuery());
 	}
 
-	public function testMapOnlyAcceptsArray()
+	public function testMapOnlyAcceptsArray(): void
 	{
 		$this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
 		map(1);
 	}
 
-	public function testFunctionReturnsFuncClass()
+	public function testFunctionReturnsFuncClass(): void
 	{
 		$function = function_();
 
 		$this->assertSame(Procedure::class, $function);
 	}
 
-	public function testRawReturnsRawExpression()
+	public function testRawReturnsRawExpression(): void
 	{
 		$raw = raw('(unimplemented feature)');
 
@@ -230,10 +238,11 @@ final class FunctionsTest extends TestCase
 		$this->assertSame('(unimplemented feature)', $raw->toQuery());
 	}
 
-	public function testRawOnlyAcceptsString()
+	public function testRawOnlyAcceptsString(): void
 	{
 		$this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
 		raw([]);
 	}
 }
