@@ -59,4 +59,12 @@ final class QueryRemoveTest extends TestCase
 
         $this->assertSame('REMOVE tom:Actor, leonardo:Actor', $query->toQuery());
     }
+
+    public function testReturnsSameInstance(): void
+    {
+        $expected = Query::new();
+        $actual = $expected->remove([Query::variable('tom')->labeled('Actor')]);
+
+        $this->assertSame($expected, $actual);
+    }
 }

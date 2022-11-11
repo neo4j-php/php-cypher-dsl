@@ -40,11 +40,12 @@ class QuerySetTest extends TestCase
 
 	public function testSetRejectsAnyType(): void
 	{
-		$m = $this->createMock(AnyType::class);
+        $m = Query::node('Movie');
 
 		$this->expectException(TypeError::class);
 
-		(new Query())->set([$m, $m]);
+        // @phpstan-ignore-next-line
+		Query::new()->set([$m, $m]);
 	}
 
 	public function testSetWithLabel(): void

@@ -22,20 +22,52 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
  *
  * @covers \WikibaseSolutions\CypherDSL\Query
  */
-class QueryReturningTest extends TestCase
+final class QueryReturningTest extends TestCase
 {
-	public function testReturning(): void
-	{
-		$m = (new Node("Movie"))->withVariable('m');
+    public function testReturningNamedNode(): void
+    {
+        $m = Query::node('Movie')->withVariable('m');
 
-		$statement = (new Query())->returning($m)->build();
+        $statement = Query::new()->returning($m)->build();
 
-		$this->assertSame("RETURN m", $statement);
+        $this->assertSame("RETURN m", $statement);
+    }
 
-		$statement = (new Query())->returning(["n" => $m])->build();
+    public function testReturningUnnamedNodeGeneratesName(): void
+    {
+        $m = Query::node('Movie');
 
-		$this->assertSame("RETURN m AS n", $statement);
-	}
+        $statement = Query::new()->returning($m)->build();
+
+        $this->assertMatchesRegularExpression("/(RETURN var[\da-f]+)/", $statement);
+    }
+
+    public function testReturningNamedNodeAlias(): void
+    {
+        $m = Query::node('Movie')->withVariable('m');
+
+        $statement = Query::new()->returning(["n" => $m])->build();
+
+        $this->assertSame("RETURN m AS n", $statement);
+    }
+
+    public function testReturningUnnamedNodeAlias(): void
+    {
+        $m = Query::node('Movie');
+
+        $statement = Query::new()->returning(["n" => $m])->build();
+
+        $this->assertMatchesRegularExpression("/(RETURN var[\da-f]+ AS n)/", $statement);
+    }
+
+    public function testReturnDistinct(): void
+    {
+        $m = Query::node('Movie')->withVariable('m');
+
+        $statement = Query::new()->returning($m, true)->build();
+
+        $this->assertSame('RETURN DISTINCT m', $statement);
+    }
 
 	public function testReturningRejectsNotAnyType(): void
 	{
@@ -43,22 +75,15 @@ class QueryReturningTest extends TestCase
 
 		$this->expectException(TypeError::class);
 
-		(new Query())->returning($m);
+        // @phpstan-ignore-next-line
+        Query::new()->returning($m);
 	}
 
-	public function testReturningWithNode(): void
-	{
-		$node = Query::node("m");
+    public function testReturnsSameInstance(): void
+    {
+        $expected = Query::new();
+        $actual = $expected->returning(Query::node());
 
-		$statement = (new Query())->returning($node)->build();
-
-		$this->assertMatchesRegularExpression("/(RETURN var[\da-f]+)/", $statement);
-
-		$node = Query::node("m");
-		$node->withVariable('example');
-
-		$statement = (new Query())->returning($node)->build();
-
-		$this->assertSame('RETURN example', $statement);
-	}
+        $this->assertSame($expected, $actual);
+    }
 }

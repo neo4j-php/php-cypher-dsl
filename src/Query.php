@@ -411,7 +411,7 @@ final class Query implements QueryConvertible
     /**
      * Creates the RETURN clause.
      *
-     * @param AnyType|Alias|Pattern|int|float|string|bool|array|(AnyType|Alias|Pattern|int|float|string|bool|array)[] $expressions The expressions to return
+     * @param AnyType|Alias|Pattern|int|float|string|bool|array|AnyType[]|Alias[]|Pattern[]|int[]|float[]|string[]|bool[] $expressions The expressions to return
      * @param bool $distinct Whether to be a RETURN DISTINCT query
      *
      * @return $this
