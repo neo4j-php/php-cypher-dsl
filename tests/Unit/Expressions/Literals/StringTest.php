@@ -66,7 +66,7 @@ final class StringTest extends TestCase
     public function testDoubleQuotes(string $string, string $expected): void
     {
         $literal = new String_($string);
-        $literal->useDoubleQuotes(true);
+        $literal->useDoubleQuotes();
 
         $this->assertSame($expected, $literal->toQuery());
         $this->assertEquals($string, $literal->getValue());

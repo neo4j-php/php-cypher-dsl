@@ -73,4 +73,23 @@ final class IntegerTest extends TestCase
             ["-1238109438204130457284308235720483205", "-1238109438204130457284308235720483205"]
         ];
     }
+
+    /**
+     * @dataProvider wrongInputProvider
+     */
+    public function testWrongInput($input)
+    {
+        $this->expectException(TypeError::class);
+        new Integer($input);
+    }
+
+    public function wrongInputProvider(): array
+    {
+        return [
+             ['nonumber'],
+             ['12.3E36'],
+             ['0x86'],
+             ['5.5'],
+        ];
+    }
 }

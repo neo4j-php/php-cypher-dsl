@@ -103,11 +103,12 @@ final class Raw extends Procedure implements
      */
     protected function getSignature(): string
     {
-        return sprintf(
-            "%s(%s)",
-            $this->functionName,
-            implode(", ", array_fill(0, count($this->parameters), "%s"))
-        );
+        // A string of the form '%s, %s, %s' with count($this->parameters) occurences of '%s'
+        $percentSString =
+            count($this->parameters) === 0 ?
+            '' :
+            str_repeat( '%s, ' , count($this->parameters) - 1 ).'%s';
+        return $this->functionName.'('.$percentSString.')';
     }
 
     /**

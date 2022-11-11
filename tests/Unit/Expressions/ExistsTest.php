@@ -44,8 +44,8 @@ class ExistsTest extends TestCase
         $exists = new Exists(
             (new MatchClause)->addPattern(
                 new Path(
-                    [(new Node)->withVariable('person'),(new Node('Dog'))->withVariable('dog')],
-                    [(new Relationship(Relationship::DIR_RIGHT))->addType('HAS_DOG')]
+                    [(new Node)->withVariable('person'), (new Node('Dog'))->withVariable('dog')],
+                    (new Relationship(Relationship::DIR_RIGHT))->addType('HAS_DOG')
                 )
             )
         );

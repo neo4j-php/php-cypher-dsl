@@ -22,5 +22,9 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 class QueryWithTest extends TestCase
 {
-
+    public function testWith()
+    {
+        $with = Query::new()->with('a')->with(['b' => new Variable('c')]);
+        $this->assertSame('WITH a WITH c AS b', $with->toQuery());
+    }
 }

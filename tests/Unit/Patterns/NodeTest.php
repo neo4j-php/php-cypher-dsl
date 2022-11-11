@@ -45,10 +45,10 @@ final class NodeTest extends TestCase
      * @param string $label
      * @param string $expected
      */
-    public function testOnlyLabel(string $label, string $expected): void
+    public function testOnlyLabel(string $expected, string ...$label): void
     {
         $node = new Node();
-        $node->addLabel($label);
+        $node->addLabel(...$label);
 
         $this->assertSame($expected, $node->toQuery());
     }
@@ -258,9 +258,9 @@ final class NodeTest extends TestCase
     public function provideOnlyLabelData(): array
     {
         return [
-            ['a', '(:a)'],
-            ['A', '(:A)'],
-            [':', '(:`:`)'],
+            ['(:a)', 'a'],
+            ['(:Foo:Bar)', 'Foo', 'Bar'],
+            ['(:`:`)', ':'],
         ];
     }
 

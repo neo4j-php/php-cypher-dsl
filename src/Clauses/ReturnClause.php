@@ -34,7 +34,7 @@ final class ReturnClause extends Clause
     private bool $distinct = false;
 
     /**
-     * @var AnyType[]|Alias[] The expressions to return
+     * @var (AnyType|Alias)[] The expressions to return
      */
     private array $columns = [];
 

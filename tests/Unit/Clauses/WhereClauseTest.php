@@ -14,7 +14,6 @@ use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\WhereClause

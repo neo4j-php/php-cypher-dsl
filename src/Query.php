@@ -827,19 +827,22 @@ final class Query implements QueryConvertible
      * Changes an associative array into an array of aliases.
      *
      * @param mixed[] $values The array to change into an array of aliases
-     * @param callable|null $castFunc Function to use to cast the elements of $array
+     * @param callable $castFunc Function to use to cast the elements of $array
      * @return mixed[] A sequential array, possibly consisting of aliases
      */
-    private function makeAliasArray(array $values, ?callable $castFunc = null): array
+    private function makeAliasArray(array $values, callable $castFunc): array
     {
         $res = [];
 
         foreach ($values as $key => $value) {
-            if ($castFunc !== null) {
+            if (is_string($key)) {
+                /** @var AnyType $value */
                 $value = $castFunc($value);
+                $res[] = $value->alias($key);
+            } else {
+                // If key is numeric, keep value unchanged.
+                $res []= $value;
             }
-
-            $res[] = is_string($key) ? $value->alias($key) : $value;
         }
 
         return $res;
