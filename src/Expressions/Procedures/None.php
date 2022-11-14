@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -41,14 +41,15 @@ final class None extends Procedure implements BooleanType
     private AnyType $predicate;
 
     /**
-     * The signature of the "none()" function is:
+     * The signature of the "none()" function is:.
      *
      * none(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
      *
-     * @param Variable $variable A variable that can be used from within the predicate
-     * @param ListType $list A list
-     * @param AnyType $predicate A predicate that is tested against all items in the list
-	 * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
+     * @param Variable $variable  A variable that can be used from within the predicate
+     * @param ListType $list      A list
+     * @param AnyType  $predicate A predicate that is tested against all items in the list
+     *
+     * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(Variable $variable, ListType $list, AnyType $predicate)
     {

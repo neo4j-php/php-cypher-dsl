@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,8 +18,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 class ExistsTest extends TestCase
 {
-
-    public function testToQuery()
+    public function testToQuery(): void
     {
         $expression = $this->createMock(AnyType::class);
         $expression->method('toQuery')->willReturn('expression');
@@ -32,7 +31,7 @@ class ExistsTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testAcceptsAnyType()
+    public function testAcceptsAnyType(): void
     {
         $expression = $this->createMock(AnyType::class);
 

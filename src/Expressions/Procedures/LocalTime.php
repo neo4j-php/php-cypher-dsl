@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -24,17 +24,18 @@ final class LocalTime extends Procedure implements LocalTimeType
     use LocalTimeTypeTrait;
 
     /**
-     * @var AnyType|null The input to the localtime function, from which to construct the localtime
+     * @var null|AnyType The input to the localtime function, from which to construct the localtime
      */
     private ?AnyType $value;
 
     /**
-     * The signature of the "localtime()" function is:
+     * The signature of the "localtime()" function is:.
      *
      * localtime(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (LOCALTIME?)
      *
-     * @param AnyType|null $value The input to the localtime function, from which to construct the localtime
-	 * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
+     * @param null|AnyType $value The input to the localtime function, from which to construct the localtime
+     *
+     * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(?AnyType $value = null)
     {

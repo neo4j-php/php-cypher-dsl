@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,6 +10,7 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Query;
@@ -19,7 +20,6 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
@@ -28,10 +28,11 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
  */
 final class CastTraitTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
-        $this->trait = new class {
+        $this->trait = new class
+        {
             use CastTrait {
                 toListType as public;
                 toMapType as public;
@@ -184,7 +185,7 @@ final class CastTraitTest extends TestCase
 
     public function testToNameDoesNotAcceptPattern(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
 
         $this->trait->toName(Query::node());
     }

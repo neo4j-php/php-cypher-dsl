@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021-  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,8 +13,6 @@ use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Syntax\Alias;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 
 /**
  * This class represents a CALL procedure clause.
@@ -30,7 +28,7 @@ final class CallProcedureClause extends Clause
     use CastTrait;
 
     /**
-     * @var Procedure|null The procedure to call
+     * @var null|Procedure The procedure to call
      */
     private ?Procedure $procedure = null;
 
@@ -43,6 +41,7 @@ final class CallProcedureClause extends Clause
      * Sets the procedure to call.
      *
      * @param Procedure $procedure The procedure to call
+     *
      * @return $this
      */
     public function setProcedure(Procedure $procedure): self
@@ -55,7 +54,8 @@ final class CallProcedureClause extends Clause
     /**
      * Adds a variable to yield.
      *
-     * @param Variable|Alias|string $yields The variable to yield
+     * @param Alias|string|Variable $yields The variable to yield
+     *
      * @return $this
      */
     public function addYield(...$yields): self
@@ -111,7 +111,7 @@ final class CallProcedureClause extends Clause
         $subject = $this->procedure->toQuery();
 
         if (!empty($this->yields)) {
-            $yields = array_map(fn ($variableOrAlias): string => $variableOrAlias->toQuery(), $this->yields);
+            $yields = array_map(static fn ($variableOrAlias): string => $variableOrAlias->toQuery(), $this->yields);
             $subject .= sprintf(" YIELD %s", implode(", ", $yields));
         }
 

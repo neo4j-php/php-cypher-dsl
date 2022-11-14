@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,6 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Literals;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
@@ -20,7 +19,7 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  */
 final class MapTest extends TestCase
 {
-    public function testEmpty()
+    public function testEmpty(): void
     {
         $map = new Map([]);
 
@@ -29,10 +28,8 @@ final class MapTest extends TestCase
 
     /**
      * @dataProvider provideNumericalKeysData
-     * @param array $properties
-     * @param string $expected
      */
-    public function testNumericalKeys(array $properties, string $expected)
+    public function testNumericalKeys(array $properties, string $expected): void
     {
         $map = new Map($properties);
 
@@ -41,10 +38,8 @@ final class MapTest extends TestCase
 
     /**
      * @dataProvider provideStringKeysData
-     * @param array $properties
-     * @param string $expected
      */
-    public function testStringKeys(array $properties, string $expected)
+    public function testStringKeys(array $properties, string $expected): void
     {
         $map = new Map($properties);
 
@@ -53,17 +48,15 @@ final class MapTest extends TestCase
 
     /**
      * @dataProvider provideNestedMapsData
-     * @param array $properties
-     * @param string $expected
      */
-    public function testNestedMaps(array $properties, string $expected)
+    public function testNestedMaps(array $properties, string $expected): void
     {
         $map = new Map($properties);
 
         $this->assertSame($expected, $map->toQuery());
     }
 
-    public function testMergeWith()
+    public function testMergeWith(): void
     {
         $map = new Map(["foo" => new String_("bar")]);
         $map->mergeWith(new Map(["boo" => new String_("far")]));
@@ -75,7 +68,7 @@ final class MapTest extends TestCase
         $this->assertSame("{foo: 'bar', boo: 'far'}", $map->toQuery());
     }
 
-    public function testAdd()
+    public function testAdd(): void
     {
         $map = new Map(["foo" => new String_("bar")]);
         $map->add('foo', new String_("baz"));

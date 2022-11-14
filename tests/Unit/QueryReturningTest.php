@@ -2,20 +2,16 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021-  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
-use TypeError;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Patterns\Node;
-use WikibaseSolutions\CypherDSL\Patterns\Path;
-use WikibaseSolutions\CypherDSL\Patterns\Relationship;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * Tests the "returning" method of the Query class.
@@ -69,15 +65,17 @@ final class QueryReturningTest extends TestCase
         $this->assertSame('RETURN DISTINCT m', $statement);
     }
 
-	public function testReturningRejectsNotAnyType(): void
-	{
-		$m = new class () {};
+    public function testReturningRejectsNotAnyType(): void
+    {
+        $m = new class()
+        {
+        };
 
-		$this->expectException(TypeError::class);
+        $this->expectException(TypeError::class);
 
         // @phpstan-ignore-next-line
         Query::new()->returning($m);
-	}
+    }
 
     public function testReturnsSameInstance(): void
     {

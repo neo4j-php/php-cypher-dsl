@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -30,7 +30,6 @@ use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\TimeTypeTra
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits\NodeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits\PathTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits\RelationshipTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
@@ -54,8 +53,8 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
  */
 final class Variable implements
     BooleanType,
-    DateType,
     DateTimeType,
+    DateType,
     FloatType,
     IntegerType,
     ListType,
@@ -70,8 +69,8 @@ final class Variable implements
     TimeType
 {
     use BooleanTypeTrait,
-        DateTypeTrait,
         DateTimeTypeTrait,
+        DateTypeTrait,
         FloatTypeTrait,
         IntegerTypeTrait,
         ListTypeTrait,
@@ -86,9 +85,9 @@ final class Variable implements
         StringTypeTrait,
         TimeTypeTrait;
 
+    use ErrorTrait;
     use EscapeTrait;
     use NameGenerationTrait;
-    use ErrorTrait;
 
     /**
      * @var string The name of this variable
@@ -96,7 +95,8 @@ final class Variable implements
     private string $name;
 
     /**
-     * @param string|null $name The name of the variable
+     * @param null|string $name The name of the variable
+     *
      * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(?string $name = null)
@@ -112,7 +112,6 @@ final class Variable implements
      * Returns a label with this variable.
      *
      * @param string ...$labels The labels to attach to this variable
-     * @return Label
      */
     public function labeled(string ...$labels): Label
     {
@@ -122,8 +121,7 @@ final class Variable implements
     /**
      * Assign a value to this property.
      *
-     * @param Map|array $value The value to assign
-     * @return PropertyReplacement
+     * @param array|Map $value The value to assign
      */
     public function assign($value): PropertyReplacement
     {
@@ -132,8 +130,6 @@ final class Variable implements
 
     /**
      * Returns the escaped name of this variable.
-     *
-     * @return string
      */
     public function getName(): string
     {

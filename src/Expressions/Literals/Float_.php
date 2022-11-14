@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -26,6 +26,7 @@ final class Float_ implements FloatType
 
     /**
      * @param float $value The value
+     *
      * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(float $value)
@@ -35,8 +36,6 @@ final class Float_ implements FloatType
 
     /**
      * Returns the integer value.
-     *
-     * @return float
      */
     public function getValue(): float
     {
@@ -48,9 +47,9 @@ final class Float_ implements FloatType
      */
     public function toQuery(): string
     {
-        $value = (string)$this->value;
+        $value = (string) $this->value;
 
-        if (ctype_digit($value) || ($value[0] === '-' && ctype_digit(substr($value,1)))) {
+        if (ctype_digit($value) || ($value[0] === '-' && ctype_digit(substr($value, 1)))) {
             $value .= '.0';
         }
 

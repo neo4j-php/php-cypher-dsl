@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021-  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -26,14 +26,15 @@ final class RemoveClause extends Clause
     use ErrorTrait;
 
     /**
-     * @var Property[]|Label[] The expressions in this REMOVE clause.
+     * @var Label[]|Property[] the expressions in this REMOVE clause
      */
     private array $expressions = [];
 
     /**
      * Add one or more expressions to the REMOVE clause.
      *
-     * @param Property|Label ...$expressions The expressions to add
+     * @param Label|Property ...$expressions The expressions to add
+     *
      * @return RemoveClause
      */
     public function addExpression(...$expressions): self
@@ -69,7 +70,7 @@ final class RemoveClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (QueryConvertible $expression) => $expression->toQuery(), $this->expressions)
+            array_map(static fn (QueryConvertible $expression) => $expression->toQuery(), $this->expressions)
         );
     }
 }

@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,8 +11,8 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
@@ -42,8 +42,6 @@ final class NodeTest extends TestCase
 
     /**
      * @dataProvider provideOnlyLabelData
-     * @param string $label
-     * @param string $expected
      */
     public function testOnlyLabel(string $expected, string ...$label): void
     {
@@ -55,8 +53,6 @@ final class NodeTest extends TestCase
 
     /**
      * @dataProvider provideOnlyNameData
-     * @param string $name
-     * @param string $expected
      */
     public function testOnlyName(string $name, string $expected): void
     {
@@ -68,8 +64,6 @@ final class NodeTest extends TestCase
 
     /**
      * @dataProvider provideOnlyPropertiesData
-     * @param array $properties
-     * @param string $expected
      */
     public function testOnlyProperties(array $properties, string $expected): void
     {
@@ -81,9 +75,6 @@ final class NodeTest extends TestCase
 
     /**
      * @dataProvider provideWithNameAndLabelData
-     * @param string $name
-     * @param string $label
-     * @param string $expected
      */
     public function testWithNameAndLabel(string $name, string $label, string $expected): void
     {
@@ -95,9 +86,6 @@ final class NodeTest extends TestCase
 
     /**
      * @dataProvider provideWithNameAndPropertiesData
-     * @param string $name
-     * @param array $properties
-     * @param string $expected
      */
     public function testWithNameAndProperties(string $name, array $properties, string $expected): void
     {
@@ -109,9 +97,6 @@ final class NodeTest extends TestCase
 
     /**
      * @dataProvider provideWithLabelAndPropertiesData
-     * @param string $label
-     * @param array $properties
-     * @param string $expected
      */
     public function testWithLabelAndProperties(string $label, array $properties, string $expected): void
     {
@@ -123,10 +108,6 @@ final class NodeTest extends TestCase
 
     /**
      * @dataProvider provideWithNameAndLabelAndPropertiesData
-     * @param string $name
-     * @param string $label
-     * @param array $properties
-     * @param string $expected
      */
     public function testWithNameAndLabelAndProperties(string $name, string $label, array $properties, string $expected): void
     {
@@ -138,8 +119,6 @@ final class NodeTest extends TestCase
 
     /**
      * @dataProvider provideMultipleLabelsData
-     * @param array $labels
-     * @param string $expected
      */
     public function testMultipleLabels(array $labels, string $expected): void
     {

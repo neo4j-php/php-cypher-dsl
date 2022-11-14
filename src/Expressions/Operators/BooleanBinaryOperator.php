@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@ use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanType
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
- * Represents a boolean binary operator. These are:
+ * Represents a boolean binary operator. These are:.
  *
  * - conjunction: "AND"
  * - disjunction: "OR"
@@ -28,7 +28,8 @@ abstract class BooleanBinaryOperator extends BinaryOperator implements BooleanTy
 
     /**
      * @inheritDoc
-     * @param BooleanType $left The left-hand of the boolean operator
+     *
+     * @param BooleanType $left  The left-hand of the boolean operator
      * @param BooleanType $right The right-hand of the boolean operator
      */
     public function __construct(BooleanType $left, BooleanType $right, bool $insertParentheses = true)

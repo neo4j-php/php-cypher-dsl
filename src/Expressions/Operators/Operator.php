@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -26,6 +26,7 @@ abstract class Operator implements QueryConvertible
 
     /**
      * @param bool $insertParentheses Whether to insert parentheses around the application of the operator
+     *
      * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(bool $insertParentheses = true)
@@ -35,8 +36,6 @@ abstract class Operator implements QueryConvertible
 
     /**
      * Returns whether the operator inserts parenthesis.
-     *
-     * @return bool
      */
     public function insertsParentheses(): bool
     {
@@ -56,8 +55,6 @@ abstract class Operator implements QueryConvertible
 
     /**
      * Returns the inner part of the application of the operator, that is, without any parentheses.
-     *
-     * @return string
      */
     abstract protected function toInner(): string;
 }

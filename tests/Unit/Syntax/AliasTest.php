@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,8 @@ use WikibaseSolutions\CypherDSL\Syntax\Alias;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Syntax\Alias
  */
-final class AliasTest extends TestCase {
+final class AliasTest extends TestCase
+{
     public function testGetOriginal(): void
     {
         $original = Query::variable('a');

@@ -2,20 +2,17 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021-  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
-use TypeError;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Patterns\Node;
-use WikibaseSolutions\CypherDSL\Patterns\Path;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
+use WikibaseSolutions\CypherDSL\Query;
 
 /**
  * Tests the "create" method of the Query class.
@@ -24,14 +21,14 @@ use WikibaseSolutions\CypherDSL\Patterns\Relationship;
  */
 final class QueryCreateTest extends TestCase
 {
-	public function testCreateSinglePattern(): void
-	{
-		$pattern = Query::node()->withVariable('hello');
+    public function testCreateSinglePattern(): void
+    {
+        $pattern = Query::node()->withVariable('hello');
 
         $query = Query::new()->create($pattern);
 
         $this->assertSame('CREATE (hello)', $query->toQuery());
-	}
+    }
 
     public function testCreateMultiplePatterns(): void
     {

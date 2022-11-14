@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -29,7 +29,9 @@ final class ListTest extends TestCase
 
     public function testRequiresAnyTypeInConstructor(): void
     {
-        $a = new class () {};
+        $a = new class()
+        {
+        };
 
         $this->expectException(TypeError::class);
 
@@ -126,8 +128,6 @@ final class ListTest extends TestCase
 
     /**
      * @dataProvider provideOneDimensionalData
-     * @param array $expressions
-     * @param string $expected
      */
     public function testOneDimensional(array $expressions, string $expected): void
     {
@@ -138,8 +138,6 @@ final class ListTest extends TestCase
 
     /**
      * @dataProvider provideMultidimensionalData
-     * @param array $expressions
-     * @param string $expected
      */
     public function testMultidimensional(array $expressions, string $expected): void
     {

@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
- * Represents a comparison binary operator. These are:
+ * Represents a comparison binary operator. These are:.
  *
  * - equality: "="
  * - inequality: "<>"
@@ -38,7 +38,8 @@ abstract class ComparisonBinaryOperator extends BinaryOperator implements Boolea
 
     /**
      * @inheritDoc
-     * @param AnyType $left The left-hand of the comparison operator
+     *
+     * @param AnyType $left  The left-hand of the comparison operator
      * @param AnyType $right The right-hand of the comparison operator
      */
     public function __construct(AnyType $left, AnyType $right, bool $insertParentheses = true)

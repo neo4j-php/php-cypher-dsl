@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,9 +10,9 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Procedures;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Procedures\Date;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Date;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -20,7 +20,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 class DateTest extends TestCase
 {
-    public function testToQuery()
+    public function testToQuery(): void
     {
         $map = new Map(['foo' => new String_('bar')]);
 
@@ -29,7 +29,7 @@ class DateTest extends TestCase
         $this->assertSame("date({foo: 'bar'})", $date->toQuery());
     }
 
-    public function testEmpty()
+    public function testEmpty(): void
     {
         $date = new Date();
 
@@ -39,7 +39,7 @@ class DateTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testAcceptsAnyType()
+    public function testAcceptsAnyType(): void
     {
         $map = $this->createMock(AnyType::class);
 

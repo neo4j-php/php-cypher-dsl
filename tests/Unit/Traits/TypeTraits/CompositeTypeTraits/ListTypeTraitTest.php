@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,10 +11,10 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\TypeTraits\CompositeType
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\In;
+use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait
@@ -27,17 +27,17 @@ final class ListTypeTraitTest extends TestCase
     private $a;
 
     /**
-     * @var MockObject|ListType
+     * @var ListType|MockObject
      */
     private $b;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->a = new Property(new Variable('foo'), 'bar');
         $this->b = new List_;
     }
 
-    public function testHas()
+    public function testHas(): void
     {
         $has = $this->b->has($this->a);
 

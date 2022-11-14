@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021-  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,6 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 
 /**
  * Tests the "limit" method of the Query class.
@@ -54,11 +53,11 @@ final class QueryLimitTest extends TestCase
         $this->assertSame("LIMIT 12", $statement);
     }
 
-	public function testReturnsSameInstance(): void
-	{
-		$expected = Query::new();
-		$actual = $expected->limit(420);
+    public function testReturnsSameInstance(): void
+    {
+        $expected = Query::new();
+        $actual = $expected->limit(420);
 
-		$this->assertSame($expected, $actual);
-	}
+        $this->assertSame($expected, $actual);
+    }
 }

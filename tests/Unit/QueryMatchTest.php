@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021-  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -55,21 +55,21 @@ final class QueryMatchTest extends TestCase
         Query::new()->match([$m, $r]);
     }
 
-	public function testDoesNotAcceptTypeOtherThanMatchablePattern(): void
-	{
-		$this->expectException(TypeError::class);
+    public function testDoesNotAcceptTypeOtherThanMatchablePattern(): void
+    {
+        $this->expectException(TypeError::class);
 
         // @phpstan-ignore-next-line
-		Query::new()->match(false);
-	}
+        Query::new()->match(false);
+    }
 
-	public function testReturnsSameInstance(): void
-	{
-		$m = Query::node();
+    public function testReturnsSameInstance(): void
+    {
+        $m = Query::node();
 
-		$expected = Query::new();
-		$actual = $expected->match($m);
+        $expected = Query::new();
+        $actual = $expected->match($m);
 
-		$this->assertSame($expected, $actual);
-	}
+        $this->assertSame($expected, $actual);
+    }
 }

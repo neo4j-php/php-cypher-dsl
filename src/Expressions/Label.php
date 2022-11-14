@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * Represents a label. A label in Cypher would be something like "n:German" or "n:German:Swedish". Label implements
- * BooleanType, since it can be used in a "WHERE" clause like so:
+ * BooleanType, since it can be used in a "WHERE" clause like so:.
  *
  *  MATCH (n) WHERE n:label1:label2 RETURN n
  *
@@ -39,8 +39,9 @@ final class Label implements BooleanType
     private array $labels;
 
     /**
-     * @param Variable $variable The variable to attach the labels to
-     * @param string ...$labels The labels to attach to the variable
+     * @param Variable $variable  The variable to attach the labels to
+     * @param string   ...$labels The labels to attach to the variable
+     *
      * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(Variable $variable, string ...$labels)
@@ -53,6 +54,7 @@ final class Label implements BooleanType
      * Adds one or more labels to this class.
      *
      * @param string ...$labels One or more labels to add
+     *
      * @return $this
      */
     public function addLabels(string ...$labels): self
@@ -74,8 +76,6 @@ final class Label implements BooleanType
 
     /**
      * Returns the variable to which the labels are attached.
-     *
-     * @return Variable
      */
     public function getVariable(): Variable
     {

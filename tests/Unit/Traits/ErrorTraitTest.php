@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,41 +14,33 @@ use TypeError;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 
 /**
- * Dummy classes
+ * Dummy classes.
  */
 class ErrorHelperDummyA
 {
 }
 
-;
-
 class ErrorHelperDummyB
 {
 }
-
-;
 
 class ErrorHelperDummyExtendsA extends ErrorHelperDummyA
 {
 }
 
-;
-
 class ErrorHelperDummyExtendsB extends ErrorHelperDummyB
 {
 }
 
-;
-
 /**
- * Tester/Mock class
+ * Tester/Mock class.
  */
 class ErrorImpl
 {
     use ErrorTrait;
 
     /**
-     * Overcome private method problems
+     * Overcome private method problems.
      */
     public function call($funcName, $args)
     {
@@ -63,7 +55,7 @@ final class ErrorTraitTest extends TestCase
 {
     protected ErrorImpl $errorImpl;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->errorImpl = new ErrorImpl();
     }
@@ -138,8 +130,9 @@ final class ErrorTraitTest extends TestCase
             ['float', 3.14],
             ['bool', true],
             ['array', ['foo', 'bar']],
-            ['class@anonymous', new class () {
-            }],
+            ['class@anonymous', new class()
+            {
+            }, ],
             [ErrorHelperDummyA::class, new ErrorHelperDummyA()],
         ];
     }

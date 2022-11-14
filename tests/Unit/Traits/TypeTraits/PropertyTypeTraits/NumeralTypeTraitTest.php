@@ -2,44 +2,38 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\TypeTraits\PropertyTypeTraits;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Addition;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Division;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Exponentiation;
-use WikibaseSolutions\CypherDSL\Expressions\Operators\UnaryMinus;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\ModuloDivision;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Multiplication;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Subtraction;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\UnaryMinus;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\NumeralTypeTrait
  */
 final class NumeralTypeTraitTest extends TestCase
 {
-    /**
-     * @var NumeralType
-     */
     private NumeralType $a;
 
-    /**
-     * @var NumeralType
-     */
     private NumeralType $b;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->a = new class () implements NumeralType {
+        $this->a = new class() implements NumeralType
+        {
             use NumeralTypeTrait;
 
             public function toQuery(): string

@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
- * Represents a mathematical binary operator. These are:
+ * Represents a mathematical binary operator. These are:.
  *
  * - addition: "+"
  * - subtraction: "-"
@@ -33,7 +33,8 @@ abstract class MathematicalBinaryOperator extends BinaryOperator implements Floa
 
     /**
      * @inheritDoc
-     * @param NumeralType $left The left-hand of the mathematical operator
+     *
+     * @param NumeralType $left  The left-hand of the mathematical operator
      * @param NumeralType $right The right-hand of the mathematical operator
      */
     public function __construct(NumeralType $left, NumeralType $right, bool $insertParentheses = true)

@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -32,7 +32,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
  */
 final class RawTest extends TestCase
 {
-    public function testToQuery()
+    public function testToQuery(): void
     {
         $a = new Variable('a');
         $b = new Variable('b');
@@ -43,16 +43,18 @@ final class RawTest extends TestCase
         $this->assertSame("foobar(a, b, c)", $raw->toQuery());
     }
 
-    public function testRequiresAnyTypeParameters()
+    public function testRequiresAnyTypeParameters(): void
     {
-        $a = new class () {};
+        $a = new class()
+        {
+        };
 
         $this->expectException(TypeError::class);
 
         new Raw('foobar', [$a]);
     }
 
-    public function testInstanceOf()
+    public function testInstanceOf(): void
     {
         $raw = new Raw('foo', [Literal::string('foo')]);
 

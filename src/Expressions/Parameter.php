@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,7 +21,6 @@ use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\FloatTypeTr
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\IntegerTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\LocalDateTimeTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\LocalTimeTypeTrait;
-use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\NumeralTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\PointTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\StringTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\TimeTypeTrait;
@@ -34,7 +33,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalTimeType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
@@ -46,8 +44,8 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
  */
 final class Parameter implements
     BooleanType,
-    DateType,
     DateTimeType,
+    DateType,
     FloatType,
     IntegerType,
     ListType,
@@ -59,8 +57,8 @@ final class Parameter implements
     TimeType
 {
     use BooleanTypeTrait,
-        DateTypeTrait,
         DateTimeTypeTrait,
+        DateTypeTrait,
         FloatTypeTrait,
         IntegerTypeTrait,
         ListTypeTrait,
@@ -71,18 +69,16 @@ final class Parameter implements
         StringTypeTrait,
         TimeTypeTrait;
 
+    use ErrorTrait;
     use EscapeTrait;
     use NameGenerationTrait;
-    use ErrorTrait;
 
-    /**
-     * @var string
-     */
     private string $parameter;
 
     /**
-     * @param string|null $parameter The parameter; this parameter may only consist of alphanumeric characters and
-     *  underscores
+     * @param null|string $parameter The parameter; this parameter may only consist of alphanumeric characters and
+     *                               underscores
+     *
      * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(?string $parameter = null)
@@ -96,8 +92,6 @@ final class Parameter implements
 
     /**
      * Returns the escaped parameter name.
-     *
-     * @return string
      */
     public function getParameter(): string
     {

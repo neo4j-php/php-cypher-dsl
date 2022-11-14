@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021- Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -32,7 +32,7 @@ final class RemoveClauseTest extends TestCase
     public function testSingleExpression(): void
     {
         $remove = new RemoveClause();
-        $expression = new Property(new Variable('Foo'),'Bar');
+        $expression = new Property(new Variable('Foo'), 'Bar');
 
         $remove->addExpression($expression);
 
@@ -97,6 +97,7 @@ final class RemoveClauseTest extends TestCase
 
         $this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
         $remove->addExpression(10);
     }
 

@@ -20,5 +20,8 @@
         <include>
             <directory suffix=".php">src</directory>
         </include>
+        <exclude>
+            <file>src/functions.php</file>
+        </exclude>
     </coverage>
 </phpunit>

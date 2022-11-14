@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -30,18 +30,19 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 final class AnyTypeTraitTest extends TestCase
 {
     /**
-     * @var MockObject|AnyType
+     * @var AnyType|MockObject
      */
     private $a;
 
     /**
-     * @var MockObject|AnyType
+     * @var AnyType|MockObject
      */
     private $b;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->a = new class () implements AnyType {
+        $this->a = new class() implements AnyType
+        {
             use AnyTypeTrait;
 
             public function toQuery(): string

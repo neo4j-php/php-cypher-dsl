@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@ use WikibaseSolutions\CypherDSL\Query;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Clauses\CreateClause
  */
-class CreateClauseTest extends TestCase
+final class CreateClauseTest extends TestCase
 {
     public function testEmptyClause(): void
     {
@@ -68,6 +68,7 @@ class CreateClauseTest extends TestCase
 
         $this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
         $createClause->addPattern(Query::function()::date());
         $createClause->toQuery();
     }
@@ -78,7 +79,7 @@ class CreateClauseTest extends TestCase
 
         $patterns = [
             Query::node('a'),
-            Query::node('b')
+            Query::node('b'),
         ];
 
         $createClause->addPattern(...$patterns);

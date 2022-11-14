@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,22 +19,22 @@ final class EscapeTraitTest extends TestCase
 {
     private $trait;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->trait = new class {
-			use EscapeTrait {
-				escape as public;
-			}
-		};
+        $this->trait = new class
+        {
+            use EscapeTrait {
+                escape as public;
+            }
+        };
     }
 
     /**
-     * @param string $expected
      * @dataProvider provideSafeValueIsNotEscapedData
      */
-    public function testSafeValueIsNotEscaped(string $expected)
+    public function testSafeValueIsNotEscaped(string $expected): void
     {
         $actual = $this->trait->escape($expected);
 
@@ -42,10 +42,9 @@ final class EscapeTraitTest extends TestCase
     }
 
     /**
-     * @param string $value
      * @dataProvider provideUnsafeValueIsEscapedData
      */
-    public function testUnsafeValueIsEscaped(string $value)
+    public function testUnsafeValueIsEscaped(string $value): void
     {
         $expected = sprintf("`%s`", $value);
         $actual = $this->trait->escape($value);
@@ -90,7 +89,7 @@ final class EscapeTraitTest extends TestCase
     /**
      * @dataProvider provideValueWithBacktickIsProperlyEscapedData
      */
-    public function testValueWithBacktickIsProperlyEscaped($input, $expected)
+    public function testValueWithBacktickIsProperlyEscaped($input, $expected): void
     {
         $this->assertSame('`foo``bar`', $this->trait->escape("foo`bar"));
     }
@@ -98,11 +97,11 @@ final class EscapeTraitTest extends TestCase
     public function provideValueWithBacktickIsProperlyEscapedData(): array
     {
         return [
-            ['foo`bar','`foo``bar`'],
-            ['`foo','```foo`'],
-            ['foo`','`foo```'],
-            ['foo``bar','`foo````bar`'],
-            ['`foo`','```foo```'],
+            ['foo`bar', '`foo``bar`'],
+            ['`foo', '```foo`'],
+            ['foo`', '`foo```'],
+            ['foo``bar', '`foo````bar`'],
+            ['`foo`', '```foo```'],
         ];
     }
 }

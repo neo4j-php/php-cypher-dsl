@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,6 +10,7 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\PatternTraits;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
@@ -23,7 +24,7 @@ final class PatternTraitTest extends TestCase
 {
     private $stub;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->stub = $this->getMockForTrait(PatternTrait::class);
     }
@@ -64,19 +65,20 @@ final class PatternTraitTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-	public function testDoesNotAcceptAnyType(): void
-	{
-		$this->expectException(TypeError::class);
+    public function testDoesNotAcceptAnyType(): void
+    {
+        $this->expectException(TypeError::class);
 
-		$this->stub->withVariable(new \stdClass());
-	}
+        $this->stub->withVariable(new stdClass());
+    }
 
     /**
      * @doesNotPerformAssertions
      */
     public function testImplementsPatternCompletely(): void
     {
-        new class implements Pattern {
+        new class implements Pattern
+        {
             use PatternTrait;
 
             public function toQuery(): string

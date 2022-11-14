@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021- Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -31,14 +31,14 @@ final class WithClause extends Clause
     use CastTrait;
 
     /**
-     * @var Variable[]|Alias[] The variables to include in the clause
+     * @var Alias[]|Variable[] The variables to include in the clause
      */
     private array $entries = [];
 
     /**
      * Add one or more new entries to the WITH clause.
      *
-     * @param Variable|Pattern|Alias|string ...$entries The entries to add
+     * @param Alias|Pattern|string|Variable ...$entries The entries to add
      *
      * @return $this
      */
@@ -58,7 +58,7 @@ final class WithClause extends Clause
     /**
      * Returns the expression to include in the clause.
      *
-     * @return Variable[]|Alias[]
+     * @return Alias[]|Variable[]
      */
     public function getEntries(): array
     {
@@ -80,7 +80,7 @@ final class WithClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (QueryConvertible $expression) => $expression->toQuery(), $this->entries)
+            array_map(static fn (QueryConvertible $expression) => $expression->toQuery(), $this->entries)
         );
     }
 }

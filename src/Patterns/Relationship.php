@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -29,7 +29,9 @@ final class Relationship implements PropertyPattern
     use PropertyPatternTrait;
 
     public const DIR_RIGHT = ["-", "->"];
+
     public const DIR_LEFT = ["<-", "-"];
+
     public const DIR_UNI = ["-", "-"];
 
     /**
@@ -43,17 +45,17 @@ final class Relationship implements PropertyPattern
     private array $types = [];
 
     /**
-     * @var int|null The minimum number of `relationship->node` hops away to search
+     * @var null|int The minimum number of `relationship->node` hops away to search
      */
     private ?int $minHops = null;
 
     /**
-     * @var int|null The maximum number of `relationship->node` hops away to search
+     * @var null|int The maximum number of `relationship->node` hops away to search
      */
     private ?int $maxHops = null;
 
     /**
-     * @var int|null The exact number of `relationship->node` hops away to search
+     * @var null|int The exact number of `relationship->node` hops away to search
      */
     private ?int $exactHops = null;
 
@@ -64,9 +66,10 @@ final class Relationship implements PropertyPattern
 
     /**
      * @param array $direction The direction of the relationship, should be either:
-     *  - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
-     *  - Relationship::DIR_LEFT (for a relation of (a)<--(b))
-     *  - Relationship::DIR_UNI (for a relation of (a)--(b))
+     *                         - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
+     *                         - Relationship::DIR_LEFT (for a relation of (a)<--(b))
+     *                         - Relationship::DIR_UNI (for a relation of (a)--(b))
+     *
      * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(array $direction)
@@ -83,7 +86,6 @@ final class Relationship implements PropertyPattern
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels
      *
-     * @param int $minHops
      * @return $this
      */
     public function withMinHops(int $minHops): self
@@ -110,7 +112,6 @@ final class Relationship implements PropertyPattern
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels
      *
-     * @param int $maxHops
      * @return $this
      */
     public function withMaxHops(int $maxHops): self
@@ -137,7 +138,6 @@ final class Relationship implements PropertyPattern
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels
      *
-     * @param int $exactHops
      * @return $this
      */
     public function withExactHops(int $exactHops): self
@@ -158,7 +158,6 @@ final class Relationship implements PropertyPattern
     /**
      * Set the number of hops to be an arbitrary number (wildcard).
      *
-     * @param bool $arbitraryHops
      * @return $this
      */
     public function withArbitraryHops(bool $arbitraryHops = true): self
@@ -176,6 +175,7 @@ final class Relationship implements PropertyPattern
      * The types to require for this relationship. Will overwrite any previously set types.
      *
      * @param string[] $types
+     *
      * @return $this
      */
     public function withTypes(array $types): self
@@ -189,6 +189,7 @@ final class Relationship implements PropertyPattern
      * Add one or more types to require for this relationship.
      *
      * @param string ...$type
+     *
      * @return $this
      */
     public function addType(string ...$type): self
@@ -210,8 +211,6 @@ final class Relationship implements PropertyPattern
 
     /**
      * Returns the exact amount of hops configured.
-     *
-     * @return int|null
      */
     public function getExactHops(): ?int
     {
@@ -219,9 +218,7 @@ final class Relationship implements PropertyPattern
     }
 
     /**
-     * Returns the maximum amount of hops configured
-     *
-     * @return int|null
+     * Returns the maximum amount of hops configured.
      */
     public function getMaxHops(): ?int
     {
@@ -230,8 +227,6 @@ final class Relationship implements PropertyPattern
 
     /**
      * Returns the minimum amount of hops configured.
-     *
-     * @return int|null
      */
     public function getMinHops(): ?int
     {
@@ -251,17 +246,12 @@ final class Relationship implements PropertyPattern
     /**
      * Returns the string representation of this relationship that can be used directly
      * in a query.
-     *
-     * @return string
      */
     public function toQuery(): string
     {
         return $this->direction[0] . $this->relationshipDetailToString() . $this->direction[1];
     }
 
-    /**
-     * @return string
-     */
     private function relationshipDetailToString(): string
     {
         if (isset($this->variable)) {

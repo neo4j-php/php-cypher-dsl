@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,16 +11,16 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Negation;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Negation
  */
 class NegationTest extends TestCase
 {
-    public function testToQuery()
+    public function testToQuery(): void
     {
         $not = new Negation(new Boolean(true));
 
@@ -31,7 +31,7 @@ class NegationTest extends TestCase
         $this->assertSame("(NOT (NOT true))", $not->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands()
+    public function testDoesNotAcceptAnyTypeAsOperands(): void
     {
         $this->expectException(TypeError::class);
 

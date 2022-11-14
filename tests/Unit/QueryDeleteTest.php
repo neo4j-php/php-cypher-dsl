@@ -2,18 +2,15 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
-use TypeError;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * Tests the "delete" method of the Query class.
@@ -22,7 +19,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 final class QueryDeleteTest extends TestCase
 {
-	public function testSingleStructuralType(): void
+    public function testSingleStructuralType(): void
     {
         $tom = Query::node()->withVariable('tom')->getVariable();
 

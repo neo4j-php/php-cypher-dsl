@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -29,12 +29,13 @@ final class Point extends Procedure implements PointType
     private MapType $map;
 
     /**
-     * The signature of the "point()" function is:
+     * The signature of the "point()" function is:.
      *
      * point(input :: MAP?) :: (POINT?) - returns a point object
      *
      * @param MapType $map The map to use for constructing the point
-	 * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
+     *
+     * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(MapType $map)
     {

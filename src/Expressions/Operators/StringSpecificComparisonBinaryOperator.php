@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
- * Represents a string-specific comparison binary operator. These are:
+ * Represents a string-specific comparison binary operator. These are:.
  *
  * - case-sensitive prefix search on strings: "STARTS WITH"
  * - case-sensitive suffix search on strings: "ENDS WITH"
@@ -30,7 +30,8 @@ abstract class StringSpecificComparisonBinaryOperator extends ComparisonBinaryOp
 
     /**
      * @inheritDoc
-     * @param StringType $left The left-hand of the comparison operator
+     *
+     * @param StringType $left  The left-hand of the comparison operator
      * @param StringType $right The right-hand of the comparison operator
      */
     public function __construct(StringType $left, StringType $right, bool $insertParentheses = true)

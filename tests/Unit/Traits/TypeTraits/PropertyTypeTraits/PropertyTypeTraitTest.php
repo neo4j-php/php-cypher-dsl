@@ -2,26 +2,19 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\TypeTraits\PropertyTypeTraits;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Operators\Equality;
-use WikibaseSolutions\CypherDSL\Expressions\Operators\In;
-use WikibaseSolutions\CypherDSL\Expressions\Operators\Inequality;
-use WikibaseSolutions\CypherDSL\Expressions\Operators\IsNotNull;
-use WikibaseSolutions\CypherDSL\Expressions\Operators\IsNull;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\In;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
-use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\PropertyTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
@@ -29,25 +22,16 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
  */
 final class PropertyTypeTraitTest extends TestCase
 {
-
-    /**
-     * @var PropertyType
-     */
     private PropertyType $a;
 
-    /**
-     * @var Property
-     */
     private Property $b;
 
-    /**
-     * @var List_
-     */
     private List_ $list;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->a = new class () implements PropertyType {
+        $this->a = new class() implements PropertyType
+        {
             use PropertyTypeTrait;
 
             public function toQuery(): string

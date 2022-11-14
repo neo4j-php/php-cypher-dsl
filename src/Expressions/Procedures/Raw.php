@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -34,7 +34,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalTimeType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
@@ -46,21 +45,21 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
  */
 final class Raw extends Procedure implements
     BooleanType,
-    DateType,
     DateTimeType,
+    DateType,
     FloatType,
     IntegerType,
-    StringType,
-    MapType,
-    PointType,
     ListType,
     LocalDateTimeType,
     LocalTimeType,
+    MapType,
+    PointType,
+    StringType,
     TimeType
 {
     use BooleanTypeTrait,
-        DateTypeTrait,
         DateTimeTypeTrait,
+        DateTypeTrait,
         FloatTypeTrait,
         IntegerTypeTrait,
         ListTypeTrait,
@@ -76,18 +75,19 @@ final class Raw extends Procedure implements
     use EscapeTrait;
 
     /**
-     * @var string $functionName The name of the function to call
+     * @var string The name of the function to call
      */
     private string $functionName;
 
     /**
-     * @var AnyType[] $parameters The parameters to pass to the function call
+     * @var AnyType[] The parameters to pass to the function call
      */
     private array $parameters;
 
     /**
-     * @param string $functionName The name of the function to call
-     * @param AnyType[] $parameters The parameters to pass to the function call
+     * @param string    $functionName The name of the function to call
+     * @param AnyType[] $parameters   The parameters to pass to the function call
+     *
      * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(string $functionName, array $parameters)
@@ -107,8 +107,9 @@ final class Raw extends Procedure implements
         $percentSString =
             count($this->parameters) === 0 ?
             '' :
-            str_repeat( '%s, ' , count($this->parameters) - 1 ).'%s';
-        return $this->functionName.'('.$percentSString.')';
+            str_repeat('%s, ', count($this->parameters) - 1) . '%s';
+
+        return $this->functionName . '(' . $percentSString . ')';
     }
 
     /**

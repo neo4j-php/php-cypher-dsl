@@ -2,29 +2,31 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Literals;
 
-use TypeError;
+use Iterator;
 use LogicException;
 use PHPUnit\Framework\TestCase;
+use stdClass;
+use TypeError;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Date;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\DateTime;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\LocalDateTime;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\LocalTime;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Point;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Time;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Literals\Literal
@@ -77,12 +79,13 @@ final class LiteralTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        Literal::literal(new \stdClass());
+        Literal::literal(new stdClass());
     }
 
     public function testStringable(): void
     {
-        $stringable = Literal::literal(new class () {
+        $stringable = Literal::literal(new class()
+        {
             public function __toString()
             {
                 return 'Testing is a virtue!';
@@ -104,7 +107,9 @@ final class LiteralTest extends TestCase
     public function literalDeductionFailureProvider(): array
     {
         return [
-            [new class(){}],
+            [new class()
+            {
+            }, ],
             [null],
         ];
     }
@@ -182,7 +187,8 @@ final class LiteralTest extends TestCase
 
     public function testListAcceptsIterable(): void
     {
-        $list = Literal::list(new class implements \Iterator {
+        $list = Literal::list(new class implements Iterator
+        {
             public function current()
             {
                 return 1;
@@ -193,20 +199,21 @@ final class LiteralTest extends TestCase
                 return 1;
             }
 
-            public function key()
+            public function key(): void
             {
             }
 
             public function valid()
             {
                 static $i = 0;
+
                 return $i++ < 10;
             }
 
-            public function rewind()
+            public function rewind(): void
             {
             }
-        } );
+        });
 
         $this->assertInstanceOf(List_::class, $list);
     }
@@ -310,6 +317,7 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideDateYMDData
+     *
      * @param $year
      * @param $month
      * @param $day
@@ -333,6 +341,7 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideDateYWDData
+     *
      * @param $year
      * @param $week
      * @param $weekday
@@ -377,6 +386,7 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideDatetimeYMDData
+     *
      * @param $year
      * @param $month
      * @param $day
@@ -407,6 +417,7 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideDatetimeYWDData
+     *
      * @param $year
      * @param $week
      * @param $dayOfWeek
@@ -437,6 +448,7 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideDatetimeYQDData
+     *
      * @param $year
      * @param $quarter
      * @param $dayOfQuarter
@@ -467,6 +479,7 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideDatetimeYQData
+     *
      * @param $year
      * @param $ordinalDay
      * @param $hour
@@ -517,6 +530,7 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideLocalDatetimeYMDData
+     *
      * @param $year
      * @param $month
      * @param $day
@@ -546,6 +560,7 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideLocalDatetimeYWDData
+     *
      * @param $year
      * @param $week
      * @param $dayOfWeek
@@ -575,6 +590,7 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideLocalDatetimeYQDData
+     *
      * @param $year
      * @param $quarter
      * @param $dayOfQuarter
@@ -604,6 +620,7 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideLocalDatetimeYQData
+     *
      * @param $year
      * @param $ordinalDay
      * @param $hour
@@ -651,6 +668,7 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideLocalTimeData
+     *
      * @param $hour
      * @param $minute
      * @param $second
@@ -694,6 +712,7 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideTimeData
+     *
      * @param $hour
      * @param $minute
      * @param $second
@@ -878,7 +897,7 @@ final class LiteralTest extends TestCase
             [2000, 12, 15, 8, 25, 44, 18, 6, 31, new LocalDateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8, "minute" => 25, "second" => 44, "millisecond" => 18, "microsecond" => 6, "nanosecond" => 31]))],
 
             // types
-            [new Integer(2000), null, null, null, null, null, null, null, null,new LocalDateTime(Literal::map(["year" => 2000]))],
+            [new Integer(2000), null, null, null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000]))],
             [new Integer(2000), new Integer(12), null, null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "month" => 12]))],
             [new Integer(2000), new Integer(12), new Integer(15), null, null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15]))],
             [new Integer(2000), new Integer(12), new Integer(15), new Integer(8), null, null, null, null, null, new LocalDateTime(Literal::map(["year" => 2000, "month" => 12, "day" => 15, "hour" => 8]))],

@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021- Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -26,14 +26,15 @@ final class SetClause extends Clause
     use ErrorTrait;
 
     /**
-     * @var PropertyReplacement[]|Label[] $expressions The expressions to set
+     * @var Label[]|PropertyReplacement[] The expressions to set
      */
     private array $expressions = [];
 
     /**
      * Add one or more expressions to this SET clause.
      *
-     * @param PropertyReplacement|Label $expressions The expressions to add to this set clause
+     * @param Label|PropertyReplacement $expressions The expressions to add to this set clause
+     *
      * @return $this
      */
     public function add(...$expressions): self
@@ -47,7 +48,7 @@ final class SetClause extends Clause
     /**
      * Returns the expressions to SET.
      *
-     * @return PropertyReplacement[]|Label[]
+     * @return Label[]|PropertyReplacement[]
      */
     public function getExpressions(): array
     {
@@ -69,7 +70,7 @@ final class SetClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (QueryConvertible $expression): string => $expression->toQuery(), $this->expressions)
+            array_map(static fn (QueryConvertible $expression): string => $expression->toQuery(), $this->expressions)
         );
     }
 }

@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,11 +11,11 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\TypeTraits\PropertyTypeT
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Contains;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\EndsWith;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Regex;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\StartsWith;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\StringTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
@@ -24,7 +24,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 final class StringTypeTraitTest extends TestCase
 {
-
     /**
      * @var MockObject|StringType
      */
@@ -35,9 +34,10 @@ final class StringTypeTraitTest extends TestCase
      */
     private $b;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->a = new class () implements StringType {
+        $this->a = new class() implements StringType
+        {
             use StringTypeTrait;
 
             public function toQuery(): string

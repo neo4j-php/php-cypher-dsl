@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,23 +10,23 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Procedures;
 
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\All;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Any;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Date;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\DateTime;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Exists;
-use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\IsEmpty;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\LocalDateTime;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\LocalTime;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\None;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Point;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Raw;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Single;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Time;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
@@ -35,14 +35,14 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 final class ProcedureTest extends TestCase
 {
-    public function testRaw()
+    public function testRaw(): void
     {
         $raw = Procedure::raw("foo", []);
 
         $this->assertInstanceOf(Raw::class, $raw);
     }
 
-    public function testAll()
+    public function testAll(): void
     {
         $variable = new Variable("a");
         $list = new List_;
@@ -53,7 +53,7 @@ final class ProcedureTest extends TestCase
         $this->assertInstanceOf(All::class, $all);
     }
 
-    public function testAny()
+    public function testAny(): void
     {
         $variable = new Variable("a");
         $list = new List_;
@@ -64,7 +64,7 @@ final class ProcedureTest extends TestCase
         $this->assertInstanceOf(Any::class, $any);
     }
 
-    public function testExists()
+    public function testExists(): void
     {
         $expression = $this->createMock(AnyType::class);
 
@@ -73,7 +73,7 @@ final class ProcedureTest extends TestCase
         $this->assertInstanceOf(Exists::class, $exists);
     }
 
-    public function testIsEmpty()
+    public function testIsEmpty(): void
     {
         $list = new List_;
 
@@ -82,7 +82,7 @@ final class ProcedureTest extends TestCase
         $this->assertInstanceOf(IsEmpty::class, $isEmpty);
     }
 
-    public function testNone()
+    public function testNone(): void
     {
         $variable = new Variable("a");
         $list = new List_;
@@ -93,7 +93,7 @@ final class ProcedureTest extends TestCase
         $this->assertInstanceOf(None::class, $none);
     }
 
-    public function testSingle()
+    public function testSingle(): void
     {
         $variable = new Variable("a");
         $list = new List_;
@@ -104,7 +104,7 @@ final class ProcedureTest extends TestCase
         $this->assertInstanceOf(Single::class, $single);
     }
 
-    public function testPoint()
+    public function testPoint(): void
     {
         $map = new Map([]);
 
@@ -113,7 +113,7 @@ final class ProcedureTest extends TestCase
         $this->assertInstanceOf(Point::class, $point);
     }
 
-    public function testDate()
+    public function testDate(): void
     {
         $value = $this->createMock(AnyType::class);
 
@@ -126,7 +126,7 @@ final class ProcedureTest extends TestCase
         $this->assertInstanceOf(Date::class, $date);
     }
 
-    public function testDateTime()
+    public function testDateTime(): void
     {
         $value = $this->createMock(AnyType::class);
 
@@ -139,7 +139,7 @@ final class ProcedureTest extends TestCase
         $this->assertInstanceOf(DateTime::class, $date);
     }
 
-    public function testLocalDateTime()
+    public function testLocalDateTime(): void
     {
         $value = $this->createMock(AnyType::class);
 
@@ -152,7 +152,7 @@ final class ProcedureTest extends TestCase
         $this->assertInstanceOf(LocalDateTime::class, $date);
     }
 
-    public function testLocalTime()
+    public function testLocalTime(): void
     {
         $value = $this->createMock(AnyType::class);
 
@@ -165,7 +165,7 @@ final class ProcedureTest extends TestCase
         $this->assertInstanceOf(LocalTime::class, $date);
     }
 
-    public function testTime()
+    public function testTime(): void
     {
         $value = $this->createMock(AnyType::class);
 

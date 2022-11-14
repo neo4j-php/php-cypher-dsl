@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,11 +11,11 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\TypeTraits\PropertyTypeT
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Conjunction;
-use WikibaseSolutions\CypherDSL\Expressions\Operators\Negation;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Disjunction;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\ExclusiveDisjunction;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\Negation;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
@@ -25,18 +25,19 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 final class BooleanTypeTraitTest extends TestCase
 {
     /**
-     * @var MockObject|BooleanType
+     * @var BooleanType|MockObject
      */
     private $a;
 
     /**
-     * @var MockObject|BooleanType
+     * @var BooleanType|MockObject
      */
     private $b;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->a = new class () implements BooleanType {
+        $this->a = new class() implements BooleanType
+        {
             use BooleanTypeTrait;
 
             public function toQuery(): string

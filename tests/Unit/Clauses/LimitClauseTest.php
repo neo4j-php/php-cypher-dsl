@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021- Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -43,10 +43,11 @@ final class LimitClauseTest extends TestCase
 
         $this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
         $limit->setLimit($expression);
     }
 
-    public function testSetLimitAcceptsPHPInteger()
+    public function testSetLimitAcceptsPHPInteger(): void
     {
         $limit = new LimitClause();
         $limit->setLimit(10);
@@ -67,7 +68,7 @@ final class LimitClauseTest extends TestCase
         $this->assertSame($expression, $limit->getLimit());
     }
 
-    public function testSetLimitReturnsSameInstance()
+    public function testSetLimitReturnsSameInstance(): void
     {
         $limit = new LimitClause();
         $limit2 = $limit->setLimit(10);

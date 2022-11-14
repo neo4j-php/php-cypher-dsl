@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
- * Represents a comparison binary operator. These are:
+ * Represents a comparison binary operator. These are:.
  *
  * - "IS NULL"
  * - "IS NOT NULL"
@@ -28,6 +28,7 @@ abstract class ComparisonUnaryOperator extends UnaryOperator implements BooleanT
 
     /**
      * @inheritDoc
+     *
      * @param AnyType $expression The unary expression
      */
     public function __construct(AnyType $expression, bool $insertParentheses = true)

@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -45,8 +45,6 @@ final class StringTest extends TestCase
 
     /**
      * @dataProvider provideSingleQuotesData
-     * @param string $string
-     * @param string $expected
      */
     public function testSingleQuotes(string $string, string $expected): void
     {
@@ -60,8 +58,6 @@ final class StringTest extends TestCase
 
     /**
      * @dataProvider provideDoubleQuotesData
-     * @param string $string
-     * @param string $expected
      */
     public function testDoubleQuotes(string $string, string $expected): void
     {
@@ -93,7 +89,7 @@ final class StringTest extends TestCase
             ["\U00000000", "'\\\\U00000000'"],
             ["\Uffffffff", "'\\\\Uffffffff'"],
             ["\\\\b", "'\\\\\\\\b'"],
-            ["\t\n\\", "'\\t\\n\\\\'"]
+            ["\t\n\\", "'\\t\\n\\\\'"],
         ];
     }
 
@@ -117,7 +113,7 @@ final class StringTest extends TestCase
             ["\U00000000", "\"\\\\U00000000\""],
             ["\Uffffffff", "\"\\\\Uffffffff\""],
             ["\\\\b", "\"\\\\\\\\b\""],
-            ["\t\n\\", "\"\\t\\n\\\\\""]
+            ["\t\n\\", "\"\\t\\n\\\\\""],
         ];
     }
 }

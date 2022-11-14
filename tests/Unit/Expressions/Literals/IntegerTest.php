@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,6 @@ use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Literals\Integer
@@ -49,8 +48,8 @@ final class IntegerTest extends TestCase
 
     /**
      * @dataProvider provideToQueryData
-     * @param        $number
-     * @param string $expected
+     *
+     * @param $number
      */
     public function testToQuery($number, string $expected): void
     {
@@ -70,14 +69,14 @@ final class IntegerTest extends TestCase
             [-12, "-12"],
             [69, "69"],
             ["292922929312312831203129382304823043284234729847294324724982749274294729427429471230918457", "292922929312312831203129382304823043284234729847294324724982749274294729427429471230918457"],
-            ["-1238109438204130457284308235720483205", "-1238109438204130457284308235720483205"]
+            ["-1238109438204130457284308235720483205", "-1238109438204130457284308235720483205"],
         ];
     }
 
     /**
      * @dataProvider wrongInputProvider
      */
-    public function testWrongInput($input)
+    public function testWrongInput($input): void
     {
         $this->expectException(TypeError::class);
         new Integer($input);
@@ -86,10 +85,10 @@ final class IntegerTest extends TestCase
     public function wrongInputProvider(): array
     {
         return [
-             ['nonumber'],
-             ['12.3E36'],
-             ['0x86'],
-             ['5.5'],
+            ['nonumber'],
+            ['12.3E36'],
+            ['0x86'],
+            ['5.5'],
         ];
     }
 }

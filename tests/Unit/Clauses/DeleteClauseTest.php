@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021- Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -87,6 +87,7 @@ final class DeleteClauseTest extends TestCase
 
         $this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
         $delete->addStructure($variable);
         $delete->toQuery();
     }
@@ -111,10 +112,9 @@ final class DeleteClauseTest extends TestCase
         $variableA = new Variable('a');
         $variableB = $this->createMock(AnyType::class);
 
-        $variables = [$variableA, $variableB];
-
         $this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
         $delete->addStructure($variableA, $variableB);
         $delete->toQuery();
     }

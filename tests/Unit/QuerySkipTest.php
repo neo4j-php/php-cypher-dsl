@@ -10,26 +10,34 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Query;
 
 /**
- * Tests the "raw" method of the Query class.
+ * Tests the "skip" method of the Query class.
  *
  * @covers \WikibaseSolutions\CypherDSL\Query
  */
-final class QueryRawTest extends TestCase
+final class QuerySkipTest extends TestCase
 {
-    public function testClause(): void
+    public function testSkipLiteral(): void
     {
-        $query = Query::new()->raw('UNIMPLEMENTED', 'clause body');
+        $skip = Query::new()->skip(10)->toQuery();
 
-        $this->assertSame('UNIMPLEMENTED clause body', $query->toQuery());
+        $this->assertSame("SKIP 10", $skip);
+    }
+
+    public function testSkipInteger(): void
+    {
+        $skip = Query::new()->skip(Query::integer(10))->toQuery();
+
+        $this->assertSame("SKIP 10", $skip);
     }
 
     public function testReturnsSameInstance(): void
     {
         $expected = Query::new();
-        $actual = $expected->raw('UNIMPLEMENTED', 'body');
+        $actual = $expected->skip(10);
 
         $this->assertSame($expected, $actual);
     }

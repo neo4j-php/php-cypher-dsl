@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,9 +11,7 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Traits\PatternTraits\CompletePatternTrait;
 use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PatternTrait;
-use WikibaseSolutions\CypherDSL\Traits\PatternTraits\RelatablePatternTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
@@ -42,8 +40,9 @@ final class Path implements BooleanType, CompletePattern, RelatablePattern
     private array $nodes;
 
     /**
-     * @param Node|Node[] $nodes
+     * @param Node|Node[]                 $nodes
      * @param Relationship|Relationship[] $relationships
+     *
      * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct($nodes = [], $relationships = [])
@@ -181,12 +180,10 @@ final class Path implements BooleanType, CompletePattern, RelatablePattern
     /**
      * Construct a new relationship from the given parameters.
      *
-     * @param array $direction The direction of the relationship (should be a Relationship::DIR_* constant)
-     * @param string|null $type The type of the relationship
-     * @param array|MapType|null $properties The properties to add to the relationship
-     * @param string|Variable|null $name The name of the variable to which to assign this relationship
-     *
-     * @return Relationship
+     * @param array                $direction  The direction of the relationship (should be a Relationship::DIR_* constant)
+     * @param null|string          $type       The type of the relationship
+     * @param null|array|MapType   $properties The properties to add to the relationship
+     * @param null|string|Variable $name       The name of the variable to which to assign this relationship
      */
     private static function buildRelationship(array $direction, ?string $type = null, $properties = null, $name = null): Relationship
     {

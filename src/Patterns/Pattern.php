@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@ use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PatternTrait;
 
 /**
- * This class represents a pattern. A pattern can be:
+ * This class represents a pattern. A pattern can be:.
  *
  * - a node
  * - a path (alternating sequence of nodes and relationships)
@@ -38,15 +38,14 @@ interface Pattern extends QueryConvertible
     /**
      * Explicitly assign a named variable to this pattern.
      *
-     * @param Variable|string $variable
+     * @param string|Variable $variable
+     *
      * @return $this
      */
-    public function withVariable($variable): Pattern;
+    public function withVariable($variable): self;
 
     /**
      * Returns the variable of this pattern. This function generates a variable if none has been set.
-     *
-     * @return Variable
      */
     public function getVariable(): Variable;
 }

@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021- Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,6 +10,7 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\MatchClause;
 use WikibaseSolutions\CypherDSL\Clauses\OptionalMatchClause;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
@@ -48,7 +49,7 @@ final class OptionalMatchTest extends TestCase
         $this->assertSame("OPTIONAL MATCH (a), (b)", $match->toQuery());
     }
 
-    public function testMultiplePatternsSeparateFunctionCalls()
+    public function testMultiplePatternsSeparateFunctionCalls(): void
     {
         $patternA = Query::node()->withVariable('a');
         $patternB = Query::node()->withVariable('b');
@@ -60,7 +61,7 @@ final class OptionalMatchTest extends TestCase
         $this->assertSame("OPTIONAL MATCH (a), (b)", $match->toQuery());
     }
 
-    public function testMultiplePatternsMerge()
+    public function testMultiplePatternsMerge(): void
     {
         $patternA = Query::node()->withVariable('a');
         $patternB = Query::node()->withVariable('b');
@@ -74,7 +75,7 @@ final class OptionalMatchTest extends TestCase
         $this->assertSame("OPTIONAL MATCH (a), (b), (c), (d)", $match->toQuery());
     }
 
-    public function testAddPatternAcceptsAnyMatchablePattern()
+    public function testAddPatternAcceptsAnyMatchablePattern(): void
     {
         $node = Query::node();
 
@@ -88,18 +89,19 @@ final class OptionalMatchTest extends TestCase
         $this->assertSame('OPTIONAL MATCH (), ()-->()', $match->toQuery());
     }
 
-    public function testAddPatternDoesNotAcceptRelationship()
+    public function testAddPatternDoesNotAcceptRelationship(): void
     {
         $rel = Query::relationship(Relationship::DIR_LEFT);
 
         $match = new OptionalMatchClause();
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
 
+        // @phpstan-ignore-next-line
         $match->addPattern($rel);
     }
 
-    public function testAddPatternArrayUnpacking()
+    public function testAddPatternArrayUnpacking(): void
     {
         $patternA = Query::node()->withVariable('a');
         $patternB = Query::node()->withVariable('b');

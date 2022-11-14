@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021-  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -30,7 +30,7 @@ final class CallClause extends Clause
     use ErrorTrait;
 
     /**
-     * @var Query|null The subquery to call, or NULL if no subquery has been set yet
+     * @var null|Query The subquery to call, or NULL if no subquery has been set yet
      */
     private ?Query $subQuery = null;
 
@@ -43,6 +43,7 @@ final class CallClause extends Clause
      * Sets the query to call. This overwrites any previously set subquery.
      *
      * @param Query $subQuery The subquery to call
+     *
      * @return $this
      */
     public function withSubQuery(Query $subQuery): self
@@ -55,7 +56,8 @@ final class CallClause extends Clause
     /**
      * Add one or more variables to include in the WITH clause.
      *
-     * @param Variable|Pattern|string ...$variables
+     * @param Pattern|string|Variable ...$variables
+     *
      * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/#subquery-correlated-importing
@@ -76,8 +78,6 @@ final class CallClause extends Clause
     /**
      * Returns the query that is being called. This query does not include the WITH clause that is inserted
      * if there are any correlated variables.
-     *
-     * @return Query|null
      */
     public function getSubQuery(): ?Query
     {

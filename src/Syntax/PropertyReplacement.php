@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -27,7 +27,7 @@ final class PropertyReplacement implements QueryConvertible
     use ErrorTrait;
 
     /**
-     * @var Variable|Property The name of the property to which we assign a (new) value
+     * @var Property|Variable The name of the property to which we assign a (new) value
      */
     private $property;
 
@@ -44,8 +44,9 @@ final class PropertyReplacement implements QueryConvertible
     /**
      * PropertyReplacement constructor.
      *
-     * @param Variable|Property $property The property or variable to assign a value to
-     * @param AnyType $value The value to assign to the property
+     * @param Property|Variable $property The property or variable to assign a value to
+     * @param AnyType           $value    The value to assign to the property
+     *
      * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct($property, AnyType $value)
@@ -60,7 +61,6 @@ final class PropertyReplacement implements QueryConvertible
      * Whether to use the property mutation instead of the property replacement
      * operator.
      *
-     * @param bool $mutate
      * @return $this
      */
     public function setMutate(bool $mutate = true): self
@@ -72,8 +72,6 @@ final class PropertyReplacement implements QueryConvertible
 
     /**
      * Returns whether the assignment uses property mutation instead of replacement.
-     *
-     * @return bool
      */
     public function mutates(): bool
     {

@@ -1,5 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
+/*
+ * This file is part of php-cypher-dsl.
+ *
+ * Copyright (C) Wikibase Solutions
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace WikibaseSolutions\CypherDSL\Traits\PatternTraits;
 
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
@@ -16,14 +23,15 @@ trait PatternTrait
     use CastTrait;
 
     /**
-     * @var Variable|null The variable that this object is assigned
+     * @var null|Variable The variable that this object is assigned
      */
     protected ?Variable $variable = null;
 
     /**
      * Explicitly assign a named variable to this object.
      *
-     * @param Variable|string $variable
+     * @param string|Variable $variable
+     *
      * @return $this
      */
     public function withVariable($variable): self
@@ -35,8 +43,6 @@ trait PatternTrait
 
     /**
      * Returns the variable of this object. This function generates a variable if none has been set.
-     *
-     * @return Variable
      */
     public function getVariable(): Variable
     {

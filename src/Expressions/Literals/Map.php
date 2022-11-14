@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
  * This class represents a CYPHER map. For example, this class can represent the following
- * construct:
+ * construct:.
  *
  * {name: 'Andy', sport: 'Brazilian Ju-Jitsu'}
  *
@@ -28,8 +28,8 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  */
 final class Map implements MapType
 {
-    use EscapeTrait;
     use ErrorTrait;
+    use EscapeTrait;
     use MapTypeTrait;
 
     /**
@@ -39,6 +39,7 @@ final class Map implements MapType
 
     /**
      * @param AnyType[] $elements Associative array of the elements that this map should have
+     *
      * @internal This method is not covered by the backwards compatibility promise of php-cypher-dsl
      */
     public function __construct(array $elements = [])
@@ -50,8 +51,9 @@ final class Map implements MapType
     /**
      * Adds an element for the given name with the given value. Overrides the element if the $key already exists.
      *
-     * @param string $key The name/label for the element
-     * @param mixed $value The value of the element
+     * @param string $key   The name/label for the element
+     * @param mixed  $value The value of the element
+     *
      * @return $this
      */
     public function add(string $key, $value): self
@@ -65,9 +67,10 @@ final class Map implements MapType
      * Merges the given map with this map.
      *
      * @param Map $map The map to merge
+     *
      * @return $this
      */
-    public function mergeWith(Map $map): self
+    public function mergeWith(self $map): self
     {
         $this->elements = array_merge($this->elements, $map->getElements());
 
@@ -85,9 +88,7 @@ final class Map implements MapType
     }
 
     /**
-     * Checks if this map is empty
-     *
-     * @return bool
+     * Checks if this map is empty.
      */
     public function isEmpty(): bool
     {
@@ -102,7 +103,7 @@ final class Map implements MapType
         $pairs = [];
 
         foreach ($this->elements as $key => $value) {
-            $pairs[] = sprintf("%s: %s", $this->escape(strval($key)), $value->toQuery());
+            $pairs[] = sprintf("%s: %s", $this->escape((string) $key), $value->toQuery());
         }
 
         return sprintf("{%s}", implode(", ", $pairs));

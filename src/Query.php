@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -29,7 +29,6 @@ use WikibaseSolutions\CypherDSL\Clauses\UnionClause;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
 use WikibaseSolutions\CypherDSL\Expressions\Exists;
-use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
@@ -39,6 +38,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Parameter;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
@@ -54,7 +54,6 @@ use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
@@ -62,29 +61,24 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
  */
 final class Query implements QueryConvertible
 {
-    use EscapeTrait;
-    use ErrorTrait;
     use CastTrait;
+    use ErrorTrait;
+    use EscapeTrait;
 
     // A reference to the Literal class
     public const literal = Literal::class;
 
-    // A reference to the FunctionCall class
-    public const function = Procedure::class;
+    // A reference to the Procedure class
+    // @deprecated
+    public const function = self::procedure;
+
+    // A reference to the Procedure class
+    public const procedure = Procedure::class;
 
     /**
-     * @var Clause[] $clauses Ordered list of clauses for this query
+     * @var Clause[] Ordered list of clauses for this query
      */
     private array $clauses = [];
-
-    /**
-     * @see Query::new()
-     * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
-     */
-    public function __construct()
-    {
-        // This constructor currently does nothing, but we still define it, so we can mark it as internal
-    }
 
     /**
      * Construct a new Query instance.
@@ -93,18 +87,17 @@ final class Query implements QueryConvertible
      */
     public static function new(): self
     {
-        return new Query();
+        return new self();
     }
 
     /**
      * Creates a node.
      *
-     * @param string|null $label The label to give to the node
+     * @param null|string $label The label to give to the node
      *
-     * @return Node
      * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
      */
-    public static function node(string $label = null): Node
+    public static function node(?string $label = null): Node
     {
         return new Node($label);
     }
@@ -112,12 +105,11 @@ final class Query implements QueryConvertible
     /**
      * Creates a relationship.
      *
-     * @param array $direction The direction of the relationship, should be either:
-     *  - Path::DIR_RIGHT (for a relation of (a)-->(b))
-     *  - Path::DIR_LEFT (for a relation of (a)<--(b))
-     *  - Path::DIR_UNI (for a relation of (a)--(b))
+     * @param string[] $direction The direction of the relationship, should be either:
+     *                            - Path::DIR_RIGHT (for a relation of (a)-->(b))
+     *                            - Path::DIR_LEFT (for a relation of (a)<--(b))
+     *                            - Path::DIR_UNI (for a relation of (a)--(b))
      *
-     * @return Relationship
      * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
      */
     public static function relationship(array $direction): Relationship
@@ -128,8 +120,7 @@ final class Query implements QueryConvertible
     /**
      * Creates a new variable with the given name, or generates a new variable with a random unique name.
      *
-     * @param string|null $variable The name of the variable; leave empty to automatically generate a variable name.
-     * @return Variable
+     * @param null|string $variable the name of the variable; leave empty to automatically generate a variable name
      */
     public static function variable(?string $variable = null): Variable
     {
@@ -185,9 +176,10 @@ final class Query implements QueryConvertible
      *  Query::list() - For a list
      *  Query::map() - For a map
      *
-     * @param string|int|float|bool|array|null $literal The literal to construct
-     * @return String_|Boolean|Float_|Integer|Map|List_|Literal|string The string literal that was created (or a
-     *  reference to the Literal class)
+     * @param null|bool|float|int|mixed[]|string $literal The literal to construct
+     *
+     * @return Boolean|Float_|Integer|List_|Literal|Map|string|String_ The string literal that was created (or a
+     *                                                                 reference to the Literal class)
      */
     public static function literal($literal = null)
     {
@@ -200,75 +192,61 @@ final class Query implements QueryConvertible
 
     /**
      * Creates a new boolean.
-     *
-     * @param bool $value
-     * @return Boolean
      */
     public static function boolean(bool $value): Boolean
     {
-        return self::literal()::boolean($value);
+        return Literal::boolean($value);
     }
 
     /**
      * Creates a new string.
-     *
-     * @param string $value
-     * @return String_
      */
     public static function string(string $value): String_
     {
-        return self::literal()::string($value);
+        return Literal::string($value);
     }
 
     /**
      * Creates a new integer.
-     *
-     * @param int $value
-     * @return Integer
      */
     public static function integer(int $value): Integer
     {
-        return self::literal()::integer($value);
+        return Literal::integer($value);
     }
 
     /**
      * Creates a new float.
-     *
-     * @param float $value
-     * @return Float_
      */
     public static function float(float $value): Float_
     {
-        return self::literal()::float($value);
+        return Literal::float($value);
     }
 
     /**
      * Creates a new list literal.
      *
-     * @param array $value
-     * @return List_
+     * @param mixed[] $value
      */
     public static function list(iterable $value): List_
     {
-        return self::literal()::list($value);
+        return Literal::list($value);
     }
 
     /**
      * Creates a new map literal.
      *
-     * @param array $value
-     * @return Map
+     * @param mixed[] $value
      */
     public static function map(array $value): Map
     {
-        return self::literal()::map($value);
+        return Literal::map($value);
     }
 
     /**
      * Creates a parameter.
      *
-     * @param string|null $parameter The name of the parameter; may only consist of alphanumeric characters and underscores
-     * @return Parameter
+     * @param null|string $parameter The name of the parameter; may only consist of alphanumeric characters and
+     *                               underscores
      */
     public static function parameter(?string $parameter = null): Parameter
     {
@@ -276,22 +254,27 @@ final class Query implements QueryConvertible
     }
 
     /**
-     * Returns the name of the Func class. This can be used to more easily create new functions calls, like so:
+     * Returns the name of the Func class. This can be used to more easily create new functions calls, like so:.
      *
      * Query::function()::raw(...)
      *
-     * @return string|Procedure
+     * @return class-string<Procedure>
+     * @deprecated Use Query::procedure() instead
      */
     public static function function(): string
     {
-        return self::function;
+        return self::procedure;
+    }
+
+    public static function procedure(): string
+    {
+        return self::procedure;
     }
 
     /**
      * Creates a raw expression.
      *
      * @param string $expression The raw expression
-     * @return RawExpression
      */
     public static function rawExpression(string $expression): RawExpression
     {
@@ -302,9 +285,7 @@ final class Query implements QueryConvertible
      * Creates an EXISTS expression.
      *
      * @param CompletePattern|CompletePattern[]|MatchClause $match
-     * @param BooleanType|WhereClause|null $where
-     * @param bool $insertParentheses
-     * @return Exists
+     * @param null|BooleanType|WhereClause                  $where
      */
     public static function exists($match, $where = null, bool $insertParentheses = false): Exists
     {
@@ -321,12 +302,31 @@ final class Query implements QueryConvertible
     }
 
     /**
+     * @see Query::new()
+     *
+     * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
+     */
+    public function __construct()
+    {
+        // This constructor currently does nothing, but we still define it, so we can mark it as internal. We could
+        // make it private, but people might assume the class should not be constructed at all.
+    }
+
+    /**
+     * Automatically build the query if this object is used as a string somewhere.
+     */
+    public function __toString(): string
+    {
+        return $this->build();
+    }
+
+    /**
      * Creates a CALL sub query clause and adds it to the query.
      *
      * @note This feature is not part of the openCypher standard. For more information, see https://github.com/opencypher/openCypher/blob/a507292d35280aca9e37bf938cdec4fdd1e64ba9/docs/standardisation-scope.adoc.
      *
-     * @param Query|callable(Query):void $query A callable decorating a query, or the actual sub-query
-     * @param Variable|Pattern|string|Variable[]|Pattern[]|string[] $variables The variables to include in the WITH clause for correlation
+     * @param callable(Query):void|Query                            $query     A callable decorating a query, or the actual sub-query
+     * @param Pattern|Pattern[]|string|string[]|Variable|Variable[] $variables The variables to include in the WITH clause for correlation
      *
      * @return $this
      *
@@ -334,7 +334,7 @@ final class Query implements QueryConvertible
      */
     public function call($query = null, $variables = []): self
     {
-        $this->assertClass('query', [Query::class, Closure::class, 'callable'], $query);
+        $this->assertClass('query', [self::class, Closure::class, 'callable'], $query);
 
         if (is_callable($query)) {
             $subQuery = self::new();
@@ -411,8 +411,8 @@ final class Query implements QueryConvertible
     /**
      * Creates the RETURN clause.
      *
-     * @param AnyType|Alias|Pattern|int|float|string|bool|array|AnyType[]|Alias[]|Pattern[]|int[]|float[]|string[]|bool[] $expressions The expressions to return
-     * @param bool $distinct Whether to be a RETURN DISTINCT query
+     * @param Alias|Alias[]|AnyType|AnyType[]|array|bool|bool[]|float|float[]|int|int[]|Pattern|Pattern[]|string|string[] $expressions The expressions to return
+     * @param bool                                                                                                        $distinct    Whether to be a RETURN DISTINCT query
      *
      * @return $this
      *
@@ -455,7 +455,7 @@ final class Query implements QueryConvertible
 
         $createClause = new CreateClause();
         $createClause->addPattern(...$patterns);
-        
+
         $this->clauses[] = $createClause;
 
         return $this;
@@ -464,10 +464,11 @@ final class Query implements QueryConvertible
     /**
      * Creates the DELETE clause.
      *
-     * @param StructuralType|Pattern|StructuralType[]|Pattern[] $structures The structures to delete
-     * @param bool $detach Whether to DETACH DELETE
+     * @param Pattern|Pattern[]|StructuralType|StructuralType[] $structures The structures to delete
+     * @param bool                                              $detach     Whether to DETACH DELETE
      *
      * @return $this
+     *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
      * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 105)
      */
@@ -480,7 +481,7 @@ final class Query implements QueryConvertible
         $deleteClause = new DeleteClause();
         $deleteClause->setDetach($detach);
         $deleteClause->addStructure(...$structures);
-        
+
         $this->clauses[] = $deleteClause;
 
         return $this;
@@ -489,9 +490,10 @@ final class Query implements QueryConvertible
     /**
      * Creates the DETACH DELETE clause.
      *
-     * @param StructuralType|Pattern|StructuralType[]|Pattern[] $structures The variables to delete, including nodes, relationships and paths
+     * @param Pattern|Pattern[]|StructuralType|StructuralType[] $structures The variables to delete, including nodes, relationships and paths
      *
      * @return $this
+     *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
      * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 105)
      * @deprecated Use Query::delete(..., true) instead
@@ -504,7 +506,7 @@ final class Query implements QueryConvertible
     /**
      * Adds a LIMIT clause.
      *
-     * @param NumeralType|int $limit The amount to use as the limit
+     * @param int|IntegerType $limit The amount to use as the limit
      *
      * @return $this
      *
@@ -524,7 +526,7 @@ final class Query implements QueryConvertible
     /**
      * Creates the SKIP clause.
      *
-     * @param IntegerType|int $amount The amount to skip
+     * @param int|IntegerType $amount The amount to skip
      *
      * @return $this
      *
@@ -544,16 +546,16 @@ final class Query implements QueryConvertible
     /**
      * Creates the MERGE clause.
      *
-     * @param CompletePattern $pattern The pattern to merge
-     * @param SetClause|null $createClause The clause to execute when the pattern is created
-     * @param SetClause|null $matchClause The clause to execute when the pattern is matched
+     * @param CompletePattern $pattern      The pattern to merge
+     * @param null|SetClause  $createClause The clause to execute when the pattern is created
+     * @param null|SetClause  $matchClause  The clause to execute when the pattern is matched
      *
      * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/
      * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 115)
      */
-    public function merge(CompletePattern $pattern, SetClause $createClause = null, SetClause $matchClause = null): self
+    public function merge(CompletePattern $pattern, ?SetClause $createClause = null, ?SetClause $matchClause = null): self
     {
         $mergeClause = new MergeClause();
         $mergeClause->setPattern($pattern);
@@ -593,7 +595,7 @@ final class Query implements QueryConvertible
      * Creates the ORDER BY clause.
      *
      * @param Property|Property[] $properties A single property or a list of properties
-     * @param bool $descending Whether to order in descending order
+     * @param bool                $descending Whether to order in descending order
      *
      * @return $this
      *
@@ -618,7 +620,7 @@ final class Query implements QueryConvertible
     /**
      * Creates the REMOVE clause.
      *
-     * @param Property|Label|Property[]|Label[] $expressions The expressions to remove (should either be a Node or a Property)
+     * @param Label|Label[]|Property|Property[] $expressions The expressions to remove (should either be a Node or a Property)
      *
      * @return $this
      *
@@ -642,7 +644,7 @@ final class Query implements QueryConvertible
     /**
      * Create the SET clause.
      *
-     * @param PropertyReplacement|Label|PropertyReplacement[]|Label[] $expressions A single expression or a list of expressions
+     * @param Label|Label[]|PropertyReplacement|PropertyReplacement[] $expressions A single expression or a list of expressions
      *
      * @return $this
      *
@@ -666,9 +668,9 @@ final class Query implements QueryConvertible
     /**
      * Creates the WHERE clause.
      *
-     * @param BooleanType|bool|BooleanType[]|bool[] $expressions The expression to match
-     * @param string $operator The operator with which to unify the given expressions, should be either WhereClause::OR,
-     *  WhereClause::AND or WhereClause::XOR
+     * @param bool|bool[]|BooleanType|BooleanType[] $expressions The expression to match
+     * @param string                                $operator    The operator with which to unify the given expressions, should be either WhereClause::OR,
+     *                                                           WhereClause::AND or WhereClause::XOR
      *
      * @return $this
      *
@@ -695,7 +697,7 @@ final class Query implements QueryConvertible
     /**
      * Creates the WITH clause.
      *
-     * @param AnyType|Alias|Pattern|int|float|string|bool|array|AnyType[]|Alias[]|Pattern[]|int[]|float[]|string[]|bool[]|array[] $expressions The entries to add; if the array-key is non-numerical, it is used as the alias
+     * @param Alias|Alias[]|AnyType|AnyType[]|array|array[]|bool|bool[]|float|float[]|int|int[]|Pattern|Pattern[]|string|string[] $expressions The entries to add; if the array-key is non-numerical, it is used as the alias
      *
      * @return $this
      *
@@ -721,7 +723,7 @@ final class Query implements QueryConvertible
     /**
      * Creates a raw clause. This should only be used for features that are not implemented by the DSL.
      *
-     * @param string $clause The name of the clause; for instance "MATCH"
+     * @param string $clause  The name of the clause; for instance "MATCH"
      * @param string $subject The subject/body of the clause
      *
      * @return $this
@@ -736,8 +738,8 @@ final class Query implements QueryConvertible
     /**
      * Combines the result of this query with another one via a UNION clause.
      *
-     * @param Query|callable(Query):void $queryOrCallable The callable decorating a fresh query instance or the query instance to be attached after the union clause.
-     * @param bool $all Whether the union should include all results or remove the duplicates instead.
+     * @param callable(Query):void|Query $queryOrCallable the callable decorating a fresh query instance or the query instance to be attached after the union clause
+     * @param bool                       $all             whether the union should include all results or remove the duplicates instead
      *
      * @return $this
      *
@@ -747,7 +749,7 @@ final class Query implements QueryConvertible
     public function union($queryOrCallable, bool $all = false): self
     {
         if (is_callable($queryOrCallable)) {
-            $query = Query::new();
+            $query = self::new();
             $queryOrCallable($query);
         } else {
             $query = $queryOrCallable;
@@ -797,15 +799,17 @@ final class Query implements QueryConvertible
     public function build(): string
     {
         $builtClauses = array_map(
-            fn (Clause $clause): string => $clause->toQuery(),
+            static fn (Clause $clause): string => $clause->toQuery(),
             $this->clauses
         );
 
         // Filter any empty clauses to prevent double spaces
-        return implode(" ", array_filter($builtClauses, fn ($clause) => !empty($clause)));
+        return implode(" ", array_filter($builtClauses, static fn ($clause) => !empty($clause)));
     }
 
     /**
+     * Alias of $this->build().
+     *
      * @inheritDoc
      */
     public function toQuery(): string
@@ -814,23 +818,14 @@ final class Query implements QueryConvertible
     }
 
     /**
-     * Automatically build the query if this object is used as a string somewhere.
-     *
-     * @return string
-     */
-    public function __toString(): string
-    {
-        return $this->build();
-    }
-
-    /**
      * Changes an associative array into an array of aliases.
      *
-     * @param mixed[] $values The array to change into an array of aliases
+     * @param mixed[]  $values   The array to change into an array of aliases
      * @param callable $castFunc Function to use to cast the elements of $array
+     *
      * @return mixed[] A sequential array, possibly consisting of aliases
      */
-    private function makeAliasArray(array $values, callable $castFunc): array
+    private static function makeAliasArray(array $values, callable $castFunc): array
     {
         $res = [];
 
@@ -841,7 +836,7 @@ final class Query implements QueryConvertible
                 $res[] = $value->alias($key);
             } else {
                 // If key is numeric, keep value unchanged.
-                $res []= $value;
+                $res[]= $value;
             }
         }
 

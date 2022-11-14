@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -28,7 +28,8 @@ abstract class BinaryOperator extends Operator
 
     /**
      * @inheritDoc
-     * @param AnyType $left The left-hand of the expression
+     *
+     * @param AnyType $left  The left-hand of the expression
      * @param AnyType $right The right-hand of the expression
      */
     public function __construct(AnyType $left, AnyType $right, bool $insertParentheses = true)
@@ -41,8 +42,6 @@ abstract class BinaryOperator extends Operator
 
     /**
      * Gets the left-hand of the expression.
-     *
-     * @return AnyType
      */
     public function getLeft(): AnyType
     {
@@ -51,8 +50,6 @@ abstract class BinaryOperator extends Operator
 
     /**
      * Gets the right-hand of the expression.
-     *
-     * @return AnyType
      */
     public function getRight(): AnyType
     {
@@ -69,8 +66,6 @@ abstract class BinaryOperator extends Operator
 
     /**
      * Returns the operator. For instance, this function would return "-" for the minus operator.
-     *
-     * @return string
      */
     abstract protected function getOperator(): string;
 }

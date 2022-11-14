@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,11 +11,8 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\PatternTraits;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Patterns\PropertyPattern;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PatternTrait;
 use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PropertyPatternTrait;
 
 /**
@@ -25,7 +22,7 @@ final class PropertyPatternTraitTest extends TestCase
 {
     private $stub;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->stub = $this->getMockForTrait(PropertyPatternTrait::class);
     }
@@ -119,7 +116,8 @@ final class PropertyPatternTraitTest extends TestCase
      */
     public function testImplementsPatternCompletely(): void
     {
-        new class implements PropertyPattern {
+        new class implements PropertyPattern
+        {
             use PropertyPatternTrait;
 
             public function toQuery(): string

@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -55,7 +55,7 @@ final class FloatTest extends TestCase
             [1, '1.0'],
             [1.0, '1.0'],
             [111111111111111, '1.1111111111111E+14'],
-            [1337.1337, '1337.1337']
+            [1337.1337, '1337.1337'],
         ];
     }
 }

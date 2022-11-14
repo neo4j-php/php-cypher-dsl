@@ -2,38 +2,39 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021-  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
-use TypeError;
+use Iterator;
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Clauses\Clause;
+use ReturnTypeWillChange;
+use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\RawClause;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
-use WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThan;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
+use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThan;
 use WikibaseSolutions\CypherDSL\Expressions\Parameter;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
@@ -73,9 +74,9 @@ class QueryTest extends TestCase
 
     public function testVariable(): void
     {
-		$variable = Query::variable("foo");
+        $variable = Query::variable("foo");
         $this->assertInstanceOf(Variable::class, $variable);
-		$this->assertSame("foo", $variable->getName());
+        $this->assertSame("foo", $variable->getName());
     }
 
     public function testVariableEmpty(): void
@@ -92,8 +93,8 @@ class QueryTest extends TestCase
 
     /**
      * @dataProvider provideLiteralData
-     * @param        $literal
-     * @param PropertyType $expected
+     *
+     * @param mixed $literal
      */
     public function testLiteral($literal, PropertyType $expected): void
     {
@@ -102,11 +103,54 @@ class QueryTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testBoolean(): void
+    {
+        $actual = Query::boolean(true);
+
+        $this->assertEquals(new Boolean(true), $actual);
+    }
+
+    public function testInteger(): void
+    {
+        $actual = Query::integer(10);
+
+        $this->assertEquals(new Integer(10), $actual);
+    }
+
     public function testList(): void
     {
         $list = Query::list([]);
 
         $this->assertInstanceOf(List_::class, $list);
+    }
+
+    public function testFunction(): void
+    {
+        $function = Query::function();
+
+        $this->assertSame(Query::procedure(), $function);
+    }
+
+    public function testProcedure(): void
+    {
+        $procedure = Query::procedure();
+
+        $this->assertSame(Procedure::class, $procedure);
+    }
+
+    public function testRawExpression(): void
+    {
+        $rawExpression = Query::rawExpression('UNIMPLEMENTED');
+
+        $this->assertEquals(new RawExpression('UNIMPLEMENTED'), $rawExpression);
+    }
+
+    public function testToString(): void
+    {
+        $query = Query::new()->skip(10);
+
+        $this->assertSame('SKIP 10', $query->__toString());
+        $this->assertSame('SKIP 10', (string)$query);
     }
 
     public function testListOfLiterals(): void
@@ -142,31 +186,28 @@ class QueryTest extends TestCase
 
     public function testIteratorList(): void
     {
-        $iterator = new class () implements \Iterator {
+        $iterator = new class() implements Iterator
+        {
             private int $count = 0;
 
-            #[\ReturnTypeWillChange]
-            public function current()
+            public function current(): int
             {
                 return 1;
             }
 
-            #[\ReturnTypeWillChange]
-            public function next()
+            public function next(): int
             {
                 $this->count++;
 
                 return 1;
             }
 
-            #[\ReturnTypeWillChange]
-            public function key()
+            public function key(): int
             {
                 return 0;
             }
 
-            #[\ReturnTypeWillChange]
-            public function valid()
+            public function valid(): bool
             {
                 // In order to avoid an infinite loop
                 return $this->count < 10;
@@ -185,7 +226,9 @@ class QueryTest extends TestCase
     public function testInvalidList(): void
     {
         $this->expectException(TypeError::class);
-        Query::list([new class () {}]);
+        Query::list([new class()
+        {
+        }, ]);
     }
 
     public function testMap(): void
@@ -193,14 +236,6 @@ class QueryTest extends TestCase
         $map = Query::map([]);
 
         $this->assertInstanceOf(Map::class, $map);
-    }
-
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testFunction(): void
-    {
-        Query::function()::raw("test", []);
     }
 
     public function testAddClause(): void
@@ -214,7 +249,7 @@ class QueryTest extends TestCase
     public function testBuild(): void
     {
         $withClause = (new WithClause)->addEntry(new Variable("foobar"));
-        $whereClause = (new WhereClause)->addExpression(new Label(new Variable("foo"),"bar"));
+        $whereClause = (new WhereClause)->addExpression(new Label(new Variable("foo"), "bar"));
 
         $query = new Query();
         $query->addClause($withClause)->addClause($whereClause);
@@ -261,46 +296,64 @@ class QueryTest extends TestCase
     public function testInt(): void
     {
         $literal = Query::literal(1);
-        self::assertInstanceOf(Integer::class, $literal);
-        self::assertEquals('1', $literal->toQuery());
+        $this->assertInstanceOf(Integer::class, $literal);
+        $this->assertEquals('1', $literal->toQuery());
+    }
+
+    public function testFloatLiteral(): void
+    {
+        $literal = Query::literal(1.2);
+        $this->assertInstanceOf(Float_::class, $literal);
+        $this->assertEquals('1.2', $literal->toQuery());
     }
 
     public function testFloat(): void
     {
-        $literal = Query::literal(1.2);
-        self::assertInstanceOf(Float_::class, $literal);
-        self::assertEquals('1.2', $literal->toQuery());
+        $float = Query::float(1.0);
+
+        $this->assertSame(new Float_(1.0), $float);
+    }
+
+    public function testStringLiteral(): void
+    {
+        $literal = Query::literal('abc');
+        $this->assertInstanceOf(String_::class, $literal);
+        $this->assertEquals("'abc'", $literal->toQuery());
     }
 
     public function testString(): void
     {
-        $literal = Query::literal('abc');
-        self::assertInstanceOf(String_::class, $literal);
-        self::assertEquals("'abc'", $literal->toQuery());
+        $string = Query::string('foo');
+
+        $this->assertSame(new String_('foo'), $string);
     }
 
     public function testStringAble(): void
     {
-        $literal = Query::literal(new class () {
+        // @phpstan-ignore-next-line
+        $literal = Query::literal(new class()
+        {
             public function __toString(): string
             {
                 return 'stringable abc';
             }
         });
-        self::assertInstanceOf(String_::class, $literal);
-        self::assertEquals("'stringable abc'", $literal->toQuery());
+        $this->assertInstanceOf(String_::class, $literal);
+        $this->assertEquals("'stringable abc'", $literal->toQuery());
     }
 
     public function testBool(): void
     {
         $literal = Query::literal(true);
-        self::assertInstanceOf(Boolean::class, $literal);
-        self::assertEquals("true", $literal->toQuery());
+        $this->assertInstanceOf(Boolean::class, $literal);
+        $this->assertEquals("true", $literal->toQuery());
     }
 
     public function testInvalidLiteral(): void
     {
         $this->expectException(TypeError::class);
+
+        // @phpstan-ignore-next-line
         Query::literal(Query::literal(true));
     }
 
@@ -331,6 +384,14 @@ class QueryTest extends TestCase
         $this->assertInstanceOf(Variable::class, $node->getVariable());
     }
 
+    public function testExists(): void
+    {
+
+    }
+
+    /**
+     * @return mixed[][]
+     */
     public function provideLiteralData(): array
     {
         return [

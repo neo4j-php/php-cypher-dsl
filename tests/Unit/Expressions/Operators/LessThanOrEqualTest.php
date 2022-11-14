@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,17 +10,14 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
-use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThanOrEqual;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThanOrEqual;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\LessThanOrEqual
  */
 class LessThanOrEqualTest extends TestCase
 {
-
     public function testToQuery(): void
     {
         $lessThanOrEqual = new LessThanOrEqual(new Integer(10), new Integer(15));

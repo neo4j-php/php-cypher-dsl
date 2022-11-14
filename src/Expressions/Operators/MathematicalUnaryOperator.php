@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
- * Represents a mathematical unary operator. These are:
+ * Represents a mathematical unary operator. These are:.
  *
  * - unary minus: "-"
  *
@@ -28,6 +28,7 @@ abstract class MathematicalUnaryOperator extends UnaryOperator implements FloatT
 
     /**
      * @inheritDoc
+     *
      * @param NumeralType $expression The unary expression
      */
     public function __construct(NumeralType $expression, bool $insertParentheses = true)

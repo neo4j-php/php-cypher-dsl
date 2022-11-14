@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021-  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,7 +11,6 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
@@ -19,11 +18,9 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Patterns\Node;
-use WikibaseSolutions\CypherDSL\Patterns\Relationship;
-use WikibaseSolutions\CypherDSL\Query;
 use function WikibaseSolutions\CypherDSL\float;
 use function WikibaseSolutions\CypherDSL\function_;
 use function WikibaseSolutions\CypherDSL\integer;
@@ -31,6 +28,9 @@ use function WikibaseSolutions\CypherDSL\list_;
 use function WikibaseSolutions\CypherDSL\literal;
 use function WikibaseSolutions\CypherDSL\map;
 use function WikibaseSolutions\CypherDSL\node;
+use WikibaseSolutions\CypherDSL\Patterns\Node;
+use WikibaseSolutions\CypherDSL\Patterns\Relationship;
+use WikibaseSolutions\CypherDSL\Query;
 use function WikibaseSolutions\CypherDSL\query;
 use function WikibaseSolutions\CypherDSL\raw;
 use function WikibaseSolutions\CypherDSL\relationship;
@@ -159,90 +159,90 @@ final class FunctionsTest extends TestCase
         string([]);
     }
 
-	public function testIntegerReturnsInteger(): void
-	{
-		$integer = integer(1);
+    public function testIntegerReturnsInteger(): void
+    {
+        $integer = integer(1);
 
-		$this->assertInstanceOf(Integer::class, $integer);
-		$this->assertSame("1", $integer->toQuery());
-	}
+        $this->assertInstanceOf(Integer::class, $integer);
+        $this->assertSame("1", $integer->toQuery());
+    }
 
-	public function testIntegerOnlyAcceptsInteger(): void
-	{
-		$this->expectException(TypeError::class);
-
-        // @phpstan-ignore-next-line
-		integer([]);
-	}
-
-	public function testFloatReturnsFloat(): void
-	{
-		$float = float(1.1);
-
-		$this->assertInstanceOf(Float_::class, $float);
-		$this->assertSame("1.1", $float->toQuery());
-	}
-
-	public function testFloatOnlyAcceptsFloat(): void
-	{
-		$this->expectException(TypeError::class);
+    public function testIntegerOnlyAcceptsInteger(): void
+    {
+        $this->expectException(TypeError::class);
 
         // @phpstan-ignore-next-line
-		float([]);
-	}
+        integer([]);
+    }
 
-	public function testListReturnsList(): void
-	{
-		$list = list_(['a', 'b', 'c']);
+    public function testFloatReturnsFloat(): void
+    {
+        $float = float(1.1);
 
-		$this->assertInstanceOf(List_::class, $list);
-		$this->assertSame("['a', 'b', 'c']", $list->toQuery());
-	}
+        $this->assertInstanceOf(Float_::class, $float);
+        $this->assertSame("1.1", $float->toQuery());
+    }
 
-	public function testListOnlyAcceptsArray(): void
-	{
-		$this->expectException(TypeError::class);
-
-        // @phpstan-ignore-next-line
-		list_(1);
-	}
-
-	public function testMapReturnsMap(): void
-	{
-		$map = map(['a' => 'b', 'c' => 'd']);
-
-		$this->assertInstanceOf(Map::class, $map);
-		$this->assertSame("{a: 'b', c: 'd'}", $map->toQuery());
-	}
-
-	public function testMapOnlyAcceptsArray(): void
-	{
-		$this->expectException(TypeError::class);
+    public function testFloatOnlyAcceptsFloat(): void
+    {
+        $this->expectException(TypeError::class);
 
         // @phpstan-ignore-next-line
-		map(1);
-	}
+        float([]);
+    }
 
-	public function testFunctionReturnsFuncClass(): void
-	{
-		$function = function_();
+    public function testListReturnsList(): void
+    {
+        $list = list_(['a', 'b', 'c']);
 
-		$this->assertSame(Procedure::class, $function);
-	}
+        $this->assertInstanceOf(List_::class, $list);
+        $this->assertSame("['a', 'b', 'c']", $list->toQuery());
+    }
 
-	public function testRawReturnsRawExpression(): void
-	{
-		$raw = raw('(unimplemented feature)');
-
-		$this->assertInstanceOf(RawExpression::class, $raw);
-		$this->assertSame('(unimplemented feature)', $raw->toQuery());
-	}
-
-	public function testRawOnlyAcceptsString(): void
-	{
-		$this->expectException(TypeError::class);
+    public function testListOnlyAcceptsArray(): void
+    {
+        $this->expectException(TypeError::class);
 
         // @phpstan-ignore-next-line
-		raw([]);
-	}
+        list_(1);
+    }
+
+    public function testMapReturnsMap(): void
+    {
+        $map = map(['a' => 'b', 'c' => 'd']);
+
+        $this->assertInstanceOf(Map::class, $map);
+        $this->assertSame("{a: 'b', c: 'd'}", $map->toQuery());
+    }
+
+    public function testMapOnlyAcceptsArray(): void
+    {
+        $this->expectException(TypeError::class);
+
+        // @phpstan-ignore-next-line
+        map(1);
+    }
+
+    public function testFunctionReturnsFuncClass(): void
+    {
+        $function = function_();
+
+        $this->assertSame(Procedure::class, $function);
+    }
+
+    public function testRawReturnsRawExpression(): void
+    {
+        $raw = raw('(unimplemented feature)');
+
+        $this->assertInstanceOf(RawExpression::class, $raw);
+        $this->assertSame('(unimplemented feature)', $raw->toQuery());
+    }
+
+    public function testRawOnlyAcceptsString(): void
+    {
+        $this->expectException(TypeError::class);
+
+        // @phpstan-ignore-next-line
+        raw([]);
+    }
 }

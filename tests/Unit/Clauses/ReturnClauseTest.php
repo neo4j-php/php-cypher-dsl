@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021- Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,11 +10,11 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Clauses;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Syntax\Alias;
+use WikibaseSolutions\CypherDSL\Clauses\ReturnClause;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
-use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Clauses\ReturnClause;
+use WikibaseSolutions\CypherDSL\Syntax\Alias;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -74,8 +74,8 @@ final class ReturnClauseTest extends TestCase
     public function testMultipleAliases(): void
     {
         $return = new ReturnClause();
-        $aliasA = new Alias(new Variable('a'),new Variable('b'));
-        $aliasB = new Alias(new Variable('b'),new Variable('c'));
+        $aliasA = new Alias(new Variable('a'), new Variable('b'));
+        $aliasB = new Alias(new Variable('b'), new Variable('c'));
         $return->addColumn($aliasA);
         $return->addColumn($aliasB);
 
