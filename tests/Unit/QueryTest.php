@@ -38,10 +38,28 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
+ * This class only tests methods of the query class that do not add a neq clause. Use a separate class for testing
+ * functions that add new clauses to the query.
+ *
  * @covers \WikibaseSolutions\CypherDSL\Query
  */
 class QueryTest extends TestCase
 {
+	public function testNew(): void
+	{
+		$new = Query::new();
+
+		$this->assertInstanceOf(Query::class, $new);
+	}
+
+	public function testIsNotSingleton(): void
+	{
+		$a = Query::new();
+		$b = Query::new();
+
+		$this->assertNotSame($a, $b);
+	}
+
     public function testNodeWithoutLabel(): void
     {
         $actual = Query::node();
@@ -72,6 +90,13 @@ class QueryTest extends TestCase
         }
     }
 
+	public function testInvalidRelationship(): void
+	{
+		$this->expectException(\InvalidArgumentException::class);
+
+		Query::relationship(['bad', 'value']);
+	}
+
     public function testVariable(): void
     {
         $variable = Query::variable("foo");
@@ -90,6 +115,11 @@ class QueryTest extends TestCase
     {
         $this->assertInstanceOf(Parameter::class, Query::parameter("foo"));
     }
+
+	public function testParameterEmpty(): void
+	{
+		$this->assertInstanceOf(Parameter::class, Query::parameter());
+	}
 
     /**
      * @dataProvider provideLiteralData
@@ -364,6 +394,13 @@ class QueryTest extends TestCase
         $this->assertSame(Literal::class, $value);
     }
 
+	public function testCanConstruct(): void
+	{
+		$query = new Query();
+
+		$this->assertInstanceOf(Query::class, $query);
+	}
+
     public function testAutomaticIdentifierGeneration(): void
     {
         $node = Query::node();
@@ -382,11 +419,6 @@ class QueryTest extends TestCase
         $node = Query::node();
 
         $this->assertInstanceOf(Variable::class, $node->getVariable());
-    }
-
-    public function testExists(): void
-    {
-
     }
 
     /**

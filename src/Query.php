@@ -50,7 +50,6 @@ use WikibaseSolutions\CypherDSL\Syntax\Alias;
 use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
@@ -63,13 +62,12 @@ final class Query implements QueryConvertible
 {
     use CastTrait;
     use ErrorTrait;
-    use EscapeTrait;
 
     // A reference to the Literal class
     public const literal = Literal::class;
 
     // A reference to the Procedure class
-    // @deprecated
+    // @deprecated Use self::procedure instead
     public const function = self::procedure;
 
     // A reference to the Procedure class
@@ -254,7 +252,7 @@ final class Query implements QueryConvertible
     }
 
     /**
-     * Returns the name of the Func class. This can be used to more easily create new functions calls, like so:.
+     * Returns the name of the "Procedure" class. This can be used to more easily create new functions calls, like so:
      *
      * Query::function()::raw(...)
      *
@@ -263,9 +261,16 @@ final class Query implements QueryConvertible
      */
     public static function function(): string
     {
-        return self::procedure;
+        return self::procedure();
     }
 
+	/**
+	 * Returns the name of the "Procedure" class. This can be used to more easily create new functions calls, like so:
+	 *
+	 * Query::function()::raw(...)
+	 *
+	 * @return class-string<Procedure>
+	 */
     public static function procedure(): string
     {
         return self::procedure;
