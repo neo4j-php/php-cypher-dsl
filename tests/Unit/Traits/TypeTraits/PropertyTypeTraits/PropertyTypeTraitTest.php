@@ -23,9 +23,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 final class PropertyTypeTraitTest extends TestCase
 {
     private PropertyType $a;
-
     private Property $b;
-
     private List_ $list;
 
     protected function setUp(): void

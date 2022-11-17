@@ -26,7 +26,7 @@ use WikibaseSolutions\CypherDSL\Traits\TypeTraits\AnyTypeTrait;
 /**
  * Represents any type in Cypher.
  *
- * @see AnyTypeTrait for a default implementation
+ * @see  AnyTypeTrait for a default implementation
  * @note This interface should not be implemented by any concrete class directly.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/

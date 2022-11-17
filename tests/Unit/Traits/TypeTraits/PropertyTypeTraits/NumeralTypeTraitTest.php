@@ -27,7 +27,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 final class NumeralTypeTraitTest extends TestCase
 {
     private NumeralType $a;
-
     private NumeralType $b;
 
     protected function setUp(): void

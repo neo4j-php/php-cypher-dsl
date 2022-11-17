@@ -67,11 +67,11 @@ final class Query implements QueryConvertible
     public const literal = Literal::class;
 
     // A reference to the Procedure class
-    // @deprecated Use self::procedure instead
-    public const function = self::procedure;
+    public const procedure = Procedure::class;
 
     // A reference to the Procedure class
-    public const procedure = Procedure::class;
+    // @deprecated Use self::procedure instead
+    public const function = self::procedure;
 
     /**
      * @var Clause[] Ordered list of clauses for this query
@@ -93,7 +93,7 @@ final class Query implements QueryConvertible
      *
      * @param null|string $label The label to give to the node
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
+     * @link https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
      */
     public static function node(?string $label = null): Node
     {
@@ -108,7 +108,7 @@ final class Query implements QueryConvertible
      *                            - Path::DIR_LEFT (for a relation of (a)<--(b))
      *                            - Path::DIR_UNI (for a relation of (a)--(b))
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
+     * @link https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
      */
     public static function relationship(array $direction): Relationship
     {
@@ -118,7 +118,7 @@ final class Query implements QueryConvertible
     /**
      * Creates a new variable with the given name, or generates a new variable with a random unique name.
      *
-     * @param null|string $variable the name of the variable; leave empty to automatically generate a variable name
+     * @param null|string $variable the name of the variable, or null to automatically generate a variable name
      */
     public static function variable(?string $variable = null): Variable
     {
@@ -162,10 +162,9 @@ final class Query implements QueryConvertible
      *  Query::literal()::timeHMS(...) - For a time from the given hour, minute and second
      *  Query::literal()::timeString(...) - For a time from the given time string
      *
-     * When no arguments are given to this function (or NULL is passed as its only argument), the function will return
-     * a reference to the Literal class.
+     * When no arguments are given to this function, the function will return a reference to the Literal class.
      *
-     * You can also directly use the constructors of the most basic types, namely:
+     * You can directly call the constructors of the most basic types:
      *
      *  Query::boolean() - For a boolean
      *  Query::string() - For a string
@@ -176,8 +175,7 @@ final class Query implements QueryConvertible
      *
      * @param null|bool|float|int|mixed[]|string $literal The literal to construct
      *
-     * @return Boolean|Float_|Integer|List_|Literal|Map|string|String_ The string literal that was created (or a
-     *                                                                 reference to the Literal class)
+     * @return Boolean|class-string<Literal>|Float_|Integer|List_|Map|String_
      */
     public static function literal($literal = null)
     {
@@ -193,7 +191,8 @@ final class Query implements QueryConvertible
      */
     public static function boolean(bool $value): Boolean
     {
-        return Literal::boolean($value);
+        // @phpstan-ignore-next-line
+        return self::literal()::boolean($value);
     }
 
     /**
@@ -201,7 +200,8 @@ final class Query implements QueryConvertible
      */
     public static function string(string $value): String_
     {
-        return Literal::string($value);
+        // @phpstan-ignore-next-line
+        return self::literal()::string($value);
     }
 
     /**
@@ -209,7 +209,8 @@ final class Query implements QueryConvertible
      */
     public static function integer(int $value): Integer
     {
-        return Literal::integer($value);
+        // @phpstan-ignore-next-line
+        return self::literal()::integer($value);
     }
 
     /**
@@ -217,7 +218,8 @@ final class Query implements QueryConvertible
      */
     public static function float(float $value): Float_
     {
-        return Literal::float($value);
+        // @phpstan-ignore-next-line
+        return self::literal()::float($value);
     }
 
     /**
@@ -227,7 +229,8 @@ final class Query implements QueryConvertible
      */
     public static function list(iterable $value): List_
     {
-        return Literal::list($value);
+        // @phpstan-ignore-next-line
+        return self::literal()::list($value);
     }
 
     /**
@@ -237,14 +240,14 @@ final class Query implements QueryConvertible
      */
     public static function map(array $value): Map
     {
-        return Literal::map($value);
+        // @phpstan-ignore-next-line
+        return self::literal()::map($value);
     }
 
     /**
-     * Creates a parameter.
+     * Creates a new parameter.
      *
-     * @param null|string $parameter The name of the parameter; may only consist of alphanumeric characters and
-     *                               underscores
+     * @param null|string $parameter The name of the parameter
      */
     public static function parameter(?string $parameter = null): Parameter
     {
@@ -252,11 +255,12 @@ final class Query implements QueryConvertible
     }
 
     /**
-     * Returns the name of the "Procedure" class. This can be used to more easily create new functions calls, like so:
+     * Returns the name of the "Procedure" class. This can be used to more easily create new functions calls, like so:.
      *
      * Query::function()::raw(...)
      *
      * @return class-string<Procedure>
+     *
      * @deprecated Use Query::procedure() instead
      */
     public static function function(): string
@@ -264,20 +268,20 @@ final class Query implements QueryConvertible
         return self::procedure();
     }
 
-	/**
-	 * Returns the name of the "Procedure" class. This can be used to more easily create new functions calls, like so:
-	 *
-	 * Query::function()::raw(...)
-	 *
-	 * @return class-string<Procedure>
-	 */
+    /**
+     * Returns the name of the "Procedure" class. This can be used to more easily create new functions calls, like so:.
+     *
+     *  Query::procedure()::raw()
+     *
+     * @return class-string<Procedure>
+     */
     public static function procedure(): string
     {
         return self::procedure;
     }
 
     /**
-     * Creates a raw expression.
+     * Creates a new raw expression.
      *
      * @param string $expression The raw expression
      */
@@ -330,12 +334,12 @@ final class Query implements QueryConvertible
      *
      * @note This feature is not part of the openCypher standard. For more information, see https://github.com/opencypher/openCypher/blob/a507292d35280aca9e37bf938cdec4fdd1e64ba9/docs/standardisation-scope.adoc.
      *
-     * @param callable(Query):void|Query                            $query     A callable decorating a query, or the actual sub-query
+     * @param callable|Query                                        $query     A callable decorating a query, or the actual sub-query
      * @param Pattern|Pattern[]|string|string[]|Variable|Variable[] $variables The variables to include in the WITH clause for correlation
      *
      * @return $this
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/
+     * @link https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/ Corresponding documentation on Neo4j.com
      */
     public function call($query = null, $variables = []): self
     {
@@ -364,13 +368,12 @@ final class Query implements QueryConvertible
     /**
      * Creates the CALL procedure clause.
      *
-     * @param Procedure $procedure The procedure to call
-     * @param string|Variable|Alias|(string|Variable|Alias)[] $yields The result fields that should be returned
+     * @param Procedure                                         $procedure The procedure to call
+     * @param Alias|Alias[]|string|string[]|Variable|Variable[] $yields    The result fields that should be returned (optional)
      *
      * @return $this
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/call/
-     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 122)
+     * @link https://neo4j.com/docs/cypher-manual/current/clauses/call/ Corresponding documentation on Neo4j.com
      */
     public function callProcedure(Procedure $procedure, $yields = []): self
     {
@@ -392,12 +395,11 @@ final class Query implements QueryConvertible
     /**
      * Creates the MATCH clause.
      *
-     * @param CompletePattern|CompletePattern[] $patterns A single pattern or a list of patterns
+     * @param CompletePattern|CompletePattern[] $patterns A single pattern or a non-empty list of patterns
      *
      * @return $this
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/
-     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 57)
+     * @link https://neo4j.com/docs/cypher-manual/current/clauses/match/ Corresponding documentation on Neo4j.com
      */
     public function match($patterns): self
     {
@@ -417,12 +419,11 @@ final class Query implements QueryConvertible
      * Creates the RETURN clause.
      *
      * @param Alias|Alias[]|AnyType|AnyType[]|array|bool|bool[]|float|float[]|int|int[]|Pattern|Pattern[]|string|string[] $expressions The expressions to return
-     * @param bool                                                                                                        $distinct    Whether to be a RETURN DISTINCT query
+     * @param bool                                                                                                        $distinct    Whether to be a RETURN DISTINCT clause (optional)
      *
      * @return $this
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/
-     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 74)
+     * @link https://neo4j.com/docs/cypher-manual/current/clauses/return/ Corresponding documentation on Neo4j.com
      */
     public function returning($expressions, bool $distinct = false): self
     {
@@ -434,7 +435,6 @@ final class Query implements QueryConvertible
 
         $returnClause = new ReturnClause();
         $returnClause->addColumn(...$expressions);
-
         $returnClause->setDistinct($distinct);
 
         $this->clauses[] = $returnClause;
@@ -449,8 +449,7 @@ final class Query implements QueryConvertible
      *
      * @return $this
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/create/
-     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 99)
+     * @link https://neo4j.com/docs/cypher-manual/current/clauses/create/ Corresponding documentation on Neo4j.com
      */
     public function create($patterns): self
     {
@@ -474,8 +473,7 @@ final class Query implements QueryConvertible
      *
      * @return $this
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
-     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 105)
+     * @link https://neo4j.com/docs/cypher-manual/current/clauses/delete/ Corresponding documentation on Neo4j.com
      */
     public function delete($structures, bool $detach = false): self
     {
@@ -499,9 +497,7 @@ final class Query implements QueryConvertible
      *
      * @return $this
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/
-     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 105)
-     * @deprecated Use Query::delete(..., true) instead
+     * @link https://neo4j.com/docs/cypher-manual/current/clauses/delete/ Corresponding documentation on Neo4j.com
      */
     public function detachDelete($structures): self
     {
@@ -515,8 +511,7 @@ final class Query implements QueryConvertible
      *
      * @return $this
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/limit/
-     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 98)
+     * @link https://neo4j.com/docs/cypher-manual/current/clauses/limit/ Corresponding documentation on Neo4j.com
      */
     public function limit($limit): self
     {
@@ -535,8 +530,7 @@ final class Query implements QueryConvertible
      *
      * @return $this
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/skip/
-     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 96)
+     * @link https://neo4j.com/docs/cypher-manual/current/clauses/skip/ Corresponding documentation on Neo4j.com
      */
     public function skip($amount): self
     {
@@ -557,8 +551,7 @@ final class Query implements QueryConvertible
      *
      * @return $this
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/
-     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 115)
+     * @link https://neo4j.com/docs/cypher-manual/current/clauses/merge/ Corresponding documentation on Neo4j.com
      */
     public function merge(CompletePattern $pattern, ?SetClause $createClause = null, ?SetClause $matchClause = null): self
     {
@@ -579,8 +572,7 @@ final class Query implements QueryConvertible
      *
      * @return $this
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/optional-match/
-     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 69)
+     * @link https://neo4j.com/docs/cypher-manual/current/clauses/optional-match/ Corresponding documentation on Neo4j.com
      */
     public function optionalMatch($patterns): self
     {
@@ -604,8 +596,7 @@ final class Query implements QueryConvertible
      *
      * @return $this
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/order-by/
-     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 93)
+     * @link https://neo4j.com/docs/cypher-manual/current/clauses/order-by/ Corresponding documentation on Neo4j.com
      */
     public function orderBy($properties, bool $descending = false): self
     {
@@ -629,8 +620,7 @@ final class Query implements QueryConvertible
      *
      * @return $this
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/remove/
-     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 113)
+     * @link https://neo4j.com/docs/cypher-manual/current/clauses/remove/ Corresponding documentation on Neo4j.com
      */
     public function remove($expressions): self
     {
@@ -653,8 +643,7 @@ final class Query implements QueryConvertible
      *
      * @return $this
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/
-     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 107)
+     * @link https://neo4j.com/docs/cypher-manual/current/clauses/set/ Corresponding documentation on Neo4j.com
      */
     public function set($expressions): self
     {
@@ -679,8 +668,7 @@ final class Query implements QueryConvertible
      *
      * @return $this
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/
-     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 83)
+     * @link https://neo4j.com/docs/cypher-manual/current/clauses/where/ Corresponding documentation on Neo4j.com
      */
     public function where($expressions, string $operator = WhereClause::AND): self
     {
@@ -702,12 +690,11 @@ final class Query implements QueryConvertible
     /**
      * Creates the WITH clause.
      *
-     * @param Alias|Alias[]|AnyType|AnyType[]|array|array[]|bool|bool[]|float|float[]|int|int[]|Pattern|Pattern[]|string|string[] $expressions The entries to add; if the array-key is non-numerical, it is used as the alias
+     * @param Alias|Pattern|AnyType|bool|float|int|string|Alias[]|Pattern[]|AnyType[]|bool[]|float[]|int[]|string[]|mixed[]|mixed[][] $expressions The entries to add; if the array-key is non-numerical, it is used as the alias
      *
      * @return $this
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/with/
-     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 78)
+     * @link https://neo4j.com/docs/cypher-manual/current/clauses/with/ Corresponding documentation on Neo4j.com
      */
     public function with($expressions): self
     {
@@ -743,13 +730,12 @@ final class Query implements QueryConvertible
     /**
      * Combines the result of this query with another one via a UNION clause.
      *
-     * @param callable(Query):void|Query $queryOrCallable the callable decorating a fresh query instance or the query instance to be attached after the union clause
-     * @param bool                       $all             whether the union should include all results or remove the duplicates instead
+     * @param callable|Query $queryOrCallable The callable decorating a fresh query instance or the query instance to be attached after the union clause
+     * @param bool           $all             Whether the union should include all results or remove the duplicates instead
      *
      * @return $this
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/union/
-     * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 128)
+     * @link https://neo4j.com/docs/cypher-manual/current/clauses/union/ Corresponding documentation on Neo4j.com
      */
     public function union($queryOrCallable, bool $all = false): self
     {
@@ -836,7 +822,9 @@ final class Query implements QueryConvertible
 
         foreach ($values as $key => $value) {
             if (is_string($key)) {
-                /** @var AnyType $value */
+                /**
+                 * @var AnyType $value
+                 */
                 $value = $castFunc($value);
                 $res[] = $value->alias($key);
             } else {

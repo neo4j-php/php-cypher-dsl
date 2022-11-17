@@ -20,7 +20,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 final class String_ implements StringType
 {
     use StringTypeTrait;
-
     private string $value;
 
     /**

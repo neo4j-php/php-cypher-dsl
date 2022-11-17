@@ -34,7 +34,7 @@ final class UnionClause extends Clause
      * @param Query $right the query after the union clause
      * @param bool  $all   Whether the union should include all results or remove the duplicates instead.
      *
-     * TODO: Move this function somewhere else.
+     *                     TODO: Move this function somewhere else.
      */
     public static function union(Query $left, Query $right, bool $all = false): Query
     {

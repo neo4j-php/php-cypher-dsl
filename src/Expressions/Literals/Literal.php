@@ -81,7 +81,7 @@ final class Literal
      *
      * @return Float_|Integer
      *
-     * @see Literal::number()
+     * @see        Literal::number()
      * @deprecated
      */
     public static function decimal($value)
@@ -189,11 +189,15 @@ final class Literal
      */
     public static function dateYMD($year, $month = null, $day = null): Date
     {
-        return Procedure::date(self::makeTemporalMap([
-            "year" => $year,
-            "month" => $month,
-            "day" => $day,
-        ]));
+        return Procedure::date(
+            self::makeTemporalMap(
+                [
+                    "year" => $year,
+                    "month" => $month,
+                    "day" => $day,
+                ]
+            )
+        );
     }
 
     /**
@@ -207,11 +211,15 @@ final class Literal
      */
     public static function dateYWD($year, $week = null, $weekday = null): Date
     {
-        return Procedure::date(self::makeTemporalMap([
-            "year" => $year,
-            "week" => $week,
-            "dayOfWeek" => $weekday,
-        ]));
+        return Procedure::date(
+            self::makeTemporalMap(
+                [
+                    "year" => $year,
+                    "week" => $week,
+                    "dayOfWeek" => $weekday,
+                ]
+            )
+        );
     }
 
     /**
@@ -271,18 +279,22 @@ final class Literal
         $nanosecond = null,
         $timezone = null
     ): DateTime {
-        return Procedure::datetime(self::makeTemporalMap([
-            "year" => $year,
-            "month" => $month,
-            "day" => $day,
-            "hour" => $hour,
-            "minute" => $minute,
-            "second" => $second,
-            "millisecond" => $millisecond,
-            "microsecond" => $microsecond,
-            "nanosecond" => $nanosecond,
-            "timezone" => $timezone,
-        ]));
+        return Procedure::datetime(
+            self::makeTemporalMap(
+                [
+                    "year" => $year,
+                    "month" => $month,
+                    "day" => $day,
+                    "hour" => $hour,
+                    "minute" => $minute,
+                    "second" => $second,
+                    "millisecond" => $millisecond,
+                    "microsecond" => $microsecond,
+                    "nanosecond" => $nanosecond,
+                    "timezone" => $timezone,
+                ]
+            )
+        );
     }
 
     /**
@@ -313,18 +325,22 @@ final class Literal
         $nanosecond = null,
         $timezone = null
     ): DateTime {
-        return Procedure::datetime(self::makeTemporalMap([
-            "year" => $year,
-            "week" => $week,
-            "dayOfWeek" => $dayOfWeek,
-            "hour" => $hour,
-            "minute" => $minute,
-            "second" => $second,
-            "millisecond" => $millisecond,
-            "microsecond" => $microsecond,
-            "nanosecond" => $nanosecond,
-            "timezone" => $timezone,
-        ]));
+        return Procedure::datetime(
+            self::makeTemporalMap(
+                [
+                    "year" => $year,
+                    "week" => $week,
+                    "dayOfWeek" => $dayOfWeek,
+                    "hour" => $hour,
+                    "minute" => $minute,
+                    "second" => $second,
+                    "millisecond" => $millisecond,
+                    "microsecond" => $microsecond,
+                    "nanosecond" => $nanosecond,
+                    "timezone" => $timezone,
+                ]
+            )
+        );
     }
 
     /**
@@ -355,18 +371,22 @@ final class Literal
         $nanosecond = null,
         $timezone = null
     ): DateTime {
-        return Procedure::datetime(self::makeTemporalMap([
-            "year" => $year,
-            "quarter" => $quarter,
-            "dayOfQuarter" => $dayOfQuarter,
-            "hour" => $hour,
-            "minute" => $minute,
-            "second" => $second,
-            "millisecond" => $millisecond,
-            "microsecond" => $microsecond,
-            "nanosecond" => $nanosecond,
-            "timezone"   => $timezone,
-        ]));
+        return Procedure::datetime(
+            self::makeTemporalMap(
+                [
+                    "year" => $year,
+                    "quarter" => $quarter,
+                    "dayOfQuarter" => $dayOfQuarter,
+                    "hour" => $hour,
+                    "minute" => $minute,
+                    "second" => $second,
+                    "millisecond" => $millisecond,
+                    "microsecond" => $microsecond,
+                    "nanosecond" => $nanosecond,
+                    "timezone"   => $timezone,
+                ]
+            )
+        );
     }
 
     /**
@@ -395,17 +415,21 @@ final class Literal
         $nanosecond = null,
         $timezone = null
     ): DateTime {
-        return Procedure::datetime(self::makeTemporalMap([
-            "year" => $year,
-            "ordinalDay" => $ordinalDay,
-            "hour" => $hour,
-            "minute" => $minute,
-            "second" => $second,
-            "millisecond" => $millisecond,
-            "microsecond" => $microsecond,
-            "nanosecond" => $nanosecond,
-            "timezone"   => $timezone,
-        ]));
+        return Procedure::datetime(
+            self::makeTemporalMap(
+                [
+                    "year" => $year,
+                    "ordinalDay" => $ordinalDay,
+                    "hour" => $hour,
+                    "minute" => $minute,
+                    "second" => $second,
+                    "millisecond" => $millisecond,
+                    "microsecond" => $microsecond,
+                    "nanosecond" => $nanosecond,
+                    "timezone"   => $timezone,
+                ]
+            )
+        );
     }
 
     /**
@@ -460,17 +484,21 @@ final class Literal
         $microsecond = null,
         $nanosecond = null
     ): LocalDateTime {
-        return Procedure::localdatetime(self::makeTemporalMap([
-            "year" => $year,
-            "month" => $month,
-            "day" => $day,
-            "hour" => $hour,
-            "minute" => $minute,
-            "second" => $second,
-            "millisecond" => $millisecond,
-            "microsecond" => $microsecond,
-            "nanosecond" => $nanosecond,
-        ]));
+        return Procedure::localdatetime(
+            self::makeTemporalMap(
+                [
+                    "year" => $year,
+                    "month" => $month,
+                    "day" => $day,
+                    "hour" => $hour,
+                    "minute" => $minute,
+                    "second" => $second,
+                    "millisecond" => $millisecond,
+                    "microsecond" => $microsecond,
+                    "nanosecond" => $nanosecond,
+                ]
+            )
+        );
     }
 
     /**
@@ -500,17 +528,21 @@ final class Literal
         $microsecond = null,
         $nanosecond = null
     ): LocalDateTime {
-        return Procedure::localdatetime(self::makeTemporalMap([
-            "year" => $year,
-            "week" => $week,
-            "dayOfWeek" => $dayOfWeek,
-            "hour" => $hour,
-            "minute" => $minute,
-            "second" => $second,
-            "millisecond" => $millisecond,
-            "microsecond" => $microsecond,
-            "nanosecond" => $nanosecond,
-        ]));
+        return Procedure::localdatetime(
+            self::makeTemporalMap(
+                [
+                    "year" => $year,
+                    "week" => $week,
+                    "dayOfWeek" => $dayOfWeek,
+                    "hour" => $hour,
+                    "minute" => $minute,
+                    "second" => $second,
+                    "millisecond" => $millisecond,
+                    "microsecond" => $microsecond,
+                    "nanosecond" => $nanosecond,
+                ]
+            )
+        );
     }
 
     /**
@@ -539,17 +571,21 @@ final class Literal
         $microsecond = null,
         $nanosecond = null
     ): LocalDateTime {
-        return Procedure::localdatetime(self::MakeTemporalMap([
-            "year" => $year,
-            "quarter" => $quarter,
-            "dayOfQuarter" => $dayOfQuarter,
-            "hour" => $hour,
-            "minute" => $minute,
-            "second" => $second,
-            "millisecond" => $millisecond,
-            "microsecond" => $microsecond,
-            "nanosecond" => $nanosecond,
-        ]));
+        return Procedure::localdatetime(
+            self::MakeTemporalMap(
+                [
+                    "year" => $year,
+                    "quarter" => $quarter,
+                    "dayOfQuarter" => $dayOfQuarter,
+                    "hour" => $hour,
+                    "minute" => $minute,
+                    "second" => $second,
+                    "millisecond" => $millisecond,
+                    "microsecond" => $microsecond,
+                    "nanosecond" => $nanosecond,
+                ]
+            )
+        );
     }
 
     /**
@@ -576,16 +612,20 @@ final class Literal
         $microsecond = null,
         $nanosecond = null
     ): LocalDateTime {
-        return Procedure::localdatetime(self::makeTemporalMap([
-            "year" => $year,
-            "ordinalDay" => $ordinalDay,
-            "hour" => $hour,
-            "minute" => $minute,
-            "second" => $second,
-            "millisecond" => $millisecond,
-            "microsecond" => $microsecond,
-            "nanosecond" => $nanosecond,
-        ]));
+        return Procedure::localdatetime(
+            self::makeTemporalMap(
+                [
+                    "year" => $year,
+                    "ordinalDay" => $ordinalDay,
+                    "hour" => $hour,
+                    "minute" => $minute,
+                    "second" => $second,
+                    "millisecond" => $millisecond,
+                    "microsecond" => $microsecond,
+                    "nanosecond" => $nanosecond,
+                ]
+            )
+        );
     }
 
     /**
@@ -636,14 +676,18 @@ final class Literal
         $microsecond = null,
         $nanosecond = null
     ): LocalTime {
-        return Procedure::localtime(self::makeTemporalMap([
-            "hour" => $hour,
-            "minute" => $minute,
-            "second" => $second,
-            "millisecond" => $millisecond,
-            "microsecond" => $microsecond,
-            "nanosecond" => $nanosecond,
-        ]));
+        return Procedure::localtime(
+            self::makeTemporalMap(
+                [
+                    "hour" => $hour,
+                    "minute" => $minute,
+                    "second" => $second,
+                    "millisecond" => $millisecond,
+                    "microsecond" => $microsecond,
+                    "nanosecond" => $nanosecond,
+                ]
+            )
+        );
     }
 
     /**
@@ -694,15 +738,19 @@ final class Literal
         $nanosecond = null,
         $timezone = null
     ): Time {
-        return Procedure::time(self::makeTemporalMap([
-            "hour" => $hour,
-            "minute" => $minute,
-            "second" => $second,
-            "millisecond" => $millisecond,
-            "microsecond" => $microsecond,
-            "nanosecond" => $nanosecond,
-            "timezone" => $timezone,
-        ]));
+        return Procedure::time(
+            self::makeTemporalMap(
+                [
+                    "hour" => $hour,
+                    "minute" => $minute,
+                    "second" => $second,
+                    "millisecond" => $millisecond,
+                    "microsecond" => $microsecond,
+                    "nanosecond" => $nanosecond,
+                    "timezone" => $timezone,
+                ]
+            )
+        );
     }
 
     /**

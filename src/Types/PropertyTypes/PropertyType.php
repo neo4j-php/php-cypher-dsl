@@ -35,7 +35,7 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
  * Homogeneous lists of simple types can also be stored as properties, although lists in
  * general cannot.
  *
- * @see PropertyTypeTrait for a default implementation
+ * @see  PropertyTypeTrait for a default implementation
  * @note This interface should not be implemented by any class directly.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#property-types

@@ -9,9 +9,9 @@
  */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
+use InvalidArgumentException;
 use Iterator;
 use PHPUnit\Framework\TestCase;
-use ReturnTypeWillChange;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\RawClause;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
@@ -43,22 +43,22 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
  *
  * @covers \WikibaseSolutions\CypherDSL\Query
  */
-class QueryTest extends TestCase
+final class QueryTest extends TestCase
 {
-	public function testNew(): void
-	{
-		$new = Query::new();
+    public function testNew(): void
+    {
+        $new = Query::new();
 
-		$this->assertInstanceOf(Query::class, $new);
-	}
+        $this->assertInstanceOf(Query::class, $new);
+    }
 
-	public function testIsNotSingleton(): void
-	{
-		$a = Query::new();
-		$b = Query::new();
+    public function testIsNotSingleton(): void
+    {
+        $a = Query::new();
+        $b = Query::new();
 
-		$this->assertNotSame($a, $b);
-	}
+        $this->assertNotSame($a, $b);
+    }
 
     public function testNodeWithoutLabel(): void
     {
@@ -90,12 +90,12 @@ class QueryTest extends TestCase
         }
     }
 
-	public function testInvalidRelationship(): void
-	{
-		$this->expectException(\InvalidArgumentException::class);
+    public function testInvalidRelationship(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
 
-		Query::relationship(['bad', 'value']);
-	}
+        Query::relationship(['bad', 'value']);
+    }
 
     public function testVariable(): void
     {
@@ -116,10 +116,10 @@ class QueryTest extends TestCase
         $this->assertInstanceOf(Parameter::class, Query::parameter("foo"));
     }
 
-	public function testParameterEmpty(): void
-	{
-		$this->assertInstanceOf(Parameter::class, Query::parameter());
-	}
+    public function testParameterEmpty(): void
+    {
+        $this->assertInstanceOf(Parameter::class, Query::parameter());
+    }
 
     /**
      * @dataProvider provideLiteralData
@@ -180,7 +180,7 @@ class QueryTest extends TestCase
         $query = Query::new()->skip(10);
 
         $this->assertSame('SKIP 10', $query->__toString());
-        $this->assertSame('SKIP 10', (string)$query);
+        $this->assertSame('SKIP 10', (string) $query);
     }
 
     public function testListOfLiterals(): void
@@ -341,7 +341,7 @@ class QueryTest extends TestCase
     {
         $float = Query::float(1.0);
 
-        $this->assertSame(new Float_(1.0), $float);
+        $this->assertEquals(new Float_(1.0), $float);
     }
 
     public function testStringLiteral(): void
@@ -355,7 +355,7 @@ class QueryTest extends TestCase
     {
         $string = Query::string('foo');
 
-        $this->assertSame(new String_('foo'), $string);
+        $this->assertEquals(new String_('foo'), $string);
     }
 
     public function testStringAble(): void
@@ -394,12 +394,12 @@ class QueryTest extends TestCase
         $this->assertSame(Literal::class, $value);
     }
 
-	public function testCanConstruct(): void
-	{
-		$query = new Query();
+    public function testCanConstruct(): void
+    {
+        $query = new Query();
 
-		$this->assertInstanceOf(Query::class, $query);
-	}
+        $this->assertInstanceOf(Query::class, $query);
+    }
 
     public function testAutomaticIdentifierGeneration(): void
     {
