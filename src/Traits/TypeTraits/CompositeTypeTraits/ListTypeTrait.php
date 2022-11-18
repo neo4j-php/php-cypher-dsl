@@ -11,12 +11,9 @@ namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits;
 
 use WikibaseSolutions\CypherDSL\Expressions\Operators\In;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 
 /**
  * This trait provides a default implementation to satisfy the "ListType" interface.
- *
- * @implements ListType
  */
 trait ListTypeTrait
 {

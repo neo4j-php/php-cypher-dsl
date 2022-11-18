@@ -12,7 +12,6 @@ namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\In;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\AnyTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
  * This trait provides a default implementation to satisfy the "PropertyType" interface.
@@ -29,8 +28,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
  * - PointTypeTrait
  * - StringTypeTrait
  * - TimeTypeTrait
- *
- * @implements PropertyType
  */
 trait PropertyTypeTrait
 {

@@ -32,7 +32,7 @@ interface PropertyPattern extends Pattern
     /**
      * Set the properties of this pattern.
      *
-     * @param array|MapType $properties
+     * @param MapType|mixed[] $properties
      *
      * @return $this
      */
@@ -54,7 +54,7 @@ interface PropertyPattern extends Pattern
      * An exception will be thrown if they are anything else (such as a variable). If the pattern  does not yet contain
      * any properties, a new map will be created.
      *
-     * @param array|Map $properties
+     * @param Map|mixed[] $properties
      *
      * @return $this
      */

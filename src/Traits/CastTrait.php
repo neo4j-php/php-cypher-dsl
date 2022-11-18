@@ -34,7 +34,7 @@ trait CastTrait
     /**
      * Casts the given value to a ListType.
      *
-     * @param array|ListType $list
+     * @param ListType|mixed[] $list
      */
     private static function toListType($list): ListType
     {
@@ -46,7 +46,7 @@ trait CastTrait
     /**
      * Casts the given value to a MapType.
      *
-     * @param array|MapType $map
+     * @param MapType|mixed[] $map
      */
     private static function toMapType($map): MapType
     {
@@ -76,6 +76,7 @@ trait CastTrait
     {
         self::assertClass('numeral', [NumeralType::class, 'int', 'float'], $numeral);
 
+        // @phpstan-ignore-next-line
         return $numeral instanceof NumeralType ? $numeral : Literal::number($numeral);
     }
 
@@ -112,6 +113,7 @@ trait CastTrait
     {
         self::assertClass('property', [PropertyType::class, 'bool', 'int', 'float', 'string'], $property);
 
+        // @phpstan-ignore-next-line
         return $property instanceof PropertyType ? $property : Literal::literal($property);
     }
 
@@ -166,7 +168,7 @@ trait CastTrait
     /**
      * Casts the given value to an AnyType.
      *
-     * @param AnyType|array|bool|float|int|Pattern|string $value
+     * @param AnyType|bool|float|int|mixed[]|Pattern|string $value
      */
     private static function toAnyType($value): AnyType
     {
@@ -180,6 +182,7 @@ trait CastTrait
             return $value;
         }
 
+        // @phpstan-ignore-next-line
         return Literal::literal($value);
     }
 }

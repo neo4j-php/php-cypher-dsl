@@ -16,12 +16,9 @@ use WikibaseSolutions\CypherDSL\Expressions\Operators\ModuloDivision;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Multiplication;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Subtraction;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\UnaryMinus;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
  * This trait provides a default implementation to satisfy the "NumeralType" interface.
- *
- * @implements NumeralType
  */
 trait NumeralTypeTrait
 {

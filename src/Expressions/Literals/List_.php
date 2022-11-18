@@ -50,7 +50,7 @@ final class List_ implements ListType
     /**
      * Add one or more expressions to the list.
      *
-     * @param AnyType|array|bool|float|int|Pattern|string ...$expressions
+     * @param AnyType|bool|float|int|mixed[]|Pattern|string ...$expressions
      *
      * @return $this
      */

@@ -12,7 +12,7 @@ namespace WikibaseSolutions\CypherDSL;
 /**
  * This interface represents any class that can be converted into a (partial) Cypher query.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/
+ * @see https://neo4j.com/docs/cypher-manual/current/ Corresponding documentation on Neo4j.com
  */
 interface QueryConvertible
 {

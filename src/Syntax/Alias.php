@@ -16,8 +16,8 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 /**
  * Represents aliasing an expression or variable.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
- * @see https://neo4j.com/docs/cypher-manual/current/clauses/with/#with-introduce-variables
+ * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias Corresponding documentation on Neo4j.com
+ * @see https://neo4j.com/docs/cypher-manual/current/clauses/with/#with-introduce-variables Corresponding documentation on Neo4j.com
  */
 final class Alias implements QueryConvertible
 {

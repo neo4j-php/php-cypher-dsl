@@ -11,7 +11,6 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
  * This class represents a SKIP clause.
@@ -45,8 +44,6 @@ final class SkipClause extends Clause
 
     /**
      * Returns the amount to skip.
-     *
-     * @return null|NumeralType
      */
     public function getSkip(): ?IntegerType
     {

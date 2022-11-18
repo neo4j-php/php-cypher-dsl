@@ -121,7 +121,7 @@ final class Variable implements
     /**
      * Assign a value to this property.
      *
-     * @param array|Map $value The value to assign
+     * @param Map|mixed[] $value The value to assign
      */
     public function assign($value): PropertyReplacement
     {

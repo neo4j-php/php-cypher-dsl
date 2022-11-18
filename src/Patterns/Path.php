@@ -19,8 +19,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 /**
  * This class represents a path, which is an alternating sequence of nodes and relationships.
  *
- * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 5)
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#structural-types
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#structural-types Corresponding documentation on Neo4j.com
  */
 final class Path implements BooleanType, CompletePattern, RelatablePattern
 {
@@ -91,8 +90,8 @@ final class Path implements BooleanType, CompletePattern, RelatablePattern
 
             return $this;
         }
-
         // Otherwise, add the relatable to the list of nodes
+        // @phpstan-ignore-next-line
         $this->nodes[] = $pattern;
 
         return $this;
@@ -180,9 +179,9 @@ final class Path implements BooleanType, CompletePattern, RelatablePattern
     /**
      * Construct a new relationship from the given parameters.
      *
-     * @param array                $direction  The direction of the relationship (should be a Relationship::DIR_* constant)
+     * @param string[]             $direction  The direction of the relationship (should be a Relationship::DIR_* constant)
      * @param null|string          $type       The type of the relationship
-     * @param null|array|MapType   $properties The properties to add to the relationship
+     * @param null|MapType|mixed[] $properties The properties to add to the relationship
      * @param null|string|Variable $name       The name of the variable to which to assign this relationship
      */
     private static function buildRelationship(array $direction, ?string $type = null, $properties = null, $name = null): Relationship

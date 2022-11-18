@@ -14,12 +14,9 @@ use WikibaseSolutions\CypherDSL\Expressions\Operators\Disjunction;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\ExclusiveDisjunction;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Negation;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * This trait provides a default implementation to satisfy the "BooleanType" interface.
- *
- * @implements BooleanType
  */
 trait BooleanTypeTrait
 {

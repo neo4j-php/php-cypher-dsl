@@ -13,7 +13,8 @@ use __PHP_Incomplete_Class;
 use TypeError;
 
 /**
- * Convenience trait including simple assertions and error reporting functions.
+ * Convenience trait including simple assertions and error reporting functions. Used as a polyfill for PHP 8.0 union
+ * types.
  *
  * @internal This trait is not covered by the backwards compatibility guarantee of php-cypher-dsl
  */
@@ -24,7 +25,7 @@ trait ErrorTrait
      *
      * @param string          $varName    THe name of the user input variable, to be used in the error message
      * @param string|string[] $classNames The classnames that should be tested against
-     * @param array           $userInput  The input array that should be tested
+     * @param mixed[]         $userInput  The input array that should be tested
      *
      * @throws TypeError
      */
@@ -57,6 +58,8 @@ trait ErrorTrait
 
     /**
      * Get debug type method stolen and refactored from the symfony polyfill.
+     *
+     * @param mixed $value
      *
      * @see https://github.com/symfony/polyfill/blob/main/src/Php80/Php80.php
      */
@@ -151,6 +154,7 @@ trait ErrorTrait
                 return $class;
             }
 
+            // @phpstan-ignore-next-line
             return (get_parent_class($class) ?: key(class_implements($class)) ?: 'class') . '@anonymous';
         }
 
@@ -167,6 +171,7 @@ trait ErrorTrait
         if (is_resource($value)) {
             $type = @get_resource_type($value);
 
+            // @phpstan-ignore-next-line
             if ($type === null) {
                 return 'unknown';
             }

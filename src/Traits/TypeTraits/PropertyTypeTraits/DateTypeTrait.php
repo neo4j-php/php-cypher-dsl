@@ -9,12 +9,8 @@
  */
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits;
 
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
-
 /**
  * This trait provides a default implementation to satisfy the "DateType" interface.
- *
- * @implements DateType
  */
 trait DateTypeTrait
 {

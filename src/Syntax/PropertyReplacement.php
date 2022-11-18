@@ -18,9 +18,8 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 /**
  * Represents the application of the property replacement (=/+=) operator.
  *
- * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 108)
- * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/#set-set-a-property
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#syntax-property-replacement-operator
+ * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/#set-set-a-property Corresponding documentation on Neo4j.com
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#syntax-property-replacement-operator Corresponding documentation on Neo4j.com
  */
 final class PropertyReplacement implements QueryConvertible
 {

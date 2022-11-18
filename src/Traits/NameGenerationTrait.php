@@ -27,8 +27,8 @@ trait NameGenerationTrait
      *
      * @note The returned string is not cryptographically secure.
      *
-     * @param string   $prefix The prefix to put before the name. Must start with a letter to adhere to cypher namings.
-     * @param null|int $length the length of the generated name in bytes
+     * @param string $prefix The prefix to put before the name. Must start with a letter to adhere to cypher namings
+     * @param int    $length the length of the generated name in bytes (optional)
      */
     private function generateIdentifier(string $prefix = 'var', int $length = 32): string
     {

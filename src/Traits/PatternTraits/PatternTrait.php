@@ -10,13 +10,10 @@
 namespace WikibaseSolutions\CypherDSL\Traits\PatternTraits;
 
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 
 /**
  * This trait provides a default implementation to satisfy the "Pattern" interface.
- *
- * @implements Pattern
  */
 trait PatternTrait
 {

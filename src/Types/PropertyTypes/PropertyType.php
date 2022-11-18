@@ -36,16 +36,16 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
  * general cannot.
  *
  * @see  PropertyTypeTrait for a default implementation
- * @note This interface should not be implemented by any class directly.
+ * @note This interface should not be implemented by any class directly
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#property-types
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#property-types Corresponding documentation on Neo4j.com
  */
 interface PropertyType extends AnyType
 {
     /**
      * Checks whether the element exists in the given list.
      *
-     * @param array|ListType $right
+     * @param ListType|mixed[] $right
      */
     public function in($right): In;
 }

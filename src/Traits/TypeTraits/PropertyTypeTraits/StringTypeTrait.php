@@ -14,12 +14,9 @@ use WikibaseSolutions\CypherDSL\Expressions\Operators\EndsWith;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Regex;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\StartsWith;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
  * This trait provides a default implementation to satisfy the "StringType" interface.
- *
- * @implements StringType
  */
 trait StringTypeTrait
 {

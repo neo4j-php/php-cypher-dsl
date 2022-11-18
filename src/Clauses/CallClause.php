@@ -30,7 +30,7 @@ final class CallClause extends Clause
     use ErrorTrait;
 
     /**
-     * @var null|Query The subquery to call, or NULL if no subquery has been set yet
+     * @var null|Query The sub-query to call, or NULL if no sub-query has been set yet
      */
     private ?Query $subQuery = null;
 
@@ -40,9 +40,9 @@ final class CallClause extends Clause
     private array $withVariables = [];
 
     /**
-     * Sets the query to call. This overwrites any previously set subquery.
+     * Sets the query to call. This overwrites any previously set sub-query.
      *
-     * @param Query $subQuery The subquery to call
+     * @param Query $subQuery The sub-query to call
      *
      * @return $this
      */

@@ -9,16 +9,15 @@
  */
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PropertyPatternTrait;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
  * This class represents a node.
  *
- * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 8)
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node Corresponding documentation on Neo4j.com
  */
 final class Node implements CompletePattern, PropertyPattern, RelatablePattern
 {
@@ -31,11 +30,6 @@ final class Node implements CompletePattern, PropertyPattern, RelatablePattern
      * @var string[] The labels of this node
      */
     private array $labels = [];
-
-    /**
-     * @var null|MapType The properties of this relationship
-     */
-    private ?MapType $properties = null;
 
     /**
      * @param null|string $label The initial label to include on this node
@@ -145,12 +139,14 @@ final class Node implements CompletePattern, PropertyPattern, RelatablePattern
             }
         }
 
-        if (isset($this->properties) && !$this->properties->isEmpty()) {
+        if (isset($this->properties)) {
             if ($nodeInner !== "") {
                 $nodeInner .= " ";
             }
 
-            $nodeInner .= $this->properties->toQuery();
+            if (!$this->properties instanceof Map || !$this->properties->isEmpty()) {
+                $nodeInner .= $this->properties->toQuery();
+            }
         }
 
         return $nodeInner;

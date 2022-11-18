@@ -56,6 +56,7 @@ final class Literal
         }
 
         if (is_int($literal)) {
+            // @phpstan-ignore-next-line
             return self::integer($literal);
         }
 
@@ -100,6 +101,7 @@ final class Literal
     {
         self::assertClass('value', ['int', 'float'], $value);
 
+        // @phpstan-ignore-next-line PHPStan does not work well with classes named "Integer"
         return is_int($value) ? self::integer($value) : self::float($value);
     }
 
@@ -142,7 +144,7 @@ final class Literal
     /**
      * Creates a new list literal.
      *
-     * @param array|iterable $value
+     * @param mixed[] $value
      */
     public static function list(iterable $value): List_
     {
@@ -155,6 +157,8 @@ final class Literal
 
     /**
      * Creates a new map literal.
+     *
+     * @param mixed[] $value
      */
     public static function map(array $value): Map
     {
@@ -864,6 +868,8 @@ final class Literal
      * - If a 'second' variable is encountered, it is checked if 'seconds' is not-null when milliseconds/microseconds/nanoseconds are provided.
      * - All variables except 'timezone' are made into NumeralType.
      * - 'timezone' is made into StringLiteral.
+     *
+     * @param mixed[] $variables
      */
     private static function makeTemporalMap(array $variables): Map
     {

@@ -19,12 +19,9 @@ use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThan;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThanOrEqual;
 use WikibaseSolutions\CypherDSL\Syntax\Alias;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * This trait provides a default implementation to satisfy the "AnyType" interface.
- *
- * @implements AnyType
  */
 trait AnyTypeTrait
 {

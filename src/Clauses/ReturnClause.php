@@ -34,14 +34,14 @@ final class ReturnClause extends Clause
     private bool $distinct = false;
 
     /**
-     * @var (AnyType|Alias)[] The expressions to return
+     * @var Alias[]|AnyType[] The expressions to return
      */
     private array $columns = [];
 
     /**
      * Add a new column to this RETURN clause.
      *
-     * @param Alias|AnyType|array|bool|float|int|Pattern|string ...$columns The values to return
+     * @param Alias|AnyType|bool|float|int|mixed[]|Pattern|string ...$columns The values to return
      *
      * @return $this
      *

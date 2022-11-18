@@ -28,9 +28,9 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  * - map
  *
  * @see  CompositeTypeTrait for a default implemenation
- * @note This interface should not be implemented by any class directly.
+ * @note This interface should not be implemented by any class directly
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#composite-types
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#composite-types Corresponding documentation on Neo4j.com
  */
 interface CompositeType extends AnyType
 {

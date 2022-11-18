@@ -19,8 +19,7 @@ use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PropertyPatternTrait;
 /**
  * This class represents an arbitrary relationship.
  *
- * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 10)
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship Corresponding documentation on Neo4j.com
  */
 final class Relationship implements PropertyPattern
 {
@@ -65,10 +64,10 @@ final class Relationship implements PropertyPattern
     private bool $arbitraryHops = false;
 
     /**
-     * @param array $direction The direction of the relationship, should be either:
-     *                         - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
-     *                         - Relationship::DIR_LEFT (for a relation of (a)<--(b))
-     *                         - Relationship::DIR_UNI (for a relation of (a)--(b))
+     * @param string[] $direction The direction of the relationship, should be either:
+     *                            - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
+     *                            - Relationship::DIR_LEFT (for a relation of (a)<--(b))
+     *                            - Relationship::DIR_UNI (for a relation of (a)--(b))
      *
      * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
@@ -84,7 +83,7 @@ final class Relationship implements PropertyPattern
     /**
      * Set the minimum number of `relationship->node` hops away to search.
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels Corresponding documentation on Neo4j.com
      *
      * @return $this
      */
@@ -110,7 +109,7 @@ final class Relationship implements PropertyPattern
     /**
      * Set the maximum number of `relationship->node` hops away to search.
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels Corresponding documentation on Neo4j.com
      *
      * @return $this
      */
@@ -136,7 +135,7 @@ final class Relationship implements PropertyPattern
     /**
      * Set the exact number of `relationship->node` hops away to search.
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/#varlength-rels Corresponding documentation on Neo4j.com
      *
      * @return $this
      */
@@ -252,6 +251,9 @@ final class Relationship implements PropertyPattern
         return $this->direction[0] . $this->relationshipDetailToString() . $this->direction[1];
     }
 
+    /**
+     * Converts the relationship details (the inner part of the relationship) to Cypher syntax.
+     */
     private function relationshipDetailToString(): string
     {
         if (isset($this->variable)) {

@@ -27,9 +27,9 @@ use WikibaseSolutions\CypherDSL\Traits\TypeTraits\AnyTypeTrait;
  * Represents any type in Cypher.
  *
  * @see  AnyTypeTrait for a default implementation
- * @note This interface should not be implemented by any concrete class directly.
+ * @note This interface should not be implemented by any class directly
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/ Corresponding documentation on Neo4j.com
  */
 interface AnyType extends QueryConvertible
 {
@@ -43,42 +43,42 @@ interface AnyType extends QueryConvertible
     /**
      * Perform an equality check with the given expression.
      *
-     * @param AnyType|array|bool|float|int|Pattern|string $right
+     * @param AnyType|bool|float|int|mixed[]|Pattern|string $right
      */
     public function equals($right, bool $insertParentheses = true): Equality;
 
     /**
      * Perform an inequality comparison against the given expression.
      *
-     * @param AnyType|array|bool|float|int|Pattern|string $right
+     * @param AnyType|bool|float|int|mixed[]|Pattern|string $right
      */
     public function notEquals($right, bool $insertParentheses = true): Inequality;
 
     /**
      * Perform a greater than comparison against the given expression.
      *
-     * @param AnyType|array|bool|float|int|Pattern|string $right
+     * @param AnyType|bool|float|int|mixed[]|Pattern|string $right
      */
     public function gt($right, bool $insertParentheses = true): GreaterThan;
 
     /**
      * Perform a greater than or equal comparison against the given expression.
      *
-     * @param AnyType|array|bool|float|int|Pattern|string $right
+     * @param AnyType|bool|float|int|mixed[]|Pattern|string $right
      */
     public function gte($right, bool $insertParentheses = true): GreaterThanOrEqual;
 
     /**
      * Perform a less than comparison against the given expression.
      *
-     * @param AnyType|array|bool|float|int|Pattern|string $right
+     * @param AnyType|bool|float|int|mixed[]|Pattern|string $right
      */
     public function lt($right, bool $insertParentheses = true): LessThan;
 
     /**
      * Perform a less than or equal comparison against the given expression.
      *
-     * @param AnyType|array|bool|float|int|Pattern|string $right
+     * @param AnyType|bool|float|int|mixed[]|Pattern|string $right
      */
     public function lte($right, bool $insertParentheses = true): LessThanOrEqual;
 

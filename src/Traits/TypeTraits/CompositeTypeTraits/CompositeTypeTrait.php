@@ -10,7 +10,6 @@
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits;
 
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\AnyTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\CompositeTypes\CompositeType;
 
 /**
  * This trait provides a default implementation to satisfy the "CompositeType" interface.
@@ -20,8 +19,6 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\CompositeType;
  *
  * - ListTypeTrait
  * - MapTypeTrait
- *
- * @implements CompositeType
  */
 trait CompositeTypeTrait
 {

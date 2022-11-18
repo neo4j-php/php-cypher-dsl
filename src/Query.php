@@ -93,7 +93,7 @@ final class Query implements QueryConvertible
      *
      * @param null|string $label The label to give to the node
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
+     * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node Corresponding documentation on Neo4j.com
      */
     public static function node(?string $label = null): Node
     {
@@ -104,11 +104,11 @@ final class Query implements QueryConvertible
      * Creates a relationship.
      *
      * @param string[] $direction The direction of the relationship, should be either:
-     *                            - Path::DIR_RIGHT (for a relation of (a)-->(b))
-     *                            - Path::DIR_LEFT (for a relation of (a)<--(b))
-     *                            - Path::DIR_UNI (for a relation of (a)--(b))
+     *                            - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
+     *                            - Relationship::DIR_LEFT (for a relation of (a)<--(b))
+     *                            - Relationship::DIR_UNI (for a relation of (a)--(b))
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship
+     * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship Corresponding documentation on Neo4j.com
      */
     public static function relationship(array $direction): Relationship
     {
@@ -118,7 +118,9 @@ final class Query implements QueryConvertible
     /**
      * Creates a new variable with the given name, or generates a new variable with a random unique name.
      *
-     * @param null|string $variable the name of the variable, or null to automatically generate a variable name
+     * @param null|string $variable the name of the variable, or null to automatically generate a name\
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/syntax/variables/ Corresponding documentation on Neo4j.com
      */
     public static function variable(?string $variable = null): Variable
     {
@@ -247,7 +249,7 @@ final class Query implements QueryConvertible
     /**
      * Creates a new parameter.
      *
-     * @param null|string $parameter The name of the parameter
+     * @param null|string $parameter The name of the parameter, or null to automatically generate a name
      */
     public static function parameter(?string $parameter = null): Parameter
     {
@@ -255,13 +257,11 @@ final class Query implements QueryConvertible
     }
 
     /**
-     * Returns the name of the "Procedure" class. This can be used to more easily create new functions calls, like so:.
+     * Returns the class string of the "Procedure" class. This can be used to more easily create new functions calls, like so:.
      *
      * Query::function()::raw(...)
      *
      * @return class-string<Procedure>
-     *
-     * @deprecated Use Query::procedure() instead
      */
     public static function function(): string
     {
@@ -269,7 +269,7 @@ final class Query implements QueryConvertible
     }
 
     /**
-     * Returns the name of the "Procedure" class. This can be used to more easily create new functions calls, like so:.
+     * Returns the class string of the "Procedure" class. This can be used to more easily create new functions calls, like so:.
      *
      *  Query::procedure()::raw()
      *
@@ -281,7 +281,7 @@ final class Query implements QueryConvertible
     }
 
     /**
-     * Creates a new raw expression.
+     * Creates a new raw expression. This should be used only for features that are not implemented by the DSL.
      *
      * @param string $expression The raw expression
      */
@@ -335,13 +335,13 @@ final class Query implements QueryConvertible
      * @note This feature is not part of the openCypher standard. For more information, see https://github.com/opencypher/openCypher/blob/a507292d35280aca9e37bf938cdec4fdd1e64ba9/docs/standardisation-scope.adoc.
      *
      * @param callable|Query                                        $query     A callable decorating a query, or the actual sub-query
-     * @param Pattern|Pattern[]|string|string[]|Variable|Variable[] $variables The variables to include in the WITH clause for correlation
+     * @param Pattern|Pattern[]|string|string[]|Variable|Variable[] $variables The variables to include in the WITH clause for correlation (optional)
      *
      * @return $this
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/ Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/ Corresponding documentation on Neo4j.com
      */
-    public function call($query = null, $variables = []): self
+    public function call($query, $variables = []): self
     {
         $this->assertClass('query', [self::class, Closure::class, 'callable'], $query);
 
@@ -373,7 +373,7 @@ final class Query implements QueryConvertible
      *
      * @return $this
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/clauses/call/ Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/call/ Corresponding documentation on Neo4j.com
      */
     public function callProcedure(Procedure $procedure, $yields = []): self
     {
@@ -399,7 +399,7 @@ final class Query implements QueryConvertible
      *
      * @return $this
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/clauses/match/ Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/ Corresponding documentation on Neo4j.com
      */
     public function match($patterns): self
     {
@@ -418,12 +418,12 @@ final class Query implements QueryConvertible
     /**
      * Creates the RETURN clause.
      *
-     * @param Alias|Alias[]|AnyType|AnyType[]|array|bool|bool[]|float|float[]|int|int[]|Pattern|Pattern[]|string|string[] $expressions The expressions to return
-     * @param bool                                                                                                        $distinct    Whether to be a RETURN DISTINCT clause (optional)
+     * @param Alias|Alias[]|AnyType|AnyType[]|array|bool|bool[]|float|float[]|int|int[]|Pattern|Pattern[]|string|string[] $expressions A single expression to return, or a non-empty list of expressions to return
+     * @param bool                                                                                                        $distinct    Whether to be a RETURN DISTINCT clause (optional, default: false)
      *
      * @return $this
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/clauses/return/ Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/ Corresponding documentation on Neo4j.com
      */
     public function returning($expressions, bool $distinct = false): self
     {
@@ -445,11 +445,11 @@ final class Query implements QueryConvertible
     /**
      * Creates the CREATE clause.
      *
-     * @param CompletePattern|CompletePattern[] $patterns A single pattern or a list of patterns
+     * @param CompletePattern|CompletePattern[] $patterns A single pattern or a non-empty list of patterns
      *
      * @return $this
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/clauses/create/ Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/create/ Corresponding documentation on Neo4j.com
      */
     public function create($patterns): self
     {
@@ -468,12 +468,12 @@ final class Query implements QueryConvertible
     /**
      * Creates the DELETE clause.
      *
-     * @param Pattern|Pattern[]|StructuralType|StructuralType[] $structures The structures to delete
-     * @param bool                                              $detach     Whether to DETACH DELETE
+     * @param Pattern|Pattern[]|StructuralType|StructuralType[] $structures A single structure to delete, or a non-empty list of structures to delete
+     * @param bool                                              $detach     Whether to DETACH DELETE (optional, default: false)
      *
      * @return $this
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/clauses/delete/ Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/ Corresponding documentation on Neo4j.com
      */
     public function delete($structures, bool $detach = false): self
     {
@@ -493,11 +493,11 @@ final class Query implements QueryConvertible
     /**
      * Creates the DETACH DELETE clause.
      *
-     * @param Pattern|Pattern[]|StructuralType|StructuralType[] $structures The variables to delete, including nodes, relationships and paths
+     * @param Pattern|Pattern[]|StructuralType|StructuralType[] $structures A single structure to delete, or a non-empty list of structures to delete
      *
      * @return $this
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/clauses/delete/ Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/ Corresponding documentation on Neo4j.com
      */
     public function detachDelete($structures): self
     {
@@ -511,7 +511,7 @@ final class Query implements QueryConvertible
      *
      * @return $this
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/clauses/limit/ Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/limit/ Corresponding documentation on Neo4j.com
      */
     public function limit($limit): self
     {
@@ -530,7 +530,7 @@ final class Query implements QueryConvertible
      *
      * @return $this
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/clauses/skip/ Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/skip/ Corresponding documentation on Neo4j.com
      */
     public function skip($amount): self
     {
@@ -546,12 +546,12 @@ final class Query implements QueryConvertible
      * Creates the MERGE clause.
      *
      * @param CompletePattern $pattern      The pattern to merge
-     * @param null|SetClause  $createClause The clause to execute when the pattern is created
-     * @param null|SetClause  $matchClause  The clause to execute when the pattern is matched
+     * @param null|SetClause  $createClause The clause to execute when the pattern is created (optional)
+     * @param null|SetClause  $matchClause  The clause to execute when the pattern is matched (optional)
      *
      * @return $this
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/clauses/merge/ Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/ Corresponding documentation on Neo4j.com
      */
     public function merge(CompletePattern $pattern, ?SetClause $createClause = null, ?SetClause $matchClause = null): self
     {
@@ -568,11 +568,11 @@ final class Query implements QueryConvertible
     /**
      * Creates the OPTIONAL MATCH clause.
      *
-     * @param CompletePattern|CompletePattern[] $patterns A single pattern or a list of patterns
+     * @param CompletePattern|CompletePattern[] $patterns A single pattern to match, or a non-empty list of patterns to match
      *
      * @return $this
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/clauses/optional-match/ Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/optional-match/ Corresponding documentation on Neo4j.com
      */
     public function optionalMatch($patterns): self
     {
@@ -591,12 +591,12 @@ final class Query implements QueryConvertible
     /**
      * Creates the ORDER BY clause.
      *
-     * @param Property|Property[] $properties A single property or a list of properties
-     * @param bool                $descending Whether to order in descending order
+     * @param Property|Property[] $properties A single property to order by, or a non-empty list of properties to order by
+     * @param bool                $descending Whether to order in descending order (optional, default: false)
      *
      * @return $this
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/clauses/order-by/ Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/order-by/ Corresponding documentation on Neo4j.com
      */
     public function orderBy($properties, bool $descending = false): self
     {
@@ -616,11 +616,11 @@ final class Query implements QueryConvertible
     /**
      * Creates the REMOVE clause.
      *
-     * @param Label|Label[]|Property|Property[] $expressions The expressions to remove (should either be a Node or a Property)
+     * @param Label|Label[]|Property|Property[] $expressions A single expression to remove, or a non-empty list of expressions to remove
      *
      * @return $this
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/clauses/remove/ Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/remove/ Corresponding documentation on Neo4j.com
      */
     public function remove($expressions): self
     {
@@ -639,11 +639,11 @@ final class Query implements QueryConvertible
     /**
      * Create the SET clause.
      *
-     * @param Label|Label[]|PropertyReplacement|PropertyReplacement[] $expressions A single expression or a list of expressions
+     * @param Label|Label[]|PropertyReplacement|PropertyReplacement[] $expressions A single expression to set, or a non-empty list of expressions to set
      *
      * @return $this
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/clauses/set/ Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/ Corresponding documentation on Neo4j.com
      */
     public function set($expressions): self
     {
@@ -662,13 +662,13 @@ final class Query implements QueryConvertible
     /**
      * Creates the WHERE clause.
      *
-     * @param bool|bool[]|BooleanType|BooleanType[] $expressions The expression to match
+     * @param bool|bool[]|BooleanType|BooleanType[] $expressions A boolean expression to evaluate, or a non-empty list of boolean expression to evaluate
      * @param string                                $operator    The operator with which to unify the given expressions, should be either WhereClause::OR,
-     *                                                           WhereClause::AND or WhereClause::XOR
+     *                                                           WhereClause::AND or WhereClause::XOR (optional, default: 'and')
      *
      * @return $this
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/clauses/where/ Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/ Corresponding documentation on Neo4j.com
      */
     public function where($expressions, string $operator = WhereClause::AND): self
     {
@@ -690,11 +690,11 @@ final class Query implements QueryConvertible
     /**
      * Creates the WITH clause.
      *
-     * @param Alias|Pattern|AnyType|bool|float|int|string|Alias[]|Pattern[]|AnyType[]|bool[]|float[]|int[]|string[]|mixed[]|mixed[][] $expressions The entries to add; if the array-key is non-numerical, it is used as the alias
+     * @param Alias|Alias[]|AnyType|AnyType[]|bool|bool[]|float|float[]|int|int[]|mixed[]|mixed[][]|Pattern|Pattern[]|string|string[] $expressions An entry to add, or a non-empty list of entries to add; if the array-key is non-numerical, it is used as the alias
      *
      * @return $this
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/clauses/with/ Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/with/ Corresponding documentation on Neo4j.com
      */
     public function with($expressions): self
     {
@@ -715,8 +715,8 @@ final class Query implements QueryConvertible
     /**
      * Creates a raw clause. This should only be used for features that are not implemented by the DSL.
      *
-     * @param string $clause  The name of the clause; for instance "MATCH"
-     * @param string $subject The subject/body of the clause
+     * @param string $clause  The name of the clause, for instance "MATCH"
+     * @param string $subject The subject (body) of the clause
      *
      * @return $this
      */
@@ -731,11 +731,11 @@ final class Query implements QueryConvertible
      * Combines the result of this query with another one via a UNION clause.
      *
      * @param callable|Query $queryOrCallable The callable decorating a fresh query instance or the query instance to be attached after the union clause
-     * @param bool           $all             Whether the union should include all results or remove the duplicates instead
+     * @param bool           $all             Whether the union should include all results or remove the duplicates instead (optional, default: false)
      *
      * @return $this
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/clauses/union/ Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/union/ Corresponding documentation on Neo4j.com
      */
     public function union($queryOrCallable, bool $all = false): self
     {

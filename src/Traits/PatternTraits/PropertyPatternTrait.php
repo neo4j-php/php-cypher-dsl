@@ -12,15 +12,12 @@ namespace WikibaseSolutions\CypherDSL\Traits\PatternTraits;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
-use WikibaseSolutions\CypherDSL\Patterns\PropertyPattern;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
  * This trait provides a default implementation to satisfy the "PropertyPattern" interface.
- *
- * @implements PropertyPattern
  */
 trait PropertyPatternTrait
 {
@@ -56,9 +53,7 @@ trait PropertyPatternTrait
      */
     public function addProperty(string $key, $property): self
     {
-        $this->makeProperties();
-
-        $this->properties->add($key, $property);
+        $this->makeMap()->add($key, $property);
 
         return $this;
     }
@@ -70,7 +65,7 @@ trait PropertyPatternTrait
     {
         self::assertClass('properties', [Map::class, 'array'], $properties);
 
-        $this->makeProperties();
+        $map = $this->makeMap();
 
         if (is_array($properties)) {
             $res = [];
@@ -83,7 +78,7 @@ trait PropertyPatternTrait
             $properties = new Map($res);
         }
 
-        $this->properties->mergeWith($properties);
+        $map->mergeWith($properties);
 
         return $this;
     }
@@ -99,7 +94,7 @@ trait PropertyPatternTrait
     /**
      * Initialises the properties in this pattern.
      */
-    private function makeProperties(): void
+    private function makeMap(): Map
     {
         if (!isset($this->properties)) {
             $this->properties = new Map();
@@ -110,5 +105,7 @@ trait PropertyPatternTrait
             // MapType with the {} syntax).
             throw new TypeError('$this->properties must be of type Map to support "addProperty"');
         }
+
+        return $this->properties;
     }
 }

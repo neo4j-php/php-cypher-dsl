@@ -28,7 +28,7 @@ trait EscapeTrait
      *
      * @return string The escaped name
      *
-     * @see https://neo4j.com/docs/cypher-manual/4.4/syntax/naming
+     * @see https://neo4j.com/docs/cypher-manual/4.4/syntax/naming Corresponding documentation on Neo4j.com
      */
     private static function escape(string $name): string
     {

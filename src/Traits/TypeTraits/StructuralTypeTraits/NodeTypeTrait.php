@@ -10,12 +10,9 @@
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits;
 
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\MethodTraits\PropertyMethodTrait;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 
 /**
  * This trait provides a default implementation to satisfy the "NodeType" interface.
- *
- * @implements NodeType
  */
 trait NodeTypeTrait
 {
