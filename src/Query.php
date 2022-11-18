@@ -93,7 +93,7 @@ final class Query implements QueryConvertible
      *
      * @param null|string $label The label to give to the node
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node Corresponding documentation on Neo4j.com
+     * @link https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node Corresponding documentation on Neo4j.com
      */
     public static function node(?string $label = null): Node
     {
@@ -103,16 +103,46 @@ final class Query implements QueryConvertible
     /**
      * Creates a relationship.
      *
-     * @param string[] $direction The direction of the relationship, should be either:
+     * @param string[] $direction The direction of the relationship (optional, default: unidirectional), should be either:
      *                            - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
      *                            - Relationship::DIR_LEFT (for a relation of (a)<--(b))
      *                            - Relationship::DIR_UNI (for a relation of (a)--(b))
      *
-     * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship Corresponding documentation on Neo4j.com
+     * @link https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship Corresponding documentation on Neo4j.com
      */
-    public static function relationship(array $direction): Relationship
+    public static function relationship(array $direction = Relationship::DIR_UNI): Relationship
     {
         return new Relationship($direction);
+    }
+
+    /**
+     * Creates a unidirectional relationship.
+     *
+     * @link https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship Corresponding documentation on Neo4j.com
+     */
+    public static function relationshipUni(): Relationship
+    {
+        return new Relationship(Relationship::DIR_UNI);
+    }
+
+    /**
+     * Creates a right relationship.
+     *
+     * @link https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship Corresponding documentation on Neo4j.com
+     */
+    public static function relationshipTo(): Relationship
+    {
+        return new Relationship(Relationship::DIR_RIGHT);
+    }
+
+    /**
+     * Creates a left relationship.
+     *
+     * @link https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship Corresponding documentation on Neo4j.com
+     */
+    public static function relationshipFrom(): Relationship
+    {
+        return new Relationship(Relationship::DIR_LEFT);
     }
 
     /**

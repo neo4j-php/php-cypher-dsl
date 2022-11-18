@@ -58,16 +58,46 @@ function node(?string $label = null): Node
 /**
  * Creates a relationship.
  *
- * @param string[] $direction The direction of the relationship, should be either:
+ * @param string[] $direction The direction of the relationship (optional, default: unidirectional), should be either:
  *                            - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
  *                            - Relationship::DIR_LEFT (for a relation of (a)<--(b))
  *                            - Relationship::DIR_UNI (for a relation of (a)--(b))
  *
  * @see Query::relationship()
  */
-function relationship(array $direction): Relationship
+function relationship(array $direction = Relationship::DIR_UNI): Relationship
 {
     return Query::relationship($direction);
+}
+
+/**
+ * Creates a unidirectional relationship.
+ *
+ * @see Query::relationshipUni()
+ */
+function relationshipUni(): Relationship
+{
+    return Query::relationshipUni();
+}
+
+/**
+ * Creates a right relationship.
+ *
+ * @see Query::relationshipTo()
+ */
+function relationshipTo(): Relationship
+{
+    return Query::relationshipTo();
+}
+
+/**
+ * Creates a left relationship.
+ *
+ * @see Query::relationshipFrom()
+ */
+function relationshipFrom(): Relationship
+{
+    return Query::relationshipFrom();
 }
 
 /**
