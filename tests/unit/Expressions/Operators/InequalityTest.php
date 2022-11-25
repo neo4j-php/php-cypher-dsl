@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Inequality;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Inequality
@@ -39,5 +40,12 @@ class InequalityTest extends TestCase
         $inequality = new Inequality($inequality, $inequality);
 
         $this->assertSame("(v.a <> v.b <> v.a <> v.b)", $inequality->toQuery());
+    }
+
+    public function testInstanceOfBooleanType(): void
+    {
+        $inequality = new Inequality(new Variable('a'), new Variable('b'));
+
+        $this->assertInstanceOf(BooleanType::class, $inequality);
     }
 }

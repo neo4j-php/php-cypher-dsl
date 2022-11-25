@@ -20,10 +20,7 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  */
 final class PropertyMethodTraitTest extends TestCase
 {
-    /**
-     * @var MapType|MockObject
-     */
-    private $a;
+    private MapType $a;
 
     protected function setUp(): void
     {

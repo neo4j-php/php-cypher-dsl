@@ -9,7 +9,6 @@
  */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\TypeTraits\PropertyTypeTraits;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Conjunction;
@@ -24,15 +23,8 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  */
 final class BooleanTypeTraitTest extends TestCase
 {
-    /**
-     * @var BooleanType|MockObject
-     */
-    private $a;
-
-    /**
-     * @var BooleanType|MockObject
-     */
-    private $b;
+    private BooleanType $a;
+    private BooleanType $b;
 
     protected function setUp(): void
     {

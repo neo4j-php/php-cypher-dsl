@@ -24,15 +24,8 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 final class StringTypeTraitTest extends TestCase
 {
-    /**
-     * @var MockObject|StringType
-     */
-    private $a;
-
-    /**
-     * @var MockObject|StringType
-     */
-    private $b;
+    private StringType $a;
+    private StringType $b;
 
     protected function setUp(): void
     {
