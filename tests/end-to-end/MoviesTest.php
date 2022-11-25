@@ -7,43 +7,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace WikibaseSolutions\CypherDSL\Tests\Unit;
+namespace WikibaseSolutions\CypherDSL\Tests\EndToEnd;
 
 use PHPUnit\Framework\TestCase;
-use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
-use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
-use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
-use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use function WikibaseSolutions\CypherDSL\float;
-use function WikibaseSolutions\CypherDSL\function_;
-use function WikibaseSolutions\CypherDSL\integer;
-use function WikibaseSolutions\CypherDSL\list_;
-use function WikibaseSolutions\CypherDSL\literal;
-use function WikibaseSolutions\CypherDSL\map;
 use function WikibaseSolutions\CypherDSL\node;
-use WikibaseSolutions\CypherDSL\Patterns\Node;
-use WikibaseSolutions\CypherDSL\Patterns\Relationship;
-use WikibaseSolutions\CypherDSL\Query;
 use function WikibaseSolutions\CypherDSL\query;
-use function WikibaseSolutions\CypherDSL\raw;
-use function WikibaseSolutions\CypherDSL\relationship;
 use function WikibaseSolutions\CypherDSL\relationshipUni;
-use function WikibaseSolutions\CypherDSL\string;
-use function WikibaseSolutions\CypherDSL\variable;
 
 /**
- * This class contains some end-to-end tests to test the creation of Cypher queries present in the ":play movies" example.
+ * This class contains some end-to-end tests to test the creation of Cypher queries present in the ":play movies"
+ * example.
  *
  * @coversNothing
  *
- * @link https://neo4j.com/developer/example-data/
+ * @see https://neo4j.com/developer/example-data/
  */
 final class MoviesTest extends TestCase
 {
