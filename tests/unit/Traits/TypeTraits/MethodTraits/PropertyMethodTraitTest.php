@@ -9,7 +9,6 @@
  */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\TypeTraits\MethodTraits;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Property;

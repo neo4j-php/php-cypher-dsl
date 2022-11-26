@@ -13,7 +13,6 @@ use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\In;
-use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\PropertyTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 

@@ -27,7 +27,7 @@ final class MoviesTest extends TestCase
     public function testFindActorNamedTomHanks(): void
     {
         $tom = node()->withProperties([
-            'name' => 'Tom Hanks'
+            'name' => 'Tom Hanks',
         ]);
 
         $query = query()
@@ -40,7 +40,7 @@ final class MoviesTest extends TestCase
     public function testFindTheMovieWithTitleCloudAtlas(): void
     {
         $cloudAtlas = node()->withProperties([
-            'title' => 'Cloud Atlas'
+            'title' => 'Cloud Atlas',
         ]);
 
         $query = query()
@@ -69,7 +69,7 @@ final class MoviesTest extends TestCase
             ->match($nineties)
             ->where([
                 $nineties->property('released')->gte(1990),
-                $nineties->property('released')->lt(2000)
+                $nineties->property('released')->lt(2000),
             ])
             ->returning($nineties->property('title'));
 
@@ -80,7 +80,7 @@ final class MoviesTest extends TestCase
     {
         $movies = node();
         $tom = node('Person')->withProperties([
-            'name' => 'Tom Hanks'
+            'name' => 'Tom Hanks',
         ]);
 
         $query = query()
@@ -94,7 +94,7 @@ final class MoviesTest extends TestCase
     {
         $directors = node();
         $cloudAtlas = node()->withProperties([
-            'title' => 'Cloud Atlas'
+            'title' => 'Cloud Atlas',
         ]);
 
         $query = query()
@@ -108,7 +108,7 @@ final class MoviesTest extends TestCase
     {
         $coActors = node();
         $tom = node('Person')->withProperties([
-            'name' => 'Tom Hanks'
+            'name' => 'Tom Hanks',
         ]);
 
         $query = query()
@@ -122,7 +122,7 @@ final class MoviesTest extends TestCase
     {
         $hollywood = node();
         $bacon = node('Person')->withProperties([
-            'name' => 'Kevin Bacon'
+            'name' => 'Kevin Bacon',
         ]);
 
         $relation = relationshipUni()

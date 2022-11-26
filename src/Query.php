@@ -93,7 +93,7 @@ final class Query implements QueryConvertible
      *
      * @param null|string $label The label to give to the node
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node Corresponding documentation on Neo4j.com
      */
     public static function node(?string $label = null): Node
     {
@@ -108,7 +108,7 @@ final class Query implements QueryConvertible
      *                            - Relationship::DIR_LEFT (for a relation of (a)<--(b))
      *                            - Relationship::DIR_UNI (for a relation of (a)--(b))
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship Corresponding documentation on Neo4j.com
      */
     public static function relationship(array $direction = Relationship::DIR_UNI): Relationship
     {
@@ -118,7 +118,7 @@ final class Query implements QueryConvertible
     /**
      * Creates a unidirectional relationship.
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship Corresponding documentation on Neo4j.com
      */
     public static function relationshipUni(): Relationship
     {
@@ -128,7 +128,7 @@ final class Query implements QueryConvertible
     /**
      * Creates a right relationship.
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship Corresponding documentation on Neo4j.com
      */
     public static function relationshipTo(): Relationship
     {
@@ -138,7 +138,7 @@ final class Query implements QueryConvertible
     /**
      * Creates a left relationship.
      *
-     * @link https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship Corresponding documentation on Neo4j.com
+     * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship Corresponding documentation on Neo4j.com
      */
     public static function relationshipFrom(): Relationship
     {

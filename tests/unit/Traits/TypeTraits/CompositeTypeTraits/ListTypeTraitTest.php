@@ -9,7 +9,6 @@
  */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\TypeTraits\CompositeTypeTraits;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\In;
