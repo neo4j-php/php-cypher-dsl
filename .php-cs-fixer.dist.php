@@ -22,8 +22,9 @@ COPYRIGHT;
 $finder = Finder::create()
     ->files()
     ->in(__DIR__ . '/src')
-    ->in(__DIR__ . '/tests/Unit')
-    ->in(__DIR__ . '/tests/Integration')
+    ->in(__DIR__ . '/tests/unit')
+    ->in(__DIR__ . '/tests/integration')
+    ->in(__DIR__ . '/tests/end-to-end')
     ->name('*.php');
 
 $config = new Config();
