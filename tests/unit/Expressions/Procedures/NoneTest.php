@@ -15,48 +15,34 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\None;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\None
  */
-class NoneTest extends TestCase
+final class NoneTest extends TestCase
 {
     public function testToQuery(): void
     {
-        $variable = new Variable("variable");
-        $list = new List_([new String_('foo'), new String_('bar')]);
-        $predicate = $this->createMock(AnyType::class);
-        $predicate->method('toQuery')->willReturn('predicate');
+        $variable = Query::variable('variable');
+        $list = Query::list(['foo', 'bar']);
+        $predicate = Query::boolean(true);
 
-        $all = new None($variable, $list, $predicate);
+        $none = new None($variable, $list, $predicate);
 
-        $this->assertSame("none(variable IN ['foo', 'bar'] WHERE predicate)", $all->toQuery());
+        $this->assertSame("none(variable IN ['foo', 'bar'] WHERE predicate)", $none->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsVariable(): void
+    public function testInstanceOfBooleanType(): void
     {
-        $variable = $this->createMock(AnyType::class);
-        $list = new List_;
-        $predicate = $this->createMock(AnyType::class);
+        $variable = Query::variable('variable');
+        $list = Query::list(['foo', 'bar']);
+        $predicate = Query::boolean(true);
 
-        $this->expectException(TypeError::class);
+        $none = new None($variable, $list, $predicate);
 
-        $all = new None($variable, $list, $predicate);
-
-        $all->toQuery();
-    }
-
-    public function testDoesNotAcceptAnyTypeAsList(): void
-    {
-        $variable = new Variable("variable");
-        $list = $this->createMock(AnyType::class);
-        $predicate = $this->createMock(AnyType::class);
-
-        $this->expectException(TypeError::class);
-
-        $all = new None($variable, $list, $predicate);
-
-        $all->toQuery();
+        $this->assertInstanceOf(BooleanType::class, $none);
     }
 }

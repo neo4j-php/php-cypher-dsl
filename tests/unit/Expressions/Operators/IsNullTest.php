@@ -12,11 +12,12 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\IsNull;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\IsNull
  */
-class IsNullTest extends TestCase
+final class IsNullTest extends TestCase
 {
     public function testToQuery(): void
     {
@@ -31,5 +32,12 @@ class IsNullTest extends TestCase
         $this->assertSame("(true IS NULL IS NULL)", $isNull->toQuery());
 
         $this->assertTrue($isNull->insertsParentheses());
+    }
+
+    public function testInstanceOfBooleanType(): void
+    {
+        $isNull = new IsNull(new Boolean(true));
+
+        $this->assertInstanceOf(BooleanType::class, $isNull);
     }
 }

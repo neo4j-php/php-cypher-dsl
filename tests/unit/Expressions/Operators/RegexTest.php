@@ -15,11 +15,12 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Regex;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Regex
  */
-class RegexTest extends TestCase
+final class RegexTest extends TestCase
 {
     public function testToQuery(): void
     {
@@ -35,23 +36,10 @@ class RegexTest extends TestCase
         $this->assertSame("a =~ 'b'", $regex->toQuery());
     }
 
-    public function testCannotBeNested(): void
+    public function testInstanceOfBooleanType(): void
     {
         $regex = new Regex(new Variable("a"), new String_("b"));
 
-        $this->expectException(TypeError::class);
-
-        $regex = new Regex($regex, $regex);
-
-        $regex->toQuery();
-    }
-
-    public function testDoesNotAcceptAnyTypeAsOperands(): void
-    {
-        $this->expectException(TypeError::class);
-
-        $regex = new Regex($this->createMock(AnyType::class), $this->createMock(AnyType::class));
-
-        $regex->toQuery();
+        $this->assertSame(BooleanType::class, $regex);
     }
 }

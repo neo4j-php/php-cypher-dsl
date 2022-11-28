@@ -11,43 +11,51 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\ModuloDivision;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\ModuloDivision
  */
-class ModuloDivisionTest extends TestCase
+final class ModuloDivisionTest extends TestCase
 {
     public function testToQuery(): void
     {
-        $ModuloDivision = new ModuloDivision(new Integer(10), new Integer(15));
+        $moduloDivision = new ModuloDivision(new Integer(10), new Integer(15));
 
-        $this->assertSame("(10 % 15)", $ModuloDivision->toQuery());
+        $this->assertSame("(10 % 15)", $moduloDivision->toQuery());
 
-        $ModuloDivision = new ModuloDivision($ModuloDivision, $ModuloDivision);
+        $moduloDivision = new ModuloDivision($moduloDivision, $moduloDivision);
 
-        $this->assertSame("((10 % 15) % (10 % 15))", $ModuloDivision->toQuery());
+        $this->assertSame("((10 % 15) % (10 % 15))", $moduloDivision->toQuery());
     }
 
     public function testToQueryNoParentheses(): void
     {
-        $ModuloDivision = new ModuloDivision(new Integer(10), new Integer(15), false);
+        $moduloDivision = new ModuloDivision(new Integer(10), new Integer(15), false);
 
-        $this->assertSame("10 % 15", $ModuloDivision->toQuery());
+        $this->assertSame("10 % 15", $moduloDivision->toQuery());
 
-        $ModuloDivision = new ModuloDivision($ModuloDivision, $ModuloDivision);
+        $moduloDivision = new ModuloDivision($moduloDivision, $moduloDivision);
 
-        $this->assertSame("(10 % 15 % 10 % 15)", $ModuloDivision->toQuery());
+        $this->assertSame("(10 % 15 % 10 % 15)", $moduloDivision->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands(): void
+    public function testInstanceOfIntegerType(): void
     {
-        $this->expectException(TypeError::class);
+        $moduloDivision = new ModuloDivision(new Integer(10), new Integer(15));
 
-        $ModuloDivision = new ModuloDivision($this->createMock(AnyType::class), $this->createMock(AnyType::class));
+        $this->assertInstanceOf(IntegerType::class, $moduloDivision);
+    }
 
-        $ModuloDivision->toQuery();
+    public function testInstanceOfFloatType(): void
+    {
+        $moduloDivision = new ModuloDivision(new Float_(10.0), new Float_(15.0));
+
+        $this->assertInstanceOf(FloatType::class, $moduloDivision);
     }
 }

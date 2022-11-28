@@ -15,11 +15,12 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\StartsWith;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\StartsWith
  */
-class StartsWithTest extends TestCase
+final class StartsWithTest extends TestCase
 {
     public function testToQuery(): void
     {
@@ -35,23 +36,10 @@ class StartsWithTest extends TestCase
         $this->assertSame("a STARTS WITH 'b'", $startsWith->toQuery());
     }
 
-    public function testCannotBeNested(): void
+    public function testInstanceOfBooleanType(): void
     {
         $startsWith = new StartsWith(new Variable("a"), new String_("b"));
 
-        $this->expectException(TypeError::class);
-
-        $startsWith = new StartsWith($startsWith, $startsWith);
-
-        $startsWith->toQuery();
-    }
-
-    public function testDoesNotAcceptAnyTypeAsOperands(): void
-    {
-        $this->expectException(TypeError::class);
-
-        $startsWith = new StartsWith($this->createMock(AnyType::class), $this->createMock(AnyType::class));
-
-        $startsWith->toQuery();
+        $this->assertInstanceOf(BooleanType::class, $startsWith);
     }
 }

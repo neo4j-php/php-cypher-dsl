@@ -11,14 +11,17 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Multiplication;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Multiplication
  */
-class MultiplicationTest extends TestCase
+final class MultiplicationTest extends TestCase
 {
     public function testToQuery(): void
     {
@@ -42,12 +45,17 @@ class MultiplicationTest extends TestCase
         $this->assertSame("(10 * 15 * 10 * 15)", $multiplication->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands(): void
+    public function testInstanceOfFloatType(): void
     {
-        $this->expectException(TypeError::class);
+        $multiplication = new Multiplication(new Float_(10.0), new Float_(15.0), false);
 
-        $multiplication = new Multiplication($this->createMock(AnyType::class), $this->createMock(AnyType::class));
+        $this->assertInstanceOf(FloatType::class, $multiplication);
+    }
 
-        $multiplication->toQuery();
+    public function testInstanceOfIntegerType(): void
+    {
+        $multiplication = new Multiplication(new Integer(10), new Integer(15), false);
+
+        $this->assertInstanceOf(IntegerType::class, $multiplication);
     }
 }

@@ -14,11 +14,12 @@ use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Negation;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Negation
  */
-class NegationTest extends TestCase
+final class NegationTest extends TestCase
 {
     public function testToQuery(): void
     {
@@ -31,12 +32,17 @@ class NegationTest extends TestCase
         $this->assertSame("(NOT (NOT true))", $not->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands(): void
+    public function testToQueryNoParentheses(): void
     {
-        $this->expectException(TypeError::class);
+        $not = new Negation(new Boolean(true), false);
 
-        $and = new Negation($this->createMock(AnyType::class));
+        $this->assertSame("NOT true", $not->toQuery());
+    }
 
-        $and->toQuery();
+    public function testInstanceOfBooleanType(): void
+    {
+        $not = new Negation(new Boolean(true));
+
+        $this->assertInstanceOf(BooleanType::class, $not);
     }
 }

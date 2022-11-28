@@ -14,30 +14,28 @@ use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Point;
+use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\Point
  */
-class PointTest extends TestCase
+final class PointTest extends TestCase
 {
     public function testToQuery(): void
     {
-        $map = new Map(['latitude' => new Float_(1.5), 'longitude' => new Float_(4.2)]);
-
+        $map = Query::map(['latitude' => 1.5, 'longitude' => 4.2]);
         $point = new Point($map);
 
         $this->assertSame("point({latitude: 1.5, longitude: 4.2})", $point->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsVariable(): void
+    public function testInstanceOfPointType(): void
     {
-        $map = $this->createMock(AnyType::class);
-
-        $this->expectException(TypeError::class);
-
+        $map = Query::map(['latitude' => 1.5, 'longitude' => 4.2]);
         $point = new Point($map);
 
-        $point->toQuery();
+        $this->assertInstanceOf(PointType::class, $point);
     }
 }

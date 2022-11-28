@@ -9,6 +9,7 @@
  */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
+use PHPStan\Type\BooleanType;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThan;
@@ -16,7 +17,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThan;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\LessThan
  */
-class LessThanTest extends TestCase
+final class LessThanTest extends TestCase
 {
     public function testToQuery(): void
     {
@@ -34,5 +35,12 @@ class LessThanTest extends TestCase
         $lessThan = new LessThan(new Integer(10), new Integer(15), false);
 
         $this->assertSame("10 < 15", $lessThan->toQuery());
+    }
+
+    public function testInstanceOfBooleanType(): void
+    {
+        $lessThan = new LessThan(new Integer(1), new Integer(2));
+
+        $this->assertInstanceOf(BooleanType::class, $lessThan);
     }
 }

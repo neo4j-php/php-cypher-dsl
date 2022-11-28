@@ -13,17 +13,18 @@ use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\LocalDateTime;
+use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\LocalDateTime
  */
-class LocalDateTimeTest extends TestCase
+final class LocalDateTimeTest extends TestCase
 {
     public function testToQuery(): void
     {
-        $map = new Map(['foo' => new String_('bar')]);
-
+        $map = Query::map(['foo' => 'bar']);
         $dateTime = new LocalDateTime($map);
 
         $this->assertSame("localdatetime({foo: 'bar'})", $dateTime->toQuery());
@@ -36,15 +37,10 @@ class LocalDateTimeTest extends TestCase
         $this->assertSame("localdatetime()", $dateTime->toQuery());
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsAnyType(): void
+    public function testInstanceOfLocalDateTimeType(): void
     {
-        $map = $this->createMock(AnyType::class);
+        $dateTime = new LocalDateTime();
 
-        $dateTime = new LocalDateTime($map);
-
-        $dateTime->toQuery();
+        $this->assertInstanceOf(LocalDateTimeType::class, $dateTime);
     }
 }

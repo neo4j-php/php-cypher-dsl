@@ -14,11 +14,12 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Date;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\Date
  */
-class DateTest extends TestCase
+final class DateTest extends TestCase
 {
     public function testToQuery(): void
     {
@@ -36,15 +37,10 @@ class DateTest extends TestCase
         $this->assertSame("date()", $date->toQuery());
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsAnyType(): void
+    public function testInstanceOfDateType(): void
     {
-        $map = $this->createMock(AnyType::class);
+        $date = new Date();
 
-        $date = new Date($map);
-
-        $date->toQuery();
+        $this->assertInstanceOf(DateType::class, $date);
     }
 }

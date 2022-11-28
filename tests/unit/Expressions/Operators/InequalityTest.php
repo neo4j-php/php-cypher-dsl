@@ -18,7 +18,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Inequality
  */
-class InequalityTest extends TestCase
+final class InequalityTest extends TestCase
 {
     public function testToQuery(): void
     {

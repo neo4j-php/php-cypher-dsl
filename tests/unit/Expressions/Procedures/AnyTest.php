@@ -15,48 +15,32 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Any;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\Any
  */
-class AnyTest extends TestCase
+final class AnyTest extends TestCase
 {
     public function testToQuery(): void
     {
-        $variable = new Variable("variable");
-        $list = new List_([new String_('a'), new String_('b')]);
-        $predicate = $this->createMock(AnyType::class);
-        $predicate->method('toQuery')->willReturn('predicate');
+        $variable = Query::variable('variable');
+        $list = Query::list(['a', 'b']);
 
-        $any = new Any($variable, $list, $predicate);
+        $any = new Any($variable, $list, Query::boolean(true));
 
-        $this->assertSame("any(variable IN ['a', 'b'] WHERE predicate)", $any->toQuery());
+        $this->assertSame("any(variable IN ['a', 'b'] WHERE true)", $any->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsVariable(): void
+    public function testInstanceOfBooleanType(): void
     {
-        $variable = $this->createMock(AnyType::class);
-        $list = new Variable("list");
-        $predicate = $this->createMock(AnyType::class);
+        $variable = Query::variable('variable');
+        $list = Query::list(['a', 'b']);
 
-        $this->expectException(TypeError::class);
+        $any = new Any($variable, $list, Query::boolean(true));
 
-        $any = new Any($variable, $list, $predicate);
-
-        $any->toQuery();
-    }
-
-    public function testDoesNotAcceptAnyTypeAsList(): void
-    {
-        $variable = new Variable("variable");
-        $list = $this->createMock(AnyType::class);
-        $predicate = $this->createMock(AnyType::class);
-
-        $this->expectException(TypeError::class);
-
-        $any = new Any($variable, $list, $predicate);
-
-        $any->toQuery();
+        $this->assertInstanceOf(BooleanType::class, $any);
     }
 }

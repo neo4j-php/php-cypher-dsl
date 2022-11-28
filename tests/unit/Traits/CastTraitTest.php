@@ -31,6 +31,7 @@ final class CastTraitTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->trait = new class
         {
             use CastTrait {

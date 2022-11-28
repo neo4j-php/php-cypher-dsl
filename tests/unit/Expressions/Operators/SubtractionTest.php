@@ -14,11 +14,13 @@ use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Subtraction;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\Subtraction
  */
-class SubtractionTest extends TestCase
+final class SubtractionTest extends TestCase
 {
     public function testToQuery(): void
     {
@@ -42,12 +44,17 @@ class SubtractionTest extends TestCase
         $this->assertSame("(10 - 15 - 10 - 15)", $subtraction->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands(): void
+    public function testInstanceOfIntegerType(): void
     {
-        $this->expectException(TypeError::class);
+        $subtraction = new Subtraction(new Integer(10), new Integer(15));
 
-        $subtraction = new Subtraction($this->createMock(AnyType::class), $this->createMock(AnyType::class));
+        $this->assertInstanceOf(IntegerType::class, $subtraction);
+    }
 
-        $subtraction->toQuery();
+    public function testInstanceOfFloatType(): void
+    {
+        $subtraction = new Subtraction(new Integer(10), new Integer(15));
+
+        $this->assertInstanceOf(FloatType::class, $subtraction);
     }
 }

@@ -17,11 +17,11 @@ use WikibaseSolutions\CypherDSL\Traits\NameGenerationTrait;
  */
 final class NameGenerationTraitTest extends TestCase
 {
-    private $hasName;
+    private $trait;
 
     protected function setUp(): void
     {
-        $this->hasName = new class()
+        $this->trait = new class()
         {
             use NameGenerationTrait {
                 generateIdentifier as public;
@@ -29,9 +29,18 @@ final class NameGenerationTraitTest extends TestCase
         };
     }
 
-    public function testGenerateName(): void
+    public function testGenerateIdentifierWithoutPrefix(): void
     {
-        $this->assertMatchesRegularExpression('/var\w{32}/', $this->hasName->generateIdentifier());
-        $this->assertMatchesRegularExpression('/x\w{16}/', $this->hasName->generateIdentifier('x', 16));
+        $this->assertMatchesRegularExpression('/var\w{32}/', $this->trait->generateIdentifier());
+    }
+
+    public function testGenerateIdentifierWithPrefix(): void
+    {
+        $this->assertMatchesRegularExpression('/x\w{32}/', $this->trait->generateIdentifier('x'));
+    }
+
+    public function testGenerateIdentifierWithPrefixAndLength(): void
+    {
+        $this->assertMatchesRegularExpression('/x\w{16}/', $this->trait->generateIdentifier('x', 16));
     }
 }

@@ -15,66 +15,28 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\IsEmpty;
+use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\IsEmpty
  */
-class IsEmptyTest extends TestCase
+final class IsEmptyTest extends TestCase
 {
     public function testToQuery(): void
     {
-        $list = new List_([new String_('a'), new String_('b')]);
-
+        $list = Query::list(['a', 'b']);
         $isEmpty = new IsEmpty($list);
 
         $this->assertSame("isEmpty(['a', 'b'])", $isEmpty->toQuery());
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsListType(): void
+    public function testInstanceOfBooleanType(): void
     {
-        $list = new List_;
-
+        $list = Query::list(['a', 'b']);
         $isEmpty = new IsEmpty($list);
 
-        $isEmpty->toQuery();
-    }
-
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsMapType(): void
-    {
-        $list = new Map;
-
-        $isEmpty = new IsEmpty($list);
-
-        $isEmpty->toQuery();
-    }
-
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsStringType(): void
-    {
-        $list = new String_('a');
-
-        $isEmpty = new IsEmpty($list);
-
-        $isEmpty->toQuery();
-    }
-
-    public function testDoestNotAcceptAnyType(): void
-    {
-        $list = $this->createMock(AnyType::class);
-
-        $this->expectException(TypeError::class);
-
-        $isEmpty = new IsEmpty($list);
-
-        $isEmpty->toQuery();
+        $this->assertInstanceOf(BooleanType::class, $isEmpty);
     }
 }

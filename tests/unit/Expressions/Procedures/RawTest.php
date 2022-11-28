@@ -43,17 +43,6 @@ final class RawTest extends TestCase
         $this->assertSame("foobar(a, b, c)", $raw->toQuery());
     }
 
-    public function testRequiresAnyTypeParameters(): void
-    {
-        $a = new class()
-        {
-        };
-
-        $this->expectException(TypeError::class);
-
-        new Raw('foobar', [$a]);
-    }
-
     public function testInstanceOf(): void
     {
         $raw = new Raw('foo', [Literal::string('foo')]);

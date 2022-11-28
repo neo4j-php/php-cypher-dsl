@@ -33,7 +33,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure
  */
-final class ProcedureTest extends TestCase
+class ProcedureTest extends TestCase
 {
     public function testRaw(): void
     {

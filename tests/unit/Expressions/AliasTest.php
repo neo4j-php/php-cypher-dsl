@@ -16,7 +16,7 @@ use WikibaseSolutions\CypherDSL\Syntax\Alias;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Syntax\Alias
  */
-class AliasTest extends TestCase
+final class AliasTest extends TestCase
 {
     private Alias $alias;
 

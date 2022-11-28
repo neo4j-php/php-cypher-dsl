@@ -135,4 +135,50 @@ final class MoviesTest extends TestCase
 
         $this->assertStringMatchesFormat('MATCH (:Person {name: \'Kevin Bacon\'})-[*1..4]-(%s) RETURN DISTINCT %s', $query->toQuery());
     }
+
+    public function testFindSomeoneToIntroduceTomHanksToTomCruise(): void
+    {
+        $tom = node('Person')->withProperties([
+            'name' => 'Tom Hanks',
+        ]);
+
+        $cruise = node('Person')->withProperties([
+            'name' => 'Tom Cruise',
+        ]);
+
+        $m = node();
+        $m2 = node();
+        $coActors = node();
+
+        $query = query()
+            ->match([
+                $tom->relationshipTo($m, 'ACTED_IN')->relationshipFrom($coActors, 'ACTED_IN'),
+                $coActors->relationshipTo($m2, 'ACTED_IN')->relationshipFrom($cruise, 'ACTED_IN'),
+            ])
+            ->returning([$tom, $m, $coActors, $m2, $cruise]);
+
+        $this->assertStringMatchesFormat('MATCH (%s:Person {name: \'Tom Hanks\'})-[:ACTED_IN]->(%s)<-[:ACTED_IN]-(%s), (%s)-[:ACTED_IN]->(%s)<-[:ACTED_IN]-(%s:Person {name: \'Tom Cruise\'}) RETURN %s, %s, %s, %s', $query->toQuery());
+    }
+
+    public function testDeleteAllMovieAndPersonNodes(): void
+    {
+        $n = node();
+
+        $query = query()
+            ->match($n)
+            ->delete($n, true);
+
+        $this->assertStringMatchesFormat('MATCH (%s) DETACH DELETE %s', $query->toQuery());
+    }
+
+    public function testProveThatMovieGraphIsGone(): void
+    {
+        $n = node();
+
+        $query = query()
+            ->match($n)
+            ->returning($n);
+
+        $this->assertStringMatchesFormat('MATCH (%s) RETURN %s', $query->toQuery());
+    }
 }

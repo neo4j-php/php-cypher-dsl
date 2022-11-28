@@ -14,11 +14,13 @@ use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\UnaryMinus;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\UnaryMinus
  */
-class UnaryMinusTest extends TestCase
+final class UnaryMinusTest extends TestCase
 {
     public function testToQuery(): void
     {
@@ -29,14 +31,30 @@ class UnaryMinusTest extends TestCase
         $minus = new UnaryMinus($minus);
 
         $this->assertSame("(- (- -10))", $minus->toQuery());
+
+        $minus = new UnaryMinus(new Integer(10));
+
+        $this->assertSame("(-10)", $minus->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperand(): void
+    public function testToQueryNoParentheses(): void
     {
-        $this->expectException(TypeError::class);
+        $minus = new UnaryMinus(new Integer(10), false);
 
-        $minus = new UnaryMinus($this->createMock(AnyType::class));
+        $this->assertSame("-10", $minus->toQuery());
+    }
 
-        $minus->toQuery();
+    public function testInstanceOfFloatType(): void
+    {
+        $minus = new UnaryMinus(new Integer(-10));
+
+        $this->assertInstanceOf(FloatType::class, $minus);
+    }
+
+    public function testInstanceOfIntegerType(): void
+    {
+        $minus = new UnaryMinus(new Integer(-10));
+
+        $this->assertInstanceOf(IntegerType::class, $minus);
     }
 }

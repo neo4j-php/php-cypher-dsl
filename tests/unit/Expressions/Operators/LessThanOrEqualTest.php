@@ -12,11 +12,12 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThanOrEqual;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\LessThanOrEqual
  */
-class LessThanOrEqualTest extends TestCase
+final class LessThanOrEqualTest extends TestCase
 {
     public function testToQuery(): void
     {
@@ -34,5 +35,12 @@ class LessThanOrEqualTest extends TestCase
         $lessThanOrEqual = new LessThanOrEqual(new Integer(10), new Integer(15), false);
 
         $this->assertSame("10 <= 15", $lessThanOrEqual->toQuery());
+    }
+
+    public function testInstanceOfBooleanType(): void
+    {
+        $lessThanOrEqual = new LessThanOrEqual(new Integer(1), new Integer(2));
+
+        $this->assertInstanceOf(BooleanType::class, $lessThanOrEqual);
     }
 }

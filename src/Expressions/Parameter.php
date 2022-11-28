@@ -72,6 +72,7 @@ final class Parameter implements
     use ErrorTrait;
     use EscapeTrait;
     use NameGenerationTrait;
+
     private string $parameter;
 
     /**

@@ -11,32 +11,28 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Procedures;
 
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Exists;
+use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\Exists
  */
-class ExistsTest extends TestCase
+final class ExistsTest extends TestCase
 {
     public function testToQuery(): void
     {
-        $expression = $this->createMock(AnyType::class);
-        $expression->method('toQuery')->willReturn('expression');
-
+        $expression = Query::string("expression");
         $exists = new Exists($expression);
 
-        $this->assertSame("exists(expression)", $exists->toQuery());
+        $this->assertSame("exists('expression')", $exists->toQuery());
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsAnyType(): void
+    public function testInstanceOfBooleanType(): void
     {
-        $expression = $this->createMock(AnyType::class);
-
+        $expression = Query::string("expression");
         $exists = new Exists($expression);
 
-        $exists->toQuery();
+        $this->assertInstanceOf(BooleanType::class, $exists);
     }
 }

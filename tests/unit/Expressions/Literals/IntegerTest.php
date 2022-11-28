@@ -59,6 +59,16 @@ final class IntegerTest extends TestCase
         $this->assertEquals($expected, $decimal->getValue());
     }
 
+    /**
+     * @dataProvider provideInvalidInputData
+     */
+    public function testInvalidInput($input): void
+    {
+        $this->expectException(TypeError::class);
+        new Integer($input);
+    }
+
+
     public function provideToQueryData(): array
     {
         return [
@@ -72,17 +82,7 @@ final class IntegerTest extends TestCase
             ["-1238109438204130457284308235720483205", "-1238109438204130457284308235720483205"],
         ];
     }
-
-    /**
-     * @dataProvider wrongInputProvider
-     */
-    public function testWrongInput($input): void
-    {
-        $this->expectException(TypeError::class);
-        new Integer($input);
-    }
-
-    public function wrongInputProvider(): array
+    public function provideInvalidInputData(): array
     {
         return [
             ['nonumber'],

@@ -10,18 +10,17 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
-use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\In;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\In
  */
-class InTest extends TestCase
+final class InTest extends TestCase
 {
     public function testToQuery(): void
     {
@@ -45,12 +44,10 @@ class InTest extends TestCase
         $this->assertSame("(v.a IN b IN [true, false])", $in->toQuery());
     }
 
-    public function testDoesNotAcceptAnyTypeAsOperands(): void
+    public function testInstanceOfBooleanType(): void
     {
-        $this->expectException(TypeError::class);
+        $in = new In(new Property(new Variable('a'), 'a'), new Variable('b'));
 
-        $inequality = new In($this->createMock(AnyType::class), $this->createMock(AnyType::class));
-
-        $inequality->toQuery();
+        $this->assertInstanceOf(BooleanType::class, $in);
     }
 }

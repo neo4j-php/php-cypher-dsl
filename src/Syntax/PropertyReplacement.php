@@ -78,6 +78,24 @@ final class PropertyReplacement implements QueryConvertible
     }
 
     /**
+     * Returns the name of the property to which we assign a (new) value.
+     *
+     * @return Property|Variable
+     */
+    public function getProperty()
+    {
+        return $this->property;
+    }
+
+    /**
+     * Returns value to assign to the property.
+     */
+    public function getValue(): AnyType
+    {
+        return $this->value;
+    }
+
+    /**
      * @inheritDoc
      */
     public function toQuery(): string
