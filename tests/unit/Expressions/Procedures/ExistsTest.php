@@ -12,7 +12,6 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Procedures;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Exists;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**

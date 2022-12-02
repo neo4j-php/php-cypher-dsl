@@ -13,12 +13,12 @@ use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Time;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\Time
  */
-class TimeTest extends TestCase
+final class TimeTest extends TestCase
 {
     public function testToQuery(): void
     {
@@ -36,15 +36,10 @@ class TimeTest extends TestCase
         $this->assertSame("time()", $time->toQuery());
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testAcceptsAnyType(): void
+    public function testInstanceOfTimeType(): void
     {
-        $map = $this->createMock(AnyType::class);
+        $time = new Time();
 
-        $time = new Time($map);
-
-        $time->toQuery();
+        $this->assertInstanceOf(TimeType::class, $time);
     }
 }

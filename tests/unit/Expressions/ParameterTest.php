@@ -16,7 +16,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Parameter;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Parameter
  */
-class ParameterTest extends TestCase
+final class ParameterTest extends TestCase
 {
     /**
      * @dataProvider provideToQueryData

@@ -9,7 +9,6 @@
  */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits\TypeTraits;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Equality;

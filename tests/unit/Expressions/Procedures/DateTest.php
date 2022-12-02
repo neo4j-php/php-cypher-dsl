@@ -13,7 +13,6 @@ use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Date;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
 
 /**

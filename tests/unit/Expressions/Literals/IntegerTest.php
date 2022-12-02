@@ -68,7 +68,6 @@ final class IntegerTest extends TestCase
         new Integer($input);
     }
 
-
     public function provideToQueryData(): array
     {
         return [
@@ -82,6 +81,7 @@ final class IntegerTest extends TestCase
             ["-1238109438204130457284308235720483205", "-1238109438204130457284308235720483205"],
         ];
     }
+
     public function provideInvalidInputData(): array
     {
         return [

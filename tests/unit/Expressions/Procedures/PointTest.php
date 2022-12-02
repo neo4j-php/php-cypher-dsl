@@ -10,12 +10,8 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Procedures;
 
 use PHPUnit\Framework\TestCase;
-use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Point;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 
 /**

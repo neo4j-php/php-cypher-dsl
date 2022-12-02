@@ -9,10 +9,10 @@
  */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
-use PHPStan\Type\BooleanType;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThan;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Operators\LessThan

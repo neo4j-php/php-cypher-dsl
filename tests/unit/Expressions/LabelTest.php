@@ -16,7 +16,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Variable;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Label
  */
-class LabelTest extends TestCase
+final class LabelTest extends TestCase
 {
     public function testSingle(): void
     {

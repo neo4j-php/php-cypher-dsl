@@ -10,13 +10,8 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Procedures;
 
 use PHPUnit\Framework\TestCase;
-use TypeError;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\IsEmpty;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**

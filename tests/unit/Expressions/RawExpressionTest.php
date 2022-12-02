@@ -15,12 +15,19 @@ use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\RawExpression
  */
-class RawExpressionTest extends TestCase
+final class RawExpressionTest extends TestCase
 {
     public function testToQuery(): void
     {
         $rawExpression = new RawExpression("foobar(3 > 4)");
 
         $this->assertSame("foobar(3 > 4)", $rawExpression->toQuery());
+    }
+
+    public function testGetExpression(): void
+    {
+        $rawExpression = new RawExpression("foobar(3 > 4)");
+
+        $this->assertSame("foobar(3 > 4)", $rawExpression->getExpression());
     }
 }

@@ -10,11 +10,9 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
-use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Regex;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
@@ -40,6 +38,6 @@ final class RegexTest extends TestCase
     {
         $regex = new Regex(new Variable("a"), new String_("b"));
 
-        $this->assertSame(BooleanType::class, $regex);
+        $this->assertInstanceOf(BooleanType::class, $regex);
     }
 }

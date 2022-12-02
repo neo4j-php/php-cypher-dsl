@@ -9,6 +9,7 @@
  */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
@@ -19,7 +20,7 @@ use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Variable
  */
-class VariableTest extends TestCase
+final class VariableTest extends TestCase
 {
     public function testEmptyConstructor(): void
     {
@@ -53,6 +54,29 @@ class VariableTest extends TestCase
         $this->assertSame($map, $assignment->getValue());
     }
 
+    public function testGetNameReturnsEscaped(): void
+    {
+        $variable = new Variable('$foo');
+
+        $this->assertSame('`$foo`', $variable->getName());
+    }
+
+    public function testEmptyNameIsNotAllowed(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        new Variable('');
+    }
+
+    public function testLongNameIsNotAllowed(): void
+    {
+        $name = str_repeat('a', 65535);
+
+        $this->expectException(InvalidArgumentException::class);
+
+        new Variable($name);
+    }
+
     /**
      * @dataProvider provideToQueryData
      */
@@ -79,6 +103,7 @@ class VariableTest extends TestCase
         return [
             ["a", "a"],
             ["b", "b"],
+            ['$foo', '`$foo`'],
         ];
     }
 

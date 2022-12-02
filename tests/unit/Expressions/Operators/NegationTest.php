@@ -10,10 +10,8 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
-use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Negation;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**

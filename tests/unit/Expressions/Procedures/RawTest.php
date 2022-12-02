@@ -10,7 +10,6 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Procedures;
 
 use PHPUnit\Framework\TestCase;
-use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Raw;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
