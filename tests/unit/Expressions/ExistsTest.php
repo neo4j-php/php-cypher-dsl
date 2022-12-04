@@ -24,7 +24,7 @@ use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Exists
  */
-class ExistsTest extends TestCase
+final class ExistsTest extends TestCase
 {
     public function testToQuery(): void
     {

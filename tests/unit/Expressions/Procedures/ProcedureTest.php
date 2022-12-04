@@ -10,6 +10,7 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Procedures;
 
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
@@ -28,12 +29,13 @@ use WikibaseSolutions\CypherDSL\Expressions\Procedures\Raw;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Single;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Time;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure
  */
-class ProcedureTest extends TestCase
+final class ProcedureTest extends TestCase
 {
     public function testRaw(): void
     {
@@ -44,9 +46,9 @@ class ProcedureTest extends TestCase
 
     public function testAll(): void
     {
-        $variable = new Variable("a");
-        $list = new List_;
-        $predicate = $this->createMock(AnyType::class);
+        $variable = Query::variable('a');
+        $list = Query::list([]);
+        $predicate = Query::boolean(true);
 
         $all = Procedure::all($variable, $list, $predicate);
 
@@ -55,9 +57,9 @@ class ProcedureTest extends TestCase
 
     public function testAny(): void
     {
-        $variable = new Variable("a");
-        $list = new List_;
-        $predicate = $this->createMock(AnyType::class);
+        $variable = Query::variable('a');
+        $list = Query::list([]);
+        $predicate = Query::boolean(true);
 
         $any = Procedure::any($variable, $list, $predicate);
 
@@ -66,7 +68,7 @@ class ProcedureTest extends TestCase
 
     public function testExists(): void
     {
-        $expression = $this->createMock(AnyType::class);
+        $expression = Query::string("Hello World");
 
         $exists = Procedure::exists($expression);
 
@@ -75,7 +77,7 @@ class ProcedureTest extends TestCase
 
     public function testIsEmpty(): void
     {
-        $list = new List_;
+        $list = Query::list([]);
 
         $isEmpty = Procedure::isEmpty($list);
 
@@ -84,9 +86,9 @@ class ProcedureTest extends TestCase
 
     public function testNone(): void
     {
-        $variable = new Variable("a");
-        $list = new List_;
-        $predicate = $this->createMock(AnyType::class);
+        $variable = Query::variable('a');
+        $list = Query::list([]);
+        $predicate = Query::boolean(true);
 
         $none = Procedure::none($variable, $list, $predicate);
 
@@ -95,9 +97,9 @@ class ProcedureTest extends TestCase
 
     public function testSingle(): void
     {
-        $variable = new Variable("a");
-        $list = new List_;
-        $predicate = $this->createMock(AnyType::class);
+        $variable = Query::variable('a');
+        $list = Query::list([]);
+        $predicate = Query::boolean(true);
 
         $single = Procedure::single($variable, $list, $predicate);
 
@@ -106,7 +108,7 @@ class ProcedureTest extends TestCase
 
     public function testPoint(): void
     {
-        $map = new Map([]);
+        $map = Query::map([]);
 
         $point = Procedure::point($map);
 
@@ -115,7 +117,7 @@ class ProcedureTest extends TestCase
 
     public function testDate(): void
     {
-        $value = $this->createMock(AnyType::class);
+        $value = Query::string("Hello World!");
 
         $date = Procedure::date($value);
 
@@ -128,7 +130,7 @@ class ProcedureTest extends TestCase
 
     public function testDateTime(): void
     {
-        $value = $this->createMock(AnyType::class);
+        $value = Query::string("Hello World!");
 
         $date = Procedure::datetime($value);
 
@@ -141,7 +143,7 @@ class ProcedureTest extends TestCase
 
     public function testLocalDateTime(): void
     {
-        $value = $this->createMock(AnyType::class);
+        $value = Query::string("Hello World!");
 
         $date = Procedure::localdatetime($value);
 
@@ -154,7 +156,7 @@ class ProcedureTest extends TestCase
 
     public function testLocalTime(): void
     {
-        $value = $this->createMock(AnyType::class);
+        $value = Query::string("Hello World!");
 
         $date = Procedure::localtime($value);
 
@@ -167,7 +169,7 @@ class ProcedureTest extends TestCase
 
     public function testTime(): void
     {
-        $value = $this->createMock(AnyType::class);
+        $value = Query::string("Hello World!");
 
         $date = Procedure::time($value);
 
@@ -176,14 +178,5 @@ class ProcedureTest extends TestCase
         $date = Procedure::time();
 
         $this->assertInstanceOf(Time::class, $date);
-    }
-
-    public function testToQuery(): void
-    {
-        $mock = $this->getMockForAbstractClass(Procedure::class);
-        $mock->method('getSignature')->willReturn('foo(%s)');
-        $mock->method('getParameters')->willReturn([Literal::string('bar')]);
-
-        $this->assertSame("foo('bar')", $mock->toQuery());
     }
 }
