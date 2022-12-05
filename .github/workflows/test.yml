@@ -20,7 +20,7 @@ jobs:
       COMPOSER_VERSION: 2
       COVERAGE_DRIVER: xdebug
       MINIMUM_COVERAGE_PERCENTAGE: 90
-      MINIMUM_MSI_PERCENTAGE: 90
+      MINIMUM_MSI_PERCENTAGE: 84.27
 
     steps:
       - name: Checkout repository

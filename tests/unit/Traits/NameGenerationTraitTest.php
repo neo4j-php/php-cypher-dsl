@@ -31,16 +31,16 @@ final class NameGenerationTraitTest extends TestCase
 
     public function testGenerateIdentifierWithoutPrefix(): void
     {
-        $this->assertMatchesRegularExpression('/var\w{32}/', $this->trait->generateIdentifier());
+        $this->assertMatchesRegularExpression('/^var\w{32}$/', $this->trait->generateIdentifier());
     }
 
     public function testGenerateIdentifierWithPrefix(): void
     {
-        $this->assertMatchesRegularExpression('/x\w{32}/', $this->trait->generateIdentifier('x'));
+        $this->assertMatchesRegularExpression('/^x\w{32}$/', $this->trait->generateIdentifier('x'));
     }
 
     public function testGenerateIdentifierWithPrefixAndLength(): void
     {
-        $this->assertMatchesRegularExpression('/x\w{16}/', $this->trait->generateIdentifier('x', 16));
+        $this->assertMatchesRegularExpression('/^x\w{16}$/', $this->trait->generateIdentifier('x', 16));
     }
 }

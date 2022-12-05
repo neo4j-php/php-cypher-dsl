@@ -111,6 +111,13 @@ final class PropertyPatternTraitTest extends TestCase
         $this->assertSame($this->stub, $actual);
     }
 
+    public function testAddPropertiesDoesNotAcceptMapType(): void
+    {
+        $this->expectException(TypeError::class);
+
+        $this->stub->addProperties(Query::variable('foobar'));
+    }
+
     /**
      * @doesNotPerformAssertions
      */

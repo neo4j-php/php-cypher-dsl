@@ -60,6 +60,15 @@ final class EscapeTraitTest extends TestCase
         $this->assertSame('`foo``bar`', $this->trait->escape("foo`bar"));
     }
 
+    public function testValueWithMoreThan65534CharactersCannotBeEscaped(): void
+    {
+        $value = str_repeat('a', 65535);
+
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->trait->escape($value);
+    }
+
     public function provideSafeValueIsNotEscapedData(): array
     {
         return [
