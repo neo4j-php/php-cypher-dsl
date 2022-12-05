@@ -21,8 +21,9 @@ use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\NumeralType
 /**
  * Represents the abstract type "numeral", which has the subtypes "float" and "integer".
  *
- * @see  NumeralTypeTrait for a default implementation
  * @note This interface should not be implemented by any class directly
+ *
+ * @see  NumeralTypeTrait for a default implementation
  */
 interface NumeralType extends PropertyType
 {

@@ -17,8 +17,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 /**
  * Represents the application of the "IN" operator.
  *
- * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 51)
- * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/#where-in-operator
+ * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/#where-in-operator Corresponding documentation on Neo4j.com
  */
 final class In extends BinaryOperator implements BooleanType
 {

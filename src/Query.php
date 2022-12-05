@@ -164,46 +164,46 @@ final class Query implements QueryConvertible
      * This function cannot be used directly to construct Point or Date types. Instead, you can create a Point literal
      * by using any of the following functions:
      *
-     *  Query::literal()::point2d(...) - For a 2D cartesian point
-     *  Query::literal()::point3d(...) - For a 3D cartesian point
-     *  Query::literal()::point2dWGS84(...) - For a 2D WGS 84 point
-     *  Query::literal()::point3dWGS84(...) - For a 3D WGS 84 point
+     *  - Query::literal()::point2d(...) - For a 2D cartesian point
+     *  - Query::literal()::point3d(...) - For a 3D cartesian point
+     *  - Query::literal()::point2dWGS84(...) - For a 2D WGS 84 point
+     *  - Query::literal()::point3dWGS84(...) - For a 3D WGS 84 point
      *
      * And a Date literal by using one of the following functions:
      *
-     *  Query::literal()::date(...) - For the current date
-     *  Query::literal()::dateYMD(...) - For a date from the given year, month and day
-     *  Query::literal()::dateYWD(...) - For a date from the given year, week and day
-     *  Query::literal()::dateString(...) - For a date from the given date string
-     *  Query::literal()::dateTime(...) - For the current datetime
-     *  Query::literal()::dateTimeYMD(...) - For a datetime from the given parameters (see function definition)
-     *  Query::literal()::dateTimeYWD(...) - For a datetime from the given parameters (see function definition)
-     *  Query::literal()::dateTimeYQD(...) - For a datetime from the given parameters (see function definition)
-     *  Query::literal()::dateTimeYD(...) - For a datetime from the given parameters (see function definition)
-     *  Query::literal()::dateTimeString(...) - For a datetime from the given datetime string
-     *  Query::literal()::localDateTime(...) - For the current local datetime
-     *  Query::literal()::localDateTimeYMD(...) - For a local datetime from the given parameters (see function definition)
-     *  Query::literal()::localDateTimeYWD(...) - For a local datetime from the given parameters (see function definition)
-     *  Query::literal()::localDateTimeYQD(...) - For a local datetime from the given parameters (see function definition)
-     *  Query::literal()::localDateTimeYD(...) - For a local datetime from the given parameters (see function definition)
-     *  Query::literal()::localDateTimeString(...) - For a local datetime from the given datetime string
-     *  Query::literal()::localTimeCurrent(...) - For the current LocalTime
-     *  Query::literal()::localTime(...) - For a local time from the given parameters (see function definition)
-     *  Query::literal()::localTimeString(...) - For a local time from the given time string
-     *  Query::literal()::time(...) - For the curren time
-     *  Query::literal()::timeHMS(...) - For a time from the given hour, minute and second
-     *  Query::literal()::timeString(...) - For a time from the given time string
+     *  - Query::literal()::date(...) - For the current date
+     *  - Query::literal()::dateYMD(...) - For a date from the given year, month and day
+     *  - Query::literal()::dateYWD(...) - For a date from the given year, week and day
+     *  - Query::literal()::dateString(...) - For a date from the given date string
+     *  - Query::literal()::dateTime(...) - For the current datetime
+     *  - Query::literal()::dateTimeYMD(...) - For a datetime from the given parameters (see function definition)
+     *  - Query::literal()::dateTimeYWD(...) - For a datetime from the given parameters (see function definition)
+     *  - Query::literal()::dateTimeYQD(...) - For a datetime from the given parameters (see function definition)
+     *  - Query::literal()::dateTimeYD(...) - For a datetime from the given parameters (see function definition)
+     *  - Query::literal()::dateTimeString(...) - For a datetime from the given datetime string
+     *  - Query::literal()::localDateTime(...) - For the current local datetime
+     *  - Query::literal()::localDateTimeYMD(...) - For a local datetime from the given parameters (see function definition)
+     *  - Query::literal()::localDateTimeYWD(...) - For a local datetime from the given parameters (see function definition)
+     *  - Query::literal()::localDateTimeYQD(...) - For a local datetime from the given parameters (see function definition)
+     *  - Query::literal()::localDateTimeYD(...) - For a local datetime from the given parameters (see function definition)
+     *  - Query::literal()::localDateTimeString(...) - For a local datetime from the given datetime string
+     *  - Query::literal()::localTimeCurrent(...) - For the current LocalTime
+     *  - Query::literal()::localTime(...) - For a local time from the given parameters (see function definition)
+     *  - Query::literal()::localTimeString(...) - For a local time from the given time string
+     *  - Query::literal()::time(...) - For the curren time
+     *  - Query::literal()::timeHMS(...) - For a time from the given hour, minute and second
+     *  - Query::literal()::timeString(...) - For a time from the given time string
      *
      * When no arguments are given to this function, the function will return a reference to the Literal class.
      *
      * You can directly call the constructors of the most basic types:
      *
-     *  Query::boolean() - For a boolean
-     *  Query::string() - For a string
-     *  Query::integer() - For an integer
-     *  Query::float() - For a float
-     *  Query::list() - For a list
-     *  Query::map() - For a map
+     *  - Query::boolean() - For a boolean
+     *  - Query::string() - For a string
+     *  - Query::integer() - For an integer
+     *  - Query::float() - For a float
+     *  - Query::list() - For a list
+     *  - Query::map() - For a map
      *
      * @param null|bool|float|int|mixed[]|string $literal The literal to construct
      *
@@ -287,9 +287,7 @@ final class Query implements QueryConvertible
     }
 
     /**
-     * Returns the class string of the "Procedure" class. This can be used to more easily create new functions calls, like so:.
-     *
-     * Query::function()::raw(...)
+     * Returns the class string of the "Procedure" class. This can be used to more easily create new functions calls.
      *
      * @return class-string<Procedure>
      */
@@ -299,9 +297,7 @@ final class Query implements QueryConvertible
     }
 
     /**
-     * Returns the class string of the "Procedure" class. This can be used to more easily create new functions calls, like so:.
-     *
-     *  Query::procedure()::raw()
+     * Returns the class string of the "Procedure" class. This can be used to more easily create new functions calls.
      *
      * @return class-string<Procedure>
      */
@@ -311,7 +307,9 @@ final class Query implements QueryConvertible
     }
 
     /**
-     * Creates a new raw expression. This should be used only for features that are not implemented by the DSL.
+     * Creates a new raw expression.
+     *
+     * @note This should be used only for features that are not implemented by the DSL.
      *
      * @param string $expression The raw expression
      */
@@ -362,9 +360,9 @@ final class Query implements QueryConvertible
     /**
      * Creates a CALL sub query clause and adds it to the query.
      *
-     * @note This feature is not part of the openCypher standard. For more information, see https://github.com/opencypher/openCypher/blob/a507292d35280aca9e37bf938cdec4fdd1e64ba9/docs/standardisation-scope.adoc.
+     * @note This feature is not part of the openCypher standard.
      *
-     * @param callable|Query                                        $query     A callable decorating a query, or the actual sub-query
+     * @param callable|Query                                        $query     A callable decorating a Query, or an instance of Query
      * @param Pattern|Pattern[]|string|string[]|Variable|Variable[] $variables The variables to include in the WITH clause for correlation (optional)
      *
      * @return $this
@@ -743,7 +741,9 @@ final class Query implements QueryConvertible
     }
 
     /**
-     * Creates a raw clause. This should only be used for features that are not implemented by the DSL.
+     * Creates a raw clause.
+     *
+     * @note This should only be used for features that are not implemented by the DSL.
      *
      * @param string $clause  The name of the clause, for instance "MATCH"
      * @param string $subject The subject (body) of the clause

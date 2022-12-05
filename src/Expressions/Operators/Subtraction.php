@@ -13,8 +13,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
  * Represents the application of the subtraction (-) operator.
  *
  * @see UnaryMinus for the unary minus (-) operator
- * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 48)
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-mathematical
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-mathematical Corresponding documentation on Neo4j.com
  */
 final class Subtraction extends MathematicalBinaryOperator
 {

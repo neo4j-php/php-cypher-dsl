@@ -12,9 +12,9 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 /**
  * Represents the application of the regex operator.
  *
- * @note This expression is not part of the openCypher standard (version 9)
+ * @note This expression is not part of the openCypher standard (version 9).
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-string
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-string Corresponding documentation on Neo4j.com
  */
 final class Regex extends StringSpecificComparisonBinaryOperator
 {

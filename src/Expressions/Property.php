@@ -141,6 +141,6 @@ final class Property implements
      */
     public function toQuery(): string
     {
-        return sprintf("%s.%s", $this->expression->toQuery(), $this->escape($this->property));
+        return sprintf("%s.%s", $this->expression->toQuery(), self::escape($this->property));
     }
 }

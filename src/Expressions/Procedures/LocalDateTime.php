@@ -16,7 +16,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalDateTimeType;
 /**
  * This class represents the "localdatetime()" function.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime
+ * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime Corresponding documentation on Neo4j.com
  * @see Procedure::localdatetime()
  */
 final class LocalDateTime extends Procedure implements LocalDateTimeType
@@ -29,9 +29,7 @@ final class LocalDateTime extends Procedure implements LocalDateTimeType
     private ?AnyType $value;
 
     /**
-     * The signature of the "localdatetime()" function is:.
-     *
-     * localdatetime(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (LOCALDATETIME?)
+     * The signature of the "localdatetime()" function is "localdatetime(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (LOCALDATETIME?)".
      *
      * @param null|AnyType $value The input to the localdatetime function, from which to construct the localdatetime
      *

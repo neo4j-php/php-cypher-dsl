@@ -12,7 +12,7 @@ namespace WikibaseSolutions\CypherDSL\Traits;
 use InvalidArgumentException;
 
 /**
- * Trait for encoding certain structures that are used in multiple clauses in a Cypher query.
+ * Trait for escaping names.
  *
  * @internal This trait is not covered by the backwards compatibility guarantee of php-cypher-dsl
  */

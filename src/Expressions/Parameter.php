@@ -40,7 +40,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 /**
  * Represents a parameter.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/parameters/
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/parameters/ Corresponding documentation on Neo4j.com
  */
 final class Parameter implements
     BooleanType,
@@ -83,7 +83,7 @@ final class Parameter implements
     public function __construct(?string $parameter = null)
     {
         if (!isset($parameter)) {
-            $parameter = $this->generateIdentifier('param');
+            $parameter = self::generateIdentifier('param');
         }
 
         $this->parameter = self::escape($parameter);

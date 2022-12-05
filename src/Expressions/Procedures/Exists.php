@@ -18,7 +18,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  *
  * @note: The "exists()" function is deprecated for Neo4j 4.3 and up. Use "IS NOT NULL" instead.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-exists
+ * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-exists Corresponding documentation on Neo4j.com
  * @see Procedure::exists()
  */
 final class Exists extends Procedure implements BooleanType
@@ -31,9 +31,7 @@ final class Exists extends Procedure implements BooleanType
     private AnyType $expression;
 
     /**
-     * The signature of the "exists()" function is:.
-     *
-     * exists(input :: ANY?) :: (BOOLEAN?)
+     * The signature of the "exists()" function is "exists(input :: ANY?) :: (BOOLEAN?)".
      *
      * @param AnyType $expression The value to check whether it exists
      *

@@ -41,9 +41,7 @@ final class Single extends Procedure implements BooleanType
     private AnyType $predicate;
 
     /**
-     * The signature of the "single()" function is:.
-     *
-     * single(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
+     * The signature of the "single()" function is "single(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)".
      *
      * @param Variable $variable  A variable that can be used from within the predicate
      * @param ListType $list      A list

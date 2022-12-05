@@ -14,8 +14,7 @@ use WikibaseSolutions\CypherDSL\QueryConvertible;
 /**
  * This class represents the application of an operator, such as "NOT" or "*".
  *
- * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 46)
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/ Corresponding documentation on Neo4j.com
  */
 abstract class Operator implements QueryConvertible
 {

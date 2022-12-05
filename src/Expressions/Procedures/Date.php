@@ -16,7 +16,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\DateType;
 /**
  * This class represents the "date()" function.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-date
+ * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-date Corresponding documentation on Neo4j.com
  * @see Procedure::date()
  */
 final class Date extends Procedure implements DateType
@@ -29,9 +29,7 @@ final class Date extends Procedure implements DateType
     private ?AnyType $value;
 
     /**
-     * The signature of the "date()" function is:.
-     *
-     * date(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (DATE?)
+     * The signature of the "date()" function is "date(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (DATE?)".
      *
      * @param null|AnyType $value The input to the date function, from which to construct the date
      *

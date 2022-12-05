@@ -49,7 +49,7 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 /**
  * Represents a variable.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/variables/
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/variables/ Corresponding documentation on Neo4j.com
  */
 final class Variable implements
     BooleanType,
@@ -102,7 +102,7 @@ final class Variable implements
     public function __construct(?string $name = null)
     {
         if ($name === null) {
-            $name = $this->generateIdentifier();
+            $name = self::generateIdentifier();
         }
 
         $this->name = self::escape($name);

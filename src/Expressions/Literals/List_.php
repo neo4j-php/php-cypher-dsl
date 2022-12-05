@@ -27,8 +27,6 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 final class List_ implements ListType
 {
     use CastTrait;
-
-    use ErrorTrait;
     use ListTypeTrait;
 
     /**
@@ -37,14 +35,13 @@ final class List_ implements ListType
     private array $expressions;
 
     /**
-     * @param AnyType[] $expressions The list of expressions
+     * @param mixed[] $expressions The list of expressions
      *
      * @internal This method is not covered by the backwards compatibility promise of php-cypher-dsl
      */
     public function __construct(array $expressions = [])
     {
-        self::assertClassArray('expressions', AnyType::class, $expressions);
-        $this->expressions = $expressions;
+        $this->expressions = array_map([self::class, 'toAnyType'], $expressions);
     }
 
     /**

@@ -21,8 +21,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  * - case-sensitive inclusion search in strings: "CONTAINS"
  * - regular expression: "~=" (not part of openCypher)
  *
- * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 48)
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-mathematical
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-mathematical Corresponding documentation on Neo4j.com
  */
 abstract class StringSpecificComparisonBinaryOperator extends ComparisonBinaryOperator implements BooleanType
 {

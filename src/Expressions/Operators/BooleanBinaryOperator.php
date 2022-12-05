@@ -19,8 +19,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  * - disjunction: "OR"
  * - exclusive disjunction: "XOR"
  *
- * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 50)
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-boolean
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-boolean Corresponding documentation on Neo4j.com
  */
 abstract class BooleanBinaryOperator extends BinaryOperator implements BooleanType
 {

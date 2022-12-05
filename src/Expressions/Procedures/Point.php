@@ -16,7 +16,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 /**
  * This class represents the "point()" function.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/functions/spatial/
+ * @see https://neo4j.com/docs/cypher-manual/current/functions/spatial/ Corresponding documentation on Neo4j.com
  * @see Procedure::point()
  */
 final class Point extends Procedure implements PointType
@@ -29,9 +29,7 @@ final class Point extends Procedure implements PointType
     private MapType $map;
 
     /**
-     * The signature of the "point()" function is:.
-     *
-     * point(input :: MAP?) :: (POINT?) - returns a point object
+     * The signature of the "point()" function is "point(input :: MAP?) :: (POINT?)".
      *
      * @param MapType $map The map to use for constructing the point
      *

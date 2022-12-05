@@ -15,12 +15,9 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
  * Represents a label. A label in Cypher would be something like "n:German" or "n:German:Swedish". Label implements
- * BooleanType, since it can be used in a "WHERE" clause like so:.
+ * BooleanType, since it can be used in a "WHERE" clause.
  *
- *  MATCH (n) WHERE n:label1:label2 RETURN n
- *
- * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 85)
- * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/#filter-on-node-label
+ * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/#filter-on-node-label Corresponding documentation on Neo4j.com
  */
 final class Label implements BooleanType
 {

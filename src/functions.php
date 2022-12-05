@@ -119,46 +119,46 @@ function variable(?string $variable = null): Variable
  * This function cannot be used directly to construct Point or Date types. Instead, you can create a Point literal
  * by using any of the following functions:
  *
- *  literal()::point2d(...) - For a 2D cartesian point
- *  literal()::point3d(...) - For a 3D cartesian point
- *  literal()::point2dWGS84(...) - For a 2D WGS 84 point
- *  literal()::point3dWGS84(...) - For a 3D WGS 84 point
+ *  - literal()::point2d(...) - For a 2D cartesian point
+ *  - literal()::point3d(...) - For a 3D cartesian point
+ *  - literal()::point2dWGS84(...) - For a 2D WGS 84 point
+ *  - literal()::point3dWGS84(...) - For a 3D WGS 84 point
  *
  * And a Date literal by using one of the following functions:
  *
- *  literal()::date(...) - For the current date
- *  literal()::dateYMD(...) - For a date from the given year, month and day
- *  literal()::dateYWD(...) - For a date from the given year, week and day
- *  literal()::dateString(...) - For a date from the given date string
- *  literal()::dateTime(...) - For the current datetime
- *  literal()::dateTimeYMD(...) - For a datetime from the given parameters (see function definition)
- *  literal()::dateTimeYWD(...) - For a datetime from the given parameters (see function definition)
- *  literal()::dateTimeYQD(...) - For a datetime from the given parameters (see function definition)
- *  literal()::dateTimeYD(...) - For a datetime from the given parameters (see function definition)
- *  literal()::dateTimeString(...) - For a datetime from the given datetime string
- *  literal()::localDateTime(...) - For the current local datetime
- *  literal()::localDateTimeYMD(...) - For a local datetime from the given parameters (see function definition)
- *  literal()::localDateTimeYWD(...) - For a local datetime from the given parameters (see function definition)
- *  literal()::localDateTimeYQD(...) - For a local datetime from the given parameters (see function definition)
- *  literal()::localDateTimeYD(...) - For a local datetime from the given parameters (see function definition)
- *  literal()::localDateTimeString(...) - For a local datetime from the given datetime string
- *  literal()::localTimeCurrent(...) - For the current LocalTime
- *  literal()::localTime(...) - For a local time from the given parameters (see function definition)
- *  literal()::localTimeString(...) - For a local time from the given time string
- *  literal()::time(...) - For the curren time
- *  literal()::timeHMS(...) - For a time from the given hour, minute and second
- *  literal()::timeString(...) - For a time from the given time string
+ *  - literal()::date(...) - For the current date
+ *  - literal()::dateYMD(...) - For a date from the given year, month and day
+ *  - literal()::dateYWD(...) - For a date from the given year, week and day
+ *  - literal()::dateString(...) - For a date from the given date string
+ *  - literal()::dateTime(...) - For the current datetime
+ *  - literal()::dateTimeYMD(...) - For a datetime from the given parameters (see function definition)
+ *  - literal()::dateTimeYWD(...) - For a datetime from the given parameters (see function definition)
+ *  - literal()::dateTimeYQD(...) - For a datetime from the given parameters (see function definition)
+ *  - literal()::dateTimeYD(...) - For a datetime from the given parameters (see function definition)
+ *  - literal()::dateTimeString(...) - For a datetime from the given datetime string
+ *  - literal()::localDateTime(...) - For the current local datetime
+ *  - literal()::localDateTimeYMD(...) - For a local datetime from the given parameters (see function definition)
+ *  - literal()::localDateTimeYWD(...) - For a local datetime from the given parameters (see function definition)
+ *  - literal()::localDateTimeYQD(...) - For a local datetime from the given parameters (see function definition)
+ *  - literal()::localDateTimeYD(...) - For a local datetime from the given parameters (see function definition)
+ *  - literal()::localDateTimeString(...) - For a local datetime from the given datetime string
+ *  - literal()::localTimeCurrent(...) - For the current LocalTime
+ *  - literal()::localTime(...) - For a local time from the given parameters (see function definition)
+ *  - literal()::localTimeString(...) - For a local time from the given time string
+ *  - literal()::time(...) - For the curren time
+ *  - literal()::timeHMS(...) - For a time from the given hour, minute and second
+ *  - literal()::timeString(...) - For a time from the given time string
  *
  * When no arguments are given to this function, the function will return a reference to the Literal class.
  *
  * You can directly call the constructors of the most basic types:
  *
- *  boolean() - For a boolean
- *  string() - For a string
- *  integer() - For an integer
- *  float() - For a float
- *  list_() - For a list
- *  map() - For a map
+ *  - boolean() - For a boolean
+ *  - string() - For a string
+ *  - integer() - For an integer
+ *  - float() - For a float
+ *  - list_() - For a list
+ *  - map() - For a map
  *
  * @param null|bool|float|int|mixed[]|string $literal The literal to construct
  *
@@ -272,7 +272,9 @@ function procedure(): string
 }
 
 /**
- * Creates a new raw expression. This should be used only for features that are not implemented by the DSL.
+ * Creates a new raw expression.
+ *
+ * @note This should be used only for features that are not implemented by the DSL.
  *
  * @param string $expression The raw expression
  *

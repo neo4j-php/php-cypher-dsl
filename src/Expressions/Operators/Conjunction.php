@@ -12,8 +12,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 /**
  * Represents the application of the conjunction (AND) operator.
  *
- * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 50)
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-boolean
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-boolean Corresponding documentation on Neo4j.com
  */
 final class Conjunction extends BooleanBinaryOperator
 {

@@ -20,6 +20,10 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 final class String_ implements StringType
 {
     use StringTypeTrait;
+
+    /**
+     * @var string The value of the string
+     */
     private string $value;
 
     /**
@@ -28,7 +32,7 @@ final class String_ implements StringType
     private bool $useDoubleQuotes = false;
 
     /**
-     * @param string $value The value
+     * @param string $value The value of the string
      *
      * @internal This method is not covered by the backwards compatibility promise of php-cypher-dsl
      */

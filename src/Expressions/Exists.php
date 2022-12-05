@@ -18,7 +18,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 /**
  * Represents the EXISTS expression.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/#filter-on-relationship-type
+ * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/#filter-on-relationship-type Corresponding documentation on Neo4j.com
  */
 final class Exists implements BooleanType
 {

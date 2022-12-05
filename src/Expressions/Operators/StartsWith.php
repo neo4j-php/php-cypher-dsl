@@ -12,8 +12,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 /**
  * Represents the application of the case-sensitive prefix search (STARTS WITH) operator.
  *
- * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 50)
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operator-comparison-string-specific
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operator-comparison-string-specific Corresponding documentation on Neo4j.com
  */
 final class StartsWith extends StringSpecificComparisonBinaryOperator
 {

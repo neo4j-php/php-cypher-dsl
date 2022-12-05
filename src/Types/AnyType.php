@@ -26,9 +26,9 @@ use WikibaseSolutions\CypherDSL\Traits\TypeTraits\AnyTypeTrait;
 /**
  * Represents any type in Cypher.
  *
- * @see  AnyTypeTrait for a default implementation
  * @note This interface should not be implemented by any class directly
  *
+ * @see  AnyTypeTrait for a default implementation
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/ Corresponding documentation on Neo4j.com
  */
 interface AnyType extends QueryConvertible

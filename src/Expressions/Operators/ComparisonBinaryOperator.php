@@ -29,8 +29,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  * - case-sensitive suffix search on strings: "ENDS WITH"
  * - case-sensitive inclusion search in strings: "CONTAINS"
  *
- * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 48)
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison Corresponding documentation on Neo4j.com
  */
 abstract class ComparisonBinaryOperator extends BinaryOperator implements BooleanType
 {

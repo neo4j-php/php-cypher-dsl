@@ -19,8 +19,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  * - "IS NULL"
  * - "IS NOT NULL"
  *
- * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 48)
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison Corresponding documentation on Neo4j.com
  */
 abstract class ComparisonUnaryOperator extends UnaryOperator implements BooleanType
 {

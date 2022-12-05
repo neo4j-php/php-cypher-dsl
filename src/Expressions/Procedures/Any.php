@@ -18,7 +18,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 /**
  * Represents the "any()" function.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-any
+ * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-any Corresponding documentation on Neo4j.com
  * @see Procedure::any()
  */
 final class Any extends Procedure implements BooleanType
@@ -41,9 +41,7 @@ final class Any extends Procedure implements BooleanType
     private AnyType $predicate;
 
     /**
-     * The signature of the "any()" function is:.
-     *
-     * any(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)
+     * The signature of the "any()" function is "any(variable :: VARIABLE IN list :: LIST OF ANY? WHERE predicate :: ANY?) :: (BOOLEAN?)".
      *
      * @param Variable $variable  A variable that can be used from within the predicate
      * @param ListType $list      A list

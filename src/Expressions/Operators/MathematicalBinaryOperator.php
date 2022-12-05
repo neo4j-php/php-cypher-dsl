@@ -24,8 +24,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
  * - modulo division: "%"
  * - exponentiation: "^"
  *
- * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 48)
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-mathematical
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-mathematical Corresponding documentation on Neo4j.com
  */
 abstract class MathematicalBinaryOperator extends BinaryOperator implements FloatType, IntegerType
 {

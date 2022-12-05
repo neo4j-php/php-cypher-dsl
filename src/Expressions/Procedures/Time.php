@@ -29,9 +29,7 @@ final class Time extends Procedure implements TimeType
     private ?AnyType $value;
 
     /**
-     * The signature of the "time()" function is:.
-     *
-     * time(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (TIME?)
+     * The signature of the "time()" function is "time(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (TIME?)".
      *
      * @param null|AnyType $value The input to the time function, from which to construct the time
      *

@@ -135,7 +135,7 @@ final class Node implements CompletePattern, PropertyPattern, RelatablePattern
 
         if ($this->labels !== []) {
             foreach ($this->labels as $label) {
-                $nodeInner .= ":{$this->escape($label)}";
+                $nodeInner .= ":" . self::escape($label);
             }
         }
 

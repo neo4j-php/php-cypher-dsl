@@ -19,8 +19,8 @@ jobs:
     env:
       COMPOSER_VERSION: 2
       COVERAGE_DRIVER: xdebug
-      MINIMUM_COVERAGE_PERCENTAGE: 80
-      MINIMUM_MSI_PERCENTAGE: 80
+      MINIMUM_COVERAGE_PERCENTAGE: 90
+      MINIMUM_MSI_PERCENTAGE: 90
 
     steps:
       - name: Checkout repository
@@ -42,6 +42,9 @@ jobs:
 
       - name: Check coverage
         run: php vendor/bin/coverage-check coverage/clover.xml ${{ env.MINIMUM_COVERAGE_PERCENTAGE }}
+
+      - name: Run end-to-end tests
+        run: php vendor/bin/phpunit --testsuite end-to-end --no-coverage
 
       - name: Run mutation tests
         run: XDEBUG_MODE=coverage php vendor/bin/infection --show-mutations --min-msi=${{ env.MINIMUM_MSI_PERCENTAGE }} --threads=4

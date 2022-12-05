@@ -266,7 +266,7 @@ final class Relationship implements PropertyPattern
 
         if (count($types) !== 0) {
             // If we have at least one condition type, escape them and insert them into the query
-            $escapedTypes = array_map(fn (string $type): string => $this->escape($type), $types);
+            $escapedTypes = array_map(fn (string $type): string => self::escape($type), $types);
             $conditionInner .= sprintf(":%s", implode("|", $escapedTypes));
         }
 

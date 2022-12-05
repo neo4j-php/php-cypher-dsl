@@ -21,14 +21,11 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  *
  * {name: 'Andy', sport: 'Brazilian Ju-Jitsu'}
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/maps/
- *
- * For its use for properties, see
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-properties
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/maps/ Corresponding documentation on Neo4j.com
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-properties Corresponding documentation on Neo4j.com
  */
 final class Map implements MapType
 {
-    use ErrorTrait;
     use EscapeTrait;
     use MapTypeTrait;
 
@@ -38,14 +35,13 @@ final class Map implements MapType
     private array $elements;
 
     /**
-     * @param AnyType[] $elements Associative array of the elements that this map should have
+     * @param mixed[] $elements Associative array of the elements that this map should have
      *
      * @internal This method is not covered by the backwards compatibility promise of php-cypher-dsl
      */
     public function __construct(array $elements = [])
     {
-        self::assertClassArray('elements', AnyType::class, $elements);
-        $this->elements = $elements;
+        $this->elements = array_map([self::class, 'toAnyType'], $elements);
     }
 
     /**
@@ -103,7 +99,7 @@ final class Map implements MapType
         $pairs = [];
 
         foreach ($this->elements as $key => $value) {
-            $pairs[] = sprintf("%s: %s", $this->escape((string) $key), $value->toQuery());
+            $pairs[] = sprintf("%s: %s", self::escape((string) $key), $value->toQuery());
         }
 
         return sprintf("{%s}", implode(", ", $pairs));

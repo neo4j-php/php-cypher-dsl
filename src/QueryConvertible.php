@@ -17,7 +17,7 @@ namespace WikibaseSolutions\CypherDSL;
 interface QueryConvertible
 {
     /**
-     * Converts the object into a (partial) query.
+     * Converts the object into a (partial) Cypher query.
      *
      * @internal This method is not covered by the backwards compatibility promise of php-cypher-dsl
      */
