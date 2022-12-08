@@ -101,4 +101,34 @@ final class ExamplesTest extends TestCase
 
         $this->assertSame("CALL `dbms.security.createUser`('example_username', 'example_password', false)", $statement);
     }
+
+    public function testCreateClauseExample1(): void
+    {
+        $query = Query::new()
+            ->create(Query::node("Person"))
+            ->build();
+
+        $this->assertSame("CREATE (:Person)", $query);
+    }
+
+    public function testCreateClauseExample2(): void
+    {
+        $query = Query::new()
+            ->create(Query::node("Person")->withVariable('n')->withProperties([
+                'name' => 'Marijn',
+                'title' => 'Maintainer'
+            ]))
+            ->build();
+
+        $this->assertSame("CREATE (n:Person {name: 'Marijn', title: 'Maintainer'})", $query);
+    }
+
+    public function testCreateClauseExample3(): void
+    {
+        $query = Query::new()
+            ->create([Query::node("Person"), Query::node("Animal")])
+            ->build();
+
+        $this->assertSame("CREATE (:Person), (:Animal)", $query);
+    }
 }
