@@ -26,7 +26,7 @@ final class RemoveClause extends Clause
     use ErrorTrait;
 
     /**
-     * @var Label[]|Property[] the expressions in this REMOVE clause
+     * @var Label[]|Property[]|(Label|Property)[] the expressions in this REMOVE clause
      */
     private array $expressions = [];
 
@@ -48,7 +48,7 @@ final class RemoveClause extends Clause
     /**
      * Returns the expressions in the REMOVE clause.
      *
-     * @return Label[]|Property[]
+     * @return Label[]|Property[]|(Label|Property)[]
      */
     public function getExpressions(): array
     {

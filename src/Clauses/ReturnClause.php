@@ -34,7 +34,7 @@ final class ReturnClause extends Clause
     private bool $distinct = false;
 
     /**
-     * @var Alias[]|AnyType[] The expressions to return
+     * @var Alias[]|AnyType[]|(Alias|AnyType)[] The expressions to return
      */
     private array $columns = [];
 
@@ -77,7 +77,7 @@ final class ReturnClause extends Clause
     /**
      * Returns the columns to return. Aliased columns have string keys instead of integers.
      *
-     * @return Alias[]|AnyType[]
+     * @return Alias[]|AnyType[]|(Alias|AnyType)[]
      */
     public function getColumns(): array
     {

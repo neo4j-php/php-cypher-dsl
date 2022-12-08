@@ -33,7 +33,7 @@ final class CallProcedureClause extends Clause
     private ?Procedure $procedure = null;
 
     /**
-     * @var Alias[]|Variable[] The result fields that are yielded
+     * @var Alias[]|Variable[]|(Alias|Variable)[] The result fields that are yielded
      */
     private array $yields = [];
 
@@ -84,7 +84,7 @@ final class CallProcedureClause extends Clause
     /**
      * Returns the variables to yield.
      *
-     * @return Alias[]|Variable[]
+     * @return Alias[]|Variable[]|(Alias|Variable)[]
      */
     public function getYields(): array
     {

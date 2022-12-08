@@ -31,7 +31,7 @@ final class WithClause extends Clause
     use CastTrait;
 
     /**
-     * @var Alias[]|Variable[] The variables to include in the clause
+     * @var Alias[]|Variable[]|(Alias|Variable)[] The variables to include in the clause
      */
     private array $entries = [];
 
@@ -58,7 +58,7 @@ final class WithClause extends Clause
     /**
      * Returns the expression to include in the clause.
      *
-     * @return Alias[]|Variable[]
+     * @return Alias[]|Variable[]|(Alias|Variable)[]
      */
     public function getEntries(): array
     {

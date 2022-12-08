@@ -12,7 +12,7 @@ namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\MethodTraits\PropertyMethodTrait;
 
 /**
- * This trait provides a default implementation to satisfy the "MapType" interface.e.
+ * This trait provides a default implementation to satisfy the "MapType" interface.
  */
 trait MapTypeTrait
 {

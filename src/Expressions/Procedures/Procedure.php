@@ -35,8 +35,8 @@ abstract class Procedure implements QueryConvertible
      * Produces a raw function call. This enables the usage of unimplemented functions in your
      * Cypher queries. The parameters of this function are not type-checked.
      *
-     * @param string                                                                                                    $functionName The name of the function to call
-     * @param AnyType|AnyType[]|bool|bool[]|float|float[]|int|int[]|mixed[]|mixed[][]|Pattern|Pattern[]|string|string[] $parameters   The parameters to pass to the function call
+     * @param string                                                                                                                                                      $functionName The name of the function to call
+     * @param AnyType|AnyType[]|bool|bool[]|float|float[]|int|int[]|mixed[]|mixed[][]|Pattern|Pattern[]|string|string[]|(AnyType|bool|float|int|mixed[]|Pattern|string)[] $parameters   The parameters to pass to the function call
      */
     public static function raw(string $functionName, $parameters): Raw
     {

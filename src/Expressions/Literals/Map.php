@@ -9,6 +9,7 @@
  */
 namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait;
@@ -26,6 +27,7 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  */
 final class Map implements MapType
 {
+    use CastTrait;
     use EscapeTrait;
     use MapTypeTrait;
 

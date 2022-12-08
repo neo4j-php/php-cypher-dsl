@@ -26,7 +26,7 @@ final class SetClause extends Clause
     use ErrorTrait;
 
     /**
-     * @var Label[]|PropertyReplacement[] The expressions to set
+     * @var Label[]|PropertyReplacement[]|(Label|PropertyReplacement)[] The expressions to set
      */
     private array $expressions = [];
 
@@ -48,7 +48,7 @@ final class SetClause extends Clause
     /**
      * Returns the expressions to SET.
      *
-     * @return Label[]|PropertyReplacement[]
+     * @return Label[]|PropertyReplacement[]|(Label|PropertyReplacement)[]
      */
     public function getExpressions(): array
     {
