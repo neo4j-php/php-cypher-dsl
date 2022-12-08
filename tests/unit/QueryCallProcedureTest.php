@@ -56,6 +56,13 @@ final class QueryCallProcedureTest extends TestCase
         $this->assertSame("CALL localtime() YIELD a, b", $statement->toQuery());
     }
 
+    public function testCallProcedureString(): void
+    {
+        $statement = Query::new()->callProcedure('apoc.json');
+
+        $this->assertSame("CALL `apoc.json`()", $statement->toQuery());
+    }
+
     public function testReturnsSameInstance(): void
     {
         $procedure = Procedure::localtime();

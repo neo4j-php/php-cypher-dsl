@@ -396,15 +396,19 @@ final class Query implements QueryConvertible
     /**
      * Creates the CALL procedure clause.
      *
-     * @param Procedure $procedure The procedure to call
+     * @param Procedure|string $procedure The procedure to call
      * @param Alias|Alias[]|string|string[]|Variable|Variable[]|(Alias|string|Variable)[] $yields    The result fields that should be returned (optional)
      *
      * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/call/ Corresponding documentation on Neo4j.com
      */
-    public function callProcedure(Procedure $procedure, $yields = []): self
+    public function callProcedure($procedure, $yields = []): self
     {
+        if (is_string($procedure)) {
+            $procedure = Procedure::raw($procedure, $yields);
+        }
+
         if (!is_array($yields)) {
             $yields = [$yields];
         }
