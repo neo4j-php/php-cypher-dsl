@@ -1,6 +1,7 @@
 # Changelog
 
-All notable changes to the php-cypher-dsl project will be documented in this file. A changelog has been kept from version 5.0.0 onwards.
+All notable changes to the php-cypher-dsl project will be documented in this
+file. A changelog has been kept from version 5.0.0 onwards.
 
 The format is based on [Keep a Changelog], and this project adheres to
 [Semantic Versioning].
