@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -23,6 +23,7 @@ abstract class UnaryOperator extends Operator
 
     /**
      * @inheritDoc
+     *
      * @param AnyType $expression The unary expression
      */
     public function __construct(AnyType $expression, bool $insertParentheses = true)
@@ -34,8 +35,6 @@ abstract class UnaryOperator extends Operator
 
     /**
      * Returns whether this is a postfix operator or not.
-     *
-     * @return bool
      */
     public function isPostfix(): bool
     {
@@ -44,8 +43,6 @@ abstract class UnaryOperator extends Operator
 
     /**
      * Returns the expression to negate.
-     *
-     * @return AnyType
      */
     public function getExpression(): AnyType
     {
@@ -67,8 +64,6 @@ abstract class UnaryOperator extends Operator
 
     /**
      * Returns the operator. For instance, this function would return "-" for the minus operator.
-     *
-     * @return string
      */
     abstract protected function getOperator(): string;
 }

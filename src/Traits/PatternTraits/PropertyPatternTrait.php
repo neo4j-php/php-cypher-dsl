@@ -1,24 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Traits\PatternTraits;
 
 use TypeError;
@@ -29,9 +17,7 @@ use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
- * This trait provides a default implementation to satisfy the "AssignablePattern" interface.
- *
- * @implements PropertyPatternTrait
+ * This trait provides a default implementation to satisfy the "PropertyPattern" interface.
  */
 trait PropertyPatternTrait
 {
@@ -40,7 +26,7 @@ trait PropertyPatternTrait
     use PatternTrait;
 
     /**
-     * @var MapType|null The properties of this object
+     * @var null|MapType The properties of this object
      */
     private ?MapType $properties = null;
 
@@ -67,9 +53,7 @@ trait PropertyPatternTrait
      */
     public function addProperty(string $key, $property): self
     {
-        $this->makeProperties();
-
-        $this->properties->add($key, $property);
+        $this->makeMap()->add($key, $property);
 
         return $this;
     }
@@ -81,29 +65,22 @@ trait PropertyPatternTrait
     {
         self::assertClass('properties', [Map::class, 'array'], $properties);
 
-        $this->makeProperties();
+        $map = $this->makeMap();
 
         if (is_array($properties)) {
+            $res = [];
+
+            foreach ($properties as $key => $property) {
+                $res[$key] = self::toAnyType($property);
+            }
+
             // Cast the array to a Map
-            $properties = new Map($properties);
+            $properties = new Map($res);
         }
 
-        $this->properties->mergeWith($properties);
+        $map->mergeWith($properties);
 
         return $this;
-    }
-
-    private function makeProperties(): void
-    {
-        if (!isset($this->properties)) {
-            $this->properties = new Map();
-        } elseif (!($this->properties instanceof Map)) {
-            // Adding to a map is not natively supported by the MapType, but it is supported by Map. Syntactically, it
-            // is not possible to add new items to, for instance, a Variable, even though it implements MapType. It is
-            // however still useful to be able to add items to objects where a Map is used (that is, an object of
-            // MapType with the {} syntax).
-            throw new TypeError('$this->properties must be of type Map to support "addProperty"');
-        }
     }
 
     /**
@@ -111,6 +88,24 @@ trait PropertyPatternTrait
      */
     public function getProperties(): ?MapType
     {
+        return $this->properties;
+    }
+
+    /**
+     * Initialises the properties in this pattern.
+     */
+    private function makeMap(): Map
+    {
+        if (!isset($this->properties)) {
+            $this->properties = new Map();
+        } elseif (!$this->properties instanceof Map) {
+            // Adding to a map is not natively supported by the MapType, but it is supported by Map. Syntactically, it
+            // is not possible to add new items to, for instance, a Variable, even though it implements MapType. It is
+            // however still useful to be able to add items to objects where a Map is used (that is, an object of
+            // MapType with the {} syntax).
+            throw new TypeError('$this->properties must be of type Map to support "addProperty"');
+        }
+
         return $this->properties;
     }
 }

@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021- Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -34,14 +34,14 @@ final class ReturnClause extends Clause
     private bool $distinct = false;
 
     /**
-     * @var AnyType[]|Alias[] The expressions to return
+     * @var Alias[]|AnyType[]|(Alias|AnyType)[] The expressions to return
      */
     private array $columns = [];
 
     /**
      * Add a new column to this RETURN clause.
      *
-     * @param AnyType|Alias|Pattern|int|float|string|bool|array ...$columns The values to return
+     * @param Alias|AnyType|bool|float|int|mixed[]|Pattern|string ...$columns The values to return
      *
      * @return $this
      *
@@ -63,8 +63,6 @@ final class ReturnClause extends Clause
     /**
      * Sets this query to only retrieve unique rows.
      *
-     * @param bool $distinct
-     *
      * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-unique-results
@@ -79,7 +77,7 @@ final class ReturnClause extends Clause
     /**
      * Returns the columns to return. Aliased columns have string keys instead of integers.
      *
-     * @return AnyType[]|Alias[]
+     * @return Alias[]|AnyType[]|(Alias|AnyType)[]
      */
     public function getColumns(): array
     {
@@ -88,8 +86,6 @@ final class ReturnClause extends Clause
 
     /**
      * Returns whether the returned results are distinct.
-     *
-     * @return bool
      */
     public function isDistinct(): bool
     {
@@ -113,7 +109,7 @@ final class ReturnClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (QueryConvertible $column) => $column->toQuery(), $this->columns)
+            array_map(static fn (QueryConvertible $column) => $column->toQuery(), $this->columns)
         );
     }
 }

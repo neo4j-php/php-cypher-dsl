@@ -6,18 +6,25 @@
 >
     <testsuites>
         <testsuite name="unit">
-            <directory>tests/Unit</directory>
+            <directory>tests/unit</directory>
+        </testsuite>
+        <testsuite name="end-to-end">
+            <directory>tests/end-to-end</directory>
         </testsuite>
         <testsuite name="integration">
-            <directory>tests/Integration</directory>
+            <directory>tests/integration</directory>
         </testsuite>
     </testsuites>
     <coverage processUncoveredFiles="true" cacheDirectory="coverage/cache" pathCoverage="true">
         <report>
             <clover outputFile="coverage/clover.xml" />
+            <html outputDirectory="coverage/" />
         </report>
         <include>
             <directory suffix=".php">src</directory>
         </include>
+        <exclude>
+            <file>src/functions.php</file>
+        </exclude>
     </coverage>
 </phpunit>

@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021- Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,6 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
  * This class represents a LIMIT clause.
@@ -29,15 +28,14 @@ final class LimitClause extends Clause
 
     /**
      * The expression of the LIMIT statement.
-     *
-     * @var IntegerType|null $limit
      */
     private ?IntegerType $limit = null;
 
     /**
      * Sets the expression that returns the limit.
      *
-     * @param IntegerType|int $limit The limit
+     * @param int|IntegerType $limit The limit
+     *
      * @return $this
      */
     public function setLimit($limit): self
@@ -49,8 +47,6 @@ final class LimitClause extends Clause
 
     /**
      * Returns the limit of the clause.
-     *
-     * @return IntegerType|null
      */
     public function getLimit(): ?IntegerType
     {

@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,15 +11,13 @@ namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 
 /**
  * This class represents a list of expressions. For example, this class can represent the following
- * construct:
+ * construct:.
  *
  * ['a', 2, n.property]
  *
@@ -27,11 +25,8 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
  */
 final class List_ implements ListType
 {
-    use ListTypeTrait;
-
     use CastTrait;
-    use EscapeTrait;
-    use ErrorTrait;
+    use ListTypeTrait;
 
     /**
      * @var AnyType[] The list of expressions
@@ -39,24 +34,25 @@ final class List_ implements ListType
     private array $expressions;
 
     /**
-     * @param AnyType[] $expressions The list of expressions
+     * @param mixed[] $expressions The list of expressions
+     *
      * @internal This method is not covered by the backwards compatibility promise of php-cypher-dsl
      */
     public function __construct(array $expressions = [])
     {
-        self::assertClassArray('expressions', AnyType::class, $expressions);
-        $this->expressions = $expressions;
+        $this->expressions = array_map([self::class, 'toAnyType'], $expressions);
     }
 
     /**
      * Add one or more expressions to the list.
      *
-     * @param AnyType|Pattern|int|float|string|bool|array ...$expressions
+     * @param AnyType|bool|float|int|mixed[]|Pattern|string ...$expressions
+     *
      * @return $this
      */
     public function addExpression(...$expressions): self
     {
-        $this->expressions = array_merge($this->expressions, array_map([Literal::class, 'literal'], $expressions));
+        $this->expressions = array_merge($this->expressions, array_map([self::class, 'toAnyType'], $expressions));
 
         return $this;
     }
@@ -73,8 +69,6 @@ final class List_ implements ListType
 
     /**
      * Returns whether this list is empty.
-     *
-     * @return bool
      */
     public function isEmpty(): bool
     {
@@ -87,7 +81,7 @@ final class List_ implements ListType
     public function toQuery(): string
     {
         $expressions = array_map(
-            fn (AnyType $expression): string => $expression->toQuery(),
+            static fn (AnyType $expression): string => $expression->toQuery(),
             $this->expressions
         );
 

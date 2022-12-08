@@ -2,6 +2,7 @@ name: test
 
 on:
   push:
+    branches: ['main']
   pull_request:
   workflow_dispatch:
 
@@ -18,7 +19,7 @@ jobs:
     env:
       COMPOSER_VERSION: 2
       COVERAGE_DRIVER: xdebug
-      MINIMUM_COVERAGE_PERCENTAGE: 80
+      MINIMUM_COVERAGE_PERCENTAGE: 90
       MINIMUM_MSI_PERCENTAGE: 80
 
     steps:
@@ -42,6 +43,9 @@ jobs:
       - name: Check coverage
         run: php vendor/bin/coverage-check coverage/clover.xml ${{ env.MINIMUM_COVERAGE_PERCENTAGE }}
 
+      - name: Run end-to-end tests
+        run: php vendor/bin/phpunit --testsuite end-to-end --no-coverage
+
       - name: Run mutation tests
         run: XDEBUG_MODE=coverage php vendor/bin/infection --show-mutations --min-msi=${{ env.MINIMUM_MSI_PERCENTAGE }} --threads=4
 
@@ -60,8 +64,7 @@ jobs:
       neo4j:
         image: neo4j:${{ matrix.neo4j-version }}
         env:
-          NEO4J_AUTH: neo4j/test
-          NEO4JLABS_PLUGINS: '["apoc"]'
+          NEO4J_AUTH: none
         ports:
           - 7687:7687
           - 7474:7474
@@ -75,7 +78,6 @@ jobs:
     env:
       COMPOSER_VERSION: 2
       COVERAGE_DRIVER: none
-      NEO4J_CONNECTIONS: bolt://neo4j:test@localhost,http://neo4j:test@localhost
 
     steps:
       - name: Checkout repository

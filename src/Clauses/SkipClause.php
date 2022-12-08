@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021- Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,7 +11,6 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 
 /**
  * This class represents a SKIP clause.
@@ -26,15 +25,14 @@ final class SkipClause extends Clause
 
     /**
      * The expression of the SKIP statement.
-     *
-     * @var IntegerType|null $skip
      */
     private ?IntegerType $skip = null;
 
     /**
      * Sets the expression that returns the skip.
      *
-     * @param IntegerType|int $skip The amount to skip
+     * @param int|IntegerType $skip The amount to skip
+     *
      * @return SkipClause
      */
     public function setSkip($skip): self
@@ -46,8 +44,6 @@ final class SkipClause extends Clause
 
     /**
      * Returns the amount to skip.
-     *
-     * @return NumeralType|null
      */
     public function getSkip(): ?IntegerType
     {

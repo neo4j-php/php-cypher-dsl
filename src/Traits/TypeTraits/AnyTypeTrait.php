@@ -1,5 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
+/*
+ * This file is part of php-cypher-dsl.
+ *
+ * Copyright (C) Wikibase Solutions
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits;
 
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Equality;
@@ -12,12 +19,9 @@ use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThan;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThanOrEqual;
 use WikibaseSolutions\CypherDSL\Syntax\Alias;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * This trait provides a default implementation to satisfy the "AnyType" interface.
- *
- * @implements AnyType
  */
 trait AnyTypeTrait
 {

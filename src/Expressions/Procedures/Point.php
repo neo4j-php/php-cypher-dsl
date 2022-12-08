@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 /**
  * This class represents the "point()" function.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/functions/spatial/
+ * @see https://neo4j.com/docs/cypher-manual/current/functions/spatial/ Corresponding documentation on Neo4j.com
  * @see Procedure::point()
  */
 final class Point extends Procedure implements PointType
@@ -29,12 +29,11 @@ final class Point extends Procedure implements PointType
     private MapType $map;
 
     /**
-     * The signature of the "point()" function is:
-     *
-     * point(input :: MAP?) :: (POINT?) - returns a point object
+     * The signature of the "point()" function is "point(input :: MAP?) :: (POINT?)".
      *
      * @param MapType $map The map to use for constructing the point
-	 * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
+     *
+     * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(MapType $map)
     {

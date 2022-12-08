@@ -1,24 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Traits;
 
 /**
@@ -39,14 +27,13 @@ trait NameGenerationTrait
      *
      * @note The returned string is not cryptographically secure.
      *
-     * @param string $prefix The prefix to put before the name. Must start with a letter to adhere to cypher namings.
-     * @param int|null $length The length of the generated name in bytes.
-     *
-     * @return string
+     * @param string $prefix The prefix to put before the name. Must start with a letter to adhere to cypher namings
+     * @param int    $length the length of the generated name in bytes (optional)
      */
-    private function generateIdentifier(string $prefix = 'var', int $length = 32): string
+    private static function generateIdentifier(string $prefix = 'var', int $length = 32): string
     {
         $random = '';
+
         for ($i = 0; $i < $length; ++$i) {
             $random .= dechex(mt_rand(0, 15));
         }

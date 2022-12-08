@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -26,6 +26,7 @@ final class Boolean implements BooleanType
 
     /**
      * @param bool $value The value
+     *
      * @internal This method is not covered by the backwards compatibility promise of php-cypher-dsl
      */
     public function __construct(bool $value)
@@ -35,8 +36,6 @@ final class Boolean implements BooleanType
 
     /**
      * Returns the boolean value.
-     *
-     * @return bool
      */
     public function getValue(): bool
     {

@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,17 +22,18 @@ final class String_ implements StringType
     use StringTypeTrait;
 
     /**
-     * @var string
+     * @var string The value of the string
      */
     private string $value;
 
     /**
-     * @var bool Whether to use double quotes or not.
+     * @var bool whether to use double quotes or not
      */
     private bool $useDoubleQuotes = false;
 
     /**
-     * @param string $value The value
+     * @param string $value The value of the string
+     *
      * @internal This method is not covered by the backwards compatibility promise of php-cypher-dsl
      */
     public function __construct(string $value)
@@ -42,8 +43,6 @@ final class String_ implements StringType
 
     /**
      * Whether to use double quotes or not.
-     *
-     * @param bool $useDoubleQuotes
      */
     public function useDoubleQuotes(bool $useDoubleQuotes = true): void
     {
@@ -52,8 +51,6 @@ final class String_ implements StringType
 
     /**
      * Returns the string value.
-     *
-     * @return string
      */
     public function getValue(): string
     {
@@ -62,8 +59,6 @@ final class String_ implements StringType
 
     /**
      * Returns whether the string uses double quotes. Single quotes are used if false.
-     *
-     * @return bool
      */
     public function usesDoubleQuotes(): bool
     {
@@ -89,6 +84,7 @@ final class String_ implements StringType
      * Encodes special string characters in Cypher.
      *
      * @param string $value The string to encode
+     *
      * @return string The encoded string
      */
     private static function encodeSpecials(string $value): string

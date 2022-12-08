@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,7 +20,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 /**
  * This class represents the "isEmpty()" function.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-isempty
+ * @see https://neo4j.com/docs/cypher-manual/current/functions/predicate/#functions-isempty Corresponding documentation on Neo4j.com
  * @see Procedure::isEmpty()
  */
 final class IsEmpty extends Procedure implements BooleanType
@@ -34,14 +34,14 @@ final class IsEmpty extends Procedure implements BooleanType
     private AnyType $list;
 
     /**
-     * The signature of the "isEmpty()" function is:
-     *
-     * isEmpty(input :: LIST? OF ANY?) :: (BOOLEAN?) - to check whether a list is empty
-     * isEmpty(input :: MAP?) :: (BOOLEAN?) - to check whether a map is empty
-     * isEmpty(input :: STRING?) :: (BOOLEAN?) - to check whether a string is empty
+     * The signatures of the "isEmpty()" function are:
+     * - "isEmpty(input :: LIST? OF ANY?) :: (BOOLEAN?)" - to check whether a list is empty
+     * - "isEmpty(input :: MAP?) :: (BOOLEAN?)" - to check whether a map is empty
+     * - "isEmpty(input :: STRING?) :: (BOOLEAN?)" - to check whether a string is empty.
      *
      * @param ListType|MapType|StringType $list An expression that returns a list
-	 * @internal This method is not covered by the backwards compatibility promise of php-cypher-dsl
+     *
+     * @internal This method is not covered by the backwards compatibility promise of php-cypher-dsl
      */
     public function __construct(AnyType $list)
     {

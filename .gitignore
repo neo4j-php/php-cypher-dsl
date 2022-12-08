@@ -1,9 +1,9 @@
 .DS_Store
 composer.lock
 coverage/
+doxygen/
 phpunit.xml
 vendor/
 *.idea
 .phpunit.result.cache
 .php-cs-fixer.cache
-coverage/

@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -24,17 +24,16 @@ final class Time extends Procedure implements TimeType
     use TimeTypeTrait;
 
     /**
-     * @var AnyType|null The input to the localtime function, from which to construct the time
+     * @var null|AnyType The input to the localtime function, from which to construct the time
      */
     private ?AnyType $value;
 
     /**
-     * The signature of the "time()" function is:
+     * The signature of the "time()" function is "time(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (TIME?)".
      *
-     * time(input = DEFAULT_TEMPORAL_ARGUMENT :: ANY?) :: (TIME?)
+     * @param null|AnyType $value The input to the time function, from which to construct the time
      *
-     * @param AnyType|null $value The input to the time function, from which to construct the time
-	 * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
+     * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct(?AnyType $value = null)
     {

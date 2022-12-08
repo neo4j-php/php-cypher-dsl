@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021-  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,7 +10,6 @@
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Patterns\CompletePattern;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 
 /**
  * This class represents a MERGE clause.
@@ -24,17 +23,17 @@ use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 final class MergeClause extends Clause
 {
     /**
-     * @var CompletePattern|null $pattern The pattern to merge
+     * @var null|CompletePattern The pattern to merge
      */
     private ?CompletePattern $pattern = null;
 
     /**
-     * @var SetClause|null $createClause The clause to execute when the pattern is created
+     * @var null|SetClause The clause to execute when the pattern is created
      */
     private ?SetClause $createClause = null;
 
     /**
-     * @var SetClause|null $matchClause The clause to execute when the pattern is matched
+     * @var null|SetClause The clause to execute when the pattern is matched
      */
     private ?SetClause $matchClause = null;
 
@@ -42,6 +41,7 @@ final class MergeClause extends Clause
      * Sets the pattern to merge.
      *
      * @param CompletePattern $pattern The pattern to merge
+     *
      * @return $this
      */
     public function setPattern(CompletePattern $pattern): self
@@ -56,7 +56,6 @@ final class MergeClause extends Clause
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/#merge-merge-with-on-create
      *
-     * @param SetClause|null $createClause
      * @return $this
      */
     public function setOnCreate(?SetClause $createClause): self
@@ -71,7 +70,6 @@ final class MergeClause extends Clause
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/#merge-merge-with-on-match
      *
-     * @param SetClause|null $matchClause
      * @return $this
      */
     public function setOnMatch(?SetClause $matchClause): self
@@ -83,8 +81,6 @@ final class MergeClause extends Clause
 
     /**
      * Returns the pattern to MERGE.
-     *
-     * @return CompletePattern|null
      */
     public function getPattern(): ?CompletePattern
     {
@@ -93,8 +89,6 @@ final class MergeClause extends Clause
 
     /**
      * Returns the clause to execute when the pattern is matched.
-     *
-     * @return SetClause|null
      */
     public function getOnCreateClause(): ?SetClause
     {
@@ -103,8 +97,6 @@ final class MergeClause extends Clause
 
     /**
      * Returns the clause to execute when the pattern is matched.
-     *
-     * @return SetClause|null
      */
     public function getOnMatchClause(): ?SetClause
     {

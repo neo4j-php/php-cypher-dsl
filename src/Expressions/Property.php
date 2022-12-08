@@ -2,17 +2,16 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
-use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
+use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
@@ -47,21 +46,21 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
  */
 final class Property implements
     BooleanType,
-    DateType,
     DateTimeType,
+    DateType,
     FloatType,
     IntegerType,
-    StringType,
-    MapType,
-    PointType,
     ListType,
     LocalDateTimeType,
     LocalTimeType,
+    MapType,
+    PointType,
+    StringType,
     TimeType
 {
     use BooleanTypeTrait,
-        DateTypeTrait,
         DateTimeTypeTrait,
+        DateTypeTrait,
         EscapeTrait,
         FloatTypeTrait,
         IntegerTypeTrait,
@@ -88,8 +87,9 @@ final class Property implements
     /**
      * Property constructor.
      *
-     * @param MapType|NodeType|RelationshipType $expression  The expression that has the property
-     * @param string                            $property    The name of the property
+     * @param MapType|NodeType|RelationshipType $expression The expression that has the property
+     * @param string                            $property   The name of the property
+     *
      * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
     public function __construct($expression, string $property)
@@ -106,7 +106,9 @@ final class Property implements
      * TODO: Disallow this function to be used outside the context of a SET
      *
      * @note This function only makes sense when used in the context of a SET
-     * @param PropertyType|bool|int|float|string $value The new value to give to this property
+     *
+     * @param bool|float|int|PropertyType|string $value The new value to give to this property
+     *
      * @return PropertyReplacement
      *
      * TODO: Allow this function to take arrays of property types
@@ -118,8 +120,6 @@ final class Property implements
 
     /**
      * Returns the property name.
-     *
-     * @return string
      */
     public function getProperty(): string
     {
@@ -141,6 +141,6 @@ final class Property implements
      */
     public function toQuery(): string
     {
-        return sprintf("%s.%s", $this->expression->toQuery(), $this->escape($this->property));
+        return sprintf("%s.%s", $this->expression->toQuery(), self::escape($this->property));
     }
 }

@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 /**
- * Represents a comparison binary operator. These are:
+ * Represents a comparison binary operator. These are:.
  *
  * - equality: "="
  * - inequality: "<>"
@@ -29,8 +29,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
  * - case-sensitive suffix search on strings: "ENDS WITH"
  * - case-sensitive inclusion search in strings: "CONTAINS"
  *
- * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 48)
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/operators/#query-operators-comparison Corresponding documentation on Neo4j.com
  */
 abstract class ComparisonBinaryOperator extends BinaryOperator implements BooleanType
 {
@@ -38,7 +37,8 @@ abstract class ComparisonBinaryOperator extends BinaryOperator implements Boolea
 
     /**
      * @inheritDoc
-     * @param AnyType $left The left-hand of the comparison operator
+     *
+     * @param AnyType $left  The left-hand of the comparison operator
      * @param AnyType $right The right-hand of the comparison operator
      */
     public function __construct(AnyType $left, AnyType $right, bool $insertParentheses = true)

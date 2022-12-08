@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021- Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -27,20 +27,23 @@ final class WhereClause extends Clause
     use CastTrait;
 
     public const AND = 'and';
+
     public const OR = 'or';
+
     public const XOR = 'xor';
 
     /**
-     * @var BooleanType|null The expression to match
+     * @var null|BooleanType The expression to match
      */
     private ?BooleanType $expression = null;
 
     /**
      * Add an expression to this WHERE clause.
      *
-     * @param BooleanType|bool $expression The expression to add to the WHERE clause
-     * @param string $operator The operator to use to combine the given expression with the existing expression, should
-     *  be one of WhereClause::AND, WhereClause::OR or WhereClause::XOR
+     * @param bool|BooleanType $expression The expression to add to the WHERE clause
+     * @param string           $operator   The operator to use to combine the given expression with the existing expression, should
+     *                                     be one of WhereClause::AND, WhereClause::OR or WhereClause::XOR
+     *
      * @return $this
      */
     public function addExpression($expression, string $operator = self::AND): self
@@ -66,8 +69,6 @@ final class WhereClause extends Clause
 
     /**
      * Returns the expression to match.
-     *
-     * @return BooleanType|null
      */
     public function getExpression(): ?BooleanType
     {

@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021-  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -35,6 +35,7 @@ final class CreateClause extends Clause
      * Add one or more patterns to create.
      *
      * @param CompletePattern ...$pattern The patterns to add to the CREATE clause
+     *
      * @return $this
      */
     public function addPattern(CompletePattern ...$pattern): self
@@ -69,7 +70,7 @@ final class CreateClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (CompletePattern $pattern): string => $pattern->toQuery(), $this->patterns)
+            array_map(static fn (CompletePattern $pattern): string => $pattern->toQuery(), $this->patterns)
         );
     }
 }

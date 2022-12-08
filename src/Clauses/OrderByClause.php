@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021- Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,7 +11,6 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 
 /**
  * This class represents an ORDER BY sub-clause.
@@ -41,6 +40,7 @@ final class OrderByClause extends Clause
      * Add one or more properties to sort on.
      *
      * @param Property ...$property The additional property to sort on
+     *
      * @return OrderByClause
      */
     public function addProperty(Property ...$property): self
@@ -53,7 +53,6 @@ final class OrderByClause extends Clause
     /**
      * Set to sort in a DESCENDING order.
      *
-     * @param bool $descending
      * @return OrderByClause
      */
     public function setDescending(bool $descending = true): self
@@ -75,8 +74,6 @@ final class OrderByClause extends Clause
 
     /**
      * Returns whether the ordering is in descending order.
-     *
-     * @return bool
      */
     public function isDescending(): bool
     {
@@ -96,7 +93,7 @@ final class OrderByClause extends Clause
      */
     protected function getSubject(): string
     {
-        $properties = array_map(fn (Property $property): string => $property->toQuery(), $this->properties);
+        $properties = array_map(static fn (Property $property): string => $property->toQuery(), $this->properties);
         $subject = implode(", ", $properties);
 
         if ($this->descending) {

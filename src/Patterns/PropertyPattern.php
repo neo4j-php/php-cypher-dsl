@@ -2,7 +2,7 @@
 /*
  * This file is part of php-cypher-dsl.
  *
- * Copyright (C) 2021  Wikibase Solutions
+ * Copyright (C) Wikibase Solutions
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@ use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PropertyPatternTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
- * Represents patterns to which properties can be assigned. These are:
+ * Represents patterns to which properties can be assigned. These are:.
  *
  * - node
  * - relationship
@@ -26,16 +26,14 @@ interface PropertyPattern extends Pattern
 {
     /**
      * Returns the property of the given name in this pattern.
-     *
-     * @param string $property
-     * @return Property
      */
     public function property(string $property): Property;
 
     /**
      * Set the properties of this pattern.
      *
-     * @param MapType|array $properties
+     * @param MapType|mixed[] $properties
+     *
      * @return $this
      */
     public function withProperties($properties): self;
@@ -45,8 +43,8 @@ interface PropertyPattern extends Pattern
      * a map. An exception will be thrown if they are anything else (such as a variable). If the pattern  does not yet
      * contain any properties, a new map will be created.
      *
-     * @param string $key
      * @param mixed $property
+     *
      * @return $this
      */
     public function addProperty(string $key, $property): self;
@@ -56,15 +54,14 @@ interface PropertyPattern extends Pattern
      * An exception will be thrown if they are anything else (such as a variable). If the pattern  does not yet contain
      * any properties, a new map will be created.
      *
-     * @param Map|array $properties
+     * @param Map|mixed[] $properties
+     *
      * @return $this
      */
     public function addProperties($properties): self;
 
     /**
      * Returns the properties of this object.
-     *
-     * @return MapType|null
      */
     public function getProperties(): ?MapType;
 }
