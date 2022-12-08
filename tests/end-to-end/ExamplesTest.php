@@ -33,4 +33,40 @@ final class ExamplesTest extends TestCase
 
         $this->assertStringMatchesFormat("MATCH (:Person {name: 'Tom Hanks'})-[:ACTED_IN]->()<-[:ACTED_IN]-(%s) RETURN %s.name", $statement);
     }
+
+    public function testCallSubqueryClauseExample1(): void
+    {
+        $query = Query::new()
+            ->call(static function (Query $query): void
+            {
+                $query->create(Query::node("Person"));
+            })
+            ->build();
+
+        $this->assertSame("CALL { CREATE (:Person) }", $query);
+    }
+
+    public function testCallSubqueryClauseExample2(): void
+    {
+        $subQuery = Query::new()->create(Query::node("Person"));
+        $query = Query::new()
+            ->call($subQuery)
+            ->build();
+
+        $this->assertSame("CALL { CREATE (:Person) }", $query);
+    }
+
+    public function testCallSubqueryClauseExample3(): void
+    {
+        $person = Query::variable();
+        $query = Query::new()
+            ->match(Query::node('Person')->withVariable($person))
+            ->call(static function (Query $query) use ($person): void
+            {
+                $query->remove($person->labeled('Person'));
+            }, [$person])
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s:Person) CALL { WITH %s REMOVE %s:Person }", $query);
+    }
 }
