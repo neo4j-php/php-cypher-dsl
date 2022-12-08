@@ -406,7 +406,7 @@ final class Query implements QueryConvertible
     public function callProcedure($procedure, $yields = []): self
     {
         if (is_string($procedure)) {
-            $procedure = Procedure::raw($procedure, $yields);
+            $procedure = Procedure::raw($procedure);
         }
 
         if (!is_array($yields)) {
