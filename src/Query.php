@@ -397,7 +397,7 @@ final class Query implements QueryConvertible
      * Creates the CALL procedure clause.
      *
      * @param Procedure|string $procedure The procedure to call
-     * @param Alias|Alias[]|string|string[]|Variable|Variable[]|(Alias|string|Variable)[] $yields    The result fields that should be returned (optional)
+     * @param AnyType|AnyType[]|bool|bool[]|float|float[]|int|int[]|mixed[]|mixed[][]|Pattern|Pattern[]|string|string[]|(AnyType|bool|float|int|mixed[]|Pattern|string)[] $yields    The result fields that should be returned (optional)
      *
      * @return $this
      *
