@@ -10,6 +10,7 @@
 namespace WikibaseSolutions\CypherDSL\Tests\EndToEnd;
 
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Query;
 
 /**
@@ -68,5 +69,36 @@ final class ExamplesTest extends TestCase
             ->build();
 
         $this->assertStringMatchesFormat("MATCH (%s:Person) CALL { WITH %s REMOVE %s:Person }", $query);
+    }
+
+    public function testCallProcedureClauseExample1(): void
+    {
+        $statement = Query::new()
+            ->callProcedure("apoc.json")
+            ->build();
+
+        $this->assertSame("CALL `apoc.json`()", $statement);
+    }
+
+    public function testCallProcedureClauseExample2(): void
+    {
+        $statement = Query::new()
+            ->callProcedure("dbms.procedures", [
+                Query::variable('name'),
+                Query::variable('signature')
+            ])
+            ->build();
+
+        $this->assertSame("CALL `dbms.procedures`() YIELD name, signature", $statement);
+    }
+
+    public function testCallProcedureClauseExample3(): void
+    {
+        $procedure = Procedure::raw("dbms.security.createUser", ['example_username', 'example_password', false]);
+        $statement = Query::new()
+            ->callProcedure($procedure)
+            ->build();
+
+        $this->assertSame("CALL `dbms.security.createUser`('example_username', 'example_password', false)", $statement);
     }
 }
