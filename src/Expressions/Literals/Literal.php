@@ -19,7 +19,6 @@ use WikibaseSolutions\CypherDSL\Expressions\Procedures\LocalTime;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Point;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Time;
-use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;

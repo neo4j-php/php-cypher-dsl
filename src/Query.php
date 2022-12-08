@@ -362,7 +362,7 @@ final class Query implements QueryConvertible
      *
      * @note This feature is not part of the openCypher standard.
      *
-     * @param callable|Query                                        $query     A callable decorating a Query, or an instance of Query
+     * @param callable|Query $query A callable decorating a Query, or an instance of Query
      * @param Pattern|Pattern[]|string|string[]|Variable|Variable[]|(Pattern|string|Variable)[] $variables The variables to include in the WITH clause for correlation (optional)
      *
      * @return $this
@@ -396,7 +396,7 @@ final class Query implements QueryConvertible
     /**
      * Creates the CALL procedure clause.
      *
-     * @param Procedure                                         $procedure The procedure to call
+     * @param Procedure $procedure The procedure to call
      * @param Alias|Alias[]|string|string[]|Variable|Variable[]|(Alias|string|Variable)[] $yields    The result fields that should be returned (optional)
      *
      * @return $this
@@ -447,7 +447,7 @@ final class Query implements QueryConvertible
      * Creates the RETURN clause.
      *
      * @param Alias|Alias[]|AnyType|AnyType[]|mixed[]|bool|bool[]|float|float[]|int|int[]|Pattern|Pattern[]|string|string[]|(Alias|AnyType|mixed[]|bool|float|int|Pattern|string)[] $expressions A single expression to return, or a non-empty list of expressions to return
-     * @param bool                                                                                                        $distinct    Whether to be a RETURN DISTINCT clause (optional, default: false)
+     * @param bool $distinct Whether to be a RETURN DISTINCT clause (optional, default: false)
      *
      * @return $this
      *
@@ -497,7 +497,7 @@ final class Query implements QueryConvertible
      * Creates the DELETE clause.
      *
      * @param Pattern|Pattern[]|StructuralType|StructuralType[]|(Pattern|StructuralType)[] $structures A single structure to delete, or a non-empty list of structures to delete
-     * @param bool                                              $detach     Whether to DETACH DELETE (optional, default: false)
+     * @param bool $detach Whether to DETACH DELETE (optional, default: false)
      *
      * @return $this
      *
@@ -691,8 +691,8 @@ final class Query implements QueryConvertible
      * Creates the WHERE clause.
      *
      * @param bool|bool[]|BooleanType|BooleanType[]|(bool|BooleanType)[] $expressions A boolean expression to evaluate, or a non-empty list of boolean expression to evaluate
-     * @param string                                $operator    The operator with which to unify the given expressions, should be either WhereClause::OR,
-     *                                                           WhereClause::AND or WhereClause::XOR (optional, default: 'and')
+     * @param string $operator The operator with which to unify the given expressions, should be either WhereClause::OR,
+     *                         WhereClause::AND or WhereClause::XOR (optional, default: 'and')
      *
      * @return $this
      *

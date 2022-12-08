@@ -10,10 +10,6 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Procedures;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\All;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Any;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Date;
@@ -28,9 +24,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Raw;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Single;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Time;
-use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * @covers \WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure

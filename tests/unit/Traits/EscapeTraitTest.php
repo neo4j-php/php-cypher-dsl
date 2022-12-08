@@ -9,6 +9,7 @@
  */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 
@@ -64,7 +65,7 @@ final class EscapeTraitTest extends TestCase
     {
         $value = str_repeat('a', 65535);
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->trait->escape($value);
     }
