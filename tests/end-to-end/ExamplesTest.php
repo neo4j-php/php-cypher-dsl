@@ -131,4 +131,144 @@ final class ExamplesTest extends TestCase
 
         $this->assertSame("CREATE (:Person), (:Animal)", $query);
     }
+
+    public function testDeleteClauseExample1(): void
+    {
+        $unknown = Query::node('Person')->withProperties([
+            'name' => 'UNKNOWN'
+        ]);
+
+        $query = Query::new()
+            ->match($unknown)
+            ->delete($unknown)
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s:Person {name: 'UNKNOWN'}) DELETE %s", $query);
+    }
+
+    public function testDeleteClauseExample2(): void
+    {
+        $everything = Query::node();
+
+        $query = Query::new()
+            ->match($everything)
+            ->delete($everything)
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s) DELETE %s", $query);
+    }
+
+    public function testDeleteClauseExample3(): void
+    {
+        $everything = Query::node();
+
+        $query = Query::new()
+            ->match($everything)
+            ->delete($everything, true)
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s) DETACH DELETE %s", $query);
+    }
+
+    public function testDeleteClauseExample4(): void
+    {
+        $everything = Query::node();
+
+        $query = Query::new()
+            ->match($everything)
+            ->detachDelete($everything)
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s) DETACH DELETE %s", $query);
+    }
+
+    public function testDeleteClauseExample5(): void
+    {
+        $persons = Query::node('Person');
+        $animals = Query::node('Animal');
+
+        $query = Query::new()
+            ->match([$persons, $animals])
+            ->delete([$persons, $animals])
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s:Person), (%s:Animal) DELETE %s, %s", $query);
+    }
+
+    public function testLimitClauseExample1(): void
+    {
+        $persons = Query::node('Person');
+        $query = Query::new()
+            ->match($persons)
+            ->returning($persons->property('name'))
+            ->limit(3)
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s:Person) RETURN %s.name LIMIT 3", $query);
+    }
+
+    public function testMatchClauseExample1(): void
+    {
+        $n = Query::node();
+        $query = Query::new()
+            ->match($n)
+            ->returning($n)
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s) RETURN %s", $query);
+    }
+
+    public function testMatchClauseExample2(): void
+    {
+        $movie = Query::node("Movie");
+        $query = Query::new()
+            ->match($movie)
+            ->returning($movie->property("title"))
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s:Movie) RETURN %s.title", $query);
+    }
+
+    public function testMatchClauseExample3(): void
+    {
+        $movie = Query::node();
+        $query = Query::new()
+            ->match(Query::node()->withProperties(['name' => 'Oliver Stone'])->relationshipUni($movie))
+            ->returning($movie->property("title"))
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH ({name: 'Oliver Stone'})--(%s) RETURN %s.title", $query);
+}
+
+    public function testMatchClauseExample4(): void
+    {
+        $movie = Query::node('Movie');
+        $query = Query::new()
+            ->match(Query::node('Person')->withProperties(['name' => 'Oliver Stone'])->relationshipUni($movie))
+            ->returning($movie->property("title"))
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (:Person {name: 'Oliver Stone'})--(%s:Movie) RETURN %s.title", $query);
+    }
+
+    public function testMatchClauseExample5(): void
+    {
+        $n = Query::node()->addLabel('Movie', 'Person');
+        $query = Query::new()
+            ->match($n)
+            ->returning(['name' => $n->property("name"), 'title' => $n->property("title")])
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s:Movie:Person) RETURN %s.name AS name, %s.title AS title", $query);
+    }
+
+    public function testOptionalMatchClauseExample1(): void
+    {
+        $movies = Query::node("Movie");
+        $query = Query::new()
+            ->optionalMatch($movies)
+            ->build();
+
+        $this->assertSame("OPTIONAL MATCH (:Movie)", $query);
+    }
 }
