@@ -10,6 +10,7 @@
 namespace WikibaseSolutions\CypherDSL\Tests\EndToEnd;
 
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Query;
 
@@ -262,6 +263,173 @@ final class ExamplesTest extends TestCase
         $this->assertStringMatchesFormat("MATCH (%s:Movie:Person) RETURN %s.name AS name, %s.title AS title", $query);
     }
 
+    public function testMatchClauseExample6(): void
+    {
+        $movie = Query::node();
+        $query = Query::new()
+            ->match(
+                Query::node('Person')->withProperties(['name' => 'Oliver Stone'])->relationshipTo($movie)
+            )
+            ->returning($movie->property('title'))
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (:Person {name: 'Oliver Stone'})-->(%s) RETURN %s.title", $query);
+    }
+
+    public function testMatchClauseExample7(): void
+    {
+        $r = Query::relationshipTo();
+        $query = Query::new()
+            ->match(Query::node('Person')->withProperties(['name' => 'Oliver Stone'])->relationship($r, Query::node()))
+            ->returning($r)
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (:Person {name: 'Oliver Stone'})-[%s]->() RETURN %s", $query);
+    }
+
+    public function testMatchClauseExample8(): void
+    {
+        $actor = Query::node();
+        $query = Query::new()
+            ->match(
+                Query::node('Movie')
+                    ->withProperties(['title' => 'Wall Street'])
+                    ->relationshipFrom($actor, 'ACTED_IN')
+            )
+            ->returning($actor->property('name'))
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (:Movie {title: 'Wall Street'})<-[:ACTED_IN]-(%s) RETURN %s.name", $query);
+    }
+
+    public function testMatchClauseExample9(): void
+    {
+        $person = Query::node();
+        $relationship = Query::relationshipFrom()->withTypes(['ACTED_IN', 'DIRECTED']);
+        $query = Query::new()
+            ->match(
+                Query::node('Movie')
+                    ->withProperties(['title' => 'Wall Street'])
+                    ->relationship($relationship, $person)
+            )
+            ->returning($person->property('name'))
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (:Movie {title: 'Wall Street'})<-[:ACTED_IN|DIRECTED]-(%s) RETURN %s.name", $query);
+    }
+
+    public function testMatchClauseExample10(): void
+    {
+        $actor = Query::node();
+        $relationship = Query::relationshipFrom()->withTypes(['ACTED_IN']);
+        $query = Query::new()
+            ->match(
+                Query::node('Movie')
+                    ->withProperties(['title' => 'Wall Street'])
+                    ->relationship($relationship, $actor)
+            )
+            ->returning($relationship->property('role'))
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (:Movie {title: 'Wall Street'})<-[%s:ACTED_IN]-() RETURN %s.role", $query);
+    }
+
+    public function testMatchClauseExample11(): void
+    {
+        $charlie = Query::node('Person')->withProperties(['name' => 'Charlie Sheen']);
+        $rob = Query::node('Person')->withProperties(['name' => 'Rob Reiner']);
+
+        $query = Query::new()
+            ->match([$charlie, $rob])
+            ->create(
+                Query::node()
+                    ->withVariable($rob->getVariable())
+                    ->relationshipTo(
+                        Query::node()->withVariable($charlie->getVariable()), 'TYPE INCLUDING A SPACE')
+                )
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s:Person {name: 'Charlie Sheen'}), (%s:Person {name: 'Rob Reiner'}) CREATE (%s)-[:`TYPE INCLUDING A SPACE`]->(%s)", $query);
+    }
+
+    public function testMatchClauseExample12(): void
+    {
+        $movie = Query::node();
+        $director = Query::node();
+
+        $query = Query::new()
+            ->match(
+                Query::node()
+                    ->withProperties(['name' => 'Charlie Sheen'])
+                    ->relationshipTo($movie, 'ACTED_IN')
+                    ->relationshipFrom($director, 'DIRECTED'))
+            ->returning([$movie->property('title'), $director->property('name')])
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH ({name: 'Charlie Sheen'})-[:ACTED_IN]->(%s)<-[:DIRECTED]-(%s) RETURN %s.title, %s.name", $query);
+    }
+
+    public function testMatchClauseExample13(): void
+    {
+        $movie = Query::node('Movie');
+        $r = Query::relationshipUni()->addType('ACTED_IN')->withMinHops(1)->withMaxHops(3);
+
+        $query = Query::new()
+            ->match(Query::node()->withProperties(['name' => 'Charlie Sheen'])->relationship($r, $movie))
+            ->returning($movie->property('title'))
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH ({name: 'Charlie Sheen'})-[:ACTED_IN*1..3]-(%s:Movie) RETURN %s.title", $query);
+    }
+
+    public function testMatchClauseExample14(): void
+    {
+        $p = Query::node()->withProperties(['name' => 'Michael Douglas'])->relationshipTo(Query::node());
+
+        $query = Query::new()
+            ->match($p)
+            ->returning($p)
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH %s = ({name: 'Michael Douglas'})-->() RETURN %s", $query);
+    }
+
+    public function testMergeClauseExample1(): void
+    {
+        $robert = Query::node('Critic');
+
+        $query = Query::new()
+            ->merge($robert)
+            ->returning($robert)
+            ->build();
+
+        $this->assertStringMatchesFormat("MERGE (%s:Critic) RETURN %s", $query);
+    }
+
+    public function testMergeClauseExample2(): void
+    {
+        $keanu = Query::node('Person')->withProperties(['name' => 'Keanu Reeves']);
+
+        $query = Query::new()
+            ->merge($keanu, (new SetClause())->add($keanu->property('created')->replaceWith(Query::procedure()::raw('timestamp'))))
+            ->returning([$keanu->property('name'), $keanu->property('created')])
+            ->build();
+
+        $this->assertStringMatchesFormat("MERGE (%s:Person {name: 'Keanu Reeves'}) ON CREATE SET %s.created = timestamp() RETURN %s.name, %s.created", $query);
+    }
+
+    public function testMergeClauseExample3(): void
+    {
+        $keanu = Query::node('Person')->withProperties(['name' => 'Keanu Reeves']);
+
+        $query = Query::new()
+            ->merge($keanu, null, (new SetClause())->add($keanu->property('created')->replaceWith(Query::procedure()::raw('timestamp'))))
+            ->returning([$keanu->property('name'), $keanu->property('created')])
+            ->build();
+
+        $this->assertStringMatchesFormat("MERGE (%s:Person {name: 'Keanu Reeves'}) ON MATCH SET %s.created = timestamp() RETURN %s.name, %s.created", $query);
+    }
+
     public function testOptionalMatchClauseExample1(): void
     {
         $movies = Query::node("Movie");
@@ -270,5 +438,43 @@ final class ExamplesTest extends TestCase
             ->build();
 
         $this->assertSame("OPTIONAL MATCH (:Movie)", $query);
+    }
+
+    public function testCombiningClausesExample1(): void
+    {
+        $nineties = Query::node("Movie");
+        $expression = $nineties->property('released')->gte(1990)->and($nineties->property('released')->lt(2000));
+
+        $statement = Query::new()
+            ->match($nineties)
+            ->where($expression)
+            ->returning($nineties->property("title"))
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s:Movie) WHERE ((%s.released >= 1990) AND (%s.released < 2000)) RETURN %s.title", $statement);
+    }
+
+    public function testExpressions1(): void
+    {
+        $released = Query::variable("nineties")->property("released");
+        $expression = $released->gte(1990)->and($released->lt(2000));
+
+        $this->assertSame("((nineties.released >= 1990) AND (nineties.released < 2000))", $expression->toQuery());
+    }
+
+    public function testExpressions2(): void
+    {
+        $name = Query::variable("actor")->property("name");
+        $expression = $name->notEquals("Tom Hanks");
+
+        $this->assertSame("(actor.name <> 'Tom Hanks')", $expression->toQuery());
+    }
+
+    public function testExpressions3(): void
+    {
+        $released = Query::variable("nineties")->property("released");
+        $expression = $released->gte(1990)->and(Query::rawExpression("(nineties IS NOT NULL)"));
+
+        $this->assertSame("((nineties.released >= 1990) AND (nineties IS NOT NULL))", $expression->toQuery());
     }
 }

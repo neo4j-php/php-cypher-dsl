@@ -24,6 +24,17 @@ use function WikibaseSolutions\CypherDSL\relationshipUni;
  */
 final class MoviesTest extends TestCase
 {
+    public function testFindAllMovies(): void
+    {
+        $movie = node("Movie");
+        $query = query()
+            ->match($movie)
+            ->returning($movie)
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s:Movie) RETURN %s", $query);
+    }
+
     public function testFindActorNamedTomHanks(): void
     {
         $tom = node()->withProperties([
@@ -32,9 +43,10 @@ final class MoviesTest extends TestCase
 
         $query = query()
             ->match($tom)
-            ->returning($tom);
+            ->returning($tom)
+            ->build();
 
-        $this->assertStringMatchesFormat('MATCH (%s {name: \'Tom Hanks\'}) RETURN %s', $query->toQuery());
+        $this->assertStringMatchesFormat("MATCH (%s {name: 'Tom Hanks'}) RETURN %s", $query);
     }
 
     public function testFindTheMovieWithTitleCloudAtlas(): void
@@ -45,9 +57,10 @@ final class MoviesTest extends TestCase
 
         $query = query()
             ->match($cloudAtlas)
-            ->returning($cloudAtlas);
+            ->returning($cloudAtlas)
+            ->build();
 
-        $this->assertStringMatchesFormat('MATCH (%s {title: \'Cloud Atlas\'}) RETURN %s', $query->toQuery());
+        $this->assertStringMatchesFormat("MATCH (%s {title: 'Cloud Atlas'}) RETURN %s", $query);
     }
 
     public function testFind10People(): void
@@ -57,9 +70,10 @@ final class MoviesTest extends TestCase
         $query = query()
             ->match($people)
             ->returning($people->property('name'))
-            ->limit(10);
+            ->limit(10)
+            ->build();
 
-        $this->assertStringMatchesFormat('MATCH (%s:Person) RETURN %s.name LIMIT 10', $query->toQuery());
+        $this->assertStringMatchesFormat("MATCH (%s:Person) RETURN %s.name LIMIT 10", $query);
     }
 
     public function testFindMoviesReleasedInThe1990s(): void
@@ -71,51 +85,49 @@ final class MoviesTest extends TestCase
                 $nineties->property('released')->gte(1990),
                 $nineties->property('released')->lt(2000),
             ])
-            ->returning($nineties->property('title'));
+            ->returning($nineties->property('title'))
+            ->build();
 
-        $this->assertStringMatchesFormat('MATCH (%s:Movie) WHERE ((%s.released >= 1990) AND (%s.released < 2000)) RETURN %s.title', $query->toQuery());
+        $this->assertStringMatchesFormat("MATCH (%s:Movie) WHERE ((%s.released >= 1990) AND (%s.released < 2000)) RETURN %s.title", $query);
     }
 
     public function testListAllTomHanksMovies(): void
     {
         $movies = node();
-        $tom = node('Person')->withProperties([
-            'name' => 'Tom Hanks',
-        ]);
+        $tom = node('Person')->withProperties(['name' => 'Tom Hanks']);
 
         $query = query()
             ->match($tom->relationshipTo($movies, 'ACTED_IN'))
-            ->returning([$tom, $movies]);
+            ->returning([$tom, $movies])
+            ->build();
 
-        $this->assertStringMatchesFormat('MATCH (%s:Person {name: \'Tom Hanks\'})-[:ACTED_IN]->(%s) RETURN %s, %s', $query->toQuery());
+        $this->assertStringMatchesFormat("MATCH (%s:Person {name: 'Tom Hanks'})-[:ACTED_IN]->(%s) RETURN %s, %s", $query);
     }
 
     public function testWhoDirectedCloudAtlas(): void
     {
         $directors = node();
-        $cloudAtlas = node()->withProperties([
-            'title' => 'Cloud Atlas',
-        ]);
+        $cloudAtlas = node()->withProperties(['title' => 'Cloud Atlas',]);
 
         $query = query()
             ->match($cloudAtlas->relationshipFrom($directors, 'DIRECTED'))
-            ->returning($directors->property('name'));
+            ->returning($directors->property('name'))
+            ->build();
 
-        $this->assertStringMatchesFormat('MATCH ({title: \'Cloud Atlas\'})<-[:DIRECTED]-(%s) RETURN %s.name', $query->toQuery());
+        $this->assertStringMatchesFormat("MATCH ({title: 'Cloud Atlas'})<-[:DIRECTED]-(%s) RETURN %s.name", $query);
     }
 
     public function testTomHanksCoActors(): void
     {
         $coActors = node();
-        $tom = node('Person')->withProperties([
-            'name' => 'Tom Hanks',
-        ]);
+        $tom = node('Person')->withProperties(['name' => 'Tom Hanks']);
 
         $query = query()
             ->match($tom->relationshipTo(node(), 'ACTED_IN')->relationshipFrom($coActors, 'ACTED_IN'))
-            ->returning($coActors->property('name'));
+            ->returning($coActors->property('name'))
+            ->build();
 
-        $this->assertStringMatchesFormat('MATCH (:Person {name: \'Tom Hanks\'})-[:ACTED_IN]->()<-[:ACTED_IN]-(%s) RETURN %s.name', $query->toQuery());
+        $this->assertStringMatchesFormat("MATCH (:Person {name: 'Tom Hanks'})-[:ACTED_IN]->()<-[:ACTED_IN]-(%s) RETURN %s.name", $query);
     }
 
     public function testMoviesAndActorsUpTo4HopsAwayFromKevinBacon(): void
