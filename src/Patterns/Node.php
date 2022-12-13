@@ -9,6 +9,7 @@
  */
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
+use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
@@ -79,6 +80,16 @@ final class Node implements CompletePattern, PropertyPattern, RelatablePattern
     public function getLabels(): array
     {
         return $this->labels;
+    }
+
+    /**
+     * Returns a label with the variable in this node.
+     *
+     * @param string ...$labels The labels to attach to the variable in this node
+     */
+    public function labeled(string ...$labels): Label
+    {
+        return new Label($this->getVariable(), ...$labels);
     }
 
     /**

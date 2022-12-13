@@ -11,6 +11,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
+use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
@@ -232,6 +233,22 @@ final class NodeTest extends TestCase
         $relationship = $node->relationshipUni($amsterdam, "LIVES_IN");
 
         $this->assertSame("(:City)-[:LIVES_IN]-(:City {city: 'Amsterdam'})", $relationship->toQuery());
+    }
+
+    public function testLabeledSingleLabel(): void
+    {
+        $node = new Node();
+        $labeled = $node->labeled('German');
+
+        $this->assertEquals(new Label($node->getVariable(), 'German'), $labeled);
+    }
+
+    public function testLabeledMultipleLabels(): void
+    {
+        $node = new Node();
+        $labeled = $node->labeled('German', 'Swedish');
+
+        $this->assertEquals(new Label($node->getVariable(), 'German', 'Swedish'), $labeled);
     }
 
     public function provideOnlyLabelData(): array
