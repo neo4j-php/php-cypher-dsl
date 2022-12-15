@@ -12,7 +12,16 @@ namespace WikibaseSolutions\CypherDSL\Tests\EndToEnd;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
+use function WikibaseSolutions\CypherDSL\integer;
+use function WikibaseSolutions\CypherDSL\node;
+use function WikibaseSolutions\CypherDSL\procedure;
 use WikibaseSolutions\CypherDSL\Query;
+use function WikibaseSolutions\CypherDSL\query;
+use function WikibaseSolutions\CypherDSL\raw;
+use function WikibaseSolutions\CypherDSL\relationshipFrom;
+use function WikibaseSolutions\CypherDSL\relationshipTo;
+use function WikibaseSolutions\CypherDSL\relationshipUni;
+use function WikibaseSolutions\CypherDSL\variable;
 
 /**
  * This class contains some end-to-end tests to test the examples in the wiki.
@@ -25,11 +34,11 @@ final class ExamplesTest extends TestCase
 {
     public function testReadmeExample(): void
     {
-        $tom = Query::node("Person")->withProperties(["name" => "Tom Hanks"]);
-        $coActors = Query::node();
+        $tom = node("Person")->withProperties(["name" => "Tom Hanks"]);
+        $coActors = node();
 
-        $statement = Query::new()
-            ->match($tom->relationshipTo(Query::node(), "ACTED_IN")->relationshipFrom($coActors, "ACTED_IN"))
+        $statement = query()
+            ->match($tom->relationshipTo(node(), "ACTED_IN")->relationshipFrom($coActors, "ACTED_IN"))
             ->returning($coActors->property("name"))
             ->build();
 
@@ -38,10 +47,10 @@ final class ExamplesTest extends TestCase
 
     public function testCallSubqueryClauseExample1(): void
     {
-        $query = Query::new()
+        $query = query()
             ->call(static function (Query $query): void
             {
-                $query->create(Query::node("Person"));
+                $query->create(node("Person"));
             })
             ->build();
 
@@ -50,8 +59,8 @@ final class ExamplesTest extends TestCase
 
     public function testCallSubqueryClauseExample2(): void
     {
-        $subQuery = Query::new()->create(Query::node("Person"));
-        $query = Query::new()
+        $subQuery = query()->create(node("Person"));
+        $query = query()
             ->call($subQuery)
             ->build();
 
@@ -60,9 +69,9 @@ final class ExamplesTest extends TestCase
 
     public function testCallSubqueryClauseExample3(): void
     {
-        $person = Query::variable();
-        $query = Query::new()
-            ->match(Query::node('Person')->withVariable($person))
+        $person = variable();
+        $query = query()
+            ->match(node('Person')->withVariable($person))
             ->call(static function (Query $query) use ($person): void
             {
                 $query->remove($person->labeled('Person'));
@@ -74,7 +83,7 @@ final class ExamplesTest extends TestCase
 
     public function testCallProcedureClauseExample1(): void
     {
-        $statement = Query::new()
+        $statement = query()
             ->callProcedure("apoc.json")
             ->build();
 
@@ -83,10 +92,10 @@ final class ExamplesTest extends TestCase
 
     public function testCallProcedureClauseExample2(): void
     {
-        $statement = Query::new()
+        $statement = query()
             ->callProcedure("dbms.procedures", [
-                Query::variable('name'),
-                Query::variable('signature')
+                variable('name'),
+                variable('signature'),
             ])
             ->build();
 
@@ -96,7 +105,7 @@ final class ExamplesTest extends TestCase
     public function testCallProcedureClauseExample3(): void
     {
         $procedure = Procedure::raw("dbms.security.createUser", ['example_username', 'example_password', false]);
-        $statement = Query::new()
+        $statement = query()
             ->callProcedure($procedure)
             ->build();
 
@@ -105,8 +114,8 @@ final class ExamplesTest extends TestCase
 
     public function testCreateClauseExample1(): void
     {
-        $query = Query::new()
-            ->create(Query::node("Person"))
+        $query = query()
+            ->create(node("Person"))
             ->build();
 
         $this->assertSame("CREATE (:Person)", $query);
@@ -114,10 +123,10 @@ final class ExamplesTest extends TestCase
 
     public function testCreateClauseExample2(): void
     {
-        $query = Query::new()
-            ->create(Query::node("Person")->withVariable('n')->withProperties([
+        $query = query()
+            ->create(node("Person")->withVariable('n')->withProperties([
                 'name' => 'Marijn',
-                'title' => 'Maintainer'
+                'title' => 'Maintainer',
             ]))
             ->build();
 
@@ -126,8 +135,8 @@ final class ExamplesTest extends TestCase
 
     public function testCreateClauseExample3(): void
     {
-        $query = Query::new()
-            ->create([Query::node("Person"), Query::node("Animal")])
+        $query = query()
+            ->create([node("Person"), node("Animal")])
             ->build();
 
         $this->assertSame("CREATE (:Person), (:Animal)", $query);
@@ -135,11 +144,11 @@ final class ExamplesTest extends TestCase
 
     public function testDeleteClauseExample1(): void
     {
-        $unknown = Query::node('Person')->withProperties([
-            'name' => 'UNKNOWN'
+        $unknown = node('Person')->withProperties([
+            'name' => 'UNKNOWN',
         ]);
 
-        $query = Query::new()
+        $query = query()
             ->match($unknown)
             ->delete($unknown)
             ->build();
@@ -149,9 +158,9 @@ final class ExamplesTest extends TestCase
 
     public function testDeleteClauseExample2(): void
     {
-        $everything = Query::node();
+        $everything = node();
 
-        $query = Query::new()
+        $query = query()
             ->match($everything)
             ->delete($everything)
             ->build();
@@ -161,9 +170,9 @@ final class ExamplesTest extends TestCase
 
     public function testDeleteClauseExample3(): void
     {
-        $everything = Query::node();
+        $everything = node();
 
-        $query = Query::new()
+        $query = query()
             ->match($everything)
             ->delete($everything, true)
             ->build();
@@ -173,9 +182,9 @@ final class ExamplesTest extends TestCase
 
     public function testDeleteClauseExample4(): void
     {
-        $everything = Query::node();
+        $everything = node();
 
-        $query = Query::new()
+        $query = query()
             ->match($everything)
             ->detachDelete($everything)
             ->build();
@@ -185,10 +194,10 @@ final class ExamplesTest extends TestCase
 
     public function testDeleteClauseExample5(): void
     {
-        $persons = Query::node('Person');
-        $animals = Query::node('Animal');
+        $persons = node('Person');
+        $animals = node('Animal');
 
-        $query = Query::new()
+        $query = query()
             ->match([$persons, $animals])
             ->delete([$persons, $animals])
             ->build();
@@ -198,8 +207,8 @@ final class ExamplesTest extends TestCase
 
     public function testLimitClauseExample1(): void
     {
-        $persons = Query::node('Person');
-        $query = Query::new()
+        $persons = node('Person');
+        $query = query()
             ->match($persons)
             ->returning($persons->property('name'))
             ->limit(3)
@@ -210,8 +219,8 @@ final class ExamplesTest extends TestCase
 
     public function testMatchClauseExample1(): void
     {
-        $n = Query::node();
-        $query = Query::new()
+        $n = node();
+        $query = query()
             ->match($n)
             ->returning($n)
             ->build();
@@ -221,8 +230,8 @@ final class ExamplesTest extends TestCase
 
     public function testMatchClauseExample2(): void
     {
-        $movie = Query::node("Movie");
-        $query = Query::new()
+        $movie = node("Movie");
+        $query = query()
             ->match($movie)
             ->returning($movie->property("title"))
             ->build();
@@ -232,20 +241,20 @@ final class ExamplesTest extends TestCase
 
     public function testMatchClauseExample3(): void
     {
-        $movie = Query::node();
-        $query = Query::new()
-            ->match(Query::node()->withProperties(['name' => 'Oliver Stone'])->relationshipUni($movie))
+        $movie = node();
+        $query = query()
+            ->match(node()->withProperties(['name' => 'Oliver Stone'])->relationshipUni($movie))
             ->returning($movie->property("title"))
             ->build();
 
         $this->assertStringMatchesFormat("MATCH ({name: 'Oliver Stone'})--(%s) RETURN %s.title", $query);
-}
+    }
 
     public function testMatchClauseExample4(): void
     {
-        $movie = Query::node('Movie');
-        $query = Query::new()
-            ->match(Query::node('Person')->withProperties(['name' => 'Oliver Stone'])->relationshipUni($movie))
+        $movie = node('Movie');
+        $query = query()
+            ->match(node('Person')->withProperties(['name' => 'Oliver Stone'])->relationshipUni($movie))
             ->returning($movie->property("title"))
             ->build();
 
@@ -254,8 +263,8 @@ final class ExamplesTest extends TestCase
 
     public function testMatchClauseExample5(): void
     {
-        $n = Query::node()->addLabel('Movie', 'Person');
-        $query = Query::new()
+        $n = node()->addLabel('Movie', 'Person');
+        $query = query()
             ->match($n)
             ->returning(['name' => $n->property("name"), 'title' => $n->property("title")])
             ->build();
@@ -265,10 +274,10 @@ final class ExamplesTest extends TestCase
 
     public function testMatchClauseExample6(): void
     {
-        $movie = Query::node();
-        $query = Query::new()
+        $movie = node();
+        $query = query()
             ->match(
-                Query::node('Person')->withProperties(['name' => 'Oliver Stone'])->relationshipTo($movie)
+                node('Person')->withProperties(['name' => 'Oliver Stone'])->relationshipTo($movie)
             )
             ->returning($movie->property('title'))
             ->build();
@@ -278,9 +287,9 @@ final class ExamplesTest extends TestCase
 
     public function testMatchClauseExample7(): void
     {
-        $r = Query::relationshipTo();
-        $query = Query::new()
-            ->match(Query::node('Person')->withProperties(['name' => 'Oliver Stone'])->relationship($r, Query::node()))
+        $r = relationshipTo();
+        $query = query()
+            ->match(node('Person')->withProperties(['name' => 'Oliver Stone'])->relationship($r, node()))
             ->returning($r)
             ->build();
 
@@ -289,10 +298,10 @@ final class ExamplesTest extends TestCase
 
     public function testMatchClauseExample8(): void
     {
-        $actor = Query::node();
-        $query = Query::new()
+        $actor = node();
+        $query = query()
             ->match(
-                Query::node('Movie')
+                node('Movie')
                     ->withProperties(['title' => 'Wall Street'])
                     ->relationshipFrom($actor, 'ACTED_IN')
             )
@@ -304,11 +313,11 @@ final class ExamplesTest extends TestCase
 
     public function testMatchClauseExample9(): void
     {
-        $person = Query::node();
-        $relationship = Query::relationshipFrom()->withTypes(['ACTED_IN', 'DIRECTED']);
-        $query = Query::new()
+        $person = node();
+        $relationship = relationshipFrom()->withTypes(['ACTED_IN', 'DIRECTED']);
+        $query = query()
             ->match(
-                Query::node('Movie')
+                node('Movie')
                     ->withProperties(['title' => 'Wall Street'])
                     ->relationship($relationship, $person)
             )
@@ -320,11 +329,11 @@ final class ExamplesTest extends TestCase
 
     public function testMatchClauseExample10(): void
     {
-        $actor = Query::node();
-        $relationship = Query::relationshipFrom()->withTypes(['ACTED_IN']);
-        $query = Query::new()
+        $actor = node();
+        $relationship = relationshipFrom()->withTypes(['ACTED_IN']);
+        $query = query()
             ->match(
-                Query::node('Movie')
+                node('Movie')
                     ->withProperties(['title' => 'Wall Street'])
                     ->relationship($relationship, $actor)
             )
@@ -336,17 +345,19 @@ final class ExamplesTest extends TestCase
 
     public function testMatchClauseExample11(): void
     {
-        $charlie = Query::node('Person')->withProperties(['name' => 'Charlie Sheen']);
-        $rob = Query::node('Person')->withProperties(['name' => 'Rob Reiner']);
+        $charlie = node('Person')->withProperties(['name' => 'Charlie Sheen']);
+        $rob = node('Person')->withProperties(['name' => 'Rob Reiner']);
 
-        $query = Query::new()
+        $query = query()
             ->match([$charlie, $rob])
             ->create(
-                Query::node()
+                node()
                     ->withVariable($rob->getVariable())
                     ->relationshipTo(
-                        Query::node()->withVariable($charlie->getVariable()), 'TYPE INCLUDING A SPACE')
-                )
+                        node()->withVariable($charlie->getVariable()),
+                        'TYPE INCLUDING A SPACE'
+                    )
+            )
             ->build();
 
         $this->assertStringMatchesFormat("MATCH (%s:Person {name: 'Charlie Sheen'}), (%s:Person {name: 'Rob Reiner'}) CREATE (%s)-[:`TYPE INCLUDING A SPACE`]->(%s)", $query);
@@ -354,15 +365,16 @@ final class ExamplesTest extends TestCase
 
     public function testMatchClauseExample12(): void
     {
-        $movie = Query::node();
-        $director = Query::node();
+        $movie = node();
+        $director = node();
 
-        $query = Query::new()
+        $query = query()
             ->match(
-                Query::node()
+                node()
                     ->withProperties(['name' => 'Charlie Sheen'])
                     ->relationshipTo($movie, 'ACTED_IN')
-                    ->relationshipFrom($director, 'DIRECTED'))
+                    ->relationshipFrom($director, 'DIRECTED')
+            )
             ->returning([$movie->property('title'), $director->property('name')])
             ->build();
 
@@ -371,11 +383,11 @@ final class ExamplesTest extends TestCase
 
     public function testMatchClauseExample13(): void
     {
-        $movie = Query::node('Movie');
-        $r = Query::relationshipUni()->addType('ACTED_IN')->withMinHops(1)->withMaxHops(3);
+        $movie = node('Movie');
+        $r = relationshipUni()->addType('ACTED_IN')->withMinHops(1)->withMaxHops(3);
 
-        $query = Query::new()
-            ->match(Query::node()->withProperties(['name' => 'Charlie Sheen'])->relationship($r, $movie))
+        $query = query()
+            ->match(node()->withProperties(['name' => 'Charlie Sheen'])->relationship($r, $movie))
             ->returning($movie->property('title'))
             ->build();
 
@@ -384,9 +396,9 @@ final class ExamplesTest extends TestCase
 
     public function testMatchClauseExample14(): void
     {
-        $p = Query::node()->withProperties(['name' => 'Michael Douglas'])->relationshipTo(Query::node());
+        $p = node()->withProperties(['name' => 'Michael Douglas'])->relationshipTo(node());
 
-        $query = Query::new()
+        $query = query()
             ->match($p)
             ->returning($p)
             ->build();
@@ -396,9 +408,9 @@ final class ExamplesTest extends TestCase
 
     public function testMergeClauseExample1(): void
     {
-        $robert = Query::node('Critic');
+        $robert = node('Critic');
 
-        $query = Query::new()
+        $query = query()
             ->merge($robert)
             ->returning($robert)
             ->build();
@@ -408,10 +420,10 @@ final class ExamplesTest extends TestCase
 
     public function testMergeClauseExample2(): void
     {
-        $keanu = Query::node('Person')->withProperties(['name' => 'Keanu Reeves']);
+        $keanu = node('Person')->withProperties(['name' => 'Keanu Reeves']);
 
-        $query = Query::new()
-            ->merge($keanu, (new SetClause())->add($keanu->property('created')->replaceWith(Query::procedure()::raw('timestamp'))))
+        $query = query()
+            ->merge($keanu, (new SetClause())->add($keanu->property('created')->replaceWith(procedure()::raw('timestamp'))))
             ->returning([$keanu->property('name'), $keanu->property('created')])
             ->build();
 
@@ -420,10 +432,10 @@ final class ExamplesTest extends TestCase
 
     public function testMergeClauseExample3(): void
     {
-        $keanu = Query::node('Person')->withProperties(['name' => 'Keanu Reeves']);
+        $keanu = node('Person')->withProperties(['name' => 'Keanu Reeves']);
 
-        $query = Query::new()
-            ->merge($keanu, null, (new SetClause())->add($keanu->property('created')->replaceWith(Query::procedure()::raw('timestamp'))))
+        $query = query()
+            ->merge($keanu, null, (new SetClause())->add($keanu->property('created')->replaceWith(procedure()::raw('timestamp'))))
             ->returning([$keanu->property('name'), $keanu->property('created')])
             ->build();
 
@@ -432,20 +444,259 @@ final class ExamplesTest extends TestCase
 
     public function testOptionalMatchClauseExample1(): void
     {
-        $movies = Query::node("Movie");
-        $query = Query::new()
+        $movies = node("Movie");
+        $query = query()
             ->optionalMatch($movies)
             ->build();
 
         $this->assertSame("OPTIONAL MATCH (:Movie)", $query);
     }
 
+    public function testOrderByClauseExample1(): void
+    {
+        $n = node();
+        $query = query()
+            ->match($n)
+            ->returning([$n->property('name'), $n->property('age')])
+            ->orderBy($n->property('name'))
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s) RETURN %s.name, %s.age ORDER BY %s.name", $query);
+    }
+
+    public function testOrderByClauseExample2(): void
+    {
+        $n = node();
+        $query = query()
+            ->match($n)
+            ->returning([$n->property('name'), $n->property('age')])
+            ->orderBy([$n->property('age'), $n->property('name')])
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s) RETURN %s.name, %s.age ORDER BY %s.age, %s.name", $query);
+    }
+
+    public function testOrderByClauseExample3(): void
+    {
+        $n = node();
+        $query = query()
+            ->match($n)
+            ->returning([$n->property('name'), $n->property('age')])
+            ->orderBy([$n->property('name')], true)
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s) RETURN %s.name, %s.age ORDER BY %s.name DESCENDING", $query);
+    }
+
+    public function testRemoveClauseExample1(): void
+    {
+        $a = node()->withProperties(['name' => 'Andy']);
+        $query = query()
+            ->match($a)
+            ->remove($a->property('age'))
+            ->returning([$a->property('name'), $a->property('age')])
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s {name: 'Andy'}) REMOVE %s.age RETURN %s.name, %s.age", $query);
+    }
+
+    public function testRemoveClauseExample2(): void
+    {
+        $n = node()->withProperties(['name' => 'Peter']);
+        $query = query()
+            ->match($n)
+            ->remove($n->labeled('German'))
+            ->returning($n->property('name'))
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s {name: 'Peter'}) REMOVE %s:German RETURN %s.name", $query);
+    }
+
+    public function testRemoveClauseExample3(): void
+    {
+        $n = node()->withProperties(['name' => 'Peter']);
+        $query = query()
+            ->match($n)
+            ->remove($n->labeled('German', 'Swedish'))
+            ->returning($n->property('name'))
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s {name: 'Peter'}) REMOVE %s:German:Swedish RETURN %s.name", $query);
+    }
+
+    public function testReturnClauseExample1(): void
+    {
+        $n = node()->withProperties(['name' => 'B']);
+        $query = query()
+            ->match($n)
+            ->returning($n)
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s {name: 'B'}) RETURN %s", $query);
+    }
+
+    public function testReturnClauseExample2(): void
+    {
+        $r = relationshipTo()->addType('KNOWS');
+        $query = query()
+            ->match(node()->withProperties(['name' => 'A'])->relationship($r, node()))
+            ->returning($r)
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH ({name: 'A'})-[%s:KNOWS]->() RETURN %s", $query);
+    }
+
+    public function testReturnClauseExample3(): void
+    {
+        $n = node()->withProperties(['name' => 'A']);
+        $query = query()
+            ->match($n)
+            ->returning($n->property('name'))
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s {name: 'A'}) RETURN %s.name", $query);
+    }
+
+    public function testReturnClauseExample4(): void
+    {
+        $n = node()->withVariable('This isn\'t a common variable name');
+        $query = query()
+            ->match($n)
+            ->where($n->property('name')->equals('A'))
+            ->returning($n->property('happy'))
+            ->build();
+
+        $this->assertSame("MATCH (`This isn't a common variable name`) WHERE (`This isn't a common variable name`.name = 'A') RETURN `This isn't a common variable name`.happy", $query);
+    }
+
+    public function testReturnClauseExample5(): void
+    {
+        $a = node()->withProperties(['name' => 'A']);
+        $query = query()
+            ->match($a)
+            ->returning($a->property('age')->alias('SomethingTotallyDifferent'))
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s {name: 'A'}) RETURN %s.age AS SomethingTotallyDifferent", $query);
+    }
+
+    public function testReturnClauseExample6(): void
+    {
+        $a = node()->withProperties(['name' => 'A']);
+        $query = query()
+            ->match($a)
+            ->returning([$a->property('age')->gt(30), "I'm a literal"])
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s {name: 'A'}) RETURN (%s.age > 30), 'I\\'m a literal'", $query);
+    }
+
+    public function testReturnClauseExample7(): void
+    {
+        $b = node();
+        $query = query()
+            ->match(node()->withProperties(['name' => 'A'])->relationshipTo($b))
+            ->returning($b, true)
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH ({name: 'A'})-->(%s) RETURN DISTINCT %s", $query);
+    }
+
+    public function testSetClauseExample1(): void
+    {
+        $n = node()->withProperties(['name' => 'Andy']);
+        $query = query()
+            ->match($n)
+            ->set($n->property('surname')->replaceWith('Taylor'))
+            ->returning([$n->property('name'), $n->property('surname')])
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s {name: 'Andy'}) SET %s.surname = 'Taylor' RETURN %s.name, %s.surname", $query);
+    }
+
+    public function testUnionClauseExample1(): void
+    {
+        $actor = node('Actor');
+        $movie = node('Movie');
+
+        $query = query()
+            ->match($actor)
+            ->returning($actor->property('name')->alias('name'))
+            ->union(
+                query()
+                    ->match($movie)
+                    ->returning($movie->property('title')->alias('name')),
+                true
+            )
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s:Actor) RETURN %s.name AS name UNION ALL MATCH (%s:Movie) RETURN %s.title AS name", $query);
+    }
+
+    public function testUnionClauseExample2(): void
+    {
+        $actor = node('Actor');
+        $movie = node('Movie');
+
+        $query = query()
+            ->match($actor)
+            ->returning($actor->property('name')->alias('name'))
+            ->union(
+                query()
+                    ->match($movie)
+                    ->returning($movie->property('title')->alias('name'))
+            )
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s:Actor) RETURN %s.name AS name UNION MATCH (%s:Movie) RETURN %s.title AS name", $query);
+    }
+
+    public function testSkipClauseExample1(): void
+    {
+        $n = node();
+        $query = query()
+            ->match($n)
+            ->returning($n->property('name'))
+            ->orderBy($n->property('name'))
+            ->skip(3)
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s) RETURN %s.name ORDER BY %s.name SKIP 3", $query);
+    }
+
+    public function testSkipClauseExample2(): void
+    {
+        $n = node();
+        $query = query()
+            ->match($n)
+            ->returning($n->property('name'))
+            ->orderBy($n->property('name'))
+            ->skip(1)
+            ->limit(2)
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s) RETURN %s.name ORDER BY %s.name SKIP 1 LIMIT 2", $query);
+    }
+
+    public function testSkipClauseExample3(): void
+    {
+        $n = node();
+        $query = query()
+            ->match($n)
+            ->returning($n->property('name'))
+            ->orderBy($n->property('name'))
+            ->skip(integer(5)->exponentiate(2))
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s) RETURN %s.name ORDER BY %s.name SKIP (5 ^ 2)", $query);
+    }
+
     public function testCombiningClausesExample1(): void
     {
-        $nineties = Query::node("Movie");
+        $nineties = node("Movie");
         $expression = $nineties->property('released')->gte(1990)->and($nineties->property('released')->lt(2000));
 
-        $statement = Query::new()
+        $statement = query()
             ->match($nineties)
             ->where($expression)
             ->returning($nineties->property("title"))
@@ -456,7 +707,7 @@ final class ExamplesTest extends TestCase
 
     public function testExpressions1(): void
     {
-        $released = Query::variable("nineties")->property("released");
+        $released = variable("nineties")->property("released");
         $expression = $released->gte(1990)->and($released->lt(2000));
 
         $this->assertSame("((nineties.released >= 1990) AND (nineties.released < 2000))", $expression->toQuery());
@@ -464,7 +715,7 @@ final class ExamplesTest extends TestCase
 
     public function testExpressions2(): void
     {
-        $name = Query::variable("actor")->property("name");
+        $name = variable("actor")->property("name");
         $expression = $name->notEquals("Tom Hanks");
 
         $this->assertSame("(actor.name <> 'Tom Hanks')", $expression->toQuery());
@@ -472,8 +723,8 @@ final class ExamplesTest extends TestCase
 
     public function testExpressions3(): void
     {
-        $released = Query::variable("nineties")->property("released");
-        $expression = $released->gte(1990)->and(Query::rawExpression("(nineties IS NOT NULL)"));
+        $released = variable("nineties")->property("released");
+        $expression = $released->gte(1990)->and(raw("(nineties IS NOT NULL)"));
 
         $this->assertSame("((nineties.released >= 1990) AND (nineties IS NOT NULL))", $expression->toQuery());
     }

@@ -107,7 +107,7 @@ final class MoviesTest extends TestCase
     public function testWhoDirectedCloudAtlas(): void
     {
         $directors = node();
-        $cloudAtlas = node()->withProperties(['title' => 'Cloud Atlas',]);
+        $cloudAtlas = node()->withProperties(['title' => 'Cloud Atlas']);
 
         $query = query()
             ->match($cloudAtlas->relationshipFrom($directors, 'DIRECTED'))

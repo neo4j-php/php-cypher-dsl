@@ -61,7 +61,7 @@ final class ReturnClause extends Clause
     }
 
     /**
-     * Sets this query to only retrieve unique rows.
+     * Sets this query to only return unique rows.
      *
      * @return $this
      *

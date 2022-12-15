@@ -28,35 +28,6 @@ final class UnionClause extends Clause
     private bool $all = false;
 
     /**
-     * Combines two queries with a union.
-     *
-     * @param Query $left  the query preceding the union clause
-     * @param Query $right the query after the union clause
-     * @param bool  $all   Whether the union should include all results or remove the duplicates instead.
-     *
-     *                     TODO: Move this function somewhere else.
-     */
-    public static function union(Query $left, Query $right, bool $all = false): Query
-    {
-        $tbr = Query::new();
-
-        foreach ($left->getClauses() as $clause) {
-            $tbr->addClause($clause);
-        }
-
-        $unionClause = new self();
-        $unionClause->setAll($all);
-
-        $tbr->addClause($unionClause);
-
-        foreach ($right->getClauses() as $clause) {
-            $tbr->addClause($clause);
-        }
-
-        return $tbr;
-    }
-
-    /**
      * Sets that the union should include all results, instead of removing duplicates.
      *
      * @param bool $all Whether the union should include all results or remove the duplicates instead

@@ -33,13 +33,14 @@ To construct a query to find all of Tom Hanks' co-actors, you can use the
 following code:
 
 ```php
-$tom = Query::node("Person")->withProperties(["name" => "Tom Hanks"]);
-$coActors = Query::node();
+use function WikibaseSolutions\CypherDSL\node;
+use function WikibaseSolutions\CypherDSL\query;
 
-$statement = Query::new()
+$tom = node("Person")->withProperties(["name" => "Tom Hanks"]);
+$coActors = node();
+
+$statement = query()
     ->match($tom->relationshipTo(Query::node(), "ACTED_IN")->relationshipFrom($coActors, "ACTED_IN"))
     ->returning($coActors->property("name"))
     ->build();
-
-$this->assertStringMatchesFormat("MATCH (:Person {name: 'Tom Hanks'})-[:ACTED_IN]->()<-[:ACTED_IN]-(%s) RETURN %s.name", $statement);
 ```
