@@ -691,6 +691,30 @@ final class ExamplesTest extends TestCase
         $this->assertStringMatchesFormat("MATCH (%s) RETURN %s.name ORDER BY %s.name SKIP (5 ^ 2)", $query);
     }
 
+    public function testWhereClauseExample1(): void
+    {
+        $n = node('Person');
+        $query = query()
+            ->match($n)
+            ->where($n->property('name')->equals('Peter'))
+            ->returning($n)
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s:Person) WHERE (%s.name = 'Peter') RETURN %s", $query);
+    }
+
+    public function testWhereClauseExample2(): void
+    {
+        $n = node();
+        $query = query()
+            ->match($n)
+            ->where($n->labeled('Person'))
+            ->returning($n)
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s) WHERE %s:Person RETURN %s", $query);
+    }
+
     public function testCombiningClausesExample1(): void
     {
         $nineties = node("Movie");
