@@ -1,56 +1,75 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
-use WikibaseSolutions\CypherDSL\Property;
+use WikibaseSolutions\CypherDSL\Expressions\Label;
+use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\NodeTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
+use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PropertyPatternTrait;
 
 /**
  * This class represents a node.
  *
- * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-node Corresponding documentation on Neo4j.com
  */
-class Node implements NodeType
+final class Node implements CompletePattern, PropertyPattern, RelatablePattern
 {
+    use ErrorTrait;
     use EscapeTrait;
-    use NodeTypeTrait;
+
+    use PropertyPatternTrait;
 
     /**
-     * @var string[]
+     * @var string[] The labels of this node
      */
     private array $labels = [];
 
     /**
-     * Node constructor.
+     * @param null|string $label The initial label to include on this node
      *
-     * @param string|null $label
+     * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
-    public function __construct(string $label = null)
+    public function __construct(?string $label = null)
     {
         if ($label !== null) {
             $this->labels[] = $label;
         }
+    }
+
+    /**
+     * Sets the labels of this node. This overwrites any previously set labels.
+     *
+     * @param string[] $labels
+     *
+     * @return $this
+     */
+    public function withLabels(array $labels): self
+    {
+        $this->labels = $labels;
+
+        return $this;
+    }
+
+    /**
+     * Adds one or more labels to this node.
+     *
+     * @param string ...$label
+     *
+     * @return $this
+     */
+    public function addLabel(string ...$label): self
+    {
+        $this->labels = array_merge($this->labels, $label);
+
+        return $this;
     }
 
     /**
@@ -64,25 +83,60 @@ class Node implements NodeType
     }
 
     /**
-     * Adds a label to the node.
+     * Returns a label with the variable in this node.
      *
-     * @param string $label
-     * @return Node
+     * @param string ...$labels The labels to attach to the variable in this node
      */
-    public function labeled(string $label): self
+    public function labeled(string ...$labels): Label
     {
-        $this->labels[] = $label;
+        return new Label($this->getVariable(), ...$labels);
+    }
 
-        return $this;
+    /**
+     * @inheritDoc
+     */
+    public function relationship(Relationship $relationship, Pattern $pattern): Path
+    {
+        return (new Path($this))->relationship($relationship, $pattern);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationshipTo(Pattern $pattern, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return (new Path($this))->relationshipTo($pattern, $type, $properties, $name);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationshipFrom(Pattern $pattern, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return (new Path($this))->relationshipFrom($pattern, $type, $properties, $name);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationshipUni(Pattern $pattern, ?string $type = null, $properties = null, $name = null): Path
+    {
+        return (new Path($this))->relationshipUni($pattern, $type, $properties, $name);
     }
 
     /**
      * Returns the string representation of this relationship that can be used directly
      * in a query.
-     *
-     * @return string
      */
     public function toQuery(): string
+    {
+        return sprintf("(%s)", $this->nodeInnerToString());
+    }
+
+    /**
+     * Returns the string representation of the inner part of a node.
+     */
+    private function nodeInnerToString(): string
     {
         $nodeInner = "";
 
@@ -92,7 +146,7 @@ class Node implements NodeType
 
         if ($this->labels !== []) {
             foreach ($this->labels as $label) {
-                $nodeInner .= ":{$this->escape($label)}";
+                $nodeInner .= ":" . self::escape($label);
             }
         }
 
@@ -101,21 +155,11 @@ class Node implements NodeType
                 $nodeInner .= " ";
             }
 
-            $nodeInner .= $this->properties->toQuery();
+            if (!$this->properties instanceof Map || !$this->properties->isEmpty()) {
+                $nodeInner .= $this->properties->toQuery();
+            }
         }
 
-        return "($nodeInner)";
-    }
-
-    /**
-     * Returns a property on the node.
-     *
-     * @param string $property The name of the property.
-     *
-     * @return Property
-     */
-    public function property(string $property): Property
-    {
-        return new Property($this->getName(), $property);
+        return $nodeInner;
     }
 }

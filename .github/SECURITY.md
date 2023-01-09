@@ -1,0 +1,70 @@
+# Security policy
+
+**Please do not disclose security-related issues publicly, [see
+below](#reporting-a-vulnerability).**
+
+## Reporting a vulnerability
+
+If you discover a security vulnerability within php-cypher-dsl, please send an
+e-mail to Marijn van Wezel at marijnvanwezel@gmail.com. All security
+vulnerabilities will be promptly addressed.
+
+You may optionally encrypt your report with PGP, using the following key
+(fingerprint: `98ED96AA2260D7E3`, proof:
+[keybase.io](https://keybase.io/01101101)):
+
+```text
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+1t3QWAzGmg==
+=Yjmm
+-----END PGP PUBLIC KEY BLOCK-----
+```
+

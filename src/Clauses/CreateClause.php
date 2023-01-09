@@ -1,62 +1,54 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
+use WikibaseSolutions\CypherDSL\Patterns\CompletePattern;
+use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 
 /**
  * This class represents a CREATE clause.
  *
+ * The CREATE clause is used to create graph elements — nodes and relationships.
+ *
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 99)
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/create/
+ * @see Query::create() for a more convenient method to construct this class
  */
-class CreateClause extends Clause
+final class CreateClause extends Clause
 {
     use ErrorTrait;
 
     /**
-     * @var (PathType|NodeType)[] The patterns to create
+     * @var CompletePattern[] The patterns to create
      */
     private array $patterns = [];
 
     /**
-     * Add a pattern to create.
+     * Add one or more patterns to create.
      *
-     * @param PathType|NodeType $pattern The pattern to create
-     * @return CreateClause
+     * @param CompletePattern ...$pattern The patterns to add to the CREATE clause
+     *
+     * @return $this
      */
-    public function addPattern($pattern): self
+    public function addPattern(CompletePattern ...$pattern): self
     {
-        $this->assertClass('pattern', [PathType::class, NodeType::class], $pattern);
-        $this->patterns[] = $pattern;
+        $this->patterns = array_merge($this->patterns, $pattern);
 
         return $this;
     }
 
     /**
-     * Returns the patterns of the create clause.
+     * Returns the patterns of the CREATE clause.
      *
-     * @return (PathType|NodeType)[]
+     * @return CompletePattern[]
      */
     public function getPatterns(): array
     {
@@ -78,7 +70,7 @@ class CreateClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn ($pattern): string => $pattern->toQuery(), $this->patterns)
+            array_map(static fn (CompletePattern $pattern): string => $pattern->toQuery(), $this->patterns)
         );
     }
 }

@@ -1,68 +1,58 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Label;
-use WikibaseSolutions\CypherDSL\Property;
-use WikibaseSolutions\CypherDSL\QueryConvertable;
+use WikibaseSolutions\CypherDSL\Expressions\Label;
+use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 
 /**
  * This class represents a REMOVE clause.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/remove/
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 113)
+ * @see Query::remove() for a more convenient method to construct this class
  */
-class RemoveClause extends Clause
+final class RemoveClause extends Clause
 {
     use ErrorTrait;
 
     /**
-     * @var Property[]|Label[] The expressions in this REMOVE clause.
+     * @var Label[]|Property[]|(Label|Property)[] the expressions in this REMOVE clause
      */
     private array $expressions = [];
 
     /**
+     * Add one or more expressions to the REMOVE clause.
+     *
+     * @param Label|Property ...$expressions The expressions to add
+     *
+     * @return RemoveClause
+     */
+    public function addExpression(...$expressions): self
+    {
+        self::assertClassArray('expressions', [Property::class, Label::class], $expressions);
+        $this->expressions = array_merge($this->expressions, $expressions);
+
+        return $this;
+    }
+
+    /**
      * Returns the expressions in the REMOVE clause.
      *
-     * @return Label[]|Property[]
+     * @return Label[]|Property[]|(Label|Property)[]
      */
     public function getExpressions(): array
     {
         return $this->expressions;
-    }
-
-    /**
-     * Add an expression to the REMOVE clause. This expression usually returns a property (a.b) or a label (a:b).
-     *
-     * @param Property|Label $expression The expression to add
-     * @return RemoveClause
-     */
-    public function addExpression($expression): self
-    {
-        $this->assertClass('expression', [Property::class, Label::class], $expression);
-
-        $this->expressions[] = $expression;
-
-        return $this;
     }
 
     /**
@@ -80,7 +70,7 @@ class RemoveClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (QueryConvertable $expression) => $expression->toQuery(), $this->expressions)
+            array_map(static fn (QueryConvertible $expression) => $expression->toQuery(), $this->expressions)
         );
     }
 }

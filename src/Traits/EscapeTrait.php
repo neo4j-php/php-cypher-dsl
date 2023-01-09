@@ -1,63 +1,56 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Traits;
 
-use function preg_match;
-use function sprintf;
-use function str_replace;
+use InvalidArgumentException;
 
 /**
- * Trait for encoding certain structures that are used in multiple clauses in a
- * Cypher query.
+ * Trait for escaping names.
+ *
+ * @internal This trait is not covered by the backwards compatibility guarantee of php-cypher-dsl
  */
 trait EscapeTrait
 {
     /**
      * Escapes a 'name' if it needs to be escaped.
-     * @see https://neo4j.com/docs/cypher-manual/4.4/syntax/naming
-     * A 'name' in cypher is any string that should be included directly in a cypher query,
-     * such as variable names, labels, property names and relation types
      *
-     * @param string $name
-     * @return string
+     * A 'name' in Cypher is any string that should be included directly in a Cypher query,
+     * such as variable names, labels, property names and relation types.
+     *
+     * @param string $name The name to escape
+     *
+     * @return string The escaped name
+     *
+     * @see https://neo4j.com/docs/cypher-manual/4.4/syntax/naming Corresponding documentation on Neo4j.com
      */
-    public static function escape(string $name): string
+    private static function escape(string $name): string
     {
-        if (preg_match('/^\p{L}[\p{L}\d_]*$/u', $name)) {
+        if ($name === "") {
+            // Although some versions of Neo4j do not crash when the empty string is used as a name,
+            // there is no real reason to ever use the empty string as a name
+            throw new InvalidArgumentException("A name cannot be the empty string");
+        }
+
+        if (strlen($name) > 65534) {
+            // Remark: Some versions of Neo4j support names up to 65535 characters, but we just take the lower bound
+            throw new InvalidArgumentException("A name cannot be longer than 65534 (2^16 - 2) characters");
+        }
+
+        if (\preg_match('/^\p{L}[\p{L}\d_]*$/u', $name)) {
+            // The name is already valid and does not need to be escaped
             return $name;
         }
 
-        return self::escapeRaw($name);
-    }
-
-    /**
-     * Escapes the given $name to be used directly in a CYPHER query.
-     * Note: according to https://github.com/neo4j/neo4j/issues/12901 backslashes might give problems in some Neo4j versions.
-     */
-    public static function escapeRaw($name)
-    {
         // Escape backticks that are included in $name by doubling them.
-        $name = str_replace('`', '``', $name);
+        $name = \str_replace('`', '``', $name);
 
-        return sprintf("`%s`", $name);
+        return \sprintf("`%s`", $name);
     }
 }

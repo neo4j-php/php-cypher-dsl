@@ -1,54 +1,47 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Traits;
 
 use __PHP_Incomplete_Class;
-use function class_implements;
-use function get_class;
-use function get_parent_class;
-use function get_resource_type;
-use InvalidArgumentException;
-use function is_array;
-use function is_bool;
-use function is_float;
-use function is_int;
-use function is_object;
-use function is_resource;
-use function is_string;
-use function key;
-use function strpos;
 use TypeError;
 
 /**
- * Convenience trait including simple assertions and error reporting functions
+ * Convenience trait including simple assertions and error reporting functions. Used as a polyfill for PHP 8.0 union
+ * types.
+ *
+ * @internal This trait is not covered by the backwards compatibility guarantee of php-cypher-dsl
  */
 trait ErrorTrait
 {
     /**
-     * Asserts that $userInput is an instance of one of the provided $classNames (polyfill for php 8.0 Union types)
+     * Asserts that all values of $userInput are an instance of one of the provided $classNames.
      *
-     * @param string $varName The name of the userinput variable, to be used in the error message.
+     * @param string          $varName    THe name of the user input variable, to be used in the error message
      * @param string|string[] $classNames The classnames that should be tested against
-     * @param mixed $userInput The input that should be tested
+     * @param mixed[]         $userInput  The input array that should be tested
+     *
+     * @throws TypeError
+     */
+    private static function assertClassArray(string $varName, $classNames, array $userInput): void
+    {
+        foreach ($userInput as $value) {
+            self::assertClass($varName, $classNames, $value);
+        }
+    }
+
+    /**
+     * Asserts that $userInput is an instance of one of the provided $classNames (polyfill for php 8.0 Union types).
+     *
+     * @param string          $varName    The name of the user input variable, to be used in the error message
+     * @param string|string[] $classNames The classnames that should be tested against
+     * @param mixed           $userInput  The input that should be tested
      *
      * @throws TypeError
      */
@@ -64,11 +57,13 @@ trait ErrorTrait
     }
 
     /**
-     * Get debug type method stolen and refactored from the symfony polyfill
+     * Get debug type method stolen and refactored from the symfony polyfill.
+     *
+     * @param mixed $value
      *
      * @see https://github.com/symfony/polyfill/blob/main/src/Php80/Php80.php
      */
-    public static function getDebugType($value): string
+    private static function getDebugType($value): string
     {
         return self::detectScalar($value)
             ?? self::detectClass($value)
@@ -78,8 +73,7 @@ trait ErrorTrait
 
     /**
      * @param string[] $classNames
-     * @param mixed $userInput
-     * @return bool
+     * @param mixed    $userInput
      */
     private static function isClass(array $classNames, $userInput): bool
     {
@@ -93,60 +87,25 @@ trait ErrorTrait
     }
 
     /**
-     * Validates the name to see if it can be used as a parameter or variable.
-     *
-     * @see https://neo4j.com/docs/cypher-manual/current/syntax/naming/#_naming_rules
-     *
-     * @param string $name
-     *
-     * @return void
-     */
-    private static function assertValidName(string $name): void
-    {
-        $name = trim($name);
-
-        if ($name === "") {
-            throw new InvalidArgumentException("A name cannot be an empty string");
-        }
-
-        if (strlen($name) >= 65535) {
-            // Remark: Actual limit depends on Neo4j version, but we just take the lower bound.
-            throw new InvalidArgumentException('A name cannot be longer than 65534 characters');
-        }
-    }
-
-    /**
-     * @param string $varName
      * @param string[] $classNames
-     * @param mixed $userInput
-     * @return TypeError
+     * @param mixed    $userInput
      */
     private static function typeError(string $varName, array $classNames, $userInput): TypeError
     {
-        return new TypeError(self::getTypeErrorText($varName, $classNames, $userInput));
-    }
-
-    /**
-     * @param string $varName
-     * @param string[] $classNames
-     * @param mixed $userInput
-     * @return string
-     */
-    private static function getTypeErrorText(string $varName, array $classNames, $userInput): string
-    {
-        return sprintf(
-            '$%s should be a %s object, %s given.',
+        $errorText = sprintf(
+            '$%s should be a %s, %s given.',
             $varName,
             implode(' or ', $classNames),
             self::getDebugType($userInput)
         );
+
+        return new TypeError($errorText);
     }
 
     /**
      * Returns the name of the scalar type of the value if it is one.
      *
      * @param mixed $value
-     * @return string|null
      */
     private static function detectScalar($value): ?string
     {
@@ -181,8 +140,6 @@ trait ErrorTrait
      * Returns the name of the class of the value if it is one.
      *
      * @param mixed $value
-     *
-     * @return string|null
      */
     private static function detectClass($value): ?string
     {
@@ -193,11 +150,12 @@ trait ErrorTrait
         if (is_object($value)) {
             $class = get_class($value);
 
-            if (false === strpos($class, '@')) {
+            if (strpos($class, '@') === false) {
                 return $class;
             }
 
-            return (get_parent_class($class) ?: key(class_implements($class)) ?: 'class').'@anonymous';
+            // @phpstan-ignore-next-line
+            return (get_parent_class($class) ?: key(class_implements($class)) ?: 'class') . '@anonymous';
         }
 
         return null;
@@ -207,22 +165,22 @@ trait ErrorTrait
      * Returns the name of the resource of the value if it is one.
      *
      * @param mixed $value
-     *
-     * @return string|null
      */
     private static function detectResource($value): ?string
     {
         if (is_resource($value)) {
             $type = @get_resource_type($value);
-            if (null === $type) {
+
+            // @phpstan-ignore-next-line
+            if ($type === null) {
                 return 'unknown';
             }
 
-            if ('Unknown' === $type) {
+            if ($type === 'Unknown') {
                 $type = 'closed';
             }
 
-            return "resource ($type)";
+            return "resource ({$type})";
         }
 
         return null;

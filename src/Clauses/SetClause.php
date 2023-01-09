@@ -1,68 +1,58 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Assignment;
-use WikibaseSolutions\CypherDSL\Label;
-use WikibaseSolutions\CypherDSL\QueryConvertable;
+use WikibaseSolutions\CypherDSL\Expressions\Label;
+use WikibaseSolutions\CypherDSL\QueryConvertible;
+use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 
 /**
  * This class represents a SET clause.
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 107)
+ * @see Query::set() for a more convenient method to construct this class
  */
-class SetClause extends Clause
+final class SetClause extends Clause
 {
     use ErrorTrait;
 
     /**
-     * @var Assignment[]|Label[] $expressions The expressions to set
+     * @var Label[]|PropertyReplacement[]|(Label|PropertyReplacement)[] The expressions to set
      */
     private array $expressions = [];
 
     /**
+     * Add one or more expressions to this SET clause.
+     *
+     * @param Label|PropertyReplacement $expressions The expressions to add to this set clause
+     *
+     * @return $this
+     */
+    public function add(...$expressions): self
+    {
+        $this->assertClassArray('expression', [PropertyReplacement::class, Label::class], $expressions);
+        $this->expressions = array_merge($this->expressions, $expressions);
+
+        return $this;
+    }
+
+    /**
      * Returns the expressions to SET.
      *
-     * @return Assignment[]|Label[]
+     * @return Label[]|PropertyReplacement[]|(Label|PropertyReplacement)[]
      */
     public function getExpressions(): array
     {
         return $this->expressions;
-    }
-
-    /**
-     * Add an assignment.
-     *
-     * @param Assignment|Label $expression The assignment to execute
-     * @return SetClause
-     */
-    public function addAssignment($expression): self
-    {
-        $this->assertClass('expression', [Assignment::class, Label::class], $expression);
-
-        $this->expressions[] = $expression;
-
-        return $this;
     }
 
     /**
@@ -80,7 +70,7 @@ class SetClause extends Clause
     {
         return implode(
             ", ",
-            array_map(fn (QueryConvertable $expression): string => $expression->toQuery(), $this->expressions)
+            array_map(static fn (QueryConvertible $expression): string => $expression->toQuery(), $this->expressions)
         );
     }
 }

@@ -1,20 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit
-        backupGlobals="false"
-        backupStaticAttributes="false"
-        colors="true"
-        convertErrorsToExceptions="true"
-        convertNoticesToExceptions="true"
-        convertWarningsToExceptions="true"
-        processIsolation="false"
-        stopOnFailure="false"
-        bootstrap="./vendor/autoload.php">
+<phpunit colors="true" verbose="true"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+>
     <testsuites>
-        <testsuite name="Unit">
-            <directory>./tests/Unit/</directory>
+        <testsuite name="unit">
+            <directory>tests/unit</directory>
         </testsuite>
-        <testsuite name="All">
-            <directory>./tests/</directory>
+        <testsuite name="end-to-end">
+            <directory>tests/end-to-end</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory>tests/integration</directory>
         </testsuite>
     </testsuites>
+    <coverage processUncoveredFiles="true" cacheDirectory="coverage/cache" pathCoverage="true">
+        <report>
+            <clover outputFile="coverage/clover.xml" />
+            <html outputDirectory="coverage/" />
+        </report>
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+        <exclude>
+            <file>src/functions.php</file>
+        </exclude>
+    </coverage>
 </phpunit>

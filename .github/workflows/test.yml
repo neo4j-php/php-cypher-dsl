@@ -1,0 +1,50 @@
+name: test
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  unit:
+    name: "Unit and mutation testing (PHP ${{ matrix.php-version }})"
+    runs-on: "ubuntu-22.04"
+    continue-on-error: true
+
+    strategy:
+      matrix:
+        php-version: [ "7.4", "8.0", "8.1", "8.2" ]
+
+    env:
+      COMPOSER_VERSION: 2
+      COVERAGE_DRIVER: xdebug
+      MINIMUM_COVERAGE_PERCENTAGE: 90
+      MINIMUM_MSI_PERCENTAGE: 80
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: ${{ env.COVERAGE_DRIVER }}
+          ini-values: memory_limit=512M, xdebug.mode=off
+          tools: composer:${{ env.COMPOSER_VERSION }}
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Run unit tests
+        run: XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite unit
+
+      - name: Check coverage
+        run: php vendor/bin/coverage-check coverage/clover.xml ${{ env.MINIMUM_COVERAGE_PERCENTAGE }}
+
+      - name: Run end-to-end tests
+        run: php vendor/bin/phpunit --testsuite end-to-end --no-coverage
+
+      - name: Run mutation tests
+        run: XDEBUG_MODE=coverage php vendor/bin/infection --show-mutations --min-msi=${{ env.MINIMUM_MSI_PERCENTAGE }} --threads=4

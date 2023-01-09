@@ -1,58 +1,56 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Patterns\Pattern;
+use WikibaseSolutions\CypherDSL\Query;
+use WikibaseSolutions\CypherDSL\QueryConvertible;
+use WikibaseSolutions\CypherDSL\Syntax\Alias;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 
 /**
  * This class represents a WITH clause.
  *
+ * The WITH clause allows query parts to be chained together, piping the results from one to be used as a starting point
+ * or criteria in the next.
+ *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/with/
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 78)
+ * @see Query::with() for a more convenient method to construct this class
  */
-class WithClause extends Clause
+final class WithClause extends Clause
 {
-    use EscapeTrait;
+    use CastTrait;
 
     /**
-     * @var array The expressions to include in the clause
+     * @var Alias[]|Variable[]|(Alias|Variable)[] The variables to include in the clause
      */
-    private array $expressions = [];
+    private array $entries = [];
 
     /**
-     * Add a new entry to the WITH clause.
+     * Add one or more new entries to the WITH clause.
      *
-     * @param AnyType $expression The entry to add
-     * @param string $alias An optional entry alias
+     * @param Alias|Pattern|string|Variable ...$entries The entries to add
      *
-     * @return WithClause
+     * @return $this
      */
-    public function addEntry(AnyType $expression, string $alias = ""): self
+    public function addEntry(...$entries): self
     {
-        if ($alias !== "") {
-            $this->expressions[$alias] = $expression;
-        } else {
-            $this->expressions[] = $expression;
+        $res = [];
+
+        foreach ($entries as $entry) {
+            $res[] = $entry instanceof Alias ? $entry : self::toVariable($entry);
         }
+
+        $this->entries = array_merge($this->entries, $res);
 
         return $this;
     }
@@ -60,11 +58,11 @@ class WithClause extends Clause
     /**
      * Returns the expression to include in the clause.
      *
-     * @return array
+     * @return Alias[]|Variable[]|(Alias|Variable)[]
      */
-    public function getExpressions(): array
+    public function getEntries(): array
     {
-        return $this->expressions;
+        return $this->entries;
     }
 
     /**
@@ -80,15 +78,9 @@ class WithClause extends Clause
      */
     protected function getSubject(): string
     {
-        $expressions = [];
-
-        foreach ($this->expressions as $alias => $expression) {
-            $expressionQuery = $expression->toQuery();
-            $expressions[] = is_int($alias) ?
-                $expressionQuery :
-                sprintf("%s AS %s", $expressionQuery, $this->escape($alias));
-        }
-
-        return implode(", ", $expressions);
+        return implode(
+            ", ",
+            array_map(static fn (QueryConvertible $expression) => $expression->toQuery(), $this->entries)
+        );
     }
 }

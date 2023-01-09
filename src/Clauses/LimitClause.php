@@ -1,63 +1,56 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
+use WikibaseSolutions\CypherDSL\Query;
+use WikibaseSolutions\CypherDSL\Traits\CastTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 
 /**
  * This class represents a LIMIT clause.
  *
+ * LIMIT constrains the number of records in the output.
+ *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/limit/
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 98)
+ * @see Query::limit() for a more convenient method to construct this class
  */
-class LimitClause extends Clause
+final class LimitClause extends Clause
 {
-    /**
-     * The expression of the LIMIT statement.
-     *
-     * @var NumeralType|null $limit
-     */
-    private ?NumeralType $limit = null;
+    use CastTrait;
 
     /**
-     * Returns the actual limit of the clause.
-     *
-     * @return NumeralType|null
+     * The expression of the LIMIT statement.
      */
-    public function getLimit(): ?NumeralType
-    {
-        return $this->limit;
-    }
+    private ?IntegerType $limit = null;
 
     /**
      * Sets the expression that returns the limit.
      *
-     * @param NumeralType $limit The limit
-     * @return LimitClause
+     * @param int|IntegerType $limit The limit
+     *
+     * @return $this
      */
-    public function setLimit(NumeralType $limit): self
+    public function setLimit($limit): self
     {
-        $this->limit = $limit;
+        $this->limit = self::toIntegerType($limit);
 
         return $this;
+    }
+
+    /**
+     * Returns the limit of the clause.
+     */
+    public function getLimit(): ?IntegerType
+    {
+        return $this->limit;
     }
 
     /**

@@ -1,61 +1,133 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
-use function array_key_exists;
-use function is_array;
-use WikibaseSolutions\CypherDSL\PropertyMap;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Traits\PathTrait;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\HasRelationshipsType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
-use WikibaseSolutions\CypherDSL\Variable;
+use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PatternTrait;
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
-class Path implements PathType
+/**
+ * This class represents a path, which is an alternating sequence of nodes and relationships.
+ *
+ * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#structural-types Corresponding documentation on Neo4j.com
+ */
+final class Path implements BooleanType, CompletePattern, RelatablePattern
 {
-    use PathTrait;
+    use BooleanTypeTrait;
     use ErrorTrait;
 
-    /** @var Relationship[] */
+    use PatternTrait;
+
+    /**
+     * @var Relationship[]
+     */
     private array $relationships;
-    /** @var Node[] */
+
+    /**
+     * @var Node[]
+     */
     private array $nodes;
 
     /**
-     * @param AnyType|AnyType[]|null $nodes
-     * @param Relationship|Relationship[]|null $relationships
+     * @param Node|Node[]                 $nodes
+     * @param Relationship|Relationship[] $relationships
+     *
+     * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
-    public function __construct($nodes = null, $relationships = null)
+    public function __construct($nodes = [], $relationships = [])
     {
-        self::assertClass('relationships', [Relationship::class, 'array', 'null'], $relationships);
-        self::assertClass('nodes', [AnyType::class, 'array', 'null'], $nodes);
+        $nodes = is_array($nodes) ? $nodes : [$nodes];
+        $relationships = is_array($relationships) ? $relationships : [$relationships];
 
-        $nodes ??= [];
-        $relationships ??= [];
+        self::assertClassArray('nodes', Node::class, $nodes);
+        self::assertClassArray('relationships', Relationship::class, $relationships);
 
-        $this->nodes = is_array($nodes) ? array_values($nodes) : [$nodes];
-        $this->relationships = is_array($relationships) ? array_values($relationships) : [$relationships];
+        $this->nodes = $nodes;
+        $this->relationships = $relationships;
+    }
+
+    /**
+     * Returns the relatables in the path in sequential order.
+     *
+     * @return Node[]
+     */
+    public function getNodes(): array
+    {
+        return $this->nodes;
+    }
+
+    /**
+     * Returns the relationships in the path in sequential order.
+     *
+     * @return Relationship[]
+     */
+    public function getRelationships(): array
+    {
+        return $this->relationships;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationship(Relationship $relationship, Pattern $pattern): self
+    {
+        $this->relationships[] = $relationship;
+
+        if ($pattern instanceof self) {
+            // If the given relatable is also a path, we can merge their relatables and relationships
+            $this->relationships = array_merge($this->relationships, $pattern->getRelationships());
+            $this->nodes = array_merge($this->nodes, $pattern->getNodes());
+
+            return $this;
+        }
+        // Otherwise, add the relatable to the list of nodes
+        // @phpstan-ignore-next-line
+        $this->nodes[] = $pattern;
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationshipTo(Pattern $pattern, ?string $type = null, $properties = null, $name = null): self
+    {
+        return $this->relationship(
+            self::buildRelationship(Relationship::DIR_RIGHT, $type, $properties, $name),
+            $pattern
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationshipFrom(Pattern $pattern, ?string $type = null, $properties = null, $name = null): self
+    {
+        return $this->relationship(
+            self::buildRelationship(Relationship::DIR_LEFT, $type, $properties, $name),
+            $pattern
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function relationshipUni(Pattern $pattern, ?string $type = null, $properties = null, $name = null): self
+    {
+        return $this->relationship(
+            self::buildRelationship(Relationship::DIR_UNI, $type, $properties, $name),
+            $pattern
+        );
     }
 
     /**
@@ -69,9 +141,11 @@ class Path implements PathType
         }
 
         $cql = '';
-        // If a variable exists, we need to assign following the expression to it
-        if ($this->getVariable() !== null) {
-            $cql = $this->getName()->toQuery() . ' = ';
+
+        // If a variable exists, we need to assign following the expression to it; this results in a named
+        // path as described in page 66 of the openCypher reference (version 9).
+        if (isset($this->variable)) {
+            $cql = $this->variable->toQuery() . ' = ';
         }
 
         // We use the relationships as a reference point to iterate over.
@@ -103,90 +177,19 @@ class Path implements PathType
     }
 
     /**
-     * Returns the nodes in the path in sequential order.
+     * Construct a new relationship from the given parameters.
      *
-     * @return Node[]
+     * @param string[]             $direction  The direction of the relationship (should be a Relationship::DIR_* constant)
+     * @param null|string          $type       The type of the relationship
+     * @param null|MapType|mixed[] $properties The properties to add to the relationship
+     * @param null|string|Variable $name       The name of the variable to which to assign this relationship
      */
-    public function getNodes(): array
+    private static function buildRelationship(array $direction, ?string $type = null, $properties = null, $name = null): Relationship
     {
-        return $this->nodes;
-    }
-
-    /**
-     * Returns the relationships in the path in sequential order.
-     *
-     * @return Relationship[]
-     */
-    public function getRelationships(): array
-    {
-        return $this->relationships;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function relationship(RelationshipType $relationship, HasRelationshipsType $nodeOrPath): Path
-    {
-        self::assertClass('nodeOrPath', [__CLASS__, Node::class], $nodeOrPath);
-
-        $this->relationships[] = $relationship;
-        if ($nodeOrPath instanceof self) {
-            $this->relationships = array_merge($this->relationships, $nodeOrPath->getRelationships());
-            $this->nodes = array_merge($this->nodes, $nodeOrPath->getNodes());
-        } else {
-            $this->nodes []= $nodeOrPath;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function relationshipTo(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
-    {
-        $relationship = $this->buildRelationship(Relationship::DIR_RIGHT, $type, $properties, $name);
-
-        return $this->relationship($relationship, $nodeOrPath);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function relationshipFrom(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
-    {
-        $relationship = $this->buildRelationship(Relationship::DIR_LEFT, $type, $properties, $name);
-
-        return $this->relationship($relationship, $nodeOrPath);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function relationshipUni(HasRelationshipsType $nodeOrPath, ?string $type = null, $properties = null, $name = null): Path
-    {
-        $relationship = $this->buildRelationship(Relationship::DIR_UNI, $type, $properties, $name);
-
-        return $this->relationship($relationship, $nodeOrPath);
-    }
-
-    /**
-     * @param array $direction
-     * @param string|null $type
-     * @param mixed $properties
-     * @param mixed $name
-     *
-     * @return Relationship
-     */
-    private function buildRelationship(array $direction, ?string $type, $properties, $name): Relationship
-    {
-        self::assertClass('properties', ['array', PropertyMap::class, 'null'], $properties);
-        self::assertClass('name', ['string', Variable::class, 'null'], $name);
-
         $relationship = new Relationship($direction);
 
         if ($type !== null) {
-            $relationship->withType($type);
+            $relationship->addType($type);
         }
 
         if ($properties !== null) {
@@ -194,7 +197,7 @@ class Path implements PathType
         }
 
         if ($name !== null) {
-            $relationship->named($name);
+            $relationship->withVariable($name);
         }
 
         return $relationship;

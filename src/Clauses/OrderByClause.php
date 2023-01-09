@@ -1,58 +1,63 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
- * Cypher DSL
- * Copyright (C) 2021  Wikibase Solutions
+ * This file is part of php-cypher-dsl.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) Wikibase Solutions
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Property;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
+use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Query;
 
 /**
- * This class represents an ORDER BY clause. This clause should always be preceded by a RETURN
- * or WITH clause.
+ * This class represents an ORDER BY sub-clause.
+ *
+ * ORDER BY is a sub-clause following RETURN or WITH, and it specifies that the output should be sorted
+ * and how.
+ *
+ * TODO: Allow order modifier to be applied for each property (see #39).
  *
  * @see https://neo4j.com/docs/cypher-manual/current/clauses/order-by/
+ * @see https://s3.amazonaws.com/artifacts.opencypher.org/openCypher9.pdf (page 93)
+ * @see Query::orderBy() for a more convenient method to construct this class
  */
-class OrderByClause extends Clause
+final class OrderByClause extends Clause
 {
-    use EscapeTrait;
-
     /**
      * @var Property[] The expressions to include in the clause
      */
     private array $properties = [];
 
     /**
-     * @var bool
+     * @var bool Whether to add the DESC modifier to the clause
      */
     private bool $descending = false;
 
     /**
-     * Add a property to sort on.
+     * Add one or more properties to sort on.
      *
-     * @param Property $property The additional property to sort on
+     * @param Property ...$property The additional property to sort on
+     *
      * @return OrderByClause
      */
-    public function addProperty(Property $property): self
+    public function addProperty(Property ...$property): self
     {
-        $this->properties[] = $property;
+        $this->properties = array_merge($this->properties, $property);
+
+        return $this;
+    }
+
+    /**
+     * Set to sort in a DESCENDING order.
+     *
+     * @return OrderByClause
+     */
+    public function setDescending(bool $descending = true): self
+    {
+        $this->descending = $descending;
 
         return $this;
     }
@@ -69,25 +74,10 @@ class OrderByClause extends Clause
 
     /**
      * Returns whether the ordering is in descending order.
-     *
-     * @return bool
      */
     public function isDescending(): bool
     {
         return $this->descending;
-    }
-
-    /**
-     * Set to sort in a DESCENDING order.
-     *
-     * @param bool $descending
-     * @return OrderByClause
-     */
-    public function setDescending(bool $descending = true): self
-    {
-        $this->descending = $descending;
-
-        return $this;
     }
 
     /**
@@ -103,9 +93,13 @@ class OrderByClause extends Clause
      */
     protected function getSubject(): string
     {
-        $properties = array_map(fn (Property $property): string => $property->toQuery(), $this->properties);
+        $properties = array_map(static fn (Property $property): string => $property->toQuery(), $this->properties);
         $subject = implode(", ", $properties);
 
-        return $this->descending ? sprintf("%s DESCENDING", $subject) : $subject;
+        if ($this->descending) {
+            $subject .= ' DESCENDING';
+        }
+
+        return $subject;
     }
 }
