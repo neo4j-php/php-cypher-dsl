@@ -1,8 +1,5 @@
 # php-cypher-dsl
 
-![Build
-status](https://github.com/WikibaseSolutions/php-cypher-dsl/actions/workflows/main.yml/badge.svg)
-
 The `php-cypher-dsl` library provides a way to construct advanced Cypher
 queries in an object-oriented and type-safe manner.
 
