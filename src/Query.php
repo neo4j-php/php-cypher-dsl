@@ -450,7 +450,7 @@ final class Query implements QueryConvertible
     /**
      * Creates the RETURN clause.
      *
-     * @param Alias|Alias[]|AnyType|AnyType[]|mixed[]|bool|bool[]|float|float[]|int|int[]|Pattern|Pattern[]|string|string[]|(Alias|AnyType|mixed[]|bool|float|int|Pattern|string)[] $expressions A single expression to return, or a non-empty list of expressions to return
+     * @param Alias|Alias[]|AnyType|AnyType[]|bool|bool[]|float|float[]|int|int[]|Pattern|Pattern[]|string|string[]|(Alias|AnyType|mixed[]|bool|float|int|Pattern|string)[] $expressions A single expression to return, or a non-empty list of expressions to return
      * @param bool $distinct Whether to be a RETURN DISTINCT clause (optional, default: false)
      *
      * @return $this
@@ -722,7 +722,7 @@ final class Query implements QueryConvertible
     /**
      * Creates the WITH clause.
      *
-     * @param Alias|Alias[]|AnyType|AnyType[]|bool|bool[]|float|float[]|int|int[]|mixed[]|mixed[][]|Pattern|Pattern[]|string|string[]|(Alias|AnyType|bool|float|int|mixed[]|Pattern|string)[] $expressions An entry to add, or a non-empty list of entries to add; if the array-key is non-numerical, it is used as the alias
+     * @param Alias|Alias[]|AnyType|AnyType[]|bool|bool[]|float|float[]|int|int[]|mixed[][]|Pattern|Pattern[]|string|string[]|(Alias|AnyType|bool|float|int|mixed[]|Pattern|string)[] $expressions An entry to add, or a non-empty list of entries to add; if the array-key is non-numerical, it is used as the alias
      *
      * @return $this
      *
