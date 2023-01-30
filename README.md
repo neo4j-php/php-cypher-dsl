@@ -24,6 +24,10 @@ command:
 composer require "wikibase-solutions/php-cypher-dsl"
 ```
 
+## Contributing
+
+Please refer to [CONTRIBUTING.md](https://github.com/neo4j-php/php-cypher-dsl/blob/main/.github/CONTRIBUTING.md) for information on how to contribute to this project.
+
 ## Example
 
 To construct a query to find all of Tom Hanks' co-actors, you can use the
