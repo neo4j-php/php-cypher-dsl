@@ -46,7 +46,7 @@
     "source": "https://github.com/WikibaseSolutions/php-cypher-dsl"
   },
   "require": {
-    "php": ">=7.4",
+    "php": ">=8.0",
     "ext-ctype": "*",
     "ext-openssl": "*",
     "symfony/polyfill-php80": "^1.25",
