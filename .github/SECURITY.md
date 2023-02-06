@@ -10,7 +10,7 @@ e-mail to Marijn van Wezel at marijnvanwezel@gmail.com. All security
 vulnerabilities will be promptly addressed.
 
 You may optionally encrypt your report with PGP, using the following key
-(fingerprint: `98ED96AA2260D7E3`, proof:
+(fingerprint: `DF63A760A689CC9B5E257CE298ED96AA2260D7E3`, proof:
 [keybase.io](https://keybase.io/01101101)):
 
 ```text
