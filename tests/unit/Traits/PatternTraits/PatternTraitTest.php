@@ -72,6 +72,25 @@ final class PatternTraitTest extends TestCase
         $this->stub->withVariable(new stdClass());
     }
 
+    public function testPatternNotSet(): void
+    {
+        $this->assertFalse($this->stub->hasVariableSet());
+    }
+
+    public function testPatternSet(): void
+    {
+        $this->stub->withVariable("hello");
+        $this->assertTrue($this->stub->hasVariableSet());
+    }
+
+    public function testPatternUnSet(): void
+    {
+        $this->stub->withVariable("hello");
+        $this->stub->withVariable(null);
+
+        $this->assertFalse($this->stub->hasVariableSet());
+    }
+
     /**
      * @doesNotPerformAssertions
      */

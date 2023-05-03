@@ -36,16 +36,21 @@ use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PatternTrait;
 interface Pattern extends QueryConvertible
 {
     /**
+     * Returns whether a variable has been set for this pattern.
+     */
+    public function hasVariableSet(): bool;
+
+    /**
      * Explicitly assign a named variable to this pattern.
      *
-     * @param string|Variable $variable
+     * @param null|string|Variable $variable
      *
      * @return $this
      */
     public function withVariable($variable): self;
 
     /**
-     * Returns the variable of this pattern. This function generates a variable if none has been set.
+     * Returns the variable of this pattern. This function generates a variable if none has been set. It will implicitly set the variable of the pattern as well.
      */
     public function getVariable(): Variable;
 }

@@ -25,15 +25,23 @@ trait PatternTrait
     protected ?Variable $variable = null;
 
     /**
+     * Returns whether a variable has been set for this pattern.
+     */
+    public function hasVariableSet(): bool
+    {
+        return $this->variable !== null;
+    }
+
+    /**
      * Explicitly assign a named variable to this object.
      *
-     * @param string|Variable $variable
+     * @param null|string|Variable $variable
      *
      * @return $this
      */
     public function withVariable($variable): self
     {
-        $this->variable = self::toName($variable);
+        $this->variable = $variable === null ? null : self::toName($variable);
 
         return $this;
     }
