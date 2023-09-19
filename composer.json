@@ -12,7 +12,7 @@
     "builder"
   ],
   "homepage": "https://wikibase-solutions.com",
-  "license": "GPL-2.0-or-later",
+  "license": "MIT",
   "authors": [
     {
       "name": "Marijn van Wezel",
