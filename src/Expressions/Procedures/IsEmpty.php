@@ -9,9 +9,7 @@
  */
 namespace WikibaseSolutions\CypherDSL\Expressions\Procedures;
 
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
@@ -26,12 +24,11 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 final class IsEmpty extends Procedure implements BooleanType
 {
     use BooleanTypeTrait;
-    use ErrorTrait;
 
     /**
      * @var ListType|MapType|StringType An expression that returns a list
      */
-    private AnyType $list;
+    private ListType|MapType|StringType $list;
 
     /**
      * The signatures of the "isEmpty()" function are:
@@ -43,10 +40,8 @@ final class IsEmpty extends Procedure implements BooleanType
      *
      * @internal This method is not covered by the backwards compatibility promise of php-cypher-dsl
      */
-    public function __construct(AnyType $list)
+    public function __construct(ListType|MapType|StringType $list)
     {
-        self::assertClass('list', [ListType::class, MapType::class, StringType::class], $list);
-
         $this->list = $list;
     }
 

@@ -11,7 +11,6 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
 
 use WikibaseSolutions\CypherDSL\Clauses\MatchClause;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
@@ -23,7 +22,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 final class Exists implements BooleanType
 {
     use BooleanTypeTrait;
-    use ErrorTrait;
 
     /**
      * @var MatchClause The MATCH part of the EXISTS expression

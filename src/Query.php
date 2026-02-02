@@ -49,7 +49,6 @@ use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Syntax\Alias;
 use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
@@ -61,7 +60,6 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 final class Query implements QueryConvertible
 {
     use CastTrait;
-    use ErrorTrait;
 
     // A reference to the Literal class
     public const literal = Literal::class;
@@ -363,25 +361,19 @@ final class Query implements QueryConvertible
      * @note This feature is not part of the openCypher standard.
      *
      * @param callable|Query $query A callable decorating a Query, or an instance of Query
-     * @param Pattern|Pattern[]|string|string[]|Variable|Variable[]|(Pattern|string|Variable)[] $variables The variables to include in the WITH clause for correlation (optional)
+     * @param Pattern|string|Variable ...$variables The variables to include in the WITH clause for correlation (optional)
      *
      * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/ Corresponding documentation on Neo4j.com
      */
-    public function call($query, $variables = []): self
+    public function call(Query|callable $query, Pattern|Variable|string ...$variables): self
     {
-        $this->assertClass('query', [self::class, Closure::class, 'callable'], $query);
-
         if (is_callable($query)) {
             $subQuery = self::new();
             $query($subQuery);
         } else {
             $subQuery = $query;
-        }
-
-        if (!is_array($variables)) {
-            $variables = [$variables];
         }
 
         $callClause = new CallClause();

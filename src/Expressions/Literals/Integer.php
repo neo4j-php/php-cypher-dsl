@@ -30,12 +30,8 @@ final class Integer implements IntegerType
      *
      * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
-    public function __construct($value)
+    public function __construct(int|string $value)
     {
-        if (!is_int($value) && !is_string($value)) {
-            throw new TypeError('An integer should be given as a string or integer, ' . gettype($value) . ' received.');
-        }
-
         $parsedValue = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
 
         if ($parsedValue === false) {

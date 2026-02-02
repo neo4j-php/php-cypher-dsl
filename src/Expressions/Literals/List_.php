@@ -14,6 +14,7 @@ use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This class represents a list of expressions. For example, this class can represent the following
@@ -25,7 +26,6 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
  */
 final class List_ implements ListType
 {
-    use CastTrait;
     use ListTypeTrait;
 
     /**
@@ -34,25 +34,25 @@ final class List_ implements ListType
     private array $expressions;
 
     /**
-     * @param mixed[] $expressions The list of expressions
+     * @param array $expressions The list of expressions
      *
      * @internal This method is not covered by the backwards compatibility promise of php-cypher-dsl
      */
     public function __construct(array $expressions = [])
     {
-        $this->expressions = array_map([self::class, 'toAnyType'], $expressions);
+        $this->expressions = array_map(CastUtils::toAnyType(...), $expressions);
     }
 
     /**
      * Add one or more expressions to the list.
      *
-     * @param AnyType|bool|float|int|mixed[]|Pattern|string ...$expressions
+     * @param AnyType|bool|float|int|array|Pattern|string ...$expressions
      *
      * @return $this
      */
-    public function addExpression(...$expressions): self
+    public function addExpression(AnyType|bool|float|int|array|Pattern|string ...$expressions): self
     {
-        $this->expressions = array_merge($this->expressions, array_map([self::class, 'toAnyType'], $expressions));
+        $this->expressions = array_merge($this->expressions, array_map(CastUtils::toAnyType(...), $expressions));
 
         return $this;
     }

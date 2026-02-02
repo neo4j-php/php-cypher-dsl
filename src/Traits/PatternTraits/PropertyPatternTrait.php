@@ -13,7 +13,6 @@ use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
@@ -22,7 +21,6 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 trait PropertyPatternTrait
 {
     use CastTrait;
-    use ErrorTrait;
     use PatternTrait;
 
     /**
@@ -61,18 +59,14 @@ trait PropertyPatternTrait
     /**
      * @inheritDoc
      */
-    public function addProperties($properties): self
+    public function addProperties(Map|array $properties): self
     {
-        self::assertClass('properties', [Map::class, 'array'], $properties);
-
         $map = $this->makeMap();
 
         if (is_array($properties)) {
-            $res = [];
-
-            foreach ($properties as $key => $property) {
-                $res[$key] = self::toAnyType($property);
-            }
+            $res = array_map(function ($property) {
+                return self::toAnyType($property);
+            }, $properties);
 
             // Cast the array to a Map
             $properties = new Map($res);

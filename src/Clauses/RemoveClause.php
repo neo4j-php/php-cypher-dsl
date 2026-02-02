@@ -12,7 +12,6 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\QueryConvertible;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 
 /**
  * This class represents a REMOVE clause.
@@ -23,10 +22,8 @@ use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
  */
 final class RemoveClause extends Clause
 {
-    use ErrorTrait;
-
     /**
-     * @var Label[]|Property[]|(Label|Property)[] the expressions in this REMOVE clause
+     * @var (Label|Property)[] the expressions in this REMOVE clause
      */
     private array $expressions = [];
 
@@ -37,9 +34,8 @@ final class RemoveClause extends Clause
      *
      * @return RemoveClause
      */
-    public function addExpression(...$expressions): self
+    public function addExpression(Property|Label ...$expressions): self
     {
-        self::assertClassArray('expressions', [Property::class, Label::class], $expressions);
         $this->expressions = array_merge($this->expressions, $expressions);
 
         return $this;
@@ -48,7 +44,7 @@ final class RemoveClause extends Clause
     /**
      * Returns the expressions in the REMOVE clause.
      *
-     * @return Label[]|Property[]|(Label|Property)[]
+     * @return (Label|Property)[]
      */
     public function getExpressions(): array
     {

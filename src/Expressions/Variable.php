@@ -11,7 +11,6 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
 
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NameGenerationTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
@@ -85,7 +84,6 @@ final class Variable implements
         StringTypeTrait,
         TimeTypeTrait;
 
-    use ErrorTrait;
     use EscapeTrait;
     use NameGenerationTrait;
 
@@ -121,7 +119,7 @@ final class Variable implements
     /**
      * Assign a value to this property.
      *
-     * @param Map|mixed[] $value The value to assign
+     * @param Map|array $value The value to assign
      */
     public function assign($value): PropertyReplacement
     {

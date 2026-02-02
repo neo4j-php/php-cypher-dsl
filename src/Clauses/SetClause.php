@@ -12,7 +12,6 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 
 /**
  * This class represents a SET clause.
@@ -23,23 +22,20 @@ use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
  */
 final class SetClause extends Clause
 {
-    use ErrorTrait;
-
     /**
-     * @var Label[]|PropertyReplacement[]|(Label|PropertyReplacement)[] The expressions to set
+     * @var (Label|PropertyReplacement)[] The expressions to set
      */
     private array $expressions = [];
 
     /**
      * Add one or more expressions to this SET clause.
      *
-     * @param Label|PropertyReplacement $expressions The expressions to add to this set clause
+     * @param Label|PropertyReplacement ...$expressions The expressions to add to this set clause
      *
      * @return $this
      */
-    public function add(...$expressions): self
+    public function add(Label|PropertyReplacement ...$expressions): self
     {
-        $this->assertClassArray('expression', [PropertyReplacement::class, Label::class], $expressions);
         $this->expressions = array_merge($this->expressions, $expressions);
 
         return $this;
@@ -48,7 +44,7 @@ final class SetClause extends Clause
     /**
      * Returns the expressions to SET.
      *
-     * @return Label[]|PropertyReplacement[]|(Label|PropertyReplacement)[]
+     * @return (Label|PropertyReplacement)[]
      */
     public function getExpressions(): array
     {

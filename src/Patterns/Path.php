@@ -10,7 +10,6 @@
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PatternTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -24,7 +23,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 final class Path implements BooleanType, CompletePattern, RelatablePattern
 {
     use BooleanTypeTrait;
-    use ErrorTrait;
 
     use PatternTrait;
 
@@ -44,13 +42,10 @@ final class Path implements BooleanType, CompletePattern, RelatablePattern
      *
      * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
-    public function __construct($nodes = [], $relationships = [])
+    public function __construct(Node|array $nodes = [], Relationship|array $relationships = [])
     {
         $nodes = is_array($nodes) ? $nodes : [$nodes];
         $relationships = is_array($relationships) ? $relationships : [$relationships];
-
-        self::assertClassArray('nodes', Node::class, $nodes);
-        self::assertClassArray('relationships', Relationship::class, $relationships);
 
         $this->nodes = $nodes;
         $this->relationships = $relationships;
@@ -181,10 +176,10 @@ final class Path implements BooleanType, CompletePattern, RelatablePattern
      *
      * @param string[]             $direction  The direction of the relationship (should be a Relationship::DIR_* constant)
      * @param null|string          $type       The type of the relationship
-     * @param null|MapType|mixed[] $properties The properties to add to the relationship
+     * @param null|MapType|array   $properties The properties to add to the relationship
      * @param null|string|Variable $name       The name of the variable to which to assign this relationship
      */
-    private static function buildRelationship(array $direction, ?string $type = null, $properties = null, $name = null): Relationship
+    private static function buildRelationship(array $direction, ?string $type = null, MapType|array|null $properties = null, Variable|string|null $name = null): Relationship
     {
         $relationship = new Relationship($direction);
 

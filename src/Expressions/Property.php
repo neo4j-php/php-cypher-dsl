@@ -92,10 +92,8 @@ final class Property implements
      *
      * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
-    public function __construct($expression, string $property)
+    public function __construct(MapType|NodeType|RelationshipType $expression, string $property)
     {
-        self::assertClass('expression', [MapType::class, NodeType::class, RelationshipType::class], $expression);
-
         $this->expression = $expression;
         $this->property = $property;
     }
@@ -113,7 +111,7 @@ final class Property implements
      *
      * TODO: Allow this function to take arrays of property types
      */
-    public function replaceWith($value): PropertyReplacement
+    public function replaceWith(PropertyType|string|bool|float|int $value): PropertyReplacement
     {
         return new PropertyReplacement($this, self::toPropertyType($value));
     }
@@ -131,7 +129,7 @@ final class Property implements
      *
      * @return MapType|NodeType|RelationshipType
      */
-    public function getExpression(): AnyType
+    public function getExpression(): MapType|NodeType|RelationshipType
     {
         return $this->expression;
     }

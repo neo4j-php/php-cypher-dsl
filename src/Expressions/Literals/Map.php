@@ -9,14 +9,14 @@
  */
 namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
+use WikibaseSolutions\CypherDSL\Utils\NameUtils;
 
 /**
- * This class represents a CYPHER map. For example, this class can represent the following
+ * This class represents a Cypher map. For example, this class can represent the following
  * construct:.
  *
  * {name: 'Andy', sport: 'Brazilian Ju-Jitsu'}
@@ -26,8 +26,6 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  */
 final class Map implements MapType
 {
-    use CastTrait;
-    use EscapeTrait;
     use MapTypeTrait;
 
     /**
@@ -36,13 +34,13 @@ final class Map implements MapType
     private array $elements;
 
     /**
-     * @param mixed[] $elements Associative array of the elements that this map should have
+     * @param array $elements Associative array of the elements that this map should have
      *
      * @internal This method is not covered by the backwards compatibility promise of php-cypher-dsl
      */
     public function __construct(array $elements = [])
     {
-        $this->elements = array_map([self::class, 'toAnyType'], $elements);
+        $this->elements = array_map(CastUtils::toAnyType(...), $elements);
     }
 
     /**
@@ -53,9 +51,9 @@ final class Map implements MapType
      *
      * @return $this
      */
-    public function add(string $key, $value): self
+    public function add(string $key, mixed $value): self
     {
-        $this->elements[$key] = self::toAnyType($value);
+        $this->elements[$key] = CastUtils::toAnyType($value);
 
         return $this;
     }
@@ -100,7 +98,7 @@ final class Map implements MapType
         $pairs = [];
 
         foreach ($this->elements as $key => $value) {
-            $pairs[] = sprintf("%s: %s", self::escape((string) $key), $value->toQuery());
+            $pairs[] = sprintf("%s: %s", NameUtils::escape((string) $key), $value->toQuery());
         }
 
         return sprintf("{%s}", implode(", ", $pairs));

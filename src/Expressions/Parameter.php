@@ -9,7 +9,6 @@
  */
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\NameGenerationTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
@@ -69,9 +68,9 @@ final class Parameter implements
         StringTypeTrait,
         TimeTypeTrait;
 
-    use ErrorTrait;
     use EscapeTrait;
     use NameGenerationTrait;
+
     private string $parameter;
 
     /**

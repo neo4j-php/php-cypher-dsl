@@ -9,7 +9,6 @@
  */
 namespace WikibaseSolutions\CypherDSL\Expressions\Procedures;
 
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait;
@@ -71,7 +70,6 @@ final class Raw extends Procedure implements
         StringTypeTrait,
         TimeTypeTrait;
 
-    use ErrorTrait;
     use EscapeTrait;
 
     /**
@@ -85,15 +83,13 @@ final class Raw extends Procedure implements
     private array $parameters;
 
     /**
-     * @param string    $functionName The name of the function to call
-     * @param AnyType[] $parameters   The parameters to pass to the function call
+     * @param string  $functionName  The name of the function to call
+     * @param AnyType ...$parameters The parameters to pass to the function call
      *
      * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
-    public function __construct(string $functionName, array $parameters)
+    public function __construct(string $functionName, AnyType ...$parameters)
     {
-        self::assertClassArray('parameters', AnyType::class, $parameters);
-
         $this->functionName = self::escape($functionName);
         $this->parameters = $parameters;
     }
@@ -103,7 +99,7 @@ final class Raw extends Procedure implements
      */
     protected function getSignature(): string
     {
-        // A string of the form '%s, %s, %s' with count($this->parameters) occurences of '%s'
+        // A string of the form '%s, %s, %s' with count($this->parameters) occurrences of '%s'
         $percentSString =
             count($this->parameters) === 0 ?
             '' :

@@ -12,7 +12,7 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Syntax\Alias;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This class represents a CALL procedure clause.
@@ -25,8 +25,6 @@ use WikibaseSolutions\CypherDSL\Traits\CastTrait;
  */
 final class CallProcedureClause extends Clause
 {
-    use CastTrait;
-
     /**
      * @var null|Procedure The procedure to call
      */
@@ -63,7 +61,7 @@ final class CallProcedureClause extends Clause
         $res = [];
 
         foreach ($yields as $yield) {
-            $res[] = $yield instanceof Alias ? $yield : self::toName($yield);
+            $res[] = $yield instanceof Alias ? $yield : CastUtils::toName($yield);
         }
 
         $this->yields = array_merge($this->yields, $res);
@@ -74,7 +72,7 @@ final class CallProcedureClause extends Clause
     /**
      * Returns the procedure to call.
      *
-     * @return Procedure
+     * @return Procedure|null
      */
     public function getProcedure(): ?Procedure
     {
@@ -84,7 +82,7 @@ final class CallProcedureClause extends Clause
     /**
      * Returns the variables to yield.
      *
-     * @return Alias[]|Variable[]|(Alias|Variable)[]
+     * @return (Alias|Variable)[]
      */
     public function getYields(): array
     {

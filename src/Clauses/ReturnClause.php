@@ -13,8 +13,8 @@ use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Syntax\Alias;
 use WikibaseSolutions\CypherDSL\Traits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This class represents a RETURN clause.
@@ -25,9 +25,6 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 final class ReturnClause extends Clause
 {
-    use CastTrait;
-    use ErrorTrait;
-
     /**
      * @var bool Whether to be a RETURN DISTINCT query
      */
@@ -41,18 +38,18 @@ final class ReturnClause extends Clause
     /**
      * Add a new column to this RETURN clause.
      *
-     * @param Alias|AnyType|bool|float|int|mixed[]|Pattern|string ...$columns The values to return
+     * @param Alias|AnyType|bool|float|int|array|Pattern|string ...$columns The values to return
      *
      * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
      */
-    public function addColumn(...$columns): self
+    public function addColumn(Alias|AnyType|bool|float|int|array|Pattern|string ...$columns): self
     {
         $res = [];
 
         foreach ($columns as $column) {
-            $res[] = $column instanceof Alias ? $column : self::toAnyType($column);
+            $res[] = $column instanceof Alias ? $column : CastUtils::toAnyType($column);
         }
 
         $this->columns = array_merge($this->columns, $res);
@@ -77,7 +74,7 @@ final class ReturnClause extends Clause
     /**
      * Returns the columns to return. Aliased columns have string keys instead of integers.
      *
-     * @return Alias[]|AnyType[]|(Alias|AnyType)[]
+     * @return (Alias|AnyType)[]
      */
     public function getColumns(): array
     {

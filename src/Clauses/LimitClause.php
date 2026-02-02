@@ -10,8 +10,8 @@
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This class represents a LIMIT clause.
@@ -24,8 +24,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
  */
 final class LimitClause extends Clause
 {
-    use CastTrait;
-
     /**
      * The expression of the LIMIT statement.
      */
@@ -38,9 +36,9 @@ final class LimitClause extends Clause
      *
      * @return $this
      */
-    public function setLimit($limit): self
+    public function setLimit(IntegerType|int $limit): self
     {
-        $this->limit = self::toIntegerType($limit);
+        $this->limit = CastUtils::toIntegerType($limit);
 
         return $this;
     }
