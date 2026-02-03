@@ -11,8 +11,8 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PropertyPatternTrait;
+use WikibaseSolutions\CypherDSL\Utils\NameUtils;
 
 /**
  * This class represents a node.
@@ -21,8 +21,6 @@ use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PropertyPatternTrait;
  */
 final class Node implements CompletePattern, PropertyPattern, RelatablePattern
 {
-    use EscapeTrait;
-
     use PropertyPatternTrait;
 
     /**
@@ -144,7 +142,7 @@ final class Node implements CompletePattern, PropertyPattern, RelatablePattern
 
         if ($this->labels !== []) {
             foreach ($this->labels as $label) {
-                $nodeInner .= ":" . self::escape($label);
+                $nodeInner .= ":" . NameUtils::escape($label);
             }
         }
 

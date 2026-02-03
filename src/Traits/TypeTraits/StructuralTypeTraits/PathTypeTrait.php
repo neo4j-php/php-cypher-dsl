@@ -9,8 +9,12 @@
  */
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits;
 
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
+
 /**
  * This trait provides a default implementation to satisfy the "PathType" interface.
+ *
+ * @implements PathType
  */
 trait PathTypeTrait
 {

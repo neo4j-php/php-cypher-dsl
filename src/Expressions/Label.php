@@ -12,6 +12,7 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
 use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Utils\NameUtils;
 
 /**
  * Represents a label. A label in Cypher would be something like "n:German" or "n:German:Swedish". Label implements
@@ -22,8 +23,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 final class Label implements BooleanType
 {
     use BooleanTypeTrait;
-
-    use EscapeTrait;
 
     /**
      * @var Variable The variable to which this label belongs
@@ -44,7 +43,7 @@ final class Label implements BooleanType
     public function __construct(Variable $variable, string ...$labels)
     {
         $this->variable = $variable;
-        $this->labels = array_map([self::class, 'escape'], $labels);
+        $this->labels = array_map(NameUtils::escape(...), $labels);
     }
 
     /**
@@ -56,7 +55,7 @@ final class Label implements BooleanType
      */
     public function addLabels(string ...$labels): self
     {
-        $this->labels = array_merge($this->labels, array_map([self::class, 'escape'], $labels));
+        $this->labels = array_merge($this->labels, array_map(NameUtils::escape(...), $labels));
 
         return $this;
     }

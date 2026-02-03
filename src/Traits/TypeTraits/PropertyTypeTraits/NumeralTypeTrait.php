@@ -16,9 +16,13 @@ use WikibaseSolutions\CypherDSL\Expressions\Operators\ModuloDivision;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Multiplication;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Subtraction;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\UnaryMinus;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This trait provides a default implementation to satisfy the "NumeralType" interface.
+ *
+ * @implements NumeralType
  */
 trait NumeralTypeTrait
 {
@@ -27,49 +31,49 @@ trait NumeralTypeTrait
     /**
      * @inheritDoc
      */
-    public function plus($right, bool $insertParentheses = true): Addition
+    public function plus(NumeralType|float|int $right, bool $insertParentheses = true): Addition
     {
-        return new Addition($this, self::toNumeralType($right), $insertParentheses);
+        return new Addition($this, CastUtils::toNumeralType($right), $insertParentheses);
     }
 
     /**
      * @inheritDoc
      */
-    public function divide($right, bool $insertParentheses = true): Division
+    public function divide(NumeralType|float|int $right, bool $insertParentheses = true): Division
     {
-        return new Division($this, self::toNumeralType($right), $insertParentheses);
+        return new Division($this, CastUtils::toNumeralType($right), $insertParentheses);
     }
 
     /**
      * @inheritDoc
      */
-    public function exponentiate($right, bool $insertParentheses = true): Exponentiation
+    public function exponentiate(NumeralType|float|int $right, bool $insertParentheses = true): Exponentiation
     {
-        return new Exponentiation($this, self::toNumeralType($right), $insertParentheses);
+        return new Exponentiation($this, CastUtils::toNumeralType($right), $insertParentheses);
     }
 
     /**
      * @inheritDoc
      */
-    public function mod($right, bool $insertParentheses = true): ModuloDivision
+    public function mod(NumeralType|float|int $right, bool $insertParentheses = true): ModuloDivision
     {
-        return new ModuloDivision($this, self::toNumeralType($right), $insertParentheses);
+        return new ModuloDivision($this, CastUtils::toNumeralType($right), $insertParentheses);
     }
 
     /**
      * @inheritDoc
      */
-    public function times($right, bool $insertParentheses = true): Multiplication
+    public function times(NumeralType|float|int $right, bool $insertParentheses = true): Multiplication
     {
-        return new Multiplication($this, self::toNumeralType($right), $insertParentheses);
+        return new Multiplication($this, CastUtils::toNumeralType($right), $insertParentheses);
     }
 
     /**
      * @inheritDoc
      */
-    public function minus($right, bool $insertParentheses = true): Subtraction
+    public function minus(NumeralType|float|int $right, bool $insertParentheses = true): Subtraction
     {
-        return new Subtraction($this, self::toNumeralType($right), $insertParentheses);
+        return new Subtraction($this, CastUtils::toNumeralType($right), $insertParentheses);
     }
 
     /**

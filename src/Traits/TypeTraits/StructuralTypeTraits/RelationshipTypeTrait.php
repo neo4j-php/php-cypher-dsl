@@ -10,9 +10,12 @@
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits;
 
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\MethodTraits\PropertyMethodTrait;
+use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
 
 /**
  * This trait provides a default implementation to satisfy the "RelationshipType" interface.
+ *
+ * @implements RelationshipType
  */
 trait RelationshipTypeTrait
 {

@@ -23,7 +23,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 final class Path implements BooleanType, CompletePattern, RelatablePattern
 {
     use BooleanTypeTrait;
-
     use PatternTrait;
 
     /**
@@ -95,7 +94,7 @@ final class Path implements BooleanType, CompletePattern, RelatablePattern
     /**
      * @inheritDoc
      */
-    public function relationshipTo(Pattern $pattern, ?string $type = null, $properties = null, $name = null): self
+    public function relationshipTo(Pattern $pattern, ?string $type = null, MapType|array|null $properties = null, Variable|string|null $name = null): self
     {
         return $this->relationship(
             self::buildRelationship(Relationship::DIR_RIGHT, $type, $properties, $name),
@@ -106,7 +105,7 @@ final class Path implements BooleanType, CompletePattern, RelatablePattern
     /**
      * @inheritDoc
      */
-    public function relationshipFrom(Pattern $pattern, ?string $type = null, $properties = null, $name = null): self
+    public function relationshipFrom(Pattern $pattern, ?string $type = null, MapType|array|null $properties = null, Variable|string|null $name = null): self
     {
         return $this->relationship(
             self::buildRelationship(Relationship::DIR_LEFT, $type, $properties, $name),
@@ -117,7 +116,7 @@ final class Path implements BooleanType, CompletePattern, RelatablePattern
     /**
      * @inheritDoc
      */
-    public function relationshipUni(Pattern $pattern, ?string $type = null, $properties = null, $name = null): self
+    public function relationshipUni(Pattern $pattern, ?string $type = null, MapType|array|null $properties = null, Variable|string|null $name = null): self
     {
         return $this->relationship(
             self::buildRelationship(Relationship::DIR_UNI, $type, $properties, $name),

@@ -9,8 +9,12 @@
  */
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits;
 
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
+
 /**
  * This trait provides a default implementation to satisfy the "TimeType" interface.
+ *
+ * @implements TimeType
  */
 trait TimeTypeTrait
 {

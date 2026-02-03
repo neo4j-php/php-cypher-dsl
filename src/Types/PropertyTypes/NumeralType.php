@@ -23,51 +23,39 @@ use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\NumeralType
  *
  * @note This interface should not be implemented by any class directly
  *
- * @see  NumeralTypeTrait for a default implementation
+ * @see NumeralTypeTrait for a default implementation
  */
 interface NumeralType extends PropertyType
 {
     /**
      * Add this expression to the given expression.
-     *
-     * @param float|int|NumeralType $right
      */
-    public function plus($right, bool $insertParentheses = true): Addition;
+    public function plus(NumeralType|float|int $right, bool $insertParentheses = true): Addition;
 
     /**
      * Divide this expression by the given expression.
-     *
-     * @param float|int|NumeralType $right
      */
-    public function divide($right, bool $insertParentheses = true): Division;
+    public function divide(NumeralType|float|int $right, bool $insertParentheses = true): Division;
 
     /**
      * Perform an exponentiation with the given expression.
-     *
-     * @param float|int|NumeralType $right
      */
-    public function exponentiate($right, bool $insertParentheses = true): Exponentiation;
+    public function exponentiate(NumeralType|float|int $right, bool $insertParentheses = true): Exponentiation;
 
     /**
      * Perform the modulo operation with the given expression.
-     *
-     * @param float|int|NumeralType $right
      */
-    public function mod($right, bool $insertParentheses = true): ModuloDivision;
+    public function mod(NumeralType|float|int $right, bool $insertParentheses = true): ModuloDivision;
 
     /**
      * Perform a multiplication with the given expression.
-     *
-     * @param float|int|NumeralType $right
      */
-    public function times($right, bool $insertParentheses = true): Multiplication;
+    public function times(NumeralType|float|int $right, bool $insertParentheses = true): Multiplication;
 
     /**
      * Subtract the given expression from this expression.
-     *
-     * @param float|int|NumeralType $right
      */
-    public function minus($right, bool $insertParentheses = true): Subtraction;
+    public function minus(NumeralType|float|int $right, bool $insertParentheses = true): Subtraction;
 
     /**
      * Negate this expression (negate the numeral using "0").

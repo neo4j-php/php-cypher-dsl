@@ -32,8 +32,6 @@ interface PropertyPattern extends Pattern
     /**
      * Set the properties of this pattern.
      *
-     * @param MapType|array $properties
-     *
      * @return $this
      */
     public function withProperties(MapType|array $properties): self;
@@ -43,8 +41,6 @@ interface PropertyPattern extends Pattern
      * a map. An exception will be thrown if they are anything else (such as a variable). If the pattern  does not yet
      * contain any properties, a new map will be created.
      *
-     * @param mixed $property
-     *
      * @return $this
      */
     public function addProperty(string $key, mixed $property): self;
@@ -53,8 +49,6 @@ interface PropertyPattern extends Pattern
      * Add the given properties to this pattern. This is only possible if the properties in this pattern are a map.
      * An exception will be thrown if they are anything else (such as a variable). If the pattern does not yet contain
      * any properties, a new map will be created.
-     *
-     * @param MapType|array $properties
      *
      * @return $this
      */

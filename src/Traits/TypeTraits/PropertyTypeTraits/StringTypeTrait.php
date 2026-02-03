@@ -13,45 +13,47 @@ use WikibaseSolutions\CypherDSL\Expressions\Operators\Contains;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\EndsWith;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Regex;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\StartsWith;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This trait provides a default implementation to satisfy the "StringType" interface.
+ *
+ * @implements StringType
  */
 trait StringTypeTrait
 {
-    use CastTrait;
     use PropertyTypeTrait;
 
     /**
      * @inheritDoc
      */
-    public function contains($right, bool $insertParentheses = true): Contains
+    public function contains(StringType|string $right, bool $insertParentheses = true): Contains
     {
-        return new Contains($this, self::toStringType($right), $insertParentheses);
+        return new Contains($this, CastUtils::toStringType($right), $insertParentheses);
     }
 
     /**
      * @inheritDoc
      */
-    public function endsWith($right, bool $insertParentheses = true): EndsWith
+    public function endsWith(StringType|string $right, bool $insertParentheses = true): EndsWith
     {
-        return new EndsWith($this, self::toStringType($right), $insertParentheses);
+        return new EndsWith($this, CastUtils::toStringType($right), $insertParentheses);
     }
 
     /**
      * @inheritDoc
      */
-    public function startsWith($right, bool $insertParentheses = true): StartsWith
+    public function startsWith(StringType|string $right, bool $insertParentheses = true): StartsWith
     {
-        return new StartsWith($this, self::toStringType($right), $insertParentheses);
+        return new StartsWith($this, CastUtils::toStringType($right), $insertParentheses);
     }
 
     /**
      * @inheritDoc
      */
-    public function regex($right, bool $insertParentheses = true): Regex
+    public function regex(StringType|string $right, bool $insertParentheses = true): Regex
     {
-        return new Regex($this, self::toStringType($right), $insertParentheses);
+        return new Regex($this, CastUtils::toStringType($right), $insertParentheses);
     }
 }

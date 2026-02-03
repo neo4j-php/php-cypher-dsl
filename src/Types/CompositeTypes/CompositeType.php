@@ -29,7 +29,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  *
  * @note This interface should not be implemented by any class directly
  *
- * @see  CompositeTypeTrait for a default implemenation
+ * @see CompositeTypeTrait for a default implemenation
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#composite-types Corresponding documentation on Neo4j.com
  */
 interface CompositeType extends AnyType

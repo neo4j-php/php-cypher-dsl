@@ -13,8 +13,8 @@ use DomainException;
 use InvalidArgumentException;
 use LogicException;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PropertyPatternTrait;
+use WikibaseSolutions\CypherDSL\Utils\NameUtils;
 
 /**
  * This class represents an arbitrary relationship.
@@ -23,8 +23,6 @@ use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PropertyPatternTrait;
  */
 final class Relationship implements PropertyPattern
 {
-    use EscapeTrait;
-
     use PropertyPatternTrait;
 
     public const DIR_RIGHT = ["-", "->"];
@@ -266,7 +264,7 @@ final class Relationship implements PropertyPattern
 
         if (count($types) !== 0) {
             // If we have at least one condition type, escape them and insert them into the query
-            $escapedTypes = array_map(static fn (string $type): string => self::escape($type), $types);
+            $escapedTypes = array_map(static fn (string $type): string => NameUtils::escape($type), $types);
             $conditionInner .= sprintf(":%s", implode("|", $escapedTypes));
         }
 

@@ -160,13 +160,11 @@ function variable(?string $variable = null): Variable
  *  - list_() - For a list
  *  - map() - For a map
  *
- * @param null|bool|float|int|mixed[]|string $literal The literal to construct
- *
- * @return Boolean|class-string<Literal>|Float_|Integer|List_|Map|String_
+ * @param null|bool|float|int|array|string $literal The literal to construct
  *
  * @see Query::literal()
  */
-function literal($literal = null)
+function literal(bool|float|int|array|string|null $literal = null): Boolean|Float_|List_|String_|Integer|string|Map
 {
     return Query::literal($literal);
 }
@@ -214,8 +212,6 @@ function float(float $value): Float_
 /**
  * Creates a new list literal.
  *
- * @param mixed[] $value
- *
  * @see Query::list()
  */
 function list_(array $value): List_
@@ -225,8 +221,6 @@ function list_(array $value): List_
 
 /**
  * Creates a new map literal.
- *
- * @param mixed[] $value
  *
  * @see Query::map()
  */

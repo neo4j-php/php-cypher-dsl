@@ -12,15 +12,14 @@ namespace WikibaseSolutions\CypherDSL\Traits\PatternTraits;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This trait provides a default implementation to satisfy the "PropertyPattern" interface.
  */
 trait PropertyPatternTrait
 {
-    use CastTrait;
     use PatternTrait;
 
     /**
@@ -39,9 +38,9 @@ trait PropertyPatternTrait
     /**
      * @inheritDoc
      */
-    public function withProperties($properties): self
+    public function withProperties(MapType|array $properties): self
     {
-        $this->properties = self::toMapType($properties);
+        $this->properties = CastUtils::toMapType($properties);
 
         return $this;
     }
@@ -49,7 +48,7 @@ trait PropertyPatternTrait
     /**
      * @inheritDoc
      */
-    public function addProperty(string $key, $property): self
+    public function addProperty(string $key, mixed $property): self
     {
         $this->makeMap()->add($key, $property);
 
@@ -59,13 +58,13 @@ trait PropertyPatternTrait
     /**
      * @inheritDoc
      */
-    public function addProperties(Map|array $properties): self
+    public function addProperties(MapType|array $properties): self
     {
         $map = $this->makeMap();
 
         if (is_array($properties)) {
             $res = array_map(function ($property) {
-                return self::toAnyType($property);
+                return CastUtils::toAnyType($property);
             }, $properties);
 
             // Cast the array to a Map

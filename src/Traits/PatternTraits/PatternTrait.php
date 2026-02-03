@@ -10,15 +10,13 @@
 namespace WikibaseSolutions\CypherDSL\Traits\PatternTraits;
 
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This trait provides a default implementation to satisfy the "Pattern" interface.
  */
 trait PatternTrait
 {
-    use CastTrait;
-
     /**
      * @var null|Variable The variable that this object is assigned
      */
@@ -34,14 +32,10 @@ trait PatternTrait
 
     /**
      * Explicitly assign a named variable to this object.
-     *
-     * @param null|string|Variable $variable
-     *
-     * @return $this
      */
-    public function withVariable($variable): self
+    public function withVariable(Variable|string|null $variable): self
     {
-        $this->variable = $variable === null ? null : self::toName($variable);
+        $this->variable = $variable === null ? null : CastUtils::toName($variable);
 
         return $this;
     }

@@ -9,8 +9,12 @@
  */
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits;
 
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalTimeType;
+
 /**
  * This trait provides a default implementation to satisfy the "LocalTimeType" interface.
+ *
+ * @implements LocalTimeType
  */
 trait LocalTimeTypeTrait
 {

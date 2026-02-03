@@ -40,6 +40,8 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
+use WikibaseSolutions\CypherDSL\Utils\NameUtils;
 
 /**
  * Represents a property. A property in Cypher would be something like "n.prop" or "n.a".
@@ -61,7 +63,6 @@ final class Property implements
     use BooleanTypeTrait,
         DateTimeTypeTrait,
         DateTypeTrait,
-        EscapeTrait,
         FloatTypeTrait,
         IntegerTypeTrait,
         ListTypeTrait,
@@ -72,12 +73,10 @@ final class Property implements
         StringTypeTrait,
         TimeTypeTrait;
 
-    use CastTrait;
-
     /**
      * @var MapType|NodeType|RelationshipType The expression to which this property belongs
      */
-    private AnyType $expression;
+    private MapType|NodeType|RelationshipType $expression;
 
     /**
      * @var string The name of the property
@@ -113,7 +112,7 @@ final class Property implements
      */
     public function replaceWith(PropertyType|string|bool|float|int $value): PropertyReplacement
     {
-        return new PropertyReplacement($this, self::toPropertyType($value));
+        return new PropertyReplacement($this, CastUtils::toPropertyType($value));
     }
 
     /**
@@ -139,6 +138,6 @@ final class Property implements
      */
     public function toQuery(): string
     {
-        return sprintf("%s.%s", $this->expression->toQuery(), self::escape($this->property));
+        return sprintf("%s.%s", $this->expression->toQuery(), NameUtils::escape($this->property));
     }
 }

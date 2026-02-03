@@ -13,38 +13,40 @@ use WikibaseSolutions\CypherDSL\Expressions\Operators\Conjunction;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Disjunction;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\ExclusiveDisjunction;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Negation;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This trait provides a default implementation to satisfy the "BooleanType" interface.
+ *
+ * @implements BooleanType
  */
 trait BooleanTypeTrait
 {
-    use CastTrait;
     use PropertyTypeTrait;
 
     /**
      * @inheritDoc
      */
-    public function and($right, bool $insertParentheses = true): Conjunction
+    public function and(BooleanType|bool $right, bool $insertParentheses = true): Conjunction
     {
-        return new Conjunction($this, self::toBooleanType($right), $insertParentheses);
+        return new Conjunction($this, CastUtils::toBooleanType($right), $insertParentheses);
     }
 
     /**
      * @inheritDoc
      */
-    public function or($right, bool $insertParentheses = true): Disjunction
+    public function or(BooleanType|bool $right, bool $insertParentheses = true): Disjunction
     {
-        return new Disjunction($this, self::toBooleanType($right), $insertParentheses);
+        return new Disjunction($this, CastUtils::toBooleanType($right), $insertParentheses);
     }
 
     /**
      * @inheritDoc
      */
-    public function xor($right, bool $insertParentheses = true): ExclusiveDisjunction
+    public function xor(BooleanType|bool $right, bool $insertParentheses = true): ExclusiveDisjunction
     {
-        return new ExclusiveDisjunction($this, self::toBooleanType($right), $insertParentheses);
+        return new ExclusiveDisjunction($this, CastUtils::toBooleanType($right), $insertParentheses);
     }
 
     /**
