@@ -9,17 +9,18 @@
  */
 namespace WikibaseSolutions\CypherDSL;
 
+use Stringable;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Parameter;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Patterns\Direction;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 
@@ -58,14 +59,11 @@ function node(?string $label = null): Node
 /**
  * Creates a relationship.
  *
- * @param string[] $direction The direction of the relationship (optional, default: unidirectional), should be either:
- *                            - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
- *                            - Relationship::DIR_LEFT (for a relation of (a)<--(b))
- *                            - Relationship::DIR_UNI (for a relation of (a)--(b))
+ * @param Direction $direction The direction of the relationship (optional, default: unidirectional)
  *
  * @see Query::relationship()
  */
-function relationship(array $direction = Relationship::DIR_UNI): Relationship
+function relationship(Direction $direction = Direction::UNI): Relationship
 {
     return Query::relationship($direction);
 }
@@ -160,11 +158,11 @@ function variable(?string $variable = null): Variable
  *  - list_() - For a list
  *  - map() - For a map
  *
- * @param null|bool|float|int|array|string $literal The literal to construct
+ * @param null|bool|float|int|array|Stringable|string $literal The literal to construct
  *
  * @see Query::literal()
  */
-function literal(bool|float|int|array|string|null $literal = null): Boolean|Float_|List_|String_|Integer|string|Map
+function literal(bool|float|int|array|string|Stringable|null $literal = null): Boolean|Float_|List_|String_|Integer|string|Map
 {
     return Query::literal($literal);
 }

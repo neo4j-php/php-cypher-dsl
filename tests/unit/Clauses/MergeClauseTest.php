@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\MergeClause;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
+use WikibaseSolutions\CypherDSL\Patterns\Direction;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Query;
 
@@ -108,7 +109,7 @@ final class MergeClauseTest extends TestCase
 
     public function testSetPatternDoesNotAcceptRelationship(): void
     {
-        $relationship = Query::relationship(Relationship::DIR_RIGHT);
+        $relationship = Query::relationship(Direction::RIGHT);
 
         $merge = new MergeClause();
 

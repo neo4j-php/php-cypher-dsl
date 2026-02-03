@@ -10,6 +10,7 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 
 use PHPUnit\Framework\TestCase;
+use WikibaseSolutions\CypherDSL\Patterns\Direction;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
@@ -22,7 +23,7 @@ final class PathTest extends TestCase
         $this->assertEquals('', (new Path())->toQuery());
         $this->assertEquals('', (new Path([], []))->toQuery());
         $this->assertEquals('', (new Path([], []))->toQuery());
-        $this->assertEquals('', (new Path([], [new Relationship(Relationship::DIR_UNI)]))->toQuery());
+        $this->assertEquals('', (new Path([], [new Relationship(Direction::UNI)]))->toQuery());
     }
 
     public function testSingleNode(): void
@@ -42,7 +43,7 @@ final class PathTest extends TestCase
 
     public function testSingle(): void
     {
-        $path = new Path(new Node(), new Relationship(Relationship::DIR_UNI));
+        $path = new Path(new Node(), new Relationship(Direction::UNI));
 
         $this->assertEquals('()', $path->toQuery());
     }
@@ -56,8 +57,8 @@ final class PathTest extends TestCase
 
     public function testPathMerge(): void
     {
-        $pathX = new Path([new Node(), new Node()], [new Relationship(Relationship::DIR_UNI)]);
-        $pathY = new Path([new Node(), new Node()], [new Relationship(Relationship::DIR_UNI)]);
+        $pathX = new Path([new Node(), new Node()], [new Relationship(Direction::UNI)]);
+        $pathY = new Path([new Node(), new Node()], [new Relationship(Direction::UNI)]);
 
         $pathX->withVariable('x')->relationshipTo($pathY->withVariable('y'));
 
@@ -68,7 +69,7 @@ final class PathTest extends TestCase
     {
         $path = new Path(
             new Node,
-            [new Relationship(Relationship::DIR_UNI), new Relationship(Relationship::DIR_UNI)]
+            [new Relationship(Direction::UNI), new Relationship(Direction::UNI)]
         );
         $this->assertSame('()', $path->toQuery());
     }
@@ -79,7 +80,7 @@ final class PathTest extends TestCase
         $path->relationshipUni(new Node('Label'))
             ->relationshipTo((new Node())->withVariable('b'))
             ->relationshipFrom(new Node(), 'TYPE', ['x' => Query::literal('y')], 'c')
-            ->relationship(new Relationship(Relationship::DIR_UNI), (new Node())->withVariable('d'))
+            ->relationship(new Relationship(Direction::UNI), (new Node())->withVariable('d'))
             ->withVariable('a');
 
         $this->assertEquals('a = ()--(:Label)-->(b)<-[c:TYPE {x: \'y\'}]-()--(d)', $path->toQuery());
@@ -93,20 +94,20 @@ final class PathTest extends TestCase
         ], $path->getNodes());
 
         $this->assertEquals([
-            new Relationship(Relationship::DIR_UNI),
-            new Relationship(Relationship::DIR_RIGHT),
-            (new Relationship(Relationship::DIR_LEFT))
+            new Relationship(Direction::UNI),
+            new Relationship(Direction::RIGHT),
+            (new Relationship(Direction::LEFT))
                 ->addType('TYPE')
                 ->addProperties(['x' => Query::literal('y')])
                 ->withVariable('c'),
-            new Relationship(Relationship::DIR_UNI),
+            new Relationship(Direction::UNI),
         ], $path->getRelationships());
     }
 
     public function testPathCanBeTreatedAsBoolean(): void
     {
-        $pathA = new Path([new Node(), new Node()], [new Relationship(Relationship::DIR_UNI)]);
-        $pathB = new Path([new Node(), new Node()], [new Relationship(Relationship::DIR_RIGHT)]);
+        $pathA = new Path([new Node(), new Node()], [new Relationship(Direction::UNI)]);
+        $pathB = new Path([new Node(), new Node()], [new Relationship(Direction::RIGHT)]);
 
         $this->assertSame("()--() AND ()-->()", $pathA->and($pathB, false)->toQuery());
     }

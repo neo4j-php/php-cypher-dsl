@@ -21,6 +21,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Patterns\Direction;
 use function WikibaseSolutions\CypherDSL\float;
 use function WikibaseSolutions\CypherDSL\function_;
 use function WikibaseSolutions\CypherDSL\integer;
@@ -77,7 +78,7 @@ final class FunctionsTest extends TestCase
 
     public function testRelationshipReturnsRelationship(): void
     {
-        $relationship = relationship(Relationship::DIR_RIGHT);
+        $relationship = relationship(Direction::RIGHT);
 
         $this->assertInstanceOf(Relationship::class, $relationship);
         $this->assertSame('-->', $relationship->toQuery());

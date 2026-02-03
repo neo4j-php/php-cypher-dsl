@@ -13,11 +13,11 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\QueryConvertible;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This class represents any procedure.
@@ -26,8 +26,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 abstract class Procedure implements QueryConvertible
 {
-    use CastTrait;
-
     /**
      * Produces a raw function call. This enables the usage of unimplemented functions in your
      * Cypher queries. The parameters of this function are not type-checked.
@@ -35,9 +33,9 @@ abstract class Procedure implements QueryConvertible
      * @param string $functionName The name of the function to call
      * @param mixed ...$parameters The parameters to pass to the function call
      */
-    public static function raw(string $functionName, mixed ...$parameters): Raw
+    public static function raw(string $functionName, mixed $parameters = []): Raw
     {
-        return new Raw($functionName, ...array_map(self::toAnyType(...), $parameters));
+        return new Raw($functionName, array_map(CastUtils::toAnyType(...), $parameters));
     }
 
     /**
@@ -49,7 +47,7 @@ abstract class Procedure implements QueryConvertible
      */
     public static function all(Variable|string $variable, ListType|array $list, AnyType|bool|float|int|array|Pattern|string $predicate): All
     {
-        return new All(self::toName($variable), self::toListType($list), self::toAnyType($predicate));
+        return new All(CastUtils::toName($variable), CastUtils::toListType($list), CastUtils::toAnyType($predicate));
     }
 
     /**
@@ -61,7 +59,7 @@ abstract class Procedure implements QueryConvertible
      */
     public static function any(Variable|string $variable, ListType|array $list, AnyType|bool|float|int|array|Pattern|string $predicate): Any
     {
-        return new Any(self::toName($variable), self::toListType($list), self::toAnyType($predicate));
+        return new Any(CastUtils::toName($variable), CastUtils::toListType($list), CastUtils::toAnyType($predicate));
     }
 
     /**
@@ -71,7 +69,7 @@ abstract class Procedure implements QueryConvertible
      */
     public static function exists(AnyType|bool|float|int|array|Pattern|string $expression): Exists
     {
-        return new Exists(self::toAnyType($expression));
+        return new Exists(CastUtils::toAnyType($expression));
     }
 
     /**
@@ -103,7 +101,7 @@ abstract class Procedure implements QueryConvertible
      */
     public static function none(Variable|string $variable, ListType|array $list, AnyType|bool|float|int|array|Pattern|string $predicate): None
     {
-        return new None(self::toName($variable), self::toListType($list), self::toAnyType($predicate));
+        return new None(CastUtils::toName($variable), CastUtils::toListType($list), CastUtils::toAnyType($predicate));
     }
 
     /**
@@ -115,7 +113,7 @@ abstract class Procedure implements QueryConvertible
      */
     public static function single(Variable|string $variable, ListType|array $list, AnyType|bool|float|int|array|Pattern|string $predicate): Single
     {
-        return new Single(self::toName($variable), self::toListType($list), self::toAnyType($predicate));
+        return new Single(CastUtils::toName($variable), CastUtils::toListType($list), CastUtils::toAnyType($predicate));
     }
 
     /**
@@ -130,7 +128,7 @@ abstract class Procedure implements QueryConvertible
      */
     public static function point(MapType|array $map): Point
     {
-        return new Point(self::toMapType($map));
+        return new Point(CastUtils::toMapType($map));
     }
 
     /**
@@ -145,7 +143,7 @@ abstract class Procedure implements QueryConvertible
      */
     public static function date(AnyType|bool|float|int|array|Pattern|string|null $value = null): Date
     {
-        return new Date($value === null ? null : self::toAnyType($value));
+        return new Date($value === null ? null : CastUtils::toAnyType($value));
     }
 
     /**
@@ -162,7 +160,7 @@ abstract class Procedure implements QueryConvertible
      */
     public static function datetime(AnyType|bool|float|int|array|Pattern|string|null $value = null): DateTime
     {
-        return new DateTime($value === null ? null : self::toAnyType($value));
+        return new DateTime($value === null ? null : CastUtils::toAnyType($value));
     }
 
     /**
@@ -179,7 +177,7 @@ abstract class Procedure implements QueryConvertible
      */
     public static function localdatetime(AnyType|bool|float|int|array|Pattern|string|null $value = null): LocalDateTime
     {
-        return new LocalDateTime($value === null ? null : self::toAnyType($value));
+        return new LocalDateTime($value === null ? null : CastUtils::toAnyType($value));
     }
 
     /**
@@ -193,7 +191,7 @@ abstract class Procedure implements QueryConvertible
      */
     public static function localtime(AnyType|bool|float|int|array|Pattern|string|null $value = null): LocalTime
     {
-        return new LocalTime($value === null ? null : self::toAnyType($value));
+        return new LocalTime($value === null ? null : CastUtils::toAnyType($value));
     }
 
     /**
@@ -207,7 +205,7 @@ abstract class Procedure implements QueryConvertible
      */
     public static function time(AnyType|bool|float|int|array|Pattern|string|null $value = null): Time
     {
-        return new Time($value === null ? null : self::toAnyType($value));
+        return new Time($value === null ? null : CastUtils::toAnyType($value));
     }
 
     /**

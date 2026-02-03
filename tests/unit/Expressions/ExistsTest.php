@@ -17,6 +17,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Equality;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Patterns\Direction;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
@@ -32,7 +33,7 @@ final class ExistsTest extends TestCase
             (new MatchClause)->addPattern(
                 new Path(
                     [(new Node)->withVariable('person'), (new Node('Dog'))->withVariable('dog')],
-                    (new Relationship(Relationship::DIR_RIGHT))->addType('HAS_DOG')
+                    (new Relationship(Direction::RIGHT))->addType('HAS_DOG')
                 )
             )
         );
@@ -43,7 +44,7 @@ final class ExistsTest extends TestCase
             (new MatchClause)->addPattern(
                 new Path(
                     [(new Node)->withVariable('person'), (new Node('Dog'))->withVariable('dog')],
-                    [(new Relationship(Relationship::DIR_RIGHT))->addType('HAS_DOG')]
+                    [(new Relationship(Direction::RIGHT))->addType('HAS_DOG')]
                 )
             ),
             (new WhereClause)->addExpression(

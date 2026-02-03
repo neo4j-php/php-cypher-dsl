@@ -97,7 +97,7 @@ final class Path implements BooleanType, CompletePattern, RelatablePattern
     public function relationshipTo(Pattern $pattern, ?string $type = null, MapType|array|null $properties = null, Variable|string|null $name = null): self
     {
         return $this->relationship(
-            self::buildRelationship(Relationship::DIR_RIGHT, $type, $properties, $name),
+            self::buildRelationship(Direction::RIGHT, $type, $properties, $name),
             $pattern
         );
     }
@@ -108,7 +108,7 @@ final class Path implements BooleanType, CompletePattern, RelatablePattern
     public function relationshipFrom(Pattern $pattern, ?string $type = null, MapType|array|null $properties = null, Variable|string|null $name = null): self
     {
         return $this->relationship(
-            self::buildRelationship(Relationship::DIR_LEFT, $type, $properties, $name),
+            self::buildRelationship(Direction::LEFT, $type, $properties, $name),
             $pattern
         );
     }
@@ -119,7 +119,7 @@ final class Path implements BooleanType, CompletePattern, RelatablePattern
     public function relationshipUni(Pattern $pattern, ?string $type = null, MapType|array|null $properties = null, Variable|string|null $name = null): self
     {
         return $this->relationship(
-            self::buildRelationship(Relationship::DIR_UNI, $type, $properties, $name),
+            self::buildRelationship(Direction::UNI, $type, $properties, $name),
             $pattern
         );
     }
@@ -173,12 +173,12 @@ final class Path implements BooleanType, CompletePattern, RelatablePattern
     /**
      * Construct a new relationship from the given parameters.
      *
-     * @param string[]             $direction  The direction of the relationship (should be a Relationship::DIR_* constant)
+     * @param Direction            $direction  The direction of the relationship
      * @param null|string          $type       The type of the relationship
      * @param null|MapType|array   $properties The properties to add to the relationship
      * @param null|string|Variable $name       The name of the variable to which to assign this relationship
      */
-    private static function buildRelationship(array $direction, ?string $type = null, MapType|array|null $properties = null, Variable|string|null $name = null): Relationship
+    private static function buildRelationship(Direction $direction, ?string $type = null, MapType|array|null $properties = null, Variable|string|null $name = null): Relationship
     {
         $relationship = new Relationship($direction);
 

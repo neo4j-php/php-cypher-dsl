@@ -18,6 +18,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\List_;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Patterns\Direction;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 
@@ -193,7 +194,7 @@ final class NodeTest extends TestCase
     public function testRelationship(): void
     {
         $node = new Node("City");
-        $relationship = new Relationship(Relationship::DIR_RIGHT);
+        $relationship = new Relationship(Direction::RIGHT);
         $relationship->addType("LIVES_IN");
 
         $amsterdam = new Node("City");

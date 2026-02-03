@@ -11,6 +11,7 @@ namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use TypeError;
+use WikibaseSolutions\CypherDSL\Patterns\Direction;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Query;
 
@@ -42,7 +43,7 @@ final class QueryCreateTest extends TestCase
 
     public function testDoesNotAcceptRelationship(): void
     {
-        $rel = Query::relationship(Relationship::DIR_RIGHT);
+        $rel = Query::relationship(Direction::RIGHT);
 
         $this->expectException(TypeError::class);
 

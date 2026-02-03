@@ -9,7 +9,6 @@
  */
 namespace WikibaseSolutions\CypherDSL\Expressions\Procedures;
 
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
@@ -36,6 +35,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
+use WikibaseSolutions\CypherDSL\Utils\NameUtils;
 
 /**
  * This class represents any function call.
@@ -70,8 +70,6 @@ final class Raw extends Procedure implements
         StringTypeTrait,
         TimeTypeTrait;
 
-    use EscapeTrait;
-
     /**
      * @var string The name of the function to call
      */
@@ -83,14 +81,14 @@ final class Raw extends Procedure implements
     private array $parameters;
 
     /**
-     * @param string  $functionName  The name of the function to call
-     * @param AnyType ...$parameters The parameters to pass to the function call
+     * @param string $functionName  The name of the function to call
+     * @param AnyType[] $parameters The parameters to pass to the function call
      *
      * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
-    public function __construct(string $functionName, AnyType ...$parameters)
+    public function __construct(string $functionName, array $parameters)
     {
-        $this->functionName = self::escape($functionName);
+        $this->functionName = NameUtils::escape($functionName);
         $this->parameters = $parameters;
     }
 

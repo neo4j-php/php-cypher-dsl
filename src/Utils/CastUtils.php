@@ -91,7 +91,7 @@ class CastUtils
     /**
      * Casts the given value to a Variable.
      *
-     * @see CastTrait::toName() for a function that does not accept Pattern
+     * @see CastUtils::toName() for a function that does not accept Pattern
      */
     public static function toVariable(Variable|Pattern|string $variable): Variable
     {
@@ -109,7 +109,7 @@ class CastUtils
     /**
      * Casts the given value to a name.
      *
-     * @see CastTrait::toVariable() for a function that accepts Pattern
+     * @see CastUtils::toVariable() for a function that accepts Pattern
      */
     public static function toName(Variable|string $name): Variable
     {

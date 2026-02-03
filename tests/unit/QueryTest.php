@@ -30,6 +30,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Patterns\Direction;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
@@ -80,7 +81,7 @@ final class QueryTest extends TestCase
 
     public function testRelationship(): void
     {
-        $directions = [Relationship::DIR_UNI, Relationship::DIR_LEFT, Relationship::DIR_RIGHT];
+        $directions = [Direction::UNI, Direction::LEFT, Direction::RIGHT];
 
         foreach ($directions as $direction) {
             $expected = new Relationship($direction);
@@ -88,13 +89,6 @@ final class QueryTest extends TestCase
 
             $this->assertEquals($expected, $actual);
         }
-    }
-
-    public function testInvalidRelationship(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        Query::relationship(['bad', 'value']);
     }
 
     public function testVariable(): void
@@ -291,7 +285,7 @@ final class QueryTest extends TestCase
         $variableMock = new Variable("a");
         $nodeMock = (new Node)->withVariable($variableMock);
 
-        $pathMock = new Path([$nodeMock, (new Node)->withVariable('b')], [new Relationship(Relationship::DIR_RIGHT)]);
+        $pathMock = new Path([$nodeMock, (new Node)->withVariable('b')], [new Relationship(Direction::RIGHT)]);
         $numeralMock = new Integer(12);
         $booleanMock = new GreaterThan($variableMock, new Variable('b'), false);
         $propertyMock = new Property($variableMock, 'b');

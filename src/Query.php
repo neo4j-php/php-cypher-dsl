@@ -10,6 +10,7 @@
 namespace WikibaseSolutions\CypherDSL;
 
 use Closure;
+use Stringable;
 use WikibaseSolutions\CypherDSL\Clauses\CallClause;
 use WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause;
 use WikibaseSolutions\CypherDSL\Clauses\Clause;
@@ -199,11 +200,11 @@ final class Query implements QueryConvertible
      *  - Query::list() - For a list
      *  - Query::map() - For a map
      *
-     * @param bool|float|int|array|string|null $literal The literal to construct
+     * @param bool|float|int|array|string|Stringable|null $literal The literal to construct
      *
      * @return Boolean|class-string<Literal>|Float_|Integer|List_|Map|String_
      */
-    public static function literal(null|bool|float|int|array|string $literal = null): Boolean|Float_|Integer|List_|Map|String_|string
+    public static function literal(null|bool|float|int|array|string|Stringable $literal = null): Boolean|Float_|Integer|List_|Map|String_|string
     {
         if ($literal === null) {
             return self::literal;
@@ -360,8 +361,12 @@ final class Query implements QueryConvertible
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/ Corresponding documentation on Neo4j.com
      */
-    public function call(Query|callable $query, Pattern|Variable|string ...$variables): self
+    public function call(Query|callable $query, Pattern|Variable|string|array $variables = []): self
     {
+        if (!is_array($variables)) {
+            $variables = [$variables];
+        }
+
         if (is_callable($query)) {
             $subQuery = self::new();
             $query($subQuery);
@@ -719,7 +724,7 @@ final class Query implements QueryConvertible
             $expressions = [$expressions];
         }
 
-        $expressions = $this->makeAliasArray($expressions, fn ($value) => $this->toAnyType($value));
+        $expressions = $this->makeAliasArray($expressions, fn ($value) => CastUtils::toAnyType($value));
 
         $withClause = new WithClause();
         $withClause->addEntry(...$expressions);

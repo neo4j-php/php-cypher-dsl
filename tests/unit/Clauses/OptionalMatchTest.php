@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\MatchClause;
 use WikibaseSolutions\CypherDSL\Clauses\OptionalMatchClause;
+use WikibaseSolutions\CypherDSL\Patterns\Direction;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Query;
 
@@ -91,7 +92,7 @@ final class OptionalMatchTest extends TestCase
 
     public function testAddPatternDoesNotAcceptRelationship(): void
     {
-        $rel = Query::relationship(Relationship::DIR_LEFT);
+        $rel = Query::relationship(Direction::LEFT);
 
         $match = new OptionalMatchClause();
 

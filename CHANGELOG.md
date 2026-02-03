@@ -6,6 +6,12 @@ file. A changelog has been kept from version 5.0.0 onwards.
 The format is based on [Keep a Changelog], and this project adheres to
 [Semantic Versioning].
 
+## 7.0.0 - 2026-02-03
+
+### Changed
+
+- T.B.D.
+
 ## 6.0.0 - 2023-09-19
 
 ### Changed
