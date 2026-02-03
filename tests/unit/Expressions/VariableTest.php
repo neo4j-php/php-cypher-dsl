@@ -22,6 +22,23 @@ use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
  */
 final class VariableTest extends TestCase
 {
+    public static function provideToQueryData(): array
+    {
+        return [
+            ["a", "a"],
+            ["b", "b"],
+            ['$foo', '`$foo`'],
+        ];
+    }
+
+    public static function providePropertyData(): array
+    {
+        return [
+            ["a", "a", new Property(new Variable("a"), "a")],
+            ["a", "b", new Property(new Variable("a"), "b")],
+        ];
+    }
+
     public function testEmptyConstructor(): void
     {
         $variable = new Variable();
@@ -96,22 +113,5 @@ final class VariableTest extends TestCase
         $property = $variable->property($property);
 
         $this->assertEquals($expected, $property);
-    }
-
-    public function provideToQueryData(): array
-    {
-        return [
-            ["a", "a"],
-            ["b", "b"],
-            ['$foo', '`$foo`'],
-        ];
-    }
-
-    public function providePropertyData(): array
-    {
-        return [
-            ["a", "a", new Property(new Variable("a"), "a")],
-            ["a", "b", new Property(new Variable("a"), "b")],
-        ];
     }
 }

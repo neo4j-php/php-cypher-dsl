@@ -27,6 +27,79 @@ use WikibaseSolutions\CypherDSL\Patterns\Relationship;
  */
 final class NodeTest extends TestCase
 {
+    public static function provideOnlyLabelData(): array
+    {
+        return [
+            ['(:a)', 'a'],
+            ['(:Foo:Bar)', 'Foo', 'Bar'],
+            ['(:`:`)', ':'],
+        ];
+    }
+
+    public static function provideOnlyNameData(): array
+    {
+        return [
+            ['a', '(a)'],
+            ['A', '(A)'],
+        ];
+    }
+
+    public static function provideWithNameAndLabelData(): array
+    {
+        return [
+            ['a', 'a', '(a:a)'],
+            ['A', ':', '(A:`:`)'],
+        ];
+    }
+
+    public static function provideWithNameAndPropertiesData(): array
+    {
+        return [
+            ['a', ['a' => new String_('b'), 'b' => new String_('c')], "(a {a: 'b', b: 'c'})"],
+            ['b', ['a' => new Integer(0), 'b' => new Float_(1)], "(b {a: 0, b: 1.0})"],
+            ['c', [':' => new List_([new Integer(1), new String_('a')])], "(c {`:`: [1, 'a']})"],
+        ];
+    }
+
+    public static function provideWithLabelAndPropertiesData(): array
+    {
+        return [
+            ['a', ['a' => new String_('b'), 'b' => new String_('c')], "(:a {a: 'b', b: 'c'})"],
+            ['b', ['a' => new Integer(0), 'b' => new Float_(1)], "(:b {a: 0, b: 1.0})"],
+            ['c', [':' => new List_([new Integer(1), new String_('a')])], "(:c {`:`: [1, 'a']})"],
+        ];
+    }
+
+    public static function provideOnlyPropertiesData(): array
+    {
+        return [
+            [['a' => new String_('b'), 'b' => new String_('c')], "({a: 'b', b: 'c'})"],
+            [['a' => new Integer(0), 'b' => new Float_(-1.0)], "({a: 0, b: -1.0})"],
+            [[':' => new List_([new Integer(1), new String_('a')])], "({`:`: [1, 'a']})"],
+        ];
+    }
+
+    public static function provideWithNameAndLabelAndPropertiesData(): array
+    {
+        return [
+            ['a', 'd', ['a' => new String_('b'), 'b' => new String_('c')], "(a:d {a: 'b', b: 'c'})"],
+            ['b', 'e', ['a' => new Integer(0), 'b' => new Float_(1)], "(b:e {a: 0, b: 1.0})"],
+            ['c', 'f', [':' => new List_([new Integer(1), new String_('a')])], "(c:f {`:`: [1, 'a']})"],
+        ];
+    }
+
+    public static function provideMultipleLabelsData(): array
+    {
+        return [
+            [['a'], '(:a)'],
+            [['A'], '(:A)'],
+            [[':'], '(:`:`)'],
+            [['a', 'b'], '(:a:b)'],
+            [['A', 'B'], '(:A:B)'],
+            [[':', 'a'], '(:`:`:a)'],
+        ];
+    }
+
     public function testEmptyNode(): void
     {
         $node = new Node();
@@ -250,78 +323,5 @@ final class NodeTest extends TestCase
         $labeled = $node->labeled('German', 'Swedish');
 
         $this->assertEquals(new Label($node->getVariable(), 'German', 'Swedish'), $labeled);
-    }
-
-    public function provideOnlyLabelData(): array
-    {
-        return [
-            ['(:a)', 'a'],
-            ['(:Foo:Bar)', 'Foo', 'Bar'],
-            ['(:`:`)', ':'],
-        ];
-    }
-
-    public function provideOnlyNameData(): array
-    {
-        return [
-            ['a', '(a)'],
-            ['A', '(A)'],
-        ];
-    }
-
-    public function provideWithNameAndLabelData(): array
-    {
-        return [
-            ['a', 'a', '(a:a)'],
-            ['A', ':', '(A:`:`)'],
-        ];
-    }
-
-    public function provideWithNameAndPropertiesData(): array
-    {
-        return [
-            ['a', ['a' => new String_('b'), 'b' => new String_('c')], "(a {a: 'b', b: 'c'})"],
-            ['b', ['a' => new Integer(0), 'b' => new Float_(1)], "(b {a: 0, b: 1.0})"],
-            ['c', [':' => new List_([new Integer(1), new String_('a')])], "(c {`:`: [1, 'a']})"],
-        ];
-    }
-
-    public function provideWithLabelAndPropertiesData(): array
-    {
-        return [
-            ['a', ['a' => new String_('b'), 'b' => new String_('c')], "(:a {a: 'b', b: 'c'})"],
-            ['b', ['a' => new Integer(0), 'b' => new Float_(1)], "(:b {a: 0, b: 1.0})"],
-            ['c', [':' => new List_([new Integer(1), new String_('a')])], "(:c {`:`: [1, 'a']})"],
-        ];
-    }
-
-    public function provideOnlyPropertiesData(): array
-    {
-        return [
-            [['a' => new String_('b'), 'b' => new String_('c')], "({a: 'b', b: 'c'})"],
-            [['a' => new Integer(0), 'b' => new Float_(-1.0)], "({a: 0, b: -1.0})"],
-            [[':' => new List_([new Integer(1), new String_('a')])], "({`:`: [1, 'a']})"],
-        ];
-    }
-
-    public function provideWithNameAndLabelAndPropertiesData(): array
-    {
-        return [
-            ['a', 'd', ['a' => new String_('b'), 'b' => new String_('c')], "(a:d {a: 'b', b: 'c'})"],
-            ['b', 'e', ['a' => new Integer(0), 'b' => new Float_(1)], "(b:e {a: 0, b: 1.0})"],
-            ['c', 'f', [':' => new List_([new Integer(1), new String_('a')])], "(c:f {`:`: [1, 'a']})"],
-        ];
-    }
-
-    public function provideMultipleLabelsData(): array
-    {
-        return [
-            [['a'], '(:a)'],
-            [['A'], '(:A)'],
-            [[':'], '(:`:`)'],
-            [['a', 'b'], '(:a:b)'],
-            [['A', 'B'], '(:A:B)'],
-            [[':', 'a'], '(:`:`:a)'],
-        ];
     }
 }

@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit colors="true" verbose="true"
+<phpunit colors="true"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         displayDetailsOnTestsThatTriggerDeprecations="true"
+         displayDetailsOnTestsThatTriggerErrors="true"
+         displayDetailsOnTestsThatTriggerNotices="true"
+         displayDetailsOnTestsThatTriggerWarnings="true"
+         displayDetailsOnPhpunitDeprecations="true"
          bootstrap="vendor/autoload.php"
 >
     <testsuites>
@@ -15,16 +20,18 @@
             <directory>tests/integration</directory>
         </testsuite>
     </testsuites>
-    <coverage processUncoveredFiles="true" cacheDirectory="coverage/cache" pathCoverage="true">
-        <report>
-            <clover outputFile="coverage/clover.xml" />
-            <html outputDirectory="coverage/" />
-        </report>
+    <source>
         <include>
             <directory suffix=".php">src</directory>
         </include>
         <exclude>
             <file>src/functions.php</file>
         </exclude>
+    </source>
+    <coverage cacheDirectory="coverage/cache" pathCoverage="true">
+        <report>
+            <clover outputFile="coverage/clover.xml" />
+            <html outputDirectory="coverage/" />
+        </report>
     </coverage>
 </phpunit>

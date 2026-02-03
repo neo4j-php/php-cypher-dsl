@@ -18,6 +18,54 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
  */
 final class StringTest extends TestCase
 {
+    public static function provideSingleQuotesData(): array
+    {
+        return [
+            ["a", "'a'"],
+            ["b", "'b'"],
+            ["\t", "'\\t'"],
+            ["\b", "'\\\\b'"],
+            ["\n", "'\\n'"],
+            ["\r", "'\\r'"],
+            ["\f", "'\\f'"],
+            ["'", "'\\''"],
+            ["\"", "'\\\"'"],
+            ["\\\\", "'\\\\\\\\'"],
+            ["\u1234", "'\\\\u1234'"],
+            ["\U12345678", "'\\\\U12345678'"],
+            ["\u0000", "'\\\\u0000'"],
+            ["\uffff", "'\\\\uffff'"],
+            ["\U00000000", "'\\\\U00000000'"],
+            ["\Uffffffff", "'\\\\Uffffffff'"],
+            ["\\\\b", "'\\\\\\\\b'"],
+            ["\t\n\\", "'\\t\\n\\\\'"],
+        ];
+    }
+
+    public static function provideDoubleQuotesData(): array
+    {
+        return [
+            ["a", "\"a\""],
+            ["b", "\"b\""],
+            ["\t", "\"\\t\""],
+            ["\b", "\"\\\\b\""],
+            ["\n", "\"\\n\""],
+            ["\r", "\"\\r\""],
+            ["\f", "\"\\f\""],
+            ["'", "\"\\'\""],
+            ["\"", "\"\\\"\""],
+            ["\\\\", "\"\\\\\\\\\""],
+            ["\u1234", "\"\\\\u1234\""],
+            ["\U12345678", "\"\\\\U12345678\""],
+            ["\u0000", "\"\\\\u0000\""],
+            ["\uffff", "\"\\\\uffff\""],
+            ["\U00000000", "\"\\\\U00000000\""],
+            ["\Uffffffff", "\"\\\\Uffffffff\""],
+            ["\\\\b", "\"\\\\\\\\b\""],
+            ["\t\n\\", "\"\\t\\n\\\\\""],
+        ];
+    }
+
     public function testEmptySingleQuotes(): void
     {
         $string = new String_("");
@@ -67,53 +115,5 @@ final class StringTest extends TestCase
         $this->assertSame($expected, $literal->toQuery());
         $this->assertEquals($string, $literal->getValue());
         $this->assertTrue($literal->usesDoubleQuotes());
-    }
-
-    public function provideSingleQuotesData(): array
-    {
-        return [
-            ["a", "'a'"],
-            ["b", "'b'"],
-            ["\t", "'\\t'"],
-            ["\b", "'\\\\b'"],
-            ["\n", "'\\n'"],
-            ["\r", "'\\r'"],
-            ["\f", "'\\f'"],
-            ["'", "'\\''"],
-            ["\"", "'\\\"'"],
-            ["\\\\", "'\\\\\\\\'"],
-            ["\u1234", "'\\\\u1234'"],
-            ["\U12345678", "'\\\\U12345678'"],
-            ["\u0000", "'\\\\u0000'"],
-            ["\uffff", "'\\\\uffff'"],
-            ["\U00000000", "'\\\\U00000000'"],
-            ["\Uffffffff", "'\\\\Uffffffff'"],
-            ["\\\\b", "'\\\\\\\\b'"],
-            ["\t\n\\", "'\\t\\n\\\\'"],
-        ];
-    }
-
-    public function provideDoubleQuotesData(): array
-    {
-        return [
-            ["a", "\"a\""],
-            ["b", "\"b\""],
-            ["\t", "\"\\t\""],
-            ["\b", "\"\\\\b\""],
-            ["\n", "\"\\n\""],
-            ["\r", "\"\\r\""],
-            ["\f", "\"\\f\""],
-            ["'", "\"\\'\""],
-            ["\"", "\"\\\"\""],
-            ["\\\\", "\"\\\\\\\\\""],
-            ["\u1234", "\"\\\\u1234\""],
-            ["\U12345678", "\"\\\\U12345678\""],
-            ["\u0000", "\"\\\\u0000\""],
-            ["\uffff", "\"\\\\uffff\""],
-            ["\U00000000", "\"\\\\U00000000\""],
-            ["\Uffffffff", "\"\\\\Uffffffff\""],
-            ["\\\\b", "\"\\\\\\\\b\""],
-            ["\t\n\\", "\"\\t\\n\\\\\""],
-        ];
     }
 }

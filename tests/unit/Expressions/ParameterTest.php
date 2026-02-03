@@ -18,6 +18,24 @@ use WikibaseSolutions\CypherDSL\Expressions\Parameter;
  */
 final class ParameterTest extends TestCase
 {
+    public static function provideToQueryData(): array
+    {
+        return [
+            ["a", '$a'],
+            ["b", '$b'],
+            ["foo_bar", '$foo_bar'],
+            ["A", '$A'],
+        ];
+    }
+
+    public static function provideThrowsExceptionOnInvalidData(): array
+    {
+        return [
+            [""],
+            [str_repeat('a', 65535)],
+        ];
+    }
+
     /**
      * @dataProvider provideToQueryData
      */
@@ -37,23 +55,5 @@ final class ParameterTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         new Parameter($parameter);
-    }
-
-    public function provideToQueryData(): array
-    {
-        return [
-            ["a", '$a'],
-            ["b", '$b'],
-            ["foo_bar", '$foo_bar'],
-            ["A", '$A'],
-        ];
-    }
-
-    public function provideThrowsExceptionOnInvalidData(): array
-    {
-        return [
-            [""],
-            [str_repeat('a', 65535)],
-        ];
     }
 }

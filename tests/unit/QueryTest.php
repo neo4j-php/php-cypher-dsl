@@ -45,6 +45,25 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
  */
 final class QueryTest extends TestCase
 {
+    /**
+     * @return mixed[][]
+     */
+    public static function provideLiteralData(): array
+    {
+        return [
+            ['foobar', new String_('foobar')],
+            ['0', new String_('0')],
+            ['100', new String_('100')],
+            [0, new Integer(0)],
+            [100, new Integer(100)],
+            [10.0, new Float_(10.0)],
+            [69420.0, new Float_(69420)],
+            [10.0000000000000000000000000000001, new Float_(10.0000000000000000000000000000001)],
+            [false, new Boolean(false)],
+            [true, new Boolean(true)],
+        ];
+    }
+
     public function testNew(): void
     {
         $new = Query::new();
@@ -218,11 +237,9 @@ final class QueryTest extends TestCase
                 return 1;
             }
 
-            public function next(): int
+            public function next(): void
             {
                 $this->count++;
-
-                return 1;
             }
 
             public function key(): int
@@ -412,24 +429,5 @@ final class QueryTest extends TestCase
         $node = Query::node();
 
         $this->assertInstanceOf(Variable::class, $node->getVariable());
-    }
-
-    /**
-     * @return mixed[][]
-     */
-    public function provideLiteralData(): array
-    {
-        return [
-            ['foobar', new String_('foobar')],
-            ['0', new String_('0')],
-            ['100', new String_('100')],
-            [0, new Integer(0)],
-            [100, new Integer(100)],
-            [10.0, new Float_(10.0)],
-            [69420.0, new Float_(69420)],
-            [10.0000000000000000000000000000001, new Float_(10.0000000000000000000000000000001)],
-            [false, new Boolean(false)],
-            [true, new Boolean(true)],
-        ];
     }
 }

@@ -25,6 +25,16 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  */
 final class PropertyTest extends TestCase
 {
+    public static function provideToQueryData(): array
+    {
+        return [
+            [new Variable("a"), "a", "a.a"],
+            [new Map(["b" => new String_("c")]), "b", "{b: 'c'}.b"],
+            [new Variable("b"), "a", "b.a"],
+            [new Map([":" => new String_("c")]), ":", "{`:`: 'c'}.`:`"],
+        ];
+    }
+
     /**
      * @dataProvider provideToQueryData
      */
@@ -79,15 +89,5 @@ final class PropertyTest extends TestCase
         $replaceWith = $property->replaceWith("Hello World!");
 
         $this->assertSame($property, $replaceWith->getProperty());
-    }
-
-    public function provideToQueryData(): array
-    {
-        return [
-            [new Variable("a"), "a", "a.a"],
-            [new Map(["b" => new String_("c")]), "b", "{b: 'c'}.b"],
-            [new Variable("b"), "a", "b.a"],
-            [new Map([":" => new String_("c")]), ":", "{`:`: 'c'}.`:`"],
-        ];
     }
 }

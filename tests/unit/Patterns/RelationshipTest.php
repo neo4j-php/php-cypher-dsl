@@ -24,6 +24,123 @@ use WikibaseSolutions\CypherDSL\Query;
  */
 final class RelationshipTest extends TestCase
 {
+    public static function provideVariableLengthRelationshipsWithNameData(): array
+    {
+        return [
+            ['b', 0, 100, Direction::UNI, '-[b*0..100]-'],
+            ['b', 5, 5, Direction::RIGHT, '-[b*5..5]->'],
+            ['a', 10, null, Direction::UNI, '-[a*10..]-'],
+            ['a', null, 10, Direction::LEFT, '<-[a*..10]-'],
+        ];
+    }
+
+    public static function provideVariableLengthRelationshipsWithTypeData(): array
+    {
+        return [
+            ['', 1, 100, Direction::LEFT, '<-[*1..100]-'],
+            ['a', 10, null, Direction::LEFT, '<-[:a*10..]-'],
+            [':', null, 10, Direction::LEFT, '<-[:`:`*..10]-'],
+        ];
+    }
+
+    public static function provideVariableLengthRelationshipsWithPropertiesData(): array
+    {
+        return [
+            [[], 10, 100, Direction::LEFT, "<-[*10..100]-"],
+            [[new String_('a')], 10, null, Direction::LEFT, "<-[*10.. {`0`: 'a'}]-"],
+            [['a' => new String_('b')], null, 10, Direction::LEFT, "<-[*..10 {a: 'b'}]-"],
+        ];
+    }
+
+    public static function provideVariableLengthRelationshipsWithNameAndTypeAndPropertiesData(): array
+    {
+        return [
+            ['a', 'a', [], 10, 100, Direction::LEFT, "<-[a:a*10..100]-"],
+            ['b', 'a', [new String_('a')], null, 10, Direction::LEFT, "<-[b:a*..10 {`0`: 'a'}]-"],
+            ['a', 'b', [new String_('a')], 10, 100, Direction::LEFT, "<-[a:b*10..100 {`0`: 'a'}]-"],
+            ['a', '', ['a' => new String_('b')], null, 10, Direction::LEFT, "<-[a*..10 {a: 'b'}]-"],
+            ['a', ':', ['a' => new String_('b'), new String_('c')], 10, null, Direction::LEFT, "<-[a:`:`*10.. {a: 'b', `0`: 'c'}]-"],
+        ];
+    }
+
+    public static function provideWithNameData(): array
+    {
+        return [
+            ['a', Direction::UNI, '-[a]-'],
+            ['a', Direction::LEFT, '<-[a]-'],
+            ['a', Direction::RIGHT, '-[a]->'],
+        ];
+    }
+
+    public static function provideAddTypeData(): array
+    {
+        return [
+            ['', Direction::LEFT, '<--'],
+            ['a', Direction::LEFT, '<-[:a]-'],
+            [':', Direction::LEFT, '<-[:`:`]-'],
+        ];
+    }
+
+    public static function provideWithTypesData(): array
+    {
+        return [
+            [['', 'a'], Direction::LEFT, '<-[:a]-'],
+            [['a', 'b'], Direction::LEFT, '<-[:a|b]-'],
+            [['', 'a', 'b'], Direction::LEFT, '<-[:a|b]-'],
+            [['a', '', 'b'], Direction::LEFT, '<-[:a|b]-'],
+            [['a', 'b', ':'], Direction::LEFT, '<-[:a|b|`:`]-'],
+        ];
+    }
+
+    public static function provideWithPropertiesData(): array
+    {
+        return [
+            [[], Direction::LEFT, "<--"],
+            [[new String_('a')], Direction::LEFT, "<-[{`0`: 'a'}]-"],
+            [['a' => new String_('b')], Direction::LEFT, "<-[{a: 'b'}]-"],
+            [['a' => new String_('b'), new String_('c')], Direction::LEFT, "<-[{a: 'b', `0`: 'c'}]-"],
+            [[':' => new Integer(12)], Direction::LEFT, "<-[{`:`: 12}]-"],
+            [['a' => 'b', 'c' => 12, 'd' => 12.38], Direction::LEFT, "<-[{a: 'b', c: 12, d: 12.38}]-"],
+        ];
+    }
+
+    public static function provideWithNameAndTypeData(): array
+    {
+        return [
+            ['a', '', Direction::LEFT, '<-[a]-'],
+            ['a', 'b', Direction::LEFT, '<-[a:b]-'],
+        ];
+    }
+
+    public static function provideWithNameAndPropertiesData(): array
+    {
+        return [
+            ['a', [], Direction::LEFT, "<-[a]-"],
+            ['b', [new String_('a')], Direction::LEFT, "<-[b {`0`: 'a'}]-"],
+        ];
+    }
+
+    public static function provideWithNameAndTypeAndPropertiesData(): array
+    {
+        return [
+            ['a', 'a', [], Direction::LEFT, "<-[a:a]-"],
+            ['b', 'a', [new String_('a')], Direction::LEFT, "<-[b:a {`0`: 'a'}]-"],
+            ['a', 'b', [new String_('a')], Direction::LEFT, "<-[a:b {`0`: 'a'}]-"],
+            ['a', '', ['a' => new String_('b')], Direction::LEFT, "<-[a {a: 'b'}]-"],
+            ['a', ':', ['a' => new String_('b'), new String_('c')], Direction::LEFT, "<-[a:`:` {a: 'b', `0`: 'c'}]-"],
+        ];
+    }
+
+    public static function provideWithMultipleTypesData(): array
+    {
+        return [
+            ['a', [], [], Direction::LEFT, "<-[a]-"],
+            ['b', ['a'], [new String_('a')], Direction::LEFT, "<-[b:a {`0`: 'a'}]-"],
+            ['a', ['a', 'b', 'c'], [new String_('a')], Direction::LEFT, "<-[a:a|b|c {`0`: 'a'}]-"],
+            ['a', ['a', 'b'], [], Direction::LEFT, "<-[a:a|b]-"],
+        ];
+    }
+
     public function testDirRight(): void
     {
         $r = new Relationship(Direction::RIGHT);
@@ -491,122 +608,5 @@ final class RelationshipTest extends TestCase
         $r->withTypes(['a', 'b']);
 
         $this->assertSame(['a', 'b'], $r->getTypes());
-    }
-
-    public function provideVariableLengthRelationshipsWithNameData(): array
-    {
-        return [
-            ['b', 0, 100, Direction::UNI, '-[b*0..100]-'],
-            ['b', 5, 5, Direction::RIGHT, '-[b*5..5]->'],
-            ['a', 10, null, Direction::UNI, '-[a*10..]-'],
-            ['a', null, 10, Direction::LEFT, '<-[a*..10]-'],
-        ];
-    }
-
-    public function provideVariableLengthRelationshipsWithTypeData(): array
-    {
-        return [
-            ['', 1, 100, Direction::LEFT, '<-[*1..100]-'],
-            ['a', 10, null, Direction::LEFT, '<-[:a*10..]-'],
-            [':', null, 10, Direction::LEFT, '<-[:`:`*..10]-'],
-        ];
-    }
-
-    public function provideVariableLengthRelationshipsWithPropertiesData(): array
-    {
-        return [
-            [[], 10, 100, Direction::LEFT, "<-[*10..100]-"],
-            [[new String_('a')], 10, null, Direction::LEFT, "<-[*10.. {`0`: 'a'}]-"],
-            [['a' => new String_('b')], null, 10, Direction::LEFT, "<-[*..10 {a: 'b'}]-"],
-        ];
-    }
-
-    public function provideVariableLengthRelationshipsWithNameAndTypeAndPropertiesData(): array
-    {
-        return [
-            ['a', 'a', [], 10, 100, Direction::LEFT, "<-[a:a*10..100]-"],
-            ['b', 'a', [new String_('a')], null, 10, Direction::LEFT, "<-[b:a*..10 {`0`: 'a'}]-"],
-            ['a', 'b', [new String_('a')], 10, 100, Direction::LEFT, "<-[a:b*10..100 {`0`: 'a'}]-"],
-            ['a', '', ['a' => new String_('b')], null, 10, Direction::LEFT, "<-[a*..10 {a: 'b'}]-"],
-            ['a', ':', ['a' => new String_('b'), new String_('c')], 10, null, Direction::LEFT, "<-[a:`:`*10.. {a: 'b', `0`: 'c'}]-"],
-        ];
-    }
-
-    public function provideWithNameData(): array
-    {
-        return [
-            ['a', Direction::UNI, '-[a]-'],
-            ['a', Direction::LEFT, '<-[a]-'],
-            ['a', Direction::RIGHT, '-[a]->'],
-        ];
-    }
-
-    public function provideAddTypeData(): array
-    {
-        return [
-            ['', Direction::LEFT, '<--'],
-            ['a', Direction::LEFT, '<-[:a]-'],
-            [':', Direction::LEFT, '<-[:`:`]-'],
-        ];
-    }
-
-    public function provideWithTypesData(): array
-    {
-        return [
-            [['', 'a'], Direction::LEFT, '<-[:a]-'],
-            [['a', 'b'], Direction::LEFT, '<-[:a|b]-'],
-            [['', 'a', 'b'], Direction::LEFT, '<-[:a|b]-'],
-            [['a', '', 'b'], Direction::LEFT, '<-[:a|b]-'],
-            [['a', 'b', ':'], Direction::LEFT, '<-[:a|b|`:`]-'],
-        ];
-    }
-
-    public function provideWithPropertiesData(): array
-    {
-        return [
-            [[], Direction::LEFT, "<--"],
-            [[new String_('a')], Direction::LEFT, "<-[{`0`: 'a'}]-"],
-            [['a' => new String_('b')], Direction::LEFT, "<-[{a: 'b'}]-"],
-            [['a' => new String_('b'), new String_('c')], Direction::LEFT, "<-[{a: 'b', `0`: 'c'}]-"],
-            [[':' => new Integer(12)], Direction::LEFT, "<-[{`:`: 12}]-"],
-            [['a' => 'b', 'c' => 12, 'd' => 12.38], Direction::LEFT, "<-[{a: 'b', c: 12, d: 12.38}]-"],
-        ];
-    }
-
-    public function provideWithNameAndTypeData(): array
-    {
-        return [
-            ['a', '', Direction::LEFT, '<-[a]-'],
-            ['a', 'b', Direction::LEFT, '<-[a:b]-'],
-        ];
-    }
-
-    public function provideWithNameAndPropertiesData(): array
-    {
-        return [
-            ['a', [], Direction::LEFT, "<-[a]-"],
-            ['b', [new String_('a')], Direction::LEFT, "<-[b {`0`: 'a'}]-"],
-        ];
-    }
-
-    public function provideWithNameAndTypeAndPropertiesData(): array
-    {
-        return [
-            ['a', 'a', [], Direction::LEFT, "<-[a:a]-"],
-            ['b', 'a', [new String_('a')], Direction::LEFT, "<-[b:a {`0`: 'a'}]-"],
-            ['a', 'b', [new String_('a')], Direction::LEFT, "<-[a:b {`0`: 'a'}]-"],
-            ['a', '', ['a' => new String_('b')], Direction::LEFT, "<-[a {a: 'b'}]-"],
-            ['a', ':', ['a' => new String_('b'), new String_('c')], Direction::LEFT, "<-[a:`:` {a: 'b', `0`: 'c'}]-"],
-        ];
-    }
-
-    public function provideWithMultipleTypesData(): array
-    {
-        return [
-            ['a', [], [], Direction::LEFT, "<-[a]-"],
-            ['b', ['a'], [new String_('a')], Direction::LEFT, "<-[b:a {`0`: 'a'}]-"],
-            ['a', ['a', 'b', 'c'], [new String_('a')], Direction::LEFT, "<-[a:a|b|c {`0`: 'a'}]-"],
-            ['a', ['a', 'b'], [], Direction::LEFT, "<-[a:a|b]-"],
-        ];
     }
 }
