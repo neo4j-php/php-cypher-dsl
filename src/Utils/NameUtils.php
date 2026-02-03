@@ -36,6 +36,8 @@ class NameUtils
             }
         } while (isset(self::$generatedIdentifiers[$random]));
 
+        self::$generatedIdentifiers[$random] = '';
+
         return $random;
     }
 
