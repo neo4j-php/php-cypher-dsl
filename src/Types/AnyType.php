@@ -35,40 +35,38 @@ interface AnyType extends QueryConvertible
 {
     /**
      * Creates an alias of the current expression.
-     *
-     * @param string|Variable $right
      */
     public function alias(Variable|string $right): Alias;
 
     /**
      * Perform an equality check with the given expression.
      */
-    public function equals(AnyType|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): Equality;
+    public function equals(self|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): Equality;
 
     /**
      * Perform an inequality comparison against the given expression.
      */
-    public function notEquals(AnyType|Pattern|string|bool|float|int|array$right, bool $insertParentheses = true): Inequality;
+    public function notEquals(self|Pattern|string|bool|float|int|array$right, bool $insertParentheses = true): Inequality;
 
     /**
      * Perform a greater than comparison against the given expression.
      */
-    public function gt(AnyType|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): GreaterThan;
+    public function gt(self|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): GreaterThan;
 
     /**
      * Perform a greater than or equal comparison against the given expression.
      */
-    public function gte(AnyType|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): GreaterThanOrEqual;
+    public function gte(self|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): GreaterThanOrEqual;
 
     /**
      * Perform a less than comparison against the given expression.
      */
-    public function lt(AnyType|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): LessThan;
+    public function lt(self|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): LessThan;
 
     /**
      * Perform a less than or equal comparison against the given expression.
      */
-    public function lte(AnyType|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): LessThanOrEqual;
+    public function lte(self|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): LessThanOrEqual;
 
     /**
      * Checks whether the element is null.

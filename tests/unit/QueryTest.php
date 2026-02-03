@@ -9,7 +9,6 @@
  */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
-use InvalidArgumentException;
 use Iterator;
 use PHPUnit\Framework\TestCase;
 use TypeError;

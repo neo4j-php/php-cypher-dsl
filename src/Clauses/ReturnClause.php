@@ -37,7 +37,7 @@ final class ReturnClause extends Clause
     /**
      * Add a new column to this RETURN clause.
      *
-     * @param Alias|AnyType|bool|float|int|array|Pattern|string ...$columns The values to return
+     * @param Alias|AnyType|array|bool|float|int|Pattern|string ...$columns The values to return
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
      */

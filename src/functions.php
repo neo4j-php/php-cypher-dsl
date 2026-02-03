@@ -158,7 +158,7 @@ function variable(?string $variable = null): Variable
  *  - list_() - For a list
  *  - map() - For a map
  *
- * @param null|bool|float|int|array|Stringable|string $literal The literal to construct
+ * @param null|array|bool|float|int|string|Stringable $literal The literal to construct
  *
  * @see Query::literal()
  */

@@ -175,7 +175,7 @@ final class Path implements BooleanType, CompletePattern, RelatablePattern
      *
      * @param Direction            $direction  The direction of the relationship
      * @param null|string          $type       The type of the relationship
-     * @param null|MapType|array   $properties The properties to add to the relationship
+     * @param null|array|MapType   $properties The properties to add to the relationship
      * @param null|string|Variable $name       The name of the variable to which to assign this relationship
      */
     private static function buildRelationship(Direction $direction, ?string $type = null, MapType|array|null $properties = null, Variable|string|null $name = null): Relationship

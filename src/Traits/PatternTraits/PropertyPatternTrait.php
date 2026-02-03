@@ -63,7 +63,8 @@ trait PropertyPatternTrait
         $map = $this->makeMap();
 
         if (is_array($properties)) {
-            $res = array_map(function ($property) {
+            $res = array_map(static function ($property)
+            {
                 return CastUtils::toAnyType($property);
             }, $properties);
 

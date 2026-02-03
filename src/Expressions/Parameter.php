@@ -66,7 +66,6 @@ final class Parameter implements
         PointTypeTrait,
         StringTypeTrait,
         TimeTypeTrait;
-
     private string $parameter;
 
     /**

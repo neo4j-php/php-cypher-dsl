@@ -8,14 +8,11 @@ The format is based on [Keep a Changelog], and this project adheres to
 
 ## 7.0.0 - T.B.D.
 
-### Added
-
-- Added the `Direction` enum to replace the `Relationship::DIR_*` constants.
-
 ### Changed
 
 - Changed the minimum required PHP version to 8.1.
 - Changed the signature of many functions to use PHP 8 union types.
+- Changed the `Relationship::DIR_*` to the `Direction` enum.
 
 ### Removed
 

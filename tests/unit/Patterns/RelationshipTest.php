@@ -10,7 +10,6 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 
 use DomainException;
-use InvalidArgumentException;
 use LogicException;
 use PHPUnit\Framework\TestCase;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;

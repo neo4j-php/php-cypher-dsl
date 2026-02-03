@@ -184,8 +184,6 @@ final class Relationship implements PropertyPattern
 
     /**
      * Returns the direction of this relationship (one of the Relationship::DIR_* constants).
-     *
-     * @return Direction
      */
     public function getDirection(): Direction
     {

@@ -1,5 +1,12 @@
-<?php
-
+<?php declare(strict_types=1);
+/*
+ * This file is part of php-cypher-dsl.
+ *
+ * Copyright (C) Wikibase Solutions
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace WikibaseSolutions\CypherDSL\Utils;
 
 use InvalidArgumentException;
@@ -24,7 +31,7 @@ class NameUtils
      * @note The returned string is not cryptographically secure.
      *
      * @param string $prefix The prefix to put before the name. Must start with a letter.
-     * @param int    $length The length of the generated name in bytes.
+     * @param int    $length the length of the generated name in bytes
      */
     public static function generateIdentifier(string $prefix = 'var', int $length = 32): string
     {

@@ -9,7 +9,6 @@
  */
 namespace WikibaseSolutions\CypherDSL;
 
-use Closure;
 use Stringable;
 use WikibaseSolutions\CypherDSL\Clauses\CallClause;
 use WikibaseSolutions\CypherDSL\Clauses\CallProcedureClause;
@@ -200,7 +199,7 @@ final class Query implements QueryConvertible
      *  - Query::list() - For a list
      *  - Query::map() - For a map
      *
-     * @param bool|float|int|array|string|Stringable|null $literal The literal to construct
+     * @param null|array|bool|float|int|string|Stringable $literal The literal to construct
      *
      * @return Boolean|class-string<Literal>|Float_|Integer|List_|Map|String_
      */
@@ -361,7 +360,7 @@ final class Query implements QueryConvertible
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/ Corresponding documentation on Neo4j.com
      */
-    public function call(Query|callable $query, Pattern|Variable|string|array $variables = []): self
+    public function call(self|callable $query, Pattern|Variable|string|array $variables = []): self
     {
         if (!is_array($variables)) {
             $variables = [$variables];
@@ -387,7 +386,7 @@ final class Query implements QueryConvertible
      * Creates the CALL procedure clause.
      *
      * @param Procedure|string $procedure The procedure to call
-     * @param mixed $yields               The result fields that should be returned (optional)
+     * @param mixed            $yields    The result fields that should be returned (optional)
      *
      * @return $this
      *
@@ -403,7 +402,7 @@ final class Query implements QueryConvertible
             $yields = [$yields];
         }
 
-        $yields = $this->makeAliasArray($yields, fn ($value) => CastUtils::toName($value));
+        $yields = $this->makeAliasArray($yields, static fn ($value) => CastUtils::toName($value));
 
         $callProcedureClause = new CallProcedureClause();
         $callProcedureClause->setProcedure($procedure);
@@ -441,7 +440,7 @@ final class Query implements QueryConvertible
      * Creates the RETURN clause.
      *
      * @param mixed $expressions A single expression to return, or a non-empty list of expressions to return
-     * @param bool $distinct Whether to be a RETURN DISTINCT clause (optional, default: false)
+     * @param bool  $distinct    Whether to be a RETURN DISTINCT clause (optional, default: false)
      *
      * @return $this
      *
@@ -453,7 +452,7 @@ final class Query implements QueryConvertible
             $expressions = [$expressions];
         }
 
-        $expressions = $this->makeAliasArray($expressions, fn ($value) => CastUtils::toAnyType($value));
+        $expressions = $this->makeAliasArray($expressions, static fn ($value) => CastUtils::toAnyType($value));
 
         $returnClause = new ReturnClause();
         $returnClause->addColumn(...$expressions);
@@ -724,7 +723,7 @@ final class Query implements QueryConvertible
             $expressions = [$expressions];
         }
 
-        $expressions = $this->makeAliasArray($expressions, fn ($value) => CastUtils::toAnyType($value));
+        $expressions = $this->makeAliasArray($expressions, static fn ($value) => CastUtils::toAnyType($value));
 
         $withClause = new WithClause();
         $withClause->addEntry(...$expressions);
@@ -761,7 +760,7 @@ final class Query implements QueryConvertible
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/union/ Corresponding documentation on Neo4j.com
      */
-    public function union(Query|callable $queryOrCallable, bool $all = false): self
+    public function union(self|callable $queryOrCallable, bool $all = false): self
     {
         if (is_callable($queryOrCallable)) {
             $query = self::new();
@@ -835,7 +834,7 @@ final class Query implements QueryConvertible
     /**
      * Changes an associative array into an array of aliases.
      *
-     * @param array $values The array to change into an array of aliases
+     * @param array    $values   The array to change into an array of aliases
      * @param callable $castFunc Function to use to cast the elements of $array
      *
      * @return array A sequential array, possibly consisting of aliases

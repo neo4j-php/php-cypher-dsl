@@ -116,7 +116,7 @@ final class Variable implements
     /**
      * Assign a value to this property.
      *
-     * @param Map|array $value The value to assign
+     * @param array|Map $value The value to assign
      */
     public function assign(MapType|array $value): PropertyReplacement
     {

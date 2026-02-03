@@ -25,7 +25,9 @@ use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 final class WhereClause extends Clause
 {
     public const AND = 'and';
+
     public const OR = 'or';
+
     public const XOR = 'xor';
 
     /**

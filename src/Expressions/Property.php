@@ -122,8 +122,6 @@ final class Property implements
 
     /**
      * Returns the expression to which the property belongs.
-     *
-     * @return MapType|NodeType|RelationshipType
      */
     public function getExpression(): MapType|NodeType|RelationshipType
     {

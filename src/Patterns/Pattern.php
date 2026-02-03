@@ -43,8 +43,6 @@ interface Pattern extends QueryConvertible
     /**
      * Explicitly assign a named variable to this pattern.
      *
-     * @param null|string|Variable $variable
-     *
      * @return $this
      */
     public function withVariable(Variable|string|null $variable): self;

@@ -11,7 +11,7 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 
 /**
  * Interface to mark patterns that are complete, i.e. can be matched by a MATCH clause or created by
- * a CREATE clause. These are:
+ * a CREATE clause. These are:.
  *
  * - node
  * - path

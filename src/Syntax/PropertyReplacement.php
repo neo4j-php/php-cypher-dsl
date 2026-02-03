@@ -74,8 +74,6 @@ final class PropertyReplacement implements QueryConvertible
 
     /**
      * Returns the name of the property to which we assign a (new) value.
-     *
-     * @return Property|Variable
      */
     public function getProperty(): Property|Variable
     {

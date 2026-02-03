@@ -81,8 +81,8 @@ final class Raw extends Procedure implements
     private array $parameters;
 
     /**
-     * @param string $functionName  The name of the function to call
-     * @param AnyType[] $parameters The parameters to pass to the function call
+     * @param string    $functionName The name of the function to call
+     * @param AnyType[] $parameters   The parameters to pass to the function call
      *
      * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
