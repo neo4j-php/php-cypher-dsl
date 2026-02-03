@@ -69,7 +69,7 @@ After making your changes and adding your tests, you can check whether the minim
 ```
 $ XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite unit
 $ php vendor/bin/coverage-check coverage/clover.xml 90
-$ XDEBUG_MODE=coverage php vendor/bin/infection --min-msi=8
+$ XDEBUG_MODE=coverage php vendor/bin/infection --min-msi=85
 ```
 
 ## Running test suites
