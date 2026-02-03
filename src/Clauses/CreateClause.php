@@ -11,7 +11,6 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Patterns\CompletePattern;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 
 /**
  * This class represents a CREATE clause.
@@ -24,8 +23,6 @@ use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
  */
 final class CreateClause extends Clause
 {
-    use ErrorTrait;
-
     /**
      * @var CompletePattern[] The patterns to create
      */

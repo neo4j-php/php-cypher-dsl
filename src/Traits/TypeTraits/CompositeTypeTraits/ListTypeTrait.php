@@ -10,21 +10,21 @@
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits;
 
 use WikibaseSolutions\CypherDSL\Expressions\Operators\In;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This trait provides a default implementation to satisfy the "ListType" interface.
  */
 trait ListTypeTrait
 {
-    use CastTrait;
     use CompositeTypeTrait;
 
     /**
      * @inheritDoc
      */
-    public function has($left, bool $insertParentheses = true): In
+    public function has(PropertyType|string|int|float|bool $left, bool $insertParentheses = true): In
     {
-        return new In(self::toPropertyType($left), $this, $insertParentheses);
+        return new In(CastUtils::toPropertyType($left), $this, $insertParentheses);
     }
 }

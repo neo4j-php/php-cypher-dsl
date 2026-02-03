@@ -24,24 +24,18 @@ interface BooleanType extends PropertyType
 {
     /**
      * Create a conjunction between this expression and the given expression.
-     *
-     * @param bool|BooleanType $right
      */
-    public function and($right, bool $insertParentheses = true): Conjunction;
+    public function and(self|bool $right, bool $insertParentheses = true): Conjunction;
 
     /**
      * Create a disjunction between this expression and the given expression.
-     *
-     * @param bool|BooleanType $right
      */
-    public function or($right, bool $insertParentheses = true): Disjunction;
+    public function or(self|bool $right, bool $insertParentheses = true): Disjunction;
 
     /**
      * Perform an XOR with the given expression.
-     *
-     * @param bool|BooleanType $right
      */
-    public function xor($right, bool $insertParentheses = true): ExclusiveDisjunction;
+    public function xor(self|bool $right, bool $insertParentheses = true): ExclusiveDisjunction;
 
     /**
      * Negate this expression (using the NOT operator).

@@ -17,70 +17,71 @@ use WikibaseSolutions\CypherDSL\Expressions\Operators\IsNotNull;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\IsNull;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThan;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThanOrEqual;
+use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Syntax\Alias;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This trait provides a default implementation to satisfy the "AnyType" interface.
  */
 trait AnyTypeTrait
 {
-    use CastTrait;
-
     /**
      * @inheritDoc
      */
-    public function alias($right): Alias
+    public function alias(Variable|string $right): Alias
     {
-        return new Alias($this, self::toName($right));
+        return new Alias($this, CastUtils::toName($right));
     }
 
     /**
      * @inheritDoc
      */
-    public function equals($right, bool $insertParentheses = true): Equality
+    public function equals(AnyType|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): Equality
     {
-        return new Equality($this, self::toAnyType($right), $insertParentheses);
+        return new Equality($this, CastUtils::toAnyType($right), $insertParentheses);
     }
 
     /**
      * @inheritDoc
      */
-    public function notEquals($right, bool $insertParentheses = true): Inequality
+    public function notEquals(AnyType|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): Inequality
     {
-        return new Inequality($this, self::toAnyType($right), $insertParentheses);
+        return new Inequality($this, CastUtils::toAnyType($right), $insertParentheses);
     }
 
     /**
      * @inheritDoc
      */
-    public function gt($right, bool $insertParentheses = true): GreaterThan
+    public function gt(AnyType|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): GreaterThan
     {
-        return new GreaterThan($this, self::toAnyType($right), $insertParentheses);
+        return new GreaterThan($this, CastUtils::toAnyType($right), $insertParentheses);
     }
 
     /**
      * @inheritDoc
      */
-    public function gte($right, bool $insertParentheses = true): GreaterThanOrEqual
+    public function gte(AnyType|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): GreaterThanOrEqual
     {
-        return new GreaterThanOrEqual($this, self::toAnyType($right), $insertParentheses);
+        return new GreaterThanOrEqual($this, CastUtils::toAnyType($right), $insertParentheses);
     }
 
     /**
      * @inheritDoc
      */
-    public function lt($right, bool $insertParentheses = true): LessThan
+    public function lt(AnyType|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): LessThan
     {
-        return new LessThan($this, self::toAnyType($right), $insertParentheses);
+        return new LessThan($this, CastUtils::toAnyType($right), $insertParentheses);
     }
 
     /**
      * @inheritDoc
      */
-    public function lte($right, bool $insertParentheses = true): LessThanOrEqual
+    public function lte(AnyType|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): LessThanOrEqual
     {
-        return new LessThanOrEqual($this, self::toAnyType($right), $insertParentheses);
+        return new LessThanOrEqual($this, CastUtils::toAnyType($right), $insertParentheses);
     }
 
     /**

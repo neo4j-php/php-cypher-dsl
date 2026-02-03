@@ -14,7 +14,7 @@ use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Syntax\Alias;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This class represents a WITH clause.
@@ -28,26 +28,20 @@ use WikibaseSolutions\CypherDSL\Traits\CastTrait;
  */
 final class WithClause extends Clause
 {
-    use CastTrait;
-
     /**
-     * @var Alias[]|Variable[]|(Alias|Variable)[] The variables to include in the clause
+     * @var (Alias|Variable)[] The variables to include in the clause
      */
     private array $entries = [];
 
     /**
      * Add one or more new entries to the WITH clause.
-     *
-     * @param Alias|Pattern|string|Variable ...$entries The entries to add
-     *
-     * @return $this
      */
-    public function addEntry(...$entries): self
+    public function addEntry(Alias|Pattern|string|Variable ...$entries): self
     {
         $res = [];
 
         foreach ($entries as $entry) {
-            $res[] = $entry instanceof Alias ? $entry : self::toVariable($entry);
+            $res[] = $entry instanceof Alias ? $entry : CastUtils::toVariable($entry);
         }
 
         $this->entries = array_merge($this->entries, $res);
@@ -58,7 +52,7 @@ final class WithClause extends Clause
     /**
      * Returns the expression to include in the clause.
      *
-     * @return Alias[]|Variable[]|(Alias|Variable)[]
+     * @return (Alias|Variable)[]
      */
     public function getEntries(): array
     {

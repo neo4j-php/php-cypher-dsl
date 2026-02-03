@@ -11,9 +11,6 @@ namespace WikibaseSolutions\CypherDSL\Expressions;
 
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\NameGenerationTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
@@ -45,6 +42,8 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\PathType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
+use WikibaseSolutions\CypherDSL\Utils\NameUtils;
 
 /**
  * Represents a variable.
@@ -85,10 +84,6 @@ final class Variable implements
         StringTypeTrait,
         TimeTypeTrait;
 
-    use ErrorTrait;
-    use EscapeTrait;
-    use NameGenerationTrait;
-
     /**
      * @var string The name of this variable
      */
@@ -102,10 +97,10 @@ final class Variable implements
     public function __construct(?string $name = null)
     {
         if ($name === null) {
-            $name = self::generateIdentifier();
+            $name = NameUtils::generateIdentifier();
         }
 
-        $this->name = self::escape($name);
+        $this->name = NameUtils::escape($name);
     }
 
     /**
@@ -121,11 +116,11 @@ final class Variable implements
     /**
      * Assign a value to this property.
      *
-     * @param Map|mixed[] $value The value to assign
+     * @param array|Map $value The value to assign
      */
-    public function assign($value): PropertyReplacement
+    public function assign(MapType|array $value): PropertyReplacement
     {
-        return new PropertyReplacement($this, self::toMapType($value));
+        return new PropertyReplacement($this, CastUtils::toMapType($value));
     }
 
     /**

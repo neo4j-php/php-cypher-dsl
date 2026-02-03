@@ -37,7 +37,7 @@ Feel free to propose a new feature by [opening an issue for it](https://github.c
 
 1. Fork the repository.
 1. Create a new branch.
-   1. If you are **implementing new functionality**, create your branch from `development`.
+   1. If you are **implementing new functionality**, create your branch from `main`.
    1. If you are **fixing a bug**, create your branch from the oldest [supported](https://github.com/neo4j-php/php-cypher-dsl/blob/main/LIFECYCLE.md) branch that is affected by the bug.
 1. Implement your change and add tests for it.
 1. Make sure the test suite passes.
@@ -49,18 +49,6 @@ Some things to keep in mind:
 * Make sure that you have [configured a user name and email address](https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup) for use with Git.
 * Keep backwards compatibility breaks to a minimum.
 * You are encouraged to [sign your commits](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits) with GPG.
-
-## Branching model
-
-The branching model used by this project is [gitflow](https://nvie.com/posts/a-successful-git-branching-model/), with the following changes/additions:
-
-1. Feature branches must follow the naming convention `feature/*`.
-1. The name of a feature branch should reflect the feature added (e.g. `feature/support-indexing-operator` instead of `feature/feature-1`).
-1. Release branches must follow the naming convention `release/x.y`, where `x` and `y` are the major and minor version of the release respectively. A release branch should never be made for a patch.
-1. Hotfix branches must follow the naming convention `hotfix/x.y.z`, where `x`, `y` and `z` are the major, minor and patch version of the hot respectively. 
-1. Hotfix branches must branch off from the oldest [supported](https://github.com/neo4j-php/php-cypher-dsl/blob/main/LIFECYCLE.md) branch that is affected by the bug.
-1. Right before a new **major** version is released, a *support* branch is created from `main`.
-1. Support branches must follow the naming convention `support/x.y`, where `x` and `y` are the major and minor version of the most recent release respectively.
 
 ## Coding guidelines
 
@@ -81,7 +69,7 @@ After making your changes and adding your tests, you can check whether the minim
 ```
 $ XDEBUG_MODE=coverage php vendor/bin/phpunit --testsuite unit
 $ php vendor/bin/coverage-check coverage/clover.xml 90
-$ XDEBUG_MODE=coverage php vendor/bin/infection --min-msi=80
+$ XDEBUG_MODE=coverage php vendor/bin/infection --min-msi=85
 ```
 
 ## Running test suites

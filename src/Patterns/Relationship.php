@@ -10,11 +10,10 @@
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use DomainException;
-use InvalidArgumentException;
 use LogicException;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PropertyPatternTrait;
+use WikibaseSolutions\CypherDSL\Utils\NameUtils;
 
 /**
  * This class represents an arbitrary relationship.
@@ -23,20 +22,12 @@ use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PropertyPatternTrait;
  */
 final class Relationship implements PropertyPattern
 {
-    use EscapeTrait;
-
     use PropertyPatternTrait;
 
-    public const DIR_RIGHT = ["-", "->"];
-
-    public const DIR_LEFT = ["<-", "-"];
-
-    public const DIR_UNI = ["-", "-"];
-
     /**
-     * @var string[] The direction of the relationship (one of the DIR_* constants)
+     * @var Direction The direction of the relationship
      */
-    private array $direction;
+    private Direction $direction;
 
     /**
      * @var string[] A list of relationship condition types
@@ -64,19 +55,12 @@ final class Relationship implements PropertyPattern
     private bool $arbitraryHops = false;
 
     /**
-     * @param string[] $direction The direction of the relationship, should be either:
-     *                            - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
-     *                            - Relationship::DIR_LEFT (for a relation of (a)<--(b))
-     *                            - Relationship::DIR_UNI (for a relation of (a)--(b))
+     * @param Direction $direction The direction of the relationship
      *
      * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
-    public function __construct(array $direction)
+    public function __construct(Direction $direction)
     {
-        if ($direction !== self::DIR_RIGHT && $direction !== self::DIR_LEFT && $direction !== self::DIR_UNI) {
-            throw new InvalidArgumentException("The direction must be either 'DIR_LEFT', 'DIR_RIGHT' or 'RELATED_TO'");
-        }
-
         $this->direction = $direction;
     }
 
@@ -187,8 +171,6 @@ final class Relationship implements PropertyPattern
     /**
      * Add one or more types to require for this relationship.
      *
-     * @param string ...$type
-     *
      * @return $this
      */
     public function addType(string ...$type): self
@@ -200,10 +182,8 @@ final class Relationship implements PropertyPattern
 
     /**
      * Returns the direction of this relationship (one of the Relationship::DIR_* constants).
-     *
-     * @return string[]
      */
-    public function getDirection(): array
+    public function getDirection(): Direction
     {
         return $this->direction;
     }
@@ -248,7 +228,13 @@ final class Relationship implements PropertyPattern
      */
     public function toQuery(): string
     {
-        return $this->direction[0] . $this->relationshipDetailToString() . $this->direction[1];
+        $directionParts = match ($this->direction) {
+            Direction::UNI => ['-', '-'],
+            Direction::LEFT => ['<-', '-'],
+            Direction::RIGHT => ['-', '->'],
+        };
+
+        return $directionParts[0] . $this->relationshipDetailToString() . $directionParts[1];
     }
 
     /**
@@ -266,7 +252,7 @@ final class Relationship implements PropertyPattern
 
         if (count($types) !== 0) {
             // If we have at least one condition type, escape them and insert them into the query
-            $escapedTypes = array_map(static fn (string $type): string => self::escape($type), $types);
+            $escapedTypes = array_map(static fn (string $type): string => NameUtils::escape($type), $types);
             $conditionInner .= sprintf(":%s", implode("|", $escapedTypes));
         }
 

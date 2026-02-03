@@ -9,9 +9,6 @@
  */
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
-use WikibaseSolutions\CypherDSL\Traits\NameGenerationTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
@@ -36,6 +33,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
+use WikibaseSolutions\CypherDSL\Utils\NameUtils;
 
 /**
  * Represents a parameter.
@@ -68,10 +66,6 @@ final class Parameter implements
         PointTypeTrait,
         StringTypeTrait,
         TimeTypeTrait;
-
-    use ErrorTrait;
-    use EscapeTrait;
-    use NameGenerationTrait;
     private string $parameter;
 
     /**
@@ -83,10 +77,10 @@ final class Parameter implements
     public function __construct(?string $parameter = null)
     {
         if (!isset($parameter)) {
-            $parameter = self::generateIdentifier('param');
+            $parameter = NameUtils::generateIdentifier('param');
         }
 
-        $this->parameter = self::escape($parameter);
+        $this->parameter = NameUtils::escape($parameter);
     }
 
     /**

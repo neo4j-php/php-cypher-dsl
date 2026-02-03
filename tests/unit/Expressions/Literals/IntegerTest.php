@@ -19,6 +19,30 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
  */
 final class IntegerTest extends TestCase
 {
+    public static function provideToQueryData(): array
+    {
+        return [
+            [1, "1"],
+            [2, "2"],
+            ["2147483649", "2147483649"],
+            ["9223372036854775816", "9223372036854775816"],
+            [-12, "-12"],
+            [69, "69"],
+            ["292922929312312831203129382304823043284234729847294324724982749274294729427429471230918457", "292922929312312831203129382304823043284234729847294324724982749274294729427429471230918457"],
+            ["-1238109438204130457284308235720483205", "-1238109438204130457284308235720483205"],
+        ];
+    }
+
+    public static function provideInvalidInputData(): array
+    {
+        return [
+            ['nonumber'],
+            ['12.3E36'],
+            ['0x86'],
+            ['5.5'],
+        ];
+    }
+
     public function testZero(): void
     {
         $decimal = new Integer(0);
@@ -48,8 +72,6 @@ final class IntegerTest extends TestCase
 
     /**
      * @dataProvider provideToQueryData
-     *
-     * @param $number
      */
     public function testToQuery($number, string $expected): void
     {
@@ -66,29 +88,5 @@ final class IntegerTest extends TestCase
     {
         $this->expectException(TypeError::class);
         new Integer($input);
-    }
-
-    public function provideToQueryData(): array
-    {
-        return [
-            [1, "1"],
-            [2, "2"],
-            ["2147483649", "2147483649"],
-            ["9223372036854775816", "9223372036854775816"],
-            [-12, "-12"],
-            [69, "69"],
-            ["292922929312312831203129382304823043284234729847294324724982749274294729427429471230918457", "292922929312312831203129382304823043284234729847294324724982749274294729427429471230918457"],
-            ["-1238109438204130457284308235720483205", "-1238109438204130457284308235720483205"],
-        ];
-    }
-
-    public function provideInvalidInputData(): array
-    {
-        return [
-            ['nonumber'],
-            ['12.3E36'],
-            ['0x86'],
-            ['5.5'],
-        ];
     }
 }

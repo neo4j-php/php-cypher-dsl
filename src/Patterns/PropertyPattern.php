@@ -9,9 +9,11 @@
  */
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
+use Stringable;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PropertyPatternTrait;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
@@ -32,33 +34,27 @@ interface PropertyPattern extends Pattern
     /**
      * Set the properties of this pattern.
      *
-     * @param MapType|mixed[] $properties
-     *
      * @return $this
      */
-    public function withProperties($properties): self;
+    public function withProperties(MapType|array $properties): self;
 
     /**
      * Add a property to the properties in this pattern. This is only possible if the properties in this pattern are
      * a map. An exception will be thrown if they are anything else (such as a variable). If the pattern  does not yet
      * contain any properties, a new map will be created.
      *
-     * @param mixed $property
-     *
      * @return $this
      */
-    public function addProperty(string $key, $property): self;
+    public function addProperty(string $key, AnyType|Pattern|Stringable|bool|float|int|array|string $property): self;
 
     /**
      * Add the given properties to this pattern. This is only possible if the properties in this pattern are a map.
-     * An exception will be thrown if they are anything else (such as a variable). If the pattern  does not yet contain
+     * An exception will be thrown if they are anything else (such as a variable). If the pattern does not yet contain
      * any properties, a new map will be created.
-     *
-     * @param Map|mixed[] $properties
      *
      * @return $this
      */
-    public function addProperties($properties): self;
+    public function addProperties(Map|array $properties): self;
 
     /**
      * Returns the properties of this object.

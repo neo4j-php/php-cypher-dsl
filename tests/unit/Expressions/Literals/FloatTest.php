@@ -18,6 +18,16 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
  */
 final class FloatTest extends TestCase
 {
+    public static function provideToQueryData(): array
+    {
+        return [
+            [1, '1.0'],
+            [1.0, '1.0'],
+            [111111111111111, '1.1111111111111E+14'],
+            [1337.1337, '1337.1337'],
+        ];
+    }
+
     public function testZero(): void
     {
         $float = new Float_(0);
@@ -47,15 +57,5 @@ final class FloatTest extends TestCase
     public function testInstanceOfFloatType(): void
     {
         $this->assertInstanceOf(FloatType::class, new Float_(1.0));
-    }
-
-    public function provideToQueryData(): array
-    {
-        return [
-            [1, '1.0'],
-            [1.0, '1.0'],
-            [111111111111111, '1.1111111111111E+14'],
-            [1337.1337, '1337.1337'],
-        ];
     }
 }

@@ -12,8 +12,7 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This class represents a CALL {} (subquery) clause. The CALL {} clause evaluates a subquery that returns
@@ -26,9 +25,6 @@ use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
  */
 final class CallClause extends Clause
 {
-    use CastTrait;
-    use ErrorTrait;
-
     /**
      * @var null|Query The sub-query to call, or NULL if no sub-query has been set yet
      */
@@ -56,18 +52,14 @@ final class CallClause extends Clause
     /**
      * Add one or more variables to include in the WITH clause.
      *
-     * @param Pattern|string|Variable ...$variables
-     *
-     * @return $this
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/#subquery-correlated-importing
      */
-    public function addWithVariable(...$variables): self
+    public function addWithVariable(Pattern|Variable|string ...$variables): self
     {
         $res = [];
 
         foreach ($variables as $variable) {
-            $res[] = self::toVariable($variable);
+            $res[] = CastUtils::toVariable($variable);
         }
 
         $this->withVariables = array_merge($this->withVariables, $res);

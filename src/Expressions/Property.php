@@ -10,8 +10,6 @@
 namespace WikibaseSolutions\CypherDSL\Expressions;
 
 use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
@@ -24,7 +22,6 @@ use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\LocalTimeTy
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\PointTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\StringTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\TimeTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
@@ -40,6 +37,8 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\NodeType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\RelationshipType;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
+use WikibaseSolutions\CypherDSL\Utils\NameUtils;
 
 /**
  * Represents a property. A property in Cypher would be something like "n.prop" or "n.a".
@@ -61,7 +60,6 @@ final class Property implements
     use BooleanTypeTrait,
         DateTimeTypeTrait,
         DateTypeTrait,
-        EscapeTrait,
         FloatTypeTrait,
         IntegerTypeTrait,
         ListTypeTrait,
@@ -72,12 +70,10 @@ final class Property implements
         StringTypeTrait,
         TimeTypeTrait;
 
-    use CastTrait;
-
     /**
      * @var MapType|NodeType|RelationshipType The expression to which this property belongs
      */
-    private AnyType $expression;
+    private MapType|NodeType|RelationshipType $expression;
 
     /**
      * @var string The name of the property
@@ -92,10 +88,8 @@ final class Property implements
      *
      * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
-    public function __construct($expression, string $property)
+    public function __construct(MapType|NodeType|RelationshipType $expression, string $property)
     {
-        self::assertClass('expression', [MapType::class, NodeType::class, RelationshipType::class], $expression);
-
         $this->expression = $expression;
         $this->property = $property;
     }
@@ -113,9 +107,9 @@ final class Property implements
      *
      * TODO: Allow this function to take arrays of property types
      */
-    public function replaceWith($value): PropertyReplacement
+    public function replaceWith(PropertyType|string|bool|float|int $value): PropertyReplacement
     {
-        return new PropertyReplacement($this, self::toPropertyType($value));
+        return new PropertyReplacement($this, CastUtils::toPropertyType($value));
     }
 
     /**
@@ -128,10 +122,8 @@ final class Property implements
 
     /**
      * Returns the expression to which the property belongs.
-     *
-     * @return MapType|NodeType|RelationshipType
      */
-    public function getExpression(): AnyType
+    public function getExpression(): MapType|NodeType|RelationshipType
     {
         return $this->expression;
     }
@@ -141,6 +133,6 @@ final class Property implements
      */
     public function toQuery(): string
     {
-        return sprintf("%s.%s", $this->expression->toQuery(), self::escape($this->property));
+        return sprintf("%s.%s", $this->expression->toQuery(), NameUtils::escape($this->property));
     }
 }

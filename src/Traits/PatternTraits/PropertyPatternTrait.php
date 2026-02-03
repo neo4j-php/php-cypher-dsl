@@ -9,20 +9,20 @@
  */
 namespace WikibaseSolutions\CypherDSL\Traits\PatternTraits;
 
+use Stringable;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Patterns\Pattern;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This trait provides a default implementation to satisfy the "PropertyPattern" interface.
  */
 trait PropertyPatternTrait
 {
-    use CastTrait;
-    use ErrorTrait;
     use PatternTrait;
 
     /**
@@ -41,9 +41,9 @@ trait PropertyPatternTrait
     /**
      * @inheritDoc
      */
-    public function withProperties($properties): self
+    public function withProperties(MapType|array $properties): self
     {
-        $this->properties = self::toMapType($properties);
+        $this->properties = CastUtils::toMapType($properties);
 
         return $this;
     }
@@ -51,7 +51,7 @@ trait PropertyPatternTrait
     /**
      * @inheritDoc
      */
-    public function addProperty(string $key, $property): self
+    public function addProperty(string $key, AnyType|Pattern|Stringable|bool|float|int|array|string $property): self
     {
         $this->makeMap()->add($key, $property);
 
@@ -61,18 +61,15 @@ trait PropertyPatternTrait
     /**
      * @inheritDoc
      */
-    public function addProperties($properties): self
+    public function addProperties(Map|array $properties): self
     {
-        self::assertClass('properties', [Map::class, 'array'], $properties);
-
         $map = $this->makeMap();
 
         if (is_array($properties)) {
-            $res = [];
-
-            foreach ($properties as $key => $property) {
-                $res[$key] = self::toAnyType($property);
-            }
+            $res = array_map(static function ($property)
+            {
+                return CastUtils::toAnyType($property);
+            }, $properties);
 
             // Cast the array to a Map
             $properties = new Map($res);

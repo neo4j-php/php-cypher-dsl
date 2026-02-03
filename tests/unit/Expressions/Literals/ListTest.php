@@ -20,6 +20,24 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
  */
 final class ListTest extends TestCase
 {
+    public static function provideOneDimensionalData(): array
+    {
+        return [
+            [[Query::literal(12)], "[12]"],
+            [[Query::literal('12')], "['12']"],
+            [[Query::literal('12'), Query::literal('13')], "['12', '13']"],
+        ];
+    }
+
+    public static function provideMultidimensionalData(): array
+    {
+        return [
+            [[new List_([Query::literal(12)])], "[[12]]"],
+            [[new List_([Query::literal('12')])], "[['12']]"],
+            [[new List_([Query::literal('12'), Query::literal('14')]), new List_([Query::literal('13')])], "[['12', '14'], ['13']]"],
+        ];
+    }
+
     public function testEmpty(): void
     {
         $list = new List_([]);
@@ -144,23 +162,5 @@ final class ListTest extends TestCase
         $list = new List_($expressions);
 
         $this->assertSame($expected, $list->toQuery());
-    }
-
-    public function provideOneDimensionalData(): array
-    {
-        return [
-            [[Query::literal(12)], "[12]"],
-            [[Query::literal('12')], "['12']"],
-            [[Query::literal('12'), Query::literal('13')], "['12', '13']"],
-        ];
-    }
-
-    public function provideMultidimensionalData(): array
-    {
-        return [
-            [[new List_([Query::literal(12)])], "[[12]]"],
-            [[new List_([Query::literal('12')])], "[['12']]"],
-            [[new List_([Query::literal('12'), Query::literal('14')]), new List_([Query::literal('13')])], "[['12', '14'], ['13']]"],
-        ];
     }
 }

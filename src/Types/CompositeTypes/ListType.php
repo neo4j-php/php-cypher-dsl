@@ -22,8 +22,6 @@ interface ListType extends CompositeType
 {
     /**
      * Checks whether the given element exists in this list.
-     *
-     * @param bool|float|int|PropertyType|string $left
      */
-    public function has($left, bool $insertParentheses = true): In;
+    public function has(PropertyType|string|int|float|bool $left, bool $insertParentheses = true): In;
 }

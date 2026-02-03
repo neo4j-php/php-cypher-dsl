@@ -9,8 +9,6 @@
  */
 namespace WikibaseSolutions\CypherDSL\Expressions\Procedures;
 
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
-use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\ListTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
@@ -37,6 +35,7 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\LocalTimeType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\TimeType;
+use WikibaseSolutions\CypherDSL\Utils\NameUtils;
 
 /**
  * This class represents any function call.
@@ -71,9 +70,6 @@ final class Raw extends Procedure implements
         StringTypeTrait,
         TimeTypeTrait;
 
-    use ErrorTrait;
-    use EscapeTrait;
-
     /**
      * @var string The name of the function to call
      */
@@ -92,9 +88,7 @@ final class Raw extends Procedure implements
      */
     public function __construct(string $functionName, array $parameters)
     {
-        self::assertClassArray('parameters', AnyType::class, $parameters);
-
-        $this->functionName = self::escape($functionName);
+        $this->functionName = NameUtils::escape($functionName);
         $this->parameters = $parameters;
     }
 
@@ -103,7 +97,7 @@ final class Raw extends Procedure implements
      */
     protected function getSignature(): string
     {
-        // A string of the form '%s, %s, %s' with count($this->parameters) occurences of '%s'
+        // A string of the form '%s, %s, %s' with count($this->parameters) occurrences of '%s'
         $percentSString =
             count($this->parameters) === 0 ?
             '' :

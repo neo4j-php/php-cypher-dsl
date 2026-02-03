@@ -11,8 +11,8 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This class represents a DELETE clause.
@@ -25,8 +25,6 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
  */
 final class DeleteClause extends Clause
 {
-    use CastTrait;
-
     /**
      * Whether the DETACH modifier is needed.
      */
@@ -42,8 +40,6 @@ final class DeleteClause extends Clause
      * all relationships connected to the nodes/paths need to be explicitly deleted.
      *
      * @param bool $detach Whether to use DETACH DELETE
-     *
-     * @return $this
      */
     public function setDetach(bool $detach = true): self
     {
@@ -56,15 +52,13 @@ final class DeleteClause extends Clause
      * Add one or more structures to delete.
      *
      * @param Pattern|StructuralType $structures The structures to delete
-     *
-     * @return $this
      */
     public function addStructure(...$structures): self
     {
         $res = [];
 
         foreach ($structures as $structure) {
-            $res[] = self::toStructuralType($structure);
+            $res[] = CastUtils::toStructuralType($structure);
         }
 
         $this->structures = array_merge($this->structures, $res);

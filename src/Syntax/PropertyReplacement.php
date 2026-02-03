@@ -12,7 +12,6 @@ namespace WikibaseSolutions\CypherDSL\Syntax;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\QueryConvertible;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
@@ -23,12 +22,10 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  */
 final class PropertyReplacement implements QueryConvertible
 {
-    use ErrorTrait;
-
     /**
      * @var Property|Variable The name of the property to which we assign a (new) value
      */
-    private $property;
+    private Property|Variable $property;
 
     /**
      * @var AnyType The value to assign to the property
@@ -48,10 +45,8 @@ final class PropertyReplacement implements QueryConvertible
      *
      * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
-    public function __construct($property, AnyType $value)
+    public function __construct(Property|Variable $property, AnyType $value)
     {
-        self::assertClass('property', [Variable::class, Property::class], $property);
-
         $this->property = $property;
         $this->value = $value;
     }
@@ -79,10 +74,8 @@ final class PropertyReplacement implements QueryConvertible
 
     /**
      * Returns the name of the property to which we assign a (new) value.
-     *
-     * @return Property|Variable
      */
-    public function getProperty()
+    public function getProperty(): Property|Variable
     {
         return $this->property;
     }

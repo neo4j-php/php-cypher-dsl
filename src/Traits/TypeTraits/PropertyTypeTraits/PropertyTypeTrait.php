@@ -10,8 +10,9 @@
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits;
 
 use WikibaseSolutions\CypherDSL\Expressions\Operators\In;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\AnyTypeTrait;
+use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This trait provides a default implementation to satisfy the "PropertyType" interface.
@@ -32,13 +33,12 @@ use WikibaseSolutions\CypherDSL\Traits\TypeTraits\AnyTypeTrait;
 trait PropertyTypeTrait
 {
     use AnyTypeTrait;
-    use CastTrait;
 
     /**
      * @inheritDoc
      */
-    public function in($right, bool $insertParentheses = true): In
+    public function in(ListType|array $right, bool $insertParentheses = true): In
     {
-        return new In($this, self::toListType($right), $insertParentheses);
+        return new In($this, CastUtils::toListType($right), $insertParentheses);
     }
 }

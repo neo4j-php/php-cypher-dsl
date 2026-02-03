@@ -12,7 +12,7 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Syntax\Alias;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This class represents a CALL procedure clause.
@@ -25,15 +25,13 @@ use WikibaseSolutions\CypherDSL\Traits\CastTrait;
  */
 final class CallProcedureClause extends Clause
 {
-    use CastTrait;
-
     /**
      * @var null|Procedure The procedure to call
      */
     private ?Procedure $procedure = null;
 
     /**
-     * @var Alias[]|Variable[]|(Alias|Variable)[] The result fields that are yielded
+     * @var Alias[]|(Alias|Variable)[]|Variable[] The result fields that are yielded
      */
     private array $yields = [];
 
@@ -41,8 +39,6 @@ final class CallProcedureClause extends Clause
      * Sets the procedure to call.
      *
      * @param Procedure $procedure The procedure to call
-     *
-     * @return $this
      */
     public function setProcedure(Procedure $procedure): self
     {
@@ -55,15 +51,13 @@ final class CallProcedureClause extends Clause
      * Adds a variable to yield.
      *
      * @param Alias|string|Variable $yields The variable to yield
-     *
-     * @return $this
      */
     public function addYield(...$yields): self
     {
         $res = [];
 
         foreach ($yields as $yield) {
-            $res[] = $yield instanceof Alias ? $yield : self::toName($yield);
+            $res[] = $yield instanceof Alias ? $yield : CastUtils::toName($yield);
         }
 
         $this->yields = array_merge($this->yields, $res);
@@ -73,8 +67,6 @@ final class CallProcedureClause extends Clause
 
     /**
      * Returns the procedure to call.
-     *
-     * @return Procedure
      */
     public function getProcedure(): ?Procedure
     {
@@ -84,7 +76,7 @@ final class CallProcedureClause extends Clause
     /**
      * Returns the variables to yield.
      *
-     * @return Alias[]|Variable[]|(Alias|Variable)[]
+     * @return (Alias|Variable)[]
      */
     public function getYields(): array
     {

@@ -19,6 +19,33 @@ use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
  */
 final class MapTest extends TestCase
 {
+    public static function provideNumericalKeysData(): array
+    {
+        return [
+            [[0 => new String_('a')], "{`0`: 'a'}"],
+            [[0 => new String_('a'), 1 => new String_('b')], "{`0`: 'a', `1`: 'b'}"],
+        ];
+    }
+
+    public static function provideStringKeysData(): array
+    {
+        return [
+            [['a' => new String_('a')], "{a: 'a'}"],
+            [['a' => new String_('a'), 'b' => new String_('b')], "{a: 'a', b: 'b'}"],
+            [['a' => new String_('b')], "{a: 'b'}"],
+            [[':' => new String_('a')], "{`:`: 'a'}"],
+        ];
+    }
+
+    public static function provideNestedMapsData()
+    {
+        return [
+            [['a' => new Map([])], "{a: {}}"],
+            [['a' => new Map(['a' => new Map(['a' => new String_('b')])])], "{a: {a: {a: 'b'}}}"],
+            [['a' => new Map(['b' => new String_('c')]), 'b' => new String_('d')], "{a: {b: 'c'}, b: 'd'}"],
+        ];
+    }
+
     public function testEmpty(): void
     {
         $map = new Map([]);
@@ -100,32 +127,5 @@ final class MapTest extends TestCase
         $map = new Map();
 
         $this->assertInstanceOf(MapType::class, $map);
-    }
-
-    public function provideNumericalKeysData(): array
-    {
-        return [
-            [[0 => new String_('a')], "{`0`: 'a'}"],
-            [[0 => new String_('a'), 1 => new String_('b')], "{`0`: 'a', `1`: 'b'}"],
-        ];
-    }
-
-    public function provideStringKeysData(): array
-    {
-        return [
-            [['a' => new String_('a')], "{a: 'a'}"],
-            [['a' => new String_('a'), 'b' => new String_('b')], "{a: 'a', b: 'b'}"],
-            [['a' => new String_('b')], "{a: 'b'}"],
-            [[':' => new String_('a')], "{`:`: 'a'}"],
-        ];
-    }
-
-    public function provideNestedMapsData()
-    {
-        return [
-            [['a' => new Map([])], "{a: {}}"],
-            [['a' => new Map(['a' => new Map(['a' => new String_('b')])])], "{a: {a: {a: 'b'}}}"],
-            [['a' => new Map(['b' => new String_('c')]), 'b' => new String_('d')], "{a: {b: 'c'}, b: 'd'}"],
-        ];
     }
 }

@@ -32,7 +32,7 @@ use function WikibaseSolutions\CypherDSL\variable;
  */
 final class ExamplesTest extends TestCase
 {
-    public function testReadmeExample(): void
+    public function testOldReadmeExample(): void
     {
         $tom = node("Person")->withProperties(["name" => "Tom Hanks"]);
         $coActors = node();

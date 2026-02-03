@@ -9,8 +9,8 @@
  */
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This class represents a SKIP clause.
@@ -21,8 +21,6 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
  */
 final class SkipClause extends Clause
 {
-    use CastTrait;
-
     /**
      * The expression of the SKIP statement.
      */
@@ -32,12 +30,10 @@ final class SkipClause extends Clause
      * Sets the expression that returns the skip.
      *
      * @param int|IntegerType $skip The amount to skip
-     *
-     * @return SkipClause
      */
-    public function setSkip($skip): self
+    public function setSkip(IntegerType|int $skip): self
     {
-        $this->skip = self::toIntegerType($skip);
+        $this->skip = CastUtils::toIntegerType($skip);
 
         return $this;
     }

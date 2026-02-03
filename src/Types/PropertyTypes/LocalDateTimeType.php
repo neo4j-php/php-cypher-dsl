@@ -9,10 +9,12 @@
  */
 namespace WikibaseSolutions\CypherDSL\Types\PropertyTypes;
 
+use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\LocalDateTimeTypeTrait;
+
 /**
  * Represents the leaf type "localdatetime".
  *
- * @see LocalDateTimeType for a default implementation
+ * @see LocalDateTimeTypeTrait for a default implementation
  */
 interface LocalDateTimeType extends PropertyType
 {

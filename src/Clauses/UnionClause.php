@@ -31,8 +31,6 @@ final class UnionClause extends Clause
      * Sets that the union should include all results, instead of removing duplicates.
      *
      * @param bool $all Whether the union should include all results or remove the duplicates instead
-     *
-     * @return static
      */
     public function setAll(bool $all = true): self
     {

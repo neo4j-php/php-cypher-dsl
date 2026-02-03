@@ -10,6 +10,7 @@
 namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
 use LogicException;
+use Stringable;
 use Traversable;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Date;
@@ -19,30 +20,27 @@ use WikibaseSolutions\CypherDSL\Expressions\Procedures\LocalTime;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Point;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Time;
-use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
+use WikibaseSolutions\CypherDSL\Patterns\Pattern;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\NumeralType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 
 /**
  * Helper class to construct literals.
  *
- * @note This class should only contain static methods
+ * @note This class should only contain static methods.
  */
 final class Literal
 {
-    use ErrorTrait;
-
     /**
      * Creates a new literal from the given value. This function automatically constructs the appropriate
      * class based on the type of the value given.
      *
-     * @param mixed $literal The literal to construct
+     * @param array|bool|float|int|string|Stringable $literal The literal to construct
      *
      * @throws TypeError when the type could not be deduced
-     *
-     * @return Boolean|Float_|Integer|List_|Map|String_
      */
-    public static function literal($literal)
+    public static function literal(string|bool|int|float|array|Stringable $literal): Boolean|Float_|Integer|List_|Map|String_
     {
         if (is_string($literal)) {
             return self::string($literal);
@@ -53,7 +51,6 @@ final class Literal
         }
 
         if (is_int($literal)) {
-            // @phpstan-ignore-next-line
             return self::integer($literal);
         }
 
@@ -65,40 +62,25 @@ final class Literal
             return array_is_list($literal) ? self::list($literal) : self::map($literal);
         }
 
-        if (is_object($literal) && method_exists($literal, '__toString')) {
-            return self::string($literal->__toString());
-        }
-
-        throw new TypeError("The literal type " . get_debug_type($literal) . " is not supported by Cypher");
+        return self::string($literal->__toString());
     }
 
     /**
      * Creates a new numeral literal.
      *
-     * @param float|int $value
-     *
-     * @return Float_|Integer
-     *
      * @see        Literal::number()
      * @deprecated
      */
-    public static function decimal($value)
+    public static function decimal(float|int $value): Float_|Integer
     {
         return self::number($value);
     }
 
     /**
      * Creates a new numeral literal.
-     *
-     * @param float|int $value
-     *
-     * @return Float_|Integer
      */
-    public static function number($value)
+    public static function number(float|int $value): Float_|Integer
     {
-        self::assertClass('value', ['int', 'float'], $value);
-
-        // @phpstan-ignore-next-line PHPStan does not work well with classes named "Integer"
         return is_int($value) ? self::integer($value) : self::float($value);
     }
 
@@ -140,8 +122,6 @@ final class Literal
 
     /**
      * Creates a new list literal.
-     *
-     * @param mixed[] $value
      */
     public static function list(iterable $value): List_
     {
@@ -154,8 +134,6 @@ final class Literal
 
     /**
      * Creates a new map literal.
-     *
-     * @param mixed[] $value
      */
     public static function map(array $value): Map
     {
@@ -166,11 +144,9 @@ final class Literal
      * Retrieves the current Date value, optionally for a different time zone. In reality, this function just returns
      * a call to the "date()" function.
      *
-     * @param null|string|StringType $timezone
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-date-current Corresponding documentation on Neo4j.com
      */
-    public static function date($timezone = null): Date
+    public static function date(StringType|string|null $timezone = null): Date
     {
         if ($timezone === null) {
             return Procedure::date();
@@ -182,13 +158,9 @@ final class Literal
     /**
      * Creates a date from the given year, month and day.
      *
-     * @param int|NumeralType      $year
-     * @param null|int|NumeralType $month
-     * @param null|int|NumeralType $day
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-date-calendar Corresponding documentation on Neo4j.com
      */
-    public static function dateYMD($year, $month = null, $day = null): Date
+    public static function dateYMD(NumeralType|int $year, NumeralType|int|null $month = null, NumeralType|int|null $day = null): Date
     {
         return Procedure::date(
             self::makeTemporalMap(
@@ -204,13 +176,9 @@ final class Literal
     /**
      * Creates a date from the given year, week and weekday.
      *
-     * @param int|NumeralType      $year
-     * @param null|int|NumeralType $week
-     * @param null|int|NumeralType $weekday
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-date-week Corresponding documentation on Neo4j.com
      */
-    public static function dateYWD($year, $week = null, $weekday = null): Date
+    public static function dateYWD(NumeralType|int $year, NumeralType|int|null $week = null, NumeralType|int|null $weekday = null): Date
     {
         return Procedure::date(
             self::makeTemporalMap(
@@ -226,11 +194,9 @@ final class Literal
     /**
      * Creates a date from the given string.
      *
-     * @param string|StringType $date
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-date-create-string Corresponding documentation on Neo4j.com
      */
-    public static function dateString($date): Date
+    public static function dateString(StringType|string $date): Date
     {
         return Procedure::date($date);
     }
@@ -239,11 +205,9 @@ final class Literal
      * Retrieves the current DateTime value, optionally for a different time zone. In reality, this
      * function just returns a call to the "datetime()" function.
      *
-     * @param string|StringType $timezone
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime-current Corresponding documentation on Neo4j.com
      */
-    public static function dateTime($timezone = null): DateTime
+    public static function dateTime(StringType|string|null $timezone = null): DateTime
     {
         if ($timezone === null) {
             return Procedure::datetime();
@@ -255,30 +219,19 @@ final class Literal
     /**
      * Creates a date from the given year, month, day and time values.
      *
-     * @param int|NumeralType        $year
-     * @param null|int|NumeralType   $month
-     * @param null|int|NumeralType   $day
-     * @param null|int|NumeralType   $hour
-     * @param null|int|NumeralType   $minute
-     * @param null|int|NumeralType   $second
-     * @param null|int|NumeralType   $millisecond
-     * @param null|int|NumeralType   $microsecond
-     * @param null|int|NumeralType   $nanosecond
-     * @param null|string|StringType $timezone
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime-calendar Corresponding documentation on Neo4j.com
      */
     public static function dateTimeYMD(
-        $year,
-        $month = null,
-        $day = null,
-        $hour = null,
-        $minute = null,
-        $second = null,
-        $millisecond = null,
-        $microsecond = null,
-        $nanosecond = null,
-        $timezone = null
+        NumeralType|int $year,
+        NumeralType|int|null $month = null,
+        NumeralType|int|null $day = null,
+        NumeralType|int|null $hour = null,
+        NumeralType|int|null $minute = null,
+        NumeralType|int|null $second = null,
+        NumeralType|int|null $millisecond = null,
+        NumeralType|int|null $microsecond = null,
+        NumeralType|int|null $nanosecond = null,
+        StringType|string|null $timezone = null
     ): DateTime {
         return Procedure::datetime(
             self::makeTemporalMap(
@@ -301,30 +254,19 @@ final class Literal
     /**
      * Creates a datetime with the specified year, week, dayOfWeek, hour, minute, second, millisecond, microsecond, nanosecond and timezone component values.
      *
-     * @param int|NumeralType        $year
-     * @param null|int|NumeralType   $week
-     * @param null|int|NumeralType   $dayOfWeek
-     * @param null|int|NumeralType   $hour
-     * @param null|int|NumeralType   $minute
-     * @param null|int|NumeralType   $second
-     * @param null|int|NumeralType   $millisecond
-     * @param null|int|NumeralType   $microsecond
-     * @param null|int|NumeralType   $nanosecond
-     * @param null|string|StringType $timezone
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime-week Corresponding documentation on Neo4j.com
      */
     public static function dateTimeYWD(
-        $year,
-        $week = null,
-        $dayOfWeek = null,
-        $hour = null,
-        $minute = null,
-        $second = null,
-        $millisecond = null,
-        $microsecond = null,
-        $nanosecond = null,
-        $timezone = null
+        NumeralType|int $year,
+        NumeralType|int|null $week = null,
+        NumeralType|int|null $dayOfWeek = null,
+        NumeralType|int|null $hour = null,
+        NumeralType|int|null $minute = null,
+        NumeralType|int|null $second = null,
+        NumeralType|int|null $millisecond = null,
+        NumeralType|int|null $microsecond = null,
+        NumeralType|int|null $nanosecond = null,
+        StringType|string|null $timezone = null
     ): DateTime {
         return Procedure::datetime(
             self::makeTemporalMap(
@@ -347,30 +289,19 @@ final class Literal
     /**
      * Creates a datetime with the specified year, quarter, dayOfQuarter, hour, minute, second, millisecond, microsecond, nanosecond and timezone component values.
      *
-     * @param int|NumeralType        $year
-     * @param null|int|NumeralType   $quarter
-     * @param null|int|NumeralType   $dayOfQuarter
-     * @param null|int|NumeralType   $hour
-     * @param null|int|NumeralType   $minute
-     * @param null|int|NumeralType   $second
-     * @param null|int|NumeralType   $millisecond
-     * @param null|int|NumeralType   $microsecond
-     * @param null|int|NumeralType   $nanosecond
-     * @param null|string|StringType $timezone
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime-quarter Corresponding documentation on Neo4j.com
      */
     public static function dateTimeYQD(
-        $year,
-        $quarter = null,
-        $dayOfQuarter = null,
-        $hour = null,
-        $minute = null,
-        $second = null,
-        $millisecond = null,
-        $microsecond = null,
-        $nanosecond = null,
-        $timezone = null
+        NumeralType|int $year,
+        NumeralType|int|null $quarter = null,
+        NumeralType|int|null $dayOfQuarter = null,
+        NumeralType|int|null $hour = null,
+        NumeralType|int|null $minute = null,
+        NumeralType|int|null $second = null,
+        NumeralType|int|null $millisecond = null,
+        NumeralType|int|null $microsecond = null,
+        NumeralType|int|null $nanosecond = null,
+        StringType|string|null $timezone = null
     ): DateTime {
         return Procedure::datetime(
             self::makeTemporalMap(
@@ -393,28 +324,18 @@ final class Literal
     /**
      * Creates a datetime with the specified year, ordinalDay, hour, minute, second, millisecond, microsecond, nanosecond and timezone component values.
      *
-     * @param int|NumeralType        $year
-     * @param null|int|NumeralType   $ordinalDay
-     * @param null|int|NumeralType   $hour
-     * @param null|int|NumeralType   $minute
-     * @param null|int|NumeralType   $second
-     * @param null|int|NumeralType   $millisecond
-     * @param null|int|NumeralType   $microsecond
-     * @param null|int|NumeralType   $nanosecond
-     * @param null|string|StringType $timezone
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-datetime-ordinal Corresponding documentation on Neo4j.com
      */
     public static function dateTimeYD(
-        $year,
-        $ordinalDay = null,
-        $hour = null,
-        $minute = null,
-        $second = null,
-        $millisecond = null,
-        $microsecond = null,
-        $nanosecond = null,
-        $timezone = null
+        NumeralType|int $year,
+        NumeralType|int|null $ordinalDay = null,
+        NumeralType|int|null $hour = null,
+        NumeralType|int|null $minute = null,
+        NumeralType|int|null $second = null,
+        NumeralType|int|null $millisecond = null,
+        NumeralType|int|null $microsecond = null,
+        NumeralType|int|null $nanosecond = null,
+        StringType|string|null $timezone = null
     ): DateTime {
         return Procedure::datetime(
             self::makeTemporalMap(
@@ -435,10 +356,8 @@ final class Literal
 
     /**
      * Creates a datetime by parsing a string representation of a temporal value.
-     *
-     * @param string|StringType $dateString
      */
-    public static function dateTimeString($dateString): DateTime
+    public static function dateTimeString(StringType|string $dateString): DateTime
     {
         return Procedure::datetime($dateString);
     }
@@ -446,11 +365,9 @@ final class Literal
     /**
      * Creates the current localDateTime value.
      *
-     * @param null|string|StringType $timezone
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-current Corresponding documentation on Neo4j.com
      */
-    public static function localDateTime($timezone = null): LocalDateTime
+    public static function localDateTime(StringType|string|null $timezone = null): LocalDateTime
     {
         if ($timezone === null) {
             return Procedure::localdatetime();
@@ -462,28 +379,18 @@ final class Literal
     /**
      * Creates a LocalDateTime value with specified year, month, day and time props.
      *
-     * @param int|NumeralType      $year
-     * @param null|int|NumeralType $month
-     * @param null|int|NumeralType $day
-     * @param null|int|NumeralType $hour
-     * @param null|int|NumeralType $minute
-     * @param null|int|NumeralType $second
-     * @param null|int|NumeralType $millisecond
-     * @param null|int|NumeralType $microsecond
-     * @param null|int|NumeralType $nanosecond
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-calendar Corresponding documentation on Neo4j.com
      */
     public static function localDateTimeYMD(
-        $year,
-        $month = null,
-        $day = null,
-        $hour = null,
-        $minute = null,
-        $second = null,
-        $millisecond = null,
-        $microsecond = null,
-        $nanosecond = null
+        NumeralType|int $year,
+        NumeralType|int|null $month = null,
+        NumeralType|int|null $day = null,
+        NumeralType|int|null $hour = null,
+        NumeralType|int|null $minute = null,
+        NumeralType|int|null $second = null,
+        NumeralType|int|null $millisecond = null,
+        NumeralType|int|null $microsecond = null,
+        NumeralType|int|null $nanosecond = null
     ): LocalDateTime {
         return Procedure::localdatetime(
             self::makeTemporalMap(
@@ -506,28 +413,18 @@ final class Literal
      * Creates a LocalDateTime value with the specified year, week, dayOfWeek, hour, minute,
      * second, millisecond, microsecond and nanosecond component value.
      *
-     * @param int|NumeralType      $year
-     * @param null|int|NumeralType $week
-     * @param null|int|NumeralType $dayOfWeek
-     * @param null|int|NumeralType $hour
-     * @param null|int|NumeralType $minute
-     * @param null|int|NumeralType $second
-     * @param null|int|NumeralType $millisecond
-     * @param null|int|NumeralType $microsecond
-     * @param null|int|NumeralType $nanosecond
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-week Corresponding documentation on Neo4j.com
      */
     public static function localDateTimeYWD(
-        $year,
-        $week = null,
-        $dayOfWeek = null,
-        $hour = null,
-        $minute = null,
-        $second = null,
-        $millisecond = null,
-        $microsecond = null,
-        $nanosecond = null
+        NumeralType|int $year,
+        NumeralType|int|null $week = null,
+        NumeralType|int|null $dayOfWeek = null,
+        NumeralType|int|null $hour = null,
+        NumeralType|int|null $minute = null,
+        NumeralType|int|null $second = null,
+        NumeralType|int|null $millisecond = null,
+        NumeralType|int|null $microsecond = null,
+        NumeralType|int|null $nanosecond = null
     ): LocalDateTime {
         return Procedure::localdatetime(
             self::makeTemporalMap(
@@ -549,28 +446,18 @@ final class Literal
     /**
      * Creates a LocalDateTime value with the specified year, quarter, dayOfQuarter, hour, minute, second, millisecond, microsecond and nanosecond component values.
      *
-     * @param int|NumeralType      $year
-     * @param null|int|NumeralType $quarter
-     * @param null|int|NumeralType $dayOfQuarter
-     * @param null|int|NumeralType $hour
-     * @param null|int|NumeralType $minute
-     * @param null|int|NumeralType $second
-     * @param null|int|NumeralType $millisecond
-     * @param null|int|NumeralType $microsecond
-     * @param null|int|NumeralType $nanosecond
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-quarter Corresponding documentation on Neo4j.com
      */
     public static function localDateTimeYQD(
-        $year,
-        $quarter = null,
-        $dayOfQuarter = null,
-        $hour = null,
-        $minute = null,
-        $second = null,
-        $millisecond = null,
-        $microsecond = null,
-        $nanosecond = null
+        NumeralType|int $year,
+        NumeralType|int|null $quarter = null,
+        NumeralType|int|null $dayOfQuarter = null,
+        NumeralType|int|null $hour = null,
+        NumeralType|int|null $minute = null,
+        NumeralType|int|null $second = null,
+        NumeralType|int|null $millisecond = null,
+        NumeralType|int|null $microsecond = null,
+        NumeralType|int|null $nanosecond = null
     ): LocalDateTime {
         return Procedure::localdatetime(
             self::MakeTemporalMap(
@@ -592,26 +479,17 @@ final class Literal
     /**
      * Creates a LocalDateTime value with the specified year, ordinalDay, hour, minute, second, millisecond, microsecond and nanosecond component values.
      *
-     * @param int|NumeralType      $year
-     * @param null|int|NumeralType $ordinalDay
-     * @param null|int|NumeralType $hour
-     * @param null|int|NumeralType $minute
-     * @param null|int|NumeralType $second
-     * @param null|int|NumeralType $millisecond
-     * @param null|int|NumeralType $microsecond
-     * @param null|int|NumeralType $nanosecond
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-ordinal Corresponding documentation on Neo4j.com
      */
     public static function localDateTimeYD(
-        $year,
-        $ordinalDay = null,
-        $hour = null,
-        $minute = null,
-        $second = null,
-        $millisecond = null,
-        $microsecond = null,
-        $nanosecond = null
+        NumeralType|int $year,
+        NumeralType|int|null $ordinalDay = null,
+        NumeralType|int|null $hour = null,
+        NumeralType|int|null $minute = null,
+        NumeralType|int|null $second = null,
+        NumeralType|int|null $millisecond = null,
+        NumeralType|int|null $microsecond = null,
+        NumeralType|int|null $nanosecond = null
     ): LocalDateTime {
         return Procedure::localdatetime(
             self::makeTemporalMap(
@@ -632,11 +510,9 @@ final class Literal
     /**
      * Creates the LocalDateTime value obtained by parsing a string representation of a temporal value.
      *
-     * @param string|StringType $localDateTimeString
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localdatetime-create-string Corresponding documentation on Neo4j.com
      */
-    public static function localDateTimeString($localDateTimeString): LocalDateTime
+    public static function localDateTimeString(StringType|string $localDateTimeString): LocalDateTime
     {
         return Procedure::localdatetime($localDateTimeString);
     }
@@ -644,11 +520,9 @@ final class Literal
     /**
      * Creates the current LocalTime value.
      *
-     * @param null|string|StringType $timezone
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localtime-current Corresponding documentation on Neo4j.com
      */
-    public static function localTimeCurrent($timezone = null): LocalTime
+    public static function localTimeCurrent(StringType|string|null $timezone = null): LocalTime
     {
         if ($timezone === null) {
             return Procedure::localtime();
@@ -660,22 +534,15 @@ final class Literal
     /**
      * Creates a LocalTime value with the specified hour, minute, second, millisecond, microsecond and nanosecond component values.
      *
-     * @param int|NumeralType      $hour
-     * @param null|int|NumeralType $minute
-     * @param null|int|NumeralType $second
-     * @param null|int|NumeralType $millisecond
-     * @param null|int|NumeralType $microsecond
-     * @param null|int|NumeralType $nanosecond
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-localtime-create Corresponding documentation on Neo4j.com
      */
     public static function localTime(
-        $hour,
-        $minute = null,
-        $second = null,
-        $millisecond = null,
-        $microsecond = null,
-        $nanosecond = null
+        NumeralType|int $hour,
+        NumeralType|int|null $minute = null,
+        NumeralType|int|null $second = null,
+        NumeralType|int|null $millisecond = null,
+        NumeralType|int|null $microsecond = null,
+        NumeralType|int|null $nanosecond = null
     ): LocalTime {
         return Procedure::localtime(
             self::makeTemporalMap(
@@ -693,10 +560,8 @@ final class Literal
 
     /**
      * Creates the LocalTime value obtained by parsing a string representation of a temporal value.
-     *
-     * @param string|StringType $localTimeString
      */
-    public static function localTimeString($localTimeString): LocalTime
+    public static function localTimeString(StringType|string $localTimeString): LocalTime
     {
         return Procedure::localtime($localTimeString);
     }
@@ -704,11 +569,9 @@ final class Literal
     /**
      * Creates the current Time value.
      *
-     * @param null|string|StringType $timezone
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-time-current Corresponding documentation on Neo4j.com
      */
-    public static function time($timezone = null): Time
+    public static function time(StringType|string|null $timezone = null): Time
     {
         if ($timezone === null) {
             return Procedure::time();
@@ -720,24 +583,16 @@ final class Literal
     /**
      * Creates  a Time value with the specified hour, minute, second, millisecond, microsecond, nanosecond and timezone component values.
      *
-     * @param int|NumeralType        $hour
-     * @param null|int|NumeralType   $minute
-     * @param null|int|NumeralType   $second
-     * @param null|int|NumeralType   $millisecond
-     * @param null|int|NumeralType   $microsecond
-     * @param null|int|NumeralType   $nanosecond
-     * @param null|string|StringType $timezone
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-time-create Corresponding documentation on Neo4j.com
      */
     public static function timeHMS(
-        $hour,
-        $minute = null,
-        $second = null,
-        $millisecond = null,
-        $microsecond = null,
-        $nanosecond = null,
-        $timezone = null
+        NumeralType|int $hour,
+        NumeralType|int|null $minute = null,
+        NumeralType|int|null $second = null,
+        NumeralType|int|null $millisecond = null,
+        NumeralType|int|null $microsecond = null,
+        NumeralType|int|null $nanosecond = null,
+        StringType|string|null $timezone = null
     ): Time {
         return Procedure::time(
             self::makeTemporalMap(
@@ -757,11 +612,9 @@ final class Literal
     /**
      * Creates the Time value obtained by parsing a string representation of a temporal value.
      *
-     * @param string|StringType $timeString
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/temporal/#functions-time-create-string Corresponding documentation on Neo4j.com
      */
-    public static function timeString($timeString): Time
+    public static function timeString(StringType|string $timeString): Time
     {
         return Procedure::time($timeString);
     }
@@ -769,12 +622,9 @@ final class Literal
     /**
      * Creates a 2d cartesian point.
      *
-     * @param float|int|NumeralType $x
-     * @param float|int|NumeralType $y
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/spatial/#functions-point-cartesian-2d Corresponding documentation on Neo4j.com
      */
-    public static function point2d($x, $y): Point
+    public static function point2d(NumeralType|int|float $x, NumeralType|int|float $y): Point
     {
         return Procedure::point([
             "x" => $x,
@@ -786,13 +636,9 @@ final class Literal
     /**
      * Creates a 3d cartesian point.
      *
-     * @param float|int|NumeralType $x
-     * @param float|int|NumeralType $y
-     * @param float|int|NumeralType $z
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/spatial/#functions-point-cartesian-3d Corresponding documentation on Neo4j.com
      */
-    public static function point3d($x, $y, $z): Point
+    public static function point3d(NumeralType|int|float $x, NumeralType|int|float $y, NumeralType|int|float $z): Point
     {
         return Procedure::point([
             "x" => $x,
@@ -805,12 +651,9 @@ final class Literal
     /**
      * Creates a WGS 84 2D point.
      *
-     * @param float|int|NumeralType $longitude
-     * @param float|int|NumeralType $latitude
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/spatial/#functions-point-wgs84-2d Corresponding documentation on Neo4j.com
      */
-    public static function point2dWGS84($longitude, $latitude): Point
+    public static function point2dWGS84(NumeralType|int|float $longitude, NumeralType|int|float $latitude): Point
     {
         return Procedure::point([
             "longitude" => $longitude,
@@ -822,13 +665,9 @@ final class Literal
     /**
      * Creates a WGS 84 2D point.
      *
-     * @param float|int|NumeralType $longitude
-     * @param float|int|NumeralType $latitude
-     * @param float|int|NumeralType $height
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/functions/spatial/#functions-point-wgs84-2d Corresponding documentation on Neo4j.com
      */
-    public static function point3dWGS84($longitude, $latitude, $height): Point
+    public static function point3dWGS84(NumeralType|int|float $longitude, NumeralType|int|float $latitude, NumeralType|int|float $height): Point
     {
         return Procedure::point([
             "longitude" => $longitude,
@@ -848,9 +687,7 @@ final class Literal
     /**
      * Prepares the variables to be used by temporal (i.e. time-like) CYPHER-functions.
      *
-     * @param mixed[] $variables
-     *
-     * @return mixed[]
+     * @return (AnyType|array|bool|float|int|Pattern|string)[]
      */
     private static function makeTemporalMap(array $variables): array
     {

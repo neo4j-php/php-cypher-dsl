@@ -28,6 +28,7 @@ use function WikibaseSolutions\CypherDSL\list_;
 use function WikibaseSolutions\CypherDSL\literal;
 use function WikibaseSolutions\CypherDSL\map;
 use function WikibaseSolutions\CypherDSL\node;
+use WikibaseSolutions\CypherDSL\Patterns\Direction;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Query;
@@ -77,7 +78,7 @@ final class FunctionsTest extends TestCase
 
     public function testRelationshipReturnsRelationship(): void
     {
-        $relationship = relationship(Relationship::DIR_RIGHT);
+        $relationship = relationship(Direction::RIGHT);
 
         $this->assertInstanceOf(Relationship::class, $relationship);
         $this->assertSame('-->', $relationship->toQuery());

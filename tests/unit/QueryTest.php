@@ -9,7 +9,6 @@
  */
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
-use InvalidArgumentException;
 use Iterator;
 use PHPUnit\Framework\TestCase;
 use TypeError;
@@ -30,6 +29,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Patterns\Direction;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
@@ -45,6 +45,25 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
  */
 final class QueryTest extends TestCase
 {
+    /**
+     * @return mixed[][]
+     */
+    public static function provideLiteralData(): array
+    {
+        return [
+            ['foobar', new String_('foobar')],
+            ['0', new String_('0')],
+            ['100', new String_('100')],
+            [0, new Integer(0)],
+            [100, new Integer(100)],
+            [10.0, new Float_(10.0)],
+            [69420.0, new Float_(69420)],
+            [10.0000000000000000000000000000001, new Float_(10.0000000000000000000000000000001)],
+            [false, new Boolean(false)],
+            [true, new Boolean(true)],
+        ];
+    }
+
     public function testNew(): void
     {
         $new = Query::new();
@@ -80,7 +99,7 @@ final class QueryTest extends TestCase
 
     public function testRelationship(): void
     {
-        $directions = [Relationship::DIR_UNI, Relationship::DIR_LEFT, Relationship::DIR_RIGHT];
+        $directions = [Direction::UNI, Direction::LEFT, Direction::RIGHT];
 
         foreach ($directions as $direction) {
             $expected = new Relationship($direction);
@@ -88,13 +107,6 @@ final class QueryTest extends TestCase
 
             $this->assertEquals($expected, $actual);
         }
-    }
-
-    public function testInvalidRelationship(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        Query::relationship(['bad', 'value']);
     }
 
     public function testVariable(): void
@@ -225,11 +237,9 @@ final class QueryTest extends TestCase
                 return 1;
             }
 
-            public function next(): int
+            public function next(): void
             {
                 $this->count++;
-
-                return 1;
             }
 
             public function key(): int
@@ -291,7 +301,7 @@ final class QueryTest extends TestCase
         $variableMock = new Variable("a");
         $nodeMock = (new Node)->withVariable($variableMock);
 
-        $pathMock = new Path([$nodeMock, (new Node)->withVariable('b')], [new Relationship(Relationship::DIR_RIGHT)]);
+        $pathMock = new Path([$nodeMock, (new Node)->withVariable('b')], [new Relationship(Direction::RIGHT)]);
         $numeralMock = new Integer(12);
         $booleanMock = new GreaterThan($variableMock, new Variable('b'), false);
         $propertyMock = new Property($variableMock, 'b');
@@ -419,24 +429,5 @@ final class QueryTest extends TestCase
         $node = Query::node();
 
         $this->assertInstanceOf(Variable::class, $node->getVariable());
-    }
-
-    /**
-     * @return mixed[][]
-     */
-    public function provideLiteralData(): array
-    {
-        return [
-            ['foobar', new String_('foobar')],
-            ['0', new String_('0')],
-            ['100', new String_('100')],
-            [0, new Integer(0)],
-            [100, new Integer(100)],
-            [10.0, new Float_(10.0)],
-            [69420.0, new Float_(69420)],
-            [10.0000000000000000000000000000001, new Float_(10.0000000000000000000000000000001)],
-            [false, new Boolean(false)],
-            [true, new Boolean(true)],
-        ];
     }
 }

@@ -35,10 +35,10 @@ interface RelatablePattern extends Pattern
      *
      * @param RelatablePattern     $pattern    The pattern to attach to the end of this pattern
      * @param null|string          $type       The type of the relationship
-     * @param null|MapType|mixed[] $properties The properties to attach to the relationship
+     * @param null|array|MapType   $properties The properties to attach to the relationship
      * @param null|string|Variable $name       The name fo the relationship
      */
-    public function relationshipTo(self $pattern, ?string $type = null, $properties = null, $name = null): Path;
+    public function relationshipTo(self $pattern, ?string $type = null, MapType|array|null $properties = null, Variable|string|null $name = null): Path;
 
     /**
      * Forms a new path by adding the given relatable pattern to the end of this pattern using a left (<--)
@@ -46,10 +46,10 @@ interface RelatablePattern extends Pattern
      *
      * @param RelatablePattern     $pattern    The pattern to attach to the end of this pattern
      * @param null|string          $type       The type of the relationship
-     * @param null|MapType|mixed[] $properties The properties to attach to the relationship
+     * @param null|array|MapType   $properties The properties to attach to the relationship
      * @param null|string|Variable $name       The name fo the relationship
      */
-    public function relationshipFrom(self $pattern, ?string $type = null, $properties = null, $name = null): Path;
+    public function relationshipFrom(self $pattern, ?string $type = null, MapType|array|null $properties = null, Variable|string|null $name = null): Path;
 
     /**
      * Forms a new path by adding the given relatable pattern to the end of this pattern using a unidirectional
@@ -57,8 +57,8 @@ interface RelatablePattern extends Pattern
      *
      * @param RelatablePattern     $pattern    The pattern to attach to the end of this pattern
      * @param null|string          $type       The type of the relationship
-     * @param null|MapType|mixed[] $properties The properties to attach to the relationship
+     * @param null|array|MapType   $properties The properties to attach to the relationship
      * @param null|string|Variable $name       The name fo the relationship
      */
-    public function relationshipUni(self $pattern, ?string $type = null, $properties = null, $name = null): Path;
+    public function relationshipUni(self $pattern, ?string $type = null, MapType|array|null $properties = null, Variable|string|null $name = null): Path;
 }

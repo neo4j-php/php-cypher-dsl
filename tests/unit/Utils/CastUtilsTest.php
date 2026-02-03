@@ -7,14 +7,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace WikibaseSolutions\CypherDSL\Tests\Unit\Traits;
+namespace WikibaseSolutions\CypherDSL\Tests\Unit\Utils;
 
 use PHPUnit\Framework\TestCase;
-use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
@@ -22,172 +20,144 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\FloatType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
- * @covers \WikibaseSolutions\CypherDSL\Traits\CastTrait
+ * @covers \WikibaseSolutions\CypherDSL\Utils\CastUtils
  */
-final class CastTraitTest extends TestCase
+class CastUtilsTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->trait = new class
-        {
-            use CastTrait {
-                toListType as public;
-                toMapType as public;
-                toStringType as public;
-                toNumeralType as public;
-                toIntegerType as public;
-                toBooleanType as public;
-                toPropertyType as public;
-                toStructuralType as public;
-                toVariable as public;
-                toName as public;
-                toAnyType as public;
-            }
-        };
-    }
-
     public function testToListType(): void
     {
-        $list = $this->trait->toListType(['a', 'b', 'c']);
+        $list = CastUtils::toListType(['a', 'b', 'c']);
 
         $this->assertInstanceOf(ListType::class, $list);
 
         $list = Literal::list(['a', 'b', 'c']);
-        $list = $this->trait->toListType($list);
+        $list = CastUtils::toListType($list);
 
         $this->assertInstanceOf(ListType::class, $list);
     }
 
     public function testToMapType(): void
     {
-        $map = $this->trait->toMapType(['a' => 'a', 'b' => 'b', 'c' => 'c']);
+        $map = CastUtils::toMapType(['a' => 'a', 'b' => 'b', 'c' => 'c']);
 
         $this->assertInstanceOf(MapType::class, $map);
 
         $map = Literal::map(['a' => 'a', 'b' => 'b', 'c' => 'c']);
-        $map = $this->trait->toMapType($map);
+        $map = CastUtils::toMapType($map);
 
         $this->assertInstanceOf(MapType::class, $map);
     }
 
     public function testToStringType(): void
     {
-        $string = $this->trait->toStringType('hello');
+        $string = CastUtils::toStringType('hello');
 
         $this->assertInstanceOf(StringType::class, $string);
 
         $string = Literal::string('a');
-        $string = $this->trait->toStringType($string);
+        $string = CastUtils::toStringType($string);
 
         $this->assertInstanceOf(StringType::class, $string);
     }
 
     public function testToNumeralType(): void
     {
-        $numeral = $this->trait->toNumeralType(1);
+        $numeral = CastUtils::toNumeralType(1);
 
         $this->assertInstanceOf(IntegerType::class, $numeral);
 
-        $numeral = $this->trait->toNumeralType(1.1);
+        $numeral = CastUtils::toNumeralType(1.1);
 
         $this->assertInstanceOf(FloatType::class, $numeral);
 
         $numeral = Literal::number(1.1);
-        $numeral = $this->trait->toNumeralType($numeral);
+        $numeral = CastUtils::toNumeralType($numeral);
 
         $this->assertInstanceOf(FloatType::class, $numeral);
 
         $numeral = Literal::number(1);
-        $numeral = $this->trait->toNumeralType($numeral);
+        $numeral = CastUtils::toNumeralType($numeral);
 
         $this->assertInstanceOf(IntegerType::class, $numeral);
     }
 
     public function testToIntegerType(): void
     {
-        $integer = $this->trait->toIntegerType(10);
+        $integer = CastUtils::toIntegerType(10);
 
         $this->assertInstanceOf(IntegerType::class, $integer);
 
         $integer = Literal::integer(10);
-        $integer = $this->trait->toIntegerType($integer);
+        $integer = CastUtils::toIntegerType($integer);
 
         $this->assertInstanceOf(IntegerType::class, $integer);
     }
 
     public function testToBooleanType(): void
     {
-        $boolean = $this->trait->toBooleanType(true);
+        $boolean = CastUtils::toBooleanType(true);
 
         $this->assertInstanceOf(BooleanType::class, $boolean);
 
         $boolean = Literal::boolean(true);
-        $boolean = $this->trait->toBooleanType($boolean);
+        $boolean = CastUtils::toBooleanType($boolean);
 
         $this->assertInstanceOf(BooleanType::class, $boolean);
     }
 
     public function testToPropertyType(): void
     {
-        $property = $this->trait->toPropertyType('test');
+        $property = CastUtils::toPropertyType('test');
 
         $this->assertInstanceOf(StringType::class, $property);
 
-        $property = $this->trait->toPropertyType(true);
+        $property = CastUtils::toPropertyType(true);
 
         $this->assertInstanceOf(BooleanType::class, $property);
 
         $property = Literal::boolean(true);
-        $property = $this->trait->toBooleanType($property);
+        $property = CastUtils::toBooleanType($property);
 
         $this->assertInstanceOf(BooleanType::class, $property);
     }
 
     public function testToStructuralType(): void
     {
-        $structural = $this->trait->toStructuralType(Query::node());
+        $structural = CastUtils::toStructuralType(Query::node());
 
         $this->assertInstanceOf(StructuralType::class, $structural);
 
-        $structural = $this->trait->toStructuralType(Query::node()->getVariable());
+        $structural = CastUtils::toStructuralType(Query::node()->getVariable());
 
         $this->assertInstanceOf(StructuralType::class, $structural);
     }
 
     public function testToVariable(): void
     {
-        $variable = $this->trait->toVariable('a');
+        $variable = CastUtils::toVariable('a');
 
         $this->assertInstanceOf(Variable::class, $variable);
 
-        $variable = $this->trait->toVariable(Query::node());
+        $variable = CastUtils::toVariable(Query::node());
 
         $this->assertInstanceOf(Variable::class, $variable);
 
-        $variable = $this->trait->toVariable(new Variable('a'));
+        $variable = CastUtils::toVariable(new Variable('a'));
 
         $this->assertInstanceOf(Variable::class, $variable);
     }
 
     public function testToName(): void
     {
-        $name = $this->trait->toName('a');
+        $name = CastUtils::toName('a');
 
         $this->assertInstanceOf(Variable::class, $name);
 
-        $name = $this->trait->toName(new Variable('a'));
+        $name = CastUtils::toName(new Variable('a'));
 
         $this->assertInstanceOf(Variable::class, $name);
-    }
-
-    public function testToNameDoesNotAcceptPattern(): void
-    {
-        $this->expectException(TypeError::class);
-
-        $this->trait->toName(Query::node());
     }
 }

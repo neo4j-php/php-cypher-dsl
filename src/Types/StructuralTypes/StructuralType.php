@@ -30,7 +30,7 @@ use WikibaseSolutions\CypherDSL\Types\AnyType;
  *
  * @note This interface should not be implemented by any class directly
  *
- * @see  StructuralTypeTrait for a default implementation
+ * @see StructuralTypeTrait for a default implementation
  * @see https://neo4j.com/docs/cypher-manual/current/syntax/values/#structural-types Corresponding documentation on Neo4j.com
  */
 interface StructuralType extends AnyType
