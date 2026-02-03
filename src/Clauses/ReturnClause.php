@@ -12,7 +12,6 @@ namespace WikibaseSolutions\CypherDSL\Clauses;
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Syntax\Alias;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
@@ -31,7 +30,7 @@ final class ReturnClause extends Clause
     private bool $distinct = false;
 
     /**
-     * @var Alias[]|AnyType[]|(Alias|AnyType)[] The expressions to return
+     * @var (Alias|AnyType)[] The expressions to return
      */
     private array $columns = [];
 

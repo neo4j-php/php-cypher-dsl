@@ -43,24 +43,23 @@ use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\CompletePattern;
+use WikibaseSolutions\CypherDSL\Patterns\Direction;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
 use WikibaseSolutions\CypherDSL\Syntax\Alias;
 use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
-use WikibaseSolutions\CypherDSL\Traits\CastTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
+use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * Builder class for building complex Cypher queries.
  */
 final class Query implements QueryConvertible
 {
-    use CastTrait;
-
     // A reference to the Literal class
     public const literal = Literal::class;
 
@@ -101,14 +100,11 @@ final class Query implements QueryConvertible
     /**
      * Creates a relationship.
      *
-     * @param string[] $direction The direction of the relationship (optional, default: unidirectional), should be either:
-     *                            - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
-     *                            - Relationship::DIR_LEFT (for a relation of (a)<--(b))
-     *                            - Relationship::DIR_UNI (for a relation of (a)--(b))
+     * @param Direction $direction The direction of the relationship (optional, default: unidirectional)
      *
      * @see https://neo4j.com/docs/cypher-manual/current/syntax/patterns/#cypher-pattern-relationship Corresponding documentation on Neo4j.com
      */
-    public static function relationship(array $direction = Relationship::DIR_UNI): Relationship
+    public static function relationship(Direction $direction = Direction::UNI): Relationship
     {
         return new Relationship($direction);
     }
@@ -120,7 +116,7 @@ final class Query implements QueryConvertible
      */
     public static function relationshipUni(): Relationship
     {
-        return new Relationship(Relationship::DIR_UNI);
+        return new Relationship(Direction::UNI);
     }
 
     /**
@@ -130,7 +126,7 @@ final class Query implements QueryConvertible
      */
     public static function relationshipTo(): Relationship
     {
-        return new Relationship(Relationship::DIR_RIGHT);
+        return new Relationship(Direction::RIGHT);
     }
 
     /**
@@ -140,7 +136,7 @@ final class Query implements QueryConvertible
      */
     public static function relationshipFrom(): Relationship
     {
-        return new Relationship(Relationship::DIR_LEFT);
+        return new Relationship(Direction::LEFT);
     }
 
     /**
@@ -203,11 +199,11 @@ final class Query implements QueryConvertible
      *  - Query::list() - For a list
      *  - Query::map() - For a map
      *
-     * @param null|bool|float|int|mixed[]|string $literal The literal to construct
+     * @param bool|float|int|array|string|null $literal The literal to construct
      *
      * @return Boolean|class-string<Literal>|Float_|Integer|List_|Map|String_
      */
-    public static function literal($literal = null)
+    public static function literal(null|bool|float|int|array|string $literal = null): Boolean|Float_|Integer|List_|Map|String_|string
     {
         if ($literal === null) {
             return self::literal;
@@ -318,11 +314,8 @@ final class Query implements QueryConvertible
 
     /**
      * Creates an EXISTS expression.
-     *
-     * @param CompletePattern|CompletePattern[]|MatchClause $match
-     * @param null|BooleanType|WhereClause                  $where
      */
-    public static function exists($match, $where = null, bool $insertParentheses = false): Exists
+    public static function exists(CompletePattern|MatchClause|array $match, WhereClause|BooleanType|bool $where = null, bool $insertParentheses = false): Exists
     {
         if (!$match instanceof MatchClause) {
             $match = is_array($match) ? $match : [$match];
@@ -389,13 +382,13 @@ final class Query implements QueryConvertible
      * Creates the CALL procedure clause.
      *
      * @param Procedure|string $procedure The procedure to call
-     * @param AnyType|AnyType[]|bool|bool[]|float|float[]|int|int[]|mixed[]|mixed[][]|Pattern|Pattern[]|string|string[]|(AnyType|bool|float|int|mixed[]|Pattern|string)[] $yields    The result fields that should be returned (optional)
+     * @param mixed $yields               The result fields that should be returned (optional)
      *
      * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/call/ Corresponding documentation on Neo4j.com
      */
-    public function callProcedure($procedure, $yields = []): self
+    public function callProcedure(Procedure|string $procedure, mixed $yields = []): self
     {
         if (is_string($procedure)) {
             $procedure = Procedure::raw($procedure);
@@ -405,7 +398,7 @@ final class Query implements QueryConvertible
             $yields = [$yields];
         }
 
-        $yields = $this->makeAliasArray($yields, fn ($value) => $this->toName($value));
+        $yields = $this->makeAliasArray($yields, fn ($value) => CastUtils::toName($value));
 
         $callProcedureClause = new CallProcedureClause();
         $callProcedureClause->setProcedure($procedure);
@@ -425,7 +418,7 @@ final class Query implements QueryConvertible
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/match/ Corresponding documentation on Neo4j.com
      */
-    public function match($patterns): self
+    public function match(CompletePattern|array $patterns): self
     {
         if (!is_array($patterns)) {
             $patterns = [$patterns];
@@ -442,20 +435,20 @@ final class Query implements QueryConvertible
     /**
      * Creates the RETURN clause.
      *
-     * @param Alias|Alias[]|AnyType|AnyType[]|bool|bool[]|float|float[]|int|int[]|Pattern|Pattern[]|string|string[]|(Alias|AnyType|mixed[]|bool|float|int|Pattern|string)[] $expressions A single expression to return, or a non-empty list of expressions to return
+     * @param mixed $expressions A single expression to return, or a non-empty list of expressions to return
      * @param bool $distinct Whether to be a RETURN DISTINCT clause (optional, default: false)
      *
      * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/ Corresponding documentation on Neo4j.com
      */
-    public function returning($expressions, bool $distinct = false): self
+    public function returning(mixed $expressions, bool $distinct = false): self
     {
         if (!is_array($expressions)) {
             $expressions = [$expressions];
         }
 
-        $expressions = $this->makeAliasArray($expressions, fn ($value) => $this->toAnyType($value));
+        $expressions = $this->makeAliasArray($expressions, fn ($value) => CastUtils::toAnyType($value));
 
         $returnClause = new ReturnClause();
         $returnClause->addColumn(...$expressions);
@@ -475,7 +468,7 @@ final class Query implements QueryConvertible
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/create/ Corresponding documentation on Neo4j.com
      */
-    public function create($patterns): self
+    public function create(CompletePattern|array $patterns): self
     {
         if (!is_array($patterns)) {
             $patterns = [$patterns];
@@ -492,14 +485,14 @@ final class Query implements QueryConvertible
     /**
      * Creates the DELETE clause.
      *
-     * @param Pattern|Pattern[]|StructuralType|StructuralType[]|(Pattern|StructuralType)[] $structures A single structure to delete, or a non-empty list of structures to delete
+     * @param Pattern|StructuralType|(Pattern|StructuralType)[] $structures A single structure to delete, or a non-empty list of structures to delete
      * @param bool $detach Whether to DETACH DELETE (optional, default: false)
      *
      * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/ Corresponding documentation on Neo4j.com
      */
-    public function delete($structures, bool $detach = false): self
+    public function delete(Pattern|StructuralType|array $structures, bool $detach = false): self
     {
         if (!is_array($structures)) {
             $structures = [$structures];
@@ -517,13 +510,13 @@ final class Query implements QueryConvertible
     /**
      * Creates the DETACH DELETE clause.
      *
-     * @param Pattern|Pattern[]|StructuralType|StructuralType[]|(Pattern|StructuralType)[] $structures A single structure to delete, or a non-empty list of structures to delete
+     * @param Pattern|StructuralType|(Pattern|StructuralType)[] $structures A single structure to delete, or a non-empty list of structures to delete
      *
      * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/delete/ Corresponding documentation on Neo4j.com
      */
-    public function detachDelete($structures): self
+    public function detachDelete(Pattern|StructuralType|array $structures): self
     {
         return $this->delete($structures, true);
     }
@@ -537,7 +530,7 @@ final class Query implements QueryConvertible
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/limit/ Corresponding documentation on Neo4j.com
      */
-    public function limit($limit): self
+    public function limit(IntegerType|int $limit): self
     {
         $limitClause = new LimitClause();
         $limitClause->setLimit($limit);
@@ -556,7 +549,7 @@ final class Query implements QueryConvertible
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/skip/ Corresponding documentation on Neo4j.com
      */
-    public function skip($amount): self
+    public function skip(IntegerType|int $amount): self
     {
         $skipClause = new SkipClause();
         $skipClause->setSkip($amount);
@@ -598,7 +591,7 @@ final class Query implements QueryConvertible
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/optional-match/ Corresponding documentation on Neo4j.com
      */
-    public function optionalMatch($patterns): self
+    public function optionalMatch(CompletePattern|array $patterns): self
     {
         if (!is_array($patterns)) {
             $patterns = [$patterns];
@@ -622,7 +615,7 @@ final class Query implements QueryConvertible
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/order-by/ Corresponding documentation on Neo4j.com
      */
-    public function orderBy($properties, bool $descending = false): self
+    public function orderBy(Property|array $properties, bool $descending = false): self
     {
         if (!is_array($properties)) {
             $properties = [$properties];
@@ -640,13 +633,13 @@ final class Query implements QueryConvertible
     /**
      * Creates the REMOVE clause.
      *
-     * @param Label|Label[]|Property|Property[]|(Label|Property)[] $expressions A single expression to remove, or a non-empty list of expressions to remove
+     * @param Label|Property|(Label|Property)[] $expressions A single expression to remove, or a non-empty list of expressions to remove
      *
      * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/remove/ Corresponding documentation on Neo4j.com
      */
-    public function remove($expressions): self
+    public function remove(Label|Property|array $expressions): self
     {
         if (!is_array($expressions)) {
             $expressions = [$expressions];
@@ -663,13 +656,13 @@ final class Query implements QueryConvertible
     /**
      * Create the SET clause.
      *
-     * @param Label|Label[]|PropertyReplacement|PropertyReplacement[]|(Label|PropertyReplacement)[] $expressions A single expression to set, or a non-empty list of expressions to set
+     * @param Label|PropertyReplacement|(Label|PropertyReplacement)[] $expressions A single expression to set, or a non-empty list of expressions to set
      *
      * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/set/ Corresponding documentation on Neo4j.com
      */
-    public function set($expressions): self
+    public function set(Label|PropertyReplacement|array $expressions): self
     {
         if (!is_array($expressions)) {
             $expressions = [$expressions];
@@ -686,7 +679,7 @@ final class Query implements QueryConvertible
     /**
      * Creates the WHERE clause.
      *
-     * @param bool|bool[]|BooleanType|BooleanType[]|(bool|BooleanType)[] $expressions A boolean expression to evaluate, or a non-empty list of boolean expression to evaluate
+     * @param bool|BooleanType|(bool|BooleanType)[] $expressions A boolean expression to evaluate, or a non-empty list of boolean expression to evaluate
      * @param string $operator The operator with which to unify the given expressions, should be either WhereClause::OR,
      *                         WhereClause::AND or WhereClause::XOR (optional, default: 'and')
      *
@@ -694,7 +687,7 @@ final class Query implements QueryConvertible
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/where/ Corresponding documentation on Neo4j.com
      */
-    public function where($expressions, string $operator = WhereClause::AND): self
+    public function where(BooleanType|bool|array $expressions, string $operator = WhereClause::AND): self
     {
         if (!is_array($expressions)) {
             $expressions = [$expressions];
@@ -714,13 +707,13 @@ final class Query implements QueryConvertible
     /**
      * Creates the WITH clause.
      *
-     * @param Alias|Alias[]|AnyType|AnyType[]|bool|bool[]|float|float[]|int|int[]|mixed[][]|Pattern|Pattern[]|string|string[]|(Alias|AnyType|bool|float|int|mixed[]|Pattern|string)[] $expressions An entry to add, or a non-empty list of entries to add; if the array-key is non-numerical, it is used as the alias
+     * @param mixed $expressions An entry to add, or a non-empty list of entries to add; if the array-key is non-numerical, it is used as the alias
      *
      * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/with/ Corresponding documentation on Neo4j.com
      */
-    public function with($expressions): self
+    public function with(mixed $expressions): self
     {
         if (!is_array($expressions)) {
             $expressions = [$expressions];
@@ -763,7 +756,7 @@ final class Query implements QueryConvertible
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/union/ Corresponding documentation on Neo4j.com
      */
-    public function union($queryOrCallable, bool $all = false): self
+    public function union(Query|callable $queryOrCallable, bool $all = false): self
     {
         if (is_callable($queryOrCallable)) {
             $query = self::new();
@@ -837,10 +830,10 @@ final class Query implements QueryConvertible
     /**
      * Changes an associative array into an array of aliases.
      *
-     * @param mixed[]  $values   The array to change into an array of aliases
+     * @param array $values The array to change into an array of aliases
      * @param callable $castFunc Function to use to cast the elements of $array
      *
-     * @return mixed[] A sequential array, possibly consisting of aliases
+     * @return array A sequential array, possibly consisting of aliases
      */
     private static function makeAliasArray(array $values, callable $castFunc): array
     {

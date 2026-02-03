@@ -47,7 +47,7 @@ interface Pattern extends QueryConvertible
      *
      * @return $this
      */
-    public function withVariable($variable): self;
+    public function withVariable(Variable|string|null $variable): self;
 
     /**
      * Returns the variable of this pattern. This function generates a variable if none has been set. It will implicitly set the variable of the pattern as well.

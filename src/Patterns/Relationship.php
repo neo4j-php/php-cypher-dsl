@@ -10,7 +10,6 @@
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use DomainException;
-use InvalidArgumentException;
 use LogicException;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PropertyPatternTrait;
@@ -25,16 +24,10 @@ final class Relationship implements PropertyPattern
 {
     use PropertyPatternTrait;
 
-    public const DIR_RIGHT = ["-", "->"];
-
-    public const DIR_LEFT = ["<-", "-"];
-
-    public const DIR_UNI = ["-", "-"];
-
     /**
-     * @var string[] The direction of the relationship (one of the DIR_* constants)
+     * @var Direction The direction of the relationship
      */
-    private array $direction;
+    private Direction $direction;
 
     /**
      * @var string[] A list of relationship condition types
@@ -62,19 +55,12 @@ final class Relationship implements PropertyPattern
     private bool $arbitraryHops = false;
 
     /**
-     * @param string[] $direction The direction of the relationship, should be either:
-     *                            - Relationship::DIR_RIGHT (for a relation of (a)-->(b))
-     *                            - Relationship::DIR_LEFT (for a relation of (a)<--(b))
-     *                            - Relationship::DIR_UNI (for a relation of (a)--(b))
+     * @param Direction $direction The direction of the relationship
      *
      * @internal This method is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
-    public function __construct(array $direction)
+    public function __construct(Direction $direction)
     {
-        if ($direction !== self::DIR_RIGHT && $direction !== self::DIR_LEFT && $direction !== self::DIR_UNI) {
-            throw new InvalidArgumentException("The direction must be either 'DIR_LEFT', 'DIR_RIGHT' or 'RELATED_TO'");
-        }
-
         $this->direction = $direction;
     }
 
@@ -199,9 +185,9 @@ final class Relationship implements PropertyPattern
     /**
      * Returns the direction of this relationship (one of the Relationship::DIR_* constants).
      *
-     * @return string[]
+     * @return Direction
      */
-    public function getDirection(): array
+    public function getDirection(): Direction
     {
         return $this->direction;
     }
@@ -246,7 +232,13 @@ final class Relationship implements PropertyPattern
      */
     public function toQuery(): string
     {
-        return $this->direction[0] . $this->relationshipDetailToString() . $this->direction[1];
+        $directionParts = match ($this->direction) {
+            Direction::UNI => ['-', '-'],
+            Direction::LEFT => ['<-', '-'],
+            Direction::RIGHT => ['-', '->'],
+        };
+
+        return $directionParts[0] . $this->relationshipDetailToString() . $directionParts[1];
     }
 
     /**
