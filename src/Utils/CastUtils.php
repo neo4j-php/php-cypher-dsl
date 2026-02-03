@@ -33,6 +33,8 @@ class CastUtils
 {
     /**
      * Casts the given value to a ListType.
+     *
+     * @param ListType|ListType[] $list
      */
     public static function toListType(ListType|array $list): ListType
     {
@@ -41,6 +43,8 @@ class CastUtils
 
     /**
      * Casts the given value to a MapType.
+     *
+     * @param MapType|MapType[] $map
      */
     public static function toMapType(MapType|array $map): MapType
     {
@@ -84,6 +88,7 @@ class CastUtils
      */
     public static function toPropertyType(PropertyType|bool|int|float|string $property): PropertyType
     {
+        // @phpstan-ignore-next-line
         return $property instanceof PropertyType ? $property : Literal::literal($property);
     }
 

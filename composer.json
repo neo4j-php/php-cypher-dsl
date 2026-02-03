@@ -50,11 +50,11 @@
     "ext-ctype": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "~9.0",
-    "infection/infection": "^0.25.5",
+    "phpunit/phpunit": "^10.0",
+    "infection/infection": "^0.29",
     "friendsofphp/php-cs-fixer": "^3.0",
     "rregeer/phpunit-coverage-check": "^0.3.1",
-    "phpstan/phpstan": "^1.8"
+    "phpstan/phpstan": "^2.0"
   },
   "autoload": {
     "files": [

@@ -9,9 +9,12 @@
  */
 namespace WikibaseSolutions\CypherDSL\Traits\PatternTraits;
 
+use Stringable;
 use TypeError;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
+use WikibaseSolutions\CypherDSL\Patterns\Pattern;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
@@ -48,7 +51,7 @@ trait PropertyPatternTrait
     /**
      * @inheritDoc
      */
-    public function addProperty(string $key, mixed $property): self
+    public function addProperty(string $key, AnyType|Pattern|Stringable|bool|float|int|array|string $property): self
     {
         $this->makeMap()->add($key, $property);
 
@@ -58,7 +61,7 @@ trait PropertyPatternTrait
     /**
      * @inheritDoc
      */
-    public function addProperties(MapType|array $properties): self
+    public function addProperties(Map|array $properties): self
     {
         $map = $this->makeMap();
 

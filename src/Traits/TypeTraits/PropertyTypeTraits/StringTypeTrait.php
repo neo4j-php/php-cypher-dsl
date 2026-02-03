@@ -18,8 +18,6 @@ use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This trait provides a default implementation to satisfy the "StringType" interface.
- *
- * @implements StringType
  */
 trait StringTypeTrait
 {

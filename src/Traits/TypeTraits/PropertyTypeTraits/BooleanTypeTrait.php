@@ -18,8 +18,6 @@ use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This trait provides a default implementation to satisfy the "BooleanType" interface.
- *
- * @implements BooleanType
  */
 trait BooleanTypeTrait
 {

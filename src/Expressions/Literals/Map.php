@@ -9,6 +9,8 @@
  */
 namespace WikibaseSolutions\CypherDSL\Expressions\Literals;
 
+use Stringable;
+use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\CompositeTypeTraits\MapTypeTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -46,12 +48,12 @@ final class Map implements MapType
     /**
      * Adds an element for the given name with the given value. Overrides the element if the $key already exists.
      *
-     * @param string $key   The name/label for the element
-     * @param mixed  $value The value of the element
+     * @param string                                                 $key   The name/label for the element
+     * @param AnyType|array|bool|float|int|Pattern|string|Stringable $value The value of the element
      *
      * @return $this
      */
-    public function add(string $key, mixed $value): self
+    public function add(string $key, AnyType|Pattern|Stringable|bool|float|int|array|string $value): self
     {
         $this->elements[$key] = CastUtils::toAnyType($value);
 

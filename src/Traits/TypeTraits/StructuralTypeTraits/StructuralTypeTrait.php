@@ -10,7 +10,6 @@
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\StructuralTypeTraits;
 
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\AnyTypeTrait;
-use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
  * This trait provides a default implementation to satisfy the "StructuralType" interface.
@@ -21,8 +20,6 @@ use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
  * - NodeTypeTrait
  * - PathTypeTrait
  * - RelationshipTypeTrait
- *
- * @implements StructuralType
  */
 trait StructuralTypeTrait
 {

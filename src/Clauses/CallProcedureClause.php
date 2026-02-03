@@ -31,7 +31,7 @@ final class CallProcedureClause extends Clause
     private ?Procedure $procedure = null;
 
     /**
-     * @var Alias[]|Variable[]|(Alias|Variable)[] The result fields that are yielded
+     * @var Alias[]|(Alias|Variable)[]|Variable[] The result fields that are yielded
      */
     private array $yields = [];
 

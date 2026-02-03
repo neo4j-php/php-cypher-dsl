@@ -9,9 +9,11 @@
  */
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
+use Stringable;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PropertyPatternTrait;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
 
 /**
@@ -43,7 +45,7 @@ interface PropertyPattern extends Pattern
      *
      * @return $this
      */
-    public function addProperty(string $key, mixed $property): self;
+    public function addProperty(string $key, AnyType|Pattern|Stringable|bool|float|int|array|string $property): self;
 
     /**
      * Add the given properties to this pattern. This is only possible if the properties in this pattern are a map.
@@ -52,7 +54,7 @@ interface PropertyPattern extends Pattern
      *
      * @return $this
      */
-    public function addProperties(MapType|array $properties): self;
+    public function addProperties(Map|array $properties): self;
 
     /**
      * Returns the properties of this object.

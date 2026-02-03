@@ -317,11 +317,6 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideDateYMDData
-     *
-     * @param $year
-     * @param $month
-     * @param $day
-     * @param $expected
      */
     public function testDateYMD($year, $month, $day, $expected): void
     {
@@ -341,11 +336,6 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideDateYWDData
-     *
-     * @param $year
-     * @param $week
-     * @param $weekday
-     * @param $expected
      */
     public function testDateYWD($year, $week, $weekday, $expected): void
     {
@@ -386,18 +376,6 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideDatetimeYMDData
-     *
-     * @param $year
-     * @param $month
-     * @param $day
-     * @param $hour
-     * @param $minute
-     * @param $second
-     * @param $millisecond
-     * @param $microsecond
-     * @param $nanosecond
-     * @param $timezone
-     * @param $expected
      */
     public function testDatetimeYMD($year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected): void
     {
@@ -417,18 +395,6 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideDatetimeYWDData
-     *
-     * @param $year
-     * @param $week
-     * @param $dayOfWeek
-     * @param $hour
-     * @param $minute
-     * @param $second
-     * @param $millisecond
-     * @param $microsecond
-     * @param $nanosecond
-     * @param $timezone
-     * @param $expected
      */
     public function testDatetimeYWD($year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected): void
     {
@@ -448,18 +414,6 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideDatetimeYQDData
-     *
-     * @param $year
-     * @param $quarter
-     * @param $dayOfQuarter
-     * @param $hour
-     * @param $minute
-     * @param $second
-     * @param $millisecond
-     * @param $microsecond
-     * @param $nanosecond
-     * @param $timezone
-     * @param $expected
      */
     public function testDatetimeYQD($year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected): void
     {
@@ -479,17 +433,6 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideDatetimeYQData
-     *
-     * @param $year
-     * @param $ordinalDay
-     * @param $hour
-     * @param $minute
-     * @param $second
-     * @param $millisecond
-     * @param $microsecond
-     * @param $nanosecond
-     * @param $timezone
-     * @param $expected
      */
     public function testDatetimeYD($year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $timezone, $expected): void
     {
@@ -530,17 +473,6 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideLocalDatetimeYMDData
-     *
-     * @param $year
-     * @param $month
-     * @param $day
-     * @param $hour
-     * @param $minute
-     * @param $second
-     * @param $millisecond
-     * @param $microsecond
-     * @param $nanosecond
-     * @param $expected
      */
     public function testLocalDateTimeYMD($year, $month, $day, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected): void
     {
@@ -560,17 +492,6 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideLocalDatetimeYWDData
-     *
-     * @param $year
-     * @param $week
-     * @param $dayOfWeek
-     * @param $hour
-     * @param $minute
-     * @param $second
-     * @param $millisecond
-     * @param $microsecond
-     * @param $nanosecond
-     * @param $expected
      */
     public function testLocalDateTimeYWD($year, $week, $dayOfWeek, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected): void
     {
@@ -590,17 +511,6 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideLocalDatetimeYQDData
-     *
-     * @param $year
-     * @param $quarter
-     * @param $dayOfQuarter
-     * @param $hour
-     * @param $minute
-     * @param $second
-     * @param $millisecond
-     * @param $microsecond
-     * @param $nanosecond
-     * @param $expected
      */
     public function testLocalDatetimeYQD($year, $quarter, $dayOfQuarter, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected): void
     {
@@ -620,16 +530,6 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideLocalDatetimeYQData
-     *
-     * @param $year
-     * @param $ordinalDay
-     * @param $hour
-     * @param $minute
-     * @param $second
-     * @param $millisecond
-     * @param $microsecond
-     * @param $nanosecond
-     * @param $expected
      */
     public function testLocalDatetimeYD($year, $ordinalDay, $hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected): void
     {
@@ -668,14 +568,6 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideLocalTimeData
-     *
-     * @param $hour
-     * @param $minute
-     * @param $second
-     * @param $millisecond
-     * @param $microsecond
-     * @param $nanosecond
-     * @param $expected
      */
     public function testLocalTime($hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected): void
     {
@@ -712,14 +604,6 @@ final class LiteralTest extends TestCase
 
     /**
      * @dataProvider provideTimeData
-     *
-     * @param $hour
-     * @param $minute
-     * @param $second
-     * @param $millisecond
-     * @param $microsecond
-     * @param $nanosecond
-     * @param $expected
      */
     public function testTime($hour, $minute, $second, $millisecond, $microsecond, $nanosecond, $expected): void
     {

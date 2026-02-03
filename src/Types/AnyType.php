@@ -46,7 +46,7 @@ interface AnyType extends QueryConvertible
     /**
      * Perform an inequality comparison against the given expression.
      */
-    public function notEquals(self|Pattern|string|bool|float|int|array$right, bool $insertParentheses = true): Inequality;
+    public function notEquals(self|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): Inequality;
 
     /**
      * Perform a greater than comparison against the given expression.

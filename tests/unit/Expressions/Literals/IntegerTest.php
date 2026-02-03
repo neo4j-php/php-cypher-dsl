@@ -48,8 +48,6 @@ final class IntegerTest extends TestCase
 
     /**
      * @dataProvider provideToQueryData
-     *
-     * @param $number
      */
     public function testToQuery($number, string $expected): void
     {

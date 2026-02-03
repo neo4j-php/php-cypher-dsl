@@ -9,12 +9,8 @@
  */
 namespace WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits;
 
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PointType;
-
 /**
  * This trait provides a default implementation to satisfy the "PointType" interface.
- *
- * @implements PointType
  */
 trait PointTypeTrait
 {

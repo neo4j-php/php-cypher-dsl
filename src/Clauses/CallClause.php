@@ -10,6 +10,7 @@
 namespace WikibaseSolutions\CypherDSL\Clauses;
 
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
@@ -53,7 +54,7 @@ final class CallClause extends Clause
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/#subquery-correlated-importing
      */
-    public function addWithVariable(...$variables): self
+    public function addWithVariable(Pattern|Variable|string ...$variables): self
     {
         $res = [];
 

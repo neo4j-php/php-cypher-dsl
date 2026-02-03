@@ -57,8 +57,6 @@ final class Node implements CompletePattern, PropertyPattern, RelatablePattern
     /**
      * Adds one or more labels to this node.
      *
-     * @param string ...$label
-     *
      * @return $this
      */
     public function addLabel(string ...$label): self

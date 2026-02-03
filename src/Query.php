@@ -77,8 +77,6 @@ final class Query implements QueryConvertible
 
     /**
      * Construct a new Query instance.
-     *
-     * @return Query
      */
     public static function new(): self
     {
@@ -203,6 +201,7 @@ final class Query implements QueryConvertible
      *
      * @return Boolean|class-string<Literal>|Float_|Integer|List_|Map|String_
      */
+    // @phpstan-ignore-next-line
     public static function literal(null|bool|float|int|array|string|Stringable $literal = null): Boolean|Float_|Integer|List_|Map|String_|string
     {
         if ($literal === null) {
@@ -315,7 +314,7 @@ final class Query implements QueryConvertible
     /**
      * Creates an EXISTS expression.
      */
-    public static function exists(CompletePattern|MatchClause|array $match, WhereClause|BooleanType|bool $where = null, bool $insertParentheses = false): Exists
+    public static function exists(CompletePattern|MatchClause|array $match, WhereClause|BooleanType|bool|null $where = null, bool $insertParentheses = false): Exists
     {
         if (!$match instanceof MatchClause) {
             $match = is_array($match) ? $match : [$match];
@@ -353,8 +352,8 @@ final class Query implements QueryConvertible
      *
      * @note This feature is not part of the openCypher standard.
      *
-     * @param callable|Query $query A callable decorating a Query, or an instance of Query
-     * @param Pattern|string|Variable|(Pattern|string|Variable)[] $variables The variables to include in the WITH clause for correlation (optional)
+     * @param callable|Query                                      $query     A callable decorating a Query, or an instance of Query
+     * @param Pattern|(Pattern|string|Variable)[]|string|Variable $variables The variables to include in the WITH clause for correlation (optional)
      *
      * @return $this
      *
@@ -489,8 +488,8 @@ final class Query implements QueryConvertible
     /**
      * Creates the DELETE clause.
      *
-     * @param Pattern|StructuralType|(Pattern|StructuralType)[] $structures A single structure to delete, or a non-empty list of structures to delete
-     * @param bool $detach Whether to DETACH DELETE (optional, default: false)
+     * @param Pattern|(Pattern|StructuralType)[]|StructuralType $structures A single structure to delete, or a non-empty list of structures to delete
+     * @param bool                                              $detach     Whether to DETACH DELETE (optional, default: false)
      *
      * @return $this
      *
@@ -514,7 +513,7 @@ final class Query implements QueryConvertible
     /**
      * Creates the DETACH DELETE clause.
      *
-     * @param Pattern|StructuralType|(Pattern|StructuralType)[] $structures A single structure to delete, or a non-empty list of structures to delete
+     * @param Pattern|(Pattern|StructuralType)[]|StructuralType $structures A single structure to delete, or a non-empty list of structures to delete
      *
      * @return $this
      *
@@ -637,7 +636,7 @@ final class Query implements QueryConvertible
     /**
      * Creates the REMOVE clause.
      *
-     * @param Label|Property|(Label|Property)[] $expressions A single expression to remove, or a non-empty list of expressions to remove
+     * @param Label|(Label|Property)[]|Property $expressions A single expression to remove, or a non-empty list of expressions to remove
      *
      * @return $this
      *
@@ -660,7 +659,7 @@ final class Query implements QueryConvertible
     /**
      * Create the SET clause.
      *
-     * @param Label|PropertyReplacement|(Label|PropertyReplacement)[] $expressions A single expression to set, or a non-empty list of expressions to set
+     * @param Label|(Label|PropertyReplacement)[]|PropertyReplacement $expressions A single expression to set, or a non-empty list of expressions to set
      *
      * @return $this
      *
@@ -684,8 +683,8 @@ final class Query implements QueryConvertible
      * Creates the WHERE clause.
      *
      * @param bool|BooleanType|(bool|BooleanType)[] $expressions A boolean expression to evaluate, or a non-empty list of boolean expression to evaluate
-     * @param string $operator The operator with which to unify the given expressions, should be either WhereClause::OR,
-     *                         WhereClause::AND or WhereClause::XOR (optional, default: 'and')
+     * @param string                                $operator    The operator with which to unify the given expressions, should be either WhereClause::OR,
+     *                                                           WhereClause::AND or WhereClause::XOR (optional, default: 'and')
      *
      * @return $this
      *

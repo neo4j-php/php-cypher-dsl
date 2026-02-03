@@ -21,8 +21,6 @@ use WikibaseSolutions\CypherDSL\Utils\CastUtils;
 
 /**
  * This trait provides a default implementation to satisfy the "NumeralType" interface.
- *
- * @implements NumeralType
  */
 trait NumeralTypeTrait
 {

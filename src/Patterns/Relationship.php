@@ -171,8 +171,6 @@ final class Relationship implements PropertyPattern
     /**
      * Add one or more types to require for this relationship.
      *
-     * @param string ...$type
-     *
      * @return $this
      */
     public function addType(string ...$type): self
