@@ -55,8 +55,6 @@ final class MergeClause extends Clause
      * The clause to execute on all nodes that need to be created.
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/#merge-merge-with-on-create
-     *
-     * @return $this
      */
     public function setOnCreate(?SetClause $createClause): self
     {
@@ -69,8 +67,6 @@ final class MergeClause extends Clause
      * The clause to execute on all found nodes.
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/merge/#merge-merge-with-on-match
-     *
-     * @return $this
      */
     public function setOnMatch(?SetClause $matchClause): self
     {

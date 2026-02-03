@@ -29,10 +29,6 @@ final class MatchClause extends Clause
 
     /**
      * Add one or more patterns to the MATCH clause.
-     *
-     * @param CompletePattern ...$pattern
-     *
-     * @return $this
      */
     public function addPattern(CompletePattern ...$pattern): self
     {

@@ -39,8 +39,6 @@ final class CallProcedureClause extends Clause
      * Sets the procedure to call.
      *
      * @param Procedure $procedure The procedure to call
-     *
-     * @return $this
      */
     public function setProcedure(Procedure $procedure): self
     {
@@ -53,8 +51,6 @@ final class CallProcedureClause extends Clause
      * Adds a variable to yield.
      *
      * @param Alias|string|Variable $yields The variable to yield
-     *
-     * @return $this
      */
     public function addYield(...$yields): self
     {
@@ -71,8 +67,6 @@ final class CallProcedureClause extends Clause
 
     /**
      * Returns the procedure to call.
-     *
-     * @return Procedure|null
      */
     public function getProcedure(): ?Procedure
     {

@@ -31,9 +31,9 @@ abstract class Procedure implements QueryConvertible
      * Cypher queries. The parameters of this function are not type-checked.
      *
      * @param string $functionName The name of the function to call
-     * @param mixed ...$parameters The parameters to pass to the function call
+     * @param array $parameters The parameters to pass to the function call
      */
-    public static function raw(string $functionName, mixed $parameters = []): Raw
+    public static function raw(string $functionName, array $parameters = []): Raw
     {
         return new Raw($functionName, array_map(CastUtils::toAnyType(...), $parameters));
     }

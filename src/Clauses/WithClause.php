@@ -35,10 +35,6 @@ final class WithClause extends Clause
 
     /**
      * Add one or more new entries to the WITH clause.
-     *
-     * @param Alias|Pattern|string|Variable ...$entries The entries to add
-     *
-     * @return $this
      */
     public function addEntry(Alias|Pattern|string|Variable ...$entries): self
     {

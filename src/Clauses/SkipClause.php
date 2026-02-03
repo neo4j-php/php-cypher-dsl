@@ -30,8 +30,6 @@ final class SkipClause extends Clause
      * Sets the expression that returns the skip.
      *
      * @param int|IntegerType $skip The amount to skip
-     *
-     * @return SkipClause
      */
     public function setSkip(IntegerType|int $skip): self
     {

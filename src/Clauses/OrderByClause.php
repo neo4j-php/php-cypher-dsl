@@ -40,8 +40,6 @@ final class OrderByClause extends Clause
      * Add one or more properties to sort on.
      *
      * @param Property ...$property The additional property to sort on
-     *
-     * @return OrderByClause
      */
     public function addProperty(Property ...$property): self
     {
@@ -52,8 +50,6 @@ final class OrderByClause extends Clause
 
     /**
      * Set to sort in a DESCENDING order.
-     *
-     * @return OrderByClause
      */
     public function setDescending(bool $descending = true): self
     {

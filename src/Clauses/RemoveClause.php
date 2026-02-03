@@ -31,8 +31,6 @@ final class RemoveClause extends Clause
      * Add one or more expressions to the REMOVE clause.
      *
      * @param Label|Property ...$expressions The expressions to add
-     *
-     * @return RemoveClause
      */
     public function addExpression(Property|Label ...$expressions): self
     {

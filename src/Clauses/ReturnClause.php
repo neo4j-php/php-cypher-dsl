@@ -39,8 +39,6 @@ final class ReturnClause extends Clause
      *
      * @param Alias|AnyType|bool|float|int|array|Pattern|string ...$columns The values to return
      *
-     * @return $this
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-column-alias
      */
     public function addColumn(Alias|AnyType|bool|float|int|array|Pattern|string ...$columns): self
@@ -58,8 +56,6 @@ final class ReturnClause extends Clause
 
     /**
      * Sets this query to only return unique rows.
-     *
-     * @return $this
      *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/return/#return-unique-results
      */

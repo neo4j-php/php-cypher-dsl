@@ -355,7 +355,7 @@ final class Query implements QueryConvertible
      * @note This feature is not part of the openCypher standard.
      *
      * @param callable|Query $query A callable decorating a Query, or an instance of Query
-     * @param Pattern|string|Variable ...$variables The variables to include in the WITH clause for correlation (optional)
+     * @param Pattern|string|Variable|(Pattern|string|Variable)[] $variables The variables to include in the WITH clause for correlation (optional)
      *
      * @return $this
      *

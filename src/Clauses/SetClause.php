@@ -31,8 +31,6 @@ final class SetClause extends Clause
      * Add one or more expressions to this SET clause.
      *
      * @param Label|PropertyReplacement ...$expressions The expressions to add to this set clause
-     *
-     * @return $this
      */
     public function add(Label|PropertyReplacement ...$expressions): self
     {

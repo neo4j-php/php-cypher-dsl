@@ -31,10 +31,6 @@ final class LimitClause extends Clause
 
     /**
      * Sets the expression that returns the limit.
-     *
-     * @param int|IntegerType $limit The limit
-     *
-     * @return $this
      */
     public function setLimit(IntegerType|int $limit): self
     {

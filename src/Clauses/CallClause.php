@@ -52,10 +52,6 @@ final class CallClause extends Clause
     /**
      * Add one or more variables to include in the WITH clause.
      *
-     * @param Pattern|string|Variable ...$variables
-     *
-     * @return $this
-     *
      * @see https://neo4j.com/docs/cypher-manual/current/clauses/call-subquery/#subquery-correlated-importing
      */
     public function addWithVariable(...$variables): self
