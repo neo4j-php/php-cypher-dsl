@@ -1,6 +1,6 @@
 {
   "name": "wikibase-solutions/php-cypher-dsl",
-  "description": "A query builder for the Cypher query language written in PHP",
+  "description": "A query builder for the Cypher query language",
   "type": "library",
   "keywords": [
     "neo4j",
