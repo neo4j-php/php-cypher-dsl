@@ -1,5 +1,8 @@
 name: analyse
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [ 'main' ]
