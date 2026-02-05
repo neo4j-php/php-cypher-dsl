@@ -24,4 +24,12 @@ final class Subtraction extends MathematicalBinaryOperator
     {
         return "-";
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getPrecedence(): Precedence
+    {
+        return Precedence::ADDITIVE;
+    }
 }

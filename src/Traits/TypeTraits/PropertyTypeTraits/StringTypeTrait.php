@@ -26,32 +26,32 @@ trait StringTypeTrait
     /**
      * @inheritDoc
      */
-    public function contains(StringType|string $right, bool $insertParentheses = true): Contains
+    public function contains(StringType|string $right): Contains
     {
-        return new Contains($this, CastUtils::toStringType($right), $insertParentheses);
+        return new Contains($this, CastUtils::toStringType($right));
     }
 
     /**
      * @inheritDoc
      */
-    public function endsWith(StringType|string $right, bool $insertParentheses = true): EndsWith
+    public function endsWith(StringType|string $right): EndsWith
     {
-        return new EndsWith($this, CastUtils::toStringType($right), $insertParentheses);
+        return new EndsWith($this, CastUtils::toStringType($right));
     }
 
     /**
      * @inheritDoc
      */
-    public function startsWith(StringType|string $right, bool $insertParentheses = true): StartsWith
+    public function startsWith(StringType|string $right): StartsWith
     {
-        return new StartsWith($this, CastUtils::toStringType($right), $insertParentheses);
+        return new StartsWith($this, CastUtils::toStringType($right));
     }
 
     /**
      * @inheritDoc
      */
-    public function regex(StringType|string $right, bool $insertParentheses = true): Regex
+    public function regex(StringType|string $right): Regex
     {
-        return new Regex($this, CastUtils::toStringType($right), $insertParentheses);
+        return new Regex($this, CastUtils::toStringType($right));
     }
 }

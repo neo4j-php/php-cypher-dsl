@@ -24,4 +24,12 @@ final class UnaryMinus extends MathematicalUnaryOperator
     {
         return "-";
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getPrecedence(): Precedence
+    {
+        return Precedence::UNARY;
+    }
 }

@@ -23,4 +23,12 @@ final class EndsWith extends StringSpecificComparisonBinaryOperator
     {
         return "ENDS WITH";
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getPrecedence(): Precedence
+    {
+        return Precedence::FUNCTIONAL;
+    }
 }

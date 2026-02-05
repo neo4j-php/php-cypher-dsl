@@ -23,22 +23,11 @@ final class ExclusiveDisjunctionTest extends TestCase
     {
         $xor = new ExclusiveDisjunction(new Boolean(true), new Boolean(false));
 
-        $this->assertSame("(true XOR false)", $xor->toQuery());
-
-        $xor = new ExclusiveDisjunction($xor, $xor);
-
-        $this->assertSame("((true XOR false) XOR (true XOR false))", $xor->toQuery());
-    }
-
-    public function testToQueryNoParentheses(): void
-    {
-        $xor = new ExclusiveDisjunction(new Boolean(true), new Boolean(false), false);
-
         $this->assertSame("true XOR false", $xor->toQuery());
 
         $xor = new ExclusiveDisjunction($xor, $xor);
 
-        $this->assertSame("(true XOR false XOR true XOR false)", $xor->toQuery());
+        $this->assertSame("(true XOR false) XOR (true XOR false)", $xor->toQuery());
     }
 
     public function testInstanceOfBooleanType(): void

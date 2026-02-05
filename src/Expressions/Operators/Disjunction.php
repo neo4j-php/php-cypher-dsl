@@ -23,4 +23,12 @@ final class Disjunction extends BooleanBinaryOperator
     {
         return "OR";
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getPrecedence(): Precedence
+    {
+        return Precedence::DISJUNCTION;
+    }
 }

@@ -25,22 +25,11 @@ final class MultiplicationTest extends TestCase
     {
         $multiplication = new Multiplication(new Integer(10), new Integer(15));
 
-        $this->assertSame("(10 * 15)", $multiplication->toQuery());
-
-        $multiplication = new Multiplication($multiplication, $multiplication);
-
-        $this->assertSame("((10 * 15) * (10 * 15))", $multiplication->toQuery());
-    }
-
-    public function testToQueryNoParentheses(): void
-    {
-        $multiplication = new Multiplication(new Integer(10), new Integer(15), false);
-
         $this->assertSame("10 * 15", $multiplication->toQuery());
 
         $multiplication = new Multiplication($multiplication, $multiplication);
 
-        $this->assertSame("(10 * 15 * 10 * 15)", $multiplication->toQuery());
+        $this->assertSame("(10 * 15) * (10 * 15)", $multiplication->toQuery());
     }
 
     public function testInstanceOfFloatType(): void

@@ -23,15 +23,11 @@ final class IsNullTest extends TestCase
     {
         $isNull = new IsNull(new Boolean(true), false);
 
-        $this->assertFalse($isNull->insertsParentheses());
-
         $this->assertSame("true IS NULL", $isNull->toQuery());
 
         $isNull = new IsNull($isNull);
 
-        $this->assertSame("(true IS NULL IS NULL)", $isNull->toQuery());
-
-        $this->assertTrue($isNull->insertsParentheses());
+        $this->assertSame("(true IS NULL) IS NULL", $isNull->toQuery());
     }
 
     public function testInstanceOfBooleanType(): void

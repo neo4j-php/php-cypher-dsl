@@ -23,18 +23,11 @@ final class NegationTest extends TestCase
     {
         $not = new Negation(new Boolean(true));
 
-        $this->assertSame("(NOT true)", $not->toQuery());
+        $this->assertSame("NOT true", $not->toQuery());
 
         $not = new Negation($not);
 
-        $this->assertSame("(NOT (NOT true))", $not->toQuery());
-    }
-
-    public function testToQueryNoParentheses(): void
-    {
-        $not = new Negation(new Boolean(true), false);
-
-        $this->assertSame("NOT true", $not->toQuery());
+        $this->assertSame("NOT (NOT true)", $not->toQuery());
     }
 
     public function testInstanceOfBooleanType(): void

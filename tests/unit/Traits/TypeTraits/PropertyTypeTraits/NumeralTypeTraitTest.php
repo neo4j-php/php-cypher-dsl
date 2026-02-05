@@ -49,7 +49,6 @@ final class NumeralTypeTraitTest extends TestCase
 
         $this->assertInstanceOf(Addition::class, $plus);
 
-        $this->assertTrue($plus->insertsParentheses());
         $this->assertEquals($this->a, $plus->getLeft());
         $this->assertEquals($this->b, $plus->getRight());
     }
@@ -61,24 +60,12 @@ final class NumeralTypeTraitTest extends TestCase
         $this->assertInstanceOf(Addition::class, $plus);
     }
 
-    public function testPlusNoParentheses(): void
-    {
-        $plus = $this->a->plus($this->b, false);
-
-        $this->assertInstanceOf(Addition::class, $plus);
-
-        $this->assertFalse($plus->insertsParentheses());
-        $this->assertEquals($this->a, $plus->getLeft());
-        $this->assertEquals($this->b, $plus->getRight());
-    }
-
     public function testDivide(): void
     {
         $divide = $this->a->divide($this->b);
 
         $this->assertInstanceOf(Division::class, $divide);
 
-        $this->assertTrue($divide->insertsParentheses());
         $this->assertEquals($this->a, $divide->getLeft());
         $this->assertEquals($this->b, $divide->getRight());
     }
@@ -90,24 +77,12 @@ final class NumeralTypeTraitTest extends TestCase
         $this->assertInstanceOf(Division::class, $divide);
     }
 
-    public function testDivideNoParentheses(): void
-    {
-        $divide = $this->a->divide($this->b, false);
-
-        $this->assertInstanceOf(Division::class, $divide);
-
-        $this->assertFalse($divide->insertsParentheses());
-        $this->assertEquals($this->a, $divide->getLeft());
-        $this->assertEquals($this->b, $divide->getRight());
-    }
-
     public function testExponentiate(): void
     {
         $exponentiate = $this->a->exponentiate($this->b);
 
         $this->assertInstanceOf(Exponentiation::class, $exponentiate);
 
-        $this->assertTrue($exponentiate->insertsParentheses());
         $this->assertEquals($this->a, $exponentiate->getLeft());
         $this->assertEquals($this->b, $exponentiate->getRight());
     }
@@ -119,24 +94,12 @@ final class NumeralTypeTraitTest extends TestCase
         $this->assertInstanceOf(Exponentiation::class, $exponentiate);
     }
 
-    public function testExponentiateNoParentheses(): void
-    {
-        $exponentiate = $this->a->exponentiate($this->b, false);
-
-        $this->assertInstanceOf(Exponentiation::class, $exponentiate);
-
-        $this->assertFalse($exponentiate->insertsParentheses());
-        $this->assertEquals($this->a, $exponentiate->getLeft());
-        $this->assertEquals($this->b, $exponentiate->getRight());
-    }
-
     public function testMod(): void
     {
         $mod = $this->a->mod($this->b);
 
         $this->assertInstanceOf(ModuloDivision::class, $mod);
 
-        $this->assertTrue($mod->insertsParentheses());
         $this->assertEquals($this->a, $mod->getLeft());
         $this->assertEquals($this->b, $mod->getRight());
     }
@@ -148,24 +111,12 @@ final class NumeralTypeTraitTest extends TestCase
         $this->assertInstanceOf(ModuloDivision::class, $mod);
     }
 
-    public function testModNoParentheses(): void
-    {
-        $mod = $this->a->mod($this->b, false);
-
-        $this->assertInstanceOf(ModuloDivision::class, $mod);
-
-        $this->assertFalse($mod->insertsParentheses());
-        $this->assertEquals($this->a, $mod->getLeft());
-        $this->assertEquals($this->b, $mod->getRight());
-    }
-
     public function testTimes(): void
     {
         $times = $this->a->times($this->b);
 
         $this->assertInstanceOf(Multiplication::class, $times);
 
-        $this->assertTrue($times->insertsParentheses());
         $this->assertEquals($this->a, $times->getLeft());
         $this->assertEquals($this->b, $times->getRight());
     }
@@ -177,24 +128,12 @@ final class NumeralTypeTraitTest extends TestCase
         $this->assertInstanceOf(Multiplication::class, $times);
     }
 
-    public function testTimesNoParentheses(): void
-    {
-        $times = $this->a->times($this->b, false);
-
-        $this->assertInstanceOf(Multiplication::class, $times);
-
-        $this->assertFalse($times->insertsParentheses());
-        $this->assertEquals($this->a, $times->getLeft());
-        $this->assertEquals($this->b, $times->getRight());
-    }
-
     public function testMinus(): void
     {
         $minus = $this->a->minus($this->b);
 
         $this->assertInstanceOf(Subtraction::class, $minus);
 
-        $this->assertTrue($minus->insertsParentheses());
         $this->assertEquals($this->a, $minus->getLeft());
         $this->assertEquals($this->b, $minus->getRight());
     }
@@ -204,17 +143,6 @@ final class NumeralTypeTraitTest extends TestCase
         $minus = $this->a->minus(1);
 
         $this->assertInstanceOf(Subtraction::class, $minus);
-    }
-
-    public function testMinusNoParentheses(): void
-    {
-        $minus = $this->a->minus($this->b, false);
-
-        $this->assertInstanceOf(Subtraction::class, $minus);
-
-        $this->assertFalse($minus->insertsParentheses());
-        $this->assertEquals($this->a, $minus->getLeft());
-        $this->assertEquals($this->b, $minus->getRight());
     }
 
     public function testNegate(): void

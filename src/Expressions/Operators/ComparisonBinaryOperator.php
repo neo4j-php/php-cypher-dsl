@@ -41,8 +41,8 @@ abstract class ComparisonBinaryOperator extends BinaryOperator implements Boolea
      * @param AnyType $left  The left-hand of the comparison operator
      * @param AnyType $right The right-hand of the comparison operator
      */
-    public function __construct(AnyType $left, AnyType $right, bool $insertParentheses = true)
+    public function __construct(AnyType $left, AnyType $right)
     {
-        parent::__construct($left, $right, $insertParentheses);
+        parent::__construct($left, $right);
     }
 }

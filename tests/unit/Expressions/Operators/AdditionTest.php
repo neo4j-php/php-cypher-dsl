@@ -28,16 +28,15 @@ final class AdditionTest extends TestCase
         $right = new Float_(15);
         $addition = new Addition($left, $right);
 
-        $this->assertSame("(10 + 15.0)", $addition->toQuery());
+        $this->assertSame("10 + 15.0", $addition->toQuery());
 
         $this->assertSame($left, $addition->getLeft());
         $this->assertSame($right, $addition->getRight());
 
         $newAddition = new Addition($addition, $addition);
 
-        $this->assertSame("((10 + 15.0) + (10 + 15.0))", $newAddition->toQuery());
+        $this->assertSame("(10 + 15.0) + (10 + 15.0)", $newAddition->toQuery());
 
-        $this->assertTrue($newAddition->insertsParentheses());
         $this->assertEquals($addition, $newAddition->getLeft());
         $this->assertEquals($addition, $newAddition->getRight());
 
@@ -45,7 +44,6 @@ final class AdditionTest extends TestCase
 
         $this->assertSame("(10 + 15.0) + (10 + 15.0)", $newAddition->toQuery());
 
-        $this->assertFalse($newAddition->insertsParentheses());
         $this->assertEquals($addition, $newAddition->getLeft());
         $this->assertEquals($addition, $newAddition->getRight());
     }

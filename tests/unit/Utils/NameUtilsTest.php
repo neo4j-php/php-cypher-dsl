@@ -103,12 +103,12 @@ class NameUtilsTest extends TestCase
 
     public function testGenerateIdentifierWithoutPrefix(): void
     {
-        $this->assertMatchesRegularExpression('/^var\w{32}$/', NameUtils::generateIdentifier());
+        $this->assertMatchesRegularExpression('/^var\w{8}$/', NameUtils::generateIdentifier());
     }
 
     public function testGenerateIdentifierWithPrefix(): void
     {
-        $this->assertMatchesRegularExpression('/^x\w{32}$/', NameUtils::generateIdentifier('x'));
+        $this->assertMatchesRegularExpression('/^x\w{8}$/', NameUtils::generateIdentifier('x'));
     }
 
     public function testGenerateIdentifierWithPrefixAndLength(): void

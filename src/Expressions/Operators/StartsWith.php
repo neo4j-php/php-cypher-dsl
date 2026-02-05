@@ -23,4 +23,12 @@ final class StartsWith extends StringSpecificComparisonBinaryOperator
     {
         return "STARTS WITH";
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getPrecedence(): Precedence
+    {
+        return Precedence::FUNCTIONAL;
+    }
 }

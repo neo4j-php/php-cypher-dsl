@@ -29,49 +29,49 @@ trait NumeralTypeTrait
     /**
      * @inheritDoc
      */
-    public function plus(NumeralType|float|int $right, bool $insertParentheses = true): Addition
+    public function plus(NumeralType|float|int $right): Addition
     {
-        return new Addition($this, CastUtils::toNumeralType($right), $insertParentheses);
+        return new Addition($this, CastUtils::toNumeralType($right));
     }
 
     /**
      * @inheritDoc
      */
-    public function divide(NumeralType|float|int $right, bool $insertParentheses = true): Division
+    public function divide(NumeralType|float|int $right): Division
     {
-        return new Division($this, CastUtils::toNumeralType($right), $insertParentheses);
+        return new Division($this, CastUtils::toNumeralType($right));
     }
 
     /**
      * @inheritDoc
      */
-    public function exponentiate(NumeralType|float|int $right, bool $insertParentheses = true): Exponentiation
+    public function exponentiate(NumeralType|float|int $right): Exponentiation
     {
-        return new Exponentiation($this, CastUtils::toNumeralType($right), $insertParentheses);
+        return new Exponentiation($this, CastUtils::toNumeralType($right));
     }
 
     /**
      * @inheritDoc
      */
-    public function mod(NumeralType|float|int $right, bool $insertParentheses = true): ModuloDivision
+    public function mod(NumeralType|float|int $right): ModuloDivision
     {
-        return new ModuloDivision($this, CastUtils::toNumeralType($right), $insertParentheses);
+        return new ModuloDivision($this, CastUtils::toNumeralType($right));
     }
 
     /**
      * @inheritDoc
      */
-    public function times(NumeralType|float|int $right, bool $insertParentheses = true): Multiplication
+    public function times(NumeralType|float|int $right): Multiplication
     {
-        return new Multiplication($this, CastUtils::toNumeralType($right), $insertParentheses);
+        return new Multiplication($this, CastUtils::toNumeralType($right));
     }
 
     /**
      * @inheritDoc
      */
-    public function minus(NumeralType|float|int $right, bool $insertParentheses = true): Subtraction
+    public function minus(NumeralType|float|int $right): Subtraction
     {
-        return new Subtraction($this, CastUtils::toNumeralType($right), $insertParentheses);
+        return new Subtraction($this, CastUtils::toNumeralType($right));
     }
 
     /**

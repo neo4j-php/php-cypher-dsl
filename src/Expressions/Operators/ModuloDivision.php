@@ -24,4 +24,12 @@ final class ModuloDivision extends MathematicalBinaryOperator
     {
         return "%";
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getPrecedence(): Precedence
+    {
+        return Precedence::MULTIPLICATIVE;
+    }
 }

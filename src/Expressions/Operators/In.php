@@ -26,13 +26,12 @@ final class In extends BinaryOperator implements BooleanType
     /**
      * In constructor.
      *
-     * @param PropertyType $left              The left-hand of the expression
-     * @param ListType     $right             The right-hand of the expression
-     * @param bool         $insertParentheses Whether to insert parentheses around the expression
+     * @param PropertyType $left  The left-hand of the expression
+     * @param ListType     $right The right-hand of the expression
      */
-    public function __construct(PropertyType $left, ListType $right, bool $insertParentheses = true)
+    public function __construct(PropertyType $left, ListType $right)
     {
-        parent::__construct($left, $right, $insertParentheses);
+        parent::__construct($left, $right);
     }
 
     /**
@@ -41,5 +40,13 @@ final class In extends BinaryOperator implements BooleanType
     protected function getOperator(): string
     {
         return "IN";
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getPrecedence(): Precedence
+    {
+        return Precedence::FUNCTIONAL;
     }
 }

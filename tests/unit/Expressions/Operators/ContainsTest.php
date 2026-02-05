@@ -27,13 +27,6 @@ final class ContainsTest extends TestCase
     {
         $contains = new Contains(new Variable("a"), new String_("b"));
 
-        $this->assertSame("(a CONTAINS 'b')", $contains->toQuery());
-    }
-
-    public function testToQueryNoParentheses(): void
-    {
-        $contains = new Contains(new Variable("a"), new String_("b"), false);
-
         $this->assertSame("a CONTAINS 'b'", $contains->toQuery());
     }
 

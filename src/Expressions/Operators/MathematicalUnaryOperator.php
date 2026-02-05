@@ -30,8 +30,8 @@ abstract class MathematicalUnaryOperator extends UnaryOperator implements FloatT
      *
      * @param NumeralType $expression The unary expression
      */
-    public function __construct(NumeralType $expression, bool $insertParentheses = true)
+    public function __construct(NumeralType $expression)
     {
-        parent::__construct($expression, $insertParentheses);
+        parent::__construct($expression);
     }
 }

@@ -10,6 +10,7 @@
 namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
 use WikibaseSolutions\CypherDSL\QueryConvertible;
+use WikibaseSolutions\CypherDSL\Types\AnyType;
 
 /**
  * This class represents the application of an operator, such as "NOT" or "*".
@@ -19,41 +20,33 @@ use WikibaseSolutions\CypherDSL\QueryConvertible;
 abstract class Operator implements QueryConvertible
 {
     /**
-     * @var bool Whether to insert parentheses around the expression
-     */
-    private bool $insertParentheses;
-
-    /**
-     * @param bool $insertParentheses Whether to insert parentheses around the application of the operator
+     * Returns the precedence. The precedence for Cypher operators (from low to high) is:
      *
-     * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
+     * 1. Disjunction (OR)
+     * 2. Exclusive disjunction (XOR)
+     * 3. Conjunction (AND)
+     * 4. Negation (NOT)
+     * 5. Comparison operators (=, <>, <, >, <=, >=)
+     * 6. Additive operators (+, -)
+     * 7. Multiplicative operators (*, /, %)
+     * 8. Exponentiation (^)
+     * 9. Unary operators (+, -)
+     * 10. Functional operators (IN, STARTS WITH, ENDS WITH, CONTAINS, =~, IS NULL, IS NOT NULL)
      */
-    public function __construct(bool $insertParentheses = true)
-    {
-        $this->insertParentheses = $insertParentheses;
-    }
+    abstract protected function getPrecedence(): Precedence;
 
     /**
-     * Returns whether the operator inserts parenthesis.
+     * Whether to insert parentheses around the given expression, given the precedence of this operator.
      */
-    public function insertsParentheses(): bool
+    final protected function shouldInsertParentheses(AnyType $expression): bool
     {
-        return $this->insertParentheses;
+        if (!$expression instanceof self) {
+            return false;
+        }
+
+        // When operators have equal precedence, the DSL inserts parentheses.
+        // Handling associativity is possible, but would require extra logic, and
+        // it’s unclear whether the added complexity would be worthwhile.
+        return $expression->getPrecedence()->value <= $this->getPrecedence()->value;
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function toQuery(): string
-    {
-        $format = $this->insertParentheses ? "(%s)" : "%s";
-        $inner = $this->toInner();
-
-        return sprintf($format, $inner);
-    }
-
-    /**
-     * Returns the inner part of the application of the operator, that is, without any parentheses.
-     */
-    abstract protected function toInner(): string;
 }

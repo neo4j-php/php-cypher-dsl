@@ -566,7 +566,7 @@ final class ExamplesTest extends TestCase
             ->returning($n->property('happy'))
             ->build();
 
-        $this->assertSame("MATCH (`This isn't a common variable name`) WHERE (`This isn't a common variable name`.name = 'A') RETURN `This isn't a common variable name`.happy", $query);
+        $this->assertSame("MATCH (`This isn't a common variable name`) WHERE `This isn't a common variable name`.name = 'A' RETURN `This isn't a common variable name`.happy", $query);
     }
 
     public function testReturnClauseExample5(): void
@@ -588,7 +588,7 @@ final class ExamplesTest extends TestCase
             ->returning([$a->property('age')->gt(30), "I'm a literal"])
             ->build();
 
-        $this->assertStringMatchesFormat("MATCH (%s {name: 'A'}) RETURN (%s.age > 30), 'I\\'m a literal'", $query);
+        $this->assertStringMatchesFormat("MATCH (%s {name: 'A'}) RETURN %s.age > 30, 'I\\'m a literal'", $query);
     }
 
     public function testReturnClauseExample7(): void
@@ -688,7 +688,7 @@ final class ExamplesTest extends TestCase
             ->skip(integer(5)->exponentiate(2))
             ->build();
 
-        $this->assertStringMatchesFormat("MATCH (%s) RETURN %s.name ORDER BY %s.name SKIP (5 ^ 2)", $query);
+        $this->assertStringMatchesFormat("MATCH (%s) RETURN %s.name ORDER BY %s.name SKIP 5 ^ 2", $query);
     }
 
     public function testWhereClauseExample1(): void
@@ -700,7 +700,7 @@ final class ExamplesTest extends TestCase
             ->returning($n)
             ->build();
 
-        $this->assertStringMatchesFormat("MATCH (%s:Person) WHERE (%s.name = 'Peter') RETURN %s", $query);
+        $this->assertStringMatchesFormat("MATCH (%s:Person) WHERE %s.name = 'Peter' RETURN %s", $query);
     }
 
     public function testWhereClauseExample2(): void
@@ -726,7 +726,7 @@ final class ExamplesTest extends TestCase
             ->returning($nineties->property("title"))
             ->build();
 
-        $this->assertStringMatchesFormat("MATCH (%s:Movie) WHERE ((%s.released >= 1990) AND (%s.released < 2000)) RETURN %s.title", $statement);
+        $this->assertStringMatchesFormat("MATCH (%s:Movie) WHERE %s.released >= 1990 AND %s.released < 2000 RETURN %s.title", $statement);
     }
 
     public function testExpressions1(): void
@@ -734,7 +734,7 @@ final class ExamplesTest extends TestCase
         $released = variable("nineties")->property("released");
         $expression = $released->gte(1990)->and($released->lt(2000));
 
-        $this->assertSame("((nineties.released >= 1990) AND (nineties.released < 2000))", $expression->toQuery());
+        $this->assertSame("nineties.released >= 1990 AND nineties.released < 2000", $expression->toQuery());
     }
 
     public function testExpressions2(): void
@@ -742,7 +742,7 @@ final class ExamplesTest extends TestCase
         $name = variable("actor")->property("name");
         $expression = $name->notEquals("Tom Hanks");
 
-        $this->assertSame("(actor.name <> 'Tom Hanks')", $expression->toQuery());
+        $this->assertSame("actor.name <> 'Tom Hanks'", $expression->toQuery());
     }
 
     public function testExpressions3(): void
@@ -750,6 +750,6 @@ final class ExamplesTest extends TestCase
         $released = variable("nineties")->property("released");
         $expression = $released->gte(1990)->and(raw("(nineties IS NOT NULL)"));
 
-        $this->assertSame("((nineties.released >= 1990) AND (nineties IS NOT NULL))", $expression->toQuery());
+        $this->assertSame("nineties.released >= 1990 AND (nineties IS NOT NULL)", $expression->toQuery());
     }
 }

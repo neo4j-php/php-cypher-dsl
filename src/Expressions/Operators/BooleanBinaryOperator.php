@@ -31,8 +31,8 @@ abstract class BooleanBinaryOperator extends BinaryOperator implements BooleanTy
      * @param BooleanType $left  The left-hand of the boolean operator
      * @param BooleanType $right The right-hand of the boolean operator
      */
-    public function __construct(BooleanType $left, BooleanType $right, bool $insertParentheses = true)
+    public function __construct(BooleanType $left, BooleanType $right)
     {
-        parent::__construct($left, $right, $insertParentheses);
+        parent::__construct($left, $right);
     }
 }

@@ -35,7 +35,7 @@ final class QueryLimitTest extends TestCase
 
         $statement = (new Query())->limit($expression)->build();
 
-        $this->assertSame("LIMIT (12 + 16)", $statement);
+        $this->assertSame("LIMIT 12 + 16", $statement);
     }
 
     public function testDoesNotAcceptAnyType(): void

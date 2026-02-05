@@ -88,7 +88,7 @@ final class MoviesTest extends TestCase
             ->returning($nineties->property('title'))
             ->build();
 
-        $this->assertStringMatchesFormat("MATCH (%s:Movie) WHERE ((%s.released >= 1990) AND (%s.released < 2000)) RETURN %s.title", $query);
+        $this->assertStringMatchesFormat("MATCH (%s:Movie) WHERE %s.released >= 1990 AND %s.released < 2000 RETURN %s.title", $query);
     }
 
     public function testListAllTomHanksMovies(): void

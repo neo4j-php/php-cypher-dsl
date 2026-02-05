@@ -27,13 +27,6 @@ final class EndsWithTest extends TestCase
     {
         $endsWith = new EndsWith(new Variable("a"), new String_("b"));
 
-        $this->assertSame("(a ENDS WITH 'b')", $endsWith->toQuery());
-    }
-
-    public function testToQueryNoParentheses(): void
-    {
-        $endsWith = new EndsWith(new Variable("a"), new String_("b"), false);
-
         $this->assertSame("a ENDS WITH 'b'", $endsWith->toQuery());
     }
 

@@ -22,14 +22,10 @@ abstract class UnaryOperator extends Operator
     private AnyType $expression;
 
     /**
-     * @inheritDoc
-     *
      * @param AnyType $expression The unary expression
      */
-    public function __construct(AnyType $expression, bool $insertParentheses = true)
+    public function __construct(AnyType $expression)
     {
-        parent::__construct($insertParentheses);
-
         $this->expression = $expression;
     }
 
@@ -52,14 +48,15 @@ abstract class UnaryOperator extends Operator
     /**
      * @inheritDoc
      */
-    protected function toInner(): string
+    public function toQuery(): string
     {
-        $expression = $this->expression->toQuery();
-        $operator = $this->getOperator();
+        $expression = $this->shouldInsertParentheses($this->expression) ?
+            "({$this->expression->toQuery()})" :
+            $this->expression->toQuery();
 
         return $this->isPostfix() ?
-            sprintf("%s %s", $expression, $operator) :
-            sprintf("%s %s", $operator, $expression);
+            sprintf("%s %s", $expression, $this->getOperator()) :
+            sprintf("%s %s", $this->getOperator(), $expression);
     }
 
     /**

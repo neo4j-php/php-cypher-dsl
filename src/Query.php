@@ -325,7 +325,7 @@ final class Query implements QueryConvertible
             $where = (new WhereClause())->addExpression($where);
         }
 
-        return new Exists($match, $where, $insertParentheses);
+        return new Exists($match, $where);
     }
 
     /**

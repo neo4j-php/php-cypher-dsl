@@ -23,4 +23,12 @@ final class ExclusiveDisjunction extends BooleanBinaryOperator
     {
         return "XOR";
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getPrecedence(): Precedence
+    {
+        return Precedence::EXCLUSIVE_DISJUNCTION;
+    }
 }

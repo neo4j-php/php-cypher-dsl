@@ -23,8 +23,8 @@ trait ListTypeTrait
     /**
      * @inheritDoc
      */
-    public function has(PropertyType|string|int|float|bool $left, bool $insertParentheses = true): In
+    public function has(PropertyType|string|int|float|bool $left): In
     {
-        return new In(CastUtils::toPropertyType($left), $this, $insertParentheses);
+        return new In(CastUtils::toPropertyType($left), $this);
     }
 }

@@ -25,4 +25,12 @@ final class Regex extends StringSpecificComparisonBinaryOperator
     {
         return "=~";
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getPrecedence(): Precedence
+    {
+        return Precedence::FUNCTIONAL;
+    }
 }

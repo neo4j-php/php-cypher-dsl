@@ -23,18 +23,11 @@ final class LessThanOrEqualTest extends TestCase
     {
         $lessThanOrEqual = new LessThanOrEqual(new Integer(10), new Integer(15));
 
-        $this->assertSame("(10 <= 15)", $lessThanOrEqual->toQuery());
+        $this->assertSame("10 <= 15", $lessThanOrEqual->toQuery());
 
         $lessThanOrEqual = new LessThanOrEqual($lessThanOrEqual, $lessThanOrEqual, false);
 
         $this->assertSame("(10 <= 15) <= (10 <= 15)", $lessThanOrEqual->toQuery());
-    }
-
-    public function testToQueryNoParentheses(): void
-    {
-        $lessThanOrEqual = new LessThanOrEqual(new Integer(10), new Integer(15), false);
-
-        $this->assertSame("10 <= 15", $lessThanOrEqual->toQuery());
     }
 
     public function testInstanceOfBooleanType(): void

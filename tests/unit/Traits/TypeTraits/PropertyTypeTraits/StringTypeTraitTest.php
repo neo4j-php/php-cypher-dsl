@@ -46,7 +46,6 @@ final class StringTypeTraitTest extends TestCase
 
         $this->assertInstanceOf(Contains::class, $contains);
 
-        $this->assertTrue($contains->insertsParentheses());
         $this->assertEquals($this->a, $contains->getLeft());
         $this->assertEquals($this->b, $contains->getRight());
     }
@@ -58,24 +57,12 @@ final class StringTypeTraitTest extends TestCase
         $this->assertInstanceOf(Contains::class, $contains);
     }
 
-    public function testContainsNoParentheses(): void
-    {
-        $contains = $this->a->contains($this->b, false);
-
-        $this->assertInstanceOf(Contains::class, $contains);
-
-        $this->assertFalse($contains->insertsParentheses());
-        $this->assertEquals($this->a, $contains->getLeft());
-        $this->assertEquals($this->b, $contains->getRight());
-    }
-
     public function testEndsWith(): void
     {
         $endsWith = $this->a->endsWith($this->b);
 
         $this->assertInstanceOf(EndsWith::class, $endsWith);
 
-        $this->assertTrue($endsWith->insertsParentheses());
         $this->assertEquals($this->a, $endsWith->getLeft());
         $this->assertEquals($this->b, $endsWith->getRight());
     }
@@ -87,24 +74,12 @@ final class StringTypeTraitTest extends TestCase
         $this->assertInstanceOf(EndsWith::class, $endsWith);
     }
 
-    public function testEndsWithNoParentheses(): void
-    {
-        $endsWith = $this->a->endsWith($this->b, false);
-
-        $this->assertInstanceOf(EndsWith::class, $endsWith);
-
-        $this->assertFalse($endsWith->insertsParentheses());
-        $this->assertEquals($this->a, $endsWith->getLeft());
-        $this->assertEquals($this->b, $endsWith->getRight());
-    }
-
     public function testStartsWith(): void
     {
         $startsWith = $this->a->startsWith($this->b);
 
         $this->assertInstanceOf(StartsWith::class, $startsWith);
 
-        $this->assertTrue($startsWith->insertsParentheses());
         $this->assertEquals($this->a, $startsWith->getLeft());
         $this->assertEquals($this->b, $startsWith->getRight());
     }
@@ -116,24 +91,12 @@ final class StringTypeTraitTest extends TestCase
         $this->assertInstanceOf(StartsWith::class, $startsWith);
     }
 
-    public function testStartsWithNoParentheses(): void
-    {
-        $startsWith = $this->a->startsWith($this->b, false);
-
-        $this->assertInstanceOf(StartsWith::class, $startsWith);
-
-        $this->assertFalse($startsWith->insertsParentheses());
-        $this->assertEquals($this->a, $startsWith->getLeft());
-        $this->assertEquals($this->b, $startsWith->getRight());
-    }
-
     public function testRegex(): void
     {
         $regex = $this->a->regex($this->b);
 
         $this->assertInstanceOf(Regex::class, $regex);
 
-        $this->assertTrue($regex->insertsParentheses());
         $this->assertEquals($this->a, $regex->getLeft());
         $this->assertEquals($this->b, $regex->getRight());
     }
@@ -143,16 +106,5 @@ final class StringTypeTraitTest extends TestCase
         $regex = $this->a->regex('/test/');
 
         $this->assertInstanceOf(Regex::class, $regex);
-    }
-
-    public function testRegexNoParentheses(): void
-    {
-        $regex = $this->a->regex($this->b, false);
-
-        $this->assertInstanceOf(Regex::class, $regex);
-
-        $this->assertFalse($regex->insertsParentheses());
-        $this->assertEquals($this->a, $regex->getLeft());
-        $this->assertEquals($this->b, $regex->getRight());
     }
 }

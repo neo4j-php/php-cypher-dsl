@@ -25,22 +25,11 @@ final class DivisionTest extends TestCase
     {
         $division = new Division(new Integer(10), new Integer(15));
 
-        $this->assertSame("(10 / 15)", $division->toQuery());
-
-        $division = new Division($division, $division);
-
-        $this->assertSame("((10 / 15) / (10 / 15))", $division->toQuery());
-    }
-
-    public function testToQueryNoParentheses(): void
-    {
-        $division = new Division(new Integer(10), new Integer(15), false);
-
         $this->assertSame("10 / 15", $division->toQuery());
 
         $division = new Division($division, $division);
 
-        $this->assertSame("(10 / 15 / 10 / 15)", $division->toQuery());
+        $this->assertSame("(10 / 15) / (10 / 15)", $division->toQuery());
     }
 
     public function testInstanceOfFloatType(): void

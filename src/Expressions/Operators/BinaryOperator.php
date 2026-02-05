@@ -27,15 +27,11 @@ abstract class BinaryOperator extends Operator
     private AnyType $right;
 
     /**
-     * @inheritDoc
-     *
      * @param AnyType $left  The left-hand of the expression
      * @param AnyType $right The right-hand of the expression
      */
-    public function __construct(AnyType $left, AnyType $right, bool $insertParentheses = true)
+    public function __construct(AnyType $left, AnyType $right)
     {
-        parent::__construct($insertParentheses);
-
         $this->left = $left;
         $this->right = $right;
     }
@@ -59,9 +55,17 @@ abstract class BinaryOperator extends Operator
     /**
      * @inheritDoc
      */
-    protected function toInner(): string
+    public function toQuery(): string
     {
-        return sprintf("%s %s %s", $this->left->toQuery(), $this->getOperator(), $this->right->toQuery());
+        $left = $this->shouldInsertParentheses($this->left) ?
+            "({$this->left->toQuery()})" :
+            $this->left->toQuery();
+
+        $right = $this->shouldInsertParentheses($this->right) ?
+            "({$this->right->toQuery()})" :
+            $this->right->toQuery();
+
+        return sprintf("%s %s %s", $left, $this->getOperator(), $right);
     }
 
     /**

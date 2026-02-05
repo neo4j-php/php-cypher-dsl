@@ -34,22 +34,15 @@ final class Exists implements BooleanType
     private ?WhereClause $where;
 
     /**
-     * @var bool Whether to insert parentheses around the expression
-     */
-    private bool $insertParentheses;
-
-    /**
-     * @param MatchClause      $match             The MATCH part of the EXISTS expression
-     * @param null|WhereClause $where             The optional WHERE part of the EXISTS expression
-     * @param bool             $insertParentheses Whether to insert parentheses around the expression
+     * @param MatchClause      $match The MATCH part of the EXISTS expression
+     * @param null|WhereClause $where The optional WHERE part of the EXISTS expression
      *
      * @internal This function is not covered by the backwards compatibility guarantee of php-cypher-dsl
      */
-    public function __construct(MatchClause $match, ?WhereClause $where = null, bool $insertParentheses = false)
+    public function __construct(MatchClause $match, ?WhereClause $where = null)
     {
         $this->match = $match;
         $this->where = $where;
-        $this->insertParentheses = $insertParentheses;
     }
 
     /**
@@ -69,26 +62,18 @@ final class Exists implements BooleanType
     }
 
     /**
-     * Returns whether it inserts parentheses around the expression.
-     */
-    public function insertsParentheses(): bool
-    {
-        return $this->insertParentheses;
-    }
-
-    /**
      * @inheritDoc
      */
     public function toQuery(): string
     {
         if (isset($this->where)) {
             return sprintf(
-                $this->insertParentheses ? "(EXISTS { %s %s })" : "EXISTS { %s %s }",
+                "EXISTS { %s %s }",
                 $this->match->toQuery(),
                 $this->where->toQuery()
             );
         }
 
-        return sprintf($this->insertParentheses ? "(EXISTS { %s })" : "EXISTS { %s }", $this->match->toQuery());
+        return sprintf("EXISTS { %s }", $this->match->toQuery());
     }
 }
