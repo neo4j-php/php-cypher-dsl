@@ -24,22 +24,11 @@ final class ExponentiationTest extends TestCase
     {
         $exponentiation = new Exponentiation(new Integer(10), new Integer(15));
 
-        $this->assertSame("(10 ^ 15)", $exponentiation->toQuery());
-
-        $exponentiation = new Exponentiation($exponentiation, $exponentiation);
-
-        $this->assertSame("((10 ^ 15) ^ (10 ^ 15))", $exponentiation->toQuery());
-    }
-
-    public function testToQueryNoParentheses(): void
-    {
-        $exponentiation = new Exponentiation(new Integer(10), new Integer(15), false);
-
         $this->assertSame("10 ^ 15", $exponentiation->toQuery());
 
         $exponentiation = new Exponentiation($exponentiation, $exponentiation);
 
-        $this->assertSame("(10 ^ 15 ^ 10 ^ 15)", $exponentiation->toQuery());
+        $this->assertSame("(10 ^ 15) ^ (10 ^ 15)", $exponentiation->toQuery());
     }
 
     public function testInstanceOfNumeralType(): void

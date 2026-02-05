@@ -25,17 +25,17 @@ interface BooleanType extends PropertyType
     /**
      * Create a conjunction between this expression and the given expression.
      */
-    public function and(self|bool $right, bool $insertParentheses = true): Conjunction;
+    public function and(self|bool $right): Conjunction;
 
     /**
      * Create a disjunction between this expression and the given expression.
      */
-    public function or(self|bool $right, bool $insertParentheses = true): Disjunction;
+    public function or(self|bool $right): Disjunction;
 
     /**
      * Perform an XOR with the given expression.
      */
-    public function xor(self|bool $right, bool $insertParentheses = true): ExclusiveDisjunction;
+    public function xor(self|bool $right): ExclusiveDisjunction;
 
     /**
      * Negate this expression (using the NOT operator).

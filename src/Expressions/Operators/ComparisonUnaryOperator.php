@@ -30,8 +30,8 @@ abstract class ComparisonUnaryOperator extends UnaryOperator implements BooleanT
      *
      * @param AnyType $expression The unary expression
      */
-    public function __construct(AnyType $expression, bool $insertParentheses = true)
+    public function __construct(AnyType $expression)
     {
-        parent::__construct($expression, $insertParentheses);
+        parent::__construct($expression);
     }
 }

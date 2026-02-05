@@ -26,25 +26,25 @@ trait BooleanTypeTrait
     /**
      * @inheritDoc
      */
-    public function and(BooleanType|bool $right, bool $insertParentheses = true): Conjunction
+    public function and(BooleanType|bool $right): Conjunction
     {
-        return new Conjunction($this, CastUtils::toBooleanType($right), $insertParentheses);
+        return new Conjunction($this, CastUtils::toBooleanType($right));
     }
 
     /**
      * @inheritDoc
      */
-    public function or(BooleanType|bool $right, bool $insertParentheses = true): Disjunction
+    public function or(BooleanType|bool $right): Disjunction
     {
-        return new Disjunction($this, CastUtils::toBooleanType($right), $insertParentheses);
+        return new Disjunction($this, CastUtils::toBooleanType($right));
     }
 
     /**
      * @inheritDoc
      */
-    public function xor(BooleanType|bool $right, bool $insertParentheses = true): ExclusiveDisjunction
+    public function xor(BooleanType|bool $right): ExclusiveDisjunction
     {
-        return new ExclusiveDisjunction($this, CastUtils::toBooleanType($right), $insertParentheses);
+        return new ExclusiveDisjunction($this, CastUtils::toBooleanType($right));
     }
 
     /**

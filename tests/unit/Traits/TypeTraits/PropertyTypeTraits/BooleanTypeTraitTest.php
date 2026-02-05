@@ -46,7 +46,6 @@ final class BooleanTypeTraitTest extends TestCase
 
         $this->assertInstanceOf(Conjunction::class, $and);
 
-        $this->assertTrue($and->insertsParentheses());
         $this->assertEquals($this->a, $and->getLeft());
         $this->assertEquals($this->b, $and->getRight());
     }
@@ -58,24 +57,12 @@ final class BooleanTypeTraitTest extends TestCase
         $this->assertInstanceOf(Conjunction::class, $xor);
     }
 
-    public function testAndNoParentheses(): void
-    {
-        $and = $this->a->and($this->b, false);
-
-        $this->assertInstanceOf(Conjunction::class, $and);
-
-        $this->assertFalse($and->insertsParentheses());
-        $this->assertEquals($this->a, $and->getLeft());
-        $this->assertEquals($this->b, $and->getRight());
-    }
-
     public function testOr(): void
     {
         $or = $this->a->or($this->b);
 
         $this->assertInstanceOf(Disjunction::class, $or);
 
-        $this->assertTrue($or->insertsParentheses());
         $this->assertEquals($this->a, $or->getLeft());
         $this->assertEquals($this->b, $or->getRight());
     }
@@ -87,24 +74,12 @@ final class BooleanTypeTraitTest extends TestCase
         $this->assertInstanceOf(Disjunction::class, $xor);
     }
 
-    public function testOrNoParentheses(): void
-    {
-        $or = $this->a->or($this->b, false);
-
-        $this->assertInstanceOf(Disjunction::class, $or);
-
-        $this->assertFalse($or->insertsParentheses());
-        $this->assertEquals($this->a, $or->getLeft());
-        $this->assertEquals($this->b, $or->getRight());
-    }
-
     public function testXor(): void
     {
         $xor = $this->a->xor($this->b);
 
         $this->assertInstanceOf(ExclusiveDisjunction::class, $xor);
 
-        $this->assertTrue($xor->insertsParentheses());
         $this->assertEquals($this->a, $xor->getLeft());
         $this->assertEquals($this->b, $xor->getRight());
     }
@@ -114,17 +89,6 @@ final class BooleanTypeTraitTest extends TestCase
         $xor = $this->a->xor(false);
 
         $this->assertInstanceOf(ExclusiveDisjunction::class, $xor);
-    }
-
-    public function testXorNoParentheses(): void
-    {
-        $xor = $this->a->xor($this->b, false);
-
-        $this->assertInstanceOf(ExclusiveDisjunction::class, $xor);
-
-        $this->assertFalse($xor->insertsParentheses());
-        $this->assertEquals($this->a, $xor->getLeft());
-        $this->assertEquals($this->b, $xor->getRight());
     }
 
     public function testNot(): void

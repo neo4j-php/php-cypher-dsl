@@ -24,20 +24,13 @@ final class UnaryMinusTest extends TestCase
     {
         $minus = new UnaryMinus(new Integer(-10));
 
-        $this->assertSame("(- -10)", $minus->toQuery());
+        $this->assertSame("- -10", $minus->toQuery());
 
         $minus = new UnaryMinus($minus);
 
-        $this->assertSame("(- (- -10))", $minus->toQuery());
+        $this->assertSame("- (- -10)", $minus->toQuery());
 
         $minus = new UnaryMinus(new Integer(10));
-
-        $this->assertSame("(- 10)", $minus->toQuery());
-    }
-
-    public function testToQueryNoParentheses(): void
-    {
-        $minus = new UnaryMinus(new Integer(10), false);
 
         $this->assertSame("- 10", $minus->toQuery());
     }

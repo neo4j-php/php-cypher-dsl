@@ -33,8 +33,8 @@ abstract class StringSpecificComparisonBinaryOperator extends ComparisonBinaryOp
      * @param StringType $left  The left-hand of the comparison operator
      * @param StringType $right The right-hand of the comparison operator
      */
-    public function __construct(StringType $left, StringType $right, bool $insertParentheses = true)
+    public function __construct(StringType $left, StringType $right)
     {
-        parent::__construct($left, $right, $insertParentheses);
+        parent::__construct($left, $right);
     }
 }

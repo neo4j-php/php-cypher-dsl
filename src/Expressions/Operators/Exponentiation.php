@@ -23,4 +23,12 @@ final class Exponentiation extends MathematicalBinaryOperator
     {
         return "^";
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getPrecedence(): Precedence
+    {
+        return Precedence::EXPONENTIATION;
+    }
 }

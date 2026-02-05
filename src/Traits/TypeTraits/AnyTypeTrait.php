@@ -39,49 +39,49 @@ trait AnyTypeTrait
     /**
      * @inheritDoc
      */
-    public function equals(AnyType|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): Equality
+    public function equals(AnyType|Pattern|string|bool|float|int|array $right): Equality
     {
-        return new Equality($this, CastUtils::toAnyType($right), $insertParentheses);
+        return new Equality($this, CastUtils::toAnyType($right));
     }
 
     /**
      * @inheritDoc
      */
-    public function notEquals(AnyType|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): Inequality
+    public function notEquals(AnyType|Pattern|string|bool|float|int|array $right): Inequality
     {
-        return new Inequality($this, CastUtils::toAnyType($right), $insertParentheses);
+        return new Inequality($this, CastUtils::toAnyType($right));
     }
 
     /**
      * @inheritDoc
      */
-    public function gt(AnyType|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): GreaterThan
+    public function gt(AnyType|Pattern|string|bool|float|int|array $right): GreaterThan
     {
-        return new GreaterThan($this, CastUtils::toAnyType($right), $insertParentheses);
+        return new GreaterThan($this, CastUtils::toAnyType($right));
     }
 
     /**
      * @inheritDoc
      */
-    public function gte(AnyType|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): GreaterThanOrEqual
+    public function gte(AnyType|Pattern|string|bool|float|int|array $right): GreaterThanOrEqual
     {
-        return new GreaterThanOrEqual($this, CastUtils::toAnyType($right), $insertParentheses);
+        return new GreaterThanOrEqual($this, CastUtils::toAnyType($right));
     }
 
     /**
      * @inheritDoc
      */
-    public function lt(AnyType|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): LessThan
+    public function lt(AnyType|Pattern|string|bool|float|int|array $right): LessThan
     {
-        return new LessThan($this, CastUtils::toAnyType($right), $insertParentheses);
+        return new LessThan($this, CastUtils::toAnyType($right));
     }
 
     /**
      * @inheritDoc
      */
-    public function lte(AnyType|Pattern|string|bool|float|int|array $right, bool $insertParentheses = true): LessThanOrEqual
+    public function lte(AnyType|Pattern|string|bool|float|int|array $right): LessThanOrEqual
     {
-        return new LessThanOrEqual($this, CastUtils::toAnyType($right), $insertParentheses);
+        return new LessThanOrEqual($this, CastUtils::toAnyType($right));
     }
 
     /**
@@ -89,7 +89,7 @@ trait AnyTypeTrait
      */
     public function isNull(bool $insertParentheses = true): IsNull
     {
-        return new IsNull($this, $insertParentheses);
+        return new IsNull($this);
     }
 
     /**
@@ -97,6 +97,6 @@ trait AnyTypeTrait
      */
     public function isNotNull(bool $insertParentheses = true): IsNotNull
     {
-        return new IsNotNull($this, $insertParentheses);
+        return new IsNotNull($this);
     }
 }

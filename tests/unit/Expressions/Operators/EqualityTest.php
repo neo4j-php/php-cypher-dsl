@@ -24,22 +24,11 @@ final class EqualityTest extends TestCase
     {
         $equality = new Equality(new Integer(10), new Integer(15));
 
-        $this->assertSame("(10 = 15)", $equality->toQuery());
-
-        $equality = new Equality($equality, $equality);
-
-        $this->assertSame("((10 = 15) = (10 = 15))", $equality->toQuery());
-    }
-
-    public function testToQueryNoParentheses(): void
-    {
-        $equality = new Equality(new Integer(10), new Integer(15), false);
-
         $this->assertSame("10 = 15", $equality->toQuery());
 
         $equality = new Equality($equality, $equality);
 
-        $this->assertSame("(10 = 15 = 10 = 15)", $equality->toQuery());
+        $this->assertSame("(10 = 15) = (10 = 15)", $equality->toQuery());
     }
 
     public function testInstanceOfBooleanType(): void

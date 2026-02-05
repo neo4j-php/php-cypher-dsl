@@ -23,4 +23,12 @@ final class Addition extends MathematicalBinaryOperator
     {
         return "+";
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getPrecedence(): Precedence
+    {
+        return Precedence::ADDITIVE;
+    }
 }

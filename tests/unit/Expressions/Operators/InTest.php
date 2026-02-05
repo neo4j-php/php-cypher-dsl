@@ -26,22 +26,11 @@ final class InTest extends TestCase
     {
         $in = new In(new Property(new Variable('v'), "a"), new Variable('b'));
 
-        $this->assertSame("(v.a IN b)", $in->toQuery());
-
-        $in = new In($in, new List_([new Boolean(true), new Boolean(false)]));
-
-        $this->assertSame("((v.a IN b) IN [true, false])", $in->toQuery());
-    }
-
-    public function testToQueryNoParentheses(): void
-    {
-        $in = new In(new Property(new Variable('v'), "a"), new Variable('b'), false);
-
         $this->assertSame("v.a IN b", $in->toQuery());
 
         $in = new In($in, new List_([new Boolean(true), new Boolean(false)]));
 
-        $this->assertSame("(v.a IN b IN [true, false])", $in->toQuery());
+        $this->assertSame("(v.a IN b) IN [true, false]", $in->toQuery());
     }
 
     public function testInstanceOfBooleanType(): void

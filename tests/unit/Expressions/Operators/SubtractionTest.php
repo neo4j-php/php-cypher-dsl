@@ -24,22 +24,11 @@ final class SubtractionTest extends TestCase
     {
         $subtraction = new Subtraction(new Integer(10), new Integer(15));
 
-        $this->assertSame("(10 - 15)", $subtraction->toQuery());
-
-        $subtraction = new Subtraction($subtraction, $subtraction);
-
-        $this->assertSame("((10 - 15) - (10 - 15))", $subtraction->toQuery());
-    }
-
-    public function testToQueryNoParentheses(): void
-    {
-        $subtraction = new Subtraction(new Integer(10), new Integer(15), false);
-
         $this->assertSame("10 - 15", $subtraction->toQuery());
 
         $subtraction = new Subtraction($subtraction, $subtraction);
 
-        $this->assertSame("(10 - 15 - 10 - 15)", $subtraction->toQuery());
+        $this->assertSame("(10 - 15) - (10 - 15)", $subtraction->toQuery());
     }
 
     public function testInstanceOfIntegerType(): void

@@ -23,4 +23,12 @@ final class Inequality extends ComparisonBinaryOperator
     {
         return "<>";
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getPrecedence(): Precedence
+    {
+        return Precedence::COMPARISON;
+    }
 }

@@ -23,22 +23,11 @@ final class ConjunctionTest extends TestCase
     {
         $and = new Conjunction(new Boolean(true), new Boolean(false));
 
-        $this->assertSame("(true AND false)", $and->toQuery());
-
-        $and = new Conjunction($and, $and);
-
-        $this->assertSame("((true AND false) AND (true AND false))", $and->toQuery());
-    }
-
-    public function testToQueryNoParentheses(): void
-    {
-        $and = new Conjunction(new Boolean(true), new Boolean(false), false);
-
         $this->assertSame("true AND false", $and->toQuery());
 
         $and = new Conjunction($and, $and);
 
-        $this->assertSame("(true AND false AND true AND false)", $and->toQuery());
+        $this->assertSame("(true AND false) AND (true AND false)", $and->toQuery());
     }
 
     public function testInstanceOfBooleanType(): void

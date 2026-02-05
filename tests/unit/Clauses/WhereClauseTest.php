@@ -53,7 +53,7 @@ final class WhereClauseTest extends TestCase
         $where->addExpression(true);
         $where->addExpression(false);
 
-        $this->assertSame("WHERE ((true AND true) AND false)", $where->toQuery());
+        $this->assertSame("WHERE (true AND true) AND false", $where->toQuery());
     }
 
     public function testExpressionChaining(): void
@@ -65,7 +65,7 @@ final class WhereClauseTest extends TestCase
         $where->addExpression(true, WhereClause::AND);
         $where->addExpression(true, WhereClause::XOR);
 
-        $this->assertSame('WHERE (((true OR true) AND true) XOR true)', $where->toQuery());
+        $this->assertSame('WHERE (true OR true) AND true XOR true', $where->toQuery());
     }
 
     public function testExpressionChainingFirstArgumentDoesNothing(): void

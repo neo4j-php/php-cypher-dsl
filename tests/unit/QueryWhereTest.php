@@ -39,7 +39,7 @@ final class QueryWhereTest extends TestCase
     {
         $where = Query::new()->where([true, true])->toQuery();
 
-        $this->assertSame('WHERE (true AND true)', $where);
+        $this->assertSame('WHERE true AND true', $where);
     }
 
     public function testDefaultUnifierIsConjunction(): void
@@ -54,14 +54,14 @@ final class QueryWhereTest extends TestCase
     {
         $where = Query::new()->where([true, true], WhereClause::OR)->toQuery();
 
-        $this->assertSame('WHERE (true OR true)', $where);
+        $this->assertSame('WHERE true OR true', $where);
     }
 
     public function testUnifyWithXor(): void
     {
         $where = Query::new()->where([true, true], WhereClause::XOR)->toQuery();
 
-        $this->assertSame('WHERE (true XOR true)', $where);
+        $this->assertSame('WHERE true XOR true', $where);
     }
 
     public function testDoesNotAcceptInvalidOperator(): void

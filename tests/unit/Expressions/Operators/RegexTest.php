@@ -24,13 +24,6 @@ final class RegexTest extends TestCase
     {
         $regex = new Regex(new Variable("a"), new String_("b"));
 
-        $this->assertSame("(a =~ 'b')", $regex->toQuery());
-    }
-
-    public function testToQueryNoParentheses(): void
-    {
-        $regex = new Regex(new Variable("a"), new String_("b"), false);
-
         $this->assertSame("a =~ 'b'", $regex->toQuery());
     }
 

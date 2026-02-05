@@ -44,7 +44,6 @@ final class PropertyTypeTraitTest extends TestCase
 
         $this->assertInstanceOf(In::class, $in);
 
-        $this->assertTrue($in->insertsParentheses());
         $this->assertEquals($this->a, $in->getLeft());
         $this->assertEquals($this->list, $in->getRight());
     }
@@ -54,16 +53,5 @@ final class PropertyTypeTraitTest extends TestCase
         $in = $this->a->in(['a', 'b', 'c']);
 
         $this->assertInstanceOf(In::class, $in);
-    }
-
-    public function testInNoParentheses(): void
-    {
-        $in = $this->a->in($this->list, false);
-
-        $this->assertInstanceOf(In::class, $in);
-
-        $this->assertFalse($in->insertsParentheses());
-        $this->assertEquals($this->a, $in->getLeft());
-        $this->assertEquals($this->list, $in->getRight());
     }
 }

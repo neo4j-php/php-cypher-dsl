@@ -36,8 +36,8 @@ abstract class MathematicalBinaryOperator extends BinaryOperator implements Floa
      * @param NumeralType $left  The left-hand of the mathematical operator
      * @param NumeralType $right The right-hand of the mathematical operator
      */
-    public function __construct(NumeralType $left, NumeralType $right, bool $insertParentheses = true)
+    public function __construct(NumeralType $left, NumeralType $right)
     {
-        parent::__construct($left, $right, $insertParentheses);
+        parent::__construct($left, $right);
     }
 }

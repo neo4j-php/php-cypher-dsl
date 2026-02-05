@@ -25,22 +25,11 @@ final class ModuloDivisionTest extends TestCase
     {
         $moduloDivision = new ModuloDivision(new Integer(10), new Integer(15));
 
-        $this->assertSame("(10 % 15)", $moduloDivision->toQuery());
-
-        $moduloDivision = new ModuloDivision($moduloDivision, $moduloDivision);
-
-        $this->assertSame("((10 % 15) % (10 % 15))", $moduloDivision->toQuery());
-    }
-
-    public function testToQueryNoParentheses(): void
-    {
-        $moduloDivision = new ModuloDivision(new Integer(10), new Integer(15), false);
-
         $this->assertSame("10 % 15", $moduloDivision->toQuery());
 
         $moduloDivision = new ModuloDivision($moduloDivision, $moduloDivision);
 
-        $this->assertSame("(10 % 15 % 10 % 15)", $moduloDivision->toQuery());
+        $this->assertSame("(10 % 15) % (10 % 15)", $moduloDivision->toQuery());
     }
 
     public function testInstanceOfIntegerType(): void

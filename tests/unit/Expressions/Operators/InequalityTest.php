@@ -24,22 +24,11 @@ final class InequalityTest extends TestCase
     {
         $inequality = new Inequality(new Property(new Variable('v'), "a"), new Property(new Variable('v'), "b"));
 
-        $this->assertSame("(v.a <> v.b)", $inequality->toQuery());
-
-        $inequality = new Inequality($inequality, $inequality);
-
-        $this->assertSame("((v.a <> v.b) <> (v.a <> v.b))", $inequality->toQuery());
-    }
-
-    public function testToQueryNoParentheses(): void
-    {
-        $inequality = new Inequality(new Property(new Variable('v'), "a"), new Property(new Variable('v'), "b"), false);
-
         $this->assertSame("v.a <> v.b", $inequality->toQuery());
 
         $inequality = new Inequality($inequality, $inequality);
 
-        $this->assertSame("(v.a <> v.b <> v.a <> v.b)", $inequality->toQuery());
+        $this->assertSame("(v.a <> v.b) <> (v.a <> v.b)", $inequality->toQuery());
     }
 
     public function testInstanceOfBooleanType(): void

@@ -25,20 +25,20 @@ interface StringType extends PropertyType
     /**
      * Check whether this expression the given expression.
      */
-    public function contains(self|string $right, bool $insertParentheses = true): Contains;
+    public function contains(self|string $right): Contains;
 
     /**
      * Perform a suffix string search with the given expression.
      */
-    public function endsWith(self|string $right, bool $insertParentheses = true): EndsWith;
+    public function endsWith(self|string $right): EndsWith;
 
     /**
      * Perform a prefix string search with the given expression.
      */
-    public function startsWith(self|string $right, bool $insertParentheses = true): StartsWith;
+    public function startsWith(self|string $right): StartsWith;
 
     /**
      * Perform a regex comparison with the given expression.
      */
-    public function regex(self|string $right, bool $insertParentheses = true): Regex;
+    public function regex(self|string $right): Regex;
 }

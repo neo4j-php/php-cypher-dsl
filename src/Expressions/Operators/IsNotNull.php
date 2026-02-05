@@ -31,4 +31,12 @@ final class IsNotNull extends ComparisonUnaryOperator
     {
         return "IS NOT NULL";
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getPrecedence(): Precedence
+    {
+        return Precedence::FUNCTIONAL;
+    }
 }

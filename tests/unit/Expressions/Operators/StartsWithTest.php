@@ -24,13 +24,6 @@ final class StartsWithTest extends TestCase
     {
         $startsWith = new StartsWith(new Variable("a"), new String_("b"));
 
-        $this->assertSame("(a STARTS WITH 'b')", $startsWith->toQuery());
-    }
-
-    public function testToQueryNoParentheses(): void
-    {
-        $startsWith = new StartsWith(new Variable("a"), new String_("b"), false);
-
         $this->assertSame("a STARTS WITH 'b'", $startsWith->toQuery());
     }
 

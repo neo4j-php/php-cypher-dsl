@@ -23,4 +23,12 @@ final class Contains extends StringSpecificComparisonBinaryOperator
     {
         return "CONTAINS";
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getPrecedence(): Precedence
+    {
+        return Precedence::FUNCTIONAL;
+    }
 }

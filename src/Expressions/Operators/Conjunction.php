@@ -23,4 +23,12 @@ final class Conjunction extends BooleanBinaryOperator
     {
         return "AND";
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getPrecedence(): Precedence
+    {
+        return Precedence::CONJUNCTION;
+    }
 }

@@ -24,22 +24,11 @@ final class DisjunctionTest extends TestCase
     {
         $or = new Disjunction(new Boolean(true), new Boolean(false));
 
-        $this->assertSame("(true OR false)", $or->toQuery());
-
-        $or = new Disjunction($or, $or);
-
-        $this->assertSame("((true OR false) OR (true OR false))", $or->toQuery());
-    }
-
-    public function testToQueryNoParentheses(): void
-    {
-        $or = new Disjunction(new Boolean(true), new Boolean(false), false);
-
         $this->assertSame("true OR false", $or->toQuery());
 
         $or = new Disjunction($or, $or);
 
-        $this->assertSame("(true OR false OR true OR false)", $or->toQuery());
+        $this->assertSame("(true OR false) OR (true OR false)", $or->toQuery());
     }
 
     public function testInstanceOfBooleanType(): void

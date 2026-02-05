@@ -37,8 +37,8 @@ trait PropertyTypeTrait
     /**
      * @inheritDoc
      */
-    public function in(ListType|array $right, bool $insertParentheses = true): In
+    public function in(ListType|array $right): In
     {
-        return new In($this, CastUtils::toListType($right), $insertParentheses);
+        return new In($this, CastUtils::toListType($right));
     }
 }

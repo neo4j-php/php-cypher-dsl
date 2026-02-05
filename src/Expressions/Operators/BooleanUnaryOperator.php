@@ -28,8 +28,8 @@ abstract class BooleanUnaryOperator extends UnaryOperator implements BooleanType
      *
      * @param BooleanType $expression The unary expression
      */
-    public function __construct(BooleanType $expression, bool $insertParentheses = true)
+    public function __construct(BooleanType $expression)
     {
-        parent::__construct($expression, $insertParentheses);
+        parent::__construct($expression);
     }
 }

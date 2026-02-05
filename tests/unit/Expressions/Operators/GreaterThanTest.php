@@ -23,18 +23,11 @@ final class GreaterThanTest extends TestCase
     {
         $greaterThan = new GreaterThan(new Integer(10), new Integer(15));
 
-        $this->assertSame("(10 > 15)", $greaterThan->toQuery());
+        $this->assertSame("10 > 15", $greaterThan->toQuery());
 
         $greaterThan = new GreaterThan($greaterThan, $greaterThan, false);
 
         $this->assertSame("(10 > 15) > (10 > 15)", $greaterThan->toQuery());
-    }
-
-    public function testToQueryNoParentheses(): void
-    {
-        $greaterThan = new GreaterThan(new Integer(10), new Integer(15), false);
-
-        $this->assertSame("10 > 15", $greaterThan->toQuery());
     }
 
     public function testInstanceOfBooleanType(): void

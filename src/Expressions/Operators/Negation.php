@@ -23,4 +23,12 @@ final class Negation extends BooleanUnaryOperator
     {
         return "NOT";
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getPrecedence(): Precedence
+    {
+        return Precedence::NEGATION;
+    }
 }
