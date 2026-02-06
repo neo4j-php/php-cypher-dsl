@@ -43,12 +43,16 @@ use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Patterns\AllShortest;
 use WikibaseSolutions\CypherDSL\Patterns\AllShortestPaths;
+use WikibaseSolutions\CypherDSL\Patterns\AnyPath;
 use WikibaseSolutions\CypherDSL\Patterns\CompletePattern;
 use WikibaseSolutions\CypherDSL\Patterns\Direction;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
+use WikibaseSolutions\CypherDSL\Patterns\Shortest;
+use WikibaseSolutions\CypherDSL\Patterns\ShortestGroups;
 use WikibaseSolutions\CypherDSL\Patterns\ShortestPath;
 use WikibaseSolutions\CypherDSL\Syntax\Alias;
 use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
@@ -164,6 +168,56 @@ final class Query implements QueryConvertible
     public static function allShortestPaths(CompletePattern $pattern): AllShortestPaths
     {
         return new AllShortestPaths($pattern);
+    }
+
+    /**
+     * Creates a SHORTEST k construct.
+     *
+     * @param CompletePattern $pattern The pattern to find the shortest path for
+     * @param int|IntegerType $k       The number of paths to match
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/patterns/shortest-paths/ Corresponding documentation on Neo4j.com
+     */
+    public static function shortest(CompletePattern $pattern, int|IntegerType $k = 1): Shortest
+    {
+        return new Shortest($pattern, $k);
+    }
+
+    /**
+     * Creates an ALL SHORTEST construct.
+     *
+     * @param CompletePattern $pattern The pattern to find all shortest paths for
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/patterns/shortest-paths/ Corresponding documentation on Neo4j.com
+     */
+    public static function allShortest(CompletePattern $pattern): AllShortest
+    {
+        return new AllShortest($pattern);
+    }
+
+    /**
+     * Creates a SHORTEST k GROUPS construct.
+     *
+     * @param CompletePattern $pattern The pattern to find the shortest groups for
+     * @param int|IntegerType $k       The number of groups to match
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/patterns/shortest-paths/ Corresponding documentation on Neo4j.com
+     */
+    public static function shortestGroups(CompletePattern $pattern, int|IntegerType $k): ShortestGroups
+    {
+        return new ShortestGroups($pattern, $k);
+    }
+
+    /**
+     * Creates an ANY construct.
+     *
+     * @param CompletePattern $pattern The pattern to find any path for
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/patterns/shortest-paths/ Corresponding documentation on Neo4j.com
+     */
+    public static function anyPath(CompletePattern $pattern): AnyPath
+    {
+        return new AnyPath($pattern);
     }
 
     /**

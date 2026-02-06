@@ -22,7 +22,15 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Patterns\AllShortest;
+use WikibaseSolutions\CypherDSL\Patterns\AllShortestPaths;
+use WikibaseSolutions\CypherDSL\Patterns\AnyPath;
+use WikibaseSolutions\CypherDSL\Patterns\Shortest;
+use WikibaseSolutions\CypherDSL\Patterns\ShortestGroups;
+use WikibaseSolutions\CypherDSL\Patterns\ShortestPath;
+use function WikibaseSolutions\CypherDSL\allShortest;
 use function WikibaseSolutions\CypherDSL\allShortestPaths;
+use function WikibaseSolutions\CypherDSL\anyPath;
 use function WikibaseSolutions\CypherDSL\float;
 use function WikibaseSolutions\CypherDSL\function_;
 use function WikibaseSolutions\CypherDSL\integer;
@@ -37,6 +45,8 @@ use WikibaseSolutions\CypherDSL\Query;
 use function WikibaseSolutions\CypherDSL\query;
 use function WikibaseSolutions\CypherDSL\raw;
 use function WikibaseSolutions\CypherDSL\relationship;
+use function WikibaseSolutions\CypherDSL\shortest;
+use function WikibaseSolutions\CypherDSL\shortestGroups;
 use function WikibaseSolutions\CypherDSL\shortestPath;
 use function WikibaseSolutions\CypherDSL\string;
 use function WikibaseSolutions\CypherDSL\variable;
@@ -255,7 +265,7 @@ final class FunctionsTest extends TestCase
         $path = node()->relationshipTo(node());
         $shortestPath = shortestPath($path);
 
-        $this->assertInstanceOf(\WikibaseSolutions\CypherDSL\Patterns\ShortestPath::class, $shortestPath);
+        $this->assertInstanceOf(ShortestPath::class, $shortestPath);
         $this->assertSame('shortestPath(()-->())', $shortestPath->toQuery());
     }
 
@@ -264,7 +274,61 @@ final class FunctionsTest extends TestCase
         $path = node()->relationshipTo(node());
         $allShortestPaths = allShortestPaths($path);
 
-        $this->assertInstanceOf(\WikibaseSolutions\CypherDSL\Patterns\AllShortestPaths::class, $allShortestPaths);
+        $this->assertInstanceOf(AllShortestPaths::class, $allShortestPaths);
         $this->assertSame('allShortestPaths(()-->())', $allShortestPaths->toQuery());
+    }
+
+    public function testShortest(): void
+    {
+        $path = node()->relationshipTo(node());
+        $shortest = shortest($path, 2);
+
+        $this->assertInstanceOf(Shortest::class, $shortest);
+        $this->assertSame('SHORTEST 2 (()-->())', $shortest->toQuery());
+    }
+
+    public function testShortestIntegerType(): void
+    {
+        $path = node()->relationshipTo(node());
+        $shortest = shortest($path, new Integer(2));
+
+        $this->assertInstanceOf(Shortest::class, $shortest);
+        $this->assertSame('SHORTEST 2 (()-->())', $shortest->toQuery());
+    }
+
+    public function testAllShortest(): void
+    {
+        $path = node()->relationshipTo(node());
+        $allShortest = allShortest($path);
+
+        $this->assertInstanceOf(AllShortest::class, $allShortest);
+        $this->assertSame('ALL SHORTEST (()-->())', $allShortest->toQuery());
+    }
+
+    public function testShortestGroups(): void
+    {
+        $path = node()->relationshipTo(node());
+        $shortestGroups = shortestGroups($path, 3);
+
+        $this->assertInstanceOf(ShortestGroups::class, $shortestGroups);
+        $this->assertSame('SHORTEST 3 GROUPS (()-->())', $shortestGroups->toQuery());
+    }
+
+    public function testShortestGroupsIntegerType(): void
+    {
+        $path = node()->relationshipTo(node());
+        $shortestGroups = shortestGroups($path, new Integer(3));
+
+        $this->assertInstanceOf(ShortestGroups::class, $shortestGroups);
+        $this->assertSame('SHORTEST 3 GROUPS (()-->())', $shortestGroups->toQuery());
+    }
+
+    public function testAnyPath(): void
+    {
+        $path = node()->relationshipTo(node());
+        $anyPath = anyPath($path);
+
+        $this->assertInstanceOf(AnyPath::class, $anyPath);
+        $this->assertSame('ANY (()-->())', $anyPath->toQuery());
     }
 }

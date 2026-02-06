@@ -21,12 +21,17 @@ use WikibaseSolutions\CypherDSL\Expressions\Parameter;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Patterns\AllShortest;
 use WikibaseSolutions\CypherDSL\Patterns\AllShortestPaths;
+use WikibaseSolutions\CypherDSL\Patterns\AnyPath;
 use WikibaseSolutions\CypherDSL\Patterns\CompletePattern;
 use WikibaseSolutions\CypherDSL\Patterns\Direction;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
+use WikibaseSolutions\CypherDSL\Patterns\Shortest;
+use WikibaseSolutions\CypherDSL\Patterns\ShortestGroups;
 use WikibaseSolutions\CypherDSL\Patterns\ShortestPath;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 
 /**
  * Creates a new Cypher query.
@@ -124,6 +129,56 @@ function shortestPath(CompletePattern $pattern): ShortestPath
 function allShortestPaths(CompletePattern $pattern): AllShortestPaths
 {
     return Query::allShortestPaths($pattern);
+}
+
+/**
+ * Creates the SHORTEST k construct.
+ *
+ * @param CompletePattern $pattern The pattern to find the shortest path for
+ * @param int|IntegerType $k       The number of paths to match
+ *
+ * @see Query::shortest()
+ */
+function shortest(CompletePattern $pattern, int|IntegerType $k = 1): Shortest
+{
+    return Query::shortest($pattern, $k);
+}
+
+/**
+ * Creates the ALL SHORTEST construct.
+ *
+ * @param CompletePattern $pattern The pattern to find all shortest paths for
+ *
+ * @see Query::allShortest()
+ */
+function allShortest(CompletePattern $pattern): AllShortest
+{
+    return Query::allShortest($pattern);
+}
+
+/**
+ * Creates the SHORTEST k GROUPS construct.
+ *
+ * @param CompletePattern $pattern The pattern to find the shortest groups for
+ * @param int|IntegerType $k       The number of groups to match
+ *
+ * @see Query::shortestGroups()
+ */
+function shortestGroups(CompletePattern $pattern, int|IntegerType $k): ShortestGroups
+{
+    return Query::shortestGroups($pattern, $k);
+}
+
+/**
+ * Creates the ANY construct.
+ *
+ * @param CompletePattern $pattern The pattern to find any path for
+ *
+ * @see Query::anyPath()
+ */
+function anyPath(CompletePattern $pattern): AnyPath
+{
+    return Query::anyPath($pattern);
 }
 
 /**
