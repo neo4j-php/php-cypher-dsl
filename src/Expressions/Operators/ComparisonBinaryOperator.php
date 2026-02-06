@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace WikibaseSolutions\CypherDSL\Expressions\Operators;
 
 use WikibaseSolutions\CypherDSL\Traits\TypeTraits\PropertyTypeTraits\BooleanTypeTrait;
@@ -44,5 +45,17 @@ abstract class ComparisonBinaryOperator extends BinaryOperator implements Boolea
     public function __construct(AnyType $left, AnyType $right)
     {
         parent::__construct($left, $right);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function shouldInsertParentheses(AnyType $expression): bool
+    {
+        if ($expression instanceof self) {
+            return false;
+        }
+
+        return parent::shouldInsertParentheses($expression);
     }
 }

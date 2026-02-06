@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
@@ -106,7 +107,7 @@ final class PrecedenceTest extends TestCase
         $this->assertSame('10 + 5 > 10 - 5', $expr->toQuery());
 
         $expr = new Equality(new Inequality($num1, $num2), new Boolean(true));
-        $this->assertSame('(10 <> 5) = true', $expr->toQuery());
+        $this->assertSame('10 <> 5 = true', $expr->toQuery());
     }
 
     public function testAdditiveWithMultiplicative(): void
@@ -380,7 +381,7 @@ final class PrecedenceTest extends TestCase
             new LessThan($num, $num),
             $num
         );
-        $this->assertSame('(3.0 < 3.0) < 3.0', $expr->toQuery());
+        $this->assertSame('3.0 < 3.0 < 3.0', $expr->toQuery());
 
         $expr = new Multiplication(
             new UnaryMinus(new Exponentiation($num, $num)),
@@ -452,10 +453,10 @@ final class PrecedenceTest extends TestCase
         $this->assertSame('NOT (NOT true)', $expr->toQuery());
 
         $expr = new Equality(new LessThan($num, $num), $true);
-        $this->assertSame('(7.0 < 7.0) = true', $expr->toQuery());
+        $this->assertSame('7.0 < 7.0 = true', $expr->toQuery());
 
         $expr = new LessThanOrEqual(new GreaterThanOrEqual($num, $num), $num);
-        $this->assertSame('(7.0 >= 7.0) <= 7.0', $expr->toQuery());
+        $this->assertSame('7.0 >= 7.0 <= 7.0', $expr->toQuery());
 
         $expr = new Addition(new Subtraction($num, $num), $num);
         $this->assertSame('(7.0 - 7.0) + 7.0', $expr->toQuery());
@@ -477,5 +478,69 @@ final class PrecedenceTest extends TestCase
 
         $expr = new Equality(new Contains($var, $var), new StartsWith($var, $var));
         $this->assertSame('y CONTAINS y = y STARTS WITH y', $expr->toQuery());
+    }
+
+    public function testChainedComparison(): void
+    {
+        $a = new Integer(10);
+        $b = new Integer(5);
+        $c = new Integer(1);
+
+        $expr = new GreaterThan(new GreaterThan($a, $b), $c);
+        $this->assertSame("10 > 5 > 1", $expr->toQuery());
+    }
+
+    public function testChainedComparisonRhs(): void
+    {
+        $a = new Integer(10);
+        $b = new Integer(5);
+        $c = new Integer(1);
+
+        $expr = new GreaterThan($a, new GreaterThan($b, $c));
+        $this->assertSame("10 > 5 > 1", $expr->toQuery());
+    }
+
+    public function testChainedComparisonRhsCheck(): void
+    {
+        $a = new Integer(10);
+        $b = new Integer(5);
+        $c = new Integer(1);
+        $d = new Integer(0);
+
+        $expr = new GreaterThan($a, new GreaterThan($b, new GreaterThan($c, $d)));
+        $this->assertSame("10 > 5 > 1 > 0", $expr->toQuery());
+    }
+
+    public function testChainedMixedComparisons(): void
+    {
+        $a = new Integer(10);
+        $b = new Integer(5);
+        $c = new Integer(5);
+
+        $expr = new GreaterThanOrEqual(new GreaterThan($a, $b), $c);
+        $this->assertSame("10 > 5 >= 5", $expr->toQuery());
+    }
+
+    public function testChainedInequality(): void
+    {
+        $a = new Integer(10);
+        $b = new Integer(5);
+        $c = new Integer(10);
+
+        $expr = new Inequality(new Inequality($a, $b), $c);
+        $this->assertSame("10 <> 5 <> 10", $expr->toQuery());
+    }
+
+    public function testChainedEquality(): void
+    {
+        $a = new Integer(1);
+        $b = new Integer(1);
+        $c = new Integer(1);
+
+        $expr = new Equality(new Equality($a, $b), $c);
+        $this->assertSame("1 = 1 = 1", $expr->toQuery());
+
+        $expr = new Equality($a, new Equality($b, $c));
+        $this->assertSame("1 = 1 = 1", $expr->toQuery());
     }
 }

@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace WikibaseSolutions\CypherDSL\Tests\EndToEnd;
 
 use PHPUnit\Framework\TestCase;
@@ -48,8 +49,7 @@ final class ExamplesTest extends TestCase
     public function testCallSubqueryClauseExample1(): void
     {
         $query = query()
-            ->call(static function (Query $query): void
-            {
+            ->call(static function (Query $query): void {
                 $query->create(node("Person"));
             })
             ->build();
@@ -72,8 +72,7 @@ final class ExamplesTest extends TestCase
         $person = variable();
         $query = query()
             ->match(node('Person')->withVariable($person))
-            ->call(static function (Query $query) use ($person): void
-            {
+            ->call(static function (Query $query) use ($person): void {
                 $query->remove($person->labeled('Person'));
             }, [$person])
             ->build();

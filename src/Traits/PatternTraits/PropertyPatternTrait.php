@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace WikibaseSolutions\CypherDSL\Traits\PatternTraits;
 
 use Stringable;
@@ -66,8 +67,7 @@ trait PropertyPatternTrait
         $map = $this->makeMap();
 
         if (is_array($properties)) {
-            $res = array_map(static function ($property)
-            {
+            $res = array_map(static function ($property) {
                 return CastUtils::toAnyType($property);
             }, $properties);
 

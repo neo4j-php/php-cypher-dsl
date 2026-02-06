@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 
 use PHPUnit\Framework\TestCase;
@@ -109,6 +110,6 @@ final class PathTest extends TestCase
         $pathA = new Path([new Node(), new Node()], [new Relationship(Direction::UNI)]);
         $pathB = new Path([new Node(), new Node()], [new Relationship(Direction::RIGHT)]);
 
-        $this->assertSame("()--() AND ()-->()", $pathA->and($pathB, false)->toQuery());
+        $this->assertSame("()--() AND ()-->()", $pathA->and($pathB)->toQuery());
     }
 }

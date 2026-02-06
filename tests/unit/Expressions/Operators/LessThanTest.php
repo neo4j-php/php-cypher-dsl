@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
@@ -25,9 +26,9 @@ final class LessThanTest extends TestCase
 
         $this->assertSame("10 < 15", $lessThan->toQuery());
 
-        $lessThan = new LessThan($lessThan, $lessThan, false);
+        $lessThan = new LessThan($lessThan, $lessThan);
 
-        $this->assertSame("(10 < 15) < (10 < 15)", $lessThan->toQuery());
+        $this->assertSame("10 < 15 < 10 < 15", $lessThan->toQuery());
     }
 
     public function testInstanceOfBooleanType(): void

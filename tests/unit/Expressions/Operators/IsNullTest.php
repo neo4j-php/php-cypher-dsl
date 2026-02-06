@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
@@ -21,7 +22,7 @@ final class IsNullTest extends TestCase
 {
     public function testToQuery(): void
     {
-        $isNull = new IsNull(new Boolean(true), false);
+        $isNull = new IsNull(new Boolean(true));
 
         $this->assertSame("true IS NULL", $isNull->toQuery());
 

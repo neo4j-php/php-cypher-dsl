@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
@@ -28,7 +29,7 @@ final class EqualityTest extends TestCase
 
         $equality = new Equality($equality, $equality);
 
-        $this->assertSame("(10 = 15) = (10 = 15)", $equality->toQuery());
+        $this->assertSame("10 = 15 = 10 = 15", $equality->toQuery());
     }
 
     public function testInstanceOfBooleanType(): void

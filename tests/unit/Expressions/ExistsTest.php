@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions;
 
 use PHPUnit\Framework\TestCase;
@@ -48,7 +49,7 @@ final class ExistsTest extends TestCase
                 )
             ),
             (new WhereClause)->addExpression(
-                new Equality(new Property(new Variable('toy'), 'name'), new String_('Banana'), false)
+                new Equality(new Property(new Variable('toy'), 'name'), new String_('Banana'))
             )
         );
 

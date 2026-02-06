@@ -8,12 +8,17 @@ The format is based on [Keep a Changelog], and this project adheres to
 
 ## 7.0.0 - T.B.D.
 
+### Added
+
+- Added support for operator chaining (e.g. `a > b > c`).
+
 ### Changed
 
 - Changed the minimum required PHP version to 8.1.
 - Changed the signature of many functions to use PHP 8 union types.
 - Changed the `Relationship::DIR_*` to the `Direction` enum.
 - Remove `$insertParentheses` from all methods, and automatically insert them based on precedence.
+- No longer insert parentheses when chaining comparison operators.
 
 ### Removed
 

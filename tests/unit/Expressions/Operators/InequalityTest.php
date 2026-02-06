@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
@@ -28,7 +29,7 @@ final class InequalityTest extends TestCase
 
         $inequality = new Inequality($inequality, $inequality);
 
-        $this->assertSame("(v.a <> v.b) <> (v.a <> v.b)", $inequality->toQuery());
+        $this->assertSame("v.a <> v.b <> v.a <> v.b", $inequality->toQuery());
     }
 
     public function testInstanceOfBooleanType(): void

@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Expressions\Operators;
 
 use PHPUnit\Framework\TestCase;
@@ -25,9 +26,20 @@ final class GreaterThanTest extends TestCase
 
         $this->assertSame("10 > 15", $greaterThan->toQuery());
 
-        $greaterThan = new GreaterThan($greaterThan, $greaterThan, false);
+        $greaterThan = new GreaterThan($greaterThan, $greaterThan);
 
-        $this->assertSame("(10 > 15) > (10 > 15)", $greaterThan->toQuery());
+        $this->assertSame("10 > 15 > 10 > 15", $greaterThan->toQuery());
+    }
+
+    public function testChainedComparisons(): void
+    {
+        $a = new Integer(10);
+        $b = new Integer(5);
+        $c = new Integer(1);
+
+        $expr = $a->gt($b)->gt($c);
+
+        $this->assertSame("10 > 5 > 1", $expr->toQuery());
     }
 
     public function testInstanceOfBooleanType(): void
