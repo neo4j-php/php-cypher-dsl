@@ -12,7 +12,6 @@
 namespace WikibaseSolutions\CypherDSL\Tests\Unit\Patterns;
 
 use PHPUnit\Framework\TestCase;
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Integer;
 use WikibaseSolutions\CypherDSL\Patterns\ShortestGroups;
 use WikibaseSolutions\CypherDSL\Query;
 

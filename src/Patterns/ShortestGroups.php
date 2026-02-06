@@ -10,7 +10,6 @@
 
 namespace WikibaseSolutions\CypherDSL\Patterns;
 
-use WikibaseSolutions\CypherDSL\QueryConvertible;
 use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PatternTrait;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\IntegerType;
 use WikibaseSolutions\CypherDSL\Utils\CastUtils;

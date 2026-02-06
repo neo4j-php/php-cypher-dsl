@@ -144,8 +144,6 @@ final class Query implements QueryConvertible
         return new Relationship(Direction::LEFT);
     }
 
-
-
     /**
      * Creates a shortestPath pattern.
      *
