@@ -45,4 +45,16 @@ abstract class ComparisonBinaryOperator extends BinaryOperator implements Boolea
     {
         parent::__construct($left, $right);
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function shouldInsertParentheses(AnyType $expression): bool
+    {
+        if ($expression instanceof ComparisonBinaryOperator) {
+            return false;
+        }
+
+        return parent::shouldInsertParentheses($expression);
+    }
 }

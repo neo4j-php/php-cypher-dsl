@@ -27,7 +27,7 @@ final class LessThanOrEqualTest extends TestCase
 
         $lessThanOrEqual = new LessThanOrEqual($lessThanOrEqual, $lessThanOrEqual, false);
 
-        $this->assertSame("(10 <= 15) <= (10 <= 15)", $lessThanOrEqual->toQuery());
+        $this->assertSame("10 <= 15 <= 10 <= 15", $lessThanOrEqual->toQuery());
     }
 
     public function testInstanceOfBooleanType(): void

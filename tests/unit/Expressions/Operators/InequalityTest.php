@@ -28,7 +28,7 @@ final class InequalityTest extends TestCase
 
         $inequality = new Inequality($inequality, $inequality);
 
-        $this->assertSame("(v.a <> v.b) <> (v.a <> v.b)", $inequality->toQuery());
+        $this->assertSame("v.a <> v.b <> v.a <> v.b", $inequality->toQuery());
     }
 
     public function testInstanceOfBooleanType(): void

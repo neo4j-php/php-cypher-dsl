@@ -28,7 +28,7 @@ final class EqualityTest extends TestCase
 
         $equality = new Equality($equality, $equality);
 
-        $this->assertSame("(10 = 15) = (10 = 15)", $equality->toQuery());
+        $this->assertSame("10 = 15 = 10 = 15", $equality->toQuery());
     }
 
     public function testInstanceOfBooleanType(): void

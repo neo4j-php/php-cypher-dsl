@@ -27,7 +27,7 @@ final class LessThanTest extends TestCase
 
         $lessThan = new LessThan($lessThan, $lessThan, false);
 
-        $this->assertSame("(10 < 15) < (10 < 15)", $lessThan->toQuery());
+        $this->assertSame("10 < 15 < 10 < 15", $lessThan->toQuery());
     }
 
     public function testInstanceOfBooleanType(): void

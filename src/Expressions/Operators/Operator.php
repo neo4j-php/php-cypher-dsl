@@ -38,7 +38,7 @@ abstract class Operator implements QueryConvertible
     /**
      * Whether to insert parentheses around the given expression, given the precedence of this operator.
      */
-    final protected function shouldInsertParentheses(AnyType $expression): bool
+    protected function shouldInsertParentheses(AnyType $expression): bool
     {
         if (!$expression instanceof self) {
             return false;
