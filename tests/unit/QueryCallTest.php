@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
@@ -22,8 +23,7 @@ final class QueryCallTest extends TestCase
 {
     public function testWithCallable(): void
     {
-        $query = Query::new()->call(static function (Query $query): void
-        {
+        $query = Query::new()->call(static function (Query $query): void {
             $query->match(Query::node('x'));
         });
 
@@ -35,8 +35,7 @@ final class QueryCallTest extends TestCase
         $this->expectException(TypeError::class);
 
         // @phpstan-ignore-next-line
-        Query::new()->call(static function (int $query): void
-        {
+        Query::new()->call(static function (int $query): void {
         });
     }
 
@@ -63,43 +62,37 @@ final class QueryCallTest extends TestCase
 
     public function testWithVariables(): void
     {
-        $query = Query::new()->call(static function (Query $query): void
-        {
+        $query = Query::new()->call(static function (Query $query): void {
             $query->match(Query::node('x'));
         }, Query::variable('x'));
 
         $this->assertSame('CALL { WITH x MATCH (:x) }', $query->toQuery());
 
-        $query = Query::new()->call(static function (Query $query): void
-        {
+        $query = Query::new()->call(static function (Query $query): void {
             $query->match(Query::node('x'));
         }, [Query::variable('x')]);
 
         $this->assertSame('CALL { WITH x MATCH (:x) }', $query->toQuery());
 
-        $query = Query::new()->call(static function (Query $query): void
-        {
+        $query = Query::new()->call(static function (Query $query): void {
             $query->match(Query::node('x'));
         }, [Query::variable('x'), Query::variable('y')]);
 
         $this->assertSame('CALL { WITH x, y MATCH (:x) }', $query->toQuery());
 
-        $query = Query::new()->call(static function (Query $query): void
-        {
+        $query = Query::new()->call(static function (Query $query): void {
             $query->match(Query::node('x'));
         }, 'x');
 
         $this->assertSame('CALL { WITH x MATCH (:x) }', $query->toQuery());
 
-        $query = Query::new()->call(static function (Query $query): void
-        {
+        $query = Query::new()->call(static function (Query $query): void {
             $query->match(Query::node('x'));
         }, ['x', 'y']);
 
         $this->assertSame('CALL { WITH x, y MATCH (:x) }', $query->toQuery());
 
-        $query = Query::new()->call(static function (Query $query): void
-        {
+        $query = Query::new()->call(static function (Query $query): void {
             $query->match(Query::node('x'));
         }, Query::node());
 

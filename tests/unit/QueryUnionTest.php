@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace WikibaseSolutions\CypherDSL\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
@@ -51,8 +52,7 @@ final class QueryUnionTest extends TestCase
 
         $query = Query::new()->match($nodeX)->returning($nodeX->getVariable());
 
-        $query = $query->union(static function (Query $query): void
-        {
+        $query = $query->union(static function (Query $query): void {
             $nodeY = Query::node('Y')->withVariable('y');
             $query->match($nodeY)->returning($nodeY->getVariable());
         });
@@ -66,8 +66,7 @@ final class QueryUnionTest extends TestCase
 
         $query = Query::new()->match($nodeX)->returning($nodeX->getVariable());
 
-        $query = $query->union(static function (Query $query): void
-        {
+        $query = $query->union(static function (Query $query): void {
             $nodeY = Query::node('Y')->withVariable('y');
             $query->match($nodeY)->returning($nodeY->getVariable());
         }, true);
