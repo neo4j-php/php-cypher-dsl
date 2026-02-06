@@ -48,7 +48,7 @@ final class ExistsTest extends TestCase
                 )
             ),
             (new WhereClause)->addExpression(
-                new Equality(new Property(new Variable('toy'), 'name'), new String_('Banana'), false)
+                new Equality(new Property(new Variable('toy'), 'name'), new String_('Banana'))
             )
         );
 

@@ -25,7 +25,7 @@ final class GreaterThanTest extends TestCase
 
         $this->assertSame("10 > 15", $greaterThan->toQuery());
 
-        $greaterThan = new GreaterThan($greaterThan, $greaterThan, false);
+        $greaterThan = new GreaterThan($greaterThan, $greaterThan);
 
         $this->assertSame("10 > 15 > 10 > 15", $greaterThan->toQuery());
     }

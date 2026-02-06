@@ -40,7 +40,7 @@ final class AdditionTest extends TestCase
         $this->assertEquals($addition, $newAddition->getLeft());
         $this->assertEquals($addition, $newAddition->getRight());
 
-        $newAddition = new Addition($addition, $addition, false);
+        $newAddition = new Addition($addition, $addition);
 
         $this->assertSame("(10 + 15.0) + (10 + 15.0)", $newAddition->toQuery());
 

@@ -21,7 +21,7 @@ final class IsNullTest extends TestCase
 {
     public function testToQuery(): void
     {
-        $isNull = new IsNull(new Boolean(true), false);
+        $isNull = new IsNull(new Boolean(true));
 
         $this->assertSame("true IS NULL", $isNull->toQuery());
 

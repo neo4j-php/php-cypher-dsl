@@ -21,7 +21,7 @@ final class IsNotNullTest extends TestCase
 {
     public function testToQuery(): void
     {
-        $isNotNull = new IsNotNull(new Boolean(true), false);
+        $isNotNull = new IsNotNull(new Boolean(true));
 
         $this->assertSame("true IS NOT NULL", $isNotNull->toQuery());
 

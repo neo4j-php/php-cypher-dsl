@@ -303,7 +303,7 @@ final class QueryTest extends TestCase
 
         $pathMock = new Path([$nodeMock, (new Node)->withVariable('b')], [new Relationship(Direction::RIGHT)]);
         $numeralMock = new Integer(12);
-        $booleanMock = new GreaterThan($variableMock, new Variable('b'), false);
+        $booleanMock = new GreaterThan($variableMock, new Variable('b'));
         $propertyMock = new Property($variableMock, 'b');
 
         $query = new Query();
