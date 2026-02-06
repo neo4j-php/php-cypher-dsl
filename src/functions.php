@@ -21,9 +21,12 @@ use WikibaseSolutions\CypherDSL\Expressions\Parameter;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Patterns\AllShortestPaths;
+use WikibaseSolutions\CypherDSL\Patterns\CompletePattern;
 use WikibaseSolutions\CypherDSL\Patterns\Direction;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
+use WikibaseSolutions\CypherDSL\Patterns\ShortestPath;
 
 /**
  * Creates a new Cypher query.
@@ -97,6 +100,30 @@ function relationshipTo(): Relationship
 function relationshipFrom(): Relationship
 {
     return Query::relationshipFrom();
+}
+
+/**
+ * Creates a shortestPath pattern.
+ *
+ * @param CompletePattern $pattern The pattern to find the shortest path for
+ *
+ * @see Query::shortestPath()
+ */
+function shortestPath(CompletePattern $pattern): ShortestPath
+{
+    return Query::shortestPath($pattern);
+}
+
+/**
+ * Creates an allShortestPaths pattern.
+ *
+ * @param CompletePattern $pattern The pattern to find all shortest paths for
+ *
+ * @see Query::allShortestPaths()
+ */
+function allShortestPaths(CompletePattern $pattern): AllShortestPaths
+{
+    return Query::allShortestPaths($pattern);
 }
 
 /**

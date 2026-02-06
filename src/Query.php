@@ -43,11 +43,13 @@ use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Patterns\AllShortestPaths;
 use WikibaseSolutions\CypherDSL\Patterns\CompletePattern;
 use WikibaseSolutions\CypherDSL\Patterns\Direction;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
+use WikibaseSolutions\CypherDSL\Patterns\ShortestPath;
 use WikibaseSolutions\CypherDSL\Syntax\Alias;
 use WikibaseSolutions\CypherDSL\Syntax\PropertyReplacement;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
@@ -136,6 +138,32 @@ final class Query implements QueryConvertible
     public static function relationshipFrom(): Relationship
     {
         return new Relationship(Direction::LEFT);
+    }
+
+
+
+    /**
+     * Creates a shortestPath pattern.
+     *
+     * @param CompletePattern $pattern The pattern to find the shortest path for
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/shortestpath/ Corresponding documentation on Neo4j.com
+     */
+    public static function shortestPath(CompletePattern $pattern): ShortestPath
+    {
+        return new ShortestPath($pattern);
+    }
+
+    /**
+     * Creates an allShortestPaths pattern.
+     *
+     * @param CompletePattern $pattern The pattern to find all shortest paths for
+     *
+     * @see https://neo4j.com/docs/cypher-manual/current/clauses/allshortestpaths/ Corresponding documentation on Neo4j.com
+     */
+    public static function allShortestPaths(CompletePattern $pattern): AllShortestPaths
+    {
+        return new AllShortestPaths($pattern);
     }
 
     /**

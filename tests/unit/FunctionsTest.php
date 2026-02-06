@@ -22,6 +22,7 @@ use WikibaseSolutions\CypherDSL\Expressions\Literals\String_;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use function WikibaseSolutions\CypherDSL\allShortestPaths;
 use function WikibaseSolutions\CypherDSL\float;
 use function WikibaseSolutions\CypherDSL\function_;
 use function WikibaseSolutions\CypherDSL\integer;
@@ -36,6 +37,7 @@ use WikibaseSolutions\CypherDSL\Query;
 use function WikibaseSolutions\CypherDSL\query;
 use function WikibaseSolutions\CypherDSL\raw;
 use function WikibaseSolutions\CypherDSL\relationship;
+use function WikibaseSolutions\CypherDSL\shortestPath;
 use function WikibaseSolutions\CypherDSL\string;
 use function WikibaseSolutions\CypherDSL\variable;
 
@@ -246,5 +248,23 @@ final class FunctionsTest extends TestCase
 
         // @phpstan-ignore-next-line
         raw([]);
+    }
+
+    public function testShortestPath(): void
+    {
+        $path = node()->relationshipTo(node());
+        $shortestPath = shortestPath($path);
+
+        $this->assertInstanceOf(\WikibaseSolutions\CypherDSL\Patterns\ShortestPath::class, $shortestPath);
+        $this->assertSame('shortestPath(()-->())', $shortestPath->toQuery());
+    }
+
+    public function testAllShortestPaths(): void
+    {
+        $path = node()->relationshipTo(node());
+        $allShortestPaths = allShortestPaths($path);
+
+        $this->assertInstanceOf(\WikibaseSolutions\CypherDSL\Patterns\AllShortestPaths::class, $allShortestPaths);
+        $this->assertSame('allShortestPaths(()-->())', $allShortestPaths->toQuery());
     }
 }
