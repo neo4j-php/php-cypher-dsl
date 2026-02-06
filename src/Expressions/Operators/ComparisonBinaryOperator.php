@@ -51,7 +51,7 @@ abstract class ComparisonBinaryOperator extends BinaryOperator implements Boolea
      */
     protected function shouldInsertParentheses(AnyType $expression): bool
     {
-        if ($expression instanceof ComparisonBinaryOperator) {
+        if ($expression instanceof self) {
             return false;
         }
 
