@@ -16,6 +16,7 @@ use TypeError;
 use WikibaseSolutions\CypherDSL\Clauses\RawClause;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Clauses\WithClause;
+use WikibaseSolutions\CypherDSL\Expressions\Exists;
 use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Boolean;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Float_;
@@ -30,16 +31,22 @@ use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\Property;
 use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
+use WikibaseSolutions\CypherDSL\Patterns\AllShortest;
+use WikibaseSolutions\CypherDSL\Patterns\AllShortestPaths;
+use WikibaseSolutions\CypherDSL\Patterns\AnyPath;
 use WikibaseSolutions\CypherDSL\Patterns\Direction;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Patterns\Path;
 use WikibaseSolutions\CypherDSL\Patterns\Relationship;
+use WikibaseSolutions\CypherDSL\Patterns\Shortest;
+use WikibaseSolutions\CypherDSL\Patterns\ShortestGroups;
+use WikibaseSolutions\CypherDSL\Patterns\ShortestPath;
 use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\PropertyTypes\PropertyType;
 
 /**
- * This class only tests methods of the query class that do not add a neq clause. Use a separate class for testing
+ * This class only tests methods of the query class that do not add a new clause. Use a separate class for testing
  * functions that add new clauses to the query.
  *
  * @covers \WikibaseSolutions\CypherDSL\Query
@@ -194,6 +201,77 @@ final class QueryTest extends TestCase
 
         $this->assertSame('SKIP 10', $query->__toString());
         $this->assertSame('SKIP 10', (string) $query);
+    }
+
+    public function testShortestPath(): void
+    {
+        $path = Query::node()->relationshipTo(Query::node());
+        $shortestPath = Query::shortestPath($path);
+
+        $this->assertInstanceOf(ShortestPath::class, $shortestPath);
+    }
+
+    public function testAllShortestPaths(): void
+    {
+        $path = Query::node()->relationshipTo(Query::node());
+        $allShortestPaths = Query::allShortestPaths($path);
+
+        $this->assertInstanceOf(AllShortestPaths::class, $allShortestPaths);
+    }
+
+    public function testShortest(): void
+    {
+        $path = Query::node()->relationshipTo(Query::node());
+        $shortest = Query::shortest($path, 2);
+
+        $this->assertInstanceOf(Shortest::class, $shortest);
+    }
+
+    public function testShortestWithIntegerClass(): void
+    {
+        $path = Query::node()->relationshipTo(Query::node());
+        $shortest = Query::shortest($path, Query::integer(2));
+
+        $this->assertInstanceOf(Shortest::class, $shortest);
+    }
+
+    public function testAllShortest(): void
+    {
+        $path = Query::node()->relationshipTo(Query::node());
+        $allShortest = Query::allShortest($path);
+
+        $this->assertInstanceOf(AllShortest::class, $allShortest);
+    }
+
+    public function testShortestGroups(): void
+    {
+        $path = Query::node()->relationshipTo(Query::node());
+        $shortestGroups = Query::shortestGroups($path, 3);
+
+        $this->assertInstanceOf(ShortestGroups::class, $shortestGroups);
+    }
+
+    public function testShortestGroupsWithIntegerClass(): void
+    {
+        $path = Query::node()->relationshipTo(Query::node());
+        $shortestGroups = Query::shortestGroups($path, Query::integer(3));
+
+        $this->assertInstanceOf(ShortestGroups::class, $shortestGroups);
+    }
+
+    public function testAnyPath(): void
+    {
+        $path = Query::node()->relationshipTo(Query::node());
+        $anyPath = Query::anyPath($path);
+
+        $this->assertInstanceOf(AnyPath::class, $anyPath);
+    }
+
+    public function testExists(): void
+    {
+        $exists = Query::exists(Query::node());
+
+        $this->assertInstanceOf(Exists::class, $exists);
     }
 
     public function testListOfLiterals(): void

@@ -11,6 +11,8 @@ The format is based on [Keep a Changelog], and this project adheres to
 ### Added
 
 - Added support for operator chaining (e.g. `a > b > c`).
+- Added support for `shortestPath` and `allShortestPaths` pattern constructs.
+- Added support for shortest path constructs (`SHORTEST k`, `ALL SHORTEST`, `SHORTEST k GROUPS`, and `ANY`).
 
 ### Changed
 
