@@ -12,6 +12,7 @@ namespace WikibaseSolutions\CypherDSL\Patterns;
 
 use WikibaseSolutions\CypherDSL\Expressions\Label;
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Map;
+use function WikibaseSolutions\CypherDSL\node;
 use WikibaseSolutions\CypherDSL\Traits\PatternTraits\PropertyPatternTrait;
 use WikibaseSolutions\CypherDSL\Utils\NameUtils;
 
@@ -75,6 +76,17 @@ final class Node implements CompletePattern, PropertyPattern, RelatablePattern
     public function getLabels(): array
     {
         return $this->labels;
+    }
+
+    /**
+     * Create a new node with the same variable as this node. Useful for using nodes
+     * inside a CREATE clause that were previously matched on in a MATCH clause.
+     *
+     * @see https://github.com/neo4j-php/php-cypher-dsl/issues/96
+     */
+    public function variable(): self
+    {
+        return node()->withVariable($this->getVariable());
     }
 
     /**
