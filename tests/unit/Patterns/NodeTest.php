@@ -325,4 +325,36 @@ final class NodeTest extends TestCase
 
         $this->assertEquals(new Label($node->getVariable(), 'German', 'Swedish'), $labeled);
     }
+
+    public function testVariableNewNode(): void
+    {
+        $node = new Node();
+        $variable = $node->variable();
+
+        $this->assertMatchesRegularExpression('/^\(var\w{8}\)$/', $variable->toQuery());
+    }
+
+    public function testVariableNodeWithProperties(): void
+    {
+        $node = new Node();
+        $node->withProperties(['a' => 1, 'b' => 2, 'c' => 3]);
+
+        $this->assertStringMatchesFormat('({a: 1, b: 2, c: 3})', $node->toQuery());
+
+        $variable = $node->variable();
+
+        $this->assertMatchesRegularExpression('/^\(var\w{8}\)$/', $variable->toQuery());
+    }
+
+    public function testVariableNodeWithExistingVariable(): void
+    {
+        $node = new Node();
+        $node->withVariable('foo');
+
+        $this->assertSame('(foo)', $node->toQuery());
+
+        $variable = $node->variable();
+
+        $this->assertSame('(foo)', $variable->toQuery());
+    }
 }

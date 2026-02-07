@@ -227,6 +227,21 @@ final class ExamplesTest extends TestCase
         $this->assertStringMatchesFormat("MATCH (%s) RETURN %s", $query);
     }
 
+    public function testCreateReuseVariable(): void
+    {
+        $charlie = node("Person")->withProperties(["name" => "Charlie Sheen"]);
+        $oliver = node("Person")->withProperties(["name" => "Oliver Stone"]);
+
+        $wallStreet = node("Movie")->withProperties(["title" => "Wall Street"]);
+
+        $query = query()
+            ->match([$charlie, $oliver])
+            ->create($charlie->variable()->relationshipTo($wallStreet, type: "ACTED_IN", properties: ["role" => "Bud Fox"])->relationshipFrom($oliver->variable()))
+            ->build();
+
+        $this->assertStringMatchesFormat("MATCH (%s:Person {name: 'Charlie Sheen'}), (%s:Person {name: 'Oliver Stone'}) CREATE (%s)-[:ACTED_IN {role: 'Bud Fox'}]->(:Movie {title: 'Wall Street'})<--(%s)", $query);
+    }
+
     public function testMatchClauseExample2(): void
     {
         $movie = node("Movie");
