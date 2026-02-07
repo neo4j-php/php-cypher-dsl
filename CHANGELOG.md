@@ -6,13 +6,14 @@ file. A changelog has been kept from version 5.0.0 onwards.
 The format is based on [Keep a Changelog], and this project adheres to
 [Semantic Versioning].
 
-## 7.0.0 - T.B.D.
+## 7.0.0 - 2026-02-07
 
 ### Added
 
 - Added support for operator chaining (e.g. `a > b > c`).
 - Added support for `shortestPath` and `allShortestPaths` pattern constructs.
 - Added support for shortest path constructs (`SHORTEST k`, `ALL SHORTEST`, `SHORTEST k GROUPS`, and `ANY`).
+- Added the `variable()` method to nodes, to allow for easier re-use of matched nodes in `CREATE` clauses.
 
 ### Changed
 

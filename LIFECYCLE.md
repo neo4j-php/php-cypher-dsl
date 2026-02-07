@@ -16,8 +16,8 @@ loss and/or corruption.
 
 ## Supported versions
 
-| Major version    | PHP version | Initial release   | End of bugfix support |
-|------------------|-------------|-------------------|-----------------------|
-| php-cypher-dsl 5 | &gt;=7.4    | Jan 9th, 2023     | Mar 19th, 2024        |
-| php-cypher-dsl 6 | &gt;=7.4    | Sep 19th, 2023    | To be determined      |
-| php-cypher-dsl 7 | &gt;=8.1    | To be determined  | To be determined      |
+| Major version    | PHP version | Initial release | End of bugfix support |
+|------------------|-------------|-----------------|-----------------------|
+| php-cypher-dsl 5 | &gt;=7.4    | Jan 9th, 2023   | Mar 19th, 2024        |
+| php-cypher-dsl 6 | &gt;=7.4    | Sep 19th, 2023  | Aug 7th, 2026         |
+| php-cypher-dsl 7 | &gt;=8.1    | Feb 7th, 2026   | To be determined      |
